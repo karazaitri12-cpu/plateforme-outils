@@ -1,5 +1,7 @@
-const IMCCalculator = (() => {
+// Force l'exécution même en iframe
+(function() {
   'use strict';
+  
   const els = {};
   const CATEGORIES = [
     { min: 0, max: 18.5, color: '#3182CE', label: 'Insuffisance', cls: 'cat-under' },
@@ -12,6 +14,8 @@ const IMCCalculator = (() => {
   const CFG = { min: 0, max: 50, start: -135, end: 135, cx: 140, cy: 70, rOut: 55, rIn: 35 };
 
   function init() {
+    console.log('🔍 Initialisation outil IMC...');
+    
     els.sexe = document.getElementById('sexe');
     els.taille = document.getElementById('taille');
     els.poids = document.getElementById('poids');
@@ -27,19 +31,38 @@ const IMCCalculator = (() => {
     els.scale = document.getElementById('gauge-scale');
     els.legend = document.getElementById('legend-container');
 
-    if (!els.sexe) { console.error('Outil IMC: Éléments non trouvés.'); return; }
+    if (!els.sexe || !els.btnCalc) {
+      console.error('❌ Éléments manquants !', { sexe: !!els.sexe, btn: !!els.btnCalc });
+      return;
+    }
 
+    console.log('✅ Éléments trouvés, création jauge...');
     createGauge();
     setNeedle(0);
-    if (els.btnCalc) els.btnCalc.addEventListener('click', calculate);
-    window.addEventListener('resize', () => { clearTimeout(window._rto); window._rto = setTimeout(createGauge, 150); });
+    
+    els.btnCalc.addEventListener('click', function(e) {
+      console.log('🔘 Bouton Calculer cliqué !');
+      e.preventDefault();
+      calculate();
+    });
+    
+    console.log('✅ Outil IMC prêt !');
   }
 
   function calculate() {
+    console.log('🧮 Lancement calcul...');
     const sexe = els.sexe.value;
-    const taille = parseNum(els.taille.value);
-    const poids = parseNum(els.poids.value);
-    if (!validate(taille, poids)) return;
+    const taille = parseFloat(String(els.taille.value).trim().replace(',', '.'));
+    const poids = parseFloat(String(els.poids.value).trim().replace(',', '.'));
+    
+    if (isNaN(taille) || isNaN(poids)) {
+      alert('Veuillez entrer une taille et un poids valides.');
+      return;
+    }
+    if (taille < 50 || taille > 250 || poids < 10 || poids > 300) {
+      alert('Valeurs hors limites.');
+      return;
+    }
 
     const imc = poids / ((taille/100)**2);
     const ideal = sexe === 'homme' ? taille - 100 - ((taille-150)/4) : taille - 100 - ((taille-150)/2.5);
@@ -61,15 +84,10 @@ const IMCCalculator = (() => {
     els.note.hidden = false;
     els.gaugeVal.textContent = els.imcVal.textContent;
     els.results.hidden = false;
+    
     setNeedle(0);
-    setTimeout(() => setNeedle(Math.min(50, Math.max(0, imc))), 50);
-  }
-
-  function parseNum(v) { return parseFloat(String(v).trim().replace(',', '.')); }
-  function validate(t, p) {
-    if (isNaN(t) || isNaN(p)) { alert('Valeurs invalides.'); return false; }
-    if (t<50||t>250||p<10||p>300) { alert('Valeurs hors limites (Taille: 50-250cm, Poids: 10-300kg).'); return false; }
-    return true;
+    setTimeout(() => setNeedle(Math.min(50, Math.max(0, imc))), 100);
+    console.log('✅ Calcul terminé, IMC =', imc);
   }
 
   function setNeedle(imc) {
@@ -104,7 +122,6 @@ const IMCCalculator = (() => {
       lbl.style.left = (CFG.cx + lr * Math.cos(toRad(mid))) + 'px';
       lbl.style.top = (CFG.cy + lr * Math.sin(toRad(mid))) + 'px';
       lbl.style.transform = (mid > 90 || mid < -90) ? 'translate(-100%, -50%)' : 'translate(0, -50%)';
-      lbl.style.textAlign = (mid > 90 || mid < -90) ? 'right' : 'left';
       els.legend.appendChild(lbl);
     });
 
@@ -129,6 +146,12 @@ const IMCCalculator = (() => {
     els.scale.appendChild(svg);
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  // Initialisation robuste pour iframe
+  if (document.readyState === 'complete') {
+    setTimeout(init, 100);
+  } else {
+    window.addEventListener('load', function() {
+      setTimeout(init, 200);
+    });
+  }
 })();
