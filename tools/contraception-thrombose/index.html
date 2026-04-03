@@ -4,174 +4,542 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Contraception et risque cardio-vasculaire - Outil interactif</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: #333;
-            overflow-x: hidden;
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: #F7FAFC;
+        color: #2D3748;
+        line-height: 1.6;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    
+    /* HEADER PROFESSIONNEL */
+    .container .header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        padding: 32px 40px;
+        border-radius: 0;
+        margin-bottom: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .container .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.3;
+    }
+    
+    .container .header h1 { 
+        font-size: 28px; 
+        font-weight: 700;
+        margin-bottom: 8px; 
+        color: #ffffff;
+        line-height: 1.3;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .container .header p { 
+        font-size: 14px; 
+        opacity: 0.9; 
+        color: #E2E8F0;
+        font-weight: 400;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* DISCLAIMER MÉDICO-LÉGAL */
+    .disclaimer-box {
+        background: #FFFBEB;
+        border-left: 4px solid #D69E2E;
+        color: #744210;
+        padding: 16px 20px;
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.6;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .disclaimer-box strong { 
+        color: #975A16;
+        font-weight: 600;
+    }
+    
+    /* NAVIGATION PAR ONGLETS - STYLE PROFESSIONNEL */
+    .tabs { 
+        display: flex; 
+        flex-wrap: wrap; 
+        background: white; 
+        border-bottom: 2px solid #E2E8F0;
+        padding: 0 20px;
+        margin-top: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .tab-btn { 
+        flex: 1; 
+        min-width: 200px; 
+        padding: 16px 20px; 
+        background: transparent; 
+        border: none; 
+        cursor: pointer; 
+        font-size: 14px; 
+        font-weight: 600; 
+        color: #718096; 
+        transition: all 0.2s; 
+        border-bottom: 3px solid transparent;
+        text-align: center;
+        position: relative;
+        margin-bottom: -2px;
+    }
+    
+    .tab-btn:hover { 
+        color: #2B6CB0;
+        background: #F7FAFC;
+    }
+    
+    .tab-btn.active { 
+        color: #2B6CB0; 
+        border-bottom: 3px solid #2B6CB0;
+        background: white;
+    }
+    
+    /* CONTENU DES ONGLETS */
+    .tab-content { 
+        background: white; 
+        padding: 40px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        margin: 0 20px 32px 20px;
+        border-radius: 8px;
+        min-height: 400px;
+    }
+    
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+    
+    .tab-pane h2 {
+        color: #2B6CB0;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #E2E8F0;
+    }
+    
+    .tab-pane > p {
+        color: #4A5568;
+        font-size: 15px;
+        line-height: 1.7;
+        margin-bottom: 24px;
+    }
+    
+    /* CARTES */
+    .card { 
+        background: #F7FAFC; 
+        border-radius: 8px; 
+        padding: 24px; 
+        margin-bottom: 24px; 
+        border-left: 4px solid #2B6CB0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .card h3 { 
+        color: #1e3c72; 
+        margin-bottom: 16px; 
+        font-size: 18px; 
+        font-weight: 700;
+        line-height: 1.4;
+    }
+    
+    .card ul { 
+        margin-left: 20px; 
+        margin-bottom: 0;
+        color: #4A5568;
+    }
+    
+    .card li { 
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+    
+    /* TABLEAUX */
+    .table-responsive { 
+        width: 100%; 
+        overflow-x: auto; 
+        margin: 24px 0; 
+        border-radius: 8px; 
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .container table { 
+        width: 100%; 
+        min-width: 600px; 
+        border-collapse: collapse; 
+        margin: 0; 
+        font-size: 14px; 
+        background: white;
+    }
+    
+    .container table th, 
+    .container table thead th { 
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+        color: #ffffff; 
+        font-weight: 600; 
+        padding: 16px 12px; 
+        text-align: left; 
+        border: none;
+        font-size: 14px;
+    }
+    
+    .container table td { 
+        padding: 16px 12px; 
+        border-bottom: 1px solid #E2E8F0; 
+        vertical-align: top; 
+        background: white;
+        color: #4A5568;
+        line-height: 1.6;
+    }
+    
+    .container table tr:hover td { 
+        background: #F7FAFC; 
+    }
+    
+    .container table ul {
+        margin: 0;
+        padding-left: 18px;
+    }
+    
+    .container table li {
+        margin-bottom: 6px;
+    }
+    
+    /* BADGES */
+    .badge { 
+        display: inline-block; 
+        padding: 4px 10px; 
+        border-radius: 4px; 
+        font-size: 12px; 
+        font-weight: 600; 
+        margin: 2px 4px 2px 0;
+    }
+    .badge-success { 
+        background: #C6F6D5; 
+        color: #22543D; 
+        border: 1px solid #9AE6B4;
+    }
+    .badge-danger { 
+        background: #FED7D7; 
+        color: #742A2A; 
+        border: 1px solid #FC8181;
+    }
+    .badge-warning { 
+        background: #FEEBC8; 
+        color: #744210; 
+        border: 1px solid #F6AD55;
+    }
+    
+    /* ARBRE DÉCISIONNEL */
+    .decision-tree { 
+        background: #F7FAFC; 
+        padding: 32px; 
+        border-radius: 8px; 
+        margin: 24px 0;
+        border: 1px solid #E2E8F0;
+    }
+    
+    .tree-node { 
+        margin: 0; 
+        padding: 24px; 
+        background: white; 
+        border-radius: 8px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        border: 1px solid #E2E8F0;
+    }
+    
+    .tree-node .question { 
+        font-weight: 700; 
+        color: #1e3c72; 
+        margin-bottom: 20px; 
+        font-size: 16px;
+        line-height: 1.4;
+    }
+    
+    .tree-options { 
+        display: flex; 
+        flex-wrap: wrap; 
+        gap: 16px; 
+    }
+    
+    .tree-option { 
+        flex: 1; 
+        min-width: 250px; 
+        padding: 20px; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        transition: all 0.2s;
+        border: 2px solid transparent;
+    }
+    
+    .tree-option.veineux { 
+        background: #FFF5F5; 
+        border-color: #FC8181;
+        color: #742A2A;
+    }
+    
+    .tree-option.veineux:hover { 
+        background: #FED7D7;
+        border-color: #F56565;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .tree-option.arteriel { 
+        background: #FFFFF0; 
+        border-color: #F6AD55;
+        color: #744210;
+    }
+    
+    .tree-option.arteriel:hover { 
+        background: #FEEBC8;
+        border-color: #ED8936;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .tree-option strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 15px;
+    }
+    
+    .tree-result { 
+        margin-top: 24px; 
+        padding: 24px; 
+        background: white; 
+        border-radius: 8px; 
+        border-left: 4px solid #2B6CB0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .tree-result h3 {
+        color: #1e3c72;
+        font-size: 18px;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #E2E8F0;
+    }
+    
+    .tree-result ul { 
+        margin-left: 20px; 
+        margin-top: 12px;
+        color: #4A5568;
+    }
+    
+    .tree-result li { 
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+    
+    /* CHECKLIST */
+    .checklist { 
+        list-style: none; 
+        margin-left: 0;
+    }
+    
+    .checklist li { 
+        margin: 10px 0; 
+        padding: 14px 16px; 
+        background: white; 
+        border-radius: 6px; 
+        display: flex; 
+        align-items: flex-start;
+        border: 1px solid #E2E8F0;
+        transition: all 0.2s;
+    }
+    
+    .checklist li:hover {
+        background: #F7FAFC;
+        border-color: #CBD5E0;
+    }
+    
+    .checklist li input[type="checkbox"] { 
+        margin-right: 16px; 
+        margin-top: 3px; 
+        transform: scale(1.2); 
+        cursor: pointer; 
+        flex-shrink: 0;
+        accent-color: #2B6CB0;
+    }
+    
+    .checklist li label { 
+        cursor: pointer; 
+        width: 100%; 
+        font-weight: 500; 
+        line-height: 1.5;
+        color: #2D3748;
+    }
+    
+    /* BOÎTES D'INFORMATION */
+    .info-box, .warning-box, .danger-box { 
+        padding: 16px 20px; 
+        margin: 20px 0; 
+        border-radius: 6px;
+        border-left: 4px solid;
+    }
+    
+    .info-box { 
+        background: #EBF8FF; 
+        border-left-color: #3182CE;
+        color: #2C5282;
+    }
+    
+    .warning-box { 
+        background: #FFFBEB; 
+        border-left-color: #D69E2E;
+        color: #744210;
+        font-weight: 500;
+    }
+    
+    .danger-box { 
+        background: #FFF5F5; 
+        border-left-color: #E53E3E;
+        color: #742A2A;
+    }
+    
+    /* BOUTONS */
+    .btn { 
+        display: inline-block; 
+        padding: 14px 28px; 
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+        color: white; 
+        border: none; 
+        border-radius: 6px; 
+        cursor: pointer; 
+        font-size: 15px; 
+        font-weight: 600; 
+        transition: all 0.2s; 
+        margin-top: 16px;
+        width: auto;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(30, 60, 114, 0.2);
+    }
+    
+    .btn:hover { 
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(30, 60, 114, 0.3);
+    }
+    
+    /* BOUTON RÉINITIALISER */
+    .btn-reset { 
+        display: inline-flex; 
+        align-items: center; 
+        margin-top: 32px; 
+        color: #718096; 
+        font-weight: 600; 
+        font-size: 14px; 
+        transition: all 0.2s; 
+        cursor: pointer; 
+        background: none; 
+        border: none; 
+        padding: 10px 16px;
+        font-family: inherit;
+        border-radius: 6px;
+    }
+    
+    .btn-reset:hover { 
+        color: #2B6CB0;
+        background: #F7FAFC;
+    }
+    
+    .btn-reset span { 
+        margin-right: 8px; 
+        font-size: 16px; 
+        line-height: 1;
+    }
+    
+    /* FOOTER */
+    .footer { 
+        text-align: center; 
+        padding: 24px 40px; 
+        color: #718096; 
+        font-size: 13px; 
+        border-top: 1px solid #E2E8F0; 
+        margin-top: 32px;
+        background: white;
+    }
+    
+    .footer a {
+        color: #2B6CB0;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .footer a:hover {
+        text-decoration: underline;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+        .container .header { 
+            padding: 24px 20px;
         }
-        
-        /* En-tête blindé */
-        .container .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
-            padding: 30px !important;
-            border-radius: 15px 15px 0 0 !important;
-            margin-bottom: 0 !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-        }
-        
         .container .header h1 { 
-            font-size: 2.2em !important; 
-            margin-bottom: 10px !important; 
-            color: #ffffff !important; 
-            line-height: 1.2 !important;
-            word-wrap: break-word;
+            font-size: 22px;
         }
-        
         .container .header p { 
-            font-size: 1.1em !important; 
-            opacity: 0.9 !important; 
-            color: #ffffff !important; 
+            font-size: 13px;
         }
-
-        /* Disclaimer Médico-légal */
-        .disclaimer-box {
-            background-color: #fff3cd;
-            border-left: 5px solid #856404;
-            color: #856404;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 0 0 10px 10px;
-            font-size: 0.9em;
-            font-weight: 400;
-            line-height: 1.5;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .disclaimer-box strong { color: #533f03; }
-        
-        /* Navigation par onglets */
         .tabs { 
-            display: flex; 
-            flex-wrap: wrap; 
-            background: white; 
-            border-radius: 10px 10px 0 0; 
-            overflow: hidden; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            flex-direction: column;
+            padding: 0;
         }
-        
         .tab-btn { 
-            flex: 1; 
-            min-width: 150px; 
-            padding: 15px 10px; 
-            background: #e9ecef; 
-            border: none; 
-            cursor: pointer; 
-            font-size: 1em; 
-            font-weight: 600; 
-            color: #495057; 
-            transition: all 0.3s; 
-            border-bottom: 3px solid transparent;
-            text-align: center;
+            width: 100%; 
+            border-bottom: 1px solid #E2E8F0;
+            border-left: 3px solid transparent;
+            text-align: left;
+            padding: 14px 20px;
         }
-        
-        .tab-btn:hover { background: #dee2e6; }
-        .tab-btn.active { background: white; color: #1e3c72; border-bottom: 3px solid #1e3c72; }
-        
-        /* Contenu des onglets */
+        .tab-btn.active { 
+            border-left: 3px solid #2B6CB0;
+            border-bottom: 1px solid #E2E8F0;
+        }
         .tab-content { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 0 0 10px 10px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            margin-bottom: 30px; 
-            line-height: 1.6; 
+            padding: 24px 20px;
+            margin: 0 0 24px 0;
+            border-radius: 0 0 8px 8px;
         }
-        
-        .tab-pane { display: none; }
-        .tab-pane.active { display: block; }
-        
-        /* Cartes et Listes */
-        .card { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #1e3c72; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .card h3 { color: #1e3c72; margin-bottom: 15px; font-size: 1.3em; line-height: 1.3;}
-        .card ul, .tab-pane > ul { margin-left: 20px; margin-bottom: 15px; }
-        .card li { margin-bottom: 8px; }
-
-        /* Tableaux */
-        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.05); }
-        .container table { width: 100% !important; min-width: 600px; border-collapse: collapse !important; margin: 0 !important; font-size: 0.95em !important; }
-        .container table th, .container table thead th { background-color: #1e3c72 !important; color: #ffffff !important; font-weight: 600 !important; padding: 12px !important; text-align: left !important; border: none !important; text-transform: none !important; }
-        .container table td { padding: 12px !important; border-bottom: 1px solid #dee2e6 !important; vertical-align: top !important; background-color: transparent !important; }
-        .container table tr:hover td { background-color: #f1f3f5 !important; }
-        
-        /* Badges */
-        .badge { display: inline-block !important; padding: 4px 8px !important; border-radius: 4px !important; font-size: 0.85em !important; font-weight: 600 !important; margin-bottom: 4px !important; }
-        .badge-success { background-color: #d4edda !important; color: #155724 !important; border: 1px solid #c3e6cb !important; }
-        .badge-danger { background-color: #f8d7da !important; color: #721c24 !important; border: 1px solid #f5c6cb !important; }
-        .badge-warning { background-color: #fff3cd !important; color: #856404 !important; border: 1px solid #ffeeba !important; }
-        
-        /* Arbre décisionnel */
-        .decision-tree { background: #e9ecef; padding: 20px; border-radius: 10px; margin: 20px 0; }
-        .tree-node { margin: 10px 0; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .tree-node .question { font-weight: 600; color: #1e3c72; margin-bottom: 15px; font-size: 1.1em;}
-        .tree-options { display: flex; flex-wrap: wrap; gap: 15px; }
-        .tree-option { flex: 1; min-width: 200px; padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
-        .tree-option.veineux { background: #f8d7da; border: 1px solid #f5c6cb; font-weight:400; }
-        .tree-option.veineux:hover { background: #f1b0b7; }
-        .tree-option.arteriel { background: #fff3cd; border: 1px solid #ffeeba; font-weight:400;}
-        .tree-option.arteriel:hover { background: #ffe69c; }
-        .tree-result { margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #1e3c72; }
-        .tree-result ul { margin-left: 20px; margin-top: 10px;}
-        .tree-result li { margin-bottom: 10px; }
-
-        /* Checklist */
-        .checklist { list-style: none; margin-left: 0 !important; }
-        
-        .checklist li { margin: 8px 0; padding: 12px 10px; background: #f8f9fa; border-radius: 5px; display: flex; align-items: flex-start; }
-        
-        .checklist li input[type="checkbox"] { margin-right: 15px; margin-top: 4px; transform: scale(1.3); cursor: pointer; flex-shrink: 0; }
-        .checklist li label { cursor: pointer; width: 100%; font-weight: 500; line-height: 1.4;}
-
-        /* Boîtes d'information */
-        .info-box, .warning-box, .danger-box { padding: 15px; margin: 20px 0; border-radius: 5px; word-wrap: break-word;}
-        .info-box { background: #e7f3ff; border-left: 4px solid #1e3c72; }
-        .warning-box { background: #fff3cd; border-left: 4px solid #ffc107; font-weight:400; }
-        .danger-box { background: #f8d7da; border-left: 4px solid #dc3545; }
-        
-        /* Boutons */
-        .btn { display: inline-block; padding: 15px 24px; background: #1e3c72 !important; color: white !important; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: background 0.3s; margin-top: 10px; width: 100%; text-align: center;}
-        .btn:hover { background: #2a5298 !important; }
-        
-        /* Modification : Style pour le bouton Réinitialiser */
-        .btn-reset { display: inline-flex; align-items: center; margin-top: 30px; color: #6c757d; font-weight: 600; font-size: 1.05em; transition: color 0.3s; cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; }
-        .btn-reset:hover { color: #1e3c72; }
-        .btn-reset span { margin-right: 8px; font-size: 1.3em; line-height: 1; }
-        
-        .footer { text-align: center; padding: 20px; color: #6c757d; font-size: 0.9em; border-top: 1px solid #dee2e6; margin-top: 20px;}
-        
-        @media (max-width: 768px) {
-            .container { padding: 10px; }
-            .container .header { padding: 20px 15px !important; border-radius: 10px 10px 0 0 !important;}
-            .container .header h1 { font-size: 1.6em !important; }
-            .container .header p { font-size: 1em !important; }
-            .disclaimer-box { border-radius: 0 0 10px 10px; padding: 12px; font-size: 0.85em; }
-            .tabs { flex-direction: column; border-radius: 10px; }
-            .tab-btn { width: 100%; border-bottom: 1px solid #dee2e6; padding: 12px 10px; text-align: left; }
-            .tab-btn.active { border-left: 4px solid #1e3c72; border-bottom: 1px solid #dee2e6; }
-            .tab-content { padding: 15px; }
-            .card { padding: 15px; }
-            .tree-options { flex-direction: column; }
-            .tree-option { min-width: 100%; padding: 12px;}
-            .checklist li { padding: 10px; }
-            .btn { padding: 12px 20px; font-size: 1em;}
+        .tree-options { 
+            flex-direction: column; 
         }
-    </style>
-</head>
+        .tree-option { 
+            min-width: 100%; 
+        }
+        .card { 
+            padding: 20px;
+        }
+        .checklist li { 
+            padding: 12px;
+        }
+        .btn { 
+            width: 100%;
+        }
+    }
+</style></head>
 <body>
     <div class="container">
         <!-- En-tête -->
