@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contraception et risque cardio-vasculaire - Outil interactif</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* En-tête blindé */
+        .container .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+            padding: 30px !important;
+            border-radius: 15px 15px 0 0 !important;
+            margin-bottom: 0 !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+        }
+        
+        .container .header h1 { 
+            font-size: 2.2em !important; 
+            margin-bottom: 10px !important; 
+            color: #ffffff !important; 
+            line-height: 1.2 !important;
+            word-wrap: break-word;
+        }
+        
+        .container .header p { 
+            font-size: 1.1em !important; 
+            opacity: 0.9 !important; 
+            color: #ffffff !important; 
+        }
+
+        /* Disclaimer Médico-légal */
+        .disclaimer-box {
+            background-color: #fff3cd;
+            border-left: 5px solid #856404;
+            color: #856404;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 0 10px 10px;
+            font-size: 0.9em;
+            font-weight: 400;
+            line-height: 1.5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .disclaimer-box strong { color: #533f03; }
+        
+        /* Navigation par onglets */
+        .tabs { 
+            display: flex; 
+            flex-wrap: wrap; 
+            background: white; 
+            border-radius: 10px 10px 0 0; 
+            overflow: hidden; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        
+        .tab-btn { 
+            flex: 1; 
+            min-width: 150px; 
+            padding: 15px 10px; 
+            background: #e9ecef; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 1em; 
+            font-weight: 600; 
+            color: #495057; 
+            transition: all 0.3s; 
+            border-bottom: 3px solid transparent;
+            text-align: center;
+        }
+        
+        .tab-btn:hover { background: #dee2e6; }
+        .tab-btn.active { background: white; color: #1e3c72; border-bottom: 3px solid #1e3c72; }
+        
+        /* Contenu des onglets */
+        .tab-content { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 0 0 10px 10px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            margin-bottom: 30px; 
+            line-height: 1.6; 
+        }
+        
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        
+        /* Cartes et Listes */
+        .card { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #1e3c72; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .card h3 { color: #1e3c72; margin-bottom: 15px; font-size: 1.3em; line-height: 1.3;}
+        .card ul, .tab-pane > ul { margin-left: 20px; margin-bottom: 15px; }
+        .card li { margin-bottom: 8px; }
+
+        /* Tableaux */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 20px 0; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.05); }
+        .container table { width: 100% !important; min-width: 600px; border-collapse: collapse !important; margin: 0 !important; font-size: 0.95em !important; }
+        .container table th, .container table thead th { background-color: #1e3c72 !important; color: #ffffff !important; font-weight: 600 !important; padding: 12px !important; text-align: left !important; border: none !important; text-transform: none !important; }
+        .container table td { padding: 12px !important; border-bottom: 1px solid #dee2e6 !important; vertical-align: top !important; background-color: transparent !important; }
+        .container table tr:hover td { background-color: #f1f3f5 !important; }
+        
+        /* Badges */
+        .badge { display: inline-block !important; padding: 4px 8px !important; border-radius: 4px !important; font-size: 0.85em !important; font-weight: 600 !important; margin-bottom: 4px !important; }
+        .badge-success { background-color: #d4edda !important; color: #155724 !important; border: 1px solid #c3e6cb !important; }
+        .badge-danger { background-color: #f8d7da !important; color: #721c24 !important; border: 1px solid #f5c6cb !important; }
+        .badge-warning { background-color: #fff3cd !important; color: #856404 !important; border: 1px solid #ffeeba !important; }
+        
+        /* Arbre décisionnel */
+        .decision-tree { background: #e9ecef; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .tree-node { margin: 10px 0; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tree-node .question { font-weight: 600; color: #1e3c72; margin-bottom: 15px; font-size: 1.1em;}
+        .tree-options { display: flex; flex-wrap: wrap; gap: 15px; }
+        .tree-option { flex: 1; min-width: 200px; padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .tree-option.veineux { background: #f8d7da; border: 1px solid #f5c6cb; font-weight:400; }
+        .tree-option.veineux:hover { background: #f1b0b7; }
+        .tree-option.arteriel { background: #fff3cd; border: 1px solid #ffeeba; font-weight:400;}
+        .tree-option.arteriel:hover { background: #ffe69c; }
+        .tree-result { margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #1e3c72; }
+        .tree-result ul { margin-left: 20px; margin-top: 10px;}
+        .tree-result li { margin-bottom: 10px; }
+
+        /* Checklist */
+        .checklist { list-style: none; margin-left: 0 !important; }
+        
+        .checklist li { margin: 8px 0; padding: 12px 10px; background: #f8f9fa; border-radius: 5px; display: flex; align-items: flex-start; }
+        
+        .checklist li input[type="checkbox"] { margin-right: 15px; margin-top: 4px; transform: scale(1.3); cursor: pointer; flex-shrink: 0; }
+        .checklist li label { cursor: pointer; width: 100%; font-weight: 500; line-height: 1.4;}
+
+        /* Boîtes d'information */
+        .info-box, .warning-box, .danger-box { padding: 15px; margin: 20px 0; border-radius: 5px; word-wrap: break-word;}
+        .info-box { background: #e7f3ff; border-left: 4px solid #1e3c72; }
+        .warning-box { background: #fff3cd; border-left: 4px solid #ffc107; font-weight:400; }
+        .danger-box { background: #f8d7da; border-left: 4px solid #dc3545; }
+        
+        /* Boutons */
+        .btn { display: inline-block; padding: 15px 24px; background: #1e3c72 !important; color: white !important; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: background 0.3s; margin-top: 10px; width: 100%; text-align: center;}
+        .btn:hover { background: #2a5298 !important; }
+        
+        /* Modification : Style pour le bouton Réinitialiser */
+        .btn-reset { display: inline-flex; align-items: center; margin-top: 30px; color: #6c757d; font-weight: 600; font-size: 1.05em; transition: color 0.3s; cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; }
+        .btn-reset:hover { color: #1e3c72; }
+        .btn-reset span { margin-right: 8px; font-size: 1.3em; line-height: 1; }
+        
+        .footer { text-align: center; padding: 20px; color: #6c757d; font-size: 0.9em; border-top: 1px solid #dee2e6; margin-top: 20px;}
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .container .header { padding: 20px 15px !important; border-radius: 10px 10px 0 0 !important;}
+            .container .header h1 { font-size: 1.6em !important; }
+            .container .header p { font-size: 1em !important; }
+            .disclaimer-box { border-radius: 0 0 10px 10px; padding: 12px; font-size: 0.85em; }
+            .tabs { flex-direction: column; border-radius: 10px; }
+            .tab-btn { width: 100%; border-bottom: 1px solid #dee2e6; padding: 12px 10px; text-align: left; }
+            .tab-btn.active { border-left: 4px solid #1e3c72; border-bottom: 1px solid #dee2e6; }
+            .tab-content { padding: 15px; }
+            .card { padding: 15px; }
+            .tree-options { flex-direction: column; }
+            .tree-option { min-width: 100%; padding: 12px;}
+            .checklist li { padding: 10px; }
+            .btn { padding: 12px 20px; font-size: 1em;}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header">
+            <h1>Contraception & Risque Cardio-Vasculaire</h1>
+            <p>Outil d'aide à la décision, conçu et réalisé par Dr KARA-ZAITRI M.A - Gynécologue </p>
+        </div>
+
+        <!-- AVERTISSEMENT MÉDICO-LÉGAL -->
+        <div class="disclaimer-box">
+            <strong>⚠️ Avertissement Légal :</strong> Cet outil interactif est fourni à titre strictement informatif et éducatif. Il ne remplace en aucun cas le jugement clinique du médecin ni une consultation médicale personnalisée. Bien que basé sur les recommandations en vigueur, l'auteur décline toute responsabilité quant aux décisions thérapeutiques découlant de l'utilisation de cet outil. La prescription finale relève de l'entière et unique responsabilité du praticien.
+        </div>
+        
+        <!-- Onglets -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('general', this)">📋 Généralités & Bilan</button>
+            <button class="tab-btn" onclick="showTab('decision', this)">🔍 Arbre Décisionnel</button>
+            <button class="tab-btn" onclick="showTab('tableaux', this)">📊 Tableaux Récapitulatifs</button>
+            <button class="tab-btn" onclick="showTab('checklist', this)">✅ Évaluateur CHC (Checklist)</button>
+        </div>
+        
+        <!-- Contenu -->
+        <div class="tab-content">
+            
+            <!-- 1. Généralités -->
+            <div id="general" class="tab-pane active">
+                <h2>1. Généralités et Risques Thrombotiques</h2>
+                <br>
+                <p style="margin-top: -20px; font-size: 1em;">Les maladies cardio-vasculaires représentent la première cause de décès chez la femme.<br> La réduction du risque passe par le contrôle des facteurs lipidiques et thrombotiques lors du choix contraceptif.</p>
+                <br>
+                
+                <div class="card">
+                    <h3>🔵 Risques Veineux</h3>
+                    <ul>
+                        <li>Les œstroprogestatifs (EP) multiplient par <strong>4</strong> le risque de thrombose veineuse (phlébite, EP, thrombose veineuse cérébrale...).</li>
+                        <li><strong>Facteurs aggravants :</strong> antécédents familiaux, alitement, <strong>chirurgie</strong>, tabac, âge ≥ 35 ans, obésité (IMC ≥ 30).</li>
+                        <li>Le risque est présent dès la première prise et disparaît dans les mois suivant l'arrêt.</li>
+                        <li>La diminution de la dose d'EE a réduit le risque mais <strong>ne l'a pas supprimé</strong>.</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>🔴 Risques Artériels</h3>
+                    <ul>
+                        <li>Les œstroprogestatifs multiplient par <strong>3</strong> le risque d'infarctus et d'AVC ischémique.</li>
+                        <li>Ce risque dépend fortement de l'association avec d'autres facteurs (tabac, âge, HTA, diabète).</li>
+                        <li>La fréquence est corrélée à la posologie et au type de progestatif associé.</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>🩺 Bilan pré-prescription</h3>
+                    <p>Avant toute prescription, l'interrogatoire minutieux doit rechercher :</p>
+                    <ul>
+                        <li><strong>ATCD personnels :</strong> thrombose veineuse ou artérielle, cardiopathie, HTA, diabète, dyslipidémie, migraine avec aura.</li>
+                        <li><strong>ATCD familiaux :</strong> thrombose avant <strong>45-50 ans</strong> chez un parent du 1er degré.</li>
+                        <li><strong>Facteurs de risque :</strong> tabac, obésité, âge > 35 ans.</li>
+                    </ul>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ Note importante sur la thrombophilie :</strong><br>
+                        Le bilan biologique de thrombophilie (Protéine C, S, Antithrombine III, Facteur V Leiden...) <strong>n'est pas systématique</strong>. Il est réservé aux patientes ayant des antécédents personnels ou familiaux évocateurs.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2. Arbre décisionnel -->
+            <div id="decision" class="tab-pane">
+                <h2>2. Conduite à tenir selon l'antécédent thrombotique</h2>
+                <br>
+                <p>La distinction entre thrombose veineuse et artérielle est essentielle.</p>
+                
+                <div class="decision-tree">
+                    <div class="tree-node">
+                        <div class="question">🔍 Quel est l'antécédent thrombotique de la patiente ?</div>
+                        <div class="tree-options">
+                            <div class="tree-option veineux" onclick="showResult('veineux')">
+                                <strong>🔵 Thrombose veineuse</strong><br>
+                                TVP, EP, TVC, viscérale...
+                            </div>
+                            <div class="tree-option arteriel" onclick="showResult('arteriel')">
+                                <strong>🔴 Thrombose artérielle</strong><br>
+                                IDM, AVC, AIT, AOMI, rétinienne...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="result-area" class="tree-result" style="display: none;"></div>
+                </div>
+                
+                <div class="card">
+                    <h3>Focus : Situations pathologiques associées</h3>
+                    <ul>
+                        <li><strong>HTA :</strong> CHC = <span class="badge badge-danger">CI Absolue</span>. Micro/DIU = Autorisés. Implant = Autorisé (mais à retirer si HTA se déséquilibre).</li>
+                        <li><strong>Diabète :</strong> CHC = <span class="badge badge-danger">CI Absolue</span> si atteintes vasculaires ou ancienneté > 20 ans. Progestatifs seuls = Autorisés (surveillance glycémique).</li>
+                        <li><strong>Cardiopathies :</strong> CHC = <span class="badge badge-danger">CI Absolue</span> (ischémique, valvulopathie compliquée). DIU = Méthode de choix. Avis cardio recommandé.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 3. Tableaux -->
+            <div id="tableaux" class="tab-pane">
+                <h2>3. Contre-indications thrombo-emboliques des contraceptifs</h2>
+                
+                <div class="warning-box" style="margin-bottom:15px; font-size: 0.9em;">
+                    📱 <em>Astuce mobile : Vous pouvez faire glisser le tableau ci-dessous de gauche à droite.</em>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Méthode</th>
+                                <th>Règles et Contre-indications</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Pilule estroprogestative (CHC)</strong><br><small>(Orale, Patch, Anneau)</small></td>
+                                <td>
+                                    <strong><span class="badge badge-danger">CI Absolues :</span></strong>
+                                    <ul>
+                                        <li>ATCD veineux ou artériels ou signes annonciateurs (angor, AIT).</li>
+                                        <li>Thrombophilie héréditaire ou acquise.</li>
+                                        <li><strong>Association Tabac + Âge ≥ 35 ans.</strong></li>
+                                        <li>HTA non contrôlée, Migraine avec aura, Diabète compliqué.</li>
+                                    </ul>
+                                    <strong><span class="badge badge-warning">CI Relatives :</span></strong>
+                                    <ul>
+                                        <li>Varices importantes, obésité importante.</li>
+                                        <li>Chirurgie programmée, immobilisation prolongée.</li>
+                                        <li>Facteurs de risque multiples (âge, tabac < 35 ans, diabète équilibré).</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Microprogestatifs</strong><br><small>(désogestrel)</small></td>
+                                <td>
+                                    <span class="badge badge-danger">CI Absolue :</span> Accident veineux <strong>récent ou évolutif</strong>.<br>
+                                    <span class="badge badge-success">Autorisés :</span> ATCD veineux anciens (stabilisés), ATCD artériels, fumeuses > 35 ans.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Macroprogestatifs</strong></td>
+                                <td><span class="badge badge-danger">CI Absolue :</span> Antécédents veineux OU artériels.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Progestatifs injectables</strong></td>
+                                <td><span class="badge badge-danger">CI Absolue :</span> Antécédents veineux ET artériels.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Implant progestatif</strong></td>
+                                <td>
+                                    <span class="badge badge-danger">CI Absolue :</span> Accident veineux <strong>évolutif (en cours)</strong>.<br>
+                                    <span class="badge badge-success">Note :</span> Autorisé si ATCD ancien stabilisé. (À retirer si HTA non contrôlée ou survenue thrombose).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>DIU hormonal</strong></td>
+                                <td>
+                                    <span class="badge badge-danger">CI Absolue :</span> TVP ou EP <strong>en cours</strong>, Cardiopathie ischémique <strong>actuelle</strong>.<br>
+                                    <span class="badge badge-success">Note :</span> Autorisé si ATCD thrombotique ancien et stabilisé.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>DIU au cuivre</strong></td>
+                                <td><span class="badge badge-success">Méthode de choix :</span> Aucune contre-indication métabolique ou vasculaire.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 4. Checklist & Algorithme -->
+            <div id="checklist" class="tab-pane">
+                <h2>4. Évaluateur de prescription CHC</h2>
+                <p>Cochez les antécédents et facteurs de risque de votre patiente pour obtenir une synthèse automatique <strong>pour la Contraception Hormonale Combinée (CHC)</strong>.</p>
+                <br>
+                
+                <div class="card" style="border-left-color: #dc3545;">
+                    <h3 style="color: #dc3545;">🔴 Antécédents Thrombotiques / Pathologies</h3>
+                    <ul class="checklist">
+                        <li><input type="checkbox" id="atcd_v"> <label for="atcd_v">ATCD Thrombose Veineuse (TVP, EP, TVC...)</label></li>
+                        <li><input type="checkbox" id="atcd_a"> <label for="atcd_a">ATCD Thrombose Artérielle (IDM, AVC, AOMI...)</label></li>
+                        <li><input type="checkbox" id="hta"> <label for="hta">Hypertension artérielle (HTA)</label></li>
+                        <li><input type="checkbox" id="diabete_complexe"> <label for="diabete_complexe">Diabète de type 2 > 20 ans ou avec complications vasculaires</label></li>
+                        <li><input type="checkbox" id="diabete_simple"> <label for="diabete_simple">Diabète insulinodépendant (sans complication)</label></li>
+                        <li><input type="checkbox" id="dyslipid"> <label for="dyslipid">Dyslipidémie non contrôlée</label></li>
+                        <li><input type="checkbox" id="migraine_aura"> <label for="migraine_aura">Migraine <strong>AVEC</strong> aura</label></li>
+                        <li><input type="checkbox" id="migraine_sans_aura"> <label for="migraine_sans_aura">Migraine <strong>SANS</strong> aura</label></li>
+                        <li><input type="checkbox" id="thrombophilie"> <label for="thrombophilie">Thrombophilie biologique connue (Facteur V, SAPL...)</label></li>
+                    </ul>
+                </div>
+                
+                <div class="card" style="border-left-color: #ffc107;">
+                    <h3 style="color: #856404;">⚠️ Facteurs de risque et Terrain</h3>
+                    <ul class="checklist">
+                        <li><input type="checkbox" id="age"> <label for="age">Patiente âgée de <strong>35 ans ou plus</strong></label></li>
+                        <li><input type="checkbox" id="tabac"> <label for="tabac">Tabagisme actif</label></li>
+                        <li><input type="checkbox" id="obesite"> <label for="obesite">Obésité (IMC ≥ 30)</label></li>
+                        <li><input type="checkbox" id="atcd_fam"> <label for="atcd_fam">ATCD familiaux de thrombose (1er degré, < 45-50 ans)</label></li>
+                    </ul>
+                </div>
+                
+                <button class="btn" onclick="evaluateRisk()">Générer la recommandation pour la CHC</button>
+                
+                <div id="risk-result" style="margin-top: 20px; display: none; padding: 20px; border-radius: 8px; font-size: 1.1em;">
+                    <!-- Le résultat s'affichera ici -->
+                </div>
+
+                <!-- Modification : Nouveau bouton Réinitialiser -->
+                <button onclick="resetChecklist()" class="btn-reset"><span>🔄</span> Réinitialiser</button>
+            </div>
+            
+        </div>
+        
+        <!-- Pied de page -->
+        <div class="footer">
+            <p><strong>© Outil basé sur le cours "<a href="https://www.dr-karazaitri-ma.net/gynecologie/contraception/contraception-situations-particulieres/contraception-chez-la-femme-a-risque-cardio-vasculaire/" target="_blank" style="color: #1e3c72; text-decoration: none; font-weight: 500; border-bottom: 1px dotted #1e3c72;">Contraception et risque cardio-vasculaire</a>" du Dr KARA-ZAITRI M.A</strong></p>
+            <p style="margin-top: 5px; font-size: 1em;">L'utilisation de cet outil ne se substitue pas à la responsabilité de prescription du praticien de santé.</p>
+        </div>
+    </div>
+
+    <script>
+    function showTab(tabName, btnElement) {
+        document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        btnElement.classList.add('active');
+    }
+    
+    function showResult(type) {
+        const resultArea = document.getElementById('result-area');
+        let html = '';
+        
+        if (type === 'veineux') {
+            html = `
+                <h3 style="color:#1e3c72; border-bottom: 2px solid #1e3c72; padding-bottom: 10px;">🔵 Antécédent Thrombotique Veineux</h3>
+                <p><em>(Phlébite, EP, thrombose veineuse cérébrale, viscérale...)</em></p>
+                <ul style="list-style-type: none; padding-left: 0; margin-top: 15px;">
+                    <li><span class="badge badge-danger">❌ Œstroprogestatifs</span> : Contre-indiqués (absolu).</li>
+                    <li><span class="badge badge-danger">❌ Progestatifs injectables</span> : Contre-indiqués.</li>
+                    <li><span class="badge badge-success">✅ Microprogestatifs oraux</span> : Autorisés <em>(Sauf si thrombose aiguë en cours)</em>.</li>
+                    <li><span class="badge badge-success">✅ Implant progestatif</span> : Autorisé <em>(Sauf si thrombose aiguë en cours)</em>.</li>
+                    <li><span class="badge badge-success">✅ DIU (Cuivre / Hormonal)</span> : Autorisés.</li>
+                </ul>
+            `;
+        } else if (type === 'arteriel') {
+            html = `
+                <h3 style="color:#dc3545; border-bottom: 2px solid #dc3545; padding-bottom: 10px;">🔴 Antécédent Thrombotique Artériel</h3>
+                <p><em>(IDM, AVC ischémique, AIT, AOMI, thrombose rétinienne...)</em></p>
+                <ul style="list-style-type: none; padding-left: 0; margin-top: 15px;">
+                    <li><span class="badge badge-danger">❌ Œstroprogestatifs</span> : Contre-indiqués.</li>
+                    <li><span class="badge badge-danger">❌ Progestatifs injectables</span> : Contre-indiqués.</li>
+                    <li><span class="badge badge-success">✅ Microprogestatifs oraux</span> : Autorisés.</li>
+                    <li><span class="badge badge-success">✅ Implant progestatif</span> : Autorisé.</li>
+                    <li><span class="badge badge-success">✅ DIU (Cuivre / Hormonal)</span> : Autorisés <em>(Sauf ischémie cardiaque aiguë en cours pour DIU hormonal)</em>.</li>
+                </ul>
+            `;
+        }
+        
+        resultArea.innerHTML = html;
+        resultArea.style.display = 'block';
+    }
+    
+    function evaluateRisk() {
+        const resultArea = document.getElementById('risk-result');
+        
+        const age35 = document.getElementById('age').checked;
+        const tabac = document.getElementById('tabac').checked;
+        const atcd_v = document.getElementById('atcd_v').checked;
+        const atcd_a = document.getElementById('atcd_a').checked;
+        const hta = document.getElementById('hta').checked;
+        const diabete_comp = document.getElementById('diabete_complexe').checked;
+        const diabete_simp = document.getElementById('diabete_simple').checked;
+        const dyslipid = document.getElementById('dyslipid').checked;
+        const migraine_aura = document.getElementById('migraine_aura').checked;
+        const migraine_sans = document.getElementById('migraine_sans_aura').checked;
+        const thrombophilie = document.getElementById('thrombophilie').checked;
+        const atcd_fam = document.getElementById('atcd_fam').checked;
+        const obesite = document.getElementById('obesite').checked;
+
+        let isAbsCI = false;
+        let isRelCI = false;
+        let reasonsAbs = [];
+        let reasonsRel = [];
+
+        if (atcd_v) reasonsAbs.push("Antécédent de thrombose veineuse");
+        if (atcd_a) reasonsAbs.push("Antécédent de thrombose artérielle");
+        if (hta) reasonsAbs.push("Hypertension artérielle (HTA)");
+        if (diabete_comp) reasonsAbs.push("Diabète > 20 ans ou compliqué");
+        if (dyslipid) reasonsAbs.push("Dyslipidémie non contrôlée");
+        if (migraine_aura) reasonsAbs.push("Migraine AVEC aura");
+        if (thrombophilie) reasonsAbs.push("Thrombophilie biologique connue");
+        if (atcd_fam) reasonsAbs.push("Antécédents familiaux (1er degré, < 45-50 ans)");
+        
+        if (tabac && age35) {
+            reasonsAbs.push("Association Tabac ET Âge ≥ 35 ans");
+        }
+
+        if (obesite) reasonsRel.push("Obésité (IMC ≥ 30)");
+        if (diabete_simp) reasonsRel.push("Diabète insulinodépendant (sans complication majeure)");
+        
+        let warnings = [];
+        if (tabac && !age35) warnings.push("Tabac (patiente < 35 ans) : CHC Possible mais sevrage conseillé.");
+        if (age35 && !tabac) warnings.push("Âge > 35 ans (isolé) : CHC Possible.");
+        if (migraine_sans) {
+            if (age35) warnings.push("Migraine sans aura à ≥ 35 ans : Évaluer globalement.");
+            else warnings.push("Migraine SANS aura (< 35 ans) : CHC Possible.");
+        }
+
+        if (reasonsAbs.length > 0) {
+            isAbsCI = true;
+        } else if (reasonsRel.length > 0) {
+            isRelCI = true;
+        }
+
+        let html = '';
+        
+        if (isAbsCI) {
+            resultArea.style.backgroundColor = '#f8d7da';
+            resultArea.style.borderLeftColor = '#dc3545';
+            html += `<h3 style="color: #721c24; margin-bottom: 15px;">❌ CONTRE-INDICATION ABSOLUE AUX CHC</h3>`;
+            html += `<p style="color: #721c24;">La prescription d'oestroprogestatifs (pilule, patch, anneau) est contre-indiquée en raison de :</p>`;
+            html += `<ul style="color: #721c24; font-weight: bold; margin-top: 10px;">`;
+            reasonsAbs.forEach(r => html += `<li>${r}</li>`);
+            html += `</ul>`;
+            html += `<p style="margin-top: 15px; font-size: 0.9em;"><em>👉 Orientez-vous vers les microprogestatifs ou le DIU (cf. onglet Tableaux).</em></p>`;
+        } 
+        else if (isRelCI) {
+            resultArea.style.backgroundColor = '#fff3cd';
+            resultArea.style.borderLeftColor = '#ffc107';
+            html += `<h3 style="color: #856404; margin-bottom: 15px;">⚠️ CI RELATIVE / PRUDENCE POUR LES CHC</h3>`;
+            html += `<p style="color: #856404;">Présence de facteurs nécessitant une évaluation personnalisée :</p>`;
+            html += `<ul style="color: #856404; font-weight: bold; margin-top: 10px;">`;
+            reasonsRel.forEach(r => html += `<li>${r}</li>`);
+            html += `</ul>`;
+        } 
+        else {
+            resultArea.style.backgroundColor = '#d4edda';
+            resultArea.style.borderLeftColor = '#28a745';
+            html += `<h3 style="color: #155724; margin-bottom: 15px;">✅ PRESCRIPTION CHC POSSIBLE</h3>`;
+            html += `<p style="color: #155724;">Aucune contre-indication absolue détectée pour les œstroprogestatifs.</p>`;
+        }
+
+        if (warnings.length > 0 && !isAbsCI) {
+            html += `<hr style="margin: 15px 0; border-color: rgba(0,0,0,0.1);">`;
+            html += `<strong>Remarques :</strong><ul>`;
+            warnings.forEach(w => html += `<li>${w}</li>`);
+            html += `</ul>`;
+        }
+
+        resultArea.innerHTML = html;
+        resultArea.style.display = 'block';
+    }
+
+    // Modification : Fonction pour réinitialiser le formulaire
+    function resetChecklist() {
+        // Décocher toutes les cases à cocher
+        const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        // Masquer et vider la zone de résultat
+        const resultArea = document.getElementById('risk-result');
+        resultArea.style.display = 'none';
+        resultArea.innerHTML = '';
+    }
+</script>
+</body>
+</html>
