@@ -1,1 +1,872 @@
+<!-- ============================================================
+     💊 Algorithme Aide à la prescription contraceptive
+     Version 5.0 · Blindé Elementor · Cartes x4 & Alternatives cliquables
+     ============================================================ -->
 
+<style>
+/* ── Variables & Reset isolé dans le conteneur ── */
+.contra-wrap {
+    --blue-deep:   #0d2d4a;
+    --blue-mid:    #1a4b72;
+    --blue-light:  #2a6fa8;
+    --teal:        #1b6b72;
+    --accent:      #c8782a;
+    --surface:     #ffffff;
+    --border:      #d0dce8;
+    --text-main:   #1a2332;
+    --text-sec:    #3a5570;
+    --text-muted:  #64748b;
+    --red-ci:      #b83232;
+    --green-ok:    #1b6b3a;
+    
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
+    background: #f2f5f8 !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    color: var(--text-main) !important;
+    line-height: 1.6 !important;
+    border: 1px solid var(--border) !important;
+}
+
+.contra-wrap *, .contra-wrap *::before, .contra-wrap *::after {
+    box-sizing: border-box !important;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── HEADER ── */
+.contra-header {
+    background: var(--blue-deep) !important;
+    padding: 24px 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 18px !important;
+    border-bottom: 3px solid var(--blue-mid) !important;
+}
+.contra-header-logo {
+    width: 48px !important; 
+    height: 48px !important; 
+    flex-shrink: 0 !important;
+    background: var(--blue-mid) !important;
+    border: 2px solid rgba(255,255,255,.2) !important;
+    border-radius: 50% !important;
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important;
+    font-size: 24px !important; 
+    color: #ffffff !important;
+}
+.contra-h1 {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    color: #ffffff !important;
+    margin: 0 0 4px 0 !important;
+    line-height: 1.2 !important;
+}
+.contra-subtitle {
+    font-size: 13px !important;
+    color: #8db3d0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-weight: 500 !important;
+}
+.contra-header-badge {
+    margin-left: auto !important;
+    background: rgba(200,120,42,.18) !important;
+    border: 1px solid rgba(200,120,42,.5) !important;
+    color: #f0c07a !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    letter-spacing: 0.06em !important;
+    white-space: nowrap !important;
+    text-transform: uppercase !important;
+}
+
+/* ── LAYOUT CORPS ── */
+.contra-body {
+    padding: 24px 20px 32px !important;
+}
+.contra-two-col {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 24px !important;
+    align-items: flex-start !important;
+}
+.contra-col-form { flex: 1.2 !important; min-width: 320px !important; }
+.contra-col-result { flex: 1.5 !important; min-width: 320px !important; position: sticky !important; top: 20px !important; }
+
+/* ── PANNEAUX ── */
+.contra-panel {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05) !important;
+    overflow: hidden !important;
+}
+.contra-panel-head {
+    background: #f0f4f8 !important;
+    color: var(--blue-deep) !important;
+    padding: 12px 18px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    border-bottom: 1px solid var(--border) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+.contra-panel-head::before {
+    content: '' !important;
+    display: inline-block !important;
+    width: 8px !important; 
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: var(--accent) !important;
+    flex-shrink: 0 !important;
+}
+.contra-panel-body { padding: 20px 22px !important; }
+
+/* ── FORMULAIRE ── */
+.contra-field { margin-bottom: 18px !important; }
+.contra-field-label {
+    display: block !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--blue-mid) !important;
+    letter-spacing: 0.03em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 8px !important;
+}
+.contra-wrap select {
+    width: 100% !important;
+    padding: 10px 14px !important;
+    border: 1px solid #c2d1e0 !important;
+    border-radius: 4px !important;
+    background: #fdfdfe !important;
+    font-size: 15px !important;
+    font-family: inherit !important;
+    color: var(--text-main) !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%236b8299'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    cursor: pointer !important;
+    height: auto !important;
+}
+.contra-wrap select:focus {
+    outline: none !important;
+    border-color: var(--blue-light) !important;
+    box-shadow: 0 0 0 3px rgba(42,111,168,.15) !important;
+}
+
+.contra-radio-set { display: flex !important; flex-direction: column !important; gap: 6px !important; }
+.contra-radio-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    cursor: pointer !important;
+    padding: 8px 12px !important;
+    border-radius: 4px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: var(--text-main) !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    transition: background .15s, border .15s !important;
+    margin: 0 !important;
+}
+.contra-radio-row:hover { background: #eef2f6 !important; }
+.contra-radio-row.checked {
+    background: #e6f0f9 !important;
+    border-color: var(--blue-light) !important;
+    color: var(--blue-deep) !important;
+}
+.contra-wrap input[type=radio] {
+    width: 18px !important; 
+    height: 18px !important;
+    margin: 0 !important;
+    accent-color: var(--blue-mid) !important;
+    cursor: pointer !important;
+}
+
+.contra-divider { height: 1px !important; background: var(--border) !important; margin: 20px 0 !important; }
+
+.contra-btn {
+    width: 100% !important;
+    padding: 14px !important;
+    background: var(--blue-mid) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.03em !important;
+    cursor: pointer !important;
+    transition: background .15s !important;
+    margin-top: 10px !important;
+    text-transform: uppercase !important;
+}
+.contra-btn:hover { background: var(--blue-deep) !important; }
+
+/* ── RESULTATS & METHODES ── */
+.contra-empty {
+    padding: 40px 20px !important;
+    text-align: center !important;
+    color: var(--text-muted) !important;
+    font-size: 15px !important;
+    font-style: italic !important;
+}
+.contra-empty span { font-size: 36px !important; display: block !important; opacity: .3 !important; margin-bottom: 12px !important; }
+
+.contra-method-header {
+    padding: 20px 22px 16px !important;
+    border-bottom: 1px solid var(--border) !important;
+    background: #fafbfc !important;
+}
+.contra-method-header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; margin-bottom: 6px !important; }
+
+.contra-method-cat {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 6px !important;
+}
+.cat-primary { color: var(--text-muted) !important; }
+.cat-alt { color: var(--accent) !important; }
+
+.contra-method-name {
+    font-size: 20px !important;
+    color: var(--blue-deep) !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    margin-bottom: 10px !important;
+}
+.contra-badge {
+    display: inline-block !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 4px 10px !important;
+    border-radius: 3px !important;
+    letter-spacing: 0.04em !important;
+}
+.badge-horm { background: #e8f0fb !important; color: #1a4b72 !important; border: 1px solid #c0d4ea !important; }
+.badge-nhorm { background: #e6f4f5 !important; color: var(--teal) !important; border: 1px solid #b0d8db !important; }
+.badge-barr { background: #fdf3e6 !important; color: #7a4a10 !important; border: 1px solid #e8c88a !important; }
+
+.contra-btn-reset {
+    background: transparent !important;
+    border: 1px solid #cbd5e1 !important;
+    color: var(--text-sec) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 6px 10px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+}
+.contra-btn-reset:hover { background: var(--blue-light) !important; color: white !important; border-color: var(--blue-light) !important; }
+
+/* ── 4 CARTES CLINIQUES ── */
+.contra-clinical-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    margin-bottom: 24px !important;
+}
+.contra-cbox {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    padding: 14px 16px !important;
+    background: #ffffff !important;
+}
+.contra-cbox-title {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    color: var(--text-muted) !important;
+    margin-bottom: 8px !important;
+}
+.contra-cbox-val { font-size: 14px !important; color: #0f172a !important; font-weight: 500 !important; line-height: 1.4 !important; }
+
+.contra-ul { list-style: none !important; padding: 0 !important; margin: 0 0 20px 0 !important; }
+.contra-li {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    font-size: 14.5px !important;
+    line-height: 1.5 !important;
+    margin-bottom: 8px !important;
+}
+.contra-dot { width: 8px !important; height: 8px !important; border-radius: 50% !important; flex-shrink: 0 !important; margin-top: 6px !important; }
+.dot-ok { background: var(--green-ok) !important; }
+.dot-warn { background: var(--accent) !important; }
+
+/* ── OMS ── */
+.contra-oms-row {
+    display: flex !important; align-items: center !important; gap: 12px !important;
+    padding: 10px 14px !important; background: #fff !important; border: 1px solid var(--border) !important;
+    border-radius: 4px !important; margin-bottom: 20px !important; font-size: 14px !important;
+}
+.contra-oms-pip { width: 14px !important; height: 14px !important; border-radius: 2px !important; border: 1px solid rgba(0,0,0,.15) !important; display: inline-block !important; margin-right: 2px !important; }
+.pip-1 { background: #2a9d5a !important; } .pip-2 { background: #88c840 !important; }
+.pip-3 { background: #e8a320 !important; } .pip-4 { background: #d43030 !important; }
+.pip-0 { background: #e8edf2 !important; }
+
+/* ── ALTERNATIVES CLIQUABLES ── */
+.contra-alt-section {
+    margin-top: 24px !important;
+    padding: 20px 22px !important;
+    border-top: 1px solid var(--border) !important;
+    background: #f8fafc !important;
+}
+.contra-alt-chips { display: flex !important; flex-direction: column !important; gap: 8px !important; }
+.contra-alt-chip {
+    display: block !important;
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: var(--blue-mid) !important;
+    padding: 12px 16px !important;
+    border-radius: 4px !important;
+    font-size: 14.5px !important;
+    font-weight: 500 !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.contra-alt-chip:hover { background: #eef2f6 !important; border-color: var(--blue-light) !important; color: var(--blue-deep) !important; padding-left: 20px !important; }
+
+/* ── ALERTES ── */
+.contra-alert {
+    padding: 12px 16px !important; border-radius: 4px !important; font-size: 14px !important; line-height: 1.5 !important; margin-bottom: 16px !important;
+    display: flex !important; gap: 12px !important; align-items: flex-start !important; margin: 20px 22px 0 !important;
+}
+.alert-warn { background: #fff8e1 !important; border: 1px solid #ffe082 !important; border-left: 4px solid #f57f17 !important; color: #7a5000 !important; }
+.alert-danger { background: #fdecea !important; border: 1px solid #f0b4b4 !important; border-left: 4px solid var(--red-ci) !important; color: var(--red-ci) !important; font-weight: 500 !important; }
+
+/* ── FOOTERS ── */
+.contra-footer { margin-top: 24px !important; padding: 16px !important; background: #fffbf0 !important; border: 1px solid #f0d080 !important; border-left: 4px solid var(--accent) !important; border-radius: 4px !important; font-size: 13px !important; color: #7a5a00 !important; line-height: 1.6 !important; }
+.contra-sources { margin-top: 12px !important; font-size: 12px !important; color: var(--text-muted) !important; text-align: center !important; }
+
+@media (max-width: 820px) {
+    .contra-two-col { flex-direction: column !important; }
+    .contra-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+    .contra-header-badge { margin-left: 0 !important; }
+    .contra-clinical-grid { grid-template-columns: 1fr !important; }
+}
+</style>
+
+<div class="contra-wrap">
+  
+  <!-- En-tête -->
+  <div class="contra-header">
+    <div class="contra-header-logo">&#x2695;</div>
+    <div>
+      <div class="contra-h1">Aide à la prescription contraceptive</div>
+      <div class="contra-subtitle">Outil clinique &middot; Usage professionnel exclusif</div>
+    </div>
+    <span class="contra-header-badge">Usage Médecin</span>
+  </div>
+
+  <div class="contra-body">
+    <div class="contra-two-col">
+
+      <!-- Colonne Formulaire -->
+      <div class="contra-col-form">
+        <div class="contra-panel">
+          <div class="contra-panel-head">Critères cliniques de la patiente</div>
+          <div class="contra-panel-body">
+
+            <div class="contra-field">
+              <label class="contra-field-label">Âge</label>
+              <select id="contra-age">
+                <option value="moins35">Moins de 35 ans</option>
+                <option value="35_40">35 – 40 ans</option>
+                <option value="plus40">Plus de 40 ans</option>
+              </select>
+            </div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">IMC (Poids)</label>
+              <select id="contra-imc">
+                <option value="normal">IMC &lt; 30 (Normal ou Surpoids)</option>
+                <option value="obese1">IMC 30 - 34.9 (Obésité grade I)</option>
+                <option value="obese2">IMC &ge; 35 (Obésité sévère / morbide)</option>
+              </select>
+            </div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">Tabagisme actif</label>
+              <div class="contra-radio-set" id="contra-smokingSet">
+                <label class="contra-radio-row checked"><input type="radio" name="contra_smoking" value="non" checked> Non fumeuse</label>
+                <label class="contra-radio-row"><input type="radio" name="contra_smoking" value="oui_moins35"> Fumeuse &lt; 35 ans</label>
+                <label class="contra-radio-row"><input type="radio" name="contra_smoking" value="oui_plus35"> Fumeuse ≥ 35 ans</label>
+              </div>
+            </div>
+
+            <div class="contra-divider"></div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">Antécédents / Facteurs de risque</label>
+              <select id="contra-antecedents">
+                <option value="aucun">Aucun antécédent pertinent</option>
+                <option value="migraine_aura">Migraine avec aura (ATCD ou actuelle)</option>
+                <option value="thrombo">ATCD de TEV ou TVP / EP</option>
+                <option value="hta">HTA non contrôlée (&gt; 160/100)</option>
+                <option value="cardio">Cardiopathie ischémique / AVC</option>
+                <option value="diabete_cv">Diabète avec atteinte vasculaire</option>
+                <option value="cancer_sein">Cancer du sein actuel ou ATCD</option>
+                <option value="lupus">Lupus avec anticorps antiphospholipides</option>
+                <option value="autre_mineur">Autre antécédent mineur (sans CI majeure)</option>
+              </select>
+            </div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">Thrombophilie héréditaire documentée</label>
+              <div class="contra-radio-set">
+                <label class="contra-radio-row checked"><input type="radio" name="contra_thrombo_hered" value="non" checked> Non / non recherchée</label>
+                <label class="contra-radio-row"><input type="radio" name="contra_thrombo_hered" value="oui"> Oui (Facteur V, Prothrombine...)</label>
+              </div>
+            </div>
+
+            <div class="contra-field">
+              <label class="contra-field-label" style="margin-top:18px;">Traitements en cours</label>
+              <select id="contra-traitements">
+                <option value="aucun">Aucun / Sans interaction</option>
+                <option value="inducteurs">Inducteurs enzymatiques (antiépileptiques, rifampicine...)</option>
+                <option value="bariatrique">Malabsorption (Chirurgie bariatrique type bypass)</option>
+              </select>
+            </div>
+
+            <div class="contra-divider"></div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">Situation obstétricale</label>
+              <div class="contra-radio-set">
+                <label class="contra-radio-row checked"><input type="radio" name="contra_obst" value="non_gravide" checked> Non enceinte, non allaitante</label>
+                <label class="contra-radio-row"><input type="radio" name="contra_obst" value="post_partum_6sem"> Post-partum &lt; 6 sem (allaitement)</label>
+                <label class="contra-radio-row"><input type="radio" name="contra_obst" value="post_partum_6sem_non_allait"> Post-partum &lt; 6 sem (non allait.)</label>
+                <label class="contra-radio-row"><input type="radio" name="contra_obst" value="allaitement_plus6sem"> Allaitement &gt; 6 semaines</label>
+              </div>
+            </div>
+
+            <div class="contra-divider"></div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">Projet de grossesse</label>
+              <select id="contra-grossesse">
+                <option value="moins1an">Oui, dans &lt; 1 an</option>
+                <option value="1_3ans">Dans 1 à 3 ans</option>
+                <option value="plus3ans">Pas à court terme (&gt; 3 ans / indéfini)</option>
+              </select>
+            </div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">Observance prévisible</label>
+              <select id="contra-observance">
+                <option value="excellente">Excellente (prise quotidienne sans souci)</option>
+                <option value="moyenne">Inconstante (oublis possibles)</option>
+                <option value="difficile">Difficile (décalages, mode de vie)</option>
+              </select>
+            </div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">Protection IST souhaitée</label>
+              <div class="contra-radio-set">
+                <label class="contra-radio-row checked"><input type="radio" name="contra_ist" value="non" checked> Non (partenaire unique, bilan fait)</label>
+                <label class="contra-radio-row"><input type="radio" name="contra_ist" value="oui"> Oui / situation à risque</label>
+              </div>
+            </div>
+
+            <div class="contra-field">
+              <label class="contra-field-label">Préférence menstruelle</label>
+              <select id="contra-menstruel">
+                <option value="neutre">Sans préférence</option>
+                <option value="supprimer">Souhaite réduire / supprimer les règles</option>
+                <option value="conserver">Souhaite conserver un cycle naturel</option>
+              </select>
+            </div>
+
+            <button class="contra-btn" id="contra-btnAnalyze">Générer l'aide à la prescription</button>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne Résultat -->
+      <div class="contra-col-result">
+        <div class="contra-panel">
+          <div class="contra-panel-head">Analyse clinique & Suggestion de méthode</div>
+          <div id="contra-resultContainer" style="padding-bottom:10px;">
+            <div class="contra-empty">
+              <span>&#x2295;</span>
+              Renseignez les critères cliniques puis cliquez sur<br>
+              <em>« Générer l'aide à la prescription »</em>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footers médicaux enrichis -->
+    <div class="contra-footer">
+      <strong>&#x26A0; Avertissement médico-légal :</strong> Cet outil de triage gère les risques cardiovasculaires, oncologiques et d'interactions majeurs (Inducteurs, bariatrique). <strong>Il ne dispense pas d'éliminer les autres contre-indications OMS</strong>, notamment les pathologies hépatiques sévères (tumeurs, cirrhose), les saignements inexpliqués ou les anomalies cavitaires utérines avant la pose d'un stérilet.
+    </div>
+    <div class="contra-sources">
+      Sources : OMS — Critères de recevabilité (5e éd. 2024) &middot; Recommandations CNGOF &middot; HAS.
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // Base de données méthodes
+  const METHODES =[
+    {
+      id: "pilule_ep", nom: "Pilule œstroprogestative combinée (COC)", classe: "hormonal", classeLabel: "Hormonal combiné",
+      description: "Contraception orale combinée à base d'éthinylœstradiol + progestatif. Prise quotidienne 21/7 ou schéma continu possible.",
+      duree: "Court terme – réversibilité immédiate", efficacite_parfait: ">99,7 %", efficacite_typique: "91 %", pearl: "0,3",
+      oms_categories: { migraine_aura: 4, thrombo: 4, hta: 4, cardio: 4, diabete_cv: 3, cancer_sein: 4, lupus: 4, tabac_35: 4 },
+      avantages:["Régulation du cycle, traitement dysménorrhée", "Réduction risque cancer ovaire/endomètre", "Amélioration acné"],
+      inconvenients:["Prise quotidienne stricte (observance)", "Risque thromboembolique veineux", "Majoration risque vasculaire"],
+      ci_absolues:["migraine_aura", "thrombo", "hta", "cardio", "diabete_cv", "cancer_sein", "lupus", "oui_plus35"],
+      ci_relatives:["35_40", "oui_moins35"], allaitement_ok: false, post_partum_6sem: false, indics: { supprimer: true, conserver: false }
+    },
+    {
+      id: "patch", nom: "Patch transdermique œstroprogestatif", classe: "hormonal", classeLabel: "Hormonal combiné (Transdermique)",
+      description: "Patch appliqué sur la peau. Changé chaque semaine. Évite le premier passage hépatique, mais exposition œstrogénique légèrement supérieure.",
+      duree: "Hebdomadaire – réversibilité immédiate", efficacite_parfait: ">99,7 %", efficacite_typique: "91 %", pearl: "0,3",
+      oms_categories: { migraine_aura: 4, thrombo: 4, hta: 4, cardio: 4, diabete_cv: 3, cancer_sein: 4, lupus: 4, tabac_35: 4 },
+      avantages:["Application hebdomadaire (moins d'oublis)", "Non impacté par la chirurgie bariatrique (voie transdermique)"],
+      inconvenients:["Mêmes CI cardiovasculaires que la pilule COC", "Efficacité potentiellement diminuée si poids > 90 kg", "Irritation locale possible"],
+      ci_absolues:["migraine_aura", "thrombo", "hta", "cardio", "diabete_cv", "cancer_sein", "lupus", "oui_plus35"],
+      ci_relatives:["35_40", "oui_moins35"], allaitement_ok: false, post_partum_6sem: false, indics: { supprimer: true, conserver: false }
+    },
+    {
+      id: "anneau", nom: "Anneau vaginal œstroprogestatif", classe: "hormonal", classeLabel: "Hormonal combiné (Vaginal)",
+      description: "Anneau souple inséré dans le vagin (3 semaines in / 1 semaine out). Faible diffusion systémique continue.",
+      duree: "Mensuel – réversibilité immédiate", efficacite_parfait: ">99,7 %", efficacite_typique: "91 %", pearl: "0,3",
+      oms_categories: { migraine_aura: 4, thrombo: 4, hta: 4, cardio: 4, diabete_cv: 3, cancer_sein: 4, lupus: 4, tabac_35: 4 },
+      avantages:["Oubli moins fréquent (gestion mensuelle)", "Non impacté par malabsorption digestive (bypass)", "Excellente régulation du cycle"],
+      inconvenients:["Mêmes CI cardiovasculaires que la COC", "Manipulation vaginale nécessaire"],
+      ci_absolues:["migraine_aura", "thrombo", "hta", "cardio", "cancer_sein", "oui_plus35", "lupus"], ci_relatives:[], allaitement_ok: false, post_partum_6sem: false, indics: { supprimer: true, conserver: false }
+    },
+    {
+      id: "pilule_p", nom: "Pilule microprogestative (POP)", classe: "hormonal", classeLabel: "Progestatif seul",
+      description: "Désogestrel 75 µg ou lévonorgestrel 30 µg. Sans œstrogène. Convient à l'allaitement et en cas de CI cardiovasculaires.",
+      duree: "Court terme – réversibilité immédiate", efficacite_parfait: "99,0 %", efficacite_typique: "91–96 %", pearl: "0,4–1,0",
+      oms_categories: { migraine_aura: 2, thrombo: 2, hta: 2, cardio: 2, cancer_sein: 4 },
+      avantages:["Compatible allaitement dès J21", "Pas d'augmentation du risque TEV vs COC", "Utilisable chez la fumeuse > 35 ans"],
+      inconvenients:["Spottings très fréquents", "Marge d'oubli stricte (3h pour le LNG, 12h pour le DSG)"],
+      ci_absolues: ["cancer_sein"], ci_relatives: ["cardio"], allaitement_ok: true, post_partum_6sem: true, indics: { supprimer: false, conserver: false }
+    },
+    {
+      id: "implant", nom: "Implant sous-cutané (étonogestrel)", classe: "hormonal", classeLabel: "Hormonal longue durée",
+      description: "Bâtonnet de 4 cm inséré sous la peau du bras. Libération continue d'étonogestrel. La méthode réversible la plus efficace disponible.",
+      duree: "3 ans – retrait simple, fertilité rapide", efficacite_parfait: ">99,9 %", efficacite_typique: ">99,9 %", pearl: "0,05",
+      oms_categories: { migraine_aura: 2, thrombo: 2, hta: 2, cancer_sein: 4 },
+      avantages:["Efficacité optimale, totalement indépendante de l'observance", "Compatible allaitement", "Voie parentérale (ok si bypass)"],
+      inconvenients:["Troubles du cycle très fréquents (spottings, aménorrhée)", "Nécessite un geste médical de pose/retrait"],
+      ci_absolues:["cancer_sein"], ci_relatives:[], allaitement_ok: true, post_partum_6sem: true, indics: { supprimer: true, conserver: false }
+    },
+    {
+      id: "diu_cuivre", nom: "DIU au cuivre (stérilet non hormonal)", classe: "non-hormonal", classeLabel: "Non hormonal longue durée",
+      description: "Dispositif intra-utérin. Efficacité mécanique et inflammatoire. Aucune hormone. Utilisable en contraception d'urgence (J1-5).",
+      duree: "5 à 10 ans", efficacite_parfait: "99,4 %", efficacite_typique: "99,2 %", pearl: "0,6–0,8",
+      oms_categories: { migraine_aura: 1, thrombo: 1, hta: 1, cardio: 1, diabete_cv: 1, cancer_sein: 1, lupus: 2 },
+      avantages:["Aucune interaction hormonale ou médicamenteuse", "Méthode de choix si antécédents cardiovasculaires majeurs ou cancers", "Conservation du cycle naturel"],
+      inconvenients:["Majoration fréquente du volume menstruel et des dysménorrhées", "Geste de pose utérin (CI si malformation)"],
+      ci_absolues: [], ci_relatives:["cancer_sein_cu"], allaitement_ok: true, post_partum_6sem: false, indics: { supprimer: false, conserver: true }
+    },
+    {
+      id: "diu_lng", nom: "DIU hormonal (lévonorgestrel – Mirena® / Kyleena® / Jaydess®)", classe: "hormonal", classeLabel: "Hormonal local longue durée",
+      description: "DIU diffusant un progestatif. Action locale atrophique majeure sur l'endomètre, réduisant le volume des règles.",
+      duree: "3 à 8 ans selon le dosage", efficacite_parfait: "99,8 %", efficacite_typique: "99,8 %", pearl: "0,1–0,2",
+      oms_categories: { migraine_aura: 2, thrombo: 2, hta: 2, cancer_sein: 4, lupus: 2 },
+      avantages:["Réduction massive des règles / Aménorrhée fréquente", "Traitement de choix de l'endométriose et des ménorragies", "Pas d'interaction avec les antiépileptiques"],
+      inconvenients:["Spottings initiaux fréquents (3-6 mois)", "Geste de pose", "Contre-indication absolue si cancer du sein"],
+      ci_absolues: ["cancer_sein"], ci_relatives: ["cardio_lng"], allaitement_ok: true, post_partum_6sem: false, indics: { supprimer: true, conserver: false }
+    },
+    {
+      id: "preservatif", nom: "Préservatif externe/interne", classe: "barriere", classeLabel: "Barrière mécanique",
+      description: "Seule méthode protégeant des IST et du VIH. Doit être systématiquement associé si risque d'IST.",
+      duree: "Usage unique au moment du rapport", efficacite_parfait: "98 %", efficacite_typique: "87 %", pearl: "2–13",
+      oms_categories: {},
+      avantages:["Protection IST / VIH (méthode exclusive)", "Sans hormone", "Sans prescription ni interaction médicamenteuse"],
+      inconvenients:["Efficacité très dépendante de l'usage strict", "Interruption du rapport"],
+      ci_absolues: [], ci_relatives:[], allaitement_ok: true, post_partum_6sem: true, indics: { supprimer: false, conserver: true }
+    }
+  ];
+
+  // Variables globales (isolées par la fonction anonyme)
+  let lastResults =[];
+  let originalBestMethod = null;
+  let currentCrit = null;
+
+  function getCriteres() {
+    return {
+      age:         document.getElementById('contra-age').value,
+      imc:         document.getElementById('contra-imc').value,
+      smoking:     document.querySelector('input[name="contra_smoking"]:checked').value,
+      antecedent:  document.getElementById('contra-antecedents').value,
+      thromboHer:  document.querySelector('input[name="contra_thrombo_hered"]:checked').value,
+      traitement:  document.getElementById('contra-traitements').value,
+      obstetrique: document.querySelector('input[name="contra_obst"]:checked').value,
+      grossesse:   document.getElementById('contra-grossesse').value,
+      observance:  document.getElementById('contra-observance').value,
+      ist:         document.querySelector('input[name="contra_ist"]:checked').value,
+      menstruel:   document.getElementById('contra-menstruel').value
+    };
+  }
+
+  function doScore(m, c) {
+    let s = 0;
+    
+    const ageCI = (c.smoking === "oui_plus35" || (c.smoking !== "non" && c.age === "plus40"));
+    if (ageCI && m.ci_absolues.includes("oui_plus35")) return -9999;
+    if (m.ci_absolues.includes(c.antecedent)) return -9999;
+    
+    const isCHC = (m.id === "pilule_ep" || m.id === "anneau" || m.id === "patch");
+    if (c.thromboHer === "oui" && isCHC) return -9999;
+
+    if (c.imc === "obese1" && isCHC) s -= 10;
+    if (c.imc === "obese2") {
+        if (isCHC) s -= 20;
+        if (m.id === "patch") s -= 30;
+    }
+
+    if (c.traitement === "inducteurs") {
+        if (["pilule_ep", "pilule_p", "anneau", "patch", "implant"].includes(m.id)) s -= 50; 
+        if (["diu_cuivre", "diu_lng", "preservatif"].includes(m.id)) s += 20; 
+    }
+    if (c.traitement === "bariatrique") {
+        if (["pilule_ep", "pilule_p"].includes(m.id)) s -= 50;
+        if (["anneau", "patch", "implant", "diu_cuivre", "diu_lng"].includes(m.id)) s += 15;
+    }
+
+    if (c.obstetrique === "post_partum_6sem" && !m.post_partum_6sem) return -9999;
+    if (c.obstetrique === "allaitement_plus6sem" && !m.allaitement_ok) return -9999;
+    if (c.obstetrique === "post_partum_6sem_non_allait" && isCHC) return -9999;
+    if (c.obstetrique === "post_partum_6sem" && (m.id === "diu_cuivre" || m.id === "diu_lng")) return -9999;
+
+    if (c.ist === "oui") { if (m.id === "preservatif") s += 50; else s -= 10; }
+
+    if (c.observance === "difficile") {
+      if (["implant","diu_cuivre","diu_lng"].includes(m.id)) s += 30;
+      if (["pilule_ep","pilule_p"].includes(m.id)) s -= 20;
+    }
+    if (c.observance === "moyenne") {
+      if (["implant","diu_cuivre","diu_lng","anneau", "patch"].includes(m.id)) s += 12;
+      if (["pilule_ep","pilule_p"].includes(m.id)) s -= 8;
+    }
+
+    if (c.grossesse === "moins1an") {
+      if (["pilule_ep","pilule_p","preservatif","anneau", "patch"].includes(m.id)) s += 15;
+      if (["implant","diu_cuivre","diu_lng"].includes(m.id)) s -= 5;
+    }
+    if (c.grossesse === "plus3ans") {
+      if (["implant","diu_cuivre","diu_lng"].includes(m.id)) s += 15;
+    }
+
+    if (c.menstruel === "supprimer" && m.indics.supprimer) s += 12;
+    if (c.menstruel === "conserver" && m.indics.conserver) s += 8;
+    if (c.menstruel === "supprimer" && m.id === "diu_cuivre") s -= 15;
+
+    if (["migraine_aura","thrombo","hta","cardio","diabete_cv","lupus"].includes(c.antecedent)) {
+      if (["diu_cuivre","diu_lng","implant","pilule_p"].includes(m.id)) s += 18;
+    }
+    if (c.antecedent === "cancer_sein") {
+      if (m.id === "diu_cuivre") s += 40;
+      if (m.id === "preservatif") s += 15;
+      if (["pilule_p","diu_lng","implant"].includes(m.id)) return -9999;
+    }
+
+    if (c.age === "plus40" &&["implant","diu_cuivre","diu_lng"].includes(m.id)) s += 10;
+    if (m.id === "pilule_ep" && c.antecedent === "aucun" && c.smoking === "non" && c.imc === "normal" && c.traitement === "aucun" && c.age === "moins35") s += 10;
+    
+    return s;
+  }
+
+  function drawOms(m, c) {
+    const map = {
+      migraine_aura: { label: "Migraine avec aura", key: "migraine_aura" },
+      thrombo:       { label: "ATCD Thromboembolique", key: "thrombo" },
+      hta:           { label: "HTA > 160/100", key: "hta" },
+      cardio:        { label: "Cardiopathie / AVC", key: "cardio" },
+      cancer_sein:   { label: "Cancer du sein", key: "cancer_sein" },
+      lupus:         { label: "Lupus + APL", key: "lupus" }
+    };
+    if (!map[c.antecedent] || !m.oms_categories[map[c.antecedent].key]) return '';
+    const cat = m.oms_categories[map[c.antecedent].key];
+    const labels = {1:"Catégorie 1 (Sans restriction)", 2:"Catégorie 2 (Avantages > Risques)", 3:"Catégorie 3 (Risques > Avantages)", 4:"Catégorie 4 (Contre-indication majeure)"};
+    
+    let pips = '';
+    for (let i = 1; i <= 4; i++) {
+        let pipClass = (i <= cat) ? 'pip-' + cat : 'pip-0';
+        pips += `<span class="contra-oms-pip ${pipClass}"></span>`;
+    }
+
+    return `<div class="contra-cbox-title" style="margin-top:2px;">Classification OMS (Anamnèse)</div>
+            <div class="contra-oms-row">
+              <div style="flex-shrink:0;">${pips}</div>
+              <div><strong>${map[c.antecedent].label} :</strong> ${labels[cat]}</div>
+            </div>`;
+  }
+
+  function renderMethod(b, isAlternative) {
+    const container = document.getElementById('contra-resultContainer');
+    let html = '';
+
+    // Generation des alertes globales
+    if (currentCrit.ist === "oui" && b.id !== "preservatif") {
+      html += `<div class="contra-alert alert-warn"><span>&#x26A0;</span><div><strong>Risque IST signalé :</strong> Préservatif indispensable en double protection. La méthode ci-dessous concerne uniquement la contraception.</div></div>`;
+    }
+    if (currentCrit.thromboHer === "oui") {
+      html += `<div class="contra-alert alert-warn"><span>&#x26A0;</span><div><strong>Thrombophilie héréditaire :</strong> Toute contraception contenant des œstrogènes est formellement contre-indiquée.</div></div>`;
+    }
+    if (currentCrit.traitement === "inducteurs") {
+      html += `<div class="contra-alert alert-warn"><span>&#x26A0;</span><div><strong>Inducteurs enzymatiques :</strong> Chute sévère de l'efficacité des pilules/implants. Priorité aux méthodes intra-utérines (stérilets).</div></div>`;
+    }
+    if (currentCrit.traitement === "bariatrique") {
+      html += `<div class="contra-alert alert-warn"><span>&#x26A0;</span><div><strong>Chirurgie Bariatrique :</strong> Malabsorption digestive. Pilules orales fortement déconseillées. Privilégier les voies locales.</div></div>`;
+    }
+
+    // Badge
+    let bCls = b.classe === 'non-hormonal' ? 'badge-nhorm' : b.classe === 'barriere' ? 'badge-barr' : 'badge-horm';
+    
+    // Header méthode (avec changement de couleur si alternative + bouton de retour)
+    html += `
+      <div class="contra-method-header">
+        <div class="contra-method-header-top">
+          <div>
+            <div class="contra-method-cat ${isAlternative ? 'cat-alt' : 'cat-primary'}">${isAlternative ? 'Alternative sélectionnée' : 'Méthode suggérée en 1ère intention'}</div>
+            <div class="contra-method-name">${b.nom}</div>
+          </div>
+          ${isAlternative ? `<button class="contra-btn-reset" id="btn-reset-method">&#x21A9; Rétablir le 1er choix</button>` : ''}
+        </div>
+        <span class="contra-badge ${bCls}">${b.classeLabel}</span>
+      </div>
+      
+      <div style="padding: 20px 22px 0;">
+        <p style="font-size:14.5px; color:var(--text-sec); margin-bottom:24px;">${b.description}</p>
+        
+        <!-- 4 CARTES REQUISES -->
+        <div class="contra-clinical-grid">
+          <div class="contra-cbox">
+            <div class="contra-cbox-title">Efficacité (Pearl – Usage parfait)</div>
+            <div class="contra-cbox-val">${b.efficacite_parfait} &mdash; Indice de Pearl : ${b.pearl}</div>
+          </div>
+          <div class="contra-cbox">
+            <div class="contra-cbox-title">Efficacité (Usage typique)</div>
+            <div class="contra-cbox-val">${b.efficacite_typique}</div>
+          </div>
+          <div class="contra-cbox">
+            <div class="contra-cbox-title">Durée d'action / Réversibilité</div>
+            <div class="contra-cbox-val">${b.duree}</div>
+          </div>
+          <div class="contra-cbox">
+            <div class="contra-cbox-title">Compatible allaitement</div>
+            <div class="contra-cbox-val">${b.allaitement_ok ? '&#x2713; Oui (OMS admis)' : '&#x2717; Non recommandé'}</div>
+          </div>
+        </div>
+
+        ${drawOms(b, currentCrit)}
+        
+        <div class="contra-cbox-title" style="margin-top:24px;">Avantages cliniques</div>
+        <ul class="contra-ul">${b.avantages.map(a => `<li class="contra-li"><div class="contra-dot dot-ok"></div><span>${a}</span></li>`).join('')}</ul>
+        
+        <div class="contra-cbox-title">Points de vigilance</div>
+        <ul class="contra-ul" style="margin-bottom:0;">${b.inconvenients.map(i => `<li class="contra-li"><div class="contra-dot dot-warn"></div><span>${i}</span></li>`).join('')}</ul>
+      </div>`;
+
+    // Gestion de la liste des alternatives
+    // L'alternative à afficher est la liste de tous les résultats compatibles SAUF celui actuellement affiché.
+    const alts = lastResults.map(x => x.m).filter(m => m.id !== b.id).slice(0, 4);
+
+    if (alts.length > 0) {
+      html += `
+        <div class="contra-alt-section">
+          <div class="contra-cbox-title" style="margin-bottom:12px;">Alternatives compatibles avec le profil clinique</div>
+          <div class="contra-alt-chips">
+            ${alts.map(alt => `<div class="contra-alt-chip" data-id="${alt.id}">${alt.nom}</div>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    container.innerHTML = html;
+  }
+
+  function handleCalculate() {
+    currentCrit = getCriteres();
+    lastResults = METHODES.map(m => ({ m, s: doScore(m, currentCrit) })).filter(x => x.s > -9999).sort((a,b) => b.s - a.s);
+    
+    const container = document.getElementById('contra-resultContainer');
+
+    if (lastResults.length === 0) {
+      container.innerHTML = `<div class="contra-alert alert-danger" style="margin:20px 22px;"><span>&#x26D4;</span><div><strong>Contre-indications multiples ou majeures.</strong><br>Aucune méthode standard proposée. Évaluation spécialisée recommandée.</div></div>`;
+      return;
+    }
+
+    originalBestMethod = lastResults[0].m;
+    renderMethod(originalBestMethod, false);
+  }
+
+  function init() {
+    // Styling radios
+    document.querySelectorAll('.contra-wrap .contra-radio-set').forEach(set => {
+      set.querySelectorAll('input[type=radio]').forEach(r => {
+        r.addEventListener('change', () => {
+          set.querySelectorAll('.contra-radio-row').forEach(row => row.classList.remove('checked'));
+          if (r.checked) r.closest('.contra-radio-row').classList.add('checked');
+        });
+      });
+    });
+
+    // Bouton Générer
+    const btn = document.getElementById('contra-btnAnalyze');
+    if(btn) btn.addEventListener('click', handleCalculate);
+
+    // Écoute des clics sur les Alternatives et le bouton Reset (délégation d'événements)
+    document.getElementById('contra-resultContainer').addEventListener('click', function(e) {
+      // Clic sur une alternative
+      if (e.target.closest('.contra-alt-chip')) {
+        const methodId = e.target.closest('.contra-alt-chip').getAttribute('data-id');
+        const selectedMethod = lastResults.find(x => x.m.id === methodId).m;
+        renderMethod(selectedMethod, true);
+        
+        // Scroll automatique vers le haut du panneau si on est sur mobile
+        if(window.innerWidth <= 820) {
+            document.querySelector('.contra-col-result').scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+      }
+      
+      // Clic sur Rétablir le 1er choix
+      if (e.target.closest('#btn-reset-method')) {
+        renderMethod(originalBestMethod, false);
+      }
+    });
+  }
+
+  // Hook lancement sécurisé
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  // Reprise Elementor
+  if (typeof elementorFrontend !== 'undefined') {
+    elementorFrontend.hooks.addAction('frontend/element_ready/widget', init);
+  }
+})();
+</script>
