@@ -82,64 +82,106 @@ const IMCCalculator = (() => {
   }
 
   function setNeedle(imc) {
-    const angle = CFG.start + ((imc - CFG.min) / (CFG.max - CFG.min)) * (CFG.end - CFG.start);
+  const GAUGE = { min: 0, max: 50, start: -135, end: 135 };
+  const clamped = Math.max(GAUGE.min, Math.min(GAUGE.max, imc));
+  const angle = GAUGE.start + ((clamped - GAUGE.min) / (GAUGE.max - GAUGE.min)) * (GAUGE.end - GAUGE.start);
+  
+  if (els.needle) {
     els.needle.style.transform = `translateX(-50%) rotate(${angle}deg)`;
   }
+}
 
   function createGauge() {
-    if (!els.scale || !els.legend) return;
-    els.scale.innerHTML = ''; els.legend.innerHTML = '';
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  if (!els.scale || !els.legend) return;
+  
+  els.scale.innerHTML = ''; 
+  els.legend.innerHTML = '';
+  
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  
+  // ✅ CORRECTION PRINCIPALE : viewBox horizontal 2:1
+  svg.setAttribute('viewBox', '0 0 280 140');
+  svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
+  svg.style.width = '100%'; 
+  svg.style.height = '100%';
+  
+  const toRad = d => d * Math.PI / 180;
+  
+  // ✅ Coordonnées adaptées au format horizontal
+  const GAUGE = { 
+    cx: 140,      // Centre X (inchangé)
+    cy: 70,       // Centre Y (divisé par 2)
+    rOut: 55,     // Rayon extérieur réduit
+    rIn: 35,      // Rayon intérieur réduit
+    min: 0, 
+    max: 50, 
+    start: -135, 
+    end: 135 
+  };
+  
+  const angleFor = v => GAUGE.start + ((v - GAUGE.min) / (GAUGE.max - GAUGE.min)) * (GAUGE.end - GAUGE.start);
+
+  // ===== SEGMENTS COLORÉS =====
+  CATEGORIES.forEach(cat => {
+    const a1 = angleFor(cat.min), a2 = angleFor(cat.max);
     
-svg.setAttribute('viewBox', '0 0 280 140'); // Ratio horizontal 2:1
-svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
-    svg.style.width = '100%'; svg.style.height = '100%';
-    const toRad = d => d * Math.PI / 180;
-    const angleFor = v => CFG.start + ((v - CFG.min) / (CFG.max - CFG.min)) * (CFG.end - CFG.start);
-
-    CATEGORIES.forEach(cat => {
-      const a1 = angleFor(cat.min), a2 = angleFor(cat.max);
-      const p = (r, a) => ({ x: CFG.cx + r * Math.cos(toRad(a)), y: CFG.cy + r * Math.sin(toRad(a)) });
-      const pts = [p(CFG.rIn, a1), p(CFG.rOut, a1), p(CFG.rOut, a2), p(CFG.rIn, a2)];
-      const large = Math.abs(a2 - a1) > 180 ? 1 : 0;
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', `M${pts[0].x} ${pts[0].y} L${pts[1].x} ${pts[1].y} A${CFG.rOut} ${CFG.rOut} 0 ${large} 1 ${pts[2].x} ${pts[2].y} L${pts[3].x} ${pts[3].y} A${CFG.rIn} ${CFG.rIn} 0 ${large} 0 ${pts[0].x} ${pts[0].y}`);
-      path.setAttribute('fill', cat.color);
-      svg.appendChild(path);
-
-      const mid = (a1 + a2) / 2;
-      const lbl = document.createElement('div');
-      lbl.className = 'legend-label';
-      lbl.textContent = cat.label;
-      const lr = CFG.rOut + 12;
-      lbl.style.left = (CFG.cx + lr * Math.cos(toRad(mid))) + 'px';
-      lbl.style.top = (CFG.cy + lr * Math.sin(toRad(mid))) + 'px';
-      lbl.style.transform = (mid > 90 || mid < -90) ? 'translate(-100%, -50%)' : 'translate(0, -50%)';
-      lbl.style.textAlign = (mid > 90 || mid < -90) ? 'right' : 'left';
-      els.legend.appendChild(lbl);
+    // Fonction helper pour calculer les points
+    const p = (r, a) => ({ 
+      x: GAUGE.cx + r * Math.cos(toRad(a)), 
+      y: GAUGE.cy + r * Math.sin(toRad(a)) 
     });
+    
+    const pts = [p(GAUGE.rIn, a1), p(GAUGE.rOut, a1), p(GAUGE.rOut, a2), p(GAUGE.rIn, a2)];
+    const large = Math.abs(a2 - a1) > 180 ? 1 : 0;
+    
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M${pts[0].x} ${pts[0].y} L${pts[1].x} ${pts[1].y} A${GAUGE.rOut} ${GAUGE.rOut} 0 ${large} 1 ${pts[2].x} ${pts[2].y} L${pts[3].x} ${pts[3].y} A${GAUGE.rIn} ${GAUGE.rIn} 0 ${large} 0 ${pts[0].x} ${pts[0].y}`);
+    path.setAttribute('fill', cat.color);
+    svg.appendChild(path);
 
-    // Ticks
-    [0,10,20,30,40,50].forEach(v => {
-      const a = angleFor(v);
-      const r1 = CFG.rOut, r2 = CFG.rOut - 14;
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', CFG.cx + r1*Math.cos(toRad(a))); line.setAttribute('y1', CFG.cy + r1*Math.sin(toRad(a)));
-      line.setAttribute('x2', CFG.cx + r2*Math.cos(toRad(a))); line.setAttribute('y2', CFG.cy + r2*Math.sin(toRad(a)));
-      line.setAttribute('stroke', '#000'); line.setAttribute('stroke-width', '2');
-      svg.appendChild(line);
-      const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      txt.setAttribute('x', CFG.cx + (r2-12)*Math.cos(toRad(a)));
-      txt.setAttribute('y', CFG.cy + (r2-12)*Math.sin(toRad(a)));
-      txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('dominant-baseline', 'middle');
-      txt.setAttribute('font-size', '11'); txt.setAttribute('font-weight', '600');
-      txt.setAttribute('fill', '#000'); txt.setAttribute('paint-order', 'stroke');
-      txt.setAttribute('stroke', '#fff'); txt.setAttribute('stroke-width', '2');
-      txt.textContent = v;
-      svg.appendChild(txt);
-    });
-    els.scale.appendChild(svg);
-  }
+    // ===== LÉGENDES =====
+    const mid = (a1 + a2) / 2;
+    const lbl = document.createElement('div');
+    lbl.className = 'legend-label';
+    lbl.textContent = cat.label;
+    const lr = GAUGE.rOut + 10;
+    lbl.style.left = (GAUGE.cx + lr * Math.cos(toRad(mid))) + 'px';
+    lbl.style.top = (GAUGE.cy + lr * Math.sin(toRad(mid))) + 'px';
+    lbl.style.transform = (mid > 90 || mid < -90) ? 'translate(-100%, -50%)' : 'translate(0, -50%)';
+    lbl.style.textAlign = (mid > 90 || mid < -90) ? 'right' : 'left';
+    els.legend.appendChild(lbl);
+  });
 
-  document.addEventListener('DOMContentLoaded', init);
-})();
+  // ===== GRADUATIONS (TICKS) =====
+  [0,10,20,30,40,50].forEach(v => {
+    const a = angleFor(v);
+    const r1 = GAUGE.rOut, r2 = GAUGE.rOut - 12;
+    
+    // Ligne de graduation
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', GAUGE.cx + r1*Math.cos(toRad(a))); 
+    line.setAttribute('y1', GAUGE.cy + r1*Math.sin(toRad(a)));
+    line.setAttribute('x2', GAUGE.cx + r2*Math.cos(toRad(a))); 
+    line.setAttribute('y2', GAUGE.cy + r2*Math.sin(toRad(a)));
+    line.setAttribute('stroke', '#000'); 
+    line.setAttribute('stroke-width', '2');
+    svg.appendChild(line);
+    
+    // Texte de graduation
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', GAUGE.cx + (r2-10)*Math.cos(toRad(a)));
+    txt.setAttribute('y', GAUGE.cy + (r2-10)*Math.sin(toRad(a)));
+    txt.setAttribute('text-anchor', 'middle'); 
+    txt.setAttribute('dominant-baseline', 'middle');
+    txt.setAttribute('font-size', '10'); 
+    txt.setAttribute('font-weight', '600');
+    txt.setAttribute('fill', '#000'); 
+    txt.setAttribute('paint-order', 'stroke');
+    txt.setAttribute('stroke', '#fff'); 
+    txt.setAttribute('stroke-width', '2');
+    txt.textContent = v;
+    svg.appendChild(txt);
+  });
+  
+  els.scale.appendChild(svg);
+}
