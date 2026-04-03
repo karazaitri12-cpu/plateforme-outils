@@ -90,7 +90,9 @@ const IMCCalculator = (() => {
     if (!els.scale || !els.legend) return;
     els.scale.innerHTML = ''; els.legend.innerHTML = '';
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('viewBox', '0 0 280 280');
+    
+svg.setAttribute('viewBox', '0 0 280 140'); // Ratio horizontal 2:1
+svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
     svg.style.width = '100%'; svg.style.height = '100%';
     const toRad = d => d * Math.PI / 180;
     const angleFor = v => CFG.start + ((v - CFG.min) / (CFG.max - CFG.min)) * (CFG.end - CFG.start);
