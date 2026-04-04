@@ -63,9 +63,21 @@
     © 2026 Dr. KARA-ZAITRI M.A — Outils conformes aux recommandations HAS/INCa/CNGOF. Ne remplace pas une consultation médicale.
   </footer>
 
-  <script>
+    <script>
     const params = new URLSearchParams(window.location.search);
-    const toolPath = params.get('tool');
+    let toolPath = params.get('tool');
+
+    // Si pas de paramètre ?tool=, on essaie de deviner depuis l'URL
+    if (!toolPath) {
+      const path = window.location.pathname;
+      // URL attendue : /tools/nom-de-loutil/
+      const parts = path.split('/').filter(Boolean);
+      // parts[0] = "tools", parts[1] = "nom-de-loutil"
+      if (parts.length >= 2 && parts[0] === 'tools') {
+        toolPath = parts[1];
+      }
+    }
+
     const frame = document.getElementById('tool-frame');
     const loading = document.getElementById('loading');
 
@@ -74,9 +86,10 @@
         loading.style.display = 'none';
         frame.style.display = 'block';
       };
-      frame.src = `/${toolPath}/index.html`;
+      // CORRECTION ICI : On force le chemin vers /tools/...
+      frame.src = `/tools/${toolPath}/index.html`;
     } else {
-      document.body.innerHTML = '<div style="text-align:center;padding:60px;font-family:sans-serif;"><h2 style="color:#1e3c72;">Outil non spécifié</h2><p style="color:#64748b;margin:12px 0;">Veuillez accéder à l\'outil depuis la plateforme principale.</p><a href="https://dr-karazaitri-ma.net/plateforme-doutils-medicaux/" style="color:#2a5298;font-weight:600;">Retour à la plateforme</a></div>';
+       loading.innerHTML = '<p style="color:#e53e3e;">Outil introuvable. Vérifiez le nom du dossier.</p>';
     }
   </script>
 
