@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    .thm-wrapper { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 20px auto; color: #334155; line-height: 1.5; }
+    .thm-container { background: #fff; padding: 30px; border-radius: 15px; border: 1px solid #e2e8f0; position: relative; overflow: hidden; }
+    .thm-header h1 { color: #1e40af; font-size: 26px; margin-bottom: 5px; }
+    .thm-header p { color: #64748b; font-size: 15px; margin-bottom: 10px; }
+
+    /* Barre de progression */
+    .progress-container { position: absolute; top: 0; left: 0; width: 100%; height: 6px; background-color: #f1f5f9; }
+    .progress-bar { height: 100%; background-color: #3b82f6; width: 0%; transition: width 0.4s ease; }
+
+    /* Indicateur étape */
+    .step-indicator { font-size: 12px; color: #94a3b8; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 25px; text-transform: uppercase; }
+
+    .thm-section-blue { background-color: #e3f2fd; border-radius: 12px; padding: 25px; margin-bottom: 25px; }
+    .thm-question-title { display: flex; align-items: center; font-weight: 700; font-size: 17px; color: #1e293b; margin-bottom: 15px; }
+    .thm-icon-box { background-color: #ef4444; color: white; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; margin-right: 12px; font-size: 12px; flex-shrink: 0; }
+
+    .thm-list { list-style: none; padding: 0; margin: 0; }
+    .thm-list li { position: relative; padding-left: 25px; margin-bottom: 10px; font-size: 15px; color: #475569; }
+    .thm-list li::before { content: "\2022"; position: absolute; left: 5px; color: #94a3b8; font-weight: bold; }
+
+    .thm-option { border: 1.5px solid #e2e8f0; background: #fff; border-radius: 10px; padding: 18px 25px; margin-bottom: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 500; transition: all 0.2s; width: 100%; box-sizing: border-box; }
+    .thm-option:hover { border-color: #3b82f6; background-color: #f8fbff; }
+
+    .thm-check-icon { color: #64748b; font-size: 18px; }
+    .thm-cross-icon { color: #ef4444; font-size: 18px; }
+
+    .thm-step { display: none; }
+    .thm-step.active { display: block; animation: fadeIn 0.3s; }
+    .thm-btn-back { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 14px; margin-top: 10px; text-decoration: underline; }
+    .thm-warning { background: #fff7ed; color: #9a3412; padding: 15px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-top: 20px; }
+
+    /* Grille étape 4 */
+    .thm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .thm-grid .thm-option { margin-bottom: 0; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px 18px; }
+    .thm-grid .thm-option .opt-title { font-weight: 700; font-size: 15px; color: #1e293b; }
+    .thm-grid .thm-option .opt-sub { font-size: 12px; color: #64748b; font-weight: 400; line-height: 1.4; }
+    .thm-grid .thm-option:hover { border-color: #3b82f6; background: #f0f7ff; }
+
+/* Anti-scrollbar — style App native */
+html { scrollbar-width: none !important; }
+body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+  
+    @media (max-width: 560px) { .thm-grid { grid-template-columns: 1fr; } }
+
+    /* Bilan préalable */
+    .thm-bilan { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 18px; margin-bottom: 20px; }
+    .thm-bilan-title { font-weight: 700; color: #166534; font-size: 14px; margin-bottom: 10px; }
+    .thm-bilan ul { margin: 0; padding-left: 18px; font-size: 13px; color: #166534; }
+    .thm-bilan ul li { margin-bottom: 4px; }
+
+    /* Résultat */
+    .thm-result { background: #1e40af; color: white; padding: 35px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 15px rgba(30,64,175,0.2); transition: all 0.3s; }
+    .thm-result h3 { font-size: 24px; font-weight: 700; margin-top: 0; margin-left: 0; margin-bottom: 20px; color: white; }
+    .thm-result.result-positive { background: #ffffff !important; color: #1e293b !important; border: 1.5px solid #0f766e; box-shadow: 0 4px 15px rgba(15,118,110,0.08); }
+    .thm-result.result-positive h3 { color: #0f766e !important; }
+    .res-line { display: block; margin-bottom: 14px; font-size: 15px; font-weight: 500; line-height: 1.6; }
+    .res-separator { display: block; border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 16px 0; }
+    .thm-result:not(.result-positive) .res-separator { border-top-color: rgba(255,255,255,0.2); }
+    .res-section-title { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; margin-top: 4px; font-weight: 700; color: #0f766e; border-left: 3px solid #0f766e; padding-left: 8px; }
+    .thm-result:not(.result-positive) .res-section-title { color: rgba(255,255,255,0.75); border-left-color: rgba(255,255,255,0.4); }
+
+    /* Accordéon dans résultat */
+    details.res-details { margin: 12px 0; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; }
+    .thm-result.result-positive details.res-details { background: #f8fafc; border-color: #d1fae5; }
+    .thm-result:not(.result-positive) details.res-details { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+    summary.res-summary { padding: 10px 15px; cursor: pointer; font-weight: 600; color: #1e40af; display: flex; justify-content: space-between; align-items: center; font-size: 13px; list-style: none !important; }
+    .thm-result:not(.result-positive) summary.res-summary { color: rgba(255,255,255,0.9); }
+    summary.res-summary::-webkit-details-marker { display: none !important; }
+    summary.res-summary::after { content: ""; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #64748b; }
+    details[open] summary.res-summary::after { border-top: none; border-bottom: 6px solid #64748b; }
+    .res-details-content { padding: 12px 15px; font-size: 13px; color: #334155; border-top: 1px solid #e2e8f0; }
+    .thm-result:not(.result-positive) .res-details-content { color: rgba(255,255,255,0.85); border-top-color: rgba(255,255,255,0.2); }
+
+    /* Mise en garde résultat */
+    .res-warning { background: #fff7ed; color: #9a3412; padding: 12px 15px; border-radius: 8px; font-size: 12px; font-weight: 600; margin-top: 16px; border: 1px solid #fed7aa; }
+    .thm-result:not(.result-positive) .res-warning { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.2); }
+
+    /* Bouton imprimer */
+    .btn-print { background: #0f766e; color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s; }
+    .btn-print:hover { background: #0d5c56; }
+    .thm-result:not(.result-positive) .btn-print { background: rgba(255,255,255,0.2); }
+    .thm-result:not(.result-positive) .btn-print:hover { background: rgba(255,255,255,0.3); }
+
+    /* Accordéon aide risque CV */
+    details.thm-details { margin-top: 15px; background: white; border-radius: 8px; border: 1px solid #cbd5e1; overflow: hidden; }
+    summary.thm-summary { padding: 12px 15px; cursor: pointer; font-weight: 600; color: #1e40af; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; font-size: 14px; list-style: none !important; }
+    summary.thm-summary::-webkit-details-marker { display: none !important; }
+    summary.thm-summary:hover { background: #f1f5f9; }
+    summary.thm-summary::after { content: ""; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #64748b; }
+    details[open] summary.thm-summary::after { border-top: none; border-bottom: 6px solid #64748b; }
+    .thm-details-content { padding: 15px; font-size: 13px; color: #334155; border-top: 1px solid #e2e8f0; }
+    .risk-block { margin-bottom: 10px; }
+    .risk-title { font-weight: 700; display: block; margin-bottom: 4px; }
+    .risk-green { color: #16a34a; }
+    .risk-orange { color: #d97706; }
+    .risk-red { color: #dc2626; }
+    .thm-mini-list { padding-left: 15px; margin: 0; }
+    .thm-mini-list li { margin-bottom: 2px; }
+
+    /* CI relatives */
+    .thm-section-orange { background-color: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 25px; margin-bottom: 25px; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+</style>
+</head>
+<body>
+
+<div class="thm-wrapper">
+  <div class="thm-container">
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="thm-header">
+      <h1>Algorithme – Prescription du THM</h1>
+      <p>Évaluation cardiovasculaire et gynécologique – Juin 2025</p>
+      <div class="step-indicator" id="stepIndicator">Étape 1 / 5</div>
+    </div>
+
+    <!-- ÉTAPE 1 : ÉLIGIBILITÉ -->
+    <div class="thm-step active" id="step1">
+      <div class="thm-section-blue">
+        <div class="thm-question-title"><span class="thm-icon-box">&#128203;</span> Critères d'éligibilité</div>
+        <ul class="thm-list">
+          <li>Symptômes climatériques modérés à sévères altérant la qualité de vie.</li>
+          <li>Femme ménopausée de moins de 60 ans OU délai depuis la ménopause inférieur à 10 ans.</li>
+        </ul>
+      </div>
+      <div class="thm-option" onclick="go(2)"><span>Oui, critères remplis</span><span class="thm-check-icon">&#10003;</span></div>
+      <div class="thm-option" onclick="final('non_eligible')"><span>Non, hors fenêtre d'opportunité</span><span class="thm-cross-icon">&#10005;</span></div>
+      <div class="thm-warning">&#9888;&#65039; Outil destiné aux professionnels de santé – Ne remplace pas le jugement clinique. Sources : HAS 2023, CNGOF 2024.</div>
+    </div>
+
+    <!-- ÉTAPE 2 : CI ABSOLUES -->
+    <div class="thm-step" id="step2">
+      <div class="thm-section-blue">
+        <div class="thm-question-title"><span class="thm-icon-box">&#10033;</span> Contre-indications ABSOLUES</div>
+        <ul class="thm-list">
+          <li>Cancer du sein ou de l'endomètre (actif ou antérieur)</li>
+          <li>MTE (TVP, EP) active ou antécédent</li>
+          <li>Maladie thromboembolique artérielle (IDM, AVC, AOMI)</li>
+          <li>HTA non contrôlée (&gt; 160/100 mmHg)</li>
+          <li>Maladie hépatique évolutive avec tests anormaux</li>
+          <li>Tumeurs hépatiques (adénome, carcinome)</li>
+          <li>Antécédent d'ictère sous &#339;strogènes ou cholestase gravidique</li>
+          <li>Thrombophilies, Porphyrie, Méningiome</li>
+          <li>Lupus (LED) actif ou avec anticorps antiphospholipides</li>
+          <li>Métrorragies inexpliquées</li>
+          <li>Macroprolactinome non contrôlé</li>
+        </ul>
+      </div>
+      <div class="thm-option" onclick="final('ci_abs')"><span>Oui, au moins une présente</span><span class="thm-cross-icon">&#10005;</span></div>
+      <div class="thm-option" onclick="go(3)"><span>Aucune</span><span class="thm-check-icon">&#10003;</span></div>
+      <button class="thm-btn-back" onclick="go(1)">&#8592; Retour</button>
+    </div>
+
+    <!-- ÉTAPE 3 : CI RELATIVES -->
+    <div class="thm-step" id="step3">
+      <div class="thm-section-orange">
+        <div class="thm-question-title"><span class="thm-icon-box" style="background:#d97706;">&#9888;</span> Contre-indications RELATIVES</div>
+        <p style="font-size:14px;color:#92400e;margin-bottom:12px;">Ces situations ne contre-indiquent pas formellement le THM mais imposent le <strong>triptyque de sécurité</strong> : voie transdermique + progestérone naturelle + dose minimale efficace.</p>
+        <ul class="thm-list">
+          <li style="color:#92400e;">Risque CV : HTA contrôlée, thrombose ancienne (&gt; 1 an), hyperlipidémie sévère (TG &gt; 3 g/L), obésité, tabac, diabète, ATCD familiaux thrombose précoce</li>
+          <li style="color:#92400e;">Pathologies hépatobiliaires : hépatite guérie, lithiase vésiculaire, cholestase gravidique ancienne</li>
+          <li style="color:#92400e;">Gynécologiques : endométriose, fibromes utérins, mastopathie bénigne, ATCD familiaux cancer du sein (sans mutation BRCA)</li>
+          <li style="color:#92400e;">Autres : migraine avec aura, épilepsie, otospongiose, lupus stable sans ACLA, microprolactinome stable</li>
+        </ul>
+      </div>
+      <div class="thm-option" onclick="go(4, true)"><span>Oui, au moins une présente — appliquer le triptyque</span><span style="color:#d97706;font-size:18px;">&#9888;</span></div>
+      <div class="thm-option" onclick="go(4, false)"><span>Aucune CI relative</span><span class="thm-check-icon">&#10003;</span></div>
+      <button class="thm-btn-back" onclick="go(2)">&#8592; Retour</button>
+    </div>
+
+    <!-- ÉTAPE 4 : RISQUE CV -->
+    <div class="thm-step" id="step4">
+      <div class="thm-section-blue">
+        <div class="thm-question-title"><span class="thm-icon-box">&#128269;</span> Risque Cardiovasculaire</div>
+        <p style="margin-bottom:10px;">Veuillez stratifier le risque global de la patiente.</p>
+        <details class="thm-details">
+          <summary class="thm-summary">&#128161; Aide : Tableau des Risques (Cliquez pour ouvrir)</summary>
+          <div class="thm-details-content">
+            <div class="risk-block">
+              <span class="risk-title risk-green">&#128994; Risque Faible</span>
+              <ul class="thm-mini-list">
+                <li>HTA traitée contrôlée, non compliquée.</li>
+                <li>Absence d'autres facteurs de risque.</li>
+              </ul>
+            </div>
+            <div class="risk-block">
+              <span class="risk-title risk-orange">&#128993; Risque Intermédiaire / Modéré (&#8805; 2 facteurs)</span>
+              <div style="font-weight:700;color:#475569;margin-top:5px;font-size:12px;text-transform:uppercase;">Facteurs Classiques :</div>
+              <ul class="thm-mini-list">
+                <li><strong>Tabagisme actif</strong> ou arrêt &lt; 3 ans.</li>
+                <li>HTA traitée non contrôlée.</li>
+                <li>Diabète traité sans complication.</li>
+                <li>Dyslipidémie traitée ou non.</li>
+                <li>Obésité abdominale (Tour de taille &#8805; 88 cm).</li>
+                <li>ATCD familial CV précoce (1er degré) (&lt; 55 ans &#9794;, &lt; 65 ans &#9792;).</li>
+              </ul>
+              <div style="font-weight:700;color:#475569;margin-top:8px;font-size:12px;text-transform:uppercase;">Risques Émergents (Femmes) :</div>
+              <ul class="thm-mini-list">
+                <li>HTA gravidique, prééclampsie, diabète gestationnel.</li>
+                <li>Migraine avec aura.</li>
+                <li>Maladies inflammatoires chroniques.</li>
+                <li>Syndrome métabolique, sédentarité.</li>
+              </ul>
+            </div>
+            <div class="risk-block">
+              <span class="risk-title risk-red">&#128308; Risque Élevé</span>
+              <ul class="thm-mini-list">
+                <li>Maladie CV avérée (coronaire, AVC, AOMI).</li>
+                <li>Insuffisance rénale chronique modérée/sévère.</li>
+                <li>Diabète compliqué.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+      </div>
+      <div class="thm-option" onclick="go(5)"><span>Risque Faible ou Modéré</span><span class="thm-check-icon">&#10003;</span></div>
+      <div class="thm-option" onclick="final('cv_eleve')"><span>Risque Élevé</span><span class="thm-cross-icon">&#10005;</span></div>
+      <button class="thm-btn-back" onclick="go(3)">&#8592; Retour</button>
+    </div>
+
+    <!-- ÉTAPE 5 : PROFIL GYNÉCOLOGIQUE -->
+    <div class="thm-step" id="step5">
+      <div class="thm-section-blue">
+        <div class="thm-question-title"><span class="thm-icon-box">&#9792;</span> Profil gynécologique</div>
+
+        <div class="thm-bilan">
+          <div class="thm-bilan-title">&#9989; Bilan préalable indispensable avant prescription</div>
+          <ul>
+            <li>Examen clinique complet : poids, PA, examen mammaire et gynécologique</li>
+            <li>Mammographie récente (&#8804; 1 an)</li>
+            <li>Bilan biologique : glycémie, lipides, fonction hépatique</li>
+            <li>DMO si facteurs de risque d'ostéoporose</li>
+            <li>Frottis cervico-vaginal à jour</li>
+          </ul>
+        </div>
+
+        <p style="font-weight:700;color:#1e293b;margin-bottom:12px;">Sélectionnez le profil de la patiente :</p>
+        <div class="thm-grid">
+          <div class="thm-option" onclick="final('utérus_meno')">
+            <span class="opt-title">&#128996; Utérus présent</span>
+            <span class="opt-sub">Ménopause installée<br>(cycles absents)</span>
+          </div>
+          <div class="thm-option" onclick="final('utérus_peri')">
+            <span class="opt-title">&#128996; Utérus présent</span>
+            <span class="opt-sub">Périménopause<br>(cycles encore présents)</span>
+          </div>
+          <div class="thm-option" onclick="final('hystero_meno')">
+            <span class="opt-title">&#128997; Hystérectomisée</span>
+            <span class="opt-sub">Ménopause installée<br>(ovaires conservés)</span>
+          </div>
+          <div class="thm-option" onclick="final('hystero_ovario')">
+            <span class="opt-title">&#128997; Hystérectomisée + Ovariectomie</span>
+            <span class="opt-sub">Ménopause chirurgicale<br>(castration)</span>
+          </div>
+        </div>
+      </div>
+      <button class="thm-btn-back" onclick="go(4)">&#8592; Retour</button>
+    </div>
+
+    <!-- RÉSULTAT -->
+    <div class="thm-step" id="result">
+      <div class="thm-result" id="resultBox">
+       <div id="res-title" style="color: yellow; font-size: 2.2rem;font-weight: 600; margin-bottom: 8px;">Résultat</div>
+        <div id="res-text"></div>
+        <div class="res-warning" id="res-warning" style="display:none;">
+          &#9888;&#65039; Résultat indicatif — décision clinique finale sous la responsabilité du prescripteur. Sources : HAS 2023, CNGOF 2024.
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;align-items:center;">
+        <button class="thm-btn-back" style="font-size:15px;" onclick="goBack()">&#8592; Retour</button>
+        <button class="btn-print" id="btn-imprimer" style="display:none;" onclick="copyResume()">&#128203; Copier le résumé</button>
+        <button class="thm-option" style="flex:1;justify-content:center;margin-bottom:0;" onclick="go(1)">
+          &#8635; Recommencer l'évaluation
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let lastStep = 1;
+  let hasCI_relative = false;
+  const totalSteps = 5;
+
+  const stepLabels = {
+    1: 'Étape 1 / 5 — Éligibilité',
+    2: 'Étape 2 / 5 — Contre-indications absolues',
+    3: 'Étape 3 / 5 — Contre-indications relatives',
+    4: 'Étape 4 / 5 — Risque cardiovasculaire',
+    5: 'Étape 5 / 5 — Profil gynécologique'
+  };
+
+  function go(n, ciRelative) {
+    if (ciRelative !== undefined) hasCI_relative = ciRelative;
+    document.querySelectorAll('.thm-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    document.querySelector('.thm-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('progressBar').style.width = ((n / totalSteps) * 100) + '%';
+    document.getElementById('stepIndicator').textContent = stepLabels[n] || '';
+  }
+
+  function goBack() {
+    go(lastStep);
+  }
+
+  function final(type) {
+    // Mémoriser l'étape d'origine
+    ['step1','step2','step3','step4','step5'].forEach((id, i) => {
+      if (document.getElementById(id) && document.getElementById(id).classList.contains('active')) {
+        lastStep = i + 1;
+      }
+    });
+
+    document.querySelectorAll('.thm-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('result').classList.add('active');
+    document.querySelector('.thm-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('progressBar').style.width = '100%';
+    document.getElementById('stepIndicator').textContent = 'Résultat';
+
+    const title = document.getElementById('res-title');
+    const textContainer = document.getElementById('res-text');
+    const resultBox = document.getElementById('resultBox');
+    const resWarning = document.getElementById('res-warning');
+
+    resultBox.style.backgroundColor = '';
+    resultBox.classList.remove('result-positive');
+    resWarning.style.display = 'none';
+    textContainer.innerHTML = '';
+    document.getElementById('btn-imprimer').style.display = 'none';
+
+    // Bandeau CI relative si applicable
+    const ciAlert = hasCI_relative
+      ? `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px 15px;margin-bottom:16px;font-size:13px;color:#92400e;font-weight:600;">
+          &#9888;&#65039; <strong>CI relative détectée</strong> — Appliquer le triptyque de sécurité :<br>
+          Voie transdermique + Progestérone naturelle micronisée + Dose minimale efficace avec réévaluation annuelle.
+         </div>` : '';
+
+    if (type === 'non_eligible') {
+      title.innerText = "Non éligible";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">Le THM systémique n'est pas indiqué.</span>
+        <span class="res-line">Motif : absence de symptômes ou hors fenêtre d'opportunité (&gt; 60 ans ou ménopause &gt; 10 ans).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Alternatives à envisager</span>
+        <span class="res-line">&#128310; Lubrifiants vaginaux (Replens&#174;, Sensilube&#174;).</span>
+        <span class="res-line">&#128310; ISRS/IRSNa pour les bouffées de chaleur.</span>
+        <span class="res-line">&#128310; Calcium (1 200–1 500 mg/j) + vitamine D (800–1 000 UI/j).</span>`;
+
+    } else if (type === 'ci_abs') {
+      resultBox.style.backgroundColor = '#dc2626';
+      title.innerText = "Contre-indication absolue";
+      textContainer.innerHTML = `
+        <span class="res-line">Le THM est formellement contre-indiqué.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Alternatives non hormonales</span>
+        <span class="res-line">&#128310; Bouffées de chaleur : ISRS/IRSNa (selon tolérance).</span>
+        <span class="res-line">&#128310; Sécheresse vaginale : lubrifiants locaux (Replens&#174;, Sensilube&#174;) &#177; &#339;strogènes locaux si non CI.</span>
+        <span class="res-line">&#128310; Prévention osseuse : calcium + vitamine D &#177; biphosphonates si indication.</span>`;
+
+    } else if (type === 'cv_eleve') {
+      resultBox.style.backgroundColor = '#ea580c';
+      title.innerText = "Risque CV trop élevé";
+      textContainer.innerHTML = `
+        <span class="res-line">Le risque cardiovasculaire dépasse les bénéfices attendus du THM systémique.</span>
+        <hr class="res-separator">
+        <span class="res-line">&#128310; Sécheresse vaginale isolée : &#339;strogénothérapie locale possible (Trophicrème&#174;, Physiogine&#174;, Colpotrophine&#174;).</span>
+        <span class="res-line">&#128310; Bouffées de chaleur : ISRS/IRSNa, phytoestrogènes (durée limitée, hors ATCD hormono-dépendant).</span>`;
+
+    } else if (type === 'utérus_meno') {
+      resultBox.classList.add('result-positive');
+      resWarning.style.display = 'block';
+      document.getElementById('btn-imprimer').style.display = 'inline-flex';
+      title.innerText = "THM — Utérus présent / Ménopause installée";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">&#9989; Bilan favorable — THM indiqué.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogène</span>
+        <span class="res-line">&#129657; <strong>Voie transdermique</strong> (patch ou gel) à privilégier.<br>
+        <em style="opacity:0.7;font-size:13px;">Oestrodose&#174;, Estreva&#174;, Femsept&#174; (hebdomadaire)</em></span>
+        <hr class="res-separator">
+        <span class="res-section-title">Progestatif obligatoire (protection endomètre)</span>
+        <span class="res-line">&#127807; <strong>Progestérone naturelle micronisée</strong> (Utrogestan&#174; 200 mg/j du 16&#7497; au 25&#7497; jour)<br>
+        ou <strong>dydrogestérone</strong> (Duphaston&#174; 10 mg) — moindre risque thromboembolique et mammaire.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Protocole</span>
+        <span class="res-line">&#128197; <strong>Séquentiel</strong> en début de traitement (E seul puis E+P, avec règles).<br>
+        <strong>Continu</strong> à distance (E+P quotidien, sans règles).<br>
+        <em style="opacity:0.7;font-size:13px;">Progestatif prescrit au minimum 10–12 jours/cycle.</em></span>
+        <hr class="res-separator">
+        <span class="res-section-title">Adaptation du traitement</span>
+        <details class="res-details">
+          <summary class="res-summary">&#128260; Signes de sur/sous-dosage et ajustements</summary>
+          <div class="res-details-content">
+            <p style="margin:0 0 10px;color:#dc2626;">&#9632; <strong>Hyperestrogénisme</strong> <span style="font-weight:400;font-size:13px;">(mastodynies, &#339;dèmes, prise de poids, métrorragies)</span> &#8594; Diminuer la dose ou la durée des estrogènes.</p>
+            <p style="margin:0 0 10px;color:#d97706;">&#9632; <strong>Hypo-estrogénisme</strong> <span style="font-weight:400;font-size:13px;">(bouffées persistantes, sécheresse vaginale)</span> &#8594; Augmenter la dose d'estrogènes ou associer traitements non hormonaux.</p>
+            <p style="margin:0 0 10px;color:#7c3aed;">&#9632; <strong>Hyperprogestéronisme</strong> <span style="font-weight:400;font-size:13px;">(métrorragies sur atrophie, prise de poids)</span> &#8594; Baisser la posologie ou préférer progestérone naturelle.</p>
+            <p style="margin:0;font-size:12px;color:#64748b;">&#9888;&#65039; Toute métrorragie persistante (&gt; 3 cycles) nécessite un bilan gynécologique complet (écho ± biopsie endomètre).</p>
+          </div>
+        </details>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogénothérapie locale complémentaire</span>
+        <span class="res-line" style="font-size:14px;">Si sécheresse vaginale résiduelle sous THM systémique : ajouter &#339;strogènes locaux (Trophicrème&#174;, Physiogine&#174; crème ou ovules, Colpotrophine&#174;).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Durée, suivi et arrêt</span>
+        <span class="res-line">&#128203; Dose minimale efficace — durée HAS : <strong>3 à 5 ans</strong>, réévaluation annuelle.<br>
+        Consultations : 3 mois, 6 mois, puis tous les 6–12 mois.<br>
+        Mammographie tous les 2 ans (annuelle si traitement prolongé).<br>
+        <strong>Arrêt :</strong> diminuer le dosage de 50% sur 1 mois — si symptômes : reprendre dose initiale — sinon arrêt le mois suivant. Sevrage très progressif si symptômes de rebond.</span>`;
+
+    } else if (type === 'utérus_peri') {
+      resultBox.classList.add('result-positive');
+      resWarning.style.display = 'block';
+      document.getElementById('btn-imprimer').style.display = 'inline-flex';
+      title.innerText = "THM — Utérus présent / Périménopause";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">&#9989; Bilan favorable — traitement adapté à la périménopause.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Stratégie périménopause (cycles spontanés)</span>
+        <span class="res-line">&#128310; <strong>Trouble des règles isolé</strong> : progestérone naturelle seule (Utrogestan&#174;) ou dydrogestérone (Duphaston&#174;).</span>
+        <span class="res-line">&#128310; <strong>Tableau d'hyperestrogénisme</strong> (mastodynies, prise de poids, &#339;dèmes) : progestatifs de synthèse (norprégnanes ou prégnanes) du 16&#7497; au 25&#7497; jour.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Si estrogènes nécessaires</span>
+        <span class="res-line">&#129657; Voie transdermique (Oestrodose&#174;, Estreva&#174;) + progestatif obligatoire.<br>
+        Protocole séquentiel (E seul puis E+P avec règles).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Adaptation du traitement</span>
+        <details class="res-details">
+          <summary class="res-summary">&#128260; Signes de sur/sous-dosage et ajustements</summary>
+          <div class="res-details-content">
+            <p style="margin:0 0 10px;color:#dc2626;">&#9632; <strong>Hyperestrogénisme</strong> <span style="font-weight:400;font-size:13px;">(mastodynies, &#339;dèmes, prise de poids, métrorragies)</span> &#8594; Diminuer la dose ou la durée des estrogènes.</p>
+            <p style="margin:0 0 10px;color:#d97706;">&#9632; <strong>Hypo-estrogénisme</strong> <span style="font-weight:400;font-size:13px;">(bouffées persistantes, sécheresse vaginale)</span> &#8594; Augmenter la dose ou associer traitements non hormonaux.</p>
+            <p style="margin:0;color:#7c3aed;">&#9632; <strong>Hyperprogestéronisme</strong> <span style="font-weight:400;font-size:13px;">(métrorragies sur atrophie, prise de poids)</span> &#8594; Baisser la posologie ou préférer progestérone naturelle.</p>
+          </div>
+        </details>
+        <hr class="res-separator">
+        <span class="res-section-title">Suivi et arrêt</span>
+        <span class="res-line">&#128203; Réévaluation annuelle — adapter selon l'évolution vers la ménopause installée.<br>
+        <strong>Arrêt progressif :</strong> réduction de 50% sur 1 mois, avec surveillance des symptômes de rebond.</span>`;
+
+    } else if (type === 'hystero_meno') {
+      resultBox.classList.add('result-positive');
+      resWarning.style.display = 'block';
+      document.getElementById('btn-imprimer').style.display = 'inline-flex';
+      title.innerText = "THM — Hystérectomisée / Ménopause installée";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">&#9989; Bilan favorable — estrogénothérapie isolée indiquée.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogène seul — pas de progestatif</span>
+        <span class="res-line">&#129657; <strong>Voie transdermique</strong> (patch ou gel) à privilégier.<br>
+        <em style="opacity:0.7;font-size:13px;">Oestrodose&#174;, Estreva&#174;, Femsept&#174;</em></span>
+        <span class="res-line">&#9888;&#65039; Pas de progestatif nécessaire — utérus absent.<br>
+        <em style="opacity:0.7;font-size:13px;">Exception : endométriose — progestatif obligatoire même après hystérectomie.</em></span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogénothérapie locale complémentaire</span>
+        <span class="res-line" style="font-size:14px;">Si sécheresse vaginale résiduelle : &#339;strogènes locaux (Trophicrème&#174;, Physiogine&#174;, Colpotrophine&#174;).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Surveillance mammaire renforcée</span>
+        <span class="res-line">&#128247; Mammographie annuelle — estrogénothérapie isolée prolongée = risque mammaire résiduel.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Durée, suivi et arrêt</span>
+        <span class="res-line">&#128203; Dose minimale efficace — réévaluation annuelle — durée HAS : 3 à 5 ans.<br>
+        <strong>Arrêt :</strong> diminuer le dosage de 50% sur 1 mois — si symptômes : reprendre — sinon arrêt le mois suivant.</span>`;
+
+    } else if (type === 'hystero_ovario') {
+      resultBox.classList.add('result-positive');
+      resWarning.style.display = 'block';
+      document.getElementById('btn-imprimer').style.display = 'inline-flex';
+      title.innerText = "THM — Hystérectomisée + Ovariectomie";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">&#9989; Bilan favorable — ménopause chirurgicale confirmée.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogène seul — pas de progestatif</span>
+        <span class="res-line">&#129657; <strong>Voie transdermique fortement recommandée</strong> (patch ou gel).<br>
+        <em style="opacity:0.7;font-size:13px;">Oestrodose&#174;, Estreva&#174;, Femsept&#174;</em></span>
+        <span class="res-line">&#9888;&#65039; Pas de progestatif (utérus absent).<br>
+        <em style="opacity:0.7;font-size:13px;">Exception : antécédent d'endométriose — progestatif obligatoire même après hystérectomie + ovariectomie.</em></span>
+        <hr class="res-separator">
+        <span class="res-section-title">Particularités de la ménopause chirurgicale</span>
+        <span class="res-line">&#128308; Carence estrogénique brutale et totale — symptômes souvent intenses.<br>
+        Instaurer le THM rapidement après la chirurgie si pas de CI.<br>
+        Doses parfois plus élevées qu'en ménopause naturelle.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogénothérapie locale complémentaire</span>
+        <span class="res-line" style="font-size:14px;">Si sécheresse vaginale résiduelle : &#339;strogènes locaux (Trophicrème&#174;, Physiogine&#174;, Colpotrophine&#174;).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Surveillance mammaire renforcée</span>
+        <span class="res-line">&#128247; Mammographie annuelle.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Durée, suivi et arrêt</span>
+        <span class="res-line">&#128203; Poursuivre jusqu'à l'âge de la ménopause naturelle (50–51 ans) au minimum.<br>
+        Réévaluation annuelle — arrêt progressif par réduction de 50% sur 1 mois.</span>`;
+    }
+  }
+
+  function go(n, ciRelative) {
+    if (ciRelative !== undefined) hasCI_relative = ciRelative;
+    document.querySelectorAll('.thm-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    document.querySelector('.thm-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('progressBar').style.width = ((n / totalSteps) * 100) + '%';
+    document.getElementById('stepIndicator').textContent = stepLabels[n] || '';
+  }
+
+  function goBack() {
+    go(lastStep);
+  }
+
+  function final(type) {
+    // Mémoriser l'étape d'origine
+    ['step1','step2','step3','step4','step5'].forEach((id, i) => {
+      if (document.getElementById(id) && document.getElementById(id).classList.contains('active')) {
+        lastStep = i + 1;
+      }
+    });
+
+    document.querySelectorAll('.thm-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('result').classList.add('active');
+    document.querySelector('.thm-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('progressBar').style.width = '100%';
+    document.getElementById('stepIndicator').textContent = 'Résultat';
+
+    const title = document.getElementById('res-title');
+    const textContainer = document.getElementById('res-text');
+    const resultBox = document.getElementById('resultBox');
+    const resWarning = document.getElementById('res-warning');
+
+    resultBox.style.backgroundColor = '';
+    resultBox.classList.remove('result-positive');
+    resWarning.style.display = 'none';
+    textContainer.innerHTML = '';
+    document.getElementById('btn-imprimer').style.display = 'none';
+
+    // Bandeau CI relative si applicable
+    const ciAlert = hasCI_relative
+      ? `<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px 15px;margin-bottom:16px;font-size:13px;color:#92400e;font-weight:600;">
+          &#9888;&#65039; <strong>CI relative détectée</strong> — Appliquer le triptyque de sécurité :<br>
+          Voie transdermique + Progestérone naturelle micronisée + Dose minimale efficace avec réévaluation annuelle.
+         </div>` : '';
+
+    if (type === 'non_eligible') {
+      title.innerText = "Non éligible";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">Le THM systémique n'est pas indiqué.</span>
+        <span class="res-line">Motif : absence de symptômes ou hors fenêtre d'opportunité (&gt; 60 ans ou ménopause &gt; 10 ans).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Alternatives à envisager</span>
+        <span class="res-line">&#128310; Lubrifiants vaginaux (Replens&#174;, Sensilube&#174;).</span>
+        <span class="res-line">&#128310; ISRS/IRSNa pour les bouffées de chaleur.</span>
+        <span class="res-line">&#128310; Calcium (1 200–1 500 mg/j) + vitamine D (800–1 000 UI/j).</span>`;
+
+    } else if (type === 'ci_abs') {
+      resultBox.style.backgroundColor = '#dc2626';
+      title.innerText = "Contre-indication absolue";
+      textContainer.innerHTML = `
+        <span class="res-line">Le THM est formellement contre-indiqué.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Alternatives non hormonales</span>
+        <span class="res-line">&#128310; Bouffées de chaleur : ISRS/IRSNa (selon tolérance).</span>
+        <span class="res-line">&#128310; Sécheresse vaginale : lubrifiants locaux (Replens&#174;, Sensilube&#174;) &#177; &#339;strogènes locaux si non CI.</span>
+        <span class="res-line">&#128310; Prévention osseuse : calcium + vitamine D &#177; biphosphonates si indication.</span>`;
+
+    } else if (type === 'cv_eleve') {
+      resultBox.style.backgroundColor = '#ea580c';
+      title.innerText = "Risque CV trop élevé";
+      textContainer.innerHTML = `
+        <span class="res-line">Le risque cardiovasculaire dépasse les bénéfices attendus du THM systémique.</span>
+        <hr class="res-separator">
+        <span class="res-line">&#128310; Sécheresse vaginale isolée : &#339;strogénothérapie locale possible (Trophicrème&#174;, Physiogine&#174;, Colpotrophine&#174;).</span>
+        <span class="res-line">&#128310; Bouffées de chaleur : ISRS/IRSNa, phytoestrogènes (durée limitée, hors ATCD hormono-dépendant).</span>`;
+
+    } else if (type === 'utérus_meno') {
+      resultBox.classList.add('result-positive');
+      resWarning.style.display = 'block';
+      document.getElementById('btn-imprimer').style.display = 'inline-flex';
+      title.innerText = "THM — Utérus présent / Ménopause installée";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">&#9989; Bilan favorable — THM indiqué.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogène</span>
+        <span class="res-line">&#129657; <strong>Voie transdermique</strong> (patch ou gel) à privilégier.<br>
+        <em style="opacity:0.7;font-size:13px;">Oestrodose&#174;, Estreva&#174;, Femsept&#174; (hebdomadaire)</em></span>
+        <hr class="res-separator">
+        <span class="res-section-title">Progestatif obligatoire (protection endomètre)</span>
+        <span class="res-line">&#127807; <strong>Progestérone naturelle micronisée</strong> (Utrogestan&#174; 200 mg/j du 16&#7497; au 25&#7497; jour)<br>
+        ou <strong>dydrogestérone</strong> (Duphaston&#174; 10 mg) — moindre risque thromboembolique et mammaire.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Protocole</span>
+        <span class="res-line">&#128197; <strong>Séquentiel</strong> en début de traitement (E seul puis E+P, avec règles).<br>
+        <strong>Continu</strong> à distance (E+P quotidien, sans règles).<br>
+        <em style="opacity:0.7;font-size:13px;">Progestatif prescrit au minimum 10–12 jours/cycle.</em></span>
+        <hr class="res-separator">
+        <span class="res-section-title">Adaptation du traitement</span>
+        <details class="res-details">
+          <summary class="res-summary">&#128260; Signes de sur/sous-dosage et ajustements</summary>
+          <div class="res-details-content">
+            <p style="margin:0 0 10px;color:#dc2626;">&#9632; <strong>Hyperestrogénisme</strong> <span style="font-weight:400;font-size:13px;">(mastodynies, &#339;dèmes, prise de poids, métrorragies)</span> &#8594; Diminuer la dose ou la durée des estrogènes.</p>
+            <p style="margin:0 0 10px;color:#d97706;">&#9632; <strong>Hypo-estrogénisme</strong> <span style="font-weight:400;font-size:13px;">(bouffées persistantes, sécheresse vaginale)</span> &#8594; Augmenter la dose d'estrogènes ou associer traitements non hormonaux.</p>
+            <p style="margin:0 0 10px;color:#7c3aed;">&#9632; <strong>Hyperprogestéronisme</strong> <span style="font-weight:400;font-size:13px;">(métrorragies sur atrophie, prise de poids)</span> &#8594; Baisser la posologie ou préférer progestérone naturelle.</p>
+            <p style="margin:0;font-size:12px;color:#64748b;">&#9888;&#65039; Toute métrorragie persistante (&gt; 3 cycles) nécessite un bilan gynécologique complet (écho ± biopsie endomètre).</p>
+          </div>
+        </details>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogénothérapie locale complémentaire</span>
+        <span class="res-line" style="font-size:14px;">Si sécheresse vaginale résiduelle sous THM systémique : ajouter &#339;strogènes locaux (Trophicrème&#174;, Physiogine&#174; crème ou ovules, Colpotrophine&#174;).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Durée, suivi et arrêt</span>
+        <span class="res-line">&#128203; Dose minimale efficace — durée HAS : <strong>3 à 5 ans</strong>, réévaluation annuelle.<br>
+        Consultations : 3 mois, 6 mois, puis tous les 6–12 mois.<br>
+        Mammographie tous les 2 ans (annuelle si traitement prolongé).<br>
+        <strong>Arrêt :</strong> diminuer le dosage de 50% sur 1 mois — si symptômes : reprendre dose initiale — sinon arrêt le mois suivant. Sevrage très progressif si symptômes de rebond.</span>`;
+
+    } else if (type === 'utérus_peri') {
+      resultBox.classList.add('result-positive');
+      resWarning.style.display = 'block';
+      document.getElementById('btn-imprimer').style.display = 'inline-flex';
+      title.innerText = "THM — Utérus présent / Périménopause";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">&#9989; Bilan favorable — traitement adapté à la périménopause.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Stratégie périménopause (cycles spontanés)</span>
+        <span class="res-line">&#128310; <strong>Trouble des règles isolé</strong> : progestérone naturelle seule (Utrogestan&#174;) ou dydrogestérone (Duphaston&#174;).</span>
+        <span class="res-line">&#128310; <strong>Tableau d'hyperestrogénisme</strong> (mastodynies, prise de poids, &#339;dèmes) : progestatifs de synthèse (norprégnanes ou prégnanes) du 16&#7497; au 25&#7497; jour.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Si estrogènes nécessaires</span>
+        <span class="res-line">&#129657; Voie transdermique (Oestrodose&#174;, Estreva&#174;) + progestatif obligatoire.<br>
+        Protocole séquentiel (E seul puis E+P avec règles).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Adaptation du traitement</span>
+        <details class="res-details">
+          <summary class="res-summary">&#128260; Signes de sur/sous-dosage et ajustements</summary>
+          <div class="res-details-content">
+            <p style="margin:0 0 10px;color:#dc2626;">&#9632; <strong>Hyperestrogénisme</strong> <span style="font-weight:400;font-size:13px;">(mastodynies, &#339;dèmes, prise de poids, métrorragies)</span> &#8594; Diminuer la dose ou la durée des estrogènes.</p>
+            <p style="margin:0 0 10px;color:#d97706;">&#9632; <strong>Hypo-estrogénisme</strong> <span style="font-weight:400;font-size:13px;">(bouffées persistantes, sécheresse vaginale)</span> &#8594; Augmenter la dose ou associer traitements non hormonaux.</p>
+            <p style="margin:0;color:#7c3aed;">&#9632; <strong>Hyperprogestéronisme</strong> <span style="font-weight:400;font-size:13px;">(métrorragies sur atrophie, prise de poids)</span> &#8594; Baisser la posologie ou préférer progestérone naturelle.</p>
+          </div>
+        </details>
+        <hr class="res-separator">
+        <span class="res-section-title">Suivi et arrêt</span>
+        <span class="res-line">&#128203; Réévaluation annuelle — adapter selon l'évolution vers la ménopause installée.<br>
+        <strong>Arrêt progressif :</strong> réduction de 50% sur 1 mois, avec surveillance des symptômes de rebond.</span>`;
+
+    } else if (type === 'hystero_meno') {
+      resultBox.classList.add('result-positive');
+      resWarning.style.display = 'block';
+      document.getElementById('btn-imprimer').style.display = 'inline-flex';
+      title.innerText = "THM — Hystérectomisée / Ménopause installée";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">&#9989; Bilan favorable — estrogénothérapie isolée indiquée.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogène seul — pas de progestatif</span>
+        <span class="res-line">&#129657; <strong>Voie transdermique</strong> (patch ou gel) à privilégier.<br>
+        <em style="opacity:0.7;font-size:13px;">Oestrodose&#174;, Estreva&#174;, Femsept&#174;</em></span>
+        <span class="res-line">&#9888;&#65039; Pas de progestatif nécessaire — utérus absent.<br>
+        <em style="opacity:0.7;font-size:13px;">Exception : endométriose — progestatif obligatoire même après hystérectomie.</em></span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogénothérapie locale complémentaire</span>
+        <span class="res-line" style="font-size:14px;">Si sécheresse vaginale résiduelle : &#339;strogènes locaux (Trophicrème&#174;, Physiogine&#174;, Colpotrophine&#174;).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Surveillance mammaire renforcée</span>
+        <span class="res-line">&#128247; Mammographie annuelle — estrogénothérapie isolée prolongée = risque mammaire résiduel.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Durée, suivi et arrêt</span>
+        <span class="res-line">&#128203; Dose minimale efficace — réévaluation annuelle — durée HAS : 3 à 5 ans.<br>
+        <strong>Arrêt :</strong> diminuer le dosage de 50% sur 1 mois — si symptômes : reprendre — sinon arrêt le mois suivant.</span>`;
+
+    } else if (type === 'hystero_ovario') {
+      resultBox.classList.add('result-positive');
+      resWarning.style.display = 'block';
+      document.getElementById('btn-imprimer').style.display = 'inline-flex';
+      title.innerText = "THM — Hystérectomisée + Ovariectomie";
+      textContainer.innerHTML = ciAlert + `
+        <span class="res-line">&#9989; Bilan favorable — ménopause chirurgicale confirmée.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogène seul — pas de progestatif</span>
+        <span class="res-line">&#129657; <strong>Voie transdermique fortement recommandée</strong> (patch ou gel).<br>
+        <em style="opacity:0.7;font-size:13px;">Oestrodose&#174;, Estreva&#174;, Femsept&#174;</em></span>
+        <span class="res-line">&#9888;&#65039; Pas de progestatif (utérus absent).<br>
+        <em style="opacity:0.7;font-size:13px;">Exception : antécédent d'endométriose — progestatif obligatoire même après hystérectomie + ovariectomie.</em></span>
+        <hr class="res-separator">
+        <span class="res-section-title">Particularités de la ménopause chirurgicale</span>
+        <span class="res-line">&#128308; Carence estrogénique brutale et totale — symptômes souvent intenses.<br>
+        Instaurer le THM rapidement après la chirurgie si pas de CI.<br>
+        Doses parfois plus élevées qu'en ménopause naturelle.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Estrogénothérapie locale complémentaire</span>
+        <span class="res-line" style="font-size:14px;">Si sécheresse vaginale résiduelle : &#339;strogènes locaux (Trophicrème&#174;, Physiogine&#174;, Colpotrophine&#174;).</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Surveillance mammaire renforcée</span>
+        <span class="res-line">&#128247; Mammographie annuelle.</span>
+        <hr class="res-separator">
+        <span class="res-section-title">Durée, suivi et arrêt</span>
+        <span class="res-line">&#128203; Poursuivre jusqu'à l'âge de la ménopause naturelle (50–51 ans) au minimum.<br>
+        Réévaluation annuelle — arrêt progressif par réduction de 50% sur 1 mois.</span>`;
+    }
+  }
+
+  // stripEmojis removed
+  function stripEmojis(html) {
+    // Remplace les entités emoji par texte ou supprime
+    return html
+      .replace(/&#9989;/g, '<strong>[OK]</strong>')
+      .replace(/&#128308;/g, '')
+      .replace(/&#129657;/g, '')
+      .replace(/&#127807;/g, '')
+      .replace(/&#128197;/g, '')
+      .replace(/&#128203;/g, '')
+      .replace(/&#128247;/g, '')
+      .replace(/&#128310;/g, '&bull;')
+      .replace(/&#9888;&#65039;/g, '&#9888;')
+      .replace(/&#128260;/g, '');
+  }
+
+  function printResult() {
+    const title = document.getElementById('res-title').innerText;
+    const content = stripEmojis(document.getElementById('res-text').innerHTML);
+    const warning = stripEmojis(document.getElementById('res-warning').innerHTML);
+    const date = new Date().toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
+
+    const win = window.open('', '_blank', 'width=800,height=700');
+    win.document.write(`<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>THM – ${title}</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 700px; margin: 40px auto; color: #1e293b; line-height: 1.6; }
+    h1 { color: #0f766e; font-size: 22px; border-bottom: 2px solid #0f766e; padding-bottom: 10px; margin-bottom: 20px; }
+    .meta { color: #64748b; font-size: 13px; margin-bottom: 24px; }
+    .res-section-title { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: #0f766e; border-left: 3px solid #0f766e; padding-left: 8px; margin: 20px 0 8px; }
+    .res-line { display: block; margin-bottom: 10px; font-size: 14px; }
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 14px 0; }
+    details { margin: 8px 0; }
+    summary { font-weight: 600; cursor: pointer; color: #1e40af; font-size: 13px; }
+    .res-details-content { padding: 10px; font-size: 13px; color: #334155; }
+    .warning { background: #fff7ed; color: #9a3412; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 30px; border: 1px solid #fed7aa; }
+    .footer { margin-top: 30px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; }
+    @media print { body { margin: 20px; } }
+  </style>
+</head>
+<body>
+  <h1>${title}</h1>
+  <div class="meta">Algorithme THM — Dr KARA-ZAITRI M.A &nbsp;|&nbsp; Généré le ${date}</div>
+  ${content}
+  <div class="warning">${warning}</div>
+  <div class="footer">Sources : HAS 2023, CNGOF 2024 — Outil destiné aux professionnels de santé. Ne remplace pas le jugement clinique.</div>
+  <script>window.onload = function(){ window.print(); }<\/script>
+</body>
+</html>`);
+    win.document.close();
+  }
+  function copyResume() {
+    const title = document.getElementById('res-title').innerText;
+    const date = new Date().toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
+
+    // Construire le texte brut depuis les éléments visibles
+    const resultBox = document.getElementById('res-text');
+    let lines = [];
+
+    const M  = '    ';   // marge normale
+    const M2 = '      ';  // marge texte corps
+
+    lines.push('  ════════════════════════════════════════');
+    lines.push('  ALGORITHME THM — Dr KARA-ZAITRI M.A');
+    lines.push('  ' + date);
+    lines.push('  ════════════════════════════════════════');
+    lines.push('');
+    lines.push(M + title.toUpperCase());
+    lines.push('');
+
+    // Parcourir les éléments du résultat
+    const elements = resultBox.querySelectorAll('.res-section-title, .res-line, hr.res-separator');
+    elements.forEach(el => {
+      if (el.tagName === 'HR') {
+        lines.push(M + '────────────────────────────────────');
+      } else if (el.classList.contains('res-section-title')) {
+        lines.push('');
+        lines.push(M + '▶ ' + el.innerText.toUpperCase());
+      } else if (el.classList.contains('res-line')) {
+        let txt = el.innerText
+          .replace(/^[✅🩹🌿📅📋📊📂📁⚠️✓•▶●■]/gu, '')
+          .trim();
+        if (txt) {
+          // Gérer les lignes multiples (br)
+          txt.split('\n').forEach(line => {
+            line = line.trim();
+            if (line) lines.push(M2 + line);
+          });
+        }
+      }
+    });
+
+    lines.push('');
+    lines.push(M + '────────────────────────────────────');
+    lines.push(M + '⚠  Résultat indicatif — décision clinique sous la responsabilité du prescripteur.');
+    lines.push(M + 'Sources : HAS 2023, CNGOF 2024');
+    lines.push('  ════════════════════════════════════════');
+
+    const text = lines.join('\n');
+
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('btn-imprimer');
+      const original = btn.innerHTML;
+      btn.innerHTML = '&#10003; Copié !';
+      btn.style.background = '#166534';
+      setTimeout(() => {
+        btn.innerHTML = original;
+        btn.style.background = '';
+      }, 2500);
+    }).catch(() => {
+      // Fallback si clipboard API bloquée
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      const btn = document.getElementById('btn-imprimer');
+      const original = btn.innerHTML;
+      btn.innerHTML = '&#10003; Copié !';
+      btn.style.background = '#166534';
+      setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; }, 2500);
+    });
+  }
+
+</script>
+
+</body>
+</html>
