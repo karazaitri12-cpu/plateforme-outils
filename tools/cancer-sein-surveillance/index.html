@@ -1,1 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Outil professionnel de surveillance du cancer du sein traité">
+    <title>Surveillance Cancer du Sein traité</title>
+    <style>
+        /* Reset & Scope pour Elementor */
+        .cs-surv-wrap *, .cs-surv-wrap *::before, .cs-surv-wrap *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
+        .cs-surv-wrap {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #F7FAFC;
+            color: #2D3748;
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cs-surv-container {
+            background: #ffffff;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #E2E8F0;
+        }
+
+        .cs-surv-wrap h1 {
+            color: #B71C1C;
+            margin-bottom: 20px;
+            font-size: 22px;
+            line-height: 1.3;
+            font-weight: 700;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #E2E8F0;
+        }
+
+        .cs-surv-wrap label {
+            font-weight: 600;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            display: block;
+            color: #2D3748;
+            font-size: 14px;
+        }
+
+        .cs-surv-wrap select {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border: 1px solid #CBD5E0;
+            border-radius: 8px;
+            font-size: 15px;
+            background: #ffffff;
+            color: #2D3748;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23718096'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .cs-surv-wrap select:focus {
+            outline: none;
+            border-color: #B71C1C;
+            box-shadow: 0 0 0 3px rgba(183,28,28,0.15);
+        }
+
+        .cs-surv-wrap select.champ-manquant {
+            border-color: #E53E3E !important;
+            background: #FFF5F5 !important;
+        }
+
+        .cs-surv-wrap button {
+            background: #B71C1C;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .cs-surv-wrap button:hover {
+            background: #9A1C1C;
+        }
+
+        #cs-surv-printBtn {
+            background: #4A5568;
+            margin-top: 15px;
+            display: none;
+        }
+
+        #cs-surv-printBtn:hover {
+            background: #2D3748;
+        }
+
+        #cs-surv-result {
+            margin-top: 24px;
+            padding: 20px;
+            background: #FFF5F5;
+            border-left: 4px solid #B71C1C;
+            border-radius: 8px;
+            display: none;
+        }
+
+        #cs-surv-result h2 {
+            color: #B71C1C;
+            margin-bottom: 16px;
+            font-size: 18px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .cs-surv-section-title {
+            font-size: 14px;
+            margin-top: 18px;
+            margin-bottom: 10px;
+            color: #B71C1C;
+            font-weight: 700;
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        #cs-surv-result p {
+            margin: 8px 0;
+            line-height: 1.6;
+            font-size: 14px;
+            color: #2D3748;
+        }
+
+        #cs-surv-result ul {
+            margin: 8px 0 8px 20px;
+            padding: 0;
+        }
+
+        #cs-surv-result li {
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        #cs-surv-validationMsg {
+            color: #C53030;
+            font-weight: 600;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+            padding: 12px;
+            background: #FFF5F5;
+            border-left: 4px solid #E53E3E;
+            border-radius: 6px;
+        }
+
+        /* Disclaimer médico-légal */
+        .cs-surv-legal {
+            margin: 20px 0;
+            padding: 14px 16px;
+            background: #FFFBEB;
+            border-left: 4px solid #D69E2E;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #744210;
+            line-height: 1.6;
+        }
+
+        .cs-surv-legal strong {
+            color: #975A16;
+        }
+
+        /* Anti-scrollbar — style App native */
+        html { scrollbar-width: none !important; }
+        body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+        ::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cs-surv-wrap { padding: 16px; }
+            .cs-surv-container { padding: 20px; }
+            .cs-surv-wrap h1 { font-size: 20px; }
+            .cs-surv-wrap select { font-size: 14px; padding: 10px 12px; }
+            #cs-surv-result { padding: 16px; }
+            .cs-surv-wrap button { font-size: 14px; padding: 12px 16px; }
+        }
+
+        @media print {
+            .cs-surv-wrap { padding: 0; background: white; }
+            .cs-surv-container { box-shadow: none; border: none; padding: 0; }
+            #cs-surv-formSection, #cs-surv-printBtn { display: none !important; }
+            #cs-surv-result { display: block !important; border: none; padding: 0; background: white; }
+            @page { size: A4 portrait; margin: 15mm; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cs-surv-wrap">
+        <div class="cs-surv-container">
+            <div id="cs-surv-formSection">
+                <h1>Algorithme de surveillance – Cancer du sein traité</h1>
+                
+                <div class="cs-surv-legal">
+                    <p><strong>Avertissement :</strong> Cet outil est destiné à un usage professionnel. Les recommandations doivent être adaptées au contexte clinique de chaque patiente sous la responsabilité du médecin traitant.</p>
+                    <p><strong>Source :</strong> Recommandations HAS 2023 – À jour au 15/02/2026</p>
+                </div>
+
+                <label for="cs-surv-chirurgie">Type de chirurgie</label>
+                <select id="cs-surv-chirurgie">
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="tumorectomie">Tumorectomie</option>
+                    <option value="mastectomie_unilat">Mastectomie unilatérale</option>
+                    <option value="mastectomie_bilat">Mastectomie bilatérale</option>
+                </select>
+
+                <label for="cs-surv-reconstruction">Reconstruction mammaire ?</label>
+                <select id="cs-surv-reconstruction">
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="aucune">Aucune</option>
+                    <option value="implant">Implant</option>
+                    <option value="lambeau">Lambeau autologue</option>
+                </select>
+
+                <label for="cs-surv-statut">Statut tumoral</label>
+                <select id="cs-surv-statut">
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="luminal">RE/RP+ , HER2−</option>
+                    <option value="luminal_her2">RE/RP+ , HER2+</option>
+                    <option value="her2">RE/RP− , HER2+</option>
+                    <option value="tn">Triple négatif</option>
+                </select>
+
+                <label for="cs-surv-hormono">Hormonothérapie</label>
+                <select id="cs-surv-hormono">
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="aucune">Aucune</option>
+                    <option value="tamoxifene">Tamoxifène</option>
+                    <option value="ia">Inhibiteur de l'aromatase</option>
+                    <option value="menopause_induite">Ménopause induite</option>
+                </select>
+
+                <label for="cs-surv-risques">Facteurs de risque supplémentaires</label>
+                <select id="cs-surv-risques">
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="aucun">Aucun</option>
+                    <option value="brca">Mutation BRCA / haut risque héréditaire</option>
+                    <option value="dense">Seins très denses</option>
+                </select>
+
+                <p id="cs-surv-validationMsg">⚠ Veuillez remplir tous les champs avant de générer le calendrier.</p>
+
+                <button onclick="csSurvGenerate()" aria-label="Générer le calendrier personnalisé de surveillance">Générer le calendrier</button>
+            </div>
+
+            <div id="cs-surv-resultSection">
+                <div id="cs-surv-result"></div>
+                <button id="cs-surv-printBtn" onclick="csSurvPrint()" aria-label="Imprimer ou sauvegarder en PDF">Imprimer / PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function csSurvGenerate() {
+            const champs = ['cs-surv-chirurgie', 'cs-surv-reconstruction', 'cs-surv-statut', 'cs-surv-hormono', 'cs-surv-risques'];
+            let tousRemplis = true;
+            let focusSet = false;
+
+            champs.forEach(id => {
+                document.getElementById(id).classList.remove('champ-manquant');
+            });
+
+            champs.forEach(id => {
+                if (!document.getElementById(id).value) {
+                    document.getElementById(id).classList.add('champ-manquant');
+                    tousRemplis = false;
+                    if (!focusSet) {
+                        document.getElementById(id).focus();
+                        focusSet = true;
+                    }
+                }
+            });
+
+            if (!tousRemplis) {
+                document.getElementById("cs-surv-validationMsg").style.display = "block";
+                document.getElementById("cs-surv-result").style.display = "none";
+                document.getElementById("cs-surv-printBtn").style.display = "none";
+                return;
+            }
+
+            document.getElementById("cs-surv-validationMsg").style.display = "none";
+
+            const chir = document.getElementById("cs-surv-chirurgie").value;
+            const rec = document.getElementById("cs-surv-reconstruction").value;
+            const stat = document.getElementById("cs-surv-statut").value;
+            const horm = document.getElementById("cs-surv-hormono").value;
+            const risk = document.getElementById("cs-surv-risques").value;
+
+            let html = `
+                <h2>Calendrier personnalisé de surveillance</h2>
+                <div class='cs-surv-section-title'>Examen clinique</div>
+                <p>• Tous les 6–12 mois pendant 5 ans, puis annuel.</p>
+            `;
+
+            // Mammographie
+            html += `<div class='cs-surv-section-title'>Mammographie</div>`;
+            if (chir === "mastectomie_bilat") {
+                html += `<p>• Pas de mammographie de routine (absence de tissu mammaire significatif).</p>`;
+                if (rec === "lambeau")
+                    html += `<p>• Surveillance du lambeau au cas par cas (échographie si besoin).</p>`;
+            } else {
+                if (chir === "tumorectomie")
+                    html += `<p>• Mammographie annuelle du sein traité et du sein controlatéral.</p>`;
+                if (chir === "mastectomie_unilat")
+                    html += `<p>• Mammographie annuelle du sein restant.</p>`;
+                if (rec === "implant")
+                    html += `<p>• Technique Eklund recommandée en présence d'implants.</p>`;
+                if (rec === "lambeau")
+                    html += `<p>• Mammographie non systématique (cas par cas selon tissu présent).</p>`;
+            }
+
+            // IRM mammaire
+            html += `<div class='cs-surv-section-title'>IRM mammaire</div>`;
+            if (chir === "mastectomie_bilat") {
+                html += `<p>• Pas d'IRM mammaire de routine (absence de tissu mammaire significatif).</p>`;
+                if (risk === "brca")
+                    html += `<p>• Surveillance de la paroi thoracique à discuter au cas par cas (IRM thoracique si haut risque héréditaire).</p>`;
+            } else if (risk === "brca")
+                html += `<p>• IRM annuelle recommandée en plus de la mammographie.</p>`;
+            else if (risk === "dense")
+                html += `<p>• IRM possible en complément si seins très denses.</p>`;
+            else
+                html += `<p>• Pas systématique sauf anomalie ou antécédent particulier.</p>`;
+
+            // Surveillance cardiologique
+            html += `<div class='cs-surv-section-title'>Surveillance cardiologique</div>`;
+            let cardioAdded = false;
+            if (stat === "her2" || stat === "luminal_her2") {
+                html += `<p>• Si trastuzumab reçu : Évaluation cardiaque (FEVG) à 6, 12 et 24 mois après la fin du traitement.</p>`;
+                cardioAdded = true;
+            }
+            if (stat === "tn" || stat === "her2" || stat === "luminal_her2") {
+                html += `<p>• Si chimiothérapie par anthracyclines reçue : Échographie cardiaque annuelle pendant 2–3 ans.</p>`;
+                cardioAdded = true;
+            }
+            if (!cardioAdded) {
+                html += `<p>• Pas de surveillance cardiologique spécifique recommandée en routine.</p>`;
+            }
+
+            // Particularités selon le sous-type
+            html += `<div class='cs-surv-section-title'>Particularités selon le sous-type</div>`;
+            if (stat === "tn")
+                html += `<p>• Surveillance clinique rapprochée (risque maximal durant les 3 premières années).</p>`;
+            if (stat === "luminal" || stat === "luminal_her2")
+                html += `<p>• Surveillance prolongée (risque tardif de récidive possible jusqu'à 15 ans).</p>`;
+            if (stat === "luminal_her2")
+                html += `<p>• Double surveillance requise : suivi cardiologique (HER2+) ET surveillance prolongée (hormonosensibilité).</p>`;
+            if (stat === "her2")
+                html += `<p>• Risque de récidive principalement dans les 5 premières années.</p>`;
+
+            // Surveillance liée à l'hormonothérapie
+            html += `<div class='cs-surv-section-title'>Surveillance liée à l'hormonothérapie</div>`;
+            if (horm === "tamoxifene")
+                html += `<p>• Surveillance gynécologique régulière (saignements → échographie pelvienne).</p>`;
+            if (horm === "ia")
+                html += `<p>• Densitométrie osseuse (DMO) tous les 1–2 ans.</p>`;
+            if (horm === "menopause_induite")
+                html += `<p>• Densitométrie osseuse initiale puis tous les 1–2 ans.</p>`;
+            if (horm === "aucune")
+                html += `<p>• Pas de surveillance spécifique liée à l'hormonothérapie.</p>`;
+
+            // Coordination
+            html += `<div class='cs-surv-section-title'>Coordination référent·e & médecin traitant</div>
+                <p>• Coordination assurée entre l'oncologue référent·e et le médecin traitant.</p>
+                <p>• Transmission systématique du calendrier personnalisé de surveillance.</p>
+                <p>• Réévaluation annuelle du parcours de soins.</p>`;
+
+            // Non recommandé
+            html += `<div class='cs-surv-section-title'>Non recommandé en surveillance standard</div>
+                <p>• Pas de scanner, PET-scan, IRM corps entier, échographie abdominale en l'absence de symptômes.</p>
+                <p>• Pas de dosage de CA15-3 ou CEA en routine.</p>`;
+
+            document.getElementById("cs-surv-result").innerHTML = html;
+            document.getElementById("cs-surv-result").style.display = "block";
+            document.getElementById("cs-surv-printBtn").style.display = "block";
+
+            document.getElementById("cs-surv-result").scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function csSurvPrint() {
+            const printWindow = window.open('', '_blank');
+
+            const chir = document.getElementById("cs-surv-chirurgie").options[document.getElementById("cs-surv-chirurgie").selectedIndex].text;
+            const rec = document.getElementById("cs-surv-reconstruction").options[document.getElementById("cs-surv-reconstruction").selectedIndex].text;
+            const stat = document.getElementById("cs-surv-statut").options[document.getElementById("cs-surv-statut").selectedIndex].text;
+            const horm = document.getElementById("cs-surv-hormono").options[document.getElementById("cs-surv-hormono").selectedIndex].text;
+            const risk = document.getElementById("cs-surv-risques").options[document.getElementById("cs-surv-risques").selectedIndex].text;
+
+            const content = `
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendrier de Surveillance - Cancer du Sein</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 10mm; line-height: 1.6; color: #333; font-size: 11pt; }
+        h1, h2 { color: #B71C1C; text-align: center; }
+        .cs-surv-section-title { font-size: 14pt; color: #B71C1C; font-weight: bold; border-bottom: 2px solid #B71C1C; padding-bottom: 5px; margin-top: 20px; margin-bottom: 10px; }
+        p { margin: 10px 0; line-height: 1.7; }
+        .cs-surv-legal { margin: 20px 0; padding: 10px; background: #FFFBEB; font-size: 9pt; border-left: 3px solid #D69E2E; line-height: 1.5; }
+        @page { size: A4 portrait; margin: 15mm; }
+    </style>
+</head>
+<body>
+    <h1>Algorithme de Surveillance – Cancer du Sein</h1>
+    <div class="cs-surv-legal">
+        <p><strong>Avertissement :</strong> Cet outil est destiné à un usage professionnel. Les recommandations doivent être adaptées au contexte clinique de chaque patiente sous la responsabilité du médecin traitant.</p>
+        <p><strong>Source :</strong> Recommandations HAS 2023 – À jour au 15/02/2026</p>
+    </div>
+    <div class="cs-surv-section-title">Choix effectués</div>
+    <p><strong>Type de chirurgie :</strong> ${chir}</p>
+    <p><strong>Reconstruction mammaire :</strong> ${rec}</p>
+    <p><strong>Statut tumoral :</strong> ${stat}</p>
+    <p><strong>Hormonothérapie :</strong> ${horm}</p>
+    <p><strong>Risques supplémentaires :</strong> ${risk}</p>
+    <div style="page-break-after: always;"></div>
+    ${document.getElementById("cs-surv-result").innerHTML}
+</body>
+</html>
+            `;
+
+            printWindow.document.write(content);
+            printWindow.document.close();
+            printWindow.onload = function () { printWindow.print(); };
+        }
+
+        // Init
+        if (typeof elementorFrontend !== 'undefined') {
+            elementorFrontend.hooks.addAction('frontend/element_ready/widget', function() {
+                // Rebind events if needed
+            });
+        }
+    </script>
+</body>
+</html>
