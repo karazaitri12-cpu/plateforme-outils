@@ -63,35 +63,17 @@
     © 2026 Dr. KARA-ZAITRI M.A — Outils conformes aux recommandations HAS/INCa/CNGOF. Ne remplace pas une consultation médicale.
   </footer>
 
-    <script>
-    const params = new URLSearchParams(window.location.search);
-    let toolPath = params.get('tool');
-
-    // Si pas de paramètre ?tool=, on essaie de deviner depuis l'URL
-    if (!toolPath) {
-      const path = window.location.pathname;
-      // URL attendue : /tools/nom-de-loutil/
-      const parts = path.split('/').filter(Boolean);
-      // parts[0] = "tools", parts[1] = "nom-de-loutil"
-      if (parts.length >= 2 && parts[0] === 'tools') {
-        toolPath = parts[1];
-      }
+    {
+  "rewrites": [
+    {
+      "source": "/tools/:folder([a-zA-Z0-9_-]+)/",
+      "destination": "/tools/wrapper.html"
+    },
+    {
+      "source": "/tools/:folder([a-zA-Z0-9_-]+)",
+      "destination": "/tools/wrapper.html"
     }
-
-    const frame = document.getElementById('tool-frame');
-    const loading = document.getElementById('loading');
-
-    if (toolPath) {
-      frame.onload = () => {
-        loading.style.display = 'none';
-        frame.style.display = 'block';
-      };
-      // CORRECTION ICI : On force le chemin vers /tools/...
-      frame.src = `/tools/${toolPath}/index.html`;
-    } else {
-       loading.innerHTML = '<p style="color:#e53e3e;">Outil introuvable. Vérifiez le nom du dossier.</p>';
-    }
-  </script>
-
+  ]
+}
 </body>
 </html>
