@@ -962,7 +962,20 @@
 
             var hasAlert      = false;
             var hasIncomplete = false;
-            var hyperandroBlocker = false; // blocage spécifique à la confirmation hyperandrogénie
+            var hyperandroBlocker = false;
+
+            // Les marqueurs androgéniques (testostérone, SDHEA, Δ4) sont "obligatoires"
+            // pour hasIncomplete uniquement si : hyperandrogénie cochée + option "biologique"
+            // + les 2 autres critères Rotterdam (anovulation + OPK) sont < 2.
+            // Dans tous les autres cas, leur absence ne bloque pas la progression.
+            var radioSelectedNow = document.querySelector('input[name="hyperandro-type"]:checked');
+            var radioValueNow = radioSelectedNow ? radioSelectedNow.value : null;
+            var autresCriteres = (anovChecked ? 1 : 0) + (opkChecked ? 1 : 0);
+            var androRequis = (
+                hyperandroChecked &&
+                radioValueNow === 'biologique' &&
+                autresCriteres < 2
+            );
 
             // ---- Alertes biologiques standard ----
             var alertOhp17 = document.getElementById('alert-ohp17');
@@ -980,7 +993,7 @@
                 if (testosterone > 1.5) hasAlert = true;
             } else {
                 alertTesto.style.display = 'none';
-                hasIncomplete = true;
+                if (androRequis) hasIncomplete = true;
             }
 
             var alertSdhea = document.getElementById('alert-sdhea');
@@ -989,7 +1002,7 @@
                 if (sdhea > 20) hasAlert = true;
             } else {
                 alertSdhea.style.display = 'none';
-                hasIncomplete = true;
+                if (androRequis) hasIncomplete = true;
             }
 
             var alertDelta4 = document.getElementById('alert-delta4');
@@ -998,7 +1011,7 @@
                 if (delta4 > 6) hasAlert = true;
             } else {
                 alertDelta4.style.display = 'none';
-                hasIncomplete = true;
+                if (androRequis) hasIncomplete = true;
             }
 
             var alertTsh      = document.getElementById('alert-tsh');
@@ -1024,21 +1037,19 @@
             var recalcAlert = document.getElementById('rotterdam-recalc-alert');
 
             if (hyperandroChecked) {
-                // Récupère le choix radio
-                var radioSelected = document.querySelector('input[name="hyperandro-type"]:checked');
-                var radioValue = radioSelected ? radioSelected.value : null;
+                // Utilise radioValueNow déjà calculé plus haut
 
-                if (radioValue === null) {
+                if (radioValueNow === null) {
                     // Aucun choix → bloquer
                     hyperandroBlocker = true;
                     recalcAlert.style.display = 'none';
 
-                } else if (radioValue === 'clinique') {
+                } else if (radioValueNow === 'clinique') {
                     // Hyperandrogénie clinique confirmée → critère valide, pas de contrainte biologique
                     hyperandroBlocker = false;
                     recalcAlert.style.display = 'none';
 
-                } else if (radioValue === 'biologique') {
+                } else if (radioValueNow === 'biologique') {
                     // Valide SEULEMENT si au moins un marqueur androgénique est élevé
                     var androgeneEleve = (
                         (testosterone !== null && testosterone > 1.5) ||
@@ -1074,7 +1085,7 @@
                         recalcAlert.style.display = 'none';
                     }
 
-                } else if (radioValue === 'non-confirmee') {
+                } else if (radioValueNow === 'non-confirmee') {
                     // Critère hyperandrogénie annulé → recalcul Rotterdam
                     var validCriteria = (anovChecked ? 1 : 0) + (opkChecked ? 1 : 0);
                     var countEl = document.getElementById('recalc-count');
