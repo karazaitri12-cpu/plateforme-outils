@@ -1,1015 +1,1339 @@
-<!-- GUIDE ANTIBIOTHÉRAPIE — INFECTIONS GÉNITALES
-     Version 3.0 — Avril 2026
-     Corrections médicales : HAS/ECDC 2024, IUSTI 2022, CRAT
-     Corrections techniques : px (non rem), toast positionné, résistances cohérentes
--->
-<div id="abx-tool-container" class="abx-professional abx-elementor-fix">
-
-  <!-- En-tête -->
-  <div class="abx-header">
-    <div class="abx-title-row">
-      <div class="abx-icon-box">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-        </svg>
-      </div>
-      <div>
-        <h1>Guide Antibioth&#233;rapie</h1>
-        <p class="abx-subtitle">Infections G&#233;nitales &bull; R&#233;f&#233;rences 2025</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Contrôles -->
-  <div class="abx-controls">
-    <div class="abx-search-wrapper">
-      <div class="abx-search-icon">&#128269;</div>
-      <input type="text" id="abxSearchInput" placeholder="Rechercher une pathologie ou un antibiotique..." aria-label="Rechercher">
-      <div id="abxSearchClear" class="abx-search-clear" style="display:none;" title="Effacer">&#10005;</div>
-    </div>
-    <div class="abx-tabs" role="tablist">
-      <button class="abx-tab active" data-mode="pathology" role="tab" aria-selected="true">Pathologies</button>
-      <button class="abx-tab" data-mode="antibiotic" role="tab" aria-selected="false">Antibiotiques</button>
-      <button class="abx-tab" data-mode="pregnancy" role="tab" aria-selected="false">Grossesse</button>
-      <button class="abx-tab" data-mode="resistance" role="tab" aria-selected="false">R&#233;sistances</button>
-    </div>
-  </div>
-
-  <!-- Zone de contenu -->
-  <div id="abxContentArea" class="abx-content" role="main" aria-live="polite">
-    <div class="abx-skeleton-loader">
-      <div class="abx-skeleton-header"></div>
-      <div class="abx-skeleton-grid">
-        <div class="abx-skeleton-card"></div>
-        <div class="abx-skeleton-card"></div>
-        <div class="abx-skeleton-card"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast container — position:absolute dans le conteneur (pas fixed) -->
-  <div id="abxToastContainer" style="position:absolute;bottom:20px;right:20px;z-index:100;pointer-events:none;"></div>
-
-  <!-- Mise en garde -->
-  <div class="abx-legal-warning">
-    <div class="abx-warning-icon">&#9888;&#65039;</div>
-    <div class="abx-warning-text">
-      <strong>Mise en garde :</strong> Ce guide est une aide &#224; la d&#233;cision clinique.
-      Il ne remplace pas le jugement du praticien. Toujours consulter les r&#233;f&#233;rences officielles
-      (HAS, ECDC, CRAT) avant prescription.
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="abx-footer">
-    <div class="abx-footer-left">
-      <span class="abx-version">v3.0 &bull; Avril 2026</span>
-      <span class="abx-source">Sources&nbsp;: HAS, ECDC, IUSTI, CRAT, UpToDate</span>
-    </div>
-    <div class="abx-footer-right">
-      <span class="abx-copyright">&copy; 2026 &bull; Usage professionnel exclusif</span>
-    </div>
-  </div>
-
-</div>
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Aide à la Décision – Cancer du Sein v2</title>
 <style>
-/* Variables CSS dans le scope du conteneur */
-#abx-tool-container.abx-professional {
-  --abx-primary:       #3b82f6;
-  --abx-primary-dark:  #2563eb;
-  --abx-success:       #22c55e;
-  --abx-success-dark:  #16a34a;
-  --abx-warning:       #eab308;
-  --abx-danger:        #ef4444;
-  --abx-danger-dark:   #dc2626;
-  --abx-g100:  #f8fafc;
-  --abx-g200:  #f1f5f9;
-  --abx-g300:  #e2e8f0;
-  --abx-g400:  #cbd5e1;
-  --abx-g500:  #94a3b8;
-  --abx-g600:  #64748b;
-  --abx-g700:  #4a5568;
-  --abx-g800:  #1e293b;
-  --abx-g900:  #1a365d;
+/* ============================================================
+   BLINDAGE ELEMENTOR : toutes variables préfixées, pas d'entités HTML
+   dans ::before/::after, uniquement codes Unicode CSS
+   ============================================================ */
+:root{
+  --cs-primary:#1a3a6b;
+  --cs-primary-light:#2653a0;
+  --cs-accent:#c8a951;
+  --cs-accent-light:#e8d07a;
+  --cs-danger:#b0322a;
+  --cs-warn:#d4860a;
+  --cs-ok:#2a7a4b;
+  --cs-bg:#f4f6f9;
+  --cs-surface:#ffffff;
+  --cs-border:#d8dfe8;
+  --cs-text:#1a2030;
+  --cs-muted:#5a6478;
+  --cs-radius:6px;
+  --cs-shadow:0 2px 12px rgba(26,58,107,0.09);
 }
 
-/* Blindage Elementor */
-.abx-elementor-fix { width:100% !important; min-width:320px !important; max-width:100% !important; margin:0 !important; padding:0 !important; }
-.elementor-widget-container .abx-professional { width:100% !important; min-width:320px !important; padding:15px !important; margin:10px 0 !important; }
-.elementor-widget-container #abx-tool-container.abx-professional { margin:0 !important; padding:0 !important; width:100% !important; }
-.elementor-widget-container #abx-tool-container.abx-professional * { box-sizing:border-box !important; }
-
-/* Conteneur principal */
-#abx-tool-container.abx-professional {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-  font-size: 15px !important;
-  color: #2c3e50 !important;
-  line-height: 1.6 !important;
-  background-color: #ffffff !important;
-  border: 1px solid #e0e6ed !important;
-  border-radius: 8px !important;
-  max-width: 100% !important;
-  margin: 0 auto !important;
-  position: relative !important;
-  box-sizing: border-box !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,.05) !important;
+/* Reset ciblé pour isolation Elementor */
+#cs-tool-root,#cs-tool-root *{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+  font-family:Georgia,serif;
+  line-height:1.5;
+}
+#cs-tool-root{
+  max-width:1140px;
+  margin:0 auto;
+  background:var(--cs-bg);
+  padding:0 0 24px;
+  color:var(--cs-text);
 }
 
-/* Reset interne — px partout (indépendance thème WordPress) */
-#abx-tool-container.abx-professional *,
-#abx-tool-container.abx-professional *::before,
-#abx-tool-container.abx-professional *::after {
-  box-sizing: border-box !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+/* ---- HEADER ---- */
+#cs-tool-root .cs-header{
+  background:var(--cs-primary);
+  padding:18px 24px 14px;
+  border-bottom:4px solid var(--cs-accent);
+}
+#cs-tool-root .cs-header h1{
+  margin:0;
+  font-size:17px;
+  font-weight:700;
+  color:#ffffff;
+  letter-spacing:0.3px;
+  font-family:Georgia,serif;
+}
+#cs-tool-root .cs-header .cs-subtitle{
+  margin:4px 0 0;
+  font-size:12px;
+  color:var(--cs-accent-light);
+  font-style:italic;
+}
+#cs-tool-root .cs-header .cs-ref-tag{
+  display:inline-block;
+  margin-top:8px;
+  font-size:10px;
+  background:rgba(255,255,255,0.12);
+  color:#dde8f5;
+  padding:2px 8px;
+  border-radius:3px;
+  letter-spacing:0.4px;
 }
 
-/* Typographie — toutes valeurs en px */
-#abx-tool-container.abx-professional h1 { font-size:20px !important; font-weight:700 !important; color:var(--abx-g900) !important; line-height:1.3 !important; }
-#abx-tool-container.abx-professional h2 { font-size:18px !important; font-weight:600 !important; color:var(--abx-g900) !important; line-height:1.3 !important; }
-#abx-tool-container.abx-professional h3 { font-size:15px !important; font-weight:600 !important; color:var(--abx-g900) !important; line-height:1.3 !important; margin-top:16px !important; }
-#abx-tool-container.abx-professional p  { font-size:14px !important; color:var(--abx-g700) !important; line-height:1.5 !important; margin:0 0 8px 0 !important; }
+/* ---- CORPS ---- */
+#cs-tool-root .cs-body{
+  background:var(--cs-surface);
+  margin:0;
+  padding:20px 22px;
+}
 
-/* Header */
-#abx-tool-container.abx-professional .abx-header { background:var(--abx-g100) !important; padding:16px 20px !important; border-bottom:2px solid var(--abx-g300) !important; }
-#abx-tool-container.abx-professional .abx-title-row { display:flex !important; align-items:center !important; gap:12px !important; }
-#abx-tool-container.abx-professional .abx-icon-box { width:40px !important; height:40px !important; display:flex !important; align-items:center !important; justify-content:center !important; background:var(--abx-g200) !important; border-radius:6px !important; color:var(--abx-g700) !important; flex-shrink:0 !important; }
-#abx-tool-container.abx-professional .abx-subtitle { font-size:13px !important; color:var(--abx-g600) !important; margin-top:3px !important; margin-bottom:0 !important; font-weight:400 !important; }
+/* ---- SECTION TITLES ---- */
+#cs-tool-root .cs-section-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border-left:4px solid var(--cs-primary);
+  padding:7px 12px;
+  background:#f0f4fb;
+  border-radius:0 var(--cs-radius) var(--cs-radius) 0;
+  margin:18px 0 12px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--cs-primary);
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+}
+#cs-tool-root .cs-section-head::before{
+  content:"\25A0";
+  font-size:8px;
+  color:var(--cs-accent);
+}
 
-/* Contrôles */
-#abx-tool-container.abx-professional .abx-controls { background:#ffffff !important; padding:12px 20px !important; position:sticky !important; top:0 !important; z-index:20 !important; border-bottom:1px solid var(--abx-g300) !important; }
-#abx-tool-container.abx-professional .abx-search-wrapper { position:relative !important; margin-bottom:10px !important; }
-#abx-tool-container.abx-professional .abx-search-icon { position:absolute !important; left:12px !important; top:50% !important; transform:translateY(-50%) !important; color:var(--abx-g500) !important; font-size:15px !important; pointer-events:none !important; }
-#abx-tool-container.abx-professional .abx-search-clear { position:absolute !important; right:12px !important; top:50% !important; transform:translateY(-50%) !important; color:var(--abx-g500) !important; font-size:13px !important; font-weight:bold !important; cursor:pointer !important; padding:5px !important; z-index:10 !important; transition:color .2s !important; }
-#abx-tool-container.abx-professional .abx-search-clear:hover { color:var(--abx-danger) !important; }
-#abx-tool-container.abx-professional input[type="text"] { width:100% !important; padding:10px 40px 10px 38px !important; border:1px solid var(--abx-g400) !important; border-radius:6px !important; font-size:14px !important; background:#ffffff !important; color:#2c3e50 !important; transition:border-color .2s, box-shadow .2s !important; }
-#abx-tool-container.abx-professional input[type="text"]:focus { outline:none !important; border-color:var(--abx-primary) !important; box-shadow:0 0 0 2px rgba(59,130,246,.1) !important; }
-#abx-tool-container.abx-professional input[type="text"]:disabled { background-color:var(--abx-g200) !important; cursor:not-allowed !important; opacity:.6 !important; }
+/* ---- GRILLE 3 colonnes ---- */
+#cs-tool-root .cs-grid-3{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:20px;
+  align-items:start;
+}
+@media(max-width:900px){
+  #cs-tool-root .cs-grid-3{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  #cs-tool-root .cs-grid-3{grid-template-columns:1fr}
+}
 
-/* Tabs */
-#abx-tool-container.abx-professional .abx-tabs { display:flex !important; gap:6px !important; overflow-x:auto !important; padding-bottom:2px !important; scrollbar-width:none !important; }
-#abx-tool-container.abx-professional .abx-tabs::-webkit-scrollbar { display:none !important; }
-#abx-tool-container.abx-professional .abx-tab { padding:8px 14px !important; background:var(--abx-g200) !important; border:1px solid var(--abx-g300) !important; border-radius:20px !important; font-size:13px !important; font-weight:500 !important; color:var(--abx-g700) !important; cursor:pointer !important; white-space:nowrap !important; transition:background .2s, color .2s !important; font-family:inherit !important; }
-#abx-tool-container.abx-professional .abx-tab:hover { background:var(--abx-g300) !important; color:var(--abx-g900) !important; }
-#abx-tool-container.abx-professional .abx-tab.active { background:var(--abx-primary) !important; border-color:var(--abx-primary) !important; color:#ffffff !important; font-weight:600 !important; }
+/* ---- CHAMPS ---- */
+#cs-tool-root .cs-field{
+  margin-bottom:11px;
+}
+#cs-tool-root .cs-field label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:var(--cs-primary);
+  margin-bottom:4px;
+  letter-spacing:0.2px;
+}
+#cs-tool-root .cs-field .cs-hint{
+  font-size:10px;
+  color:var(--cs-muted);
+  font-style:italic;
+  margin-bottom:3px;
+  display:block;
+}
 
-/* Contenu */
-#abx-tool-container.abx-professional .abx-content { padding:20px !important; min-height:400px !important; margin-bottom:25px !important; position:relative !important; }
+/* Inputs globaux blindés pour Elementor */
+#cs-tool-root select,
+#cs-tool-root input[type="number"],
+#cs-tool-root input[type="text"]{
+  width:100%;
+  padding:8px 10px;
+  border:1.5px solid var(--cs-border);
+  border-radius:var(--cs-radius);
+  font-size:13px;
+  color:var(--cs-text);
+  background:#fff;
+  transition:border-color .15s;
+  font-family:Georgia,serif;
+  -webkit-appearance:none;
+  appearance:none;
+}
+#cs-tool-root select:focus,
+#cs-tool-root input[type="number"]:focus,
+#cs-tool-root input[type="text"]:focus{
+  outline:none;
+  border-color:var(--cs-primary-light);
+  box-shadow:0 0 0 3px rgba(38,83,160,0.12);
+}
+#cs-tool-root input[type="number"]::-webkit-outer-spin-button,
+#cs-tool-root input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0;
+}
+#cs-tool-root input[type="number"]{-moz-appearance:textfield}
 
-/* Skeleton */
-#abx-tool-container.abx-professional .abx-skeleton-loader { display:flex !important; flex-direction:column !important; gap:20px !important; }
-#abx-tool-container.abx-professional .abx-skeleton-header { height:30px !important; background:var(--abx-g200) !important; border-radius:4px !important; width:60% !important; animation:abxSkeletonPulse 1.5s ease-in-out infinite !important; }
-#abx-tool-container.abx-professional .abx-skeleton-grid { display:grid !important; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)) !important; gap:12px !important; }
-#abx-tool-container.abx-professional .abx-skeleton-card { height:120px !important; background:var(--abx-g200) !important; border-radius:6px !important; animation:abxSkeletonPulse 1.5s ease-in-out infinite !important; }
-@keyframes abxSkeletonPulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+/* Inputs courts (âge, taille, Ki-67) */
+#cs-tool-root .cs-input-short{
+  width:80px !important;
+  max-width:80px !important;
+  display:inline-block !important;
+}
+@media(max-width:600px){
+  #cs-tool-root .cs-input-short{width:100% !important;max-width:100% !important;display:block !important}
+}
 
-/* Grille */
-#abx-tool-container.abx-professional .abx-grid { display:grid !important; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)) !important; gap:12px !important; }
-
-/* Cartes */
-#abx-tool-container.abx-professional .abx-card { background:#ffffff !important; border-radius:6px !important; padding:16px !important; border:1px solid var(--abx-g300) !important; cursor:pointer !important; transition:border-color .2s, box-shadow .2s, transform .2s !important; position:relative !important; display:flex !important; flex-direction:column !important; }
-#abx-tool-container.abx-professional .abx-card:hover { border-color:var(--abx-g400) !important; box-shadow:0 1px 2px rgba(0,0,0,.05) !important; transform:translateY(-1px) !important; }
-#abx-tool-container.abx-professional .abx-card.theme-green  { border-left:3px solid var(--abx-success) !important; background:linear-gradient(to bottom right,#ffffff,#f0fdf4) !important; }
-#abx-tool-container.abx-professional .abx-card.theme-red    { border-left:3px solid var(--abx-danger) !important;  background:linear-gradient(to bottom right,#ffffff,#fef2f2) !important; }
-#abx-tool-container.abx-professional .abx-card.theme-yellow { border-left:3px solid var(--abx-warning) !important; background:linear-gradient(to bottom right,#ffffff,#fefce8) !important; }
-#abx-tool-container.abx-professional .abx-card.theme-blue   { border-left:3px solid var(--abx-primary) !important; background:linear-gradient(to bottom right,#ffffff,#eff6ff) !important; }
-#abx-tool-container.abx-professional .abx-card-header { display:flex !important; justify-content:space-between !important; align-items:flex-start !important; margin-bottom:8px !important; }
-#abx-tool-container.abx-professional .abx-card-class { font-size:12px !important; color:#667eea !important; font-weight:600 !important; }
-#abx-tool-container.abx-professional .abx-card-pregnancy-icon { font-size:16px !important; line-height:1 !important; }
-#abx-tool-container.abx-professional .abx-card h3 { font-size:15px !important; margin-bottom:6px !important; margin-top:0 !important; color:var(--abx-g900) !important; display:flex !important; align-items:center !important; justify-content:space-between !important; font-weight:600 !important; }
-#abx-tool-container.abx-professional .abx-card p { font-size:13px !important; color:var(--abx-g700) !important; margin:0 0 8px 0 !important; }
-#abx-tool-container.abx-professional .abx-card-tag { display:inline-block !important; font-size:12px !important; padding:2px 6px !important; border-radius:3px !important; background:var(--abx-g400) !important; color:var(--abx-g800) !important; font-weight:500 !important; margin-top:auto !important; align-self:flex-start !important; }
-#abx-tool-container.abx-professional .abx-no-results { padding:40px 20px !important; text-align:center !important; color:var(--abx-g600) !important; font-size:14px !important; }
-
-/* Détail */
-#abx-tool-container.abx-professional .abx-detail { animation:abxSlideIn .3s ease-out !important; }
-@keyframes abxSlideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-
-/* Boutons */
-#abx-tool-container.abx-professional .abx-btn-back { display:inline-flex !important; align-items:center !important; padding:8px 12px !important; background:var(--abx-g100) !important; border:1px solid var(--abx-g400) !important; border-radius:4px !important; color:var(--abx-g700) !important; font-weight:500 !important; cursor:pointer !important; margin-bottom:16px !important; font-size:13px !important; transition:background .2s !important; font-family:inherit !important; }
-#abx-tool-container.abx-professional .abx-btn-back:hover { background:var(--abx-g200) !important; }
-#abx-tool-container.abx-professional .abx-btn-copy { display:inline-flex !important; align-items:center !important; padding:4px 8px !important; background:#ffffff !important; border:1px solid var(--abx-primary) !important; border-radius:4px !important; color:var(--abx-primary) !important; font-weight:500 !important; cursor:pointer !important; font-size:12px !important; transition:background .2s !important; font-family:inherit !important; margin-left:10px !important; flex-shrink:0 !important; }
-#abx-tool-container.abx-professional .abx-btn-copy:hover { background:#eff6ff !important; }
-
-/* Toast — position absolute dans conteneur (corrigé : pas fixed) */
-#abx-tool-container.abx-professional .abx-toast { background:var(--abx-success) !important; color:#ffffff !important; padding:10px 18px !important; border-radius:6px !important; box-shadow:0 4px 8px rgba(0,0,0,.12) !important; display:flex !important; align-items:center !important; gap:8px !important; font-weight:500 !important; font-size:13px !important; animation:abxToastIn .3s ease-out, abxToastOut .5s ease-out 2.5s forwards !important; pointer-events:auto !important; margin-bottom:6px !important; }
-@keyframes abxToastIn  { from{transform:translateX(100px);opacity:0} to{transform:translateX(0);opacity:1} }
-@keyframes abxToastOut { to{opacity:0;transform:translateX(40px)} }
-
-/* Boîtes */
-#abx-tool-container.abx-professional .abx-box { padding:10px 12px !important; border-radius:4px !important; margin-top:14px !important; margin-bottom:10px !important; font-size:14px !important; border-left:3px solid !important; line-height:1.5 !important; }
-#abx-tool-container.abx-professional .abx-box.success { border-color:var(--abx-success) !important; background:#f0fdf4 !important; color:#166534 !important; }
-#abx-tool-container.abx-professional .abx-box.warning { border-color:var(--abx-warning) !important; background:#fefce8 !important; color:#854d0e !important; }
-#abx-tool-container.abx-professional .abx-box.danger  { border-color:var(--abx-danger) !important;  background:#fef2f2 !important; color:#991b1b !important; }
-#abx-tool-container.abx-professional .abx-box.info    { border-color:var(--abx-primary) !important; background:#eff6ff !important; color:#1e40af !important; }
-
-/* Alerte résistance */
-#abx-tool-container.abx-professional .resistance-alert { background:#fef2f2 !important; border-left:4px solid var(--abx-danger) !important; color:#991b1b !important; padding:12px 15px !important; border-radius:6px !important; margin:15px 0 !important; font-weight:500 !important; font-size:13px !important; line-height:1.6 !important; }
-#abx-tool-container.abx-professional .resistance-alert strong { color:var(--abx-danger-dark) !important; }
-
-/* Note protocole (nouveau — M. genitalium) */
-#abx-tool-container.abx-professional .protocol-note { background:#fff8e1 !important; border-left:4px solid #f59e0b !important; color:#78350f !important; padding:10px 14px !important; border-radius:6px !important; margin:12px 0 !important; font-size:13px !important; line-height:1.6 !important; }
-
-/* Badges spectre */
-#abx-tool-container.abx-professional .spectrum-badge { display:inline-block !important; padding:4px 10px !important; margin:3px !important; border-radius:12px !important; font-size:12px !important; background:#e3f2fd !important; color:#1976d2 !important; font-weight:500 !important; }
-
-/* Listes — Unicode CSS (pas d'entités HTML) */
-#abx-tool-container.abx-professional ul { margin:8px 0 10px 0 !important; padding-left:20px !important; list-style-type:none !important; }
-#abx-tool-container.abx-professional ul li { padding:2px 0 !important; font-size:14px !important; color:var(--abx-g700) !important; line-height:1.6 !important; position:relative !important; padding-left:0 !important; }
-#abx-tool-container.abx-professional ul li::before { content:"\2022" !important; color:var(--abx-g600) !important; margin-right:6px !important; position:absolute !important; left:-14px !important; }
-#abx-tool-container.abx-professional ol { margin:8px 0 10px 0 !important; padding-left:24px !important; list-style-position:outside !important; list-style-type:decimal !important; }
-#abx-tool-container.abx-professional ol li { padding:4px 0 4px 4px !important; font-size:14px !important; color:var(--abx-g700) !important; line-height:1.6 !important; }
-#abx-tool-container.abx-professional .protocol-list { list-style:none !important; padding-left:25px !important; }
-#abx-tool-container.abx-professional .protocol-list li { position:relative !important; padding-left:0 !important; font-size:14px !important; }
-#abx-tool-container.abx-professional .protocol-list li::before { content:"\2192" !important; position:absolute !important; left:-20px !important; color:#667eea !important; font-weight:bold !important; font-size:15px !important; }
-#abx-tool-container.abx-professional .resistance-list { list-style:none !important; padding-left:0 !important; margin:8px 0 10px 0 !important; }
-#abx-tool-container.abx-professional .resistance-list li { padding:4px 0 !important; font-size:14px !important; color:var(--abx-g700) !important; line-height:1.6 !important; }
-#abx-tool-container.abx-professional .resistance-list li::before { content:none !important; }
-
-/* Tableaux */
-#abx-tool-container.abx-professional .abx-table { width:100% !important; border-collapse:collapse !important; background:#ffffff !important; border-radius:4px !important; overflow:hidden !important; margin:10px 0 !important; font-size:13px !important; border:1px solid var(--abx-g300) !important; }
-#abx-tool-container.abx-professional .abx-table th { background:var(--abx-g100) !important; text-align:left !important; padding:10px 12px !important; border-bottom:2px solid var(--abx-g300) !important; color:var(--abx-g700) !important; font-weight:600 !important; font-size:13px !important; }
-#abx-tool-container.abx-professional .abx-table td { padding:8px 12px !important; border-bottom:1px solid var(--abx-g300) !important; vertical-align:top !important; color:#2c3e50 !important; font-size:13px !important; }
-#abx-tool-container.abx-professional .abx-table tr:last-child td { border-bottom:none !important; }
-#abx-tool-container.abx-professional .abx-table tr:hover { background:var(--abx-g100) !important; }
+/* Radio */
+#cs-tool-root .cs-radio-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:2px;
+}
+#cs-tool-root .cs-radio-row label{
+  font-size:12px;
+  font-weight:400;
+  color:var(--cs-text);
+  display:flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  margin-bottom:0;
+}
+#cs-tool-root .cs-radio-row input[type="radio"]{
+  width:14px;height:14px;margin:0;flex-shrink:0;
+}
 
 /* Badges */
-#abx-tool-container.abx-professional .badge { padding:2px 6px !important; border-radius:3px !important; font-size:12px !important; font-weight:500 !important; margin-left:4px !important; white-space:nowrap !important; display:inline-block !important; }
-#abx-tool-container.abx-professional .badge.safe    { background:#d1fae5 !important; color:#065f46 !important; border:1px solid #a7f3d0 !important; }
-#abx-tool-container.abx-professional .badge.caution { background:#fde68a !important; color:#854d0e !important; border:1px solid #fcd34d !important; }
-#abx-tool-container.abx-professional .badge.unsafe  { background:#fecaca !important; color:#7f1d1d !important; border:1px solid #fca5a5 !important; }
-
-/* Mise en garde légale */
-#abx-tool-container.abx-professional .abx-legal-warning { background:#fff8e1 !important; border-left:4px solid #ffc107 !important; padding:12px 20px !important; font-size:13px !important; color:#5d4037 !important; display:flex !important; align-items:flex-start !important; gap:10px !important; margin:0 20px 20px 20px !important; border-radius:6px !important; }
-#abx-tool-container.abx-professional .abx-warning-icon { font-size:18px !important; flex-shrink:0 !important; }
-#abx-tool-container.abx-professional .abx-warning-text { line-height:1.5 !important; font-size:13px !important; }
-#abx-tool-container.abx-professional .abx-warning-text strong { color:var(--abx-danger) !important; font-weight:600 !important; }
-
-/* Footer */
-#abx-tool-container.abx-professional .abx-footer,
-#abx-tool-container.abx-professional .abx-footer span,
-#abx-tool-container.abx-professional .abx-footer div {
-  background:var(--abx-g200) !important; border-top:2px solid var(--abx-g400) !important;
-  color:var(--abx-g800) !important; font-size:12px !important; font-weight:400 !important; opacity:1 !important; text-shadow:none !important;
+#cs-tool-root .cs-badge-new{
+  display:inline-block;
+  background:#e8f5ee;
+  color:var(--cs-ok);
+  font-size:9px;
+  font-weight:700;
+  border-radius:3px;
+  padding:1px 5px;
+  margin-left:5px;
+  letter-spacing:0.4px;
+  vertical-align:middle;
+  border:1px solid #b8dfc8;
 }
-#abx-tool-container.abx-professional .abx-footer { padding:15px 20px !important; margin-top:0 !important; display:flex !important; justify-content:space-between !important; align-items:center !important; border-radius:0 0 8px 8px !important; }
-#abx-tool-container.abx-professional .abx-footer-left { display:flex !important; gap:12px !important; }
 
-/* Accessibilité */
-#abx-tool-container.abx-professional button:focus,
-#abx-tool-container.abx-professional input:focus { outline:2px solid var(--abx-primary) !important; outline-offset:2px !important; }
+/* ---- BOUTONS ---- */
+#cs-tool-root .cs-btn-group{
+  display:flex;
+  gap:10px;
+  margin-top:22px;
+  flex-wrap:wrap;
+}
+#cs-tool-root .cs-btn{
+  flex:1;
+  min-width:130px;
+  padding:11px 16px;
+  border:none;
+  border-radius:var(--cs-radius);
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  letter-spacing:0.3px;
+  font-family:Georgia,serif;
+  transition:opacity .15s, transform .1s;
+}
+#cs-tool-root .cs-btn:hover{opacity:.88;transform:translateY(-1px)}
+#cs-tool-root .cs-btn-primary{
+  background:var(--cs-primary);
+  color:#fff;
+  border-bottom:3px solid var(--cs-accent);
+}
+#cs-tool-root .cs-btn-secondary{
+  background:#e8ecf3;
+  color:var(--cs-primary);
+  border-bottom:3px solid #c8cedb;
+}
+#cs-tool-root .cs-btn-report{
+  background:var(--cs-accent);
+  color:#fff;
+  border-bottom:3px solid #a08030;
+}
+@media(max-width:600px){
+  #cs-tool-root .cs-btn-group{flex-direction:column}
+  #cs-tool-root .cs-btn{width:100%}
+}
 
-/* Anti-scrollbar — style App native */
+/* ---- RÉSULTAT ---- */
+#cs-tool-root .cs-result{
+  margin-top:20px;
+  padding:18px 20px;
+  border-radius:var(--cs-radius);
+  background:#f8f9fb;
+  border:1px solid var(--cs-border);
+  border-top:4px solid var(--cs-primary);
+}
+#cs-tool-root .cs-result h3{
+  font-size:13px;
+  color:var(--cs-primary);
+  margin:0 0 10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+#cs-tool-root .cs-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:8px;
+  margin-bottom:16px;
+}
+#cs-tool-root .cs-summary-item{
+  background:#fff;
+  border:1px solid #e0e5ef;
+  padding:9px 12px;
+  border-radius:var(--cs-radius);
+}
+#cs-tool-root .cs-summary-item strong{
+  font-size:10px;
+  color:var(--cs-muted);
+  text-transform:uppercase;
+  letter-spacing:0.4px;
+  display:block;
+  margin-bottom:3px;
+}
+#cs-tool-root .cs-summary-item span{
+  font-size:13px;
+  font-weight:700;
+  color:var(--cs-text);
+}
+#cs-tool-root .cs-subtype-pill{
+  display:inline-block;
+  padding:2px 8px;
+  border-radius:10px;
+  font-size:11px;
+  font-weight:700;
+  margin-left:6px;
+}
+#cs-tool-root .cs-pill-lumA{background:#e8f5ee;color:#2a7a4b;border:1px solid #b8dfc8}
+#cs-tool-root .cs-pill-lumB{background:#fff3cd;color:#856404;border:1px solid #ffe08a}
+#cs-tool-root .cs-pill-her2{background:#fce8e8;color:#b0322a;border:1px solid #f5b8b8}
+#cs-tool-root .cs-pill-tnbc{background:#2d2d2d;color:#fff}
+
+/* Blocs thérapeutiques */
+#cs-tool-root .cs-thera-block{
+  margin-top:10px;
+  border-left:3px solid var(--cs-primary);
+  padding:8px 12px;
+  background:#fff;
+  border-radius:0 var(--cs-radius) var(--cs-radius) 0;
+  margin-bottom:6px;
+}
+#cs-tool-root .cs-thera-block.cs-neo{border-left-color:#c8a951}
+#cs-tool-root .cs-thera-block.cs-adjuvant{border-left-color:var(--cs-ok)}
+#cs-tool-root .cs-thera-block.cs-alert{border-left-color:var(--cs-danger);background:#fff8f8}
+#cs-tool-root .cs-thera-block strong.cs-step{
+  font-size:12px;
+  color:var(--cs-primary);
+  text-transform:uppercase;
+  letter-spacing:0.4px;
+}
+#cs-tool-root .cs-thera-block p{
+  margin:4px 0 0;
+  font-size:12px;
+  color:var(--cs-text);
+}
+#cs-tool-root .cs-targeted-list{
+  margin:6px 0 0;
+  padding:0;
+  list-style:none;
+}
+#cs-tool-root .cs-targeted-list li{
+  font-size:12px;
+  padding:3px 0;
+  padding-left:16px;
+  position:relative;
+  color:var(--cs-text);
+}
+#cs-tool-root .cs-targeted-list li::before{
+  content:"\2192";
+  position:absolute;
+  left:0;
+  color:var(--cs-accent);
+  font-weight:700;
+}
+
+/* Mise en garde RCP */
+#cs-tool-root .cs-rcp-warn{
+  margin-top:14px;
+  padding:9px 12px;
+  background:#f4f0e8;
+  border:1px solid #d4b870;
+  border-radius:var(--cs-radius);
+  font-size:11px;
+  color:#5a4010;
+}
+#cs-tool-root .cs-rcp-warn::before{
+  content:"\26A0\0020";
+  font-weight:700;
+}
+
+/* ---- MODAL ---- */
+#cs-modal-identite{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(20,30,55,0.6);
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+#cs-modal-identite.cs-active{
+  display:flex;
+}
+#cs-modal-identite .cs-modal-box{
+  background:#fff;
+  border-radius:8px;
+  box-shadow:0 16px 56px rgba(20,30,55,0.22);
+  max-width:520px;
+  width:100%;
+  overflow:hidden;
+}
+#cs-modal-identite .cs-modal-header{
+  background:var(--cs-primary);
+  border-bottom:3px solid var(--cs-accent);
+  padding:14px 18px;
+}
+#cs-modal-identite .cs-modal-header h2{
+  margin:0;
+  font-size:15px;
+  color:#fff;
+  font-weight:700;
+  font-family:Georgia,serif;
+}
+#cs-modal-identite .cs-modal-header p{
+  margin:3px 0 0;
+  font-size:11px;
+  color:var(--cs-accent-light);
+  font-family:Georgia,serif;
+}
+#cs-modal-identite .cs-modal-body{padding:20px 22px 14px}
+#cs-modal-identite .cs-modal-note{
+  background:#f0f4fb;
+  border-left:3px solid var(--cs-primary-light);
+  padding:8px 11px;
+  font-size:11px;
+  color:#2a3560;
+  margin-bottom:14px;
+  border-radius:0 4px 4px 0;
+}
+#cs-modal-identite .cs-modal-section-label{
+  font-size:11px;
+  font-weight:700;
+  color:var(--cs-primary);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  margin:12px 0 8px;
+  border-bottom:1px solid var(--cs-border);
+  padding-bottom:4px;
+}
+#cs-modal-identite .cs-field label{
+  font-size:12px;
+  font-weight:700;
+  color:var(--cs-text);
+  margin-bottom:4px;
+  display:block;
+}
+#cs-modal-identite .cs-err{
+  display:none;
+  color:var(--cs-danger);
+  font-size:11px;
+  margin-top:3px;
+  font-weight:600;
+}
+#cs-modal-identite .cs-err.cs-visible{display:block}
+#cs-modal-identite .cs-input-error{
+  border-color:var(--cs-danger) !important;
+  background:#fff8f8 !important;
+}
+#cs-modal-identite .cs-modal-footer{
+  padding:0 22px 18px;
+  display:flex;
+  gap:10px;
+}
+#cs-modal-identite .cs-modal-footer .cs-btn{flex:1;font-size:13px;padding:10px}
+#cs-modal-identite .cs-badge-req{
+  display:inline-block;
+  background:#ffeaea;color:#b0322a;
+  font-size:9px;font-weight:700;
+  border-radius:3px;padding:1px 5px;
+  margin-left:5px;letter-spacing:0.4px;
+  vertical-align:middle;
+}
+
+/* PRINT */
+@media print{
+  #cs-tool-root .cs-btn-group,
+  #cs-tool-root .cs-body>form,
+  #cs-modal-identite{display:none!important}
+  #cs-tool-root .cs-result{border:1px solid #ccc;box-shadow:none}
+}
+
+/* =========================================
+   ANTI-SCROLLBAR — Style App native
+   ========================================= */
 html { scrollbar-width: none !important; }
 body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 ::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
-  
-/* Responsive */
-@media (max-width:768px) {
-  #abx-tool-container.abx-professional .abx-grid { grid-template-columns:1fr !important; }
-  #abx-tool-container.abx-professional .abx-content { padding:16px !important; }
-  #abx-tool-container.abx-professional .abx-footer { flex-direction:column !important; gap:8px !important; text-align:center !important; }
-  #abx-tool-container.abx-professional .abx-footer-left { flex-direction:column !important; gap:4px !important; align-items:center !important; }
-}
-
-/* Print */
-@media print {
-  #abx-tool-container.abx-professional { box-shadow:none !important; border:1px solid #000 !important; }
-  #abx-tool-container.abx-professional .abx-controls { display:none !important; }
-  #abx-tool-container.abx-professional .abx-card,
-  #abx-tool-container.abx-professional .abx-box { break-inside:avoid !important; border:1px solid #000 !important; background:none !important; }
-  #abx-tool-container.abx-professional .abx-btn-copy,
-  #abx-tool-container.abx-professional .abx-search-clear { display:none !important; }
-}
 </style>
+</head>
+<body>
+
+<!-- ===================== MODAL IDENTITÉ ===================== -->
+<div id="cs-modal-identite" role="dialog" aria-modal="true" aria-labelledby="cs-modal-title">
+  <div class="cs-modal-box">
+    <div class="cs-modal-header">
+      <h2 style="color: white; font-size: 15px; margin: 0;">Identification — Rapport A5</h2>
+      <p style="margin:3px 0 0; font-size:11px; color:var(--cs-accent-light);">Informations obligatoires à des fins de traçabilité médico-légale</p>
+    </div>
+    <div class="cs-modal-body">
+      <div class="cs-modal-note">
+        Ces données figureront sur le compte rendu imprimé. Elles ne sont pas conservées ni transmises.
+      </div>
+
+      <div class="cs-modal-section-label">Identité de la patiente</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="cs-field">
+          <label for="csm-nom">Nom <span class="cs-badge-req">REQUIS</span></label>
+          <input type="text" id="csm-nom" placeholder="Nom de famille" autocomplete="family-name"/>
+          <div class="cs-err" id="csm-err-nom">Champ obligatoire.</div>
+        </div>
+        <div class="cs-field">
+          <label for="csm-prenom">Prénom <span class="cs-badge-req">REQUIS</span></label>
+          <input type="text" id="csm-prenom" placeholder="Prénom" autocomplete="given-name"/>
+          <div class="cs-err" id="csm-err-prenom">Champ obligatoire.</div>
+        </div>
+        <div class="cs-field">
+          <label for="csm-ddn">Date de naissance</label>
+          <input type="text" id="csm-ddn" placeholder="JJ/MM/AAAA"/>
+        </div>
+        <div class="cs-field">
+          <label for="csm-ref">N° dossier / Réf.</label>
+          <input type="text" id="csm-ref" placeholder="Facultatif"/>
+        </div>
+      </div>
+
+      <div class="cs-modal-section-label">Praticien référent</div>
+      <div class="cs-field">
+        <label for="csm-praticien">Praticien / Établissement <span class="cs-badge-req">REQUIS</span></label>
+        <input type="text" id="csm-praticien" placeholder="Dr KARA-ZAITRI M.A – Gynécologue"/>
+        <div class="cs-err" id="csm-err-prat">Champ obligatoire.</div>
+      </div>
+    </div>
+    <div class="cs-modal-footer">
+      <button type="button" class="cs-btn cs-btn-secondary" onclick="csMdClose()">Annuler</button>
+      <button type="button" class="cs-btn cs-btn-report" onclick="csMdValider()">Valider et générer</button>
+    </div>
+  </div>
+</div>
+<!-- ===================== FIN MODAL ===================== -->
+
+<div id="cs-tool-root">
+  <div class="cs-header">
+    <h1>Aide à la Décision — Cancer du Sein</h1>
+    <div class="cs-subtitle">Dr KARA-ZAITRI M.A — Gynécologue-Obstétricien</div>
+    <span class="cs-ref-tag">Référentiels : INCa / ESO-ESMO / SOR 2023-2024 — Décision finale en RCP</span>
+  </div>
+
+  <div class="cs-body">
+
+    <form id="cs-form" onsubmit="return false">
+
+      <!-- ===== SECTION 1 : PATIENT ===== -->
+      <div class="cs-section-head">Données cliniques</div>
+      <div class="cs-grid-3">
+
+        <!-- COL 1 -->
+        <div>
+          <div class="cs-field">
+            <label>Sexe</label>
+            <select id="cs-sex">
+              <option value="female">Femme</option>
+              <option value="male">Homme</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Âge (ans)</label>
+            <input type="number" id="cs-age" class="cs-input-short" min="0" max="120" placeholder="55"/>
+          </div>
+          <div class="cs-field">
+            <label>Statut ménopausique</label>
+            <div class="cs-radio-row">
+              <label><input type="radio" name="cs-meno" value="pre"/> Pré-ménopausée</label>
+              <label><input type="radio" name="cs-meno" value="post"/> Post-ménopausée</label>
+              <label><input type="radio" name="cs-meno" value="unknown" checked/> Indéterminé</label>
+            </div>
+          </div>
+          <div class="cs-field">
+            <label>Grossesse en cours</label>
+            <select id="cs-preg">
+              <option value="no">Non</option>
+              <option value="yes">Oui</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Performance Status (OMS)</label>
+            <select id="cs-ps">
+              <option value="0">PS 0 – Activité normale</option>
+              <option value="1">PS 1 – Symptômes, ambulatoire</option>
+              <option value="2">PS 2 – Au lit &lt;50 % du temps</option>
+              <option value="3">PS 3 – Au lit &gt;50 % du temps</option>
+              <option value="4">PS 4 – Grabataire</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Opérable ?</label>
+            <select id="cs-operable">
+              <option value="yes">Oui</option>
+              <option value="no">Non / Borderline</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- COL 2 -->
+        <div>
+          <div class="cs-field">
+            <label>Taille tumorale exacte (cm)</label>
+            <input type="number" id="cs-size" class="cs-input-short" step="0.1" min="0" placeholder="2.5"/>
+          </div>
+          <div class="cs-field">
+            <label>Stade T (UICC / auto-calculé)</label>
+            <select id="cs-t">
+              <option value="">-- Sélectionner --</option>
+              <option value="T1a">T1a (≤0,5 cm)</option>
+              <option value="T1b">T1b (0,5–1 cm)</option>
+              <option value="T1c">T1c (1–2 cm)</option>
+              <option value="T2">T2 (2–5 cm)</option>
+              <option value="T3">T3 (&gt;5 cm)</option>
+              <option value="T4">T4 (paroi/peau/inflammatoire)</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Stade N</label>
+            <select id="cs-n">
+              <option value="N0">N0</option>
+              <option value="N1mi">N1mi (micrométastase)</option>
+              <option value="N1">N1 (1–3 GG)</option>
+              <option value="N2">N2 (4–9 GG)</option>
+              <option value="N3">N3 (≥10 GG ou sus-clav.)</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>M (métastase)</label>
+            <select id="cs-m">
+              <option value="M0">M0</option>
+              <option value="M1">M1</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>PEV (peau / inflammatoire)</label>
+            <select id="cs-pev">
+              <option value="0">Pev 0 (aucun)</option>
+              <option value="1">Pev 1 (œdème localisé)</option>
+              <option value="2">Pev 2 (peau d'orange)</option>
+              <option value="3">Pev 3 (inflammatoire diffus)</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Localisation</label>
+            <select id="cs-local">
+              <option value="external">Quadrant externe</option>
+              <option value="internal">Quadrant interne</option>
+              <option value="central">Centrale (rétro-aréolaire)</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Emboles vasculo-lymphatiques (EVL)</label>
+            <select id="cs-evl">
+              <option value="no">Absents / Non précisés</option>
+              <option value="yes">Présents</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- COL 3 -->
+        <div>
+          <div class="cs-field">
+            <label>Type histologique</label>
+            <select id="cs-histo">
+              <option value="cci">Carcinome canalaire infiltrant (CCI)</option>
+              <option value="cli">Carcinome lobulaire infiltrant (CLI)</option>
+              <option value="in_situ">Carcinome in situ (CCIS/CLIS)</option>
+              <option value="other">Autre type</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Récepteurs hormonaux (RH)</label>
+            <select id="cs-rh">
+              <option value="pos">Positifs (RH+)</option>
+              <option value="neg">Négatifs (RH-)</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>HER2 (IHC)</label>
+            <select id="cs-her2">
+              <option value="0">0 (négatif)</option>
+              <option value="1">1+ (négatif)</option>
+              <option value="2_neg">2+ / FISH négatif</option>
+              <option value="2_pos">2+ / FISH positif (amplifié)</option>
+              <option value="3">3+ (positif)</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Grade SBR / Elston-Ellis</label>
+            <select id="cs-grade">
+              <option value="">Non précisé</option>
+              <option value="1">Grade 1 (bas grade)</option>
+              <option value="2">Grade 2 (grade intermédiaire)</option>
+              <option value="3">Grade 3 (haut grade)</option>
+            </select>
+          </div>
+          <div class="cs-field">
+            <label>Ki-67 (%)</label>
+            <input type="number" id="cs-ki67" class="cs-input-short" min="0" max="100" placeholder="20"/>
+          </div>
+          <div class="cs-field">
+            <label>Statut BRCA <span class="cs-badge-new">NOUVEAU</span></label>
+            <select id="cs-brca">
+              <option value="unknown">Inconnu / Non testé</option>
+              <option value="wt">Sauvage (non muté)</option>
+              <option value="mut">Muté (BRCA1 ou BRCA2)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION 2 : CAS PARTICULIERS & TESTS ===== -->
+      <div class="cs-section-head">Cas particuliers et tests complémentaires</div>
+      <div class="cs-grid-3">
+        <div>
+          <div class="cs-field">
+            <label>Situation particulière</label>
+            <select id="cs-case">
+              <option value="standard">Standard</option>
+              <option value="bilateral">Bilatéral synchrone</option>
+              <option value="paget">Maladie de Paget du mamelon</option>
+              <option value="squirrhe">Squirrhe ulcéré / saignant</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div class="cs-field">
+            <label>Test génomique (si RH+, N0-N1) <span class="cs-badge-new">NOUVEAU</span></label>
+            <select id="cs-genomic">
+              <option value="none">Non réalisé / Non applicable</option>
+              <option value="low">Score BAS risque (Oncotype &lt;26 / MammaPrint Low)</option>
+              <option value="high">Score HAUT risque (Oncotype ≥26 / MammaPrint High)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div class="cs-field">
+            <label>Marges chirurgicales (si déjà opérée)</label>
+            <select id="cs-margins">
+              <option value="na">Non applicable / Opération non encore faite</option>
+              <option value="clear">Marges saines</option>
+              <option value="close">Marges proches (&lt;1 mm)</option>
+              <option value="pos">Marges envahies (R1)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRATICIEN -->
+      <div class="cs-section-head">Praticien référent</div>
+      <div style="max-width:420px">
+        <div class="cs-field">
+          <label for="cs-practitioner">Nom du praticien / Établissement</label>
+          <input type="text" id="cs-practitioner" placeholder="Dr KARA-ZAITRI M.A – Gynécologue"/>
+        </div>
+      </div>
+
+      <div class="cs-btn-group">
+        <button type="button" class="cs-btn cs-btn-primary" onclick="csAnalyze()">Analyser</button>
+        <button type="button" class="cs-btn cs-btn-secondary" onclick="csReset()">Réinitialiser</button>
+        <button type="button" class="cs-btn cs-btn-report" onclick="csOpenModal()">Rapport A5 (impression)</button>
+      </div>
+
+    </form>
+
+    <div id="cs-output" style="display:none"></div>
+
+  </div><!-- /cs-body -->
+</div><!-- /cs-tool-root -->
 
 <script>
-(function() {
-'use strict';
+(function(){
+"use strict";
 
-// ============================================================================
-// DATABASE v3.0 — Corrections médicales complètes
-// Sources : HAS/ECDC 2024, IUSTI 2022, CRAT 2024
-// ============================================================================
-var DB = {
+/* ======================================================
+   UTILITAIRES
+   ====================================================== */
+function g(id){ return document.getElementById(id); }
+function gv(id){ return (g(id)||{}).value||''; }
+function gn(id){ var v=parseFloat(gv(id)); return isNaN(v)?null:v; }
+function gi(id){ var v=parseInt(gv(id)); return isNaN(v)?null:v; }
+function esc(s){ if(!s)return''; var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-  pathologies: {
+/* ======================================================
+   AUTOMATISATIONS
+   ====================================================== */
+document.addEventListener('DOMContentLoaded', function(){
+  var szIn = g('cs-size');
+  var tSel = g('cs-t');
+  var pevSel = g('cs-pev');
 
-    gonorrhee: {
-      name: "Gonorrh\u00e9e",
-      subtitle: "Ur\u00e9trite/Cervicite \u00e0 N. gonorrhoeae",
-      keywords: ["chaude-pisse","blennorragie","ecoulement","neisseria","gonocoque","gono"],
-      firstLine: {
-        name: "Ceftriaxone",
-        dose: "1 g IM dose unique",
-        // CORRECTION v3 : monoth\u00e9rapie — bith\u00e9rapie + azithromycine abandonn\u00e9e (ECDC/HAS 2024)
-        note: "MONOATH\u00c9RAPIE. D\u00e9pistage Chlamydia par PCR syst\u00e9matique (traiter si positif)"
-      },
-      alternatives: [
-        // CORRECTION v3 : C\u00e9fixime RETIR\u00c9 (20-40\u00a0% R, d\u00e9class\u00e9 ECDC 2022)
-        { name: "Gentamicine", dose: "240 mg IM + Azithromycine 2g PO", note: "Si allergie \u03b2-lactamines document\u00e9e" },
-        { name: "Spectinomycine", dose: "2 g IM dose unique", note: "Si allergie C3G (disponibilit\u00e9 limit\u00e9e en France)" }
-      ],
-      pregnancy: "\u2705 Ceftriaxone autoris\u00e9e tous trimestres (C3G de choix \u2014 CRAT)",
-      resistance: "\u26a0\ufe0f Fluoroquinolones (50-70\u00a0% R), Azithromycine seule (>80\u00a0% R \u2014 ECDC 2024), C\u00e9fixime (20-40\u00a0% R \u2014 d\u00e9class\u00e9)",
-      notes: [
-        "Bith\u00e9rapie ceftriaxone + azithromycine syst\u00e9matique ABANDONN\u00c9E (ECDC/HAS 2024 \u2014 r\u00e9sistances)",
-        "D\u00e9pistage Chlamydia par PCR associ\u00e9 syst\u00e9matiquement (traiter si positif)",
-        "Test de contr\u00f4le obligatoire \u00e0 J7 si persistance des sympt\u00f4mes",
-        "Traitement du/des partenaire(s) syst\u00e9matique",
-        "D\u00e9claration obligatoire si souche multi-r\u00e9sistante"
-      ]
-    },
-
-    chlamydia: {
-      name: "Chlamydiose",
-      subtitle: "C. trachomatis (ur\u00e9trite / cervicite / rectite)",
-      keywords: ["clamidia","clamydia","trachomatis","ist","chlamydia"],
-      firstLine: {
-        name: "Doxycycline",
-        dose: "100 mg \u00d72/j — 7 jours",
-        // CORRECTION v3 : nuance clinique infection rectale ajout\u00e9e
-        note: "Gold Standard. Efficacit\u00e9 95-98\u00a0%. Sup\u00e9rieure \u00e0 l'azithromycine sur les infections rectales"
-      },
-      alternatives: [
-        { name: "Azithromycine", dose: "1 g PO dose unique",
-          // CORRECTION v3 : efficacit\u00e9 r\u00e9duite sur infections rectales explicit\u00e9e
-          note: "Efficacit\u00e9 urogenitale 92-95\u00a0%. \u26a0\ufe0f Efficacit\u00e9 r\u00e9duite sur infections anorectales \u2014 pr\u00e9f\u00e9rer doxycycline si infection rectale suspecte" },
-        { name: "L\u00e9vofloxacine", dose: "500 mg \u00d71/j — 7 jours", note: "Si allergie cyclines ET macrolides" }
-      ],
-      lgv: {
-        treatment: "Doxycycline 100 mg \u00d72/j pendant 21 jours",
-        note: "Lymphogranulomatose V\u00e9n\u00e9rienne (s\u00e9rovars L1-L3) — rectite particuli\u00e8rement"
-      },
-      pregnancy: "\u2705 Azithromycine 1g dose unique (Doxycycline CI T2/T3 \u2014 CRAT)",
-      notes: [
-        "Doxycycline pr\u00e9f\u00e9r\u00e9e en 1\u00e8re ligne (sup\u00e9rieure sur infections rectales)",
-        "Azithromycine alternative uniquement si infection urogenitale non anorectale",
-        "D\u00e9pistage Gonocoque syst\u00e9matique associ\u00e9",
-        "Test de gu\u00e9rison \u00e0 3-5 semaines si femme enceinte"
-      ]
-    },
-
-    salpingite: {
-      name: "Salpingite Aigu\u00eb (IGH)",
-      subtitle: "Pelvic Inflammatory Disease (PID)",
-      keywords: ["pid","douleur pelvienne","igh","trompes","annexite","salpingite"],
-      ambulatory: {
-        regimen: [
-          "Ceftriaxone 1g IM dose unique",
-          "Doxycycline 100 mg \u00d72/j (14 jours)",
-          "M\u00e9tronidazole 500 mg \u00d72/j (14 jours)"
-        ],
-        note: "Retrait DIU si pr\u00e9sent. R\u00e9\u00e9valuation \u00e0 72h obligatoire."
-      },
-      hospital: {
-        regimen: [
-          "Ceftriaxone 1-2g IV/j",
-          "Doxycycline 100 mg PO/IV \u00d72/j",
-          "M\u00e9tronidazole 500 mg IV \u00d73/j"
-        ],
-        relay: "Relais PO apr\u00e8s 48h d'apyrexie — total 14 jours",
-        indications: ["Grossesse","Abc\u00e8s tubo-ovarien","Signes p\u00e9riton\u00e9aux","Fi\u00e8vre > 39\u00b0C","Vomissements","\u00c9chec ambulatoire \u00e0 72h"]
-      },
-      pregnancy: "\ud83d\udea8 Hospitalisation syst\u00e9matique",
-      notes: ["Couverture : Gonocoque, Chlamydia, Ana\u00e9robies, Mycoplasmes","Traitement probabiliste — ne pas attendre la microbiologie"]
-    },
-
-    vaginose: {
-      name: "Vaginose Bact\u00e9rienne",
-      subtitle: "D\u00e9s\u00e9quilibre de flore (Ana\u00e9robies / Gardnerella)",
-      keywords: ["gardnerella","odeur","poisson","pertes","clue cells","vaginose"],
-      firstLine: {
-        name: "M\u00e9tronidazole (PO)",
-        dose: "500 mg \u00d72/j — 7 jours",
-        note: "Prendre au repas. Efficacit\u00e9 80-90\u00a0%"
-      },
-      alternatives: [
-        { name: "M\u00e9tronidazole (Gel)", dose: "0,75\u00a0% 1 app/soir — 5 jours", note: "Intravaginal" },
-        { name: "Clindamycine (Cr\u00e8me)", dose: "2\u00a0% 1 app/soir — 7 jours", note: "Intravaginal" }
-      ],
-      // CORRECTION v3 : formulation CRAT nuanc\u00e9e (pas "\u2705 OK tous trimestres")
-      pregnancy: "\u26a0\ufe0f M\u00e9tronidazole : utiliser avec pr\u00e9caution au 1er trimestre (passage placentaire, donn\u00e9es animales). Peut \u00eatre utilis\u00e9 si n\u00e9cessaire. Acceptable aux T2/T3. Consulter le CRAT.",
-      notes: [
-        "Pas de traitement du partenaire syst\u00e9matique (sauf r\u00e9cidives fr\u00e9quentes)",
-        "Facteur de risque d'accouchement pr\u00e9matur\u00e9 si non trait\u00e9e",
-        "\u274c Alcool interdit pendant le traitement (effet antabuse)"
-      ]
-    },
-
-    trichomonase: {
-      name: "Trichomonase",
-      subtitle: "Trichomonas vaginalis (Protozoaire)",
-      keywords: ["protozoaire","parasite","vaginalis","bulles","trichomonas"],
-      firstLine: { name: "M\u00e9tronidazole", dose: "2 g PO dose unique", note: "Meilleure observance" },
-      alternatives: [
-        { name: "M\u00e9tronidazole", dose: "500 mg \u00d72/j — 7 jours", note: "Si \u00e9chec dose unique" },
-        { name: "Tinidazole", dose: "2 g PO dose unique", note: "Alternative" }
-      ],
-      pregnancy: "\u26a0\ufe0f M\u00e9tronidazole 2g dose unique — \u00e0 utiliser avec pr\u00e9caution au T1. Acceptable T2/T3 (CRAT).",
-      notes: ["Traitement du/des PARTENAIRE(S) obligatoire (simultan\u00e9)","\u274c Alcool interdit pendant + 48h apr\u00e8s","Urines fonc\u00e9es (normal — pr\u00e9venir la patiente)"]
-    },
-
-    endometrite: {
-      name: "Endom\u00e9trite Post-Partum",
-      subtitle: "Infection polybact\u00e9rienne post-accouchement",
-      keywords: ["post-partum","accouchement","cesarienne","uterus","endometrite"],
-      hospital: {
-        regimen: ["Augmentin 1g IV \u00d73/j","Gentamicine 5 mg/kg/j IV (dose unique journali\u00e8re)"],
-        note: "Si tableau s\u00e9v\u00e8re : ajout M\u00e9tronidazole 500mg IV \u00d73/j"
-      },
-      relay: "Relais per os : Augmentin 1g \u00d73/j — total 7-10 jours",
-      pregnancy: "\u2014 (contexte post-partum)",
-      notes: ["Hospitalisation requise","Arr\u00eat Gentamicine apr\u00e8s 48-72h d'apyrexie","Echographie si suspicion r\u00e9tention"]
-    },
-
-    syphilis: {
-      name: "Syphilis",
-      subtitle: "Treponema pallidum",
-      keywords: ["chancre","treponeme","verole","roseole","syphilis","vdrl","tpha"],
-      phases: [
-        { title: "Pr\u00e9coce (\u2264 1 an)",   treat: "Benzathine-P\u00e9nicilline G 2,4 M UI IM — 1 injection unique" },
-        { title: "Tardive (> 1 an)",   treat: "Benzathine-P\u00e9nicilline G 2,4 M UI IM — 1 injection/sem. \u00d7 3 semaines" },
-        { title: "Neurosyphilis",      treat: "P\u00e9nicilline G 4 M UI IV / 4h — 10-14 jours (hospitalisation)" }
-      ],
-      alternatives: [
-        { name: "Doxycycline", dose: "100 mg \u00d72/j (14j si pr\u00e9coce / 28j si tardive)", note: "Allergie P\u00e9nicilline — CI grossesse" }
-      ],
-      pregnancy: "\u2705 P\u00e9nicilline G UNIQUEMENT (d\u00e9sensibilisation si allergie \u2014 CRAT/HAS)",
-      notes: ["R\u00e9action Jarisch-Herxheimer possible \u00e0 J1 (fi\u00e8vre, frissons) — pr\u00e9venir","Suivi VDRL quantitatif \u00e0 3, 6, 12 mois","D\u00e9claration obligatoire si congenital ou MDR"]
-    },
-
-    mycoplasma: {
-      name: "Mycoplasma Genitalium",
-      subtitle: "IST \u00e9mergente — strat\u00e9gie s\u00e9quentielle obligatoire (IUSTI 2022)",
-      keywords: ["mgen","mycoplasme","uretrite","cervicite","mycoplasma","genitalium"],
-      firstLine: {
-        name: "Strat\u00e9gie s\u00e9quentielle IUSTI 2022",
-        dose: "2 \u00e9tapes successives obligatoires",
-        note: "La doxycycline seule N'\u00c9RADIQUE PAS — voir d\u00e9tail ci-dessous"
-      },
-      // CORRECTION MAJEURE v3 : r\u00f4le de la doxycycline expliqu\u00e9 (efficacit\u00e9 ~30\u00a0% seulement)
-      strategy: [
-        "\u00c9tape 1 — R\u00e9duction de charge : Doxycycline 100 mg \u00d72/j pendant 7 jours",
-        "\u00c9tape 2 — \u00c9radication (si sensible macrolides) : Azithromycine 1g J1, puis 500 mg J2-J4",
-        "\u00c9tape 2 — \u00c9radication (si r\u00e9sistance macrolides) : Moxifloxacine 400 mg \u00d71/j pendant 7-10 jours"
-      ],
-      resistance: "30-50\u00a0% r\u00e9sistance aux macrolides (azithromycine) en France",
-      pregnancy: "\u26a0\ufe0f Complexe : Azithromycine ou Pristinamycine (Moxifloxacine CI grossesse)",
-      notes: [
-        "\u26a0\ufe0f IMPORTANT : La doxycycline (\u00e9tape 1) N'EST PAS un traitement suffisant (efficacit\u00e9 d'\u00e9radication ~30\u00a0% seulement). Elle r\u00e9duit la charge bact\u00e9rienne pour am\u00e9liorer l'efficacit\u00e9 de l'\u00e9tape 2",
-        "Ne jamais s'arr\u00eater \u00e0 l'\u00e9tape 1 : les deux \u00e9tapes sont obligatoires",
-        "Traiter uniquement si symptomatique ou partenaire confirm\u00e9 positif",
-        "Test de gu\u00e9rison PCR \u00e0 3 semaines post-traitement obligatoire",
-        "Recherche de mutations de r\u00e9sistance si disponible (avant Moxifloxacine)"
-      ]
-    }
-
-  }, // fin pathologies
-
-  antibiotics: {
-    ceftriaxone: {
-      name: "Ceftriaxone (Roc\u00e9phine)",
-      class: "C\u00e9phalosporine 3G",
-      pregnancy: "safe",
-      forms: "Injectable (IM/IV)",
-      spectrum: ["Gonocoque +++","Ent\u00e9robact\u00e9ries","Streptocoques","Haemophilus"],
-      indications: ["Gonorrh\u00e9e (1g IM \u2014 monoth\u00e9rapie)","Salpingite (1-2g IV)","Endom\u00e9trite","Syphilis cong\u00e9nitale"],
-      notes: ["Inactif sur Chlamydia et Ana\u00e9robies","IM douloureuse : diluer avec Lidoca\u00efne 1\u00a0% sans vasoconstricteur","Pas d'ajustement r\u00e9nal n\u00e9cessaire"]
-    },
-    doxycycline: {
-      name: "Doxycycline",
-      class: "Cycline",
-      pregnancy: "unsafe",
-      forms: "Orale (100 mg)",
-      spectrum: ["Chlamydia +++","M. genitalium (r\u00e9duction de charge — non \u00e9radicateur seul)","T. pallidum","Mycoplasmes","Rickettsies"],
-      indications: ["Chlamydia (1\u00e8re ligne)","Syphilis si allergie P\u00e9nicilline (CI grossesse)","M. genitalium (\u00e9tape 1 s\u00e9quentielle)","Salpingite (en association)"],
-      notes: ["\u274c CI grossesse T2/T3 (atteinte dents/os f\u0153tus) et enfant < 8 ans","Prendre au milieu du repas avec grand verre d'eau","Ne pas s'allonger 1h apr\u00e8s (ulc\u00e9ration \u0153sophage)","Photosensibilisant","\u26a0\ufe0f Sur M. genitalium : r\u00e9duit la charge bact\u00e9rienne mais N'ERADIQUE PAS seule (~30\u00a0% d'efficacit\u00e9)"]
-    },
-    metronidazole: {
-      name: "M\u00e9tronidazole (Flagyl)",
-      class: "Nitroimidazol\u00e9",
-      pregnancy: "caution",
-      forms: "PO (250/500 mg), IV, Gel vaginal",
-      spectrum: ["Ana\u00e9robies stricts +++ (Bacteroides, Prevotella)","Trichomonas vaginalis","Gardnerella vaginalis"],
-      indications: ["Vaginose bact\u00e9rienne","Trichomonase","Salpingite (ana\u00e9robies)","Endom\u00e9trite"],
-      notes: ["\u274c Effet antabuse : alcool interdit pendant + 48h apr\u00e8s","Go\u00fbt m\u00e9tallique (normal)","Urines fonc\u00e9es (normal)","\u26a0\ufe0f Grossesse : pr\u00e9caution T1 (passage placentaire). Acceptable T2/T3. Consulter CRAT."]
-    },
-    azithromycine: {
-      name: "Azithromycine (Zithromax)",
-      class: "Macrolide",
-      pregnancy: "safe",
-      forms: "PO (250/500/1000 mg)",
-      spectrum: ["Chlamydia (alternative — \u00e9viter si infection rectale)","M. genitalium (si sensible macrolides)","L\u00e9gionelles"],
-      indications: ["Chlamydia (alternative si infection urogenitale non rectale)","M. genitalium (\u00e9tape 2 s\u00e9quentielle si sensible)","Chlamydia chez femme enceinte (1g dose unique)"],
-      notes: ["Azithromycine SEULE contre gonocoque : abandonn\u00e9e (r\u00e9sistances > 80\u00a0% \u2014 ECDC 2024)","Demi-vie longue (prise unique)","Risque allongement QT","R\u00e9sistances croissantes (M. genitalium 30-50\u00a0%, Gonocoque)"]
-    },
-    augmentin: {
-      name: "Amoxicilline + Ac. Clavulanique",
-      class: "P\u00e9nicilline + Inhibiteur",
-      pregnancy: "safe",
-      forms: "PO (1g/125 mg), IV (1g/200 mg)",
-      spectrum: ["Streptocoques (dont SGB)","E. coli (si sensible)","Ana\u00e9robies","Staphylocoques sensibles"],
-      indications: ["Endom\u00e9trite post-partum","Salpingite (si Gonocoque exclu)","Abc\u00e8s gyn\u00e9cologique"],
-      notes: ["Prendre en d\u00e9but de repas (tol\u00e9rance digestive)","Diarrh\u00e9es fr\u00e9quentes","Spectre large a\u00e9ro-ana\u00e9robies"]
-    },
-    gentamicine: {
-      name: "Gentamicine",
-      class: "Aminoside",
-      pregnancy: "unsafe",
-      forms: "Injectable (IV/IM)",
-      spectrum: ["Ent\u00e9robact\u00e9ries +++","BGN","Synergie avec \u03b2-lactamines"],
-      indications: ["Endom\u00e9trite s\u00e9v\u00e8re (en association)","Gonorrh\u00e9e si allergie C3G document\u00e9e","Salpingite hospitalis\u00e9e s\u00e9v\u00e8re"],
-      notes: ["\u274c N\u00e9phrotoxique et Ototoxique (surveiller taux r\u00e9siduel si > 48h)","\u274c CI Grossesse sauf urgence vitale (ototoxicit\u00e9 f\u0153tale)","Dose unique journali\u00e8re privil\u00e9gi\u00e9e (5 mg/kg/j)","Arr\u00eat apr\u00e8s 48-72h d'apyrexie"]
-    },
-    clindamycine: {
-      name: "Clindamycine (Dalacine)",
-      class: "Lincosamide",
-      pregnancy: "safe",
-      forms: "PO, IV, Cr\u00e8me vaginale",
-      spectrum: ["Ana\u00e9robies +++","Streptocoques","Staphylocoques","Gardnerella vaginalis"],
-      indications: ["Vaginose bact\u00e9rienne (cr\u00e8me)","Alternative ana\u00e9robies si CI M\u00e9tronidazole","Abc\u00e8s"],
-      notes: ["Risque colite \u00e0 C. difficile (surveiller diarrh\u00e9e)","Bonne diffusion tissulaire"]
-    },
-    moxifloxacine: {
-      name: "Moxifloxacine (Izilox)",
-      class: "Fluoroquinolone 4G",
-      pregnancy: "unsafe",
-      forms: "PO (400 mg)",
-      spectrum: ["M. Genitalium +++ (si sensible)","Atypiques","BGN"],
-      indications: ["M. Genitalium apr\u00e8s \u00e9chec azithromycine ou r\u00e9sistance macrolides","Salpingite (alternative)"],
-      notes: ["\u274c CI Grossesse","Risque tendinite/rupture (Achille)","Risque neuropsychiatrique","Surveiller QT","R\u00e9server en 2\u00e8me recours pour M. genitalium"]
-    },
-    penig: {
-      name: "Benzathine-P\u00e9nicilline G",
-      class: "P\u00e9nicilline Retard",
-      pregnancy: "safe",
-      forms: "IM Profonde STRICTE (jamais IV)",
-      spectrum: ["T. pallidum (syphilis) +++","Streptocoques"],
-      indications: ["Syphilis (Gold Standard \u2014 toutes phases)"],
-      notes: ["Injection fessi\u00e8re cadran sup\u00e9ro-externe","Douloureuse \u2014 pr\u00e9venir","\u26a0\ufe0f JAMAIS EN IV (arr\u00eat cardiaque)","D\u00e9sensibilisation obligatoire si allergie (surtout grossesse)"]
-    }
-  }, // fin antibiotics
-
-  // CORRECTION v3 : terminologie CRAT (abandon classification FDA A/B/C/X — abandonn\u00e9e en 2015)
-  pregnancy: [
-    {
-      category: "Utilisable \u2014 CRAT",
-      badge: "safe",
-      items: [
-        { name: "P\u00e9nicillines", detail: "Amoxicilline, Augmentin, P\u00e9nicilline G \u2014 tous trimestres" },
-        { name: "C\u00e9phalosporines", detail: "Ceftriaxone, C\u00e9fixime \u2014 tous trimestres" },
-        { name: "Macrolides", detail: "Azithromycine (pr\u00e9f\u00e9r\u00e9e), \u00c9rythromycine \u2014 tous trimestres" },
-        { name: "Clindamycine", detail: "Tous trimestres" }
-      ]
-    },
-    {
-      category: "\u00c0 utiliser avec pr\u00e9caution \u2014 CRAT",
-      badge: "caution",
-      items: [
-        { name: "M\u00e9tronidazole", detail: "Pr\u00e9caution au 1er trimestre (passage placentaire). Acceptable T2/T3 si indication." },
-        { name: "Pristinamycine", detail: "Si pas d\u2019alternative disponible" }
-      ]
-    },
-    {
-      category: "Contre-indiqu\u00e9 \u2014 CRAT",
-      badge: "unsafe",
-      items: [
-        { name: "Doxycycline", detail: "CI T2/T3 (atteinte dents et os du f\u0153tus)" },
-        { name: "Fluoroquinolones", detail: "CI (arthropathie f\u0153tale) \u2014 Moxifloxacine, Ofloxacine" },
-        { name: "Aminosides", detail: "CI sauf urgence vitale (ototoxicit\u00e9 f\u0153tale)" }
-      ]
-    },
-    {
-      category: "Recommandations CRAT par pathologie",
-      badge: "info",
-      items: [
-        { name: "Syphilis", detail: "P\u00e9nicilline G OBLIGATOIRE. D\u00e9sensibilisation si allergie. Aucune alternative valid\u00e9e." },
-        { name: "Chlamydia", detail: "Azithromycine 1g dose unique (Doxycycline CI)" },
-        { name: "Salpingite", detail: "Hospitalisation syst\u00e9matique + Ceftriaxone + M\u00e9tronidazole" },
-        { name: "Vaginose", detail: "M\u00e9tronidazole : pr\u00e9caution T1, acceptable T2/T3 si indication" }
-      ]
-    }
-  ],
-
-  // CORRECTION v3 : c\u00e9fixime cohérent ("déclassé") + gono bith\u00e9rapie corrected
-  resistance: {
-    gonococcus: {
-      name: "Neisseria gonorrhoeae",
-      status: "CRITIQUE",
-      data: [
-        { antibiotic: "P\u00e9nicillines",          resistance: "> 80\u00a0%",  status: "danger" },
-        { antibiotic: "Fluoroquinolones",       resistance: "50-70\u00a0%", status: "danger" },
-        { antibiotic: "Azithromycine seule",    resistance: "> 80\u00a0%",  status: "danger" },
-        { antibiotic: "T\u00e9tracyclines",          resistance: "60-80\u00a0%", status: "danger" },
-        { antibiotic: "C\u00e9fixime (d\u00e9class\u00e9)",   resistance: "20-40\u00a0%", status: "warning", note: "Non recommand\u00e9 en routine — ECDC 2022" },
-        { antibiotic: "Ceftriaxone",            resistance: "< 5\u00a0%",   status: "success" }
-      ],
-      mdr: "Bith\u00e9rapie ceftriaxone + azithromycine syst\u00e9matique ABANDONN\u00c9E (ECDC/HAS 2024). Monoth\u00e9rapie ceftriaxone 1g IM recommand\u00e9e.",
-      prevention: [
-        "Monoth\u00e9rapie Ceftriaxone 1g IM (HAS/ECDC 2024)",
-        "D\u00e9pistage Chlamydia associ\u00e9 par PCR (traiter si positif)",
-        "Test de contr\u00f4le \u00e0 J7 si persistance sympt\u00f4mes",
-        "D\u00e9claration si souche MDR",
-        "Antibiogramme si \u00e9chec"
-      ]
-    },
-    mycoplasmag: {
-      name: "Mycoplasma genitalium",
-      status: "PR\u00c9OCCUPANT",
-      macrolides: "30-50\u00a0% de r\u00e9sistances en France",
-      mechanism: "Mutations g\u00e8ne 23S rRNA (macrolides) et ParC (fluoroquinolones)",
-      strategy: [
-        "Strat\u00e9gie s\u00e9quentielle IUSTI 2022 obligatoire (deux \u00e9tapes)",
-        "\u00c9tape 1 : Doxycycline (r\u00e9duction de charge — non \u00e9radicatrice, ~30\u00a0% d'efficacit\u00e9)",
-        "\u00c9tape 2 : Azithromycine \u00e9tendue ou Moxifloxacine selon r\u00e9sistance",
-        "Test de gu\u00e9rison PCR \u00e0 3 semaines obligatoire",
-        "Recherche mutations de r\u00e9sistance si disponible"
-      ]
-    },
-    chlamydia: {
-      name: "Chlamydia trachomatis",
-      status: "FAVORABLE",
-      resistance: "< 5\u00a0%",
-      note: "Doxycycline et azithromycine tr\u00e8s efficaces sur infections urogenitales",
-      failures: "\u00c9checs 5-8\u00a0% : souvent r\u00e9infection (partenaire non trait\u00e9) ou infection rectale sous-trait\u00e9e par azithromycine"
-    }
+  if(szIn && tSel && pevSel){
+    szIn.addEventListener('input', function(){
+      var v = parseFloat(this.value);
+      if(isNaN(v)) return;
+      var pev = pevSel.value;
+      if(pev==='2'||pev==='3'){ tSel.value='T4'; return; }
+      if(v<=0.5) tSel.value='T1a';
+      else if(v<=1) tSel.value='T1b';
+      else if(v<=2) tSel.value='T1c';
+      else if(v<=5) tSel.value='T2';
+      else tSel.value='T3';
+    });
+    pevSel.addEventListener('change', function(){
+      if(this.value==='2'||this.value==='3') tSel.value='T4';
+    });
   }
+});
 
-}; // fin DB
+/* ======================================================
+   HELPERS MÉDICAUX
+   ====================================================== */
+function isHer2Pos(her2){ return her2==='3'||her2==='2_pos'; }
+function isT1(t){ return t==='T1a'||t==='T1b'||t==='T1c'; }
+function isT1ab(t){ return t==='T1a'||t==='T1b'; }
 
-// ============================================================================
-// UTILITAIRES
-// ============================================================================
-function escapeHtml(text) {
-  if (text === null || text === undefined) return '';
-  var d = document.createElement('div');
-  d.textContent = String(text);
-  return d.innerHTML;
-}
-function normalizeText(text) {
-  if (!text) return '';
-  return text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function getMolecularSubtype(rh, her2, ki67, grade){
+  var her2p = isHer2Pos(her2);
+  if(rh==='neg' && !her2p) return 'TNBC';
+  if(her2p && rh==='neg') return 'HER2+_nonluminal';
+  if(her2p && rh==='pos') return 'Luminal_HER2';
+  // Luminal
+  var ki67High = (ki67!==null && ki67>=20);
+  var g3 = (grade==='3');
+  if(ki67High || g3) return 'Luminal_B';
+  return 'Luminal_A';
 }
 
-// ============================================================================
-// REFS DOM
-// ============================================================================
-var container   = document.getElementById('abx-tool-container');
-var contentArea = document.getElementById('abxContentArea');
-var searchInput = document.getElementById('abxSearchInput');
-var searchClear = document.getElementById('abxSearchClear');
-var tabs        = container.querySelectorAll('.abx-tab');
-var toastCont   = document.getElementById('abxToastContainer');
-var currentMode = 'pathology';
-var searchTimeout = null;
-
-// ============================================================================
-// TOAST — position:absolute dans conteneur (CORRIGÉ : plus de position:fixed)
-// ============================================================================
-function showToast(msg, type) {
-  type = type || 'success';
-  var t = document.createElement('div');
-  t.className = 'abx-toast';
-  if (type === 'warning') t.style.cssText += 'background:#f59e0b!important;';
-  if (type === 'error')   t.style.cssText += 'background:#ef4444!important;';
-  t.innerHTML = '<span>' + (type==='success'?'\u2713':type==='warning'?'\u26a0':'\u2717') + '</span><span>' + escapeHtml(msg) + '</span>';
-  toastCont.appendChild(t);
-  setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 3200);
+function getSubtypeLabel(sub){
+  var m = {
+    'TNBC':'Triple Négatif (TNBC)',
+    'HER2+_nonluminal':'HER2+ non luminal',
+    'Luminal_HER2':'Luminal HER2+',
+    'Luminal_B':'Luminal B',
+    'Luminal_A':'Luminal A'
+  };
+  return m[sub]||sub;
 }
 
-// ============================================================================
-// BADGES
-// ============================================================================
-function getPregBadge(s) {
-  if (!s) return '';
-  s = String(s);
-  if (s==='safe'    || s.indexOf('\u2705')>=0) return '<span class="badge safe">Grossesse OK</span>';
-  if (s==='caution' || s.indexOf('\u26a0')>=0) return '<span class="badge caution">Prudence</span>';
-  if (s==='unsafe'  || s.indexOf('\u274c')>=0) return '<span class="badge unsafe">\u26d4 CI Grossesse</span>';
-  if (s.indexOf('\ud83d\udea8')>=0)            return '<span class="badge unsafe">\ud83d\udea8 Hospit.</span>';
-  return '';
-}
-function getPregIcon(s) {
-  if (s==='safe')    return '\u2705';
-  if (s==='caution') return '\u26a0\ufe0f';
-  if (s==='unsafe')  return '\u274c';
-  return '';
+function getSubtypePillClass(sub){
+  if(sub==='TNBC') return 'cs-pill-tnbc';
+  if(sub.indexOf('HER2')!==-1) return 'cs-pill-her2';
+  if(sub==='Luminal_B') return 'cs-pill-lumB';
+  return 'cs-pill-lumA';
 }
 
-// ============================================================================
-// COPIE
-// ============================================================================
-window.copyToClipboard = function(id) {
-  var el = document.getElementById(id);
-  if (!el) { showToast('Erreur', 'error'); return; }
-  var txt = el.innerText;
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(txt)
-      .then(function(){ showToast('\u2713 Copi\u00e9'); })
-      .catch(function(){ fallbackCopy(txt); });
-  } else { fallbackCopy(txt); }
-};
-function fallbackCopy(txt) {
-  try {
-    var ta = document.createElement('textarea');
-    ta.value = txt; ta.style.cssText='position:fixed;left:-9999px;';
-    document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta);
-    showToast('\u2713 Copi\u00e9');
-  } catch(e){ showToast('Copie manuelle n\u00e9cessaire','warning'); }
+function getRadioReason(n, t, operable, sub, age, pev, cas, evl){
+  if(cas==='in_situ') return 'Si traitement conservateur : systématique. Post-mastectomie : non indiquée sauf micro-invasion ou marges envahies.';
+  if(!operable) return 'Selon réponse aux traitements systémiques (décision en RCP).';
+
+  var ganglions = (n==='N2'||n==='N3');
+  var gros = (t==='T3'||t==='T4');
+  var tnbc = (sub==='TNBC');
+
+  if(gros||ganglions||t==='T4'||pev==='2'||pev==='3'){
+    return 'Systématique : paroi thoracique + aires ganglionnaires (incluant sus-claviculaire si N2-N3).';
+  }
+  if(n==='N1'||n==='N1mi'||t==='T2'){
+    var r = 'Systématique après chirurgie conservatrice. ';
+    var rf = [];
+    if(age&&age<45) rf.push('âge &lt;45 ans');
+    if(tnbc) rf.push('TNBC');
+    if(n==='N1'||n==='N1mi') rf.push('N+');
+    if(evl==='yes') rf.push('EVL présents');
+    if(rf.length>0) r += 'Après mastectomie : indiquée si facteurs de risque ('+rf.join(', ')+', grade 3).';
+    else r += 'Après mastectomie : à discuter selon facteurs de risque (grade 3, EVL).';
+    return r;
+  }
+  return 'Systématique après chirurgie conservatrice. Post-mastectomie : discutée si marges envahies ou facteurs de risque.';
 }
 
-// ============================================================================
-// RENDU — PATHOLOGIES
-// ============================================================================
-function renderPathologies(filter) {
-  filter = filter || '';
-  var html = '', found = false, sn = normalizeText(filter);
-  for (var k in DB.pathologies) {
-    if (!DB.pathologies.hasOwnProperty(k)) continue;
-    var p = DB.pathologies[k];
-    var nm = normalizeText(p.name), sm = normalizeText(p.subtitle), kwm = false;
-    if (p.keywords) for (var i=0;i<p.keywords.length;i++) if(normalizeText(p.keywords[i]).indexOf(sn)>=0){kwm=true;break;}
-    if (sn && nm.indexOf(sn)<0 && sm.indexOf(sn)<0 && !kwm) continue;
-    found = true;
-    var fn = (p.firstLine && p.firstLine.name) ? p.firstLine.name : 'Voir d\u00e9tail';
-    html += '<div class="abx-card theme-blue" data-type="pathology" data-key="'+escapeHtml(k)+'">'
-          + '<h3>'+escapeHtml(p.name)+' '+getPregBadge(p.pregnancy)+'</h3>'
-          + '<p>'+escapeHtml(p.subtitle)+'</p>'
-          + '<div class="abx-card-tag">1\u00e8re intention\u00a0: '+escapeHtml(fn)+'</div>'
-          + '</div>';
-  }
-  if (!found) { contentArea.innerHTML='<p class="abx-no-results">Aucun r\u00e9sultat.</p>'; return; }
-  contentArea.innerHTML='<div class="abx-grid">'+html+'</div>';
-  attachCardListeners();
+function getHormonoReason(rh, meno, age){
+  if(rh==='neg') return 'Non indiquée (RH négatifs).';
+  var r = 'Indiquée (RH+). ';
+  var isPost = (meno==='post'||(age&&age>=55));
+  if(isPost) r += 'Standard : Anti-aromatase 5 ans (patiente ménopausée). Durée étendue à 10 ans si haut risque.';
+  else r += 'Standard : Tamoxifène 5–10 ans. Discuter suppression ovarienne (LHRH) si haut risque (SOFT/TEXT).';
+  return r;
 }
 
-function showPathologyDetail(key) {
-  if (!DB.pathologies[key]) { contentArea.innerHTML='<p class="abx-no-results">Non trouv\u00e9.</p>'; return; }
-  var p = DB.pathologies[key];
-  var html = '<div class="abx-detail"><button class="abx-btn-back" id="btnBack">\u2190 Retour</button>'
-           + '<h2>'+escapeHtml(p.name)+'</h2><p class="abx-subtitle">'+escapeHtml(p.subtitle)+'</p>';
-
-  if (p.firstLine) {
-    var cid = 'cp-'+escapeHtml(key);
-    html += '<div class="abx-box info"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">'
-          + '<div style="flex-grow:1;min-width:200px;"><strong>Premi\u00e8re intention\u00a0:</strong><br>'
-          + '<span id="'+cid+'" style="font-weight:600;color:#1e40af;">'+escapeHtml(p.firstLine.name)+' \u2014 '+escapeHtml(p.firstLine.dose)+'</span><br>'
-          + (p.firstLine.note?'<small style="color:#555;">'+escapeHtml(p.firstLine.note)+'</small>':'')
-          + '</div><button onclick="copyToClipboard(\''+cid+'\')" class="abx-btn-copy">\ud83d\udccb Copier</button></div></div>';
-  }
-  if (p.alternatives && p.alternatives.length) {
-    html += '<h3>Alternatives\u00a0:</h3><ul>';
-    for (var i=0;i<p.alternatives.length;i++) {
-      var a=p.alternatives[i];
-      html += '<li>'+escapeHtml(a.name)+' \u2014 '+escapeHtml(a.dose)+(a.note?' <small>('+escapeHtml(a.note)+')</small>':'')+'</li>';
-    }
-    html += '</ul>';
-  }
-  // Stratégie séquentielle (M. genitalium) — avec encadré d'avertissement
-  if (p.strategy && p.strategy.length) {
-    html += '<h3>Strat\u00e9gie th\u00e9rapeutique s\u00e9quentielle\u00a0:</h3>'
-          + '<div class="protocol-note"><strong>\u26a0\ufe0f Important \u2014 IUSTI 2022\u00a0:</strong> '
-          + 'La doxycycline (\u00e9tape 1) r\u00e9duit la charge bact\u00e9rienne mais N\u2019\u00c9RADIQUE PAS M. genitalium (efficacit\u00e9 ~30\u00a0%). '
-          + 'Les deux \u00e9tapes sont obligatoires. Ne pas s\u2019arr\u00eater apr\u00e8s l\u2019\u00e9tape 1.</div>'
-          + '<ol>';
-    for (var j=0;j<p.strategy.length;j++) html+='<li>'+escapeHtml(p.strategy[j])+'</li>';
-    html += '</ol>';
-  }
-  if (p.ambulatory) {
-    html += '<h3>Traitement ambulatoire\u00a0:</h3><ul class="protocol-list">';
-    for (var k2=0;k2<p.ambulatory.regimen.length;k2++) html+='<li>'+escapeHtml(p.ambulatory.regimen[k2])+'</li>';
-    html += '</ul>'+(p.ambulatory.note?'<p><small>'+escapeHtml(p.ambulatory.note)+'</small></p>':'');
-  }
-  if (p.hospital) {
-    html += '<h3>Traitement hospitalier\u00a0:</h3><ul class="protocol-list">';
-    for (var l=0;l<p.hospital.regimen.length;l++) html+='<li>'+escapeHtml(p.hospital.regimen[l])+'</li>';
-    html += '</ul>';
-    if (p.hospital.relay) html += '<p><strong>Relais\u00a0:</strong> '+escapeHtml(p.hospital.relay)+'</p>';
-    if (p.hospital.indications && p.hospital.indications.length) {
-      html += '<p><strong>Indications d\u2019hospitalisation\u00a0:</strong></p><ul>';
-      for (var m=0;m<p.hospital.indications.length;m++) html+='<li>'+escapeHtml(p.hospital.indications[m])+'</li>';
-      html += '</ul>';
-    }
-    if (p.hospital.note) html += '<div class="protocol-note">'+escapeHtml(p.hospital.note)+'</div>';
-  }
-  if (p.phases && p.phases.length) {
-    html += '<h3>Strat\u00e9gie selon la phase\u00a0:</h3><table class="abx-table"><thead><tr><th>Phase</th><th>Traitement</th></tr></thead><tbody>';
-    for (var n=0;n<p.phases.length;n++) html+='<tr><td>'+escapeHtml(p.phases[n].title)+'</td><td>'+escapeHtml(p.phases[n].treat)+'</td></tr>';
-    html += '</tbody></table>';
-  }
-  if (p.lgv) {
-    html += '<h3>Lymphogranulomatose V\u00e9n\u00e9rienne (LGV)\u00a0:</h3>'
-          + '<p><strong>Traitement\u00a0:</strong> '+escapeHtml(p.lgv.treatment)+'</p>'
-          + (p.lgv.note?'<p><small>'+escapeHtml(p.lgv.note)+'</small></p>':'');
-  }
-  if (p.relay) html += '<div class="abx-box info"><strong>Relais\u00a0:</strong> '+escapeHtml(p.relay)+'</div>';
-  if (p.pregnancy) {
-    var gc = (p.pregnancy.indexOf('\u2705')>=0)?'success':(p.pregnancy.indexOf('\u26a0')>=0)?'warning':'danger';
-    html += '<div class="abx-box '+gc+'"><strong>Grossesse\u00a0:</strong> '+escapeHtml(p.pregnancy)+'</div>';
-  }
-  if (p.resistance) html += '<div class="resistance-alert"><strong>\u26a0\ufe0f R\u00e9sistances\u00a0:</strong> '+escapeHtml(p.resistance)+'</div>';
-  if (p.notes && p.notes.length) {
-    html += '<h3>Notes importantes\u00a0:</h3><ul>';
-    for (var o=0;o<p.notes.length;o++) html+='<li>'+escapeHtml(p.notes[o])+'</li>';
-    html += '</ul>';
-  }
-  html += '</div>';
-  contentArea.innerHTML = html;
-  var bb = document.getElementById('btnBack');
-  if (bb) bb.addEventListener('click', function(){ renderPathologies(); });
+/* ======================================================
+   RESET
+   ====================================================== */
+function csReset(){
+  g('cs-form').reset();
+  var o=g('cs-output');
+  o.style.display='none';
+  o.innerHTML='';
+  o.className='';
 }
+window.csReset = csReset;
 
-// ============================================================================
-// RENDU — ANTIBIOTIQUES
-// ============================================================================
-function renderAntibiotics(filter) {
-  filter = filter || '';
-  var html='', found=false, sn=normalizeText(filter);
-  for (var k in DB.antibiotics) {
-    if (!DB.antibiotics.hasOwnProperty(k)) continue;
-    var a=DB.antibiotics[k];
-    if (sn && normalizeText(a.name).indexOf(sn)<0 && normalizeText(a.class).indexOf(sn)<0) continue;
-    found=true;
-    html += '<div class="abx-card theme-green" data-type="antibiotic" data-key="'+escapeHtml(k)+'">'
-          + '<div class="abx-card-header"><span class="abx-card-class">'+escapeHtml(a.class)+'</span>'
-          + '<span class="abx-card-pregnancy-icon">'+getPregIcon(a.pregnancy)+'</span></div>'
-          + '<h3>'+escapeHtml(a.name)+'</h3><p>'+escapeHtml(a.forms)+'</p>'
-          + '</div>';
-  }
-  if (!found) { contentArea.innerHTML='<p class="abx-no-results">Aucun r\u00e9sultat.</p>'; return; }
-  contentArea.innerHTML='<div class="abx-grid">'+html+'</div>';
-  attachCardListeners();
-}
+/* ======================================================
+   ANALYSE PRINCIPALE
+   ====================================================== */
+function csAnalyze(){
+  var out = g('cs-output');
+  out.style.display='block';
+  out.className='cs-result';
+  out.innerHTML='<em style="font-size:12px;color:var(--cs-muted)">Analyse en cours…</em>';
 
-function showAntibioticDetail(key) {
-  if (!DB.antibiotics[key]) { contentArea.innerHTML='<p class="abx-no-results">Non trouv\u00e9.</p>'; return; }
-  var a=DB.antibiotics[key];
-  var pc=a.pregnancy==='safe'?'success':a.pregnancy==='caution'?'warning':'danger';
-  var html='<div class="abx-detail"><button class="abx-btn-back" id="btnBack">\u2190 Retour</button>'
-          +'<h2>'+escapeHtml(a.name)+'</h2><p class="abx-subtitle">'+escapeHtml(a.class)+'</p>';
-  if (a.spectrum && a.spectrum.length) {
-    html+='<div class="abx-box info"><h3>\ud83c\udfaf Spectre d\u2019action</h3><div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;">';
-    for (var i=0;i<a.spectrum.length;i++) html+='<span class="spectrum-badge">'+escapeHtml(a.spectrum[i])+'</span>';
-    html+='</div></div>';
-  }
-  html+='<div class="abx-box '+pc+'"><strong>Grossesse\u00a0:</strong> '+getPregBadge(a.pregnancy)+'</div>'
-      +'<h3>Formes disponibles\u00a0:</h3><p>'+escapeHtml(a.forms)+'</p>'
-      +'<h3>Indications principales\u00a0:</h3><ul>';
-  for (var j=0;j<a.indications.length;j++) html+='<li>'+escapeHtml(a.indications[j])+'</li>';
-  html+='</ul>';
-  if (a.notes && a.notes.length) {
-    html+='<h3>Notes importantes\u00a0:</h3><ul>';
-    for (var k2=0;k2<a.notes.length;k2++) html+='<li>'+escapeHtml(a.notes[k2])+'</li>';
-    html+='</ul>';
-  }
-  html+='</div>';
-  contentArea.innerHTML=html;
-  var bb=document.getElementById('btnBack');
-  if (bb) bb.addEventListener('click',function(){ renderAntibiotics(); });
-}
-
-// ============================================================================
-// RENDU — GROSSESSE (terminologie CRAT — plus FDA)
-// ============================================================================
-function renderPregnancy() {
-  var themeMap={ safe:'theme-green', caution:'theme-yellow', unsafe:'theme-red', info:'theme-blue' };
-  var html='<div class="abx-detail"><h2>Antibiotiques et Grossesse</h2>'
-          +'<p class="abx-subtitle">Recommandations CRAT 2024 — Terminologie officielle fran\u00e7aise</p>'
-          +'<div class="abx-box warning" style="margin-top:14px;">'
-          +'\u26a0\ufe0f La classification FDA (A/B/C/D/X) est abandonn\u00e9e depuis 2015. '
-          +'En France, la r\u00e9f\u00e9rence est le <strong>CRAT (Centre de R\u00e9f\u00e9rence sur les Agents T\u00e9ratog\u00e8nes)</strong> '
-          +'\u2014 <em>www.lecrat.fr</em>'
-          +'</div>'
-          +'<div class="abx-grid" style="margin-top:16px;">';
-  for (var i=0;i<DB.pregnancy.length;i++) {
-    var cat=DB.pregnancy[i];
-    var th=themeMap[cat.badge]||'theme-blue';
-    html+='<div class="abx-card '+th+'" style="cursor:default;"><h3>'+escapeHtml(cat.category)+'</h3><ul class="resistance-list">';
-    for (var j=0;j<cat.items.length;j++)
-      html+='<li><strong>'+escapeHtml(cat.items[j].name)+'</strong> \u2014 '+escapeHtml(cat.items[j].detail)+'</li>';
-    html+='</ul></div>';
-  }
-  html+='</div>'
-      +'<div class="abx-box info" style="margin-top:20px;">'
-      +'<strong>Principes g\u00e9n\u00e9raux CRAT\u00a0:</strong><ul>'
-      +'<li>Privil\u00e9gier les mol\u00e9cules avec le plus grand recul en grossesse</li>'
-      +'<li>Dose efficace minimale sur la dur\u00e9e n\u00e9cessaire</li>'
-      +'<li>Consulter le CRAT (www.lecrat.fr) en cas de doute</li>'
-      +'<li>Syphilis : d\u00e9sensibilisation obligatoire si allergie P\u00e9nicilline confirm\u00e9e</li>'
-      +'</ul></div></div>';
-  contentArea.innerHTML=html;
-}
-
-// ============================================================================
-// RENDU — RÉSISTANCES
-// ============================================================================
-function renderResistance() {
-  var sc={ success:'#166534', warning:'#854d0e', danger:'#991b1b' };
-  var gono=DB.resistance.gonococcus;
-  var rows='';
-  for (var i=0;i<gono.data.length;i++) {
-    var d=gono.data[i];
-    var bg=d.status==='success'?'#f0fdf4':d.status==='warning'?'#fefce8':'#fef2f2';
-    rows+='<tr style="background:'+bg+';">'
-        +'<td>'+escapeHtml(d.antibiotic)+(d.note?' <small style="color:#888;font-style:italic;">('+escapeHtml(d.note)+')</small>':'')+'</td>'
-        +'<td style="font-weight:600;color:'+sc[d.status]+';">'+escapeHtml(d.resistance)+'</td>'
-        +'<td>'+(d.status==='success'?'\u2705 Actif':d.status==='warning'?'\u26a0\ufe0f D\u00e9class\u00e9':'\u274c R\u00e9sistant')+'</td>'
-        +'</tr>';
-  }
-  var myco=DB.resistance.mycoplasmag, chla=DB.resistance.chlamydia;
-  var html='<div class="abx-detail"><h2>\ud83d\udcca R\u00e9sistances Bact\u00e9riennes</h2>'
-          +'<p class="abx-subtitle">Donn\u00e9es \u00e9pid\u00e9miologiques 2025 \u2014 France (ECDC, CNR Gono)</p>'
-          +'<h3>Neisseria gonorrhoeae \u2014 Situation CRITIQUE</h3>'
-          +'<div class="resistance-alert">'+escapeHtml(gono.mdr)+'</div>'
-          +'<table class="abx-table"><thead><tr><th>Antibiotique</th><th>R\u00e9sistance</th><th>Statut</th></tr></thead><tbody>'+rows+'</tbody></table>'
-          +'<h3 style="margin-top:20px;">Mesures recommand\u00e9es (ECDC/HAS 2024)</h3><ul>';
-  for (var j=0;j<gono.prevention.length;j++) html+='<li>'+escapeHtml(gono.prevention[j])+'</li>';
-  html+='</ul><h3 style="margin-top:24px;">Mycoplasma genitalium \u2014 '+escapeHtml(myco.status)+'</h3>'
-      +'<div class="protocol-note"><strong>Macrolides\u00a0:</strong> '+escapeHtml(myco.macrolides)+'<br>'
-      +'<strong>M\u00e9canisme\u00a0:</strong> '+escapeHtml(myco.mechanism)+'</div><ul>';
-  for (var k=0;k<myco.strategy.length;k++) html+='<li>'+escapeHtml(myco.strategy[k])+'</li>';
-  html+='</ul><h3 style="margin-top:24px;">Chlamydia trachomatis \u2014 '+escapeHtml(chla.status)+'</h3>'
-      +'<div class="abx-box success"><strong>R\u00e9sistance\u00a0:</strong> '+escapeHtml(chla.resistance)+'<br>'
-      +escapeHtml(chla.note)+'<br><small>'+escapeHtml(chla.failures)+'</small></div></div>';
-  contentArea.innerHTML=html;
-}
-
-// ============================================================================
-// LISTENERS + INIT
-// ============================================================================
-function attachCardListeners() {
-  var cards = document.querySelectorAll('.abx-card');
-  for (var i=0;i<cards.length;i++) {
-    (function(c){
-      c.addEventListener('click',function(){
-        var type=this.getAttribute('data-type'), key=this.getAttribute('data-key');
-        if (type==='pathology') showPathologyDetail(key);
-        else if (type==='antibiotic') showAntibioticDetail(key);
-      });
-    })(cards[i]);
-  }
-}
-
-function init() {
-  var skel = document.querySelector('.abx-skeleton-loader');
   setTimeout(function(){
-    if (skel) skel.style.display='none';
-    renderPathologies();
-  }, 300);
+    try{ _doAnalyze(out); }
+    catch(e){ out.innerHTML='<strong>Erreur :</strong> '+e.message; }
+  },80);
+}
+window.csAnalyze = csAnalyze;
 
-  if (searchInput) {
-    searchInput.addEventListener('input', function(){
-      if (searchTimeout) clearTimeout(searchTimeout);
-      var f=searchInput.value.trim();
-      if (searchClear) searchClear.style.display = f.length>0?'block':'none';
-      searchTimeout=setTimeout(function(){
-        if (currentMode==='pathology') renderPathologies(f);
-        else if (currentMode==='antibiotic') renderAntibiotics(f);
-      }, 200);
-    });
+function _doAnalyze(out){
+  var tRaw = gv('cs-t');
+  var n    = gv('cs-n');
+  var m    = gv('cs-m');
+  var pev  = gv('cs-pev');
+  var cas  = gv('cs-case');
+  var histo= gv('cs-histo');
+
+  if(!tRaw){ out.innerHTML='<strong style="color:var(--cs-danger)">Veuillez renseigner le stade T.</strong>'; return; }
+
+  var t = tRaw;
+  if(pev==='2'||pev==='3') t='T4';
+
+  var sex      = gv('cs-sex');
+  var age      = gi('cs-age');
+  var menoEl   = document.querySelector('input[name="cs-meno"]:checked');
+  var meno     = menoEl ? menoEl.value : 'unknown';
+  var operable = gv('cs-operable')==='yes';
+  var preg     = gv('cs-preg')==='yes';
+  var ps       = parseInt(gv('cs-ps'));
+  var rh       = gv('cs-rh');
+  var her2     = gv('cs-her2');
+  var grade    = gv('cs-grade');
+  var ki67     = gn('cs-ki67');
+  var size     = gn('cs-size');
+  var evl      = gv('cs-evl');
+  var brca     = gv('cs-brca');
+  var genomic  = gv('cs-genomic');
+  var margins  = gv('cs-margins');
+
+  var her2p    = isHer2Pos(her2);
+  var sub      = getMolecularSubtype(rh, her2, ki67, grade);
+  var isLuminal= (sub==='Luminal_A'||sub==='Luminal_B'||sub==='Luminal_HER2');
+  var isTNBC   = (sub==='TNBC');
+  var size_gt2 = (size && size>2);
+
+  /* ---- Résumé clinique ---- */
+  var html = '<h3>Résumé clinique</h3><div class="cs-summary-grid">';
+
+  var sexLabel = sex==='female'?'Femme':'Homme';
+  html += '<div class="cs-summary-item"><strong>Patient</strong><span>'+sexLabel+(age?' — '+age+' ans':'')+'</span></div>';
+
+  var tnmStr = t+' '+n+' '+m;
+  if(pev!=='0') tnmStr += ' (Pev'+pev+')';
+  html += '<div class="cs-summary-item"><strong>TNM</strong><span>'+tnmStr+'</span></div>';
+
+  html += '<div class="cs-summary-item"><strong>Biologie</strong><span>RH'+(rh==='pos'?'+':'-')+' / HER2 '+her2+(ki67!==null?' / Ki-67 '+ki67+'%':'')+'</span></div>';
+
+  var subtypeLabel = getSubtypeLabel(sub);
+  var subtypePill  = getSubtypePillClass(sub);
+  html += '<div class="cs-summary-item"><strong>Sous-type moléculaire</strong><span><span class="cs-subtype-pill '+subtypePill+'">'+subtypeLabel+'</span></span></div>';
+
+  if(histo==='in_situ') html += '<div class="cs-summary-item"><strong>Histologie</strong><span>In situ</span></div>';
+  if(histo==='cli') html += '<div class="cs-summary-item"><strong>Histologie</strong><span>CLI — Discuter chirurgie élargie</span></div>';
+  if(brca==='mut') html += '<div class="cs-summary-item"><strong>BRCA</strong><span style="color:var(--cs-danger);font-weight:700">Muté</span></div>';
+  if(evl==='yes') html += '<div class="cs-summary-item"><strong>EVL</strong><span style="color:var(--cs-warn)">Présents</span></div>';
+
+  html += '</div>'; // /summary-grid
+
+  /* ---- Alertes contextuelles ---- */
+  if(ps>=3){
+    html += '<div class="cs-thera-block cs-alert"><strong class="cs-step">Alerte – Performance Status</strong><p>PS '+ps+' : Évaluation oncogériatrique indispensable. Adaptation ou allègement thérapeutique à discuter en RCP.</p></div>';
+  }
+  if(preg){
+    html += '<div class="cs-thera-block cs-alert"><strong class="cs-step">Grossesse en cours</strong><p>Chimiothérapie : possible à partir du 2<sup>e</sup> trimestre (protocoles validés). Radiothérapie et hormonothérapie : <strong>contre-indiquées</strong> pendant la grossesse — différer en post-partum. Concertation avec obstétricien.</p></div>';
   }
 
-  if (searchClear) {
-    searchClear.addEventListener('click',function(){
-      if (searchInput){ searchInput.value=''; searchInput.focus(); }
-      searchClear.style.display='none';
-      if (searchTimeout) clearTimeout(searchTimeout);
-      if (currentMode==='pathology') renderPathologies('');
-      else if (currentMode==='antibiotic') renderAntibiotics('');
-    });
+  html += '<h3 style="margin-top:18px">Proposition thérapeutique (à valider en RCP)</h3>';
+
+  /* ---- Stade IV ---- */
+  if(m==='M1'){
+    html += '<div class="cs-thera-block"><strong class="cs-step">Stade IV métastatique</strong><p>Traitement systémique de première ligne selon sous-type. Pas de chirurgie première sauf urgence (fracture, compression). Avis oncologique urgent.</p></div>';
+    _appendCommon(html, n, t, rh, meno, age, evl, isTNBC, sub, operable, pev, histo, out, preg);
+    return;
   }
 
-  for (var i=0;i<tabs.length;i++) {
-    (function(tab){
-      tab.addEventListener('click',function(){
-        for (var j=0;j<tabs.length;j++){ tabs[j].classList.remove('active'); tabs[j].setAttribute('aria-selected','false'); }
-        this.classList.add('active'); this.setAttribute('aria-selected','true');
-        currentMode=this.getAttribute('data-mode');
-        if (searchInput){ searchInput.value=''; }
-        if (searchClear) searchClear.style.display='none';
-        var isStatic=(currentMode==='pregnancy'||currentMode==='resistance');
-        if (searchInput){
-          searchInput.disabled=isStatic;
-          searchInput.placeholder=isStatic?'Recherche d\u00e9sactiv\u00e9e pour cette section':'Rechercher une pathologie ou un antibiotique\u2026';
-          searchInput.style.backgroundColor=isStatic?'#f1f5f9':'';
-          searchInput.style.cursor=isStatic?'not-allowed':'';
-        }
-        if      (currentMode==='pathology')  renderPathologies();
-        else if (currentMode==='antibiotic') renderAntibiotics();
-        else if (currentMode==='pregnancy')  renderPregnancy();
-        else if (currentMode==='resistance') renderResistance();
-      });
-    })(tabs[i]);
+  /* ---- In situ ---- */
+  if(histo==='in_situ'){
+    html += '<div class="cs-thera-block"><strong class="cs-step">1. Chirurgie</strong><p>Tumorectomie (marges ≥2 mm) ou mastectomie selon taille/multifocalité. Pas de chimio sauf micro-invasion. Ganglion sentinelle si mastectomie ou tumeur ≥2 cm.</p></div>';
+    html += '<div class="cs-thera-block"><strong class="cs-step">2. Radiothérapie</strong><p>Systématique après traitement conservateur.</p></div>';
+    html += '<div class="cs-thera-block"><strong class="cs-step">3. Hormonothérapie</strong><p>'+getHormonoReason(rh, meno, age)+'</p></div>';
+    html += '<div class="cs-rcp-warn">Document d\'aide à la décision uniquement. Décision finale en RCP pluridisciplinaire.</div>';
+    out.innerHTML = html;
+    return;
   }
+
+  /* ---- Indications Néoadjuvant ---- */
+  var neo = false;
+  var reasNeo = [];
+  var isElderly = (age&&age>75&&isLuminal);
+
+  if(!isElderly){
+    if(t==='T3'||t==='T4') { neo=true; reasNeo.push('T3/T4 ou Pev'); }
+    if(n==='N2'||n==='N3') { neo=true; reasNeo.push('N2-N3'); }
+    if(her2p && !(isT1ab(t) && n==='N0')) { neo=true; reasNeo.push('HER2+'); }
+    if(isTNBC && !(isT1ab(t) && n==='N0')) { neo=true; reasNeo.push('TNBC ≥T1c'); }
+    if((grade==='3'||(ki67!==null&&ki67>=20)) && size_gt2) { neo=true; reasNeo.push('Grade 3 / Ki-67 ≥20% + taille'); }
+    if(cas==='squirrhe') { neo=true; reasNeo.push('Squirrhe ulcéré'); }
+  }
+
+  if(neo){
+    html += '<div class="cs-thera-block cs-neo"><strong class="cs-step">1. Chimiothérapie néoadjuvante puis Chirurgie</strong>';
+    html += '<p>Indication(s) : '+reasNeo.join(', ')+'.</p>';
+    html += '<ul class="cs-targeted-list">';
+    if(isTNBC) html += '<li>Protocole : AC-T (anthracyclines-taxanes). Ajouter <strong>Pembrolizumab</strong> si PD-L1+ (KEYNOTE-522 — stade II-III).</li>';
+    if(her2p && !isTNBC) html += '<li>Protocole : AC-T + <strong>Trastuzumab + Pertuzumab</strong> (double blocage HER2 — NEOSPHERE/TRYPHAENA). Évaluation réponse pathologique (pCR).</li>';
+    if(sub==='Luminal_HER2') html += '<li>Luminal HER2+ : double blocage HER2 + hormonothérapie concomitante à discuter selon âge/méno.</li>';
+    if(!isTNBC && !her2p) html += '<li>Protocole luminal : EC-T ou TAC selon grade/Ki-67.</li>';
+    html += '<li>Bilan d\'extension complet avant traitement.</li>';
+    html += '</ul>';
+
+    /* Post-CNA residuel */
+    html += '<p style="margin-top:8px;font-size:12px"><strong>Post-chimiothérapie néoadjuvante — selon résidu tumoral (ypT, ypN) :</strong></p>';
+    html += '<ul class="cs-targeted-list">';
+    if(isTNBC) html += '<li>Résidu invasif (non-pCR) : Capécitabine adjuvante 8 cycles (CREATE-X).</li>';
+    if(her2p) html += '<li>Résidu HER2+ (non-pCR) : <strong>T-DM1</strong> (trastuzumab emtansine) 14 cycles (KATHERINE).</li>';
+    html += '</ul></div>';
+  } else {
+    /* Chirurgie première */
+    html += '<div class="cs-thera-block"><strong class="cs-step">1. Chirurgie première</strong>';
+    var chirDetails = 'Tumorectomie (si rapport sein/tumeur favorable) ou mastectomie.';
+    if(cas==='bilateral') chirDetails += ' Discuter mastectomie bilatérale.';
+    if(cas==='paget') chirDetails += ' Exérèse de la PAM systématique.';
+    if(histo==='cli') chirDetails += ' CLI : mastectomie à discuter (multifocalité fréquente).';
+    if(margins==='pos') chirDetails += ' <strong style="color:var(--cs-danger)">Reprise chirurgicale indiquée (marges R1).</strong>';
+    if(margins==='close') chirDetails += ' Marges proches : discuter reprise selon localisation.';
+    html += '<p>'+chirDetails+'</p></div>';
+
+    /* Chimio adjuvante */
+    var reasAdj = [];
+    var adjDec = 'non_formelle';
+    var adjNote = '';
+
+    if(isLuminal && genomic!=='none'){
+      adjDec = (genomic==='high') ? 'indiquee' : 'non_indiquee';
+      adjNote = 'Score génomique : '+(genomic==='high'?'haut risque → chimio recommandée':'bas risque → abstention chimiothérapeutique (preuves niveau 1)');
+    } else {
+      if(n!=='N0'&&n!=='N1mi') reasAdj.push('N+');
+      if(t==='T3'||t==='T4') reasAdj.push('T3-T4');
+      if(grade==='3') reasAdj.push('Grade 3');
+      if(her2p) reasAdj.push('HER2+');
+      if(isTNBC) reasAdj.push('TNBC');
+      if(ki67!==null&&ki67>=20) reasAdj.push('Ki-67 ≥20%');
+      if(evl==='yes') reasAdj.push('EVL+');
+
+      if(reasAdj.length>0){ adjDec='indiquee'; }
+      else if(t==='T2'&&isLuminal){ adjDec='discuter'; adjNote='Zone grise T2 N0 luminal : envisager test génomique (Oncotype DX / MammaPrint).'; }
+    }
+
+    if(adjDec==='indiquee'){
+      html += '<div class="cs-thera-block cs-adjuvant"><strong class="cs-step">2. Chimiothérapie adjuvante — <span style="color:var(--cs-ok)">Indiquée</span></strong>';
+      html += '<p>Indication(s) : '+reasAdj.join(', ')+(adjNote?' ('+adjNote+')':'')+'.</p>';
+      html += '<ul class="cs-targeted-list">';
+      if(her2p) html += '<li>+ <strong>Trastuzumab 1 an</strong> ± Pertuzumab si N+ (APHINITY).</li>';
+      if(isTNBC && brca==='mut') html += '<li>BRCA muté : discuter <strong>Olaparib</strong> adjuvant 1 an (OlympiA).</li>';
+      if(sub==='Luminal_B' && (n==='N1'||n==='N2'||n==='N3')) html += '<li>Luminal B N+ : discuter <strong>Abémaciclib</strong> adjuvant 2 ans (monarchE) si ≥4 GG ou 1-3 GG + Grade 3 / Ki-67 ≥20%.</li>';
+      html += '</ul></div>';
+    } else if(adjDec==='non_indiquee'){
+      html += '<div class="cs-thera-block"><strong class="cs-step">2. Chimiothérapie adjuvante — <span style="color:var(--cs-ok)">Non indiquée</span></strong>';
+      if(adjNote) html += '<p>'+adjNote+'</p>';
+      html += '</div>';
+    } else {
+      html += '<div class="cs-thera-block"><strong class="cs-step">2. Chimiothérapie adjuvante — À discuter</strong>';
+      if(adjNote) html += '<p>'+adjNote+'</p>';
+      html += '</div>';
+    }
+  }
+
+  _appendCommon(html, n, t, rh, meno, age, evl, isTNBC, sub, operable, pev, histo, out, preg, her2p, brca);
 }
 
-// Compatible Elementor (DOMContentLoaded éventuellement déjà passé)
-if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
-else init();
+function _appendCommon(html, n, t, rh, meno, age, evl, isTNBC, sub, operable, pev, histo, out, preg, her2p, brca){
+  var txtRadio   = getRadioReason(n, t, operable, sub, age, pev, histo==='in_situ'?'in_situ':'standard', evl);
+  var txtHormono = getHormonoReason(rh, meno, age);
+
+  html += '<div class="cs-thera-block"><strong class="cs-step">Radiothérapie</strong><p>'+txtRadio+'</p></div>';
+  html += '<div class="cs-thera-block"><strong class="cs-step">Hormonothérapie</strong><p>'+txtHormono;
+  if(rh==='pos' && (sub==='Luminal_B') && (n==='N1'||n==='N2'||n==='N3') && !her2p){
+    html += '<br><span style="font-size:11px;color:var(--cs-muted)">Luminal B N+ : discuter extension 10 ans et CDK4/6 inhibiteur (monarchE).</span>';
+  }
+  html += '</p></div>';
+
+  if(brca==='mut'){
+    html += '<div class="cs-thera-block"><strong class="cs-step">Prédisposition BRCA <span class="cs-badge-new">NOUVEAU</span></strong>';
+    html += '<ul class="cs-targeted-list">';
+    html += '<li>Conseil génétique et information famille au 1er degré.</li>';
+    html += '<li>Discuter mastectomie controlatérale prophylactique selon statut et âge.</li>';
+    if(isTNBC) html += '<li>TNBC BRCA muté : Olaparib adjuvant éligible (OlympiA).</li>';
+    html += '</ul></div>';
+  }
+
+  html += '<div class="cs-rcp-warn">Outil d\'aide à la décision — Référentiels INCa / ESO-ESMO / SOR 2023-2024. Ne se substitue pas à la décision collégiale en RCP. Responsabilité du clinicien.</div>';
+
+  out.innerHTML = html;
+}
+
+/* ======================================================
+   GESTION MODAL
+   ====================================================== */
+function csOpenModal(){
+  var t=gv('cs-t'), n=gv('cs-n'), m=gv('cs-m'), age=gv('cs-age');
+  if(!t||!n||!m||!age){
+    alert('Renseignez au minimum Âge, T, N et M avant de générer le rapport.');
+    return;
+  }
+  // Pré-remplir praticien
+  var prat = gv('cs-practitioner').trim();
+  var mPrat = g('csm-praticien');
+  if(prat && mPrat && !mPrat.value.trim()) mPrat.value = prat;
+
+  csMdClearErrors();
+  g('cs-modal-identite').classList.add('cs-active');
+  setTimeout(function(){ g('csm-nom')&&g('csm-nom').focus(); },200);
+}
+window.csOpenModal = csOpenModal;
+
+function csMdClose(){
+  g('cs-modal-identite').classList.remove('cs-active');
+  csMdClearErrors();
+}
+window.csMdClose = csMdClose;
+
+function csMdClearErrors(){
+  ['csm-nom','csm-prenom','csm-praticien'].forEach(function(id){
+    var el=g(id); if(el) el.classList.remove('cs-input-error');
+  });
+  ['csm-err-nom','csm-err-prenom','csm-err-prat'].forEach(function(id){
+    var el=g(id); if(el) el.classList.remove('cs-visible');
+  });
+}
+
+function csMdValider(){
+  var nom     = g('csm-nom').value.trim();
+  var prenom  = g('csm-prenom').value.trim();
+  var prat    = g('csm-praticien').value.trim();
+  var valid   = true;
+  csMdClearErrors();
+
+  if(!nom){   g('csm-nom').classList.add('cs-input-error');   g('csm-err-nom').classList.add('cs-visible');  valid=false; }
+  if(!prenom){g('csm-prenom').classList.add('cs-input-error');g('csm-err-prenom').classList.add('cs-visible');valid=false; }
+  if(!prat){  g('csm-praticien').classList.add('cs-input-error');g('csm-err-prat').classList.add('cs-visible');valid=false; }
+
+  if(!valid) return;
+
+  g('cs-practitioner').value = prat;
+  csMdClose();
+
+  csGenerateA5({
+    nomPatiente:esc(nom),
+    prenomPatiente:esc(prenom),
+    ddnPatiente:esc(g('csm-ddn').value.trim()),
+    refDossier:esc(g('csm-ref').value.trim()),
+    praticien:esc(prat)
+  });
+}
+window.csMdValider = csMdValider;
+
+// Fermeture overlay + Escape
+g('cs-modal-identite').addEventListener('click', function(e){ if(e.target===this) csMdClose(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') csMdClose(); });
+
+/* ======================================================
+   GÉNÉRATION RAPPORT A5
+   ====================================================== */
+function csGenerateA5(id){
+  try{
+    var tRaw  = gv('cs-t');
+    var pev   = gv('cs-pev');
+    var t     = (pev==='2'||pev==='3') ? 'T4' : tRaw;
+    var n     = gv('cs-n');
+    var m     = gv('cs-m');
+    var rh    = gv('cs-rh');
+    var her2  = gv('cs-her2');
+    var grade = gv('cs-grade');
+    var ki67  = gn('cs-ki67');
+    var size  = gn('cs-size');
+    var age   = gi('cs-age');
+    var sex   = gv('cs-sex');
+    var evl   = gv('cs-evl');
+    var brca  = gv('cs-brca');
+    var genomic  = gv('cs-genomic');
+    var margins  = gv('cs-margins');
+    var histo    = gv('cs-histo');
+    var cas      = gv('cs-case');
+    var casText  = g('cs-case').options[g('cs-case').selectedIndex].text;
+    var menoEl   = document.querySelector('input[name="cs-meno"]:checked');
+    var meno     = menoEl ? menoEl.value : 'unknown';
+    var menoText = menoEl ? (menoEl.value==='pre'?'Pré-ménopausée':(menoEl.value==='post'?'Post-ménopausée':'Indéterminé')) : 'Indéterminé';
+    var operable = gv('cs-operable')==='yes';
+    var preg     = gv('cs-preg')==='yes';
+    var her2p    = isHer2Pos(her2);
+    var sub      = getMolecularSubtype(rh, her2, ki67, grade);
+    var isTNBC   = (sub==='TNBC');
+    var isLuminal= (sub==='Luminal_A'||sub==='Luminal_B'||sub==='Luminal_HER2');
+    var size_gt2 = (size&&size>2);
+
+    var txtRadio   = getRadioReason(n, t, operable, sub, age, pev, histo==='in_situ'?'in_situ':'standard', evl);
+    var txtHormono = getHormonoReason(rh, meno, age);
+
+    /* Stratégie simplifiée pour le rapport */
+    var neo = false; var reasNeo = [];
+    var isElderly = (age&&age>75&&isLuminal);
+    if(!isElderly && histo!=='in_situ' && m!=='M1'){
+      if(t==='T3'||t==='T4'){neo=true;reasNeo.push('T3/T4');}
+      if(n==='N2'||n==='N3'){neo=true;reasNeo.push('N2-N3');}
+      if(her2p&&!(isT1ab(t)&&n==='N0')){neo=true;reasNeo.push('HER2+');}
+      if(isTNBC&&!(isT1ab(t)&&n==='N0')){neo=true;reasNeo.push('TNBC');}
+      if((grade==='3'||(ki67!==null&&ki67>=20))&&size_gt2){neo=true;reasNeo.push('Grade 3 / Ki-67');}
+    }
+
+    var dateStr = new Date().toLocaleDateString('fr-FR');
+
+    /* --- Contenu rapport --- */
+    var c = '<!doctype html><html lang="fr"><head><meta charset="utf-8">';
+    c += '<title>Rapport – '+id.nomPatiente+' '+id.prenomPatiente+'</title>';
+    c += '<style>';
+    c += '@page{size:A5 portrait;margin:14mm}';
+    c += 'body{font-family:Arial,sans-serif;font-size:11.5px;color:#1a2030;margin:0;padding:0}';
+    c += 'h1{font-size:14px;margin:0;color:#1a3a6b}';
+    c += '.meta{font-size:10.5px;color:#5a6478;margin-top:3px}';
+    c += '.header{border-bottom:3px solid #c8a951;padding-bottom:8px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}';
+    c += '.logo{width:42px;height:42px;object-fit:contain;flex-shrink:0}';
+    c += 'h2{font-size:11px;color:#1a3a6b;border-bottom:1px solid #d8dfe8;padding-bottom:2px;margin:10px 0 5px;text-transform:uppercase;letter-spacing:0.4px}';
+    c += '.kv{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:4px}';
+    c += '.kv span{font-size:11px}';
+    c += '.bloc-patient{background:#f0f4fb;border:1px solid #c6d8f5;border-radius:5px;padding:8px 11px;margin-bottom:8px}';
+    c += '.patient-name{font-size:15px;font-weight:700;color:#1a2030;margin-bottom:4px}';
+    c += 'table{width:100%;border-collapse:collapse;margin:5px 0 8px}';
+    c += 'td,th{padding:4px 7px;border:1px solid #e0e5ef;font-size:10.5px}';
+    c += 'th{background:#f0f4fb;font-weight:700;color:#1a3a6b}';
+    c += '.decision{background:#f9f7e8;border-left:3px solid #c8a951;padding:6px 9px;margin:5px 0;font-size:11px}';
+    c += '.targeted{margin:4px 0 0;padding:0 0 0 14px;font-size:10.5px}';
+    c += '.targeted li{margin-bottom:2px}';
+    c += '.warn{background:#fff8f8;border-left:3px solid #b0322a;padding:5px 8px;font-size:10.5px;margin-top:6px}';
+    c += '.footer-note{margin-top:12px;font-size:9.5px;color:#888;border-top:1px dotted #ccc;padding-top:4px}';
+    c += '.footer-bar{position:fixed;bottom:10mm;left:14mm;right:14mm;font-size:9.5px;color:#888;border-top:1px solid #eee;padding-top:3px;display:flex;justify-content:space-between}';
+    c += '</style></head><body>';
+
+    /* EN-TÊTE */
+    c += '<div class="header">';
+    /* Logo en base64 fallback blanc si externe indisponible */
+    c += '<img src="https://www.dr-karazaitri-ma.net/wp-content/uploads/2025/06/Logo.jpg" alt="" class="logo" onerror="this.style.display=\'none\'">';
+    c += '<div><h1>Compte rendu – Aide à la Décision</h1>';
+    c += '<div class="meta">Cancer du sein &nbsp;&bull;&nbsp; '+dateStr+'</div>';
+    c += '<div class="meta" style="color:#1a3a6b;font-weight:700">'+id.praticien+'</div></div>';
+    c += '</div>';
+
+    /* IDENTITÉ PATIENTE */
+    c += '<div class="bloc-patient">';
+    c += '<div class="patient-name">'+id.nomPatiente+' '+id.prenomPatiente+'</div>';
+    c += '<div class="kv">';
+    if(id.ddnPatiente) c += '<span><strong>DDN :</strong> '+id.ddnPatiente+'</span>';
+    if(id.refDossier)  c += '<span><strong>N° dossier :</strong> '+id.refDossier+'</span>';
+    c += '<span><strong>Sexe :</strong> '+sex+'</span>';
+    c += '<span><strong>Âge :</strong> '+(age||'–')+' ans</span>';
+    c += '<span><strong>Méno :</strong> '+menoText+'</span>';
+    c += '<span><strong>Grossesse :</strong> '+(preg?'<strong style="color:#b0322a">OUI</strong>':'Non')+'</span>';
+    c += '<span><strong>Opérable :</strong> '+(operable?'Oui':'Non / Borderline')+'</span>';
+    c += '</div></div>';
+
+    /* CLASSIFICATION */
+    c += '<h2>Classification TNM'+(cas!=='standard'?' — '+casText:'')+'</h2>';
+    c += '<table><tr><th>T</th><th>N</th><th>M</th><th>PEV</th><th>Taille</th><th>Ki-67</th><th>EVL</th></tr>';
+    c += '<tr><td>'+t+'</td><td>'+n+'</td><td>'+m+'</td><td>'+pev+'</td>';
+    c += '<td>'+(size!==null?size+' cm':'–')+'</td>';
+    c += '<td>'+(ki67!==null?ki67+'%':'–')+'</td>';
+    c += '<td>'+(evl==='yes'?'<strong>Présents</strong>':'–')+'</td></tr></table>';
+
+    /* BIOLOGIE */
+    c += '<h2>Biologie tumorale</h2>';
+    c += '<div class="kv">';
+    c += '<span><strong>RH :</strong> '+(rh==='pos'?'Positifs (+)':'Négatifs (–)')+'</span>';
+    c += '<span><strong>HER2 :</strong> '+her2+'</span>';
+    c += '<span><strong>Grade :</strong> '+(grade||'–')+'</span>';
+    c += '<span><strong>BRCA :</strong> '+(brca==='mut'?'<strong style="color:#b0322a">Muté</strong>':(brca==='wt'?'Sauvage':'Inconnu'))+'</span>';
+    c += '<span><strong>Sous-type :</strong> '+getSubtypeLabel(sub)+'</span>';
+    if(genomic!=='none') c += '<span><strong>Génomique :</strong> '+(genomic==='high'?'Haut risque':'Bas risque')+'</span>';
+    if(margins!=='na') c += '<span><strong>Marges :</strong> '+g('cs-margins').options[g('cs-margins').selectedIndex].text+'</span>';
+    c += '</div>';
+
+    /* PROPOSITION */
+    c += '<h2>Proposition Thérapeutique</h2>';
+
+    if(m==='M1'){
+      c += '<div class="decision"><strong>Stade IV métastatique</strong> — Traitement systémique première ligne. Avis oncologique.</div>';
+    } else if(histo==='in_situ'){
+      c += '<div class="decision">In situ : Chirurgie conservatrice ou mastectomie. RT si conservateur. Hormonothérapie si RH+.</div>';
+    } else if(neo){
+      c += '<div class="decision"><strong>Chimiothérapie néoadjuvante</strong> puis Chirurgie ('+reasNeo.join(', ')+')</div>';
+      c += '<ul class="targeted">';
+      if(isTNBC) c += '<li>Protocole AC-T ± Pembrolizumab (KEYNOTE-522 si PD-L1+)</li>';
+      if(her2p)  c += '<li>Trastuzumab + Pertuzumab (double blocage HER2)</li>';
+      if(isTNBC) c += '<li>Résidu invasif : Capécitabine adjuvante (CREATE-X)</li>';
+      if(her2p)  c += '<li>Résidu HER2+ : T-DM1 (KATHERINE)</li>';
+      c += '</ul>';
+    } else {
+      c += '<div class="decision"><strong>Chirurgie première</strong> puis traitement adjuvant selon facteurs de risque</div>';
+      if(her2p) c += '<ul class="targeted"><li>Trastuzumab 1 an ± Pertuzumab si N+ (APHINITY)</li></ul>';
+      if(sub==='Luminal_B'&&(n==='N1'||n==='N2'||n==='N3')) c += '<ul class="targeted"><li>Discuter Abémaciclib adjuvant 2 ans (monarchE)</li></ul>';
+      if(brca==='mut'&&isTNBC) c += '<ul class="targeted"><li>Olaparib adjuvant éligible (OlympiA)</li></ul>';
+    }
+
+    c += '<div class="kv" style="margin-top:8px">';
+    c += '<span style="width:100%"><strong>Radiothérapie :</strong> '+txtRadio+'</span>';
+    c += '<span style="width:100%"><strong>Hormonothérapie :</strong> '+txtHormono+'</span>';
+    c += '</div>';
+
+    if(preg){
+      c += '<div class="warn"><strong>Grossesse :</strong> RT et hormonothérapie différées en post-partum. Chimio possible à partir du 2e trimestre.</div>';
+    }
+
+    /* NOTE MÉDICO-LÉGALE */
+    c += '<div class="footer-note">Outil d\'aide à la décision clinique — Réf. INCa / ESO-ESMO / SOR 2023-2024. Ce document ne se substitue pas à la décision collégiale en Réunion de Concertation Pluridisciplinaire (RCP). Décision finale sous la responsabilité du praticien.</div>';
+
+    /* PIED DE PAGE */
+    c += '<div class="footer-bar">';
+    c += '<span>'+id.praticien+'</span>';
+    c += '<span>'+id.nomPatiente+' '+id.prenomPatiente+' | '+dateStr+'</span>';
+    c += '</div>';
+
+    c += '</body></html>';
+
+    var w = window.open('','_blank');
+    if(!w){
+      alert('Le navigateur a bloqué l\'ouverture du rapport. Autorisez les pop-ups pour ce site.');
+      return;
+    }
+    w.document.write(c);
+    w.document.close();
+    w.onload = function(){ w.focus(); w.print(); };
+
+  } catch(e){ alert('Erreur rapport : '+e.message); }
+}
+window.csGenerateA5 = csGenerateA5;
 
 })();
 </script>
+</body>
+</html>
