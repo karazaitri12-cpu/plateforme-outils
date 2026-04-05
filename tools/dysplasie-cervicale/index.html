@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outil Décisionnel : Dysplasie Cervicale</title>
+</head>
+<body>
+
+<div class="dct-isolated">
+<style>
+/* ===================================
+   ISOLATION TOTALE POUR WORDPRESS
+   =================================== */
+.dct-isolated {
+    all: initial;
+    display: block;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.5;
+    color: #333;
+}
+
+.dct-isolated *, .dct-isolated *::before, .dct-isolated *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===================================
+   VARIABLES CSS
+   =================================== */
+.dct-isolated {
+    --primary: #2980b9;
+    --hpv: #6f42c1;
+    --bg: #f4f7f6;
+    --error: #e74c3c;
+    --warning: #d35400;
+    --success: #27ae60;
+    --text: #333;
+    --text-light: #7f8c8d;
+    --border: #ddd;
+    --white: #ffffff;
+}
+
+/* ===================================
+   LAYOUT PRINCIPAL
+   =================================== */
+.dct-isolated .dct-container {
+    max-width: 900px;
+    margin: 20px auto;
+    background: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.dct-isolated .dct-title {
+    color: #2c3e50;
+    text-align: center;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+/* ===================================
+   DISCLAIMER MÉDICO-LÉGAL RENFORCÉ
+   =================================== */
+.dct-isolated .dct-legal {
+    margin: 20px 0;
+    padding: 14px 16px;
+    background: #FFFBEB;
+    border-left: 4px solid #D69E2E;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #744210;
+    line-height: 1.6;
+}
+
+.dct-isolated .dct-legal strong {
+    color: #975A16;
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+/* ===================================
+   SWITCH HPV
+   =================================== */
+.dct-isolated .dct-mode-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ebf2f7;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.dct-isolated .dct-switch-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05em;
+}
+
+.dct-isolated .dct-switch {
+    position: relative;
+    display: inline-block;
+    width: 54px;
+    height: 28px;
+}
+
+.dct-isolated .dct-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.dct-isolated .dct-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.dct-isolated .dct-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px; width: 20px;
+    left: 4px; bottom: 4px;
+    background-color: var(--white);
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.dct-isolated .dct-switch input:checked + .dct-slider {
+    background-color: var(--hpv);
+}
+
+.dct-isolated .dct-switch input:checked + .dct-slider:before {
+    transform: translateX(26px);
+}
+
+/* Focus accessible pour le switch */
+.dct-isolated .dct-switch input:focus + .dct-slider {
+    box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.3);
+}
+
+/* ===================================
+   FORMULAIRE
+   =================================== */
+.dct-isolated .dct-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 20px;
+}
+
+.dct-isolated .dct-field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.dct-isolated .dct-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--primary);
+    font-size: 0.95em;
+}
+
+.dct-isolated .dct-label-required::after {
+    content: " *";
+    color: var(--error);
+}
+
+.dct-isolated .dct-select {
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: var(--white);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.dct-isolated .dct-select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.dct-isolated .dct-select:disabled {
+    background-color: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+    border-color: #eee;
+}
+
+/* Validation visuelle */
+.dct-isolated .dct-select.is-error {
+    border-color: var(--error);
+    background-color: #fef2f2;
+}
+
+.dct-isolated .dct-error-msg {
+    color: var(--error);
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+
+.dct-isolated .dct-error-msg.visible {
+    display: block;
+}
+
+/* ===================================
+   BOÎTE DE RÉSULTATS
+   =================================== */
+.dct-isolated .dct-result-box {
+    margin-top: 35px;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+}
+
+.dct-isolated .dct-result-box.dct-active {
+    display: block !important;
+}
+
+.dct-isolated .dct-result-normal { 
+    background-color: #e8f6f3; 
+    border-left: 8px solid var(--success); 
+}
+
+.dct-isolated .dct-result-warning { 
+    background-color: #fff5e6; 
+    border-left: 8px solid var(--warning); 
+}
+
+.dct-isolated .dct-result-danger { 
+    background-color: #fdedec; 
+    border-left: 8px solid var(--error); 
+}
+
+.dct-isolated .dct-hpv-text { 
+    font-weight: 700; 
+    color: var(--hpv); 
+}
+
+/* ===================================
+   ACTIONS & FOOTER
+   =================================== */
+.dct-isolated .dct-actions {
+    display: none; 
+    margin-top: 20px; 
+    gap: 12px; 
+    flex-wrap: wrap;
+}
+
+.dct-isolated .dct-actions.dct-active { 
+    display: flex !important; 
+}
+
+.dct-isolated .dct-btn {
+    padding: 12px 24px; 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 15px; 
+    font-weight: 600;
+    cursor: pointer; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px;
+    transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.dct-isolated .dct-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dct-isolated .dct-btn:active {
+    transform: translateY(0);
+}
+
+.dct-isolated .dct-btn-primary { 
+    background-color: var(--primary); 
+    color: white; 
+}
+
+.dct-isolated .dct-btn-success { 
+    background-color: var(--success); 
+    color: white; 
+}
+
+.dct-isolated .dct-copy-zone {
+    display: none; 
+    margin-top: 20px; 
+    padding: 20px; 
+    background-color: #f8f9fa; 
+    border: 2px dashed var(--border); 
+    border-radius: 8px;
+}
+
+.dct-isolated .dct-copy-zone.dct-active { 
+    display: block !important; 
+}
+
+.dct-isolated .dct-copy-content {
+    background-color: white; 
+    padding: 15px; 
+    border-radius: 6px; 
+    border: 1px solid var(--border);
+    font-family: 'Courier New', monospace; 
+    font-size: 13px; 
+    white-space: pre-wrap;
+    color: var(--text);
+}
+
+.dct-isolated .dct-footer {
+    margin-top: 40px; 
+    font-size: 0.9em; 
+    color: var(--text-light); 
+    border-top: 1px solid #eee; 
+    padding-top: 20px;
+    line-height: 1.6;
+}
+
+/* ===================================
+   TOAST NOTIFICATION
+   =================================== */
+.dct-isolated .dct-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #2D3748;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 99999;
+    pointer-events: none;
+}
+
+.dct-isolated .dct-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===================================
+   ANTI-SCROLLBAR — Style App native
+   =================================== */
+html { scrollbar-width: none !important; }
+body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+
+/* ===================================
+   STYLES D'IMPRESSION
+   =================================== */
+@media print {
+    .dct-isolated .dct-mode-selector,
+    .dct-isolated .dct-actions,
+    .dct-isolated .dct-copy-zone,
+    .dct-isolated .dct-toast {
+        display: none !important;
+    }
+    .dct-isolated .dct-container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        max-width: 100%;
+    }
+    .dct-isolated .dct-result-box {
+        border: 1px solid #ddd !important;
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    @page {
+        size: A4 portrait;
+        margin: 15mm;
+    }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+@media (max-width: 768px) {
+    .dct-isolated .dct-container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .dct-isolated .dct-title {
+        font-size: 1.4em;
+    }
+    
+    .dct-isolated .dct-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dct-isolated .dct-mode-selector {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dct-isolated *, .dct-isolated *::before, .dct-isolated *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="dct-isolated">
+    <main class="dct-container">
+        <h1 class="dct-title">Aide à la Décision : Dysplasie Cervicale</h1>
+
+        <!-- DISCLAIMER MÉDICO-LÉGAL -->
+        <div class="dct-legal">
+            <strong>⚠️ Avertissement médico-légal</strong>
+            <p>Cet outil est destiné à un usage professionnel. Les recommandations sont basées sur les guidelines INCa / HAS 2024 et doivent être adaptées au contexte clinique individuel.</p>
+            <p style="margin-top:8px"><strong>Source :</strong> Recommandations INCa — Prise en charge des lésions précancéreuses du col utérin (2024)</p>
+        </div>
+
+        <!-- SWITCH HPV -->
+        <div class="dct-mode-selector">
+            <label class="dct-switch-container" for="dct-hpv-toggle">
+                <span id="dct-hpv-label">Disponibilité du Test <span class="dct-hpv-text">HPV</span></span>
+                <div class="dct-switch">
+                    <input type="checkbox" id="dct-hpv-toggle" checked aria-label="Activer/désactiver le test HPV">
+                    <span class="dct-slider"></span>
+                </div>
+            </label>
+        </div>
+
+        <form id="dct-main-form" novalidate>
+            <div class="dct-grid">
+                <div class="dct-field-group">
+                    <label class="dct-label dct-label-required" for="dct-grade">Histologie (Biopsie) *</label>
+                    <select id="dct-grade" class="dct-select" required aria-required="true">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="cin1">CIN 1 (Bas grade)</option>
+                        <option value="cin2">CIN 2 (Haut grade)</option>
+                        <option value="cin3">CIN 3 (Haut grade / CIS)</option>
+                        <option value="micro">Carcinome micro-invasif</option>
+                    </select>
+                    <div class="dct-error-msg" id="dct-grade-error">Ce champ est requis</div>
+                </div>
+
+                <div class="dct-field-group">
+                    <label class="dct-label" for="dct-p16">Marquage p16 (Arbitre CIN 2)</label>
+                    <select id="dct-p16" class="dct-select" disabled aria-disabled="true">
+                        <option value="oui">Positif (Vrai HSIL)</option>
+                        <option value="non">Négatif (Assimilé LSIL)</option>
+                    </select>
+                </div>
+
+                <div class="dct-field-group">
+                    <label class="dct-label" for="dct-hpv-type">Génotype HPV</label>
+                    <select id="dct-hpv-type" class="dct-select" aria-describedby="dct-hpv-hint">
+                        <option value="autre">Autres HPV-HR</option>
+                        <option value="1618">HPV 16 ou 18 (Haut Risque +)</option>
+                    </select>
+                    <div id="dct-hpv-hint" style="font-size:12px;color:#7f8c8d;margin-top:4px;">Sélectionner si test HPV disponible</div>
+                </div>
+
+                <div class="dct-field-group">
+                    <label class="dct-label dct-label-required" for="dct-colpo">Colposcopie *</label>
+                    <select id="dct-colpo" class="dct-select" required aria-required="true">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="sat">Satisfaisante (ZT vue)</option>
+                        <option value="nonsat">Non satisfaisante (ZT non vue)</option>
+                    </select>
+                    <div class="dct-error-msg" id="dct-colpo-error">Ce champ est requis</div>
+                </div>
+            </div>
+        </form>
+
+        <div id="dct-resultat" class="dct-result-box" role="status" aria-live="polite">
+            <div id="dct-res-title" style="font-weight:700; font-size:1.2em; margin-bottom:10px;"></div>
+            <div id="dct-res-content"></div>
+        </div>
+
+        <div id="dct-actions" class="dct-actions">
+            <button id="dct-btn-reset" class="dct-btn dct-btn-primary" type="button">↺ Réinitialiser</button>
+            <button id="dct-btn-copy" class="dct-btn dct-btn-success" type="button">📋 Rapport Dossier</button>
+        </div>
+
+        <div id="dct-copy-zone" class="dct-copy-zone">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong>Texte pour le dossier médical :</strong>
+                <button id="dct-btn-copy-final" class="dct-btn dct-btn-success" type="button" style="padding:5px 10px; font-size:12px;">Copier</button>
+            </div>
+            <div id="dct-copy-content" class="dct-copy-content"></div>
+        </div>
+
+        <footer class="dct-footer">
+            <small>⚠️ Cet outil est une aide à la décision clinique basée sur les recommandations INCa / HAS 2024.<br>
+            Il ne se substitue ni au jugement clinique, ni aux recommandations officielles.<br>
+            Toute situation particulière doit faire l'objet d'une discussion spécialisée (Dr KARA-ZAITRI M.A).</small>
+        </footer>
+    </main>
+
+    <!-- Toast notification -->
+    <div class="dct-toast" id="dct-toast" role="alert" aria-live="assertive"></div>
+</div>
+
+<script>
+(function() {
+    const scope = document.querySelector('.dct-isolated');
+    const el = {
+        grade: scope.querySelector('#dct-grade'),
+        p16: scope.querySelector('#dct-p16'),
+        hpvType: scope.querySelector('#dct-hpv-type'),
+        colpo: scope.querySelector('#dct-colpo'),
+        hpvToggle: scope.querySelector('#dct-hpv-toggle'),
+        resBox: scope.querySelector('#dct-resultat'),
+        resTitle: scope.querySelector('#dct-res-title'),
+        resContent: scope.querySelector('#dct-res-content'),
+        actions: scope.querySelector('#dct-actions'),
+        copyZone: scope.querySelector('#dct-copy-zone'),
+        copyContent: scope.querySelector('#dct-copy-content'),
+        toast: scope.querySelector('#dct-toast')
+    };
+
+    // Toast notification utility
+    function showToast(msg) {
+        el.toast.textContent = msg;
+        el.toast.classList.add('show');
+        setTimeout(() => el.toast.classList.remove('show'), 2500);
+    }
+
+    // Update HPV type selector state based on toggle
+    function updateHPVSelector() {
+        const hpvOn = el.hpvToggle.checked;
+        el.hpvType.disabled = !hpvOn;
+        el.hpvType.setAttribute('aria-disabled', String(!hpvOn));
+        if (!hpvOn) {
+            el.hpvType.value = 'autre'; // Reset to default when disabled
+        }
+    }
+
+    // Validation helper
+    function validateField(field, errorId) {
+        const errorEl = scope.querySelector('#' + errorId);
+        if (!field.value) {
+            field.classList.add('is-error');
+            if (errorEl) errorEl.classList.add('visible');
+            return false;
+        } else {
+            field.classList.remove('is-error');
+            if (errorEl) errorEl.classList.remove('visible');
+            return true;
+        }
+    }
+
+    function update() {
+        const grade = el.grade.value;
+        const p16 = el.p16.value;
+        const colpo = el.colpo.value;
+        const hpvOn = el.hpvToggle.checked;
+        const hpv1618 = el.hpvType.value === "1618";
+
+        // Gestion dynamique P16
+        el.p16.disabled = (grade !== "cin2");
+        el.p16.setAttribute('aria-disabled', String(grade !== "cin2"));
+
+        if (!grade || !colpo) {
+            // Validate required fields visually
+            if (!grade) validateField(el.grade, 'dct-grade-error');
+            if (!colpo) validateField(el.colpo, 'dct-colpo-error');
+            el.resBox.classList.remove('dct-active');
+            el.actions.classList.remove('dct-active');
+            return;
+        }
+
+        // Clear errors if fields are now valid
+        validateField(el.grade, 'dct-grade-error');
+        validateField(el.colpo, 'dct-colpo-error');
+
+        let title = ""; 
+        let recs = []; 
+        let style = "dct-result-normal";
+
+        // ===== CIN 1 =====
+        if (grade === "cin1") {
+            if (colpo === "nonsat") {
+                style = "dct-result-warning"; 
+                title = "CIN 1 : Colpo Non Satisfaisante";
+                recs = ["Risque de sous-évaluation. Discussion conisation diagnostique."];
+            } else {
+                title = "CIN 1 : Surveillance";
+                const delay = hpvOn && hpv1618 ? "6 mois" : "12 mois";
+                recs = hpvOn 
+                    ? [`Test <b><span class='dct-hpv-text'>HPV</span></b> à ${delay}.`] 
+                    : ["Cytologie à 6 et 12 mois."];
+            }
+        } 
+        
+        // ===== CIN 2 =====
+        else if (grade === "cin2") {
+            if (p16 === "non") {
+                style = "dct-result-normal"; 
+                title = "CIN 2 p16 Négatif (Assimilé Bas Grade)";
+                recs = ["Comportement de bas grade biologique. Surveillance recommandée."];
+            } else {
+                style = "dct-result-warning"; 
+                title = "CIN 2 p16 Positif (Vrai HSIL)";
+                recs = [colpo === "nonsat" ? "Conisation chirurgicale." : "Traitement par LEEP (Anse)."];
+            }
+        }
+        
+        // ===== CIN 3 =====
+        else if (grade === "cin3") {
+            style = "dct-result-danger"; 
+            title = "CIN 3 : Traitement Impératif";
+            recs = ["Conisation (LEEP ou bistouri froid).", hpvOn ? "Test <b><span class='dct-hpv-text'>HPV</span></b> à 6 mois." : "Suivi strict 2 ans."];
+        }
+        
+        // ===== MICRO-INVASIF =====
+        else if (grade === "micro") {
+            style = "dct-result-danger"; 
+            title = "Carcinome Micro-invasif (IA1)";
+            recs = ["Avis spécialisé RCP.", "Conisation in sano.", "Évaluation emboles."];
+        }
+
+        el.resTitle.textContent = title;
+        el.resContent.innerHTML = "<ul>" + recs.map(r => `<li>${r}</li>`).join('') + "</ul>";
+        el.resBox.className = "dct-result-box dct-active " + style;
+        el.actions.classList.add('dct-active');
+    }
+
+    // EVENTS
+    [el.grade, el.p16, el.hpvType, el.colpo].forEach(input => {
+        input.addEventListener('change', update);
+    });
+
+    // HPV toggle: update selector state + recalc
+    el.hpvToggle.addEventListener('change', function() {
+        updateHPVSelector();
+        update();
+    });
+
+    // Reset button
+    scope.querySelector('#dct-btn-reset').addEventListener('click', () => { 
+        el.resBox.classList.remove('dct-active'); 
+        el.actions.classList.remove('dct-active'); 
+        el.copyZone.classList.remove('dct-active'); 
+        scope.querySelector('#dct-main-form').reset(); 
+        el.p16.disabled = true;
+        el.p16.setAttribute('aria-disabled', 'true');
+        el.hpvType.disabled = !el.hpvToggle.checked;
+        el.hpvType.setAttribute('aria-disabled', String(!el.hpvToggle.checked));
+        // Clear validation errors
+        [el.grade, el.colpo].forEach(f => f.classList.remove('is-error'));
+        scope.querySelectorAll('.dct-error-msg').forEach(e => e.classList.remove('visible'));
+    });
+    
+    // Copy to dossier button
+    scope.querySelector('#dct-btn-copy').addEventListener('click', () => {
+        const report = `RAPPORT DYSPLASIE - ${new Date().toLocaleDateString('fr-FR')}\n-------------------\nGRADE : ${el.grade.options[el.grade.selectedIndex].text}\nCONCLUSION : ${el.resTitle.textContent}\nRECOMMANDATIONS :\n${el.resContent.innerText}`;
+        el.copyContent.textContent = report;
+        el.copyZone.classList.add('dct-active');
+        // Scroll to copy zone
+        el.copyZone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    // Final copy button with toast
+    scope.querySelector('#dct-btn-copy-final').addEventListener('click', () => {
+        navigator.clipboard.writeText(el.copyContent.textContent).then(() => {
+            showToast("✅ Copié dans le presse-papiers !");
+        }).catch(() => {
+            showToast("❌ Échec de la copie");
+        });
+    });
+
+    // Initialize
+    updateHPVSelector();
+
+})();
+</script>
+</div>
+</body>
+</html>
