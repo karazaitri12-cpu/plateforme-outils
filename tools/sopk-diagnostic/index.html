@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithme Diagnostic SOPK</title>
+    <style>
+        /* ============================================================
+           BLINDAGE ELEMENTOR — Scope CSS total
+           ============================================================ */
+        .sopk-wrap *, .sopk-wrap *::before, .sopk-wrap *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sopk-wrap {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #F7FAFC;
+            color: #2D3748;
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ============================================================
+           VOTRE CSS ORIGINAL — Préfixé avec .sopk-wrap
+           ============================================================ */
+        .sopk-wrap .container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #E2E8F0;
+        }
+
+        .sopk-wrap .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .sopk-wrap h1 {
+            color: #7c3aed;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .sopk-wrap .btn-reset {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+
+        .sopk-wrap .btn-reset:hover {
+            background: #e5e7eb;
+        }
+
+        .sopk-wrap .progress-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            position: relative;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .sopk-wrap .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 60px;
+            position: relative;
+        }
+
+        .sopk-wrap .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: #e5e7eb;
+            color: #6b7280;
+            margin-bottom: 8px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .sopk-wrap .step-circle.active {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .sopk-wrap .step-label {
+            font-size: 11px;
+            color: #374151;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            line-height: 1.3;
+        }
+
+        .sopk-wrap .step-line {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            right: -50%;
+            height: 3px;
+            background: #e5e7eb;
+            z-index: -1;
+        }
+
+        .sopk-wrap .step-line.active {
+            background: #7c3aed;
+        }
+
+        .sopk-wrap .step-content {
+            display: none;
+        }
+
+        .sopk-wrap .step-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sopk-wrap h2 {
+            color: #7c3aed;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .sopk-wrap .info-box {
+            background: #f5f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #7c3aed;
+        }
+
+        .sopk-wrap .info-box.blue {
+            background: #eff6ff;
+            border-left-color: #3b82f6;
+        }
+
+        .sopk-wrap .info-box.green {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+
+        .sopk-wrap .exam-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .sopk-wrap .exam-item {
+            background: white;
+            padding: 12px 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .sopk-wrap .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f5f3ff;
+            padding: 14px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .sopk-wrap .checkbox-label:hover {
+            background: #ede9fe;
+            border-color: #7c3aed;
+        }
+
+        .sopk-wrap .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #7c3aed;
+        }
+
+        .sopk-wrap .input-group {
+            margin-bottom: 14px;
+        }
+
+        .sopk-wrap .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .sopk-wrap .input-group input,
+        .sopk-wrap .input-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.4;
+            background: white;
+            color: #1a202c;
+            transition: border-color 0.2s;
+            min-height: 42px;
+        }
+
+        .sopk-wrap .input-group input:focus,
+        .sopk-wrap .input-group select:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+        }
+
+        .sopk-wrap .input-group select {
+            height: auto;
+            appearance: auto;
+        }
+
+        .sopk-wrap .alert {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 6px;
+            font-weight: 500;
+            display: none;
+            padding: 6px 10px;
+            background: #fef2f2;
+            border-radius: 6px;
+            border-left: 3px solid #dc2626;
+        }
+
+        .sopk-wrap .btn-primary {
+            width: 100%;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .sopk-wrap .btn-primary:hover:not(:disabled) {
+            background: #6d28d9;
+        }
+
+        .sopk-wrap .btn-primary:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .sopk-wrap .status-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .sopk-wrap .status-box.red {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left: 4px solid #dc2626;
+        }
+
+        .sopk-wrap .status-box.green {
+            background: #f0fdf4;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+        }
+
+        .sopk-wrap .recommendations {
+            background: #ede9fe;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 24px;
+            border-left: 4px solid #7c3aed;
+        }
+
+        .sopk-wrap .recommendations h3 {
+            color: #7c3aed;
+            margin-bottom: 14px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .sopk-wrap .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6b7280;
+            font-size: 13px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* ============================================================
+           DISCLAIMER MÉDICO-LÉGAL RENFORCÉ
+           ============================================================ */
+        .sopk-legal {
+            margin: 20px 0;
+            padding: 14px 16px;
+            background: #FFFBEB;
+            border-left: 4px solid #D69E2E;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #744210;
+            line-height: 1.6;
+        }
+
+        .sopk-legal strong {
+            color: #975A16;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        /* ============================================================
+           ANTI-SCROLLBAR — Style App native
+           ============================================================ */
+        html { scrollbar-width: none !important; }
+        body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+        ::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+
+        /* ============================================================
+           STYLES D'IMPRESSION
+           ============================================================ */
+        @media print {
+            .sopk-wrap .btn-reset,
+            .sopk-wrap .btn-primary,
+            .sopk-wrap .progress-bar {
+                display: none !important;
+            }
+            .sopk-wrap .container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            .sopk-wrap .step-content {
+                display: block !important;
+                page-break-inside: avoid;
+            }
+            .sopk-wrap .status-box,
+            .sopk-wrap .info-box,
+            .sopk-wrap .recommendations {
+                border: 1px solid #ddd !important;
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 15mm;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE — Votre code original optimisé
+           ============================================================ */
+        @media (max-width: 768px) {
+            .sopk-wrap { padding: 16px; }
+            .sopk-wrap .container { padding: 18px; }
+            .sopk-wrap .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .sopk-wrap .btn-reset { width: 100%; }
+            .sopk-wrap .progress-bar { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .sopk-wrap .progress-step { flex-direction: row; gap: 8px; width: 100%; justify-content: flex-start; }
+            .sopk-wrap .step-line { display: none; }
+            .sopk-wrap .exam-grid { grid-template-columns: 1fr; }
+            .sopk-wrap .checkbox-label { flex-direction: column; }
+        }
+
+        @media (max-width: 480px) {
+            .sopk-wrap { padding: 12px; }
+            .sopk-wrap .container { padding: 14px; }
+            .sopk-wrap h1 { font-size: 1.3rem; }
+            .sopk-wrap h2 { font-size: 1.2rem; }
+            .sopk-wrap .step-circle { width: 30px; height: 30px; font-size: 13px; }
+            .sopk-wrap .step-label { font-size: 10px; }
+            .sopk-wrap .btn-primary { font-size: 14px; padding: 12px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .sopk-wrap *, .sopk-wrap *::before, .sopk-wrap *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Wrapper de scope pour isolation Elementor -->
+    <div class="sopk-wrap">
+        <div class="container">
+            <div class="header">
+                <h1>Algorithme Diagnostic SOPK</h1>
+                <button class="btn-reset" onclick="resetTool()" aria-label="Réinitialiser l'outil">🔄 Réinitialiser</button>
+            </div>
+
+            <!-- DISCLAIMER MÉDICO-LÉGAL RENFORCÉ -->
+            <div class="sopk-legal">
+                <strong>⚠️ Avertissement médico-légal</strong>
+                <p>Cet outil est destiné à un usage professionnel. Le diagnostic de SOPK repose sur les critères de Rotterdam et doit être confirmé par un médecin après élimination des diagnostics différentiels.</p>
+                <p style="margin-top:8px"><strong>Source :</strong> Critères de Rotterdam 2003 — Recommandations internationales (ESHRE/ASRM) — HAS</p>
+            </div>
+
+            <div class="progress-bar" id="progressBar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="5"></div>
+
+            <!-- STEP 1: Suspicion clinique -->
+            <div class="step-content active" id="step1" role="tabpanel" aria-labelledby="tab1">
+                <h2>Suspicion Clinique de SOPK</h2>
+                <div class="info-box">
+                    <p style="margin-bottom: 16px; color: #4b5563;"><strong>Présence de signes cliniques évocateurs ?</strong></p>
+                    <div style="padding-left: 0;">
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Cycles irréguliers / aménorrhée</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Hyperandrogénie (hirsutisme, acné, alopécie)</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Obésité / surpoids</p>
+                    </div>
+                    <button class="btn-primary" style="margin-top: 24px;" onclick="goToStep(2)" aria-label="Suspicion présente, continuer">Suspicion présente →</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: Bilan -->
+            <div class="step-content" id="step2" role="tabpanel" aria-labelledby="tab2">
+                <h2>Bilan de Première Intention</h2>
+                <div class="info-box blue">
+                    <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 700;">Examens à prescrire :</h3>
+                    <div class="exam-grid">
+                        <div class="exam-item">📋 LH, FSH (J3-J5)</div>
+                        <div class="exam-item">📋 Testostérone totale, SHBG</div>
+                        <div class="exam-item">📋 SDHEA, Δ4-Androstènedione</div>
+                        <div class="exam-item">📋 17-OH Progestérone</div>
+                        <div class="exam-item">📋 TSH, Prolactine</div>
+                        <div class="exam-item">📋 Échographie pelvienne</div>
+                    </div>
+                    <button class="btn-primary" style="margin-top: 24px;" onclick="goToStep(3)" aria-label="Bilans réalisés, continuer">Bilans réalisés →</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Critères de Rotterdam -->
+            <div class="step-content" id="step3" role="tabpanel" aria-labelledby="tab3">
+                <h2>Critères de Rotterdam</h2>
+                <p style="color: #6b7280; margin-bottom: 20px; font-size: 14px;">Cocher au moins 2 critères sur 3 pour un diagnostic probable de SOPK</p>
+                
+                <label class="checkbox-label">
+                    <input type="checkbox" id="anovulation" onclick="checkRotterdam()" onchange="checkRotterdam()" aria-describedby="anov-desc">
+                    <div>
+                        <div style="font-weight: bold;">Anovulation chronique</div>
+                        <div id="anov-desc" style="font-size: 13px; color: #6b7280;">Oligoménorrhée ou aménorrhée</div>
+                    </div>
+                </label>
+
+                <label class="checkbox-label">
+                    <input type="checkbox" id="hyperandrogenism" onclick="checkRotterdam()" onchange="checkRotterdam()" aria-describedby="hyper-desc">
+                    <div>
+                        <div style="font-weight: bold;">Hyperandrogénie</div>
+                        <div id="hyper-desc" style="font-size: 13px; color: #6b7280;">Clinique (hirsutisme, acné) ou biologique</div>
+                    </div>
+                </label>
+
+                <label class="checkbox-label">
+                    <input type="checkbox" id="opk" onclick="checkRotterdam()" onchange="checkRotterdam()" aria-describedby="opk-desc">
+                    <div>
+                        <div style="font-weight: bold;">Ovaires polykystiques à l'échographie</div>
+                        <div id="opk-desc" style="font-size: 13px; color: #6b7280;">≥12 follicules 2-9mm ou volume ovarien &gt;10cm³</div>
+                    </div>
+                </label>
+
+                <div id="rotterdamStatus" class="status-box red" role="status" aria-live="polite">
+                    <span style="font-size: 24px;" aria-hidden="true">⚠️</span>
+                    <span style="font-weight: bold;">0/3 critères remplis</span>
+                </div>
+
+                <button class="btn-primary" id="btnStep3" disabled onclick="goToStep(4)" aria-disabled="true">Continuer →</button>
+            </div>
+
+            <!-- STEP 4: Diagnostics différentiels -->
+            <div class="step-content" id="step4" role="tabpanel" aria-labelledby="tab4">
+                <h2>Éliminer les Diagnostics Différentiels</h2>
+                <p style="color: #6b7280; margin-bottom: 20px; font-size: 14px;">Entrez les valeurs biologiques pour éliminer les tumeurs ou blocs enzymatiques</p>
+
+                <div style="background: white; padding: 20px; border-radius: 10px; border: 1.5px solid #e5e7eb;">
+                    <div class="input-group">
+                        <label for="ohp17">17-OH Progestérone (ng/ml)</label>
+                        <input type="number" step="0.1" id="ohp17" placeholder="Ex: 0.8 (Seuil alerte > 2)" oninput="checkDifferentials()" aria-describedby="ohp17-hint">
+                        <div id="ohp17-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : > 2 ng/ml → Test Synacthène</div>
+                        <div class="alert" id="alert-ohp17" role="alert">⚠️ > 2 ng/ml → Test Synacthène (bloc 21-hydroxylase ?)</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="testosterone">Testostérone Totale (ng/ml)</label>
+                        <input type="number" step="0.1" id="testosterone" placeholder="Ex: 0.5 (Seuil alerte > 1.5)" oninput="checkDifferentials()" aria-describedby="testo-hint">
+                        <div id="testo-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : > 1.5 ng/ml</div>
+                        <div class="alert" id="alert-testosterone" role="alert">⚠️ > 1.5 ng/ml → Suspecter tumeur ovarienne</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="sdhea">SDHEA (µmol/L)</label>
+                        <input type="number" step="0.1" id="sdhea" placeholder="Ex: 8 (Seuil alerte > 20)" oninput="checkDifferentials()" aria-describedby="sdhea-hint">
+                        <div id="sdhea-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : > 20 µmol/L</div>
+                        <div class="alert" id="alert-sdhea" role="alert">⚠️ > 20 µmol/L → Suspecter tumeur surrénalienne</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="delta4">Δ4-Androstènedione (ng/ml)</label>
+                        <input type="number" step="0.1" id="delta4" placeholder="Ex: 2.5 (Seuil alerte > 6)" oninput="checkDifferentials()" aria-describedby="delta4-hint">
+                        <div id="delta4-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : > 6 ng/ml</div>
+                        <div class="alert" id="alert-delta4" role="alert">⚠️ > 6 ng/ml → Suspecter tumeur ovarienne ou surrénalienne</div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label for="tsh">TSH & Prolactine</label>
+                        <select id="tsh" onchange="checkDifferentials()" aria-describedby="tsh-hint">
+                            <option value="">— Sélectionner —</option>
+                            <option value="normal">Normales</option>
+                            <option value="anormal">TSH anormale</option>
+                            <option value="prolactine">Prolactine élevée</option>
+                        </select>
+                        <div id="tsh-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Éliminer dysthyroïdie et hyperprolactinémie</div>
+                        <div class="alert" id="alert-tsh" role="alert">⚠️ TSH anormale → Dysthyroïdie</div>
+                        <div class="alert" id="alert-prolactin" role="alert">⚠️ Prolactine élevée → Hyperprolactinémie</div>
+                    </div>
+                </div>
+
+                <div id="sopkConfirmed" class="status-box green" style="display: none;" role="status" aria-live="polite">
+                    <span style="font-size: 24px;" aria-hidden="true">✓</span>
+                    <div>
+                        <div style="font-weight: bold;">Diagnostics différentiels exclus</div>
+                        <div style="font-weight: bold; font-size: 16px; color: #16a34a; margin-top: 6px;">DIAGNOSTIC DE SOPK CONFIRMÉ</div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="btnStep4" disabled onclick="goToStep(5)" aria-disabled="true">Évaluer les complications →</button>
+            </div>
+
+            <!-- STEP 5: Complications -->
+            <div class="step-content" id="step5" role="tabpanel" aria-labelledby="tab5">
+                <h2>Bilan des Complications et Comorbidités</h2>
+
+                <div class="status-box green">
+                    <span style="font-size: 32px;" aria-hidden="true">✓</span>
+                    <div>
+                        <div style="font-weight: bold; font-size: 18px; color: #16a34a;">SOPK CONFIRMÉ</div>
+                        <div style="color: #16a34a; margin-top: 4px; font-size: 14px;">Procéder au dépistage systématique des complications</div>
+                    </div>
+                </div>
+
+                <div class="info-box blue">
+                    <h3 style="margin-bottom: 16px; font-weight: bold; font-size: 16px;">📋 Bilan des complications à prescrire :</h3>
+                    <div style="padding-left: 0;">
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Métabolique :</strong> Glycémie à jeun, HGPO 75g, HbA1c</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Lipidique :</strong> Cholestérol total, HDL, LDL, Triglycérides</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Hépatique :</strong> Transaminases (NASH ?)</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Cardio/Sommeil :</strong> TA, Score STOP-BANG (Apnée)</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Psychologique :</strong> Dépistage anxiété/dépression</p>
+                    </div>
+                </div>
+
+                <button class="btn-primary" style="margin-top: 24px;" onclick="showRecommendations()" aria-expanded="false" aria-controls="recommendations-section">Voir les recommandations de prise en charge →</button>
+
+                <div class="recommendations" id="recommendations-section" style="display: none;" role="region" aria-label="Recommandations de prise en charge">
+                    <h3>Prise en charge personnalisée</h3>
+                    <div style="padding-left: 0;">
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Mesures hygiéno-diététiques (perte de poids si IMC >25)</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Metformine si intolérance au glucose / résistance insulinique</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Contraception œstroprogestative (régulation cycles + hyperandrogénie)</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Antiandrogènes si hirsutisme marqué</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Inducteurs ovulation si désir de grossesse</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Surveillance régulière à vie</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>Outil d'aide au diagnostic selon les critères de Rotterdam et recommandations internationales</p>
+                <p style="margin-top: 8px;">⚕️ À utiliser en complément de l'évaluation clinique</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const labels = ['Suspicion', 'Bilan', 'Rotterdam', 'Différentiels', 'Complications'];
+            progressBar.innerHTML = '';
+
+            for (let i = 1; i <= 5; i++) {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'progress-step';
+                stepDiv.setAttribute('role', 'presentation');
+
+                const circle = document.createElement('div');
+                circle.className = 'step-circle' + (currentStep >= i ? ' active' : '');
+                circle.textContent = i;
+                circle.setAttribute('aria-hidden', 'true');
+                
+                const label = document.createElement('div');
+                label.className = 'step-label';
+                label.textContent = labels[i - 1];
+                label.id = 'tab' + i;
+                
+                stepDiv.appendChild(circle);
+                stepDiv.appendChild(label);
+
+                if (i < 5) {
+                    const line = document.createElement('div');
+                    line.className = 'step-line' + (currentStep > i ? ' active' : '');
+                    line.setAttribute('aria-hidden', 'true');
+                    stepDiv.appendChild(line);
+                }
+
+                progressBar.appendChild(stepDiv);
+            }
+            progressBar.setAttribute('aria-valuenow', currentStep);
+        }
+
+        function goToStep(step) {
+            document.querySelectorAll('.step-content').forEach(el => {
+                el.classList.remove('active');
+                el.setAttribute('aria-hidden', 'true');
+            });
+
+            currentStep = step;
+            const activePanel = document.getElementById('step' + step);
+            activePanel.classList.add('active');
+            activePanel.setAttribute('aria-hidden', 'false');
+            
+            updateProgressBar();
+            
+            // Scroll to top of container on step change (mobile)
+            if (window.innerWidth < 768) {
+                document.querySelector('.sopk-wrap .container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function checkRotterdam() {
+            // Petit délai pour laisser le checkbox se mettre à jour
+            setTimeout(function() {
+                const anov = document.getElementById('anovulation').checked;
+                const hyper = document.getElementById('hyperandrogenism').checked;
+                const opk = document.getElementById('opk').checked;
+                const count = (anov ? 1 : 0) + (hyper ? 1 : 0) + (opk ? 1 : 0);
+
+                const statusBox = document.getElementById('rotterdamStatus');
+                const btn = document.getElementById('btnStep3');
+
+                if (count >= 2) {
+                    statusBox.className = 'status-box green';
+                    statusBox.innerHTML = '<span style="font-size: 24px;" aria-hidden="true">✓</span><div><span style="font-weight: bold;">' + count + '/3 critères remplis</span><div style="color: #16a34a; margin-top: 4px; font-size: 13px;">✓ SOPK probable - Passer à l\'élimination des diagnostics différentiels</div></div>';
+                    btn.disabled = false;
+                    btn.setAttribute('aria-disabled', 'false');
+                } else {
+                    statusBox.className = 'status-box red';
+                    statusBox.innerHTML = '<span style="font-size: 24px;" aria-hidden="true">⚠️</span><span style="font-weight: bold;">' + count + '/3 critères remplis</span>';
+                    btn.disabled = true;
+                    btn.setAttribute('aria-disabled', 'true');
+                }
+            }, 10);
+        }
+
+        function checkDifferentials() {
+            // Récupération des valeurs avec gestion des valeurs vides
+            const ohp17Val = document.getElementById('ohp17').value;
+            const testosteroneVal = document.getElementById('testosterone').value;
+            const sdheaVal = document.getElementById('sdhea').value;
+            const delta4Val = document.getElementById('delta4').value;
+            const tsh = document.getElementById('tsh').value;
+
+            const ohp17 = ohp17Val !== '' ? parseFloat(ohp17Val) : null;
+            const testosterone = testosteroneVal !== '' ? parseFloat(testosteroneVal) : null;
+            const sdhea = sdheaVal !== '' ? parseFloat(sdheaVal) : null;
+            const delta4 = delta4Val !== '' ? parseFloat(delta4Val) : null;
+
+            let hasAlert = false;
+
+            // Vérification 17-OHP
+            const alertOhp17 = document.getElementById('alert-ohp17');
+            if (ohp17 !== null && ohp17 > 2) {
+                alertOhp17.style.display = 'block';
+                hasAlert = true;
+            } else {
+                alertOhp17.style.display = 'none';
+            }
+
+            // Vérification Testostérone
+            const alertTesto = document.getElementById('alert-testosterone');
+            if (testosterone !== null && testosterone > 1.5) {
+                alertTesto.style.display = 'block';
+                hasAlert = true;
+            } else {
+                alertTesto.style.display = 'none';
+            }
+
+            // Vérification SDHEA
+            const alertSdhea = document.getElementById('alert-sdhea');
+            if (sdhea !== null && sdhea > 20) {
+                alertSdhea.style.display = 'block';
+                hasAlert = true;
+            } else {
+                alertSdhea.style.display = 'none';
+            }
+
+            // Vérification Delta-4 Androstènedione
+            const alertDelta4 = document.getElementById('alert-delta4');
+            if (delta4 !== null && delta4 > 6) { 
+                alertDelta4.style.display = 'block';
+                hasAlert = true;
+            } else {
+                alertDelta4.style.display = 'none';
+            }
+
+            // Vérification TSH / Prolactine
+            const alertTsh = document.getElementById('alert-tsh');
+            const alertProlactin = document.getElementById('alert-prolactin');
+            if (tsh === 'anormal') {
+                alertTsh.style.display = 'block';
+                alertProlactin.style.display = 'none';
+                hasAlert = true;
+            } else if (tsh === 'prolactine') {
+                alertProlactin.style.display = 'block';
+                alertTsh.style.display = 'none';
+                hasAlert = true;
+            } else {
+                alertTsh.style.display = 'none';
+                alertProlactin.style.display = 'none';
+            }
+
+            // Gestion de l'affichage final
+            const confirmBox = document.getElementById('sopkConfirmed');
+            const btn = document.getElementById('btnStep4');
+
+            if (!hasAlert) {
+                confirmBox.style.display = 'flex';
+                btn.disabled = false;
+                btn.setAttribute('aria-disabled', 'false');
+            } else {
+                confirmBox.style.display = 'none';
+                btn.disabled = true;
+                btn.setAttribute('aria-disabled', 'true');
+            }
+        }
+
+        function showRecommendations() {
+            const recoSection = document.getElementById('recommendations-section');
+            const isVisible = recoSection.style.display === 'block';
+            recoSection.style.display = isVisible ? 'none' : 'block';
+            document.querySelector('.btn-primary[onclick="showRecommendations()"]').setAttribute('aria-expanded', !isVisible);
+        }
+
+        function resetTool() {
+            currentStep = 1;
+            goToStep(1);
+            
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
+            document.querySelectorAll('select').forEach(select => select.value = '');
+            
+            checkRotterdam();
+            
+            document.querySelectorAll('.alert').forEach(alert => alert.style.display = 'none');
+            document.getElementById('sopkConfirmed').style.display = 'none';
+            const btn4 = document.getElementById('btnStep4');
+            btn4.disabled = true;
+            btn4.setAttribute('aria-disabled', 'true');
+            
+            const recoSection = document.getElementById('recommendations-section');
+            if (recoSection) {
+                recoSection.style.display = 'none';
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgressBar();
+        });
+    </script>
+</body>
+</html>
