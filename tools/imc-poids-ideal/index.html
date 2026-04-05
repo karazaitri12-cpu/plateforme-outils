@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur IMC – Dr Karazaïtri</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — Isolation complète via wrapper unique
+   ============================================================ */
+#imc-dkz-root * {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: 'Segoe UI', Arial, sans-serif !important;
+}
+#imc-dkz-root {
+  max-width: 860px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  color: #1a1a2e !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  background: transparent !important;
+}
+
+/* --- En-tête outil --- */
+#imc-dkz-root .dkz-header {
+  border-left: 4px solid #1a5276 !important;
+  padding: 12px 16px !important;
+  background: #f0f4f8 !important;
+  margin-bottom: 20px !important;
+  border-radius: 0 4px 4px 0 !important;
+}
+#imc-dkz-root .dkz-header h2 {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #1a5276 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 2px !important;
+}
+#imc-dkz-root .dkz-header p {
+  font-size: 12px !important;
+  color: #555 !important;
+}
+
+/* --- Layout principal --- */
+#imc-dkz-root .dkz-layout {
+  display: flex !important;
+  gap: 24px !important;
+  align-items: flex-start !important;
+  flex-wrap: wrap !important;
+}
+#imc-dkz-root .dkz-form-col {
+  flex: 1 1 260px !important;
+  min-width: 240px !important;
+}
+#imc-dkz-root .dkz-gauge-col {
+  flex: 1 1 280px !important;
+  min-width: 260px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+/* --- Formulaire --- */
+#imc-dkz-root .dkz-field {
+  margin-bottom: 14px !important;
+}
+#imc-dkz-root .dkz-field label {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  margin-bottom: 5px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+#imc-dkz-root .dkz-field select,
+#imc-dkz-root .dkz-field input[type="number"] {
+  width: 100% !important;
+  padding: 9px 12px !important;
+  border: 1px solid #b0bec5 !important;
+  border-radius: 4px !important;
+  font-size: 15px !important;
+  color: #1a1a2e !important;
+  background: #fff !important;
+  outline: none !important;
+  transition: border-color 0.2s !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+#imc-dkz-root .dkz-field select:focus,
+#imc-dkz-root .dkz-field input[type="number"]:focus {
+  border-color: #1a5276 !important;
+  box-shadow: 0 0 0 2px rgba(26,82,118,0.12) !important;
+}
+
+/* --- Bouton --- */
+#imc-dkz-root .dkz-btn {
+  width: 100% !important;
+  padding: 11px !important;
+  background: #1a5276 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  margin-top: 6px !important;
+  transition: background 0.2s !important;
+}
+#imc-dkz-root .dkz-btn:hover {
+  background: #154360 !important;
+}
+
+/* --- Résultats --- */
+#imc-dkz-root .dkz-results {
+  margin-top: 16px !important;
+}
+#imc-dkz-root .dkz-results.dkz-hidden {
+  display: none !important;
+}
+#imc-dkz-root .dkz-result-box {
+  padding: 10px 12px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+}
+#imc-dkz-root .dkz-result-box.ideal {
+  background: #eaf4fb !important;
+  border-left: 3px solid #1a5276 !important;
+  color: #1a5276 !important;
+}
+#imc-dkz-root .dkz-result-box.plage {
+  background: #f4f6f7 !important;
+  border-left: 3px solid #1a5276 !important;
+  color: #1a1a2e !important;
+}
+#imc-dkz-root .dkz-plage-title {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: #888 !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+#imc-dkz-root .dkz-plage-values {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #1a5276 !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+#imc-dkz-root .dkz-statut {
+  margin-top: 6px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  display: block !important;
+}
+#imc-dkz-root .dkz-note {
+  font-size: 12px !important;
+  color: #666 !important;
+  font-style: italic !important;
+  padding: 6px 0 !important;
+  border-top: 1px solid #e0e0e0 !important;
+  margin-top: 4px !important;
+}
+
+/* --- Jauge SVG --- */
+#imc-dkz-root .dkz-gauge-wrap {
+  position: relative !important;
+  width: 260px !important;
+  height: 260px !important;
+}
+#imc-dkz-root .dkz-gauge-wrap svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+#imc-dkz-root .dkz-gauge-center-text {
+  position: absolute !important;
+  top: 68% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  text-align: center !important;
+  pointer-events: none !important;
+}
+#imc-dkz-root .dkz-imc-val {
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  color: #1a1a2e !important;
+  line-height: 1 !important;
+  display: block !important;
+}
+#imc-dkz-root .dkz-imc-lbl {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: #888 !important;
+  display: block !important;
+  margin-top: 2px !important;
+}
+
+/* --- Badge catégorie --- */
+#imc-dkz-root .dkz-category {
+  margin-top: 12px !important;
+  padding: 8px 18px !important;
+  border-radius: 20px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  letter-spacing: 0.03em !important;
+  background: #ecf0f1 !important;
+  color: #555 !important;
+  transition: all 0.3s !important;
+}
+#imc-dkz-root .dkz-category.underweight { background:#d6eaf8 !important; color:#1a5276 !important; }
+#imc-dkz-root .dkz-category.normal      { background:#d5f5e3 !important; color:#1e8449 !important; }
+#imc-dkz-root .dkz-category.overweight  { background:#fdebd0 !important; color:#784212 !important; }
+#imc-dkz-root .dkz-category.obese1      { background:#fad7a0 !important; color:#784212 !important; }
+#imc-dkz-root .dkz-category.obese2      { background:#f5cba7 !important; color:#6e2f1a !important; }
+#imc-dkz-root .dkz-category.obese3      { background:#f1948a !important; color:#641e16 !important; }
+
+/* --- Légende IMC --- */
+#imc-dkz-root .dkz-legend {
+  width: 100% !important;
+  margin-top: 20px !important;
+  border-top: 1px solid #e0e0e0 !important;
+  padding-top: 14px !important;
+}
+#imc-dkz-root .dkz-legend-title {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  color: #888 !important;
+  margin-bottom: 8px !important;
+}
+#imc-dkz-root .dkz-legend-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 5px !important;
+  font-size: 12px !important;
+  color: #444 !important;
+}
+#imc-dkz-root .dkz-legend-dot {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+}
+
+/* --- Mise en garde médico-légale --- */
+#imc-dkz-root .dkz-legal {
+  margin-top: 20px !important;
+  padding: 10px 14px !important;
+  background: #fafafa !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  color: #888 !important;
+  line-height: 1.6 !important;
+}
+#imc-dkz-root .dkz-legal strong {
+  color: #555 !important;
+  font-weight: 600 !important;
+}
+
+/* --- Alerte grossesse --- */
+#imc-dkz-root .dkz-grossesse-alert {
+  margin-top: 10px !important;
+  padding: 9px 12px !important;
+  background: #fff8e1 !important;
+  border-left: 3px solid #f39c12 !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  color: #7d6608 !important;
+}
+#imc-dkz-root .dkz-grossesse-alert.dkz-hidden {
+  display: none !important;
+}
+
+/* Anti-scrollbar — style App native */
+html { scrollbar-width: none !important; }
+body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+  
+/* --- Responsive --- */
+@media (max-width: 600px) {
+  #imc-dkz-root .dkz-layout {
+    flex-direction: column !important;
+  }
+  #imc-dkz-root .dkz-gauge-col {
+    width: 100% !important;
+    align-items: center !important;
+  }
+  #imc-dkz-root .dkz-gauge-wrap {
+    width: 220px !important;
+    height: 220px !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="imc-dkz-root">
+
+  <!-- En-tête -->
+  <div class="dkz-header">
+    <h2>Calculateur IMC &amp; Plage de poids normal</h2>
+    <p>Indice de masse corporelle (Quetelet) &bull; Plage de poids OMS (IMC 18,5–24,9) &bull; Classification OMS 2000</p>
+  </div>
+
+  <div class="dkz-layout">
+
+    <!-- Colonne formulaire -->
+    <div class="dkz-form-col">
+      <div class="dkz-field">
+        <label for="dkz-sexe">Sexe</label>
+        <select id="dkz-sexe">
+          <option value="femme">Femme</option>
+          <option value="homme">Homme</option>
+        </select>
+      </div>
+      <div class="dkz-field">
+        <label for="dkz-taille">Taille (cm)</label>
+        <input type="number" id="dkz-taille" min="100" max="220" placeholder="ex. : 165">
+      </div>
+      <div class="dkz-field">
+        <label for="dkz-poids">Poids actuel (kg)</label>
+        <input type="number" id="dkz-poids" min="20" max="300" placeholder="ex. : 65">
+      </div>
+
+      <!-- Alerte grossesse -->
+      <div class="dkz-grossesse-alert dkz-hidden" id="dkz-grossesse-alert">
+        &#9888; Cet outil n'est pas adapté à l'évaluation du poids pendant la grossesse.
+      </div>
+
+      <button class="dkz-btn" id="dkz-btn">Calculer</button>
+
+      <!-- Résultats -->
+      <div class="dkz-results dkz-hidden" id="dkz-results">
+        <div class="dkz-result-box plage">
+          <span class="dkz-plage-title">Plage de poids normal OMS (IMC 18,5 – 24,9)</span>
+          <span class="dkz-plage-values" id="dkz-plage-values">-- – -- kg</span>
+          <span class="dkz-statut" id="dkz-statut"></span>
+        </div>
+        <p class="dkz-note" id="dkz-note"></p>
+      </div>
+
+      <!-- Légende -->
+      <div class="dkz-legend">
+        <div class="dkz-legend-title">Classification OMS</div>
+        <div class="dkz-legend-row"><span class="dkz-legend-dot" style="background:#2e86c1!important"></span>&lt; 18,5 — Insuffisance pondérale</div>
+        <div class="dkz-legend-row"><span class="dkz-legend-dot" style="background:#1e8449!important"></span>18,5 – 24,9 — Poids normal</div>
+        <div class="dkz-legend-row"><span class="dkz-legend-dot" style="background:#d4ac0d!important"></span>25 – 29,9 — Surpoids</div>
+        <div class="dkz-legend-row"><span class="dkz-legend-dot" style="background:#e67e22!important"></span>30 – 34,9 — Obésité classe I</div>
+        <div class="dkz-legend-row"><span class="dkz-legend-dot" style="background:#c0392b!important"></span>35 – 39,9 — Obésité classe II</div>
+        <div class="dkz-legend-row"><span class="dkz-legend-dot" style="background:#7b241c!important"></span>&#8805; 40 — Obésité classe III (morbide)</div>
+      </div>
+    </div>
+
+    <!-- Colonne jauge -->
+    <div class="dkz-gauge-col">
+      <div class="dkz-gauge-wrap">
+        <svg id="dkz-gauge-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="dkz-gauge-center-text">
+          <span class="dkz-imc-val" id="dkz-imc-val">--</span>
+          <span class="dkz-imc-lbl">IMC</span>
+        </div>
+      </div>
+      <div class="dkz-category" id="dkz-category">En attente de calcul</div>
+    </div>
+
+  </div>
+
+  <!-- Mise en garde -->
+  <div class="dkz-legal">
+    <strong>Note d'utilisation :</strong> L'IMC (indice de masse corporelle, Quetelet) est un indicateur de dépistage populationnel (OMS 2000). La plage de poids normal est calculée à partir des seuils OMS : IMC 18,5–24,9 kg/m². Ces valeurs ne tiennent pas compte de la composition corporelle, de l'âge, de l'origine ethnique ni du contexte clinique individuel. Outil d'information médicale — non diagnostique. Ne se substitue pas à une consultation médicale.
+  </div>
+
+</div>
+
+<script>
+(function() {
+  // ── Constantes jauge ──────────────────────────────────────────────────────
+  var CX = 130, CY = 130, R_OUT = 108, R_IN = 72;
+  var MIN_VAL = 10, MAX_VAL = 50;
+  var ANG_START = -210, ANG_END = 30; // degrés, 0 = droite
+
+  var SEGS = [
+    { min:10, max:18.5, color:'#2e86c1', label:'Insuf.' },
+    { min:18.5, max:25, color:'#1e8449', label:'Normal' },
+    { min:25, max:30,  color:'#d4ac0d', label:'Surpoids' },
+    { min:30, max:35,  color:'#e67e22', label:'Obés. I' },
+    { min:35, max:40,  color:'#c0392b', label:'Obés. II' },
+    { min:40, max:50,  color:'#7b241c', label:'Obés. III' }
+  ];
+
+  function valToAngle(v) {
+    v = Math.max(MIN_VAL, Math.min(MAX_VAL, v));
+    return ANG_START + (v - MIN_VAL) / (MAX_VAL - MIN_VAL) * (ANG_END - ANG_START);
+  }
+
+  function polar(cx, cy, r, angleDeg) {
+    var rad = angleDeg * Math.PI / 180;
+    return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
+  }
+
+  function arcPath(cx, cy, rOut, rIn, a1, a2) {
+    var p1 = polar(cx, cy, rOut, a1);
+    var p2 = polar(cx, cy, rOut, a2);
+    var p3 = polar(cx, cy, rIn, a2);
+    var p4 = polar(cx, cy, rIn, a1);
+    var laf = Math.abs(a2 - a1) > 180 ? 1 : 0;
+    return [
+      'M', p1[0], p1[1],
+      'A', rOut, rOut, 0, laf, 1, p2[0], p2[1],
+      'L', p3[0], p3[1],
+      'A', rIn, rIn, 0, laf, 0, p4[0], p4[1],
+      'Z'
+    ].join(' ');
+  }
+
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function buildGauge() {
+    var svg = document.getElementById('dkz-gauge-svg');
+    if (!svg) return;
+    svg.innerHTML = '';
+
+    // Fond gris
+    svg.appendChild(svgEl('path', {
+      d: arcPath(CX, CY, R_OUT, R_IN, ANG_START, ANG_END),
+      fill: '#ecf0f1'
+    }));
+
+    // Segments colorés
+    SEGS.forEach(function(s) {
+      var a1 = valToAngle(s.min);
+      var a2 = valToAngle(s.max);
+      svg.appendChild(svgEl('path', {
+        d: arcPath(CX, CY, R_OUT, R_IN, a1, a2),
+        fill: s.color
+      }));
+    });
+
+    // Séparateurs
+    SEGS.forEach(function(s) {
+      var a = valToAngle(s.min) * Math.PI / 180;
+      var p1 = [CX + R_IN * Math.cos(a), CY + R_IN * Math.sin(a)];
+      var p2 = [CX + R_OUT * Math.cos(a), CY + R_OUT * Math.sin(a)];
+      svg.appendChild(svgEl('line', {
+        x1:p1[0], y1:p1[1], x2:p2[0], y2:p2[1],
+        stroke:'#fff', 'stroke-width':'1.5'
+      }));
+    });
+
+    // Valeurs de graduation
+    [10, 18.5, 25, 30, 35, 40, 50].forEach(function(v) {
+      var a = valToAngle(v) * Math.PI / 180;
+      var r = R_OUT + 14;
+      var tx = CX + r * Math.cos(a);
+      var ty = CY + r * Math.sin(a);
+      var t = svgEl('text', {
+        x: tx, y: ty,
+        'text-anchor':'middle',
+        'dominant-baseline':'middle',
+        'font-size':'9',
+        'font-weight':'600',
+        fill:'#444'
+      });
+      t.textContent = v;
+      svg.appendChild(t);
+    });
+
+    // Cercle central blanc
+    svg.appendChild(svgEl('circle', {
+      cx:CX, cy:CY, r: R_IN - 2,
+      fill:'#fff', stroke:'#ddd', 'stroke-width':'1'
+    }));
+
+    // Aiguille (groupe, rotation autour du centre)
+    var g = svgEl('g', { id:'dkz-needle-g' });
+    // Corps
+    var needle = svgEl('line', {
+      id:'dkz-needle-line',
+      x1:CX, y1:CY,
+      x2:CX + (R_OUT - 12), y2:CY,
+      stroke:'#1a1a2e', 'stroke-width':'2.5',
+      'stroke-linecap':'round'
+    });
+    // Pivot
+    var pivot = svgEl('circle', {
+      cx:CX, cy:CY, r:'6',
+      fill:'#1a1a2e'
+    });
+    g.appendChild(needle);
+    g.appendChild(pivot);
+    svg.appendChild(g);
+
+    setNeedle(0);
+  }
+
+  var _needleAngle = valToAngle(MIN_VAL);
+  var _animFrame = null;
+
+  function setNeedle(imc) {
+    var g = document.getElementById('dkz-needle-g');
+    if (!g) return;
+    var angle = valToAngle(imc || MIN_VAL);
+    g.setAttribute('transform', 'rotate(' + angle + ' ' + CX + ' ' + CY + ')');
+    _needleAngle = angle;
+  }
+
+  function animateNeedle(targetImc) {
+    var g = document.getElementById('dkz-needle-g');
+    if (!g) return;
+    if (_animFrame) cancelAnimationFrame(_animFrame);
+    var targetAngle = valToAngle(targetImc);
+    var startAngle  = _needleAngle;
+    var duration    = 900;
+    var startTime   = null;
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var elapsed  = ts - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      var current  = startAngle + (targetAngle - startAngle) * easeOutCubic(progress);
+      g.setAttribute('transform', 'rotate(' + current + ' ' + CX + ' ' + CY + ')');
+      _needleAngle = current;
+      if (progress < 1) { _animFrame = requestAnimationFrame(step); }
+      else { _needleAngle = targetAngle; }
+    }
+    _animFrame = requestAnimationFrame(step);
+  }
+
+  // ── Logique métier ─────────────────────────────────────────────────────────
+  function calcPlageOMS(taille) {
+    // Plage OMS : IMC 18.5 à 24.9 (référence : OMS 2000, Classification de l'obésité)
+    var tM = taille / 100;
+    var pMin = Math.round(18.5 * tM * tM * 10) / 10;
+    var pMax = Math.round(24.9 * tM * tM * 10) / 10;
+    return { min: pMin, max: pMax };
+  }
+
+  function getStatut(poids, plage, imc) {
+    if (imc < 18.5) return { txt: 'En dessous de la plage normale (insuffisance pondérale)', color: '#1a5276' };
+    if (imc < 25)   return { txt: 'Dans la plage de poids normal', color: '#1e8449' };
+    if (imc < 30)   return { txt: 'Au-dessus de la plage normale (surpoids)', color: '#b7770d' };
+    if (imc < 35)   return { txt: 'Au-dessus de la plage normale (obésité classe I)', color: '#c0392b' };
+    if (imc < 40)   return { txt: 'Au-dessus de la plage normale (obésité classe II)', color: '#a93226' };
+                    return { txt: 'Au-dessus de la plage normale (obésité classe III)', color: '#7b241c' };
+  }
+
+  function getCategorie(imc) {
+    if (imc < 18.5) return { label:'Insuffisance pondérale', cls:'underweight' };
+    if (imc < 25)   return { label:'Poids normal',           cls:'normal' };
+    if (imc < 30)   return { label:'Surpoids',               cls:'overweight' };
+    if (imc < 35)   return { label:'Obésité modérée (classe I)',  cls:'obese1' };
+    if (imc < 40)   return { label:'Obésité sévère (classe II)',  cls:'obese2' };
+                    return { label:'Obésité morbide (classe III)',cls:'obese3' };
+  }
+
+  // ── Initialisation ─────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    buildGauge();
+
+    var btn      = document.getElementById('dkz-btn');
+    var sexeEl   = document.getElementById('dkz-sexe');
+    var tailleEl = document.getElementById('dkz-taille');
+    var poidsEl  = document.getElementById('dkz-poids');
+    var results  = document.getElementById('dkz-results');
+    var plageVal = document.getElementById('dkz-plage-values');
+    var statutEl = document.getElementById('dkz-statut');
+    var noteEl   = document.getElementById('dkz-note');
+    var catEl    = document.getElementById('dkz-category');
+    var imcValEl = document.getElementById('dkz-imc-val');
+    var alertGross = document.getElementById('dkz-grossesse-alert');
+
+    if (!btn) return;
+
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      var sexe   = sexeEl.value;
+      var taille = parseFloat(String(tailleEl.value).replace(',','.'));
+      var poids  = parseFloat(String(poidsEl.value).replace(',','.'));
+
+      if (!taille || !poids || isNaN(taille) || isNaN(poids)) {
+        alert('Veuillez renseigner la taille et le poids.');
+        return;
+      }
+      if (taille < 100 || taille > 220) {
+        alert('Taille hors plage valide (100–220 cm).');
+        return;
+      }
+      if (poids < 20 || poids > 300) {
+        alert('Poids hors plage valide (20–300 kg).');
+        return;
+      }
+
+      if (sexe === 'femme') {
+        alertGross.classList.remove('dkz-hidden');
+      } else {
+        alertGross.classList.add('dkz-hidden');
+      }
+
+      var imc    = Math.round((poids / Math.pow(taille / 100, 2)) * 10) / 10;
+      var plage  = calcPlageOMS(taille);
+      var statut = getStatut(poids, plage, imc);
+      var cat    = getCategorie(imc);
+
+      // Plage OMS — texte seul
+      plageVal.textContent = plage.min + ' – ' + plage.max + ' kg';
+      statutEl.textContent = statut.txt;
+      statutEl.style.color = statut.color;
+      noteEl.textContent   = 'Plage calculée d\'après les seuils IMC OMS (18,5–24,9 kg/m\u00b2). Ne tient pas compte de la composition corporelle, de l\'âge ni de l\'origine ethnique. À interpréter dans le contexte clinique.';
+
+      // Jauge
+      imcValEl.textContent = imc.toFixed(1);
+      catEl.textContent    = cat.label;
+      catEl.className      = 'dkz-category ' + cat.cls;
+      results.classList.remove('dkz-hidden');
+
+      // Animation fluide de l'aiguille
+      setNeedle(MIN_VAL);
+      setTimeout(function() { animateNeedle(imc); }, 50);
+    });
+  });
+
+  // Fallback si DOMContentLoaded déjà passé (Elementor)
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(function() {
+      if (!document.getElementById('dkz-needle-g')) buildGauge();
+    }, 100);
+  }
+
+})();
+</script>
+
+</body>
+</html>
