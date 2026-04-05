@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aide Décisionnelle – Dysplasie Cervicale v2</title>
+    <title>Aide Décisionnelle – Dysplasie Cervicale v2.1</title>
 </head>
 <body>
 
@@ -14,6 +14,7 @@
    Préfixe : dct-
    Pseudo-éléments : Unicode CSS uniquement (\XXXX)
    Aucune dépendance externe
+   v2.1 — Suivi post-geste intégré
    ============================================================ */
 
 .dct-isolated {
@@ -24,48 +25,35 @@
     line-height: 1.6;
     color: #1a2533;
 }
-
-.dct-isolated *,
-.dct-isolated *::before,
-.dct-isolated *::after {
+.dct-isolated *, .dct-isolated *::before, .dct-isolated *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-
-/* ============================================================
-   VARIABLES
-   ============================================================ */
 .dct-isolated {
     --c-primary:   #1a5276;
     --c-primary-l: #2471a3;
     --c-hpv:       #6c3483;
-    --c-hpv-l:     #8e44ad;
     --c-ok:        #1e8449;
     --c-warn:      #b7770d;
     --c-danger:    #922b21;
     --c-neutral:   #2c3e50;
-    --c-bg:        #f5f7fa;
     --c-bg-card:   #ffffff;
     --c-border:    #d5dce8;
     --c-text:      #1a2533;
-    --c-text-2:    #5d6d7e;
     --c-text-3:    #8395a7;
     --radius:      8px;
     --shadow:      0 2px 12px rgba(0,0,0,0.08);
-    --shadow-md:   0 4px 20px rgba(0,0,0,0.12);
     --transition:  0.2s ease;
+    /* Suivi */
+    --c-suivi:     #0e6655;
+    --c-suivi-l:   #148f77;
+    --c-suivi-bg:  #e8f8f5;
+    --c-suivi-bd:  #a2d9ce;
 }
 
-/* ============================================================
-   STRUCTURE PRINCIPALE
-   ============================================================ */
-.dct-isolated .dct-wrap {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 16px;
-}
-
+/* ── Structure ── */
+.dct-isolated .dct-wrap { max-width: 860px; margin: 0 auto; padding: 16px; }
 .dct-isolated .dct-card {
     background: var(--c-bg-card);
     border: 1px solid var(--c-border);
@@ -74,590 +62,319 @@
     overflow: hidden;
 }
 
-/* ============================================================
-   EN-TÊTE
-   ============================================================ */
-.dct-isolated .dct-header {
-    background: var(--c-primary);
-    color: #fff;
-    padding: 22px 28px 18px;
-}
-
+/* ── En-tête ── */
+.dct-isolated .dct-header { background: var(--c-primary); color: #fff; padding: 22px 28px 18px; }
 .dct-isolated .dct-header-tag {
-    font-size: 0.72em;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    opacity: 0.75;
-    margin-bottom: 6px;
+    font-size: 0.72em; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; opacity: 0.75; margin-bottom: 6px;
 }
-
 .dct-isolated .dct-header h1 {
-    font-size: 1.35em;
-    font-weight: 700;
-    line-height: 1.25;
-    color: #fff;
-    margin-bottom: 4px;
+    font-size: 1.35em; font-weight: 700; line-height: 1.25; color: #fff; margin-bottom: 4px;
 }
+.dct-isolated .dct-header-sub { font-size: 0.82em; opacity: 0.8; font-weight: 400; }
 
-.dct-isolated .dct-header-sub {
-    font-size: 0.82em;
-    opacity: 0.8;
-    font-weight: 400;
-}
+/* ── Corps ── */
+.dct-isolated .dct-body { padding: 24px 28px; }
 
-/* ============================================================
-   CORPS DU FORMULAIRE
-   ============================================================ */
-.dct-isolated .dct-body {
-    padding: 24px 28px;
-}
-
-/* ---- Contexte patient ---- */
 .dct-isolated .dct-section-title {
-    font-size: 0.72em;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--c-primary);
+    font-size: 0.72em; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--c-primary);
     border-bottom: 1px solid var(--c-border);
-    padding-bottom: 8px;
-    margin-bottom: 16px;
+    padding-bottom: 8px; margin-bottom: 16px;
 }
 
 .dct-isolated .dct-grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;
 }
-
 .dct-isolated .dct-grid-3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;
 }
+.dct-isolated .dct-field { display: flex; flex-direction: column; gap: 6px; }
+.dct-isolated .dct-field label { font-size: 0.82em; font-weight: 600; color: var(--c-neutral); }
+.dct-isolated .dct-field label .dct-req { color: var(--c-danger); margin-left: 2px; }
+.dct-isolated .dct-field label .dct-hint { font-weight: 400; color: var(--c-text-3); font-size: 0.9em; }
 
-.dct-isolated .dct-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.dct-isolated .dct-field label {
-    font-size: 0.82em;
-    font-weight: 600;
-    color: var(--c-neutral);
-}
-
-.dct-isolated .dct-field label .dct-req {
-    color: var(--c-danger);
-    margin-left: 2px;
-}
-
-.dct-isolated .dct-field label .dct-hint {
-    font-weight: 400;
-    color: var(--c-text-3);
-    font-size: 0.9em;
-}
-
-.dct-isolated select,
-.dct-isolated .dct-select {
-    appearance: none;
-    -webkit-appearance: none;
+.dct-isolated select {
+    appearance: none; -webkit-appearance: none;
     padding: 10px 36px 10px 12px;
-    border: 1.5px solid var(--c-border);
-    border-radius: var(--radius);
-    font-size: 0.92em;
-    font-family: inherit;
-    color: var(--c-text);
+    border: 1.5px solid var(--c-border); border-radius: var(--radius);
+    font-size: 0.92em; font-family: inherit; color: var(--c-text);
     background-color: #fff;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235d6d7e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    cursor: pointer;
+    background-repeat: no-repeat; background-position: right 12px center;
+    cursor: pointer; width: 100%;
     transition: border-color var(--transition), box-shadow var(--transition);
-    width: 100%;
+}
+.dct-isolated select:focus {
+    outline: none; border-color: var(--c-primary-l);
+    box-shadow: 0 0 0 3px rgba(36,113,163,0.15);
+}
+.dct-isolated select:disabled {
+    background-color: #f0f3f7; color: #aab4be;
+    cursor: not-allowed; border-color: #e2e8f0; opacity: 0.7;
 }
 
-.dct-isolated select:focus,
-.dct-isolated .dct-select:focus {
-    outline: none;
-    border-color: var(--c-primary-l);
-    box-shadow: 0 0 0 3px rgba(36, 113, 163, 0.15);
-}
-
-.dct-isolated select:disabled,
-.dct-isolated .dct-select:disabled {
-    background-color: #f0f3f7;
-    color: #aab4be;
-    cursor: not-allowed;
-    border-color: #e2e8f0;
-    opacity: 0.7;
-}
-
-/* ---- Toggle HPV ---- */
+/* ── Toggle HPV ── */
 .dct-isolated .dct-toggle-bar {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: #eef2f8;
-    border: 1px solid #d0daea;
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 14px;
+    background: #eef2f8; border: 1px solid #d0daea;
+    border-radius: var(--radius); padding: 12px 16px; margin-bottom: 20px;
 }
-
-.dct-isolated .dct-toggle-label-text {
-    font-size: 0.88em;
-    font-weight: 600;
-    color: var(--c-neutral);
-    flex: 1;
-}
-
-.dct-isolated .dct-toggle-label-text span {
-    color: var(--c-hpv);
-}
-
+.dct-isolated .dct-toggle-label-text { font-size: 0.88em; font-weight: 600; color: var(--c-neutral); flex: 1; }
+.dct-isolated .dct-toggle-label-text span { color: var(--c-hpv); }
 .dct-isolated .dct-switch {
-    position: relative;
-    display: inline-block;
-    width: 46px;
-    height: 24px;
-    flex-shrink: 0;
+    position: relative; display: inline-block;
+    width: 46px; height: 24px; flex-shrink: 0;
 }
-
-.dct-isolated .dct-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    position: absolute;
-}
-
+.dct-isolated .dct-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
 .dct-isolated .dct-slider {
-    position: absolute;
-    inset: 0;
-    background: #bdc3c7;
-    border-radius: 24px;
-    cursor: pointer;
-    transition: background var(--transition);
+    position: absolute; inset: 0; background: #bdc3c7;
+    border-radius: 24px; cursor: pointer; transition: background var(--transition);
 }
-
 .dct-isolated .dct-slider::before {
     content: "";
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    left: 3px;
-    top: 3px;
-    background: #fff;
-    border-radius: 50%;
-    transition: transform var(--transition);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    position: absolute; width: 18px; height: 18px;
+    left: 3px; top: 3px; background: #fff; border-radius: 50%;
+    transition: transform var(--transition); box-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
-
-.dct-isolated .dct-switch input:checked + .dct-slider {
-    background: var(--c-hpv);
-}
-
-.dct-isolated .dct-switch input:checked + .dct-slider::before {
-    transform: translateX(22px);
-}
-
+.dct-isolated .dct-switch input:checked + .dct-slider { background: var(--c-hpv); }
+.dct-isolated .dct-switch input:checked + .dct-slider::before { transform: translateX(22px); }
 .dct-isolated .dct-toggle-status {
-    font-size: 0.8em;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-    min-width: 48px;
-    text-align: center;
+    font-size: 0.8em; font-weight: 700; padding: 3px 8px;
+    border-radius: 4px; min-width: 48px; text-align: center;
 }
+.dct-isolated .dct-toggle-status.dct-on { background: #ede0f5; color: var(--c-hpv); }
+.dct-isolated .dct-toggle-status.dct-off { background: #eee; color: #888; }
 
-.dct-isolated .dct-toggle-status.dct-on {
-    background: #ede0f5;
-    color: var(--c-hpv);
-}
-
-.dct-isolated .dct-toggle-status.dct-off {
-    background: #eee;
-    color: #888;
-}
-
-/* ---- Checkboxes contexte ---- */
-.dct-isolated .dct-check-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
+/* ── Checkboxes contexte ── */
+.dct-isolated .dct-check-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
 .dct-isolated .dct-check-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    border: 1.5px solid var(--c-border);
-    border-radius: 6px;
-    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px; border: 1.5px solid var(--c-border);
+    border-radius: 6px; cursor: pointer; font-size: 0.86em; font-weight: 500;
+    color: var(--c-neutral); user-select: none; background: #fff;
     transition: border-color var(--transition), background var(--transition);
-    font-size: 0.86em;
-    font-weight: 500;
-    color: var(--c-neutral);
-    user-select: none;
-    background: #fff;
 }
-
-.dct-isolated .dct-check-item:hover {
-    border-color: var(--c-primary-l);
-    background: #f0f6fb;
-}
-
+.dct-isolated .dct-check-item:hover { border-color: var(--c-primary-l); background: #f0f6fb; }
 .dct-isolated .dct-check-item input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-    accent-color: var(--c-primary);
-    cursor: pointer;
+    width: 15px; height: 15px; accent-color: var(--c-primary); cursor: pointer;
 }
-
 .dct-isolated .dct-check-item.dct-checked {
-    border-color: var(--c-primary);
-    background: #eaf3fb;
-    color: var(--c-primary);
+    border-color: var(--c-primary); background: #eaf3fb; color: var(--c-primary);
 }
 
-/* ---- Séparateur ---- */
-.dct-isolated .dct-sep {
-    height: 1px;
-    background: var(--c-border);
-    margin: 20px 0;
-}
+/* ── Séparateur ── */
+.dct-isolated .dct-sep { height: 1px; background: var(--c-border); margin: 20px 0; }
 
-/* ============================================================
-   RÉSULTATS
-   ============================================================ */
-.dct-isolated .dct-result {
-    display: none;
-    margin-top: 4px;
-}
+/* ── Résultats ── */
+.dct-isolated .dct-result { display: none; margin-top: 4px; }
+.dct-isolated .dct-result.dct-visible { display: block; }
 
-.dct-isolated .dct-result.dct-visible {
-    display: block;
-}
-
-/* ---- Bandeau résultat ---- */
+/* Verdict */
 .dct-isolated .dct-verdict {
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px;
+    display: flex; align-items: flex-start; gap: 14px;
 }
-
-.dct-isolated .dct-verdict-icon {
-    font-size: 1.6em;
-    line-height: 1;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.dct-isolated .dct-verdict-body {}
-
+.dct-isolated .dct-verdict-icon { font-size: 1.6em; line-height: 1; flex-shrink: 0; margin-top: 2px; }
 .dct-isolated .dct-verdict-label {
-    font-size: 0.72em;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-    opacity: 0.8;
+    font-size: 0.72em; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 4px; opacity: 0.8;
 }
+.dct-isolated .dct-verdict-title { font-size: 1.05em; font-weight: 700; line-height: 1.3; }
+.dct-isolated .dct-verdict.dct-v-ok    { background: #eafaf1; border: 1.5px solid #a9dfbf; color: var(--c-ok); }
+.dct-isolated .dct-verdict.dct-v-warn  { background: #fef9e7; border: 1.5px solid #f9e79f; color: var(--c-warn); }
+.dct-isolated .dct-verdict.dct-v-danger{ background: #fdedec; border: 1.5px solid #f5b7b1; color: var(--c-danger); }
+.dct-isolated .dct-verdict.dct-v-urgent{ background: #f4ecf7; border: 1.5px solid #d2b4de; color: var(--c-hpv); }
 
-.dct-isolated .dct-verdict-title {
-    font-size: 1.05em;
-    font-weight: 700;
-    line-height: 1.3;
-}
-
-.dct-isolated .dct-verdict.dct-v-ok {
-    background: #eafaf1;
-    border: 1.5px solid #a9dfbf;
-    color: var(--c-ok);
-}
-
-.dct-isolated .dct-verdict.dct-v-warn {
-    background: #fef9e7;
-    border: 1.5px solid #f9e79f;
-    color: var(--c-warn);
-}
-
-.dct-isolated .dct-verdict.dct-v-danger {
-    background: #fdedec;
-    border: 1.5px solid #f5b7b1;
-    color: var(--c-danger);
-}
-
-.dct-isolated .dct-verdict.dct-v-urgent {
-    background: #f4ecf7;
-    border: 1.5px solid #d2b4de;
-    color: var(--c-hpv);
-}
-
-/* ---- Blocs recommandations ---- */
-.dct-isolated .dct-recs {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-
+/* Recommandations */
+.dct-isolated .dct-recs { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .dct-isolated .dct-rec {
-    display: flex;
-    gap: 12px;
-    background: #f8fafc;
-    border: 1px solid var(--c-border);
-    border-radius: 6px;
-    padding: 12px 14px;
-    align-items: flex-start;
+    display: flex; gap: 12px; background: #f8fafc;
+    border: 1px solid var(--c-border); border-radius: 6px;
+    padding: 12px 14px; align-items: flex-start;
 }
-
 .dct-isolated .dct-rec-icon {
-    flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75em;
-    font-weight: 700;
-    margin-top: 1px;
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75em; font-weight: 700; margin-top: 1px;
 }
-
-.dct-isolated .dct-rec-icon.dct-ri-primary {
-    background: #d6eaf8;
-    color: var(--c-primary);
-}
-
-.dct-isolated .dct-rec-icon.dct-ri-warn {
-    background: #fdebd0;
-    color: var(--c-warn);
-}
-
-.dct-isolated .dct-rec-icon.dct-ri-danger {
-    background: #fadbd8;
-    color: var(--c-danger);
-}
-
-.dct-isolated .dct-rec-icon.dct-ri-hpv {
-    background: #e8daef;
-    color: var(--c-hpv);
-}
-
-.dct-isolated .dct-rec-text {
-    font-size: 0.9em;
-    line-height: 1.5;
-    color: var(--c-text);
-}
-
-.dct-isolated .dct-rec-text strong {
-    font-weight: 700;
-}
-
+.dct-isolated .dct-rec-icon.dct-ri-primary { background: #d6eaf8; color: var(--c-primary); }
+.dct-isolated .dct-rec-icon.dct-ri-warn    { background: #fdebd0; color: var(--c-warn); }
+.dct-isolated .dct-rec-icon.dct-ri-danger  { background: #fadbd8; color: var(--c-danger); }
+.dct-isolated .dct-rec-icon.dct-ri-hpv    { background: #e8daef; color: var(--c-hpv); }
+.dct-isolated .dct-rec-icon.dct-ri-suivi  { background: #d1f2eb; color: var(--c-suivi); }
+.dct-isolated .dct-rec-text { font-size: 0.9em; line-height: 1.5; color: var(--c-text); }
+.dct-isolated .dct-rec-text strong { font-weight: 700; }
 .dct-isolated .dct-rec-text .dct-hpv-tag {
-    display: inline-block;
-    font-size: 0.8em;
-    font-weight: 700;
-    background: #ede0f5;
-    color: var(--c-hpv);
-    padding: 1px 6px;
-    border-radius: 3px;
-    vertical-align: middle;
-    margin: 0 2px;
+    display: inline-block; font-size: 0.8em; font-weight: 700;
+    background: #ede0f5; color: var(--c-hpv);
+    padding: 1px 6px; border-radius: 3px; vertical-align: middle; margin: 0 2px;
 }
 
-/* ---- Alertes contextuelles ---- */
-.dct-isolated .dct-alerts {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 16px;
-}
-
+/* Alertes */
+.dct-isolated .dct-alerts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .dct-isolated .dct-alert {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 6px;
-    font-size: 0.86em;
-    line-height: 1.45;
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border-radius: 6px; font-size: 0.86em; line-height: 1.45;
 }
+.dct-isolated .dct-alert.dct-al-warn   { background: #fef9e7; border: 1px solid #f9e79f; color: #7d6608; }
+.dct-isolated .dct-alert.dct-al-danger { background: #fdedec; border: 1px solid #f5b7b1; color: #78281f; }
+.dct-isolated .dct-alert.dct-al-info   { background: #eaf3fb; border: 1px solid #aed6f1; color: #1a5276; }
 
-.dct-isolated .dct-alert-icon {
-    flex-shrink: 0;
-    font-size: 1.1em;
-    margin-top: 1px;
-}
-
-.dct-isolated .dct-alert.dct-al-warn {
-    background: #fef9e7;
-    border: 1px solid #f9e79f;
-    color: #7d6608;
-}
-
-.dct-isolated .dct-alert.dct-al-danger {
-    background: #fdedec;
-    border: 1px solid #f5b7b1;
-    color: #78281f;
-}
-
-.dct-isolated .dct-alert.dct-al-info {
-    background: #eaf3fb;
-    border: 1px solid #aed6f1;
-    color: #1a5276;
-}
-
-/* ---- Marges post-conisation ---- */
-.dct-isolated .dct-margins-panel {
+/* ── BLOC SUIVI POST-GESTE ── */
+.dct-isolated .dct-suivi-panel {
     display: none;
-    margin-top: 4px;
-}
-
-.dct-isolated .dct-margins-panel.dct-visible {
-    display: block;
-}
-
-.dct-isolated .dct-margins-panel .dct-section-title {
-    margin-top: 20px;
-}
-
-/* ============================================================
-   ACTIONS
-   ============================================================ */
-.dct-isolated .dct-actions {
-    display: none;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-.dct-isolated .dct-actions.dct-visible {
-    display: flex;
-}
-
-.dct-isolated .dct-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 10px 18px;
-    border: none;
-    border-radius: var(--radius);
-    font-size: 0.88em;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: opacity var(--transition), box-shadow var(--transition), transform var(--transition);
-    text-decoration: none;
-}
-
-.dct-isolated .dct-btn:hover {
-    opacity: 0.9;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    transform: translateY(-1px);
-}
-
-.dct-isolated .dct-btn:active {
-    transform: translateY(0);
-    box-shadow: none;
-}
-
-.dct-isolated .dct-btn-reset {
-    background: #ecf0f1;
-    color: var(--c-neutral);
-}
-
-.dct-isolated .dct-btn-report {
-    background: var(--c-primary);
-    color: #fff;
-}
-
-.dct-isolated .dct-btn-copy {
-    background: var(--c-ok);
-    color: #fff;
-}
-
-/* ---- Zone rapport ---- */
-.dct-isolated .dct-report-zone {
-    display: none;
-    margin-top: 16px;
-    border: 1.5px dashed var(--c-border);
+    margin-top: 6px;
+    border: 1.5px solid var(--c-suivi-bd);
     border-radius: var(--radius);
     overflow: hidden;
 }
+.dct-isolated .dct-suivi-panel.dct-visible { display: block; }
 
-.dct-isolated .dct-report-zone.dct-visible {
-    display: block;
-}
-
-.dct-isolated .dct-report-header {
+.dct-isolated .dct-suivi-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 10px 16px;
-    background: #f0f3f7;
-    border-bottom: 1px solid var(--c-border);
+    justify-content: space-between;
+    gap: 10px;
+    background: var(--c-suivi-bg);
+    padding: 11px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--c-suivi-bd);
+    user-select: none;
 }
 
-.dct-isolated .dct-report-header span {
-    font-size: 0.82em;
-    font-weight: 600;
-    color: var(--c-neutral);
+.dct-isolated .dct-suivi-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.dct-isolated .dct-report-content {
-    font-family: 'Courier New', 'Consolas', monospace;
-    font-size: 0.82em;
-    line-height: 1.7;
-    color: var(--c-text);
-    padding: 14px 16px;
-    white-space: pre-wrap;
+.dct-isolated .dct-suivi-header-badge {
+    font-size: 0.68em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--c-suivi);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+}
+
+.dct-isolated .dct-suivi-header-title {
+    font-size: 0.9em;
+    font-weight: 700;
+    color: var(--c-suivi);
+}
+
+.dct-isolated .dct-suivi-chevron {
+    font-size: 0.85em;
+    color: var(--c-suivi);
+    transition: transform var(--transition);
+    font-style: normal;
+}
+
+.dct-isolated .dct-suivi-panel.dct-open .dct-suivi-chevron {
+    transform: rotate(180deg);
+}
+
+.dct-isolated .dct-suivi-body {
+    display: none;
+    padding: 16px;
     background: #fff;
 }
+.dct-isolated .dct-suivi-panel.dct-open .dct-suivi-body { display: block; }
 
-/* ============================================================
-   PIED DE PAGE
-   ============================================================ */
+/* Tableau de suivi */
+.dct-isolated .dct-suivi-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86em;
+    margin-bottom: 12px;
+}
+.dct-isolated .dct-suivi-table th {
+    background: #f0f3f7;
+    color: var(--c-neutral);
+    font-weight: 700;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--c-border);
+    white-space: nowrap;
+}
+.dct-isolated .dct-suivi-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #eef0f3;
+    vertical-align: top;
+    line-height: 1.45;
+}
+.dct-isolated .dct-suivi-table tr:last-child td { border-bottom: none; }
+.dct-isolated .dct-suivi-table tr:hover td { background: #f8fafc; }
+
+.dct-isolated .dct-suivi-table .dct-st-ok     { color: var(--c-ok);     font-weight: 600; }
+.dct-isolated .dct-suivi-table .dct-st-warn   { color: var(--c-warn);   font-weight: 600; }
+.dct-isolated .dct-suivi-table .dct-st-danger { color: var(--c-danger); font-weight: 600; }
+
+/* Recs suivi */
+.dct-isolated .dct-suivi-recs { display: flex; flex-direction: column; gap: 8px; }
+
+/* Marges panel (post-conisation) */
+.dct-isolated .dct-margins-panel { display: none; margin-top: 4px; }
+.dct-isolated .dct-margins-panel.dct-visible { display: block; }
+.dct-isolated .dct-margins-panel .dct-section-title { margin-top: 20px; }
+
+/* ── Actions ── */
+.dct-isolated .dct-actions {
+    display: none; gap: 10px; flex-wrap: wrap; margin-top: 20px;
+}
+.dct-isolated .dct-actions.dct-visible { display: flex; }
+
+.dct-isolated .dct-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 18px; border: none; border-radius: var(--radius);
+    font-size: 0.88em; font-weight: 600; font-family: inherit; cursor: pointer;
+    text-decoration: none;
+    transition: opacity var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.dct-isolated .dct-btn:hover { opacity: 0.9; box-shadow: 0 3px 10px rgba(0,0,0,0.15); transform: translateY(-1px); }
+.dct-isolated .dct-btn:active { transform: translateY(0); box-shadow: none; }
+.dct-isolated .dct-btn-reset  { background: #ecf0f1; color: var(--c-neutral); }
+.dct-isolated .dct-btn-report { background: var(--c-primary); color: #fff; }
+.dct-isolated .dct-btn-copy   { background: var(--c-ok); color: #fff; }
+
+/* Zone rapport */
+.dct-isolated .dct-report-zone {
+    display: none; margin-top: 16px;
+    border: 1.5px dashed var(--c-border); border-radius: var(--radius); overflow: hidden;
+}
+.dct-isolated .dct-report-zone.dct-visible { display: block; }
+.dct-isolated .dct-report-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 16px; background: #f0f3f7; border-bottom: 1px solid var(--c-border);
+}
+.dct-isolated .dct-report-header span { font-size: 0.82em; font-weight: 600; color: var(--c-neutral); }
+.dct-isolated .dct-report-content {
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 0.82em; line-height: 1.7; color: var(--c-text);
+    padding: 14px 16px; white-space: pre-wrap; background: #fff;
+}
+
+/* ── Footer ── */
 .dct-isolated .dct-footer {
-    padding: 14px 28px;
-    background: #f5f7fa;
-    border-top: 1px solid var(--c-border);
+    padding: 14px 28px; background: #f5f7fa; border-top: 1px solid var(--c-border);
 }
+.dct-isolated .dct-footer p { font-size: 0.76em; color: var(--c-text-3); line-height: 1.6; }
+.dct-isolated .dct-footer p::before { content: "\26A0\0020"; color: var(--c-warn); font-size: 1.1em; }
 
-.dct-isolated .dct-footer p {
-    font-size: 0.76em;
-    color: var(--c-text-3);
-    line-height: 1.6;
-}
-
-.dct-isolated .dct-footer p::before {
-    content: "\26A0\0020";
-    color: var(--c-warn);
-    font-size: 1.1em;
-}
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
+/* ── Responsive ── */
 @media (max-width: 680px) {
-    .dct-isolated .dct-header { padding: 16px 18px 14px; }
-    .dct-isolated .dct-body { padding: 18px 16px; }
-    .dct-isolated .dct-footer { padding: 12px 16px; }
+    .dct-isolated .dct-header  { padding: 16px 18px 14px; }
+    .dct-isolated .dct-body    { padding: 18px 16px; }
+    .dct-isolated .dct-footer  { padding: 12px 16px; }
     .dct-isolated .dct-grid-2,
-    .dct-isolated .dct-grid-3 { grid-template-columns: 1fr; }
+    .dct-isolated .dct-grid-3  { grid-template-columns: 1fr; }
     .dct-isolated .dct-header h1 { font-size: 1.1em; }
-    .dct-isolated .dct-check-group { gap: 8px; }
     .dct-isolated .dct-check-item { font-size: 0.82em; padding: 7px 11px; }
+    .dct-isolated .dct-suivi-table th,
+    .dct-isolated .dct-suivi-table td { padding: 7px 8px; }
 }
 </style>
 
@@ -668,17 +385,14 @@
     <div class="dct-header">
         <div class="dct-header-tag">Outil d&rsquo;aide à la décision &mdash; Gynécologie</div>
         <h1>Dysplasie Cervicale &mdash; Conduite à tenir</h1>
-        <div class="dct-header-sub">Basé sur les recommandations INCa / HAS 2024 &bull; Usage professionnel exclusif</div>
+        <div class="dct-header-sub">Recommandations INCa / HAS 2024 &bull; Usage professionnel exclusif &bull; v2.1</div>
     </div>
 
-    <!-- CORPS -->
     <div class="dct-body">
 
         <!-- TOGGLE HPV -->
         <div class="dct-toggle-bar">
-            <div class="dct-toggle-label-text">
-                Test <span>HPV</span> disponible (résultat connu)
-            </div>
+            <div class="dct-toggle-label-text">Test <span>HPV</span> disponible (résultat connu)</div>
             <label class="dct-switch" aria-label="Activer le test HPV">
                 <input type="checkbox" id="dct-hpv-toggle" checked>
                 <span class="dct-slider"></span>
@@ -686,14 +400,12 @@
             <span class="dct-toggle-status dct-on" id="dct-toggle-status">OUI</span>
         </div>
 
-        <!-- SECTION 1 : HISTOLOGIE & COLPOSCOPIE -->
+        <!-- SECTION 1 -->
         <div class="dct-section-title">1 &mdash; Histologie &amp; Colposcopie</div>
 
         <div class="dct-grid-2">
             <div class="dct-field">
-                <label for="dct-grade">
-                    Grade histologique (biopsie)<span class="dct-req">*</span>
-                </label>
+                <label for="dct-grade">Grade histologique (biopsie)<span class="dct-req">*</span></label>
                 <select id="dct-grade" aria-required="true">
                     <option value="">-- Sélectionner --</option>
                     <option value="cin1">CIN 1 &mdash; Bas grade (LSIL)</option>
@@ -703,11 +415,8 @@
                     <option value="post">Post-conisation (suivi de marges)</option>
                 </select>
             </div>
-
             <div class="dct-field">
-                <label for="dct-colpo">
-                    Colposcopie <span class="dct-hint">(ZT = zone de transformation)</span>
-                </label>
+                <label for="dct-colpo">Colposcopie <span class="dct-hint">(ZT = zone de transformation)</span></label>
                 <select id="dct-colpo">
                     <option value="sat">Satisfaisante &mdash; ZT entièrement visible</option>
                     <option value="nonsat">Non satisfaisante &mdash; ZT partiellement visible</option>
@@ -715,18 +424,14 @@
             </div>
         </div>
 
-        <!-- Champs conditionnels histologie -->
-        <div class="dct-grid-3" id="dct-row-p16-hpv">
+        <div class="dct-grid-3" id="dct-row-cond">
             <div class="dct-field" id="dct-field-p16">
-                <label for="dct-p16">
-                    Marquage p16 <span class="dct-hint">(CIN 2 uniquement)</span>
-                </label>
+                <label for="dct-p16">Marquage p16 <span class="dct-hint">(CIN 2 uniquement)</span></label>
                 <select id="dct-p16" disabled>
                     <option value="pos">Positif &mdash; vrai HSIL</option>
                     <option value="neg">Négatif &mdash; assimilé LSIL</option>
                 </select>
             </div>
-
             <div class="dct-field" id="dct-field-hpv-type">
                 <label for="dct-hpv-type">Génotype HPV-HR</label>
                 <select id="dct-hpv-type">
@@ -734,11 +439,8 @@
                     <option value="1618">HPV 16 ou 18 (haut risque+)</option>
                 </select>
             </div>
-
             <div class="dct-field" id="dct-field-marges">
-                <label for="dct-marges">
-                    Marges de conisation <span class="dct-hint">(post-conisation)</span>
-                </label>
+                <label for="dct-marges">Marges de conisation <span class="dct-hint">(post-conisation)</span></label>
                 <select id="dct-marges" disabled>
                     <option value="saines">Saines &mdash; in sano</option>
                     <option value="atteintes">Atteintes ou non évaluables</option>
@@ -746,32 +448,30 @@
             </div>
         </div>
 
-        <!-- SECTION 2 : CONTEXTE PATIENT -->
+        <!-- SECTION 2 -->
         <div class="dct-sep"></div>
-        <div class="dct-section-title">2 &mdash; Contexte clinique <span style="font-weight:400;color:var(--c-text-3);text-transform:none;letter-spacing:0;">(cocher si applicable)</span></div>
-
-        <div class="dct-check-group" id="dct-context-group">
+        <div class="dct-section-title">
+            2 &mdash; Contexte clinique
+            <span style="font-weight:400;color:var(--c-text-3);text-transform:none;letter-spacing:0;"> (cocher si applicable)</span>
+        </div>
+        <div class="dct-check-group">
             <label class="dct-check-item" id="dct-lbl-grossesse">
-                <input type="checkbox" id="dct-grossesse">
-                Désir de grossesse / grossesse en cours
+                <input type="checkbox" id="dct-grossesse"> Désir de grossesse / grossesse en cours
             </label>
             <label class="dct-check-item" id="dct-lbl-immuno">
-                <input type="checkbox" id="dct-immuno">
-                Immunodépression (VIH, greffe, IS)
+                <input type="checkbox" id="dct-immuno"> Immunodépression (VIH, greffe, IS)
             </label>
             <label class="dct-check-item" id="dct-lbl-persistant">
-                <input type="checkbox" id="dct-persistant">
-                Lésion persistante &ge; 24 mois
+                <input type="checkbox" id="dct-persistant"> Lésion persistante &ge; 24 mois
             </label>
             <label class="dct-check-item" id="dct-lbl-recidive">
-                <input type="checkbox" id="dct-recidive">
-                Récidive après traitement
+                <input type="checkbox" id="dct-recidive"> Récidive après traitement
             </label>
         </div>
 
         <div class="dct-sep"></div>
 
-        <!-- ZONE RÉSULTATS -->
+        <!-- RÉSULTATS -->
         <div class="dct-result" id="dct-result-zone">
 
             <div class="dct-verdict" id="dct-verdict-box">
@@ -782,11 +482,8 @@
                 </div>
             </div>
 
-            <!-- Alertes contextuelles -->
             <div class="dct-alerts" id="dct-alerts-zone"></div>
-
-            <!-- Recommandations -->
-            <div class="dct-recs" id="dct-recs-zone"></div>
+            <div class="dct-recs"   id="dct-recs-zone"></div>
 
             <!-- Suivi post-conisation (marges) -->
             <div class="dct-margins-panel" id="dct-margins-panel">
@@ -794,16 +491,26 @@
                 <div class="dct-recs" id="dct-margins-recs"></div>
             </div>
 
+            <!-- ★ BLOC SUIVI POST-GESTE ★ -->
+            <div class="dct-suivi-panel" id="dct-suivi-panel">
+                <div class="dct-suivi-header" id="dct-suivi-toggle-btn">
+                    <div class="dct-suivi-header-left">
+                        <span class="dct-suivi-header-badge">Suivi</span>
+                        <span class="dct-suivi-header-title" id="dct-suivi-header-title">Conduite après le geste / au prochain contrôle</span>
+                    </div>
+                    <i class="dct-suivi-chevron" id="dct-suivi-chevron">&#x25BE;</i>
+                </div>
+                <div class="dct-suivi-body" id="dct-suivi-body">
+                    <!-- rempli dynamiquement -->
+                </div>
+            </div>
+
         </div>
 
         <!-- ACTIONS -->
         <div class="dct-actions" id="dct-actions">
-            <button class="dct-btn dct-btn-reset" id="dct-btn-reset">
-                &#x21BA; Réinitialiser
-            </button>
-            <button class="dct-btn dct-btn-report" id="dct-btn-report">
-                &#x1F4CB; Générer le rapport
-            </button>
+            <button class="dct-btn dct-btn-reset"  id="dct-btn-reset">&#x21BA; Réinitialiser</button>
+            <button class="dct-btn dct-btn-report" id="dct-btn-report">&#x1F4CB; Générer le rapport</button>
         </div>
 
         <div class="dct-report-zone" id="dct-report-zone">
@@ -818,22 +525,20 @@
 
     </div><!-- /dct-body -->
 
-    <!-- FOOTER -->
     <div class="dct-footer">
-        <p>Outil d&rsquo;aide à la décision clinique. Ne se substitue pas au jugement médical, aux recommandations officielles (INCa / HAS 2024), ni à la discussion en réunion de concertation pluridisciplinaire. Toute situation complexe relève d&rsquo;une expertise spécialisée.</p>
+        <p>Outil d&rsquo;aide à la décision clinique. Ne se substitue pas au jugement médical, aux recommandations officielles (INCa / HAS 2024), ni à la discussion en RCP. Toute situation complexe relève d&rsquo;une expertise spécialisée.</p>
     </div>
 
-</div><!-- /dct-card -->
-</div><!-- /dct-wrap -->
+</div>
+</div>
 
 <script>
 (function () {
     'use strict';
 
-    /* ── Références DOM ── */
     var S = document.querySelector('.dct-isolated');
-    function q(id) { return S.querySelector('#' + id); }
-    function qAll(sel) { return S.querySelectorAll(sel); }
+    function q(id)   { return S.querySelector('#' + id); }
+    function qA(sel) { return S.querySelectorAll(sel); }
 
     var el = {
         hpvToggle:    q('dct-hpv-toggle'),
@@ -857,6 +562,11 @@
         recsZone:     q('dct-recs-zone'),
         marginsPanel: q('dct-margins-panel'),
         marginsRecs:  q('dct-margins-recs'),
+        suiviPanel:   q('dct-suivi-panel'),
+        suiviToggle:  q('dct-suivi-toggle-btn'),
+        suiviChevron: q('dct-suivi-chevron'),
+        suiviTitle:   q('dct-suivi-header-title'),
+        suiviBody:    q('dct-suivi-body'),
         actions:      q('dct-actions'),
         reportZone:   q('dct-report-zone'),
         reportContent:q('dct-report-content'),
@@ -865,33 +575,44 @@
         btnCopy:      q('dct-btn-copy')
     };
 
-    /* ── Helpers ── */
-    function show(elem) { elem.classList.add('dct-visible'); }
-    function hide(elem) { elem.classList.remove('dct-visible'); }
-    function setClass(elem, cls) {
-        elem.className = elem.className.replace(/dct-v-\S+/g, '').trim();
-        elem.classList.add(cls);
+    /* ── helpers ── */
+    function show(e) { e.classList.add('dct-visible'); }
+    function hide(e) { e.classList.remove('dct-visible'); }
+    function setVClass(cls) {
+        el.verdictBox.className = el.verdictBox.className.replace(/dct-v-\S+/g,'').trim();
+        el.verdictBox.classList.add(cls);
     }
+    function hpvTag(t) { return '<span class="dct-hpv-tag">' + t + '</span>'; }
 
-    function hpvTag(txt) {
-        return '<span class="dct-hpv-tag">' + txt + '</span>';
-    }
-
-    function makeRec(text, iconType) {
-        var iMap = { primary: 'dct-ri-primary', warn: 'dct-ri-warn', danger: 'dct-ri-danger', hpv: 'dct-ri-hpv' };
-        var nMap = { primary: '\u2192', warn: '\u26A0', danger: '\u2757', hpv: '\u2691' };
-        var cls = iMap[iconType] || 'dct-ri-primary';
-        var ico = nMap[iconType] || '\u2192';
-        return '<div class="dct-rec"><div class="dct-rec-icon ' + cls + '">' + ico + '</div>'
-             + '<div class="dct-rec-text">' + text + '</div></div>';
+    function makeRec(text, type) {
+        var iMap = { primary:'dct-ri-primary', warn:'dct-ri-warn', danger:'dct-ri-danger', hpv:'dct-ri-hpv', suivi:'dct-ri-suivi' };
+        var nMap = { primary:'\u2192', warn:'\u26A0', danger:'\u2757', hpv:'\u2691', suivi:'\u23F0' };
+        return '<div class="dct-rec"><div class="dct-rec-icon ' + (iMap[type]||'dct-ri-primary') + '">' +
+               (nMap[type]||'\u2192') + '</div><div class="dct-rec-text">' + text + '</div></div>';
     }
 
     function makeAlert(text, type) {
-        /* type: warn | danger | info */
-        var iMap = { warn: '\u26A0\uFE0F', danger: '\u26D4', info: '\u2139\uFE0F' };
-        var cls = 'dct-al-' + type;
-        return '<div class="dct-alert ' + cls + '"><span class="dct-alert-icon">' + (iMap[type] || '') + '</span>'
-             + '<span>' + text + '</span></div>';
+        var iMap = { warn:'\u26A0\uFE0F', danger:'\u26D4', info:'\u2139\uFE0F' };
+        return '<div class="dct-alert dct-al-' + type + '"><span style="flex-shrink:0;font-size:1.1em;margin-top:1px;">' +
+               (iMap[type]||'') + '</span><span>' + text + '</span></div>';
+    }
+
+    /* Tableau de suivi : ligne */
+    function trRow(situation, conduite, cls) {
+        return '<tr><td>' + situation + '</td><td class="' + (cls||'') + '">' + conduite + '</td></tr>';
+    }
+
+    /* Bloc suivi complet */
+    function makeSuiviTable(title, rows, notes) {
+        var html = '<table class="dct-suivi-table"><thead><tr><th>Résultat du contrôle</th><th>Conduite</th></tr></thead><tbody>';
+        rows.forEach(function(r) { html += trRow(r[0], r[1], r[2]||''); });
+        html += '</tbody></table>';
+        if (notes && notes.length) {
+            html += '<div class="dct-suivi-recs">';
+            notes.forEach(function(n) { html += makeRec(n[0], n[1]); });
+            html += '</div>';
+        }
+        return html;
     }
 
     /* ── Lecture état ── */
@@ -910,25 +631,29 @@
         };
     }
 
-    /* ── Mise à jour du toggle ── */
+    /* ── Toggle HPV ── */
     function updateToggle() {
         var on = el.hpvToggle.checked;
         el.toggleStatus.textContent = on ? 'OUI' : 'NON';
         el.toggleStatus.className = 'dct-toggle-status ' + (on ? 'dct-on' : 'dct-off');
-        /* Masquer génotype si HPV off */
         el.fieldHpvType.style.display = on ? '' : 'none';
     }
 
-    /* ── Mise à jour champs conditionnels ── */
+    /* ── Champs conditionnels ── */
     function updateFields() {
         var g = el.grade.value;
-        /* p16 actif seulement sur CIN 2 */
-        el.p16.disabled = (g !== 'cin2');
-        /* marges actives seulement sur post-conisation */
+        el.p16.disabled    = (g !== 'cin2');
         el.marges.disabled = (g !== 'post');
     }
 
-    /* ── Logique clinique principale ── */
+    /* ── Toggle accordion Suivi ── */
+    el.suiviToggle.addEventListener('click', function () {
+        el.suiviPanel.classList.toggle('dct-open');
+    });
+
+    /* ══════════════════════════════════════════════════════════
+       LOGIQUE CLINIQUE PRINCIPALE
+       ══════════════════════════════════════════════════════════ */
     function compute() {
         var s = getState();
 
@@ -939,162 +664,234 @@
             return;
         }
 
-        var verdict  = { cls: 'dct-v-ok', icon: '\u2705', label: '', title: '' };
-        var recs     = [];   /* HTML strings */
-        var alerts   = [];   /* HTML strings */
-        var margRecs = [];   /* HTML strings — suivi post-conisation */
+        var verdict  = { cls:'dct-v-ok', icon:'\u2705', label:'', title:'' };
+        var recs     = [];
+        var alerts   = [];
+        var margRecs = [];
         var showMarg = false;
+        var suiviHTML = '';
+        var suiviTitleText = 'Conduite après le geste / au prochain contrôle';
+        var showSuivi = false;
 
-        /* ═══════════════════════════════════
-           CIN 1
-           ═══════════════════════════════════ */
+        /* ══════ CIN 1 ══════ */
         if (s.grade === 'cin1') {
+
             if (s.colpo === 'nonsat') {
-                verdict = { cls: 'dct-v-warn', icon: '\u26A0\uFE0F', label: 'CIN 1 \u2014 Attention', title: 'Colposcopie non satisfaisante : risque de sous-estimation' };
-                alerts.push(makeAlert('La jonction pavimento-cylindrique non visible expose à un risque de mésestimation du grade réel. Une conisation diagnostique peut être discutée.', 'warn'));
-                recs.push(makeRec('<strong>Discussion</strong> : conisation diagnostique à envisager selon le contexte clinique.', 'warn'));
+                verdict = { cls:'dct-v-warn', icon:'\u26A0\uFE0F',
+                    label:'CIN 1 \u2014 Attention',
+                    title:'Colposcopie non satisfaisante : risque de sous-estimation' };
+                alerts.push(makeAlert('La jonction pavimento-cylindrique non visible expose au risque de mésestimation du grade réel.','warn'));
+                recs.push(makeRec('<strong>Discussion</strong> : conisation diagnostique à envisager selon le contexte clinique.','warn'));
+                /* Suivi si conisation réalisée → identique CIN3 / post-conisation */
+                showSuivi = true;
+                suiviTitleText = 'Si conisation diagnostique réalisée : suivi post-geste';
+                suiviHTML = makeSuiviTable('', [
+                    ['Marges saines + HPV négatif à 6 mois', 'Retour au dépistage organisé (3 ans)', 'dct-st-ok'],
+                    ['Marges saines + HPV positif à 6 mois', 'Colposcopie + biopsies', 'dct-st-warn'],
+                    ['Marges atteintes', 'Re-conisation à discuter selon grade anatomopathologique final', 'dct-st-danger']
+                ], [
+                    ['Si pas de geste : cytologie + colposcopie à 12 mois. En cas de normalisation : retour dépistage.', 'primary']
+                ]);
+
             } else if (s.persistant) {
-                verdict = { cls: 'dct-v-warn', icon: '\u26A0\uFE0F', label: 'CIN 1 persistant', title: 'Persistance \u2265 24 mois : réévaluation indiquée' };
-                recs.push(makeRec('Réévaluation par <strong>nouvelle colposcopie + biopsies</strong> dirigées.', 'warn'));
-                recs.push(makeRec('Discussion d\'un <strong>traitement ablatif ou excisionnel</strong> (LEEP, laser CO₂) si persistance confirmée.', 'warn'));
+                verdict = { cls:'dct-v-warn', icon:'\u26A0\uFE0F',
+                    label:'CIN 1 persistant',
+                    title:'Persistance \u2265 24 mois : réévaluation indiquée' };
+                recs.push(makeRec('Nouvelle colposcopie + <strong>biopsies dirigées</strong>.', 'warn'));
+                recs.push(makeRec('Discussion traitement ablatif (laser CO\u2082) ou excisionnel (LEEP) si persistance confirmée.', 'warn'));
+                showSuivi = true;
+                suiviTitleText = 'Suivi après traitement ablatif / LEEP';
+                suiviHTML = makeSuiviTable('', [
+                    ['HPV négatif à 6 mois', 'Retour au dépistage organisé (3 ans)', 'dct-st-ok'],
+                    ['HPV positif à 6 mois', 'Colposcopie + biopsies', 'dct-st-warn'],
+                    ['Marges atteintes (si LEEP)', 'Contrôle colposcopique rapproché à 3 mois', 'dct-st-danger']
+                ], [
+                    ['Si pas de traitement réalisé : cytologie + colposcopie à 6 mois, puis annuellement.', 'primary']
+                ]);
+
             } else {
-                verdict = { cls: 'dct-v-ok', icon: '\u2705', label: 'CIN 1', title: 'Surveillance recommandée' };
+                verdict = { cls:'dct-v-ok', icon:'\u2705', label:'CIN 1', title:'Surveillance recommandée' };
                 if (s.hpvOn) {
-                    var delay1 = s.hpv1618 ? '6 mois (HPV 16/18)' : '12 mois';
-                    recs.push(makeRec('Test ' + hpvTag('HPV') + ' de contrôle à <strong>' + delay1 + '</strong>.', 'hpv'));
-                    recs.push(makeRec('Si test HPV négatif : retour au dépistage organisé.', 'primary'));
-                    recs.push(makeRec('Si test HPV positif persistant : nouvelle colposcopie + biopsies.', 'warn'));
+                    var d = s.hpv1618 ? '6 mois (HPV 16/18 détecté)' : '12 mois';
+                    recs.push(makeRec('Test ' + hpvTag('HPV') + ' de contrôle à <strong>' + d + '</strong>.', 'hpv'));
+                    recs.push(makeRec('Si HPV négatif : retour au dépistage organisé.', 'primary'));
+                    recs.push(makeRec('Si HPV positif persistant : nouvelle colposcopie + biopsies.', 'warn'));
                 } else {
                     recs.push(makeRec('Cytologie de contrôle à <strong>6 mois</strong>, puis à <strong>12 mois</strong>.', 'primary'));
-                    recs.push(makeRec('Si cytologie ≥ ASCUS persistante : colposcopie + biopsies.', 'warn'));
+                    recs.push(makeRec('Si cytologie \u2265 ASCUS persistante : colposcopie + biopsies.', 'warn'));
+                }
+                showSuivi = true;
+                suiviTitleText = 'Arbre de décision au prochain contrôle HPV';
+                if (s.hpvOn) {
+                    suiviHTML = makeSuiviTable('', [
+                        ['HPV négatif', 'Retour au dépistage organisé (3 ans)', 'dct-st-ok'],
+                        ['HPV positif — cytologie normale', 'Nouveau contrôle HPV + cytologie à 12 mois', 'dct-st-warn'],
+                        ['HPV positif — cytologie \u2265 ASC-US', 'Colposcopie + biopsies dirigées', 'dct-st-warn'],
+                        ['HPV 16/18 persistent à 12 mois', 'Colposcopie impérative même si cytologie normale', 'dct-st-danger'],
+                        ['Persistance > 24 mois toute cytologie', 'Discussion traitement ablatif ou excisionnel', 'dct-st-danger']
+                    ], [
+                        [s.hpv1618 ? 'HPV 16/18 : premier contrôle avancé à 6 mois.' : 'HPV non 16/18 : premier contrôle à 12 mois.', 'hpv']
+                    ]);
+                } else {
+                    suiviHTML = makeSuiviTable('', [
+                        ['Cytologie normale \xd7 2 contrôles', 'Retour au dépistage organisé', 'dct-st-ok'],
+                        ['Cytologie \u2265 ASC-US une fois', 'Colposcopie + biopsies', 'dct-st-warn'],
+                        ['Cytologie anormale persistante > 24 mois', 'Discussion traitement ablatif ou excisionnel', 'dct-st-danger']
+                    ], null);
+                }
+                if (s.immuno) {
+                    alerts.push(makeAlert('Immunodépression sur CIN 1 : seuil de traitement abaissé. Discuter un traitement dès confirmation.', 'danger'));
                 }
             }
         }
 
-        /* ═══════════════════════════════════
-           CIN 2
-           ═══════════════════════════════════ */
+        /* ══════ CIN 2 ══════ */
         else if (s.grade === 'cin2') {
+
             if (s.p16 === 'neg') {
-                /* CIN 2 p16 négatif → LSIL comportement */
-                verdict = { cls: 'dct-v-ok', icon: '\u2705', label: 'CIN 2 p16 n\xe9gatif', title: 'Comportement biologique de bas grade \u2014 Surveillance' };
+                verdict = { cls:'dct-v-ok', icon:'\u2705',
+                    label:'CIN 2 p16 n\xe9gatif',
+                    title:'Comportement biologique de bas grade \u2014 Surveillance' };
+                alerts.push(makeAlert('Marquage p16 négatif : lésion de bas grade biologique. Surveillance rigoureuse justifiée.','info'));
                 if (s.hpvOn) {
                     recs.push(makeRec('Test ' + hpvTag('HPV') + ' de contrôle à <strong>12 mois</strong>.', 'hpv'));
                 } else {
                     recs.push(makeRec('Cytologie + colposcopie à <strong>6 et 12 mois</strong>.', 'primary'));
                 }
-                alerts.push(makeAlert('Le marquage p16 négatif sur CIN 2 traduit une lésion de bas grade biologique. La surveillance reste justifiée mais doit être rigoureuse.', 'info'));
+                showSuivi = true;
+                suiviTitleText = 'Arbre de décision au prochain contrôle';
+                suiviHTML = makeSuiviTable('', [
+                    ['HPV négatif à 12 mois', 'Retour au dépistage organisé (3 ans)', 'dct-st-ok'],
+                    ['HPV positif à 12 mois — lésion régressive', 'Nouveau contrôle HPV à 12 mois supplémentaires', 'dct-st-warn'],
+                    ['HPV positif + lésion stable ou progressive', 'Rebiopsie + discussion traitement excisionnel', 'dct-st-danger'],
+                    ['Persistance > 24 mois', 'Traitement excisionnel (LEEP) indiqué', 'dct-st-danger']
+                ], [
+                    ['Si la reclassification p16 était erronée et lésion progresse : rebiopsie systématique avant toute décision.', 'warn']
+                ]);
 
             } else {
-                /* CIN 2 p16 positif → vrai HSIL */
-                verdict = { cls: 'dct-v-warn', icon: '\u26A0\uFE0F', label: 'CIN 2 p16 positif (vrai HSIL)', title: 'Traitement excisionnel indiqu\xe9' };
+                /* CIN 2 p16+ → vrai HSIL */
+                verdict = { cls:'dct-v-warn', icon:'\u26A0\uFE0F',
+                    label:'CIN 2 p16 positif (vrai HSIL)',
+                    title:'Traitement excisionnel indiqu\xe9' };
 
                 if (s.grossesse) {
-                    alerts.push(makeAlert('Désir de grossesse ou grossesse en cours : préférer la surveillance rapprochée si possible. Le traitement excisionnel est différé sauf progression documentée.', 'warn'));
-                    recs.push(makeRec('Surveillance rapprochée : colposcopie + cytologie tous les <strong>3 mois</strong>.', 'primary'));
-                    recs.push(makeRec('Traitement différé post-partum (6 semaines minimum après accouchement).', 'warn'));
+                    alerts.push(makeAlert('Désir de grossesse : traitement différé post-partum. Surveillance rapprochée tous les 3 mois.','warn'));
+                    recs.push(makeRec('Colposcopie + cytologie tous les <strong>3 mois</strong> pendant la grossesse.', 'primary'));
+                    recs.push(makeRec('Traitement différé au post-partum (6 semaines minimum après accouchement).', 'warn'));
+                    showSuivi = true;
+                    suiviTitleText = 'Après l\'accouchement : conduite post-partum';
+                    suiviHTML = makeSuiviTable('', [
+                        ['Lésion régressive post-partum', 'Contrôle HPV + colposcopie à 3 mois post-partum', 'dct-st-ok'],
+                        ['Lésion stable ou progressive post-partum', 'LEEP ou conisation dans les 6 semaines post-partum', 'dct-st-warn'],
+                        ['Progression documentée pendant la grossesse', 'Discussion RCP — geste possible selon terme et grade', 'dct-st-danger']
+                    ], null);
                 } else if (s.colpo === 'nonsat') {
-                    recs.push(makeRec('<strong>Conisation chirurgicale</strong> (bistouri froid) : exérèse endocervicale permettant l\'évaluation des marges.', 'danger'));
+                    recs.push(makeRec('<strong>Conisation chirurgicale</strong> (bistouri froid) : exérèse endocervicale.', 'danger'));
+                    showSuivi = true;
+                    suiviTitleText = 'Suivi post-conisation (CIN 2 p16+)';
+                    suiviHTML = _suiviPostConisationCIN23(s, false);
                 } else {
                     recs.push(makeRec('<strong>Exérèse par LEEP</strong> (anse diathermique) en ambulatoire.', 'warn'));
+                    showSuivi = true;
+                    suiviTitleText = 'Suivi post-LEEP (CIN 2 p16+)';
+                    suiviHTML = _suiviPostConisationCIN23(s, false);
                 }
 
                 if (s.immuno) {
-                    alerts.push(makeAlert('Patiente immunodéprimée : seuil de traitement abaissé. Surveillance post-thérapeutique renforcée recommandée (test HPV à 6 mois, puis annuel à vie).', 'danger'));
+                    alerts.push(makeAlert('Immunodépression : surveillance post-thérapeutique renforcée. Test HPV à 6 mois, puis annuel à vie.','danger'));
                 }
             }
         }
 
-        /* ═══════════════════════════════════
-           CIN 3
-           ═══════════════════════════════════ */
+        /* ══════ CIN 3 ══════ */
         else if (s.grade === 'cin3') {
-            verdict = { cls: 'dct-v-danger', icon: '\u26D4', label: 'CIN 3 / CIS', title: 'Traitement excisionnel imp\xe9ratif' };
+            verdict = { cls:'dct-v-danger', icon:'\u26D4',
+                label:'CIN 3 / CIS',
+                title:'Traitement excisionnel imp\xe9ratif' };
 
             if (s.grossesse) {
-                alerts.push(makeAlert('Désir de grossesse ou grossesse en cours : le CIN 3 est traité sans délai (pas de différé justifié contrairement au CIN 2). Le mode de traitement sera discuté en RCP si grossesse en cours.', 'danger'));
+                alerts.push(makeAlert('CIN 3 : traitement sans délai — pas de différé justifié, même en cas de désir de grossesse. Mode de traitement à discuter en RCP si grossesse en cours.','danger'));
             }
 
             if (s.colpo === 'nonsat') {
-                recs.push(makeRec('<strong>Conisation au bistouri froid</strong> : indispensable pour atteindre la zone de transformation non visible et permettre l\'analyse des marges endocervicales.', 'danger'));
+                recs.push(makeRec('<strong>Conisation au bistouri froid</strong> obligatoire (ZT non visible — accès endocervical indispensable).', 'danger'));
             } else {
-                recs.push(makeRec('<strong>Conisation LEEP</strong> ou bistouri froid selon opérateur (deux passes si lésion endocervicale).', 'danger'));
+                recs.push(makeRec('<strong>Conisation LEEP</strong> ou bistouri froid selon opérateur ; deux passes si lésion endocervicale.', 'danger'));
             }
 
-            if (s.hpvOn) {
-                recs.push(makeRec('Test ' + hpvTag('HPV') + ' de contrôle à <strong>6 mois</strong> post-conisation.', 'hpv'));
-                recs.push(makeRec('Si HPV négatif à 6 mois : test HPV annuel pendant <strong>2 ans</strong>, puis retour au dépistage organisé (3 ans).', 'primary'));
-                recs.push(makeRec('Si HPV positif à 6 mois : colposcopie + biopsies.', 'warn'));
-            } else {
-                recs.push(makeRec('Cytologie + colposcopie à <strong>4–6 mois</strong>, puis annuellement pendant <strong>2 ans</strong>.', 'primary'));
-            }
+            if (s.immuno)   alerts.push(makeAlert('Immunodépression : surveillance post-thérapeutique à vie, annuelle.','danger'));
+            if (s.recidive) alerts.push(makeAlert('Récidive : discussion en RCP obligatoire. Bilan colposcopique complet avant tout nouveau geste.','danger'));
 
-            if (s.immuno) {
-                alerts.push(makeAlert('Immunodépression : surveillance post-thérapeutique à vie, annuelle, par test HPV (ou cytologie si HPV non disponible).', 'danger'));
-            }
-
-            if (s.recidive) {
-                alerts.push(makeAlert('Récidive documentée : discussion en RCP obligatoire avant tout nouveau geste. Évaluation de l\'histologie complète (colposcopie, biopsies étagées, curetage endocervical).', 'danger'));
-            }
+            showSuivi = true;
+            suiviTitleText = 'Suivi post-conisation (CIN 3 / CIS)';
+            suiviHTML = _suiviPostConisationCIN23(s, true);
         }
 
-        /* ═══════════════════════════════════
-           MICRO-INVASIF IA1
-           ═══════════════════════════════════ */
+        /* ══════ MICRO-INVASIF IA1 ══════ */
         else if (s.grade === 'micro') {
-            verdict = { cls: 'dct-v-urgent', icon: '\u2691', label: 'Carcinome micro-invasif stade IA1', title: 'Discussion en RCP \u2014 Prise en charge sp\xe9cialis\xe9e' };
-            alerts.push(makeAlert('Stade IA1 : nécessite une concertation pluridisciplinaire (RCP) avant toute décision thérapeutique.', 'danger'));
-            recs.push(makeRec('<strong>Conisation in sano</strong> obligatoire pour évaluation complète des marges et de la profondeur d\'invasion.', 'danger'));
+            verdict = { cls:'dct-v-urgent', icon:'\u2691',
+                label:'Carcinome micro-invasif stade IA1',
+                title:'Discussion en RCP \u2014 Prise en charge sp\xe9cialis\xe9e' };
+            alerts.push(makeAlert('Stade IA1 : concertation pluridisciplinaire (RCP) obligatoire avant toute décision.','danger'));
+            recs.push(makeRec('<strong>Conisation in sano</strong> : évaluation marges + profondeur d\'invasion.', 'danger'));
             recs.push(makeRec('Évaluation des <strong>emboles vasculo-lymphatiques</strong> sur la pièce (détermine le risque ganglionnaire).', 'danger'));
             recs.push(makeRec('Si marges saines + absence d\'emboles + désir de grossesse : <strong>surveillance acceptable</strong> en RCP.', 'primary'));
-            recs.push(makeRec('Si marges atteintes ou emboles : <strong>hystérectomie simple</strong> (ou conisation élargie si conservation utérine souhaitée).', 'danger'));
-            if (s.grossesse) {
-                alerts.push(makeAlert('Désir de grossesse : la conservation utérine est discutable au cas par cas en RCP selon la profondeur d\'invasion et les marges.', 'warn'));
-            }
+            recs.push(makeRec('Si marges atteintes ou emboles : <strong>hystérectomie simple</strong> (ou conisation élargie si conservation souhaitée).', 'danger'));
+            if (s.grossesse) alerts.push(makeAlert('Conservation utérine : discutable au cas par cas en RCP selon profondeur d\'invasion et marges.','warn'));
+
+            showSuivi = true;
+            suiviTitleText = 'Suivi post-thérapeutique — Stade IA1';
+            suiviHTML = makeSuiviTable('', [
+                ['Post-conisation : marges saines, pas d\'emboles', 'Test HPV à 6 mois. Si négatif : suivi semestriel 2 ans puis annuel.', 'dct-st-ok'],
+                ['Post-conisation : marges atteintes ou emboles', 'Discussion RCP : hystérectomie simple vs re-conisation.', 'dct-st-danger'],
+                ['Post-hystérectomie : cytologie négative', 'Cytologie vaginale annuelle pendant 5 ans.', 'dct-st-ok'],
+                ['Toute anomalie cytologique post-thérapeutique', 'Colposcopie vaginale + biopsies.', 'dct-st-warn']
+            ], [
+                ['Toute progression ou anomalie en cours de suivi : discussion RCP immédiate.', 'danger']
+            ]);
         }
 
-        /* ═══════════════════════════════════
-           POST-CONISATION (marges)
-           ═══════════════════════════════════ */
+        /* ══════ POST-CONISATION ══════ */
         else if (s.grade === 'post') {
             showMarg = true;
-            verdict = { cls: 'dct-v-ok', icon: '\u2139\uFE0F', label: 'Suivi post-conisation', title: 'Conduite selon statut des marges' };
+            verdict = { cls:'dct-v-ok', icon:'\u2139\uFE0F',
+                label:'Suivi post-conisation',
+                title:'Conduite selon statut des marges' };
 
             if (s.marges === 'saines') {
-                /* Marges saines */
-                margRecs.push(makeRec('<strong>Marges saines (in sano)</strong> : surveillance par test HPV à <strong>6 mois</strong>.', 'hpv'));
-                if (!s.hpvOn) {
-                    margRecs.push(makeRec('Si HPV non disponible : cytologie + colposcopie à <strong>4–6 mois</strong>.', 'primary'));
-                }
-                margRecs.push(makeRec('Si HPV négatif à 6 mois : retour au protocole de surveillance standard (annuel 2 ans).', 'primary'));
+                margRecs.push(makeRec('<strong>Marges saines (in sano)</strong> : test ' + hpvTag('HPV') + ' à <strong>6 mois</strong>.', 'hpv'));
+                if (!s.hpvOn) margRecs.push(makeRec('Si HPV non disponible : cytologie + colposcopie à <strong>4–6 mois</strong>.', 'primary'));
+                margRecs.push(makeRec('Si HPV négatif à 6 mois : HPV annuel \xd7 2 ans puis retour dépistage organisé.', 'primary'));
             } else {
-                /* Marges atteintes */
-                verdict.cls = 'dct-v-warn';
-                verdict.icon = '\u26A0\uFE0F';
+                verdict.cls   = 'dct-v-warn';
+                verdict.icon  = '\u26A0\uFE0F';
                 verdict.label = 'Suivi post-conisation \u2014 Marges atteintes';
-                verdict.title = 'Réévaluation et discussion de re-conisation';
-                alerts.push(makeAlert('Marges endocervicales atteintes ou non évaluables : le risque de lésion résiduelle est significatif.', 'warn'));
+                verdict.title = 'Réévaluation et discussion re-conisation';
+                alerts.push(makeAlert('Marges endocervicales atteintes ou non évaluables : risque de lésion résiduelle significatif.','warn'));
                 margRecs.push(makeRec('Test ' + hpvTag('HPV') + ' + colposcopie à <strong>3–4 mois</strong>.', 'hpv'));
-                margRecs.push(makeRec('Si persistance cytologique ou HPV positif : <strong>re-conisation</strong> (évaluation soigneuse de la réserve cervicale).', 'warn'));
-                margRecs.push(makeRec('Discussion hystérectomie si marges atteintes récidivantes, parité accomplie.', 'danger'));
+                margRecs.push(makeRec('Si HPV positif ou cytologie anormale : <strong>re-conisation</strong> (évaluation de la réserve cervicale).', 'warn'));
+                margRecs.push(makeRec('Si marges atteintes récidivantes + parité accomplie : discussion <strong>hystérectomie simple</strong>.', 'danger'));
             }
+            if (s.immuno) alerts.push(makeAlert('Immunodépression : surveillance post-conisation renforcée à vie, indépendamment du statut des marges.','danger'));
 
-            if (s.immuno) {
-                alerts.push(makeAlert('Immunodépression : surveillance renforcée post-conisation à vie, indépendamment du statut des marges.', 'danger'));
-            }
-        }
-
-        /* ── Alertes contextuelles globales (si non encore gérées spécifiquement) ── */
-        if (s.immuno && s.grade === 'cin1') {
-            alerts.push(makeAlert('Immunodépression sur CIN 1 : seuil de traitement abaissé. Discuter un traitement dès la 1ère visite si lésion confirmée.', 'danger'));
+            showSuivi = true;
+            suiviTitleText = 'Conduite selon résultat du contrôle à 6 mois';
+            suiviHTML = makeSuiviTable('', [
+                ['HPV négatif à 6 mois', 'Test HPV annuel \xd7 2 ans. Si \xd7 2 négatifs : retour dépistage organisé (3 ans).', 'dct-st-ok'],
+                ['HPV positif à 6 mois — lésion non visible', 'Colposcopie + biopsies à 6 mois supplémentaires.', 'dct-st-warn'],
+                ['HPV positif + lésion colposcopique', 'Rebiopsie dirigée \u2014 discussion re-conisation si CIN 2+ confirmé.', 'dct-st-danger'],
+                ['CIN 2+ résiduel sur biopsie', 'Re-conisation ou hystérectomie (selon parité et réserve cervicale).', 'dct-st-danger']
+            ], [
+                [s.immuno ? 'Immunodépression : suivi annuel à vie par test HPV, même si HPV négatif au premier contrôle.' : 'Surveillance standard : HPV annuel \xd7 2 ans post-conisation avant retour au dépistage.', s.immuno ? 'danger' : 'primary']
+            ]);
         }
 
         /* ── Rendu ── */
-        setClass(el.verdictBox, verdict.cls);
-        el.verdictIcon.textContent   = verdict.icon;
-        el.verdictLabel.textContent  = verdict.label;
-        el.verdictTitle.textContent  = verdict.title;
-
+        setVClass(verdict.cls);
+        el.verdictIcon.textContent  = verdict.icon;
+        el.verdictLabel.textContent = verdict.label;
+        el.verdictTitle.textContent = verdict.title;
         el.alertsZone.innerHTML = alerts.join('');
         el.recsZone.innerHTML   = recs.join('');
 
@@ -1106,149 +903,152 @@
             el.marginsRecs.innerHTML = '';
         }
 
+        if (showSuivi && suiviHTML) {
+            el.suiviTitle.textContent = suiviTitleText;
+            el.suiviBody.innerHTML    = suiviHTML;
+            show(el.suiviPanel);
+            /* Ouvrir automatiquement */
+            el.suiviPanel.classList.add('dct-open');
+        } else {
+            hide(el.suiviPanel);
+            el.suiviPanel.classList.remove('dct-open');
+            el.suiviBody.innerHTML = '';
+        }
+
         show(el.resultZone);
         show(el.actions);
         hide(el.reportZone);
     }
 
+    /* ── Suivi post-conisation CIN 2p16+ / CIN 3 ── */
+    function _suiviPostConisationCIN23(s, isCin3) {
+        var rows = [
+            /* Marges saines */
+            ['Marges saines + ' + (s.hpvOn ? 'HPV négatif à 6 mois' : 'cytologie normale à 6 mois'),
+             isCin3 ? 'Test HPV annuel \xd7 2 ans. Si \xd7 2 négatifs : retour dépistage organisé.' : 'Test HPV à 12 mois. Si négatif : retour dépistage.',
+             'dct-st-ok'],
+            ['Marges saines + ' + (s.hpvOn ? 'HPV positif à 6 mois' : 'cytologie anormale à 6 mois'),
+             'Colposcopie + biopsies.',
+             'dct-st-warn'],
+            /* Marges atteintes */
+            ['Marges endocervicales atteintes + HPV négatif à 3 mois',
+             'Surveillance rapprochée : colposcopie + HPV à 6 mois.',
+             'dct-st-warn'],
+            ['Marges atteintes + HPV positif ou lésion résiduelle',
+             'Re-conisation. Discussion hystérectomie si parité accomplie.',
+             'dct-st-danger'],
+        ];
+        var notes = [];
+        if (s.immuno) {
+            notes.push(['Immunodépression : test HPV annuel à vie, même si négatif au premier contrôle.', 'danger']);
+        }
+        if (s.hpv1618 && s.hpvOn) {
+            notes.push(['HPV 16/18 : en cas de négativation HPV, la surveillance reste annuelle pendant 3 ans avant retour au dépistage standard.', 'hpv']);
+        }
+        notes.push(['Si HPV positif mais colposcopie normale et biopsies négatives : recontrôle HPV + colposcopie à 6 mois supplémentaires avant re-intervention.', 'primary']);
+        return makeSuiviTable('', rows, notes);
+    }
+
     /* ── Rapport texte ── */
     function generateReport() {
-        var s  = getState();
-        var now = new Date();
-        var date = now.toLocaleDateString('fr-FR');
+        var s   = getState();
+        var date = new Date().toLocaleDateString('fr-FR');
         var ctx = [];
         if (s.grossesse)  ctx.push('désir de grossesse / grossesse');
         if (s.immuno)     ctx.push('immunodépression');
-        if (s.persistant) ctx.push('persistance ≥ 24 mois');
+        if (s.persistant) ctx.push('persistance \u2265 24 mois');
         if (s.recidive)   ctx.push('récidive après traitement');
 
-        var gradeLabel  = el.grade.options[el.grade.selectedIndex].text.replace(/\s*&mdash;\s*|\s*—\s*/g, ' – ').replace(/\u2014/g, '–');
-        var colpoLabel  = el.colpo.options[el.colpo.selectedIndex].text.replace(/\u2014/g, '–');
-        var verdictText = el.verdictLabel.textContent + ' : ' + el.verdictTitle.textContent;
-
-        /* Extraire texte des recs */
-        var recsText = [];
-        var recEls = el.recsZone.querySelectorAll('.dct-rec-text');
-        recEls.forEach(function(r) { recsText.push('- ' + r.innerText.trim()); });
-        var margEls = el.marginsRecs.querySelectorAll('.dct-rec-text');
-        margEls.forEach(function(r) { recsText.push('- [Marges] ' + r.innerText.trim()); });
-
-        var alertText = [];
-        var altEls = el.alertsZone.querySelectorAll('.dct-alert span:last-child');
-        altEls.forEach(function(a) { alertText.push('[!] ' + a.innerText.trim()); });
-
-        var hpvLine = s.hpvOn
+        var gradeLabel = el.grade.options[el.grade.selectedIndex].text.replace(/\u2014/g,'–');
+        var colpoLabel = el.colpo.options[el.colpo.selectedIndex].text.replace(/\u2014/g,'–');
+        var hpvLine    = s.hpvOn
             ? 'Test HPV : disponible — génotype ' + (s.hpv1618 ? 'HPV 16/18' : 'autre HPV-HR')
             : 'Test HPV : non disponible';
 
+        var recsText = [], suiviText = [], alertText = [];
+        el.recsZone.querySelectorAll('.dct-rec-text').forEach(function(r){ recsText.push('- ' + r.innerText.trim()); });
+        el.marginsRecs.querySelectorAll('.dct-rec-text').forEach(function(r){ recsText.push('- [Marges] ' + r.innerText.trim()); });
+        el.suiviBody.querySelectorAll('tr').forEach(function(tr){
+            var cells = tr.querySelectorAll('td');
+            if (cells.length === 2) suiviText.push('  Si ' + cells[0].innerText.trim() + ' \u2192 ' + cells[1].innerText.trim());
+        });
+        el.suiviBody.querySelectorAll('.dct-rec-text').forEach(function(r){ suiviText.push('  Note : ' + r.innerText.trim()); });
+        el.alertsZone.querySelectorAll('.dct-alert span:last-child').forEach(function(a){ alertText.push('[!] ' + a.innerText.trim()); });
+
         var lines = [
-            '=== AIDE DÉCISIONNELLE — DYSPLASIE CERVICALE ===',
-            'Date       : ' + date,
+            '=== AIDE DÉCISIONNELLE — DYSPLASIE CERVICALE v2.1 ===',
+            'Date        : ' + date,
             '',
             '--- DONNÉES CLINIQUES ---',
-            'Grade      : ' + gradeLabel,
-            'Colposcopie: ' + colpoLabel,
+            'Grade       : ' + gradeLabel,
+            'Colposcopie : ' + colpoLabel,
             hpvLine,
-            (s.grade === 'cin2' ? 'p16        : ' + (el.p16.options[el.p16.selectedIndex].text) : ''),
-            ctx.length ? 'Contexte   : ' + ctx.join(', ') : '',
+            s.grade === 'cin2' ? 'p16         : ' + el.p16.options[el.p16.selectedIndex].text : '',
+            ctx.length ? 'Contexte    : ' + ctx.join(', ') : '',
             '',
             '--- CONCLUSION ---',
-            verdictText,
+            el.verdictLabel.textContent + ' : ' + el.verdictTitle.textContent,
             '',
         ];
-
-        if (alertText.length) {
-            lines.push('--- POINTS D\'ATTENTION ---');
-            alertText.forEach(function(a) { lines.push(a); });
-            lines.push('');
-        }
-
-        if (recsText.length) {
-            lines.push('--- RECOMMANDATIONS ---');
-            recsText.forEach(function(r) { lines.push(r); });
-            lines.push('');
-        }
-
+        if (alertText.length) { lines.push('--- POINTS D\'ATTENTION ---'); alertText.forEach(function(a){ lines.push(a); }); lines.push(''); }
+        if (recsText.length)  { lines.push('--- RECOMMANDATIONS IMMÉDIATES ---'); recsText.forEach(function(r){ lines.push(r); }); lines.push(''); }
+        if (suiviText.length) { lines.push('--- SUIVI POST-GESTE ---'); suiviText.forEach(function(r){ lines.push(r); }); lines.push(''); }
         lines.push('--- SOURCE ---');
         lines.push('Recommandations INCa / HAS 2024 — Outil d\'aide à la décision (usage professionnel).');
 
-        /* Filtrer lignes vides multiples */
-        var report = lines.filter(function(l) { return l !== undefined && l !== null; }).join('\n');
-        el.reportContent.textContent = report;
+        el.reportContent.textContent = lines.filter(function(l){ return l !== undefined && l !== null; }).join('\n');
         show(el.reportZone);
-        el.reportZone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        el.reportZone.scrollIntoView({ behavior:'smooth', block:'nearest' });
     }
 
     /* ── Reset ── */
     function reset() {
-        /* Reset selects */
-        [el.grade, el.colpo, el.p16, el.hpvType, el.marges].forEach(function(s) { s.selectedIndex = 0; });
-        /* Reset checkboxes */
-        [el.grossesse, el.immuno, el.persistant, el.recidive].forEach(function(c) { c.checked = false; });
-        qAll('.dct-check-item').forEach(function(l) { l.classList.remove('dct-checked'); });
-        /* Reset HPV toggle */
+        [el.grade, el.colpo, el.p16, el.hpvType, el.marges].forEach(function(s){ s.selectedIndex = 0; });
+        [el.grossesse, el.immuno, el.persistant, el.recidive].forEach(function(c){ c.checked = false; });
+        qA('.dct-check-item').forEach(function(l){ l.classList.remove('dct-checked'); });
         el.hpvToggle.checked = true;
-        updateToggle();
-        updateFields();
-        hide(el.resultZone);
-        hide(el.actions);
-        hide(el.reportZone);
-        el.recsZone.innerHTML    = '';
-        el.alertsZone.innerHTML  = '';
-        el.marginsRecs.innerHTML = '';
+        updateToggle(); updateFields();
+        hide(el.resultZone); hide(el.actions); hide(el.reportZone);
+        [el.recsZone, el.alertsZone, el.marginsRecs, el.suiviBody].forEach(function(z){ z.innerHTML = ''; });
+        hide(el.suiviPanel); el.suiviPanel.classList.remove('dct-open');
     }
 
     /* ── Événements ── */
-    el.hpvToggle.addEventListener('change', function () {
-        updateToggle();
-        compute();
+    el.hpvToggle.addEventListener('change', function(){ updateToggle(); compute(); });
+
+    [el.grade, el.colpo, el.p16, el.hpvType, el.marges].forEach(function(sel){
+        sel.addEventListener('change', function(){ updateFields(); compute(); });
     });
 
-    [el.grade, el.colpo, el.p16, el.hpvType, el.marges].forEach(function(sel) {
-        sel.addEventListener('change', function () {
-            updateFields();
-            compute();
-        });
-    });
-
-    /* Checkboxes contexte */
-    qAll('.dct-check-item').forEach(function(label) {
+    qA('.dct-check-item').forEach(function(label){
         var chk = label.querySelector('input[type="checkbox"]');
-        chk.addEventListener('change', function () {
+        chk.addEventListener('change', function(){
             label.classList.toggle('dct-checked', chk.checked);
             compute();
         });
     });
 
     el.btnReset.addEventListener('click', reset);
-
     el.btnReport.addEventListener('click', generateReport);
 
-    el.btnCopy.addEventListener('click', function () {
+    el.btnCopy.addEventListener('click', function(){
         var txt = el.reportContent.textContent;
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(txt).then(function () {
+            navigator.clipboard.writeText(txt).then(function(){
                 el.btnCopy.textContent = '\u2713 Copié !';
-                setTimeout(function () { el.btnCopy.innerHTML = '&#x2398; Copier'; }, 2000);
+                setTimeout(function(){ el.btnCopy.innerHTML = '&#x2398; Copier'; }, 2000);
             });
         } else {
-            /* Fallback */
             var ta = document.createElement('textarea');
-            ta.value = txt;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.focus(); ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
+            ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0;';
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
             el.btnCopy.textContent = '\u2713 Copié !';
-            setTimeout(function () { el.btnCopy.innerHTML = '&#x2398; Copier'; }, 2000);
+            setTimeout(function(){ el.btnCopy.innerHTML = '&#x2398; Copier'; }, 2000);
         }
     });
 
-    /* ── Init ── */
-    updateToggle();
-    updateFields();
+    updateToggle(); updateFields();
 
 })();
 </script>
