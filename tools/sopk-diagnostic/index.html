@@ -25,8 +25,14 @@
         }
 
         /* ============================================================
-           VOTRE CSS ORIGINAL — Préfixé avec .sopk-wrap
+           CORRECTIF #7 — @keyframes scopé pour ne pas polluer la page hôte
+           Renommé en sopk-fadeIn pour éviter tout conflit global
            ============================================================ */
+        @keyframes sopk-fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
         .sopk-wrap .container {
             background: white;
             border-radius: 12px;
@@ -132,14 +138,10 @@
             display: none;
         }
 
+        /* CORRECTIF #7 — Animation renommée sopk-fadeIn */
         .sopk-wrap .step-content.active {
             display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            animation: sopk-fadeIn 0.4s ease;
         }
 
         .sopk-wrap h2 {
@@ -290,6 +292,29 @@
             opacity: 0.7;
         }
 
+        /* CORRECTIF #5 — Bouton imprimer */
+        .sopk-wrap .btn-print {
+            width: 100%;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1.5px solid #e5e7eb;
+            padding: 11px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .sopk-wrap .btn-print:hover {
+            background: #e5e7eb;
+        }
+
         .sopk-wrap .status-box {
             display: flex;
             align-items: center;
@@ -310,6 +335,12 @@
             background: #f0fdf4;
             color: #166534;
             border-left: 4px solid #22c55e;
+        }
+
+        .sopk-wrap .status-box.warning {
+            background: #FFFBEB;
+            color: #92400e;
+            border-left: 4px solid #F6AD55;
         }
 
         .sopk-wrap .recommendations {
@@ -337,7 +368,7 @@
         }
 
         /* ============================================================
-           DISCLAIMER MÉDICO-LÉGAL RENFORCÉ
+           DISCLAIMER MÉDICO-LÉGAL
            ============================================================ */
         .sopk-legal {
             margin: 20px 0;
@@ -358,18 +389,28 @@
         }
 
         /* ============================================================
-           ANTI-SCROLLBAR — Style App native
+           CORRECTIF #3 — Badge "mis à jour ESHRE 2023"
            ============================================================ */
-        html { scrollbar-width: none !important; }
-        body { -ms-overflow-style: none !important; overflow-y: auto !important; }
-        ::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+        .sopk-badge-eshre {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            vertical-align: middle;
+            letter-spacing: 0.02em;
+        }
 
         /* ============================================================
-           STYLES D'IMPRESSION
+           STYLES D'IMPRESSION — CORRECTIF #5
            ============================================================ */
         @media print {
             .sopk-wrap .btn-reset,
             .sopk-wrap .btn-primary,
+            .sopk-wrap .btn-print,
             .sopk-wrap .progress-bar {
                 display: none !important;
             }
@@ -396,14 +437,8 @@
             }
         }
 
-.sopk-wrap .status-box.warning {
-    background: #FFFBEB;
-    color: #92400e;
-    border-left: 4px solid #F6AD55;
-}
-        
         /* ============================================================
-           RESPONSIVE — Votre code original optimisé
+           RESPONSIVE
            ============================================================ */
         @media (max-width: 768px) {
             .sopk-wrap { padding: 16px; }
@@ -436,28 +471,29 @@
     </style>
 </head>
 <body>
-    <!-- Wrapper de scope pour isolation Elementor -->
     <div class="sopk-wrap">
         <div class="container">
             <div class="header">
                 <h1>Algorithme Diagnostic SOPK</h1>
-                <button class="btn-reset" onclick="resetTool()" aria-label="Réinitialiser l'outil">🔄 Réinitialiser</button>
+                <button class="btn-reset" onclick="resetTool()" aria-label="Réinitialiser l'outil">↺ Réinitialiser</button>
             </div>
 
-            <!-- DISCLAIMER MÉDICO-LÉGAL RENFORCÉ -->
+            <!-- DISCLAIMER MÉDICO-LÉGAL -->
             <div class="sopk-legal">
-                <strong>⚠️ Avertissement médico-légal</strong>
+                <strong>⚠ Avertissement médico-légal</strong>
                 <p>Cet outil est destiné à un usage professionnel. Le diagnostic de SOPK repose sur les critères de Rotterdam et doit être confirmé par un médecin après élimination des diagnostics différentiels.</p>
-                <p style="margin-top:8px"><strong>Source :</strong> Critères de Rotterdam 2003 — Recommandations internationales (ESHRE/ASRM) — HAS</p>
+                <p style="margin-top:8px"><strong>Sources :</strong> Critères de Rotterdam 2003 — Recommandations ESHRE/ASRM 2023 — HAS</p>
             </div>
 
             <div class="progress-bar" id="progressBar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="5"></div>
 
-            <!-- STEP 1: Suspicion clinique -->
+            <!-- =====================================================
+                 STEP 1 : Suspicion clinique
+                 ===================================================== -->
             <div class="step-content active" id="step1" role="tabpanel" aria-labelledby="tab1">
                 <h2>Suspicion Clinique de SOPK</h2>
                 <div class="info-box">
-                    <p style="margin-bottom: 16px; color: #4b5563;"><strong>Présence de signes cliniques évocateurs ?</strong></p>
+                    <p style="margin-bottom: 16px; color: #4b5563;"><strong>Présence de signes cliniques évocateurs ?</strong></p>
                     <div style="padding-left: 0;">
                         <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Cycles irréguliers / aménorrhée</p>
                         <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Hyperandrogénie (hirsutisme, acné, alopécie)</p>
@@ -467,61 +503,79 @@
                 </div>
             </div>
 
-            <!-- STEP 2: Bilan -->
+            <!-- =====================================================
+                 STEP 2 : Bilan de première intention
+                 ===================================================== -->
             <div class="step-content" id="step2" role="tabpanel" aria-labelledby="tab2">
                 <h2>Bilan de Première Intention</h2>
                 <div class="info-box blue">
-                    <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 700;">Examens à prescrire :</h3>
+                    <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 700;">Examens à prescrire :</h3>
                     <div class="exam-grid">
-                        <div class="exam-item">📋 LH, FSH (J3-J5)</div>
-                        <div class="exam-item">📋 Testostérone totale, SHBG</div>
-                        <div class="exam-item">📋 SDHEA, Δ4-Androstènedione</div>
-                        <div class="exam-item">📋 17-OH Progestérone</div>
-                        <div class="exam-item">📋 TSH, Prolactine</div>
-                        <div class="exam-item">📋 Échographie pelvienne</div>
+                        <div class="exam-item">LH, FSH (J3-J5)</div>
+                        <div class="exam-item">Testostérone totale, SHBG</div>
+                        <div class="exam-item">SDHEA, Δ4-Androstènedione</div>
+                        <div class="exam-item">17-OH Progestérone</div>
+                        <div class="exam-item">TSH, Prolactine</div>
+                        <div class="exam-item">Échographie pelvienne</div>
                     </div>
                     <button class="btn-primary" style="margin-top: 24px;" onclick="goToStep(3)" aria-label="Bilans réalisés, continuer">Bilans réalisés →</button>
                 </div>
             </div>
 
-            <!-- STEP 3: Critères de Rotterdam -->
+            <!-- =====================================================
+                 STEP 3 : Critères de Rotterdam
+                 CORRECTIF #3 — Critères échographiques ESHRE 2023
+                 ===================================================== -->
             <div class="step-content" id="step3" role="tabpanel" aria-labelledby="tab3">
                 <h2>Critères de Rotterdam</h2>
                 <p style="color: #6b7280; margin-bottom: 20px; font-size: 14px;">Cocher au moins 2 critères sur 3 pour un diagnostic probable de SOPK</p>
-                
+
+                <!-- CORRECTIF #2 — onchange uniquement, plus de onclick doublonné -->
                 <label class="checkbox-label">
-                    <input type="checkbox" id="anovulation" onclick="checkRotterdam()" onchange="checkRotterdam()" aria-describedby="anov-desc">
+                    <input type="checkbox" id="anovulation" onchange="checkRotterdam()" aria-describedby="anov-desc">
                     <div>
                         <div style="font-weight: bold;">Anovulation chronique</div>
-                        <div id="anov-desc" style="font-size: 13px; color: #6b7280;">Oligoménorrhée ou aménorrhée</div>
+                        <div id="anov-desc" style="font-size: 13px; color: #6b7280;">Oligoménorrhée (&lt; 8 cycles/an) ou aménorrhée</div>
                     </div>
                 </label>
 
                 <label class="checkbox-label">
-                    <input type="checkbox" id="hyperandrogenism" onclick="checkRotterdam()" onchange="checkRotterdam()" aria-describedby="hyper-desc">
+                    <input type="checkbox" id="hyperandrogenism" onchange="checkRotterdam()" aria-describedby="hyper-desc">
                     <div>
                         <div style="font-weight: bold;">Hyperandrogénie</div>
-                        <div id="hyper-desc" style="font-size: 13px; color: #6b7280;">Clinique (hirsutisme, acné) ou biologique</div>
+                        <div id="hyper-desc" style="font-size: 13px; color: #6b7280;">Clinique (hirsutisme, acné) ou biologique (testostérone ↑, SHBG ↓)</div>
                     </div>
                 </label>
 
                 <label class="checkbox-label">
-                    <input type="checkbox" id="opk" onclick="checkRotterdam()" onchange="checkRotterdam()" aria-describedby="opk-desc">
+                    <input type="checkbox" id="opk" onchange="checkRotterdam()" aria-describedby="opk-desc">
                     <div>
-                        <div style="font-weight: bold;">Ovaires polykystiques à l'échographie</div>
-                        <div id="opk-desc" style="font-size: 13px; color: #6b7280;">≥12 follicules 2-9mm ou volume ovarien &gt;10cm³</div>
+                        <div style="font-weight: bold;">
+                            Ovaires polykystiques à l'échographie
+                            <!-- CORRECTIF #3 — Badge ESHRE 2023 -->
+                            <span class="sopk-badge-eshre" title="European Society of Human Reproduction and Embryology — Recommandations internationales 2023">ESHRE 2023</span>
+                        </div>
+                        <!-- CORRECTIF #3 — Ancien critère Rotterdam 2003 remplacé par ESHRE 2023 -->
+                        <div id="opk-desc" style="font-size: 13px; color: #6b7280;">
+                            ≥ 20 follicules par ovaire (sonde haute résolution) <strong>ou</strong> volume ovarien ≥10 cm³
+                        </div>
+                        <div style="font-size: 11px; color: #9ca3af; margin-top: 4px; font-style: italic;">
+                            Ancien critère Rotterdam 2003 : ≥12 follicules 2–9 mm (dépassé par ESHRE 2023)
+                        </div>
                     </div>
                 </label>
 
                 <div id="rotterdamStatus" class="status-box red" role="status" aria-live="polite">
-                    <span style="font-size: 24px;" aria-hidden="true">⚠️</span>
+                    <span style="font-size: 24px;" aria-hidden="true">⚠</span>
                     <span style="font-weight: bold;">0/3 critères remplis</span>
                 </div>
 
                 <button class="btn-primary" id="btnStep3" disabled onclick="goToStep(4)" aria-disabled="true">Continuer →</button>
             </div>
 
-            <!-- STEP 4: Diagnostics différentiels -->
+            <!-- =====================================================
+                 STEP 4 : Diagnostics différentiels
+                 ===================================================== -->
             <div class="step-content" id="step4" role="tabpanel" aria-labelledby="tab4">
                 <h2>Éliminer les Diagnostics Différentiels</h2>
                 <p style="color: #6b7280; margin-bottom: 20px; font-size: 14px;">Entrez les valeurs biologiques pour éliminer les tumeurs ou blocs enzymatiques</p>
@@ -529,58 +583,58 @@
                 <div style="background: white; padding: 20px; border-radius: 10px; border: 1.5px solid #e5e7eb;">
                     <div class="input-group">
                         <label for="ohp17">17-OH Progestérone (ng/ml)</label>
-                        <input type="number" step="0.1" id="ohp17" placeholder="Ex: 0.8 (Seuil alerte > 2)" oninput="checkDifferentials()" aria-describedby="ohp17-hint">
-                        <div id="ohp17-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : > 2 ng/ml → Test Synacthène</div>
-                        <div class="alert" id="alert-ohp17" role="alert">⚠️ > 2 ng/ml → Test Synacthène (bloc 21-hydroxylase ?)</div>
+                        <input type="number" step="0.1" min="0" id="ohp17" placeholder="Ex : 0.8 (Seuil alerte > 2)" oninput="checkDifferentials()" aria-describedby="ohp17-hint">
+                        <div id="ohp17-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : &gt; 2 ng/ml → Test Synacthène</div>
+                        <div class="alert" id="alert-ohp17" role="alert">⚠ &gt; 2 ng/ml → Test Synacthène (bloc 21-hydroxylase ?)</div>
                     </div>
 
                     <div class="input-group">
                         <label for="testosterone">Testostérone Totale (ng/ml)</label>
-                        <input type="number" step="0.1" id="testosterone" placeholder="Ex: 0.5 (Seuil alerte > 1.5)" oninput="checkDifferentials()" aria-describedby="testo-hint">
-                        <div id="testo-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : > 1.5 ng/ml</div>
-                        <div class="alert" id="alert-testosterone" role="alert">⚠️ > 1.5 ng/ml → Suspecter tumeur ovarienne</div>
+                        <input type="number" step="0.1" min="0" id="testosterone" placeholder="Ex : 0.5 (Seuil alerte > 1.5)" oninput="checkDifferentials()" aria-describedby="testo-hint">
+                        <div id="testo-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : &gt; 1.5 ng/ml</div>
+                        <div class="alert" id="alert-testosterone" role="alert">⚠ &gt; 1.5 ng/ml → Suspecter tumeur ovarienne</div>
                     </div>
 
                     <div class="input-group">
                         <label for="sdhea">SDHEA (µmol/L)</label>
-                        <input type="number" step="0.1" id="sdhea" placeholder="Ex: 8 (Seuil alerte > 20)" oninput="checkDifferentials()" aria-describedby="sdhea-hint">
-                        <div id="sdhea-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : > 20 µmol/L</div>
-                        <div class="alert" id="alert-sdhea" role="alert">⚠️ > 20 µmol/L → Suspecter tumeur surrénalienne</div>
+                        <input type="number" step="0.1" min="0" id="sdhea" placeholder="Ex : 8 (Seuil alerte > 20)" oninput="checkDifferentials()" aria-describedby="sdhea-hint">
+                        <div id="sdhea-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : &gt; 20 µmol/L</div>
+                        <div class="alert" id="alert-sdhea" role="alert">⚠ &gt; 20 µmol/L → Suspecter tumeur surrénalienne</div>
                     </div>
-                    
+
+                    <!-- CORRECTIF #4 — Note sur les unités Delta-4 -->
                     <div class="input-group">
                         <label for="delta4">Δ4-Androstènedione (ng/ml)</label>
-                        <input type="number" step="0.1" id="delta4" placeholder="Ex: 2.5 (Seuil alerte > 6)" oninput="checkDifferentials()" aria-describedby="delta4-hint">
-                        <div id="delta4-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Seuil d'alerte : > 6 ng/ml</div>
-                        <div class="alert" id="alert-delta4" role="alert">⚠️ > 6 ng/ml → Suspecter tumeur ovarienne ou surrénalienne</div>
+                        <input type="number" step="0.1" min="0" id="delta4" placeholder="Ex : 2.5 (Seuil alerte > 6)" oninput="checkDifferentials()" aria-describedby="delta4-hint">
+                        <div id="delta4-hint" style="font-size:12px;color:#718096;margin-top:4px;">
+                            Seuil d'alerte : &gt; 6 ng/ml — <em>Si laboratoire en nmol/L : multiplier par 3.49</em>
+                        </div>
+                        <div class="alert" id="alert-delta4" role="alert">⚠ &gt; 6 ng/ml → Suspecter tumeur ovarienne ou surrénalienne</div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 0;">
-                        <label for="tsh">TSH & Prolactine</label>
+                        <label for="tsh">TSH &amp; Prolactine</label>
                         <select id="tsh" onchange="checkDifferentials()" aria-describedby="tsh-hint">
                             <option value="">— Sélectionner —</option>
                             <option value="normal">Normales</option>
                             <option value="anormal">TSH anormale</option>
                             <option value="prolactine">Prolactine élevée</option>
                         </select>
-                        <div id="tsh-hint" class="sopk-field-hint" style="font-size:12px;color:#718096;margin-top:4px;">Éliminer dysthyroïdie et hyperprolactinémie</div>
-                        <div class="alert" id="alert-tsh" role="alert">⚠️ TSH anormale → Dysthyroïdie</div>
-                        <div class="alert" id="alert-prolactin" role="alert">⚠️ Prolactine élevée → Hyperprolactinémie</div>
+                        <div id="tsh-hint" style="font-size:12px;color:#718096;margin-top:4px;">Éliminer dysthyroïdie et hyperprolactinémie</div>
+                        <div class="alert" id="alert-tsh" role="alert">⚠ TSH anormale → Dysthyroïdie — Orienter vers endocrinologie</div>
+                        <div class="alert" id="alert-prolactin" role="alert">⚠ Prolactine élevée → Hyperprolactinémie — IRM hypophysaire</div>
                     </div>
                 </div>
 
-                <div id="sopkConfirmed" class="status-box green" style="display: none;" role="status" aria-live="polite">
-                    <span style="font-size: 24px;" aria-hidden="true">✓</span>
-                    <div>
-                        <div style="font-weight: bold;">Diagnostics différentiels exclus</div>
-                        <div style="font-weight: bold; font-size: 16px; color: #16a34a; margin-top: 6px;">DIAGNOSTIC DE SOPK CONFIRMÉ</div>
-                    </div>
-                </div>
+                <!-- CORRECTIF #6 — id dédié, pas de innerHTML injecté depuis JS pour ce bloc statique -->
+                <div id="sopkConfirmed" class="status-box green" style="display: none;" role="status" aria-live="polite"></div>
 
                 <button class="btn-primary" id="btnStep4" disabled onclick="goToStep(5)" aria-disabled="true">Évaluer les complications →</button>
             </div>
 
-            <!-- STEP 5: Complications -->
+            <!-- =====================================================
+                 STEP 5 : Complications
+                 ===================================================== -->
             <div class="step-content" id="step5" role="tabpanel" aria-labelledby="tab5">
                 <h2>Bilan des Complications et Comorbidités</h2>
 
@@ -593,41 +647,93 @@
                 </div>
 
                 <div class="info-box blue">
-                    <h3 style="margin-bottom: 16px; font-weight: bold; font-size: 16px;">📋 Bilan des complications à prescrire :</h3>
+                    <h3 style="margin-bottom: 16px; font-weight: bold; font-size: 16px;">Bilan des complications à prescrire :</h3>
                     <div style="padding-left: 0;">
-                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Métabolique :</strong> Glycémie à jeun, HGPO 75g, HbA1c</p>
-                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Lipidique :</strong> Cholestérol total, HDL, LDL, Triglycérides</p>
-                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Hépatique :</strong> Transaminases (NASH ?)</p>
-                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Cardio/Sommeil :</strong> TA, Score STOP-BANG (Apnée)</p>
-                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Psychologique :</strong> Dépistage anxiété/dépression</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Métabolique :</strong> Glycémie à jeun, HGPO 75g, HbA1c</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Lipidique :</strong> Cholestérol total, HDL, LDL, Triglycérides</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Hépatique :</strong> Transaminases (NASH ?)</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Cardio/Sommeil :</strong> TA, Score STOP-BANG (Apnée)</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Psychologique :</strong> Dépistage anxiété/dépression (PHQ-9, GAD-7)</p>
                     </div>
                 </div>
 
-                <button class="btn-primary" style="margin-top: 24px;" onclick="showRecommendations()" aria-expanded="false" aria-controls="recommendations-section">Voir les recommandations de prise en charge →</button>
+                <!-- CORRECTIF #5 — id dédié sur le bouton -->
+                <button class="btn-primary" id="btnShowReco" style="margin-top: 24px;" onclick="showRecommendations()" aria-expanded="false" aria-controls="recommendations-section">
+                    Voir les recommandations de prise en charge →
+                </button>
+
+                <!-- CORRECTIF #5 — Bouton imprimer -->
+                <button class="btn-print" onclick="window.print()" aria-label="Imprimer ce bilan">
+                    🖨 Imprimer ce bilan
+                </button>
 
                 <div class="recommendations" id="recommendations-section" style="display: none;" role="region" aria-label="Recommandations de prise en charge">
                     <h3>Prise en charge personnalisée</h3>
                     <div style="padding-left: 0;">
-                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Mesures hygiéno-diététiques (perte de poids si IMC >25)</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Mesures hygiéno-diététiques (perte de poids si IMC &gt;25)</p>
                         <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Metformine si intolérance au glucose / résistance insulinique</p>
                         <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Contraception œstroprogestative (régulation cycles + hyperandrogénie)</p>
                         <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Antiandrogènes si hirsutisme marqué</p>
-                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Inducteurs ovulation si désir de grossesse</p>
+                        <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> Inducteurs ovulation si désir de grossesse (létrozole 1re intention — ESHRE 2023)</p>
                         <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563; font-size: 14px;"><span style="position: absolute; left: 0; color: #7c3aed; font-weight: bold; font-size: 20px;" aria-hidden="true">•</span> <strong>Surveillance régulière à vie</strong></p>
                     </div>
                 </div>
             </div>
 
             <div class="footer">
-                <p>Outil d'aide au diagnostic selon les critères de Rotterdam et recommandations internationales</p>
-                <p style="margin-top: 8px;">⚕️ À utiliser en complément de l'évaluation clinique</p>
+                <p>Outil d'aide au diagnostic selon les critères de Rotterdam et recommandations ESHRE/ASRM 2023</p>
+                <p style="margin-top: 8px;">⚕ À utiliser en complément de l'évaluation clinique</p>
             </div>
         </div>
     </div>
 
     <script>
+        /* ============================================================
+           JOURNAL DES CORRECTIFS JS
+           #1  — setTimeout(10) remplacé par requestAnimationFrame
+           #2  — onclick doublonné supprimé (onchange uniquement)
+           #5  — sélecteur fragile remplacé par id dédié
+           #6  — innerHTML injecté uniquement dans #sopkConfirmed via
+                  une fonction dédiée updateConfirmBox()
+           ============================================================ */
+
         let currentStep = 1;
 
+        /* ----------------------------------------------------------
+           Fonction utilitaire : met à jour #sopkConfirmed
+           Centralise toutes les mutations innerHTML du bloc de statut
+        ---------------------------------------------------------- */
+        function updateConfirmBox(state) {
+            const box = document.getElementById('sopkConfirmed');
+            if (state === 'hidden') {
+                box.style.display = 'none';
+                return;
+            }
+            box.style.display = 'flex';
+            if (state === 'confirmed') {
+                box.className = 'status-box green';
+                box.innerHTML =
+                    '<span style="font-size:24px" aria-hidden="true">✓<\/span>' +
+                    '<div>' +
+                    '<div style="font-weight:bold">Diagnostics différentiels exclus<\/div>' +
+                    '<div style="font-weight:bold;font-size:16px;color:#16a34a;margin-top:6px">' +
+                    'DIAGNOSTIC DE SOPK CONFIRMÉ<\/div>' +
+                    '<\/div>';
+            } else if (state === 'incomplete') {
+                box.className = 'status-box warning';
+                box.innerHTML =
+                    '<span style="font-size:24px" aria-hidden="true">⚠<\/span>' +
+                    '<div>' +
+                    '<div style="font-weight:bold">Bilan incomplet<\/div>' +
+                    '<div style="color:#92400e;margin-top:4px;font-size:13px">' +
+                    'Veuillez renseigner toutes les valeurs biologiques pour valider le diagnostic.' +
+                    '<\/div><\/div>';
+            }
+        }
+
+        /* ----------------------------------------------------------
+           Barre de progression
+        ---------------------------------------------------------- */
         function updateProgressBar() {
             const progressBar = document.getElementById('progressBar');
             const labels = ['Suspicion', 'Bilan', 'Rotterdam', 'Différentiels', 'Complications'];
@@ -642,12 +748,12 @@
                 circle.className = 'step-circle' + (currentStep >= i ? ' active' : '');
                 circle.textContent = i;
                 circle.setAttribute('aria-hidden', 'true');
-                
+
                 const label = document.createElement('div');
                 label.className = 'step-label';
                 label.textContent = labels[i - 1];
                 label.id = 'tab' + i;
-                
+
                 stepDiv.appendChild(circle);
                 stepDiv.appendChild(label);
 
@@ -663,8 +769,11 @@
             progressBar.setAttribute('aria-valuenow', currentStep);
         }
 
+        /* ----------------------------------------------------------
+           Navigation entre étapes
+        ---------------------------------------------------------- */
         function goToStep(step) {
-            document.querySelectorAll('.step-content').forEach(el => {
+            document.querySelectorAll('.step-content').forEach(function(el) {
                 el.classList.remove('active');
                 el.setAttribute('aria-hidden', 'true');
             });
@@ -673,206 +782,187 @@
             const activePanel = document.getElementById('step' + step);
             activePanel.classList.add('active');
             activePanel.setAttribute('aria-hidden', 'false');
-            
+
             updateProgressBar();
-            
-            // Scroll to top of container on step change (mobile)
+
             if (window.innerWidth < 768) {
                 document.querySelector('.sopk-wrap .container').scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
+        /* ----------------------------------------------------------
+           CORRECTIF #1 — requestAnimationFrame au lieu de setTimeout(10)
+           CORRECTIF #2 — onchange uniquement (onclick supprimé dans le HTML)
+        ---------------------------------------------------------- */
         function checkRotterdam() {
-            // Petit délai pour laisser le checkbox se mettre à jour
-            setTimeout(function() {
-                const anov = document.getElementById('anovulation').checked;
+            requestAnimationFrame(function() {
+                const anov  = document.getElementById('anovulation').checked;
                 const hyper = document.getElementById('hyperandrogenism').checked;
-                const opk = document.getElementById('opk').checked;
+                const opk   = document.getElementById('opk').checked;
                 const count = (anov ? 1 : 0) + (hyper ? 1 : 0) + (opk ? 1 : 0);
 
                 const statusBox = document.getElementById('rotterdamStatus');
-                const btn = document.getElementById('btnStep3');
+                const btn       = document.getElementById('btnStep3');
 
                 if (count >= 2) {
                     statusBox.className = 'status-box green';
-                    statusBox.innerHTML = '<span style="font-size: 24px;" aria-hidden="true">✓</span><div><span style="font-weight: bold;">' + count + '/3 critères remplis</span><div style="color: #16a34a; margin-top: 4px; font-size: 13px;">✓ SOPK probable - Passer à l\'élimination des diagnostics différentiels</div></div>';
+                    statusBox.innerHTML =
+                        '<span style="font-size:24px" aria-hidden="true">✓<\/span>' +
+                        '<div>' +
+                        '<span style="font-weight:bold">' + count + '/3 critères remplis<\/span>' +
+                        '<div style="color:#16a34a;margin-top:4px;font-size:13px">' +
+                        'SOPK probable — Passer à l’élimination des diagnostics différentiels' +
+                        '<\/div><\/div>';
                     btn.disabled = false;
                     btn.setAttribute('aria-disabled', 'false');
                 } else {
                     statusBox.className = 'status-box red';
-                    statusBox.innerHTML = '<span style="font-size: 24px;" aria-hidden="true">⚠️</span><span style="font-weight: bold;">' + count + '/3 critères remplis</span>';
+                    statusBox.innerHTML =
+                        '<span style="font-size:24px" aria-hidden="true">⚠<\/span>' +
+                        '<span style="font-weight:bold">' + count + '/3 critères remplis<\/span>';
                     btn.disabled = true;
                     btn.setAttribute('aria-disabled', 'true');
                 }
-            }, 10);
+            });
         }
 
-function checkDifferentials() {
-    // Récupération des valeurs avec gestion des valeurs vides
-    const ohp17Val = document.getElementById('ohp17').value;
-    const testosteroneVal = document.getElementById('testosterone').value;
-    const sdheaVal = document.getElementById('sdhea').value;
-    const delta4Val = document.getElementById('delta4').value;
-    const tsh = document.getElementById('tsh').value;
+        /* ----------------------------------------------------------
+           Vérification des diagnostics différentiels
+        ---------------------------------------------------------- */
+        function checkDifferentials() {
+            var ohp17Val       = document.getElementById('ohp17').value;
+            var testosteroneVal = document.getElementById('testosterone').value;
+            var sdheaVal       = document.getElementById('sdhea').value;
+            var delta4Val      = document.getElementById('delta4').value;
+            var tsh            = document.getElementById('tsh').value;
 
-    const ohp17 = ohp17Val !== '' ? parseFloat(ohp17Val) : null;
-    const testosterone = testosteroneVal !== '' ? parseFloat(testosteroneVal) : null;
-    const sdhea = sdheaVal !== '' ? parseFloat(sdheaVal) : null;
-    const delta4 = delta4Val !== '' ? parseFloat(delta4Val) : null;
+            var ohp17       = (ohp17Val       !== '' && parseFloat(ohp17Val)       >= 0) ? parseFloat(ohp17Val)       : null;
+            var testosterone = (testosteroneVal !== '' && parseFloat(testosteroneVal) >= 0) ? parseFloat(testosteroneVal) : null;
+            var sdhea       = (sdheaVal       !== '' && parseFloat(sdheaVal)       >= 0) ? parseFloat(sdheaVal)       : null;
+            var delta4      = (delta4Val      !== '' && parseFloat(delta4Val)      >= 0) ? parseFloat(delta4Val)      : null;
 
-    let hasAlert = false;
-    let hasIncomplete = false; // Nouveau : détecter les champs vides
+            var hasAlert      = false;
+            var hasIncomplete = false;
 
-    // Vérification 17-OHP
-    const alertOhp17 = document.getElementById('alert-ohp17');
-    if (ohp17 !== null) {
-        if (ohp17 > 2) {
-            alertOhp17.style.display = 'block';
-            hasAlert = true;
-        } else {
-            alertOhp17.style.display = 'none';
-        }
-    } else {
-        alertOhp17.style.display = 'none';
-        hasIncomplete = true; // Champ vide
-    }
+            // 17-OHP
+            var alertOhp17 = document.getElementById('alert-ohp17');
+            if (ohp17 !== null) {
+                alertOhp17.style.display = ohp17 > 2 ? 'block' : 'none';
+                if (ohp17 > 2) hasAlert = true;
+            } else {
+                alertOhp17.style.display = 'none';
+                hasIncomplete = true;
+            }
 
-    // Vérification Testostérone
-    const alertTesto = document.getElementById('alert-testosterone');
-    if (testosterone !== null) {
-        if (testosterone > 1.5) {
-            alertTesto.style.display = 'block';
-            hasAlert = true;
-        } else {
-            alertTesto.style.display = 'none';
-        }
-    } else {
-        alertTesto.style.display = 'none';
-        hasIncomplete = true;
-    }
+            // Testostérone
+            var alertTesto = document.getElementById('alert-testosterone');
+            if (testosterone !== null) {
+                alertTesto.style.display = testosterone > 1.5 ? 'block' : 'none';
+                if (testosterone > 1.5) hasAlert = true;
+            } else {
+                alertTesto.style.display = 'none';
+                hasIncomplete = true;
+            }
 
-    // Vérification SDHEA
-    const alertSdhea = document.getElementById('alert-sdhea');
-    if (sdhea !== null) {
-        if (sdhea > 20) {
-            alertSdhea.style.display = 'block';
-            hasAlert = true;
-        } else {
-            alertSdhea.style.display = 'none';
-        }
-    } else {
-        alertSdhea.style.display = 'none';
-        hasIncomplete = true;
-    }
+            // SDHEA
+            var alertSdhea = document.getElementById('alert-sdhea');
+            if (sdhea !== null) {
+                alertSdhea.style.display = sdhea > 20 ? 'block' : 'none';
+                if (sdhea > 20) hasAlert = true;
+            } else {
+                alertSdhea.style.display = 'none';
+                hasIncomplete = true;
+            }
 
-    // Vérification Delta-4 Androstènedione
-    const alertDelta4 = document.getElementById('alert-delta4');
-    if (delta4 !== null) {
-        if (delta4 > 6) { 
-            alertDelta4.style.display = 'block';
-            hasAlert = true;
-        } else {
-            alertDelta4.style.display = 'none';
-        }
-    } else {
-        alertDelta4.style.display = 'none';
-        hasIncomplete = true;
-    }
+            // Delta-4
+            var alertDelta4 = document.getElementById('alert-delta4');
+            if (delta4 !== null) {
+                alertDelta4.style.display = delta4 > 6 ? 'block' : 'none';
+                if (delta4 > 6) hasAlert = true;
+            } else {
+                alertDelta4.style.display = 'none';
+                hasIncomplete = true;
+            }
 
-    // Vérification TSH / Prolactine
-    const alertTsh = document.getElementById('alert-tsh');
-    const alertProlactin = document.getElementById('alert-prolactin');
-    
-    if (tsh === '') {
-        // TSH non sélectionné → incomplet
-        hasIncomplete = true;
-        alertTsh.style.display = 'none';
-        alertProlactin.style.display = 'none';
-    } else if (tsh === 'anormal') {
-        alertTsh.style.display = 'block';
-        alertProlactin.style.display = 'none';
-        hasAlert = true;
-    } else if (tsh === 'prolactine') {
-        alertProlactin.style.display = 'block';
-        alertTsh.style.display = 'none';
-        hasAlert = true;
-    } else {
-        // tsh === 'normal' → OK
-        alertTsh.style.display = 'none';
-        alertProlactin.style.display = 'none';
-    }
+            // TSH / Prolactine
+            var alertTsh      = document.getElementById('alert-tsh');
+            var alertProlactin = document.getElementById('alert-prolactin');
+            if (tsh === '') {
+                alertTsh.style.display      = 'none';
+                alertProlactin.style.display = 'none';
+                hasIncomplete = true;
+            } else if (tsh === 'anormal') {
+                alertTsh.style.display      = 'block';
+                alertProlactin.style.display = 'none';
+                hasAlert = true;
+            } else if (tsh === 'prolactine') {
+                alertProlactin.style.display = 'block';
+                alertTsh.style.display       = 'none';
+                hasAlert = true;
+            } else {
+                alertTsh.style.display      = 'none';
+                alertProlactin.style.display = 'none';
+            }
 
-    // Gestion de l'affichage final
-    const confirmBox = document.getElementById('sopkConfirmed');
-    const btn = document.getElementById('btnStep4');
-    const statusBox = document.getElementById('sopkConfirmed');
-
-    if (hasAlert) {
-        // Alertes biologiques → blocage
-        confirmBox.style.display = 'none';
-        btn.disabled = true;
-        btn.setAttribute('aria-disabled', 'true');
-    } else if (hasIncomplete) {
-        // Champs vides → message d'aide
-        confirmBox.style.display = 'flex';
-        confirmBox.className = 'status-box warning'; // Nouveau style orange
-        confirmBox.innerHTML = `
-            <span style="font-size: 24px;" aria-hidden="true">⚠️</span>
-            <div>
-                <div style="font-weight: bold;">Bilan incomplet</div>
-                <div style="color: #92400e; margin-top: 4px; font-size: 13px;">
-                    Veuillez renseigner les valeurs biologiques ou confirmer leur normalité pour valider le diagnostic.
-                </div>
-            </div>`;
-        btn.disabled = true;
-        btn.setAttribute('aria-disabled', 'true');
-    } else {
-        // Tout est rempli et dans les normes → SOPK confirmé
-        confirmBox.style.display = 'flex';
-        confirmBox.className = 'status-box green';
-        confirmBox.innerHTML = `
-            <span style="font-size: 24px;" aria-hidden="true">✓</span>
-            <div>
-                <div style="font-weight: bold;">Diagnostics différentiels exclus</div>
-                <div style="font-weight: bold; font-size: 16px; color: #16a34a; margin-top: 6px;">
-                    DIAGNOSTIC DE SOPK CONFIRMÉ
-                </div>
-            </div>`;
-        btn.disabled = false;
-        btn.setAttribute('aria-disabled', 'false');
-    }
-}
-        
-        function showRecommendations() {
-            const recoSection = document.getElementById('recommendations-section');
-            const isVisible = recoSection.style.display === 'block';
-            recoSection.style.display = isVisible ? 'none' : 'block';
-            document.querySelector('.btn-primary[onclick="showRecommendations()"]').setAttribute('aria-expanded', !isVisible);
-        }
-
-        function resetTool() {
-            currentStep = 1;
-            goToStep(1);
-            
-            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-            document.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
-            document.querySelectorAll('select').forEach(select => select.value = '');
-            
-            checkRotterdam();
-            
-            document.querySelectorAll('.alert').forEach(alert => alert.style.display = 'none');
-            document.getElementById('sopkConfirmed').style.display = 'none';
-            const btn4 = document.getElementById('btnStep4');
-            btn4.disabled = true;
-            btn4.setAttribute('aria-disabled', 'true');
-            
-            const recoSection = document.getElementById('recommendations-section');
-            if (recoSection) {
-                recoSection.style.display = 'none';
+            // Résolution finale — CORRECTIF #6 : updateConfirmBox()
+            var btn = document.getElementById('btnStep4');
+            if (hasAlert) {
+                updateConfirmBox('hidden');
+                btn.disabled = true;
+                btn.setAttribute('aria-disabled', 'true');
+            } else if (hasIncomplete) {
+                updateConfirmBox('incomplete');
+                btn.disabled = true;
+                btn.setAttribute('aria-disabled', 'true');
+            } else {
+                updateConfirmBox('confirmed');
+                btn.disabled = false;
+                btn.setAttribute('aria-disabled', 'false');
             }
         }
 
-        // Initialisation
+        /* ----------------------------------------------------------
+           CORRECTIF #5 — Sélecteur par id, plus de querySelector fragile
+        ---------------------------------------------------------- */
+        function showRecommendations() {
+            var recoSection = document.getElementById('recommendations-section');
+            var btn         = document.getElementById('btnShowReco');
+            var isVisible   = recoSection.style.display === 'block';
+            recoSection.style.display = isVisible ? 'none' : 'block';
+            btn.setAttribute('aria-expanded', String(!isVisible));
+        }
+
+        /* ----------------------------------------------------------
+           Réinitialisation complète
+        ---------------------------------------------------------- */
+        function resetTool() {
+            currentStep = 1;
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) { cb.checked = false; });
+            document.querySelectorAll('input[type="number"]').forEach(function(inp) { inp.value = ''; });
+            document.querySelectorAll('select').forEach(function(sel) { sel.value = ''; });
+
+            checkRotterdam();
+
+            document.querySelectorAll('.alert').forEach(function(a) { a.style.display = 'none'; });
+
+            updateConfirmBox('hidden');
+            var btn4 = document.getElementById('btnStep4');
+            btn4.disabled = true;
+            btn4.setAttribute('aria-disabled', 'true');
+
+            var recoSection = document.getElementById('recommendations-section');
+            if (recoSection) recoSection.style.display = 'none';
+
+            var btnShowReco = document.getElementById('btnShowReco');
+            if (btnShowReco) btnShowReco.setAttribute('aria-expanded', 'false');
+
+            goToStep(1);
+        }
+
+        /* ----------------------------------------------------------
+           Initialisation
+        ---------------------------------------------------------- */
         document.addEventListener('DOMContentLoaded', function() {
             updateProgressBar();
         });
