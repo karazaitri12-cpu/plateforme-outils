@@ -701,88 +701,142 @@
             }, 10);
         }
 
-        function checkDifferentials() {
-            // Récupération des valeurs avec gestion des valeurs vides
-            const ohp17Val = document.getElementById('ohp17').value;
-            const testosteroneVal = document.getElementById('testosterone').value;
-            const sdheaVal = document.getElementById('sdhea').value;
-            const delta4Val = document.getElementById('delta4').value;
-            const tsh = document.getElementById('tsh').value;
+function checkDifferentials() {
+    // Récupération des valeurs avec gestion des valeurs vides
+    const ohp17Val = document.getElementById('ohp17').value;
+    const testosteroneVal = document.getElementById('testosterone').value;
+    const sdheaVal = document.getElementById('sdhea').value;
+    const delta4Val = document.getElementById('delta4').value;
+    const tsh = document.getElementById('tsh').value;
 
-            const ohp17 = ohp17Val !== '' ? parseFloat(ohp17Val) : null;
-            const testosterone = testosteroneVal !== '' ? parseFloat(testosteroneVal) : null;
-            const sdhea = sdheaVal !== '' ? parseFloat(sdheaVal) : null;
-            const delta4 = delta4Val !== '' ? parseFloat(delta4Val) : null;
+    const ohp17 = ohp17Val !== '' ? parseFloat(ohp17Val) : null;
+    const testosterone = testosteroneVal !== '' ? parseFloat(testosteroneVal) : null;
+    const sdhea = sdheaVal !== '' ? parseFloat(sdheaVal) : null;
+    const delta4 = delta4Val !== '' ? parseFloat(delta4Val) : null;
 
-            let hasAlert = false;
+    let hasAlert = false;
+    let hasIncomplete = false; // Nouveau : détecter les champs vides
 
-            // Vérification 17-OHP
-            const alertOhp17 = document.getElementById('alert-ohp17');
-            if (ohp17 !== null && ohp17 > 2) {
-                alertOhp17.style.display = 'block';
-                hasAlert = true;
-            } else {
-                alertOhp17.style.display = 'none';
-            }
-
-            // Vérification Testostérone
-            const alertTesto = document.getElementById('alert-testosterone');
-            if (testosterone !== null && testosterone > 1.5) {
-                alertTesto.style.display = 'block';
-                hasAlert = true;
-            } else {
-                alertTesto.style.display = 'none';
-            }
-
-            // Vérification SDHEA
-            const alertSdhea = document.getElementById('alert-sdhea');
-            if (sdhea !== null && sdhea > 20) {
-                alertSdhea.style.display = 'block';
-                hasAlert = true;
-            } else {
-                alertSdhea.style.display = 'none';
-            }
-
-            // Vérification Delta-4 Androstènedione
-            const alertDelta4 = document.getElementById('alert-delta4');
-            if (delta4 !== null && delta4 > 6) { 
-                alertDelta4.style.display = 'block';
-                hasAlert = true;
-            } else {
-                alertDelta4.style.display = 'none';
-            }
-
-            // Vérification TSH / Prolactine
-            const alertTsh = document.getElementById('alert-tsh');
-            const alertProlactin = document.getElementById('alert-prolactin');
-            if (tsh === 'anormal') {
-                alertTsh.style.display = 'block';
-                alertProlactin.style.display = 'none';
-                hasAlert = true;
-            } else if (tsh === 'prolactine') {
-                alertProlactin.style.display = 'block';
-                alertTsh.style.display = 'none';
-                hasAlert = true;
-            } else {
-                alertTsh.style.display = 'none';
-                alertProlactin.style.display = 'none';
-            }
-
-            // Gestion de l'affichage final
-            const confirmBox = document.getElementById('sopkConfirmed');
-            const btn = document.getElementById('btnStep4');
-
-            if (!hasAlert) {
-                confirmBox.style.display = 'flex';
-                btn.disabled = false;
-                btn.setAttribute('aria-disabled', 'false');
-            } else {
-                confirmBox.style.display = 'none';
-                btn.disabled = true;
-                btn.setAttribute('aria-disabled', 'true');
-            }
+    // Vérification 17-OHP
+    const alertOhp17 = document.getElementById('alert-ohp17');
+    if (ohp17 !== null) {
+        if (ohp17 > 2) {
+            alertOhp17.style.display = 'block';
+            hasAlert = true;
+        } else {
+            alertOhp17.style.display = 'none';
         }
+    } else {
+        alertOhp17.style.display = 'none';
+        hasIncomplete = true; // Champ vide
+    }
 
+    // Vérification Testostérone
+    const alertTesto = document.getElementById('alert-testosterone');
+    if (testosterone !== null) {
+        if (testosterone > 1.5) {
+            alertTesto.style.display = 'block';
+            hasAlert = true;
+        } else {
+            alertTesto.style.display = 'none';
+        }
+    } else {
+        alertTesto.style.display = 'none';
+        hasIncomplete = true;
+    }
+
+    // Vérification SDHEA
+    const alertSdhea = document.getElementById('alert-sdhea');
+    if (sdhea !== null) {
+        if (sdhea > 20) {
+            alertSdhea.style.display = 'block';
+            hasAlert = true;
+        } else {
+            alertSdhea.style.display = 'none';
+        }
+    } else {
+        alertSdhea.style.display = 'none';
+        hasIncomplete = true;
+    }
+
+    // Vérification Delta-4 Androstènedione
+    const alertDelta4 = document.getElementById('alert-delta4');
+    if (delta4 !== null) {
+        if (delta4 > 6) { 
+            alertDelta4.style.display = 'block';
+            hasAlert = true;
+        } else {
+            alertDelta4.style.display = 'none';
+        }
+    } else {
+        alertDelta4.style.display = 'none';
+        hasIncomplete = true;
+    }
+
+    // Vérification TSH / Prolactine
+    const alertTsh = document.getElementById('alert-tsh');
+    const alertProlactin = document.getElementById('alert-prolactin');
+    
+    if (tsh === '') {
+        // TSH non sélectionné → incomplet
+        hasIncomplete = true;
+        alertTsh.style.display = 'none';
+        alertProlactin.style.display = 'none';
+    } else if (tsh === 'anormal') {
+        alertTsh.style.display = 'block';
+        alertProlactin.style.display = 'none';
+        hasAlert = true;
+    } else if (tsh === 'prolactine') {
+        alertProlactin.style.display = 'block';
+        alertTsh.style.display = 'none';
+        hasAlert = true;
+    } else {
+        // tsh === 'normal' → OK
+        alertTsh.style.display = 'none';
+        alertProlactin.style.display = 'none';
+    }
+
+    // Gestion de l'affichage final
+    const confirmBox = document.getElementById('sopkConfirmed');
+    const btn = document.getElementById('btnStep4');
+    const statusBox = document.getElementById('sopkConfirmed');
+
+    if (hasAlert) {
+        // Alertes biologiques → blocage
+        confirmBox.style.display = 'none';
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
+    } else if (hasIncomplete) {
+        // Champs vides → message d'aide
+        confirmBox.style.display = 'flex';
+        confirmBox.className = 'status-box warning'; // Nouveau style orange
+        confirmBox.innerHTML = `
+            <span style="font-size: 24px;" aria-hidden="true">⚠️</span>
+            <div>
+                <div style="font-weight: bold;">Bilan incomplet</div>
+                <div style="color: #92400e; margin-top: 4px; font-size: 13px;">
+                    Veuillez renseigner les valeurs biologiques ou confirmer leur normalité pour valider le diagnostic.
+                </div>
+            </div>`;
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
+    } else {
+        // Tout est rempli et dans les normes → SOPK confirmé
+        confirmBox.style.display = 'flex';
+        confirmBox.className = 'status-box green';
+        confirmBox.innerHTML = `
+            <span style="font-size: 24px;" aria-hidden="true">✓</span>
+            <div>
+                <div style="font-weight: bold;">Diagnostics différentiels exclus</div>
+                <div style="font-weight: bold; font-size: 16px; color: #16a34a; margin-top: 6px;">
+                    DIAGNOSTIC DE SOPK CONFIRMÉ
+                </div>
+            </div>`;
+        btn.disabled = false;
+        btn.setAttribute('aria-disabled', 'false');
+    }
+}
+        
         function showRecommendations() {
             const recoSection = document.getElementById('recommendations-section');
             const isVisible = recoSection.style.display === 'block';
