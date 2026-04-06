@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Infections Mammaires 3.3 EXPERT</title>
+    <style>
+        /* --- POLICES & STRUCTURE --- */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; color: #333; }
+   
+        h1 { color: #2c3e50; font-size: 2.5em; margin-bottom: 10px; }
+        
+        .subtitle { font-size: 1.1em; opacity: 0.8; margin-bottom: 10px; color: #555; text-align: center; }
+        .version-badge { display: block; width: fit-content; background: #2c3e50; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8em; font-weight: bold; margin: 5px auto 20px auto; }
+
+        .main-panel { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); margin: 0 auto 30px auto; max-width: 900px; }
+        
+        .section { margin-bottom: 30px; padding: 25px; background: #f8f9fa; border-radius: 15px; border-left: 5px solid #667eea; }
+        .section-title { font-size: 1.5em; color: #667eea; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        
+        .question-group { margin-bottom: 25px; }
+        .question-label { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; color: #333; display: block; }
+        .question-hint { font-size: 0.9em; color: #666; font-style: italic; margin-bottom: 10px; display: block; }
+
+        .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 12px; }
+        .radio-option, .checkbox-option { display: flex; align-items: flex-start; padding: 15px; background: white; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; position: relative; }
+        .radio-option:hover, .checkbox-option:hover { border-color: #667eea; background: #f0f4ff; transform: translateX(5px); }
+        .radio-option.selected, .checkbox-option.selected { border-color: #667eea; background: #f0f4ff; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2); }
+        
+        input[type="radio"], input[type="checkbox"] { width: 20px; height: 20px; margin-right: 12px; margin-top: 3px; cursor: pointer; accent-color: #667eea; flex-shrink: 0; }
+        label { cursor: pointer; flex: 1; font-size: 1em; font-weight: 500; }
+        .option-detail { font-size: 0.85em; color: #666; margin-top: 5px; font-weight: normal; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-label { font-weight: bold; margin-bottom: 10px; display: block; color: #333; }
+        input[type="number"], input[type="text"] { width: 100%; max-width: 300px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1.1em; transition: all 0.3s; box-sizing: border-box; }
+        input[type="number"]:focus, input[type="text"]:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+
+        .analyze-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 18px 50px; font-size: 1.3em; border-radius: 50px; cursor: pointer; transition: all 0.3s; display: block; margin: 30px auto; font-weight: bold; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); max-width: 100%; }
+        .analyze-btn:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6); }
+
+        .reset-btn { background: #6c757d; color: white; border: none; padding: 12px 30px; font-size: 1em; border-radius: 25px; cursor: pointer; margin: 10px auto; display: block; transition: all 0.3s; }
+        .reset-btn:hover { background: #5a6268; transform: scale(1.05); }
+
+        .result-container { display: none; margin-top: 30px; animation: slideIn 0.5s; max-width: 900px; margin-left: auto; margin-right: auto; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .diagnostic-box { padding: 35px; border-radius: 20px; margin-bottom: 25px; color: white; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+        .diagnostic-box::before { content: ''; position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); }
+        
+        .diagnostic-box.galactophorite { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .diagnostic-box.lymphangite { background: linear-gradient(135deg, #A07361 0%, #5D4037 100%); }
+        .diagnostic-box.mastite { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .diagnostic-box.mastite-debutante { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; }
+        .diagnostic-box.engorgement { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
+        .diagnostic-box.abces { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+        .diagnostic-box.nonpuerp { background: linear-gradient(135deg, #434343 0%, #000000 100%); }
+
+        .sepsis-alert { background: #dc3545; color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 3px solid #ff6b6b; animation: pulse 2s infinite; display: flex; align-items: center; box-shadow: 0 8px 24px rgba(220, 53, 69, 0.4); }
+        .sepsis-icon { font-size: 2.5em; margin-right: 20px; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); } 50% { box-shadow: 0 0 0 15px rgba(220, 53, 69, 0); } }
+
+        .diagnostic-title { font-size: 2.2em; font-weight: bold; margin-bottom: 15px; position: relative; z-index: 1; }
+        .diagnostic-subtitle { font-size: 1.3em; opacity: 0.95; margin-bottom: 25px; position: relative; z-index: 1; }
+        
+        .diagnostic-criteria { background: rgba(0,0,0,0.15); padding: 15px; border-radius: 10px; margin-bottom: 20px; position: relative; z-index: 1; }
+        .diagnostic-criteria strong { display: block; margin-bottom: 8px; font-size: 1.1em; }
+
+        .treatment-section { background: rgba(255,255,255,0.15); padding: 25px; border-radius: 15px; margin-top: 20px; position: relative; z-index: 1; }
+        .treatment-title { font-size: 1.5em; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+        ul.treatment-list { list-style: none !important; padding-left: 0 !important; margin-bottom: 20px !important; }
+        ul.treatment-list li { position: relative !important; padding-left: 35px !important; margin-bottom: 12px !important; line-height: 1.7 !important; font-size: 1.05em; }
+        ul.treatment-list li::before { content: "\2714" !important; position: absolute !important; left: 0 !important; font-weight: bold; font-size: 1.3em; color: inherit; }
+
+        .antibiotic-table { width: 100%; background: rgba(255,255,255,0.95); border-radius: 12px; overflow: hidden; margin: 15px 0; color: #333; border-collapse: collapse; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .antibiotic-table th { background: rgba(102, 126, 234, 0.15); padding: 15px; text-align: left; font-weight: bold; border-bottom: 2px solid rgba(102, 126, 234, 0.3); font-size: 1.05em; }
+        .antibiotic-table td { padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.08); vertical-align: middle; }
+        .antibiotic-table tr:last-child td { border-bottom: none; }
+        .antibiotic-table small { color: #666; font-style: italic; display: block; margin-top: 4px; }
+        .antibiotic-table .first-line { background: rgba(76, 175, 80, 0.08); }
+
+        .warning-box { background: #ff6b6b; color: white; padding: 20px; border-radius: 12px; margin: 20px 0; font-weight: 400; box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3); }
+        .warning-box strong { font-size: 1.1em; display: block; margin-bottom: 8px; }
+        
+        .info-box { background: rgba(255,255,255,0.25); padding: 18px; border-radius: 12px; margin: 15px 0; border-left: 4px solid rgba(255,255,255,0.5); }
+        .info-box strong { display: block; margin-bottom: 8px; font-size: 1.1em; }
+
+        .reference-box { background: rgba(0,0,0,0.05); padding: 20px; border-radius: 12px; margin-top: 25px; font-size: 0.95em; color: #333; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .reference-box strong { display: block; margin-bottom: 10px; color: #667eea; font-size: 1.1em; }
+        .reference-box ul { padding-left: 20px; }
+        .reference-box li { margin-bottom: 8px; line-height: 1.6; }
+
+        /* DISCLAIMER MÉDICAL */
+        .footer-disclaimer {
+            text-align: center; margin: 40px auto; padding: 20px; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; border-radius: 10px; font-size: 0.9em; line-height: 1.5; max-width: 900px;
+        }
+
+        /* --- RESPONSIVITÉ AMÉLIORÉE --- */
+        
+        /* Conteneur général (CORRECTION CSS) */
+        .container { 
+            padding: 0; 
+            max-width: 100%;
+        }
+        
+        /* Header responsive */
+        header { 
+            text-align: center; 
+            padding: 20px 10px;
+        }
+
+        /* Tablettes (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .container { padding: 0; }
+            .main-panel { padding: 30px; max-width: 100%; margin: 0 15px 30px 15px; }
+            h1 { font-size: 2.2em; }
+            .diagnostic-title { font-size: 2em; }
+        }
+
+        /* Mobiles (jusqu'à 768px) */
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            
+            .container { padding: 0; }
+            
+            h1 { 
+                font-size: 1.8em; 
+                line-height: 1.2;
+                padding: 0 10px;
+            }
+            
+            .subtitle { 
+                font-size: 1em; 
+                padding: 0 10px;
+            }
+            
+            .version-badge {
+                font-size: 1em;
+                padding: 4px 12px;
+            }
+            
+            .main-panel { 
+                padding: 20px 10px; 
+                border-radius: 10px; 
+                margin: 0 2px 20px 2px;
+            }
+            
+            .section { 
+                padding: 15px; 
+                margin-bottom: 20px;
+                border-left-width: 4px;
+            }
+            
+            .section-title { 
+                font-size: 1.5em; 
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            
+            .question-label {
+                font-size: 1.3em;
+                line-height: 1.4;
+            }
+            
+            .question-hint {
+                font-size: 1.2em;
+            }
+            
+            .radio-option, .checkbox-option { 
+                padding: 12px; 
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            
+            .radio-option:hover, .checkbox-option:hover { 
+                transform: translateX(0); 
+            }
+            
+            input[type="radio"], input[type="checkbox"] { 
+                width: 18px; 
+                height: 18px; 
+                margin-right: 10px;
+                margin-top: 2px;
+            }
+            
+            label { 
+                font-size: 1.2em; 
+            }
+            
+            .option-detail {
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+            
+            input[type="number"], input[type="text"] { 
+                max-width: 100%; 
+                font-size: 1.2em;
+                padding: 10px;
+            }
+            
+            .analyze-btn { 
+                width: calc(100% - 20px);
+                margin: 20px 10px;
+                padding: 16px 20px; 
+                font-size: 1.1em; 
+            }
+            
+            .reset-btn {
+                width: calc(100% - 20px);
+                margin: 10px 10px;
+                padding: 12px 20px;
+            }
+            
+            .diagnostic-box { 
+                padding: 20px 15px; 
+                border-radius: 15px;
+                margin: 0 10px 25px 10px;
+            }
+            
+            .diagnostic-title { 
+                font-size: 1.5em; 
+                line-height: 1.3;
+            }
+            
+            .diagnostic-subtitle { 
+                font-size: 1.1em; 
+                line-height: 1.4;
+            }
+            
+            .diagnostic-criteria {
+                padding: 12px;
+                font-size: 1em;
+            }
+            
+            .diagnostic-criteria strong {
+                font-size: 1.1em;
+            }
+            
+            .treatment-section {
+                padding: 15px;
+            }
+            
+            .treatment-title { 
+                font-size: 1.2em; 
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            
+            ul.treatment-list li {
+                font-size: 1em;
+                padding-left: 30px;
+                line-height: 1.6;
+            }
+            
+            ul.treatment-list li::before {
+                font-size: 1.1em;
+            }
+            
+            /* Container pour les tableaux avec scroll horizontal */
+            .table-container { 
+                overflow-x: auto; 
+                -webkit-overflow-scrolling: touch; 
+                margin: 15px -15px;
+                padding: 0 15px;
+            }
+            
+            .antibiotic-table { 
+                min-width: 500px;
+                font-size: 0.9em;
+            }
+            
+            .antibiotic-table th {
+                padding: 12px 10px;
+                font-size: 0.95em;
+            }
+            
+            .antibiotic-table td {
+                padding: 12px 10px;
+            }
+            
+            .antibiotic-table small {
+                font-size: 0.85em;
+            }
+            
+            .warning-box {
+                padding: 15px;
+                font-size: 0.95em;
+            }
+            
+            .warning-box strong {
+                font-size: 1em;
+            }
+            
+            .info-box {
+                padding: 15px;
+                font-size: 0.95em;
+            }
+            
+            .sepsis-alert { 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 15px;
+                margin: 0 10px 20px 10px;
+            }
+            
+            .sepsis-icon { 
+                margin-right: 0; 
+                margin-bottom: 10px; 
+                font-size: 2em;
+            }
+            
+            .reference-box {
+                padding: 15px;
+                font-size: 0.9em;
+                margin: 20px 10px;
+            }
+            
+            .reference-box ul {
+                padding-left: 15px;
+            }
+            
+            .reference-box li {
+                font-size: 0.95em;
+            }
+            
+            .footer-disclaimer {
+                font-size: 0.85em;
+                padding: 15px;
+                margin: 30px 10px;
+            }
+        }
+
+/* =========================================
+   PRO : Masque l'ascenseur (style App native)
+A placer en fin de css dans chaque outil
+   ========================================= */
+html { scrollbar-width: none; }               /* Firefox */
+body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
+::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
+
+        /* Petits mobiles (jusqu'à 480px) */
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5em; }
+            .subtitle { font-size: 0.9em; }
+            .version-badge { font-size: 0.7em; padding: 3px 10px; }
+            .main-panel { padding: 15px 10px; }
+            .section { padding: 12px; }
+            .section-title { font-size: 1.15em; }
+            .question-label { font-size: 0.95em; }
+            .radio-option, .checkbox-option { padding: 10px; }
+            label { font-size: 0.9em; }
+            .option-detail { font-size: 0.9em; }
+            .analyze-btn { font-size: 1em; padding: 14px 16px; }
+            .diagnostic-box { padding: 15px 12px; }
+            .diagnostic-title { font-size: 1.3em; }
+            .diagnostic-subtitle { font-size: 0.95em; }
+            .treatment-title { font-size: 1.1em; }
+            ul.treatment-list li { font-size: 0.9em; padding-left: 28px; }
+            .antibiotic-table { min-width: 450px; font-size: 0.85em; }
+            .antibiotic-table th, .antibiotic-table td { padding: 10px 8px; }
+            .sepsis-icon { font-size: 1.8em; }
+        }
+
+        /* Très petits écrans (jusqu'à 360px) */
+        @media (max-width: 360px) {
+            h1 { font-size: 1.3em; }
+            .diagnostic-title { font-size: 1.2em; }
+            .antibiotic-table { min-width: 400px; font-size: 0.8em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🩺 ASSISTANT DIAGNOSTIC PRO</h1>
+            <p class="subtitle">Infections mammaires de l'allaitement - Aide à la décision clinique</p>
+            <div class="version-badge">Version 3.3 EXPERT - Algorithme Validé</div>
+        </header>
+
+        <div class="main-panel">
+            <div class="section">
+                <div class="section-title">📋 CONTEXTE CLINIQUE</div>
+                
+                <div class="question-group">
+                    <label class="question-label">Contexte de la patiente :</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="contexte" value="allaitante" id="ctx1" checked>
+                            <label for="ctx1">
+                                Femme allaitante
+                                <div class="option-detail">Mastite puerpérale classique</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="contexte" value="non-allaitante" id="ctx2">
+                            <label for="ctx2">
+                                Femme NON allaitante
+                                <div class="option-detail">⚠️ Éliminer impérativement un cancer inflammatoire</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Jour du post-partum (si applicable) :</label>
+                    <input type="number" id="jour-pp" min="0" max="365" placeholder="Ex: 15">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Durée des symptômes :</label>
+                    <input type="number" id="duree-symptomes" min="0" max="30" placeholder="Nombre de jours">
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🌡️ SIGNES GÉNÉRAUX</div>
+                
+                <div class="input-group">
+                    <label class="input-label">Température corporelle (°C) :</label>
+                    <!-- CORRECTION : type text et inputmode decimal pour clavier mobile + virgules -->
+                    <input type="text" inputmode="decimal" id="temperature" placeholder="Ex: 38.5">
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Altération de l'état général (AEG) :</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="aeg" value="aucune" id="aeg1" checked>
+                            <label for="aeg1">
+                                Aucune - Patiente en forme
+                                <div class="option-detail">État général préservé</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="aeg" value="legere" id="aeg2">
+                            <label for="aeg2">
+                                Légère - Fatigue modérée
+                                <div class="option-detail">Activités quotidiennes possibles</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="aeg" value="moderee" id="aeg3">
+                            <label for="aeg3">
+                                Modérée - Asthénie, courbatures
+                                <div class="option-detail">Syndrome pseudo-grippal</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="aeg" value="marquee" id="aeg4">
+                            <label for="aeg4">
+                                Marquée - Frissons, malaise important
+                                <div class="option-detail">⚠️ Signes de gravité : confusion, tachycardie</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Autres signes généraux :</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="frissons" value="frissons">
+                            <label for="frissons">Frissons intenses</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="tachycardie" value="tachycardie">
+                            <label for="tachycardie">Tachycardie (FC > 100/min)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔴 ASPECT LOCAL DU SEIN</div>
+                
+                <div class="question-group">
+                    <label class="question-label">Type de rougeur :</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="rougeur" value="aucune" id="roug1">
+                            <label for="roug1">
+                                Aucune rougeur visible
+                                <div class="option-detail">Sein d'aspect normal</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="rougeur" value="lineaire" id="roug2">
+                            <label for="roug2">
+                                Trajet linéaire rouge (en bande)
+                                <div class="option-detail">Évoque une galactophorite (infection canalaire)</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="rougeur" value="quadrant" id="roug3">
+                            <label for="roug3">
+                                Rougeur localisée à un quadrant
+                                <div class="option-detail">Typique de la mastite infectieuse</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="rougeur" value="diffuse" id="roug4">
+                            <label for="roug4">
+                                Rougeur diffuse en nappe
+                                <div class="option-detail">Tout le sein ou large zone - lymphangite possible</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Palpation du sein (Cochez tous les signes présents) :</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="palp1" value="cordon">
+                            <label for="palp1">
+                                Cordon induré palpable
+                                <div class="option-detail">Trajet canalaire obstrué - galactophorite</div>
+                            </label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="palp5" value="placard">
+                            <label for="palp5">
+                                Zone indurée localisée / Placard douloureux
+                                <div class="option-detail">Atteinte parenchymateuse - mastite</div>
+                            </label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="palp2" value="peau-orange">
+                            <label for="palp2">
+                                Peau d'orange (œdème cutané)
+                                <div class="option-detail">Obstruction lymphatique</div>
+                            </label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="palp3" value="fluctuation">
+                            <label for="palp3">
+                                Masse fluctuante
+                                <div class="option-detail">🚨 URGENCE - Signe de collection (abcès)</div>
+                            </label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="palp4" value="tensionGlobale">
+                            <label for="palp4">
+                                Tension globale du sein (sans zone indurée localisée)
+                                <div class="option-detail">Évoque un engorgement</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Écoulement mamelonnaire :</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="ecoulement" value="aucun" id="ecoul1" checked>
+                            <label for="ecoul1">Aucun écoulement anormal</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="ecoulement" value="localise" id="ecoul2">
+                            <label for="ecoul2">
+                                Écoulement purulent d'un orifice précis
+                                <div class="option-detail">Galactophorite avérée</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="ecoulement" value="budin" id="ecoul3">
+                            <label for="ecoul3">
+                                Lait souillé de débris purulents
+                                <div class="option-detail">Signe de Budin - infection canalaire</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Intensité de la douleur (0-10) :</label>
+                    <input type="number" id="douleur" min="0" max="10" placeholder="0 = aucune, 10 = maximale">
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🔍 SIGNES COMPLÉMENTAIRES</div>
+                
+                <div class="question-group">
+                    <label class="question-label">Adénopathies axillaires :</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="adenopathies" value="absentes" id="aden1" checked>
+                            <label for="aden1">Absentes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="adenopathies" value="presentes" id="aden2">
+                            <label for="aden2">
+                                Présentes et sensibles
+                                <div class="option-detail">Réaction ganglionnaire inflammatoire/infectieuse</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Évolution sous traitement (si déjà traité) :</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="evolution" value="non-traite" id="evol1" checked>
+                            <label for="evol1">Pas encore traité - Premier diagnostic</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="evolution" value="amelioration" id="evol2">
+                            <label for="evol2">
+                                Amélioration sous traitement
+                                <div class="option-detail">Poursuite du traitement en cours</div>
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="evolution" value="echec" id="evol3">
+                            <label for="evol3">
+                                Échec après 48-72h d'antibiotiques
+                                <div class="option-detail">⚠️ Évoquer un abcès ou résistance</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <label class="question-label">Antécédents récents :</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="ant-crevasse" value="crevasse">
+                            <label for="ant-crevasse">Crevasses mamelonnaires</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="ant-engorgement" value="engorgement-anterieur">
+                            <label for="ant-engorgement">Engorgement récent</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="ant-mastite" value="mastite-anterieure">
+                            <label for="ant-mastite">Mastite antérieure</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CORRECTION : Ajout du type="button" pour éviter de recharger la page -->
+            <button type="button" class="analyze-btn" onclick="analyzeCase()">🔬 ANALYSER LE CAS CLINIQUE</button>
+            <button type="button" class="reset-btn" onclick="resetForm()">🔄 Réinitialiser le formulaire</button>
+        </div>
+
+        <div id="result" class="result-container"></div>
+        
+        <div class="footer-disclaimer">
+            <strong>⚠️ AVERTISSEMENT MÉDICAL IMPORTANT</strong><br>
+            Cet outil est une aide à la décision clinique destinée aux professionnels de santé. Il ne se substitue en aucun cas au jugement clinique du médecin. Toute situation clinique grave, douteuse ou atypique doit conduire à une consultation spécialisée. Les posologies sont données à titre indicatif selon les recommandations en vigueur (CNGOF, HAS, SPILF).
+        </div>
+    </div>
+
+    <script>
+        // Sélection visuelle des options
+        document.querySelectorAll('.radio-option, .checkbox-option').forEach(option => {
+            const input = option.querySelector('input');
+            input.addEventListener('change', () => {
+                if (input.type === 'radio') {
+                    option.parentElement.querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
+                }
+                if (input.checked) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        });
+
+        function analyzeCase() {
+            // 1. RÉCUPÉRATION DES DONNÉES
+            // CORRECTION : Tolérance de la virgule (ex: 38,5 devient 38.5)
+            const tempInput = document.getElementById('temperature').value.replace(',', '.');
+            const temperature = parseFloat(tempInput);
+            const douleur = parseInt(document.getElementById('douleur').value) || 0;
+            const dureeSymptomes = parseInt(document.getElementById('duree-symptomes').value) || 0;
+
+            const contexte = document.querySelector('input[name="contexte"]:checked')?.value;
+            const rougeur = document.querySelector('input[name="rougeur"]:checked')?.value;
+            const ecoulement = document.querySelector('input[name="ecoulement"]:checked')?.value;
+            const evolution = document.querySelector('input[name="evolution"]:checked')?.value;
+            const aeg = document.querySelector('input[name="aeg"]:checked')?.value;
+            const adenopathies = document.querySelector('input[name="adenopathies"]:checked')?.value;
+
+            const cordon = document.getElementById('palp1')?.checked || false;
+            const placard = document.getElementById('palp5')?.checked || false;
+            const peauOrange = document.getElementById('palp2')?.checked || false;
+            const fluctuation = document.getElementById('palp3')?.checked || false;
+            const tensionGlobale = document.getElementById('palp4')?.checked || false;
+
+            const frissons = document.getElementById('frissons')?.checked || false;
+            const tachycardie = document.getElementById('tachycardie')?.checked || false;
+
+            // 2. VALIDATION
+            if (!contexte || !rougeur) { 
+                alert('⚠️ Veuillez renseigner au minimum le contexte et l\'aspect de la rougeur.'); 
+                return; 
+            }
+            if (isNaN(temperature) || tempInput === "") { 
+                alert('⚠️ Veuillez saisir la température corporelle (ex: 38.5).'); 
+                return; 
+            }
+            if (temperature < 35 || temperature > 43) { 
+                alert('⚠️ Température hors limites physiologiques (35-43°C).'); 
+                return; 
+            }
+
+            // 3. ÉVALUATION DE LA GRAVITÉ
+            let gravityRisk = false;
+            let gravityScore = 0;
+            
+            if (aeg === 'marquee') gravityScore += 3;
+            if (temperature > 39.5) gravityScore += 2;
+            if (temperature > 38.5 && adenopathies === 'presentes') gravityScore += 2;
+            if (frissons) gravityScore += 1;
+            if (tachycardie) gravityScore += 1;
+            if (temperature > 40 || temperature < 36) gravityScore += 3;
+            
+            if (gravityScore >= 3) gravityRisk = true;
+
+            // 4. ALGORITHME DÉCISIONNEL OPTIMISÉ v3.3
+            let diagnostic = "";
+            let criteresRetenus = [];
+            
+            const pusPresent = (ecoulement === 'localise' || ecoulement === 'budin');
+            const aegSignificative = (aeg === 'moderee' || aeg === 'marquee');
+
+            // A. CONTEXTE NON ALLAITANTE
+            if (contexte === 'non-allaitante') {
+                if (fluctuation) { 
+                    diagnostic = 'abces';
+                    criteresRetenus.push('Masse fluctuante');
+                } else { 
+                    diagnostic = 'nonpuerp';
+                    criteresRetenus.push('Femme non allaitante', 'Éliminer cancer inflammatoire');
+                }
+            }
+            // B. CONTEXTE ALLAITANTE
+            else {
+                // 1. URGENCE : ABCÈS
+                if (fluctuation) {
+                    diagnostic = 'abces';
+                    criteresRetenus.push('Masse fluctuante (signe pathognomonique)');
+                }
+                else if (evolution === 'echec' && temperature > 38) {
+                    diagnostic = 'abces';
+                    criteresRetenus.push('Échec antibiotique', 'Fièvre persistante');
+                }
+                
+                // 2. MASTITE INFECTIEUSE
+                else if (placard) {
+                    diagnostic = 'mastite';
+                    criteresRetenus.push('Placard induré (atteinte parenchymateuse)');
+                    if (pusPresent) criteresRetenus.push('Pus associé');
+                    if (temperature >= 38.5) criteresRetenus.push('Fièvre confirmée');
+                }
+                else if (rougeur === 'quadrant' && temperature >= 38.5) {
+                    diagnostic = 'mastite';
+                    criteresRetenus.push('Rougeur localisée à un quadrant', 'Fièvre ≥ 38.5°C');
+                    if (douleur >= 6) criteresRetenus.push('Douleur importante');
+                }
+                
+                // 3. GALACTOPHORITE
+                else if (pusPresent || cordon || rougeur === 'lineaire') {
+                    diagnostic = 'galactophorite';
+                    if (pusPresent) criteresRetenus.push('Écoulement purulent (signe de Budin)');
+                    if (cordon) criteresRetenus.push('Cordon induré palpable');
+                    if (rougeur === 'lineaire') criteresRetenus.push('Trajet linéaire rouge');
+                }
+                
+                // 4. LYMPHANGITE
+                else if ((rougeur === 'diffuse' || peauOrange) && (temperature >= 38.5 || aegSignificative) && !pusPresent && !placard) {
+                    diagnostic = 'lymphangite';
+                    criteresRetenus.push('Rougeur diffuse en nappe');
+                    if (temperature >= 38.5) criteresRetenus.push('Fièvre ≥ 38.5°C');
+                    if (aegSignificative) criteresRetenus.push('Altération significative de l\'état général');
+                    if (peauOrange) criteresRetenus.push('Peau d\'orange (œdème)');
+                }
+
+                // 5. MASTITE DÉBUTANTE
+                else if (rougeur === 'diffuse' && temperature >= 38 && !aegSignificative && !pusPresent && !placard) {
+                    diagnostic = 'mastite-debutante';
+                    criteresRetenus.push('Rougeur diffuse', 'Fièvre modérée', 'État général conservé');
+                    if (dureeSymptomes <= 2) criteresRetenus.push('Début récent (< 48h)');
+                }
+                
+                // 6. ENGORGEMENT
+                else {
+                    diagnostic = 'engorgement';
+                    if (tensionGlobale) criteresRetenus.push('Tension globale du sein');
+                    if (temperature < 38) criteresRetenus.push('Pas de fièvre ou fièvre modérée');
+                    criteresRetenus.push('Pas de signes infectieux francs');
+                }
+            }
+
+            // 5. AFFICHAGE DES RÉSULTATS
+            displayResult(diagnostic, gravityRisk, gravityScore, criteresRetenus);
+        }
+
+        function displayResult(diagnostic, gravityRisk, gravityScore, criteres) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            
+            let content = '';
+
+            // BLOC ALERTE GRAVITÉ
+            if (gravityRisk) {
+                content += `
+                <div class="sepsis-alert">
+                    <div class="sepsis-icon">🏥</div>
+                    <div>
+                        <strong>⚠️ ALERTE : SIGNES DE GRAVITÉ INFECTIEUSE (Score: ${gravityScore}/10)</strong><br>
+                        Signes détectés : altération marquée de l'état général et/ou fièvre élevée avec retentissement.<br>
+                        <strong style="font-size:1.1em;">👉 HOSPITALISATION À DISCUTER</strong><br>
+                        → Bilan biologique, surveillance rapprochée, antibiothérapie IV potentielle.
+                    </div>
+                </div>`;
+            }
+
+            // CRITÈRES DIAGNOSTIQUES RETENUS
+            const criteresBox = criteres.length > 0 ? `
+                <div class="diagnostic-criteria">
+                    <strong>📊 Critères diagnostiques retenus :</strong>
+                    ${criteres.map(c => `• ${c}`).join('<br>')}
+                </div>` : '';
+
+            // BLOCS DIAGNOSTICS
+            if (diagnostic === 'abces') {
+                content += `
+                <div class="diagnostic-box abces">
+                    <div class="diagnostic-title">🚨 SUSPICION D'ABCÈS MAMMAIRE</div>
+                    <div class="diagnostic-subtitle">Urgence chirurgicale - Collection suppurée</div>
+                    ${criteresBox}
+                    
+                    <div class="treatment-section">
+                        <div class="treatment-title">⚡ PRISE EN CHARGE URGENTE</div>
+                        <ul class="treatment-list">
+                            <li><strong>Échographie mammaire EN URGENCE</strong> : Confirmation diagnostique, mesure de la taille.</li>
+                            <li><strong>Drainage impératif</strong> : Ponction échoguidée ou drainage chirurgical.</li>
+                            <li><strong>Prélèvement bactériologique</strong> systématique du pus.</li>
+                            <li><strong>Antibiothérapie :</strong> À discuter selon le tableau clinique (non systématique après drainage efficace).</li>
+                        </ul>
+                        <div class="table-container">${getAntibioTableAbces()}</div>
+                        <div class="warning-box"><strong>⚠️ POURSUIVRE L'ALLAITEMENT</strong></div>
+                    </div>
+                </div>`;
+            }
+            else if (diagnostic === 'nonpuerp') {
+                content += `
+                <div class="diagnostic-box nonpuerp">
+                    <div class="diagnostic-title">⚠️ MASTITE NON PUERPÉRALE</div>
+                    <div class="diagnostic-subtitle">Femme non allaitante - VIGILANCE ONCOLOGIQUE</div>
+                    ${criteresBox}
+                    <div class="warning-box">
+                        <strong>🚨 IMPÉRATIF : ÉLIMINER UN CARCINOME INFLAMMATOIRE</strong><br>
+                        Tout placard rouge chez une femme non allaitante est un cancer jusqu'à preuve du contraire.
+                    </div>
+                    <div class="treatment-section">
+                        <div class="treatment-title">🔬 BILAN DIAGNOSTIQUE</div>
+                        <ul class="treatment-list">
+                            <li><strong>Échographie mammaire</strong> en urgence</li>
+                            <li><strong>Mammographie</strong> (à distance)</li>
+                            <li><strong>Biopsie</strong> si doute persistant</li>
+                        </ul>
+                        <div class="treatment-title">💊 TRAITEMENT</div>
+                        <div class="table-container">${getAntibioTableNonPuerp()}</div>
+                    </div>
+                </div>`;
+            }
+            else if (diagnostic === 'galactophorite') {
+                content += `
+                <div class="diagnostic-box galactophorite">
+                    <div class="diagnostic-title">🔵 GALACTOPHORITE</div>
+                    <div class="diagnostic-subtitle">Infection intracanalaire - Obstruction du canal galactophore</div>
+                    ${criteresBox}
+                    <div class="treatment-section">
+                        <div class="treatment-title">💊 ANTIBIOTHÉRAPIE (10-14 jours)</div>
+                        <div class="table-container">${getAntibioTable()}</div>
+                        <div class="treatment-title" style="margin-top:25px;">🩹 MESURES LOCALES</div>
+                        <ul class="treatment-list">
+                            <li><strong>Massage du cordon</strong> vers le mamelon pendant les tétées.</li>
+                            <li><strong>Poursuite impérative de l'allaitement</strong>.</li>
+                            <li><strong>Chaud AVANT / Froid APRÈS</strong> la tétée.</li>
+                        </ul>
+                    </div>
+                </div>`;
+            }
+            else if (diagnostic === 'lymphangite') {
+                content += `
+                <div class="diagnostic-box lymphangite">
+                    <div class="diagnostic-title">🟤 LYMPHANGITE (Mastite Inflammatoire)</div>
+                    <div class="diagnostic-subtitle">Inflammation extensive des vaisseaux lymphatiques</div>
+                    ${criteresBox}
+                    <div class="treatment-section">
+                        <div class="treatment-title">💊 TRAITEMENT 1ère INTENTION (24-48h)</div>
+                        <ul class="treatment-list">
+                            <li><strong>AINS :</strong> Ibuprofène 400 mg × 3/jour (si pas d'abcès).</li>
+                            <li><strong>Drainage mammaire intensif</strong> (Tétées fréquentes).</li>
+                            <li><strong>Repos au lit strict</strong>.</li>
+                        </ul>
+                        <div class="warning-box" style="background:#fff3cd; color:#856404; border-left:5px solid #ffc107;">
+                            <strong>⚠️ SI PAS D'AMÉLIORATION À 24H :</strong><br>
+                            Débuter les antibiotiques (voir protocole Mastite).
+                        </div>
+                    </div>
+                </div>`;
+            }
+            else if (diagnostic === 'mastite') {
+                content += `
+                <div class="diagnostic-box mastite">
+                    <div class="diagnostic-title">🟠 MASTITE INFECTIEUSE</div>
+                    <div class="diagnostic-subtitle">Infection bactérienne du parenchyme (Staph. aureus)</div>
+                    ${criteresBox}
+                    <div class="treatment-section">
+                        <div class="treatment-title">💊 ANTIBIOTHÉRAPIE (10-14 jours)</div>
+                        <div class="table-container">${getAntibioTable()}</div>
+                        <div class="treatment-title" style="margin-top:25px;">🩹 MESURES ASSOCIÉES</div>
+                        <ul class="treatment-list">
+                            <li><strong>POURSUIVRE L'ALLAITEMENT</strong>.</li>
+                            <li><strong>Drainage mécanique optimal</strong> (Tétées, massage).</li>
+                            <li><strong>Antalgiques</strong> : Paracétamol.</li>
+                        </ul>
+                    </div>
+                </div>`;
+            }
+            else if (diagnostic === 'mastite-debutante') {
+                content += `
+                <div class="diagnostic-box mastite-debutante">
+                    <div class="diagnostic-title">🟡 MASTITE DÉBUTANTE (Zone grise)</div>
+                    <div class="diagnostic-subtitle">Stade précoce - Surveillance rapprochée nécessaire</div>
+                    ${criteresBox}
+                    <div class="treatment-section">
+                        <div class="treatment-title">💊 TRAITEMENT INITIAL (24-48h)</div>
+                        <ul class="treatment-list">
+                            <li><strong>AINS</strong> : Ibuprofène 400 mg × 3/jour.</li>
+                            <li><strong>Drainage mammaire intensif</strong>.</li>
+                            <li><strong>Alternance chaud/froid</strong>.</li>
+                        </ul>
+                        <div class="warning-box" style="background:#ffc107; color:#000;">
+                            <strong>⚠️ RÉÉVALUATION À 24-48H OBLIGATOIRE</strong><br>
+                            Si aggravation ou apparition de pus : Débuter Antibiotiques.
+                        </div>
+                        <div class="treatment-title" style="margin-top:25px;">Si échec : Introduction Antibiotiques</div>
+                        <div class="table-container">${getAntibioTable()}</div>
+                    </div>
+                </div>`;
+            }
+            else if (diagnostic === 'engorgement') {
+                content += `
+                <div class="diagnostic-box engorgement">
+                    <div class="diagnostic-title">🟢 ENGORGEMENT MAMMAIRE</div>
+                    <div class="diagnostic-subtitle">Stase lactée simple - Pas d'infection</div>
+                    ${criteresBox}
+                    <div class="treatment-section">
+                        <div class="treatment-title">⛔ PAS D'ANTIBIOTIQUES</div>
+                        <div class="treatment-title" style="margin-top:25px;">🩹 TRAITEMENT MÉCANIQUE</div>
+                        <ul class="treatment-list">
+                            <li><strong>Tétées très fréquentes</strong>.</li>
+                            <li><strong>Massage aréolaire</strong> (Assouplissement).</li>
+                            <li><strong>Froid entre les tétées</strong>.</li>
+                        </ul>
+                    </div>
+                </div>`;
+            }
+
+            // Références
+            content += `
+                <div class="reference-box">
+                    <strong>📚 RÉFÉRENCES SCIENTIFIQUES</strong>
+                    <ul>
+                        <li>HAS - Allaitement maternel (2002, 2023)</li>
+                        <li>CNGOF - Recommandations : Allaitement maternel (2015)</li>
+                        <li>ABM Protocol #4 - Mastitis (2022)</li>
+                        <li>SPILF - Antibiothérapie des infections (2021)</li>
+                    </ul>
+                </div>`;
+
+            resultDiv.innerHTML = content;
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- GÉNÉRATEURS DE TABLEAUX ---
+        function getAntibioTable() {
+            return `
+            <table class="antibiotic-table">
+                <thead><tr><th style="width:40%">Molécule (DCI)</th><th style="width:30%">Posologie</th><th style="width:30%">Voie</th></tr></thead>
+                <tbody>
+                    <tr class="first-line">
+                        <td><strong>Cloxacilline</strong><br><small>(ex: Orbenin®)</small></td>
+                        <td><strong>1 g × 4/jour</strong></td><td><strong>Orale</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Amoxicilline + Acide Clavulanique</strong><br><small>(ex: Augmentin®)</small></td>
+                        <td><strong>1 g × 3/jour</strong></td><td><strong>Orale</strong></td>
+                    </tr>
+                    <tr><td colspan="3" style="background:#fff3cd; font-style:italic; text-align:center; padding:8px;">⚠️ Si allergie Pénicillines :</td></tr>
+                    <tr>
+                        <td><strong>Clindamycine</strong><br><small>(ex: Dalacine®)</small></td>
+                        <td><strong>600 mg × 3/jour</strong></td><td><strong>Orale</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pristinamycine</strong><br><small>(ex: Pyostacine®)</small></td>
+                        <td><strong>1 g × 3/jour</strong></td><td><strong>Orale</strong></td>
+                    </tr>
+                </tbody>
+            </table>`;
+        }
+
+        function getAntibioTableAbces() {
+            return `
+            <table class="antibiotic-table">
+                <thead><tr><th style="width:40%">Molécule (DCI)</th><th style="width:30%">Posologie</th><th style="width:30%">Voie</th></tr></thead>
+                <tbody>
+                    <tr class="first-line">
+                        <td><strong>Cloxacilline IV</strong></td>
+                        <td><strong>2 g × 4/jour</strong></td><td><strong>IV</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Amoxicilline + Acide Clavulanique</strong></td>
+                        <td><strong>1 g × 3/jour</strong></td><td><strong>IV ou Orale</strong></td>
+                    </tr>
+                     <tr><td colspan="3" style="background:#fff3cd; font-style:italic; text-align:center; padding:8px;">⚠️ Si SARM ou Allergie :</td></tr>
+                    <tr>
+                        <td><strong>Vancomycine</strong></td>
+                        <td><strong>15-20 mg/kg × 2/j</strong></td><td><strong>IV</strong></td>
+                    </tr>
+                </tbody>
+            </table>`;
+        }
+
+        function getAntibioTableNonPuerp() {
+            return `
+            <table class="antibiotic-table">
+                <thead><tr><th style="width:40%">Molécule (DCI)</th><th style="width:30%">Posologie</th><th style="width:30%">Voie</th></tr></thead>
+                <tbody>
+                    <tr class="first-line">
+                        <td><strong>Amoxicilline + Acide Clavulanique</strong><br><small>(ex: Augmentin®)</small></td>
+                        <td><strong>1 g × 3/jour</strong></td><td><strong>Orale</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Clindamycine</strong><br><small>(ex: Dalacine®)</small></td>
+                        <td><strong>600 mg × 3/jour</strong></td><td><strong>Orale</strong></td>
+                    </tr>
+                </tbody>
+            </table>`;
+        }
+
+        function resetForm() {
+            location.reload();
+        }
+
+        window.addEventListener('load', () => {
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+                radio.closest('.radio-option').classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>
