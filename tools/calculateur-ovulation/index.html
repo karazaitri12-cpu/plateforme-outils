@@ -29,11 +29,11 @@
         /* Variables */
         .ovul-wrap {
             --ovul-primary: #4A6FA5;
-            --ovul-primary-dark: #2C4A7C;
-            --ovul-fertility: #68D391;
-            --ovul-ovulation: #9F7AEA;
-            --ovul-period: #FC8181;
-            --ovul-today: #63B3ED;
+    --ovul-primary-dark: #2C4A7C;
+    --ovul-fertility: #FFEF9D;      /* Jaune clair */
+    --ovul-ovulation: #FFD700;      /* Or/Jaune doré */
+    --ovul-period: #FF0000;         /* Rouge */
+    --ovul-today: #A0CDFC;          /* Bleu clair */
             --ovul-bg: #F7FAFC;
             --ovul-card: #FFFFFF;
             --ovul-border: #CBD5E0;
@@ -284,33 +284,32 @@
             width: 60%;
         }
 
-        .ovul-wrap .ovul-day.period {
-            background: var(--ovul-period);
-            color: white;
-            font-weight: 600;
-        }
+     .ovul-wrap .ovul-day.period {
+    background: var(--ovul-period);
+    color: white;
+}
 
-        .ovul-wrap .ovul-day.fertility {
-            background: var(--ovul-fertility);
-            color: white;
-            font-weight: 600;
-        }
+       .ovul-wrap .ovul-day.fertility {
+    background: var(--ovul-fertility); /* Jaune clair */
+    color: #000;
+    font-weight: 600;
+}
 
-        .ovul-wrap .ovul-day.ovulation {
-            background: var(--ovul-ovulation);
-            color: white;
-            font-weight: 800;
-            box-shadow: 0 0 0 3px rgba(159, 122, 234, 0.3);
-        }
+    .ovul-wrap .ovul-day.ovulation {
+    background: var(--ovul-ovulation); /* Or/Jaune doré */
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
+}
 
         .ovul-wrap .ovul-day.next-period {
             border: 3px solid var(--ovul-period);
             background: white;
         }
 
-        .ovul-wrap .ovul-day.today {
-            border: 3px solid var(--ovul-today);
-        }
+  .ovul-wrap .ovul-day.today {
+    border: 3px solid var(--ovul-today);
+}
 
         /* Légende */
         .ovul-wrap .ovul-legend {
@@ -501,147 +500,149 @@
     </div>
 
     <script>
-    (function() {
-        'use strict';
+   (function() {
+    'use strict';
 
-        function ovulToast(msg) {
-            var toast = document.getElementById('ovul-toast');
-            toast.textContent = msg;
-            toast.classList.add('show');
-            setTimeout(function() { toast.classList.remove('show'); }, 2500);
+    function ovulToast(msg) {
+        var toast = document.getElementById('ovul-toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 2500);
+    }
+
+    function ovulIsSameDay(d1, d2) {
+        return d1 && d2 &&
+            d1.getDate() === d2.getDate() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getFullYear() === d2.getFullYear();
+    }
+
+    function ovulCalculate() {
+        var startInput = document.getElementById('ovul-cycle-start');
+        var durationInput = document.getElementById('ovul-cycle-duration');
+        
+        var startDate = new Date(startInput.value);
+        var cycleDuration = parseInt(durationInput.value, 10);
+
+        if (isNaN(startDate.getTime())) {
+            ovulToast('Veuillez sélectionner une date valide.');
+            startInput.focus();
+            return;
         }
 
-        function ovulIsSameDay(d1, d2) {
-            return d1 && d2 &&
-                d1.getDate() === d2.getDate() &&
-                d1.getMonth() === d2.getMonth() &&
-                d1.getFullYear() === d2.getFullYear();
+        // CALCUL CORRIGÉ : Ovulation = J14 pour cycle 28 jours
+        // Méthode : startDate + (cycleDuration - 14) - 1
+        // Le "-1" compense le fait que le J1 compte comme jour 1 en JS
+        var ovulation = new Date(startDate);
+        ovulation.setDate(startDate.getDate() + cycleDuration - 14 - 1);
+
+        var fertilityStart = new Date(ovulation);
+        fertilityStart.setDate(ovulation.getDate() - 2);
+
+        var fertilityEnd = new Date(ovulation);
+        fertilityEnd.setDate(ovulation.getDate() + 2);
+
+        var nextPeriod = new Date(startDate);
+        nextPeriod.setDate(startDate.getDate() + cycleDuration - 1);
+
+        window.ovulData = {
+            start: startDate,
+            ovulation: ovulation,
+            fertilityStart: fertilityStart,
+            fertilityEnd: fertilityEnd,
+            nextPeriod: nextPeriod
+        };
+
+        window.ovulCurrentMonth = new Date(ovulation.getFullYear(), ovulation.getMonth(), 1);
+        ovulRenderCalendar();
+        ovulToast('✅ Calcul effectué. Ovulation estimée au J' + (cycleDuration - 14));
+    }
+
+    function ovulNavigateMonth(delta) {
+        if (!window.ovulCurrentMonth) return;
+        window.ovulCurrentMonth.setMonth(window.ovulCurrentMonth.getMonth() + delta);
+        ovulRenderCalendar();
+    }
+
+    function ovulRenderCalendar() {
+        var grid = document.getElementById('ovul-calendar-grid');
+        var monthDisplay = document.getElementById('ovul-month-display');
+        var todayFertileLegend = document.getElementById('ovul-today-fertile-legend');
+        var data = window.ovulData;
+        var today = new Date();
+
+        if (!window.ovulCurrentMonth) {
+            window.ovulCurrentMonth = new Date();
         }
 
-        function ovulCalculate() {
-            var startInput = document.getElementById('ovul-cycle-start');
-            var durationInput = document.getElementById('ovul-cycle-duration');
-            
-            var startDate = new Date(startInput.value);
-            var cycleDuration = parseInt(durationInput.value, 10);
+        var year = window.ovulCurrentMonth.getFullYear();
+        var month = window.ovulCurrentMonth.getMonth();
+        var monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+        
+        monthDisplay.textContent = monthNames[month] + ' ' + year;
 
-            if (isNaN(startDate.getTime())) {
-                ovulToast('Veuillez sélectionner une date valide.');
-                startInput.focus();
-                return;
-            }
-
-            var nextPeriod = new Date(startDate);
-            nextPeriod.setDate(startDate.getDate() + cycleDuration);
-
-            var ovulation = new Date(nextPeriod);
-            ovulation.setDate(nextPeriod.getDate() - 14);
-
-            var fertilityStart = new Date(ovulation);
-            fertilityStart.setDate(ovulation.getDate() - 2);
-
-            var fertilityEnd = new Date(ovulation);
-            fertilityEnd.setDate(ovulation.getDate() + 2);
-
-            window.ovulData = {
-                start: startDate,
-                ovulation: ovulation,
-                fertilityStart: fertilityStart,
-                fertilityEnd: fertilityEnd,
-                nextPeriod: nextPeriod
-            };
-
-            window.ovulCurrentMonth = new Date(ovulation.getFullYear(), ovulation.getMonth(), 1);
-            ovulRenderCalendar();
-            ovulToast('✅ Calcul effectué. Consultez le calendrier.');
+        while (grid.children.length > 7) {
+            grid.removeChild(grid.lastChild);
         }
 
-        function ovulNavigateMonth(delta) {
-            if (!window.ovulCurrentMonth) return;
-            window.ovulCurrentMonth.setMonth(window.ovulCurrentMonth.getMonth() + delta);
-            ovulRenderCalendar();
+        var firstDay = new Date(year, month, 1);
+        var lastDay = new Date(year, month + 1, 0);
+        var startOffset = (firstDay.getDay() + 6) % 7;
+
+        for (var i = 0; i < startOffset; i++) {
+            var emptyDay = document.createElement('div');
+            emptyDay.className = 'ovul-day';
+            emptyDay.style.visibility = 'hidden';
+            grid.appendChild(emptyDay);
         }
 
-        function ovulRenderCalendar() {
-            var grid = document.getElementById('ovul-calendar-grid');
-            var monthDisplay = document.getElementById('ovul-month-display');
-            var todayFertileLegend = document.getElementById('ovul-today-fertile-legend');
-            var data = window.ovulData;
-            var today = new Date();
+        var isTodayFertile = false;
 
-            if (!window.ovulCurrentMonth) {
-                window.ovulCurrentMonth = new Date();
+        for (var day = 1; day <= lastDay.getDate(); day++) {
+            var date = new Date(year, month, day);
+            var dayEl = document.createElement('div');
+            dayEl.className = 'ovul-day';
+            dayEl.textContent = day;
+
+            if (data && data.start && ovulIsSameDay(date, data.start)) {
+                dayEl.classList.add('period');
             }
-
-            var year = window.ovulCurrentMonth.getFullYear();
-            var month = window.ovulCurrentMonth.getMonth();
-            var monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-            
-            monthDisplay.textContent = monthNames[month] + ' ' + year;
-
-            while (grid.children.length > 7) {
-                grid.removeChild(grid.lastChild);
+            if (data && data.ovulation && ovulIsSameDay(date, data.ovulation)) {
+                dayEl.classList.add('ovulation');
             }
-
-            var firstDay = new Date(year, month, 1);
-            var lastDay = new Date(year, month + 1, 0);
-            var startOffset = (firstDay.getDay() + 6) % 7;
-
-            for (var i = 0; i < startOffset; i++) {
-                var emptyDay = document.createElement('div');
-                emptyDay.className = 'ovul-day';
-                emptyDay.style.visibility = 'hidden';
-                grid.appendChild(emptyDay);
+            if (data && data.fertilityStart && data.fertilityEnd && 
+                date >= data.fertilityStart && date <= data.fertilityEnd) {
+                dayEl.classList.add('fertility');
             }
-
-            var isTodayFertile = false;
-
-            for (var day = 1; day <= lastDay.getDate(); day++) {
-                var date = new Date(year, month, day);
-                var dayEl = document.createElement('div');
-                dayEl.className = 'ovul-day';
-                dayEl.textContent = day;
-
-                if (data && data.start && ovulIsSameDay(date, data.start)) {
-                    dayEl.classList.add('period');
-                }
-                if (data && data.ovulation && ovulIsSameDay(date, data.ovulation)) {
-                    dayEl.classList.add('ovulation');
-                }
+            if (data && data.nextPeriod && ovulIsSameDay(date, data.nextPeriod)) {
+                dayEl.classList.add('next-period');
+            }
+            if (ovulIsSameDay(date, today)) {
+                dayEl.classList.add('today');
                 if (data && data.fertilityStart && data.fertilityEnd && 
                     date >= data.fertilityStart && date <= data.fertilityEnd) {
-                    dayEl.classList.add('fertility');
+                    isTodayFertile = true;
                 }
-                if (data && data.nextPeriod && ovulIsSameDay(date, data.nextPeriod)) {
-                    dayEl.classList.add('next-period');
-                }
-                if (ovulIsSameDay(date, today)) {
-                    dayEl.classList.add('today');
-                    if (data && data.fertilityStart && data.fertilityEnd && 
-                        date >= data.fertilityStart && date <= data.fertilityEnd) {
-                        isTodayFertile = true;
-                    }
-                }
-
-                grid.appendChild(dayEl);
             }
 
-            todayFertileLegend.style.display = isTodayFertile ? 'flex' : 'none';
+            grid.appendChild(dayEl);
         }
 
-        // Event listeners
-        document.getElementById('ovul-calculate-btn').addEventListener('click', ovulCalculate);
-        document.getElementById('ovul-prev-month').addEventListener('click', function() { ovulNavigateMonth(-1); });
-        document.getElementById('ovul-next-month').addEventListener('click', function() { ovulNavigateMonth(1); });
-        
-        var slider = document.getElementById('ovul-cycle-duration');
-        var sliderVal = document.getElementById('ovul-cycle-val');
-        slider.addEventListener('input', function() {
-            sliderVal.textContent = this.value + ' j';
-        });
+        todayFertileLegend.style.display = isTodayFertile ? 'flex' : 'none';
+    }
 
-        ovulRenderCalendar();
-    })();
-    </script>
+    // Event listeners
+    document.getElementById('ovul-calculate-btn').addEventListener('click', ovulCalculate);
+    document.getElementById('ovul-prev-month').addEventListener('click', function() { ovulNavigateMonth(-1); });
+    document.getElementById('ovul-next-month').addEventListener('click', function() { ovulNavigateMonth(1); });
+    
+    var slider = document.getElementById('ovul-cycle-duration');
+    var sliderVal = document.getElementById('ovul-cycle-val');
+    slider.addEventListener('input', function() {
+        sliderVal.textContent = this.value + ' j';
+    });
+
+    ovulRenderCalendar();
+})();    </script>
 </body>
 </html>
