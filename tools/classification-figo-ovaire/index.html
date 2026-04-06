@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification FIGO — Cancer de l'Ovaire</title>
+    <style>
+        /* ============================================================
+           BLINDAGE ELEMENTOR — Isolation totale via wrapper unique
+           ============================================================ */
+        .figo-wrap {
+            all: initial;
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            color: #2D3748;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #F7FAFC;
+        }
+
+        .figo-wrap *, .figo-wrap *::before, .figo-wrap *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Variables CSS pour maintenance */
+        .figo-wrap {
+            --figo-primary: #4A6FA5;
+            --figo-primary-dark: #2C4A7C;
+            --figo-success: #276749;
+            --figo-warning: #744210;
+            --figo-danger: #742A2A;
+            --figo-bg: #F7FAFC;
+            --figo-card: #FFFFFF;
+            --figo-border: #CBD5E0;
+            --figo-text: #2D3748;
+            --figo-text-light: #718096;
+            --figo-radius: 10px;
+            --figo-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        /* Container principal */
+        .figo-wrap .figo-container {
+            background: var(--figo-card);
+            border-radius: var(--figo-radius);
+            box-shadow: var(--figo-shadow);
+            overflow: hidden;
+            border: 1px solid var(--figo-border);
+        }
+
+        /* En-tête professionnel */
+        .figo-wrap .figo-header {
+            background: linear-gradient(135deg, var(--figo-primary) 0%, var(--figo-primary-dark) 100%);
+            color: white;
+            padding: 24px 28px;
+            text-align: center;
+        }
+
+        .figo-wrap .figo-header h1 {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .figo-wrap .figo-header p {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            opacity: 0.95;
+        }
+
+        /* Disclaimer médico-légal renforcé */
+        .figo-wrap .figo-legal {
+            margin: 20px;
+            padding: 14px 18px;
+            background: #FFFBEB;
+            border-left: 4px solid #D69E2E;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #744210;
+            line-height: 1.6;
+        }
+
+        .figo-wrap .figo-legal strong {
+            color: #975A16;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        /* Section formulaire */
+        .figo-wrap .figo-form {
+            padding: 20px 28px 28px;
+        }
+
+        .figo-wrap .figo-question {
+            margin-bottom: 24px;
+            padding: 18px 20px;
+            background: #F8FAFC;
+            border-radius: 8px;
+            border-left: 4px solid var(--figo-primary);
+        }
+
+        .figo-wrap .figo-question h3 {
+            color: var(--figo-text);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 600;
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+
+        .figo-wrap .figo-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .figo-wrap .figo-option {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 14px;
+            background: white;
+            border: 2px solid var(--figo-border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .figo-wrap .figo-option:hover {
+            border-color: var(--figo-primary);
+            background: #F0F7FF;
+        }
+
+        .figo-wrap .figo-option input[type="radio"] {
+            margin-right: 12px;
+            margin-top: 4px;
+            min-width: 18px;
+            height: 18px;
+            accent-color: var(--figo-primary);
+            flex-shrink: 0;
+        }
+
+        .figo-wrap .figo-option label {
+            cursor: pointer;
+            line-height: 1.5;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            color: var(--figo-text);
+            width: 100%;
+        }
+
+        .figo-wrap .figo-option strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--figo-primary-dark);
+            font-weight: 600;
+        }
+
+        .figo-wrap .figo-example {
+            font-style: italic;
+            color: var(--figo-text-light);
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            margin-top: 6px;
+            padding-left: 2px;
+            display: block;
+        }
+
+        /* Bouton calcul */
+        .figo-wrap .figo-btn {
+            width: 100%;
+            max-width: 320px;
+            margin: 28px auto 0;
+            display: block;
+            background: linear-gradient(135deg, var(--figo-primary) 0%, var(--figo-primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: clamp(1rem, 3vw, 1.1rem);
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(74, 111, 165, 0.25);
+        }
+
+        .figo-wrap .figo-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 165, 0.35);
+        }
+
+        .figo-wrap .figo-btn:disabled {
+            background: #CBD5E0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Zone résultat */
+        .figo-wrap .figo-result {
+            display: none;
+            margin: 20px 28px 28px;
+            padding: 24px 28px;
+            background: linear-gradient(135deg, #F0FFF4 0%, #E6FFFA 100%);
+            border: 2px solid var(--figo-success);
+            border-radius: var(--figo-radius);
+            text-align: center;
+        }
+
+        .figo-wrap .figo-result.show {
+            display: block;
+            animation: figoFadeIn 0.3s ease;
+        }
+
+        @keyframes figoFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .figo-wrap .figo-result h2 {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            color: var(--figo-success);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .figo-wrap .figo-stage {
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            font-weight: 800;
+            color: var(--figo-primary-dark);
+            margin: 16px 0;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .figo-wrap .figo-description {
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            color: var(--figo-text);
+            line-height: 1.7;
+            margin-top: 20px;
+            text-align: left;
+            padding: 16px 20px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid var(--figo-primary);
+        }
+
+        .figo-wrap .figo-description strong {
+            color: var(--figo-primary-dark);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .figo-wrap .figo-description ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 10px 0;
+        }
+
+        .figo-wrap .figo-description li {
+            padding: 4px 0 4px 22px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .figo-wrap .figo-description li::before {
+            content: "\2022";
+            position: absolute;
+            left: 8px;
+            color: var(--figo-primary);
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        /* Bouton reset */
+        .figo-wrap .figo-reset {
+            background: transparent;
+            color: var(--figo-primary);
+            border: 2px solid var(--figo-primary);
+            padding: 10px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .figo-wrap .figo-reset:hover {
+            background: var(--figo-primary);
+            color: white;
+        }
+
+        /* Toast notification */
+        .figo-wrap .figo-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #2D3748;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 99999;
+            pointer-events: none;
+            max-width: 280px;
+        }
+
+        .figo-wrap .figo-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Anti-scrollbar — style App native */
+        html { scrollbar-width: none !important; }
+        body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+        ::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+
+        /* Styles d'impression */
+        @media print {
+            .figo-wrap .figo-btn,
+            .figo-wrap .figo-reset,
+            .figo-wrap .figo-toast {
+                display: none !important;
+            }
+            .figo-wrap .figo-container {
+                box-shadow: none;
+                border: none;
+            }
+            .figo-wrap .figo-result {
+                display: block !important;
+                page-break-inside: avoid;
+                border: 1px solid #000 !important;
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 15mm;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .figo-wrap { padding: 12px; }
+            .figo-wrap .figo-container { border-radius: 8px; }
+            .figo-wrap .figo-header { padding: 18px 20px; }
+            .figo-wrap .figo-form { padding: 16px 20px 20px; }
+            .figo-wrap .figo-question { padding: 14px 16px; }
+            .figo-wrap .figo-option { padding: 10px 12px; }
+            .figo-wrap .figo-result { margin: 16px 20px 20px; padding: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .figo-wrap .figo-header h1 { font-size: 1.3rem; }
+            .figo-wrap .figo-question h3 { font-size: 1rem; }
+            .figo-wrap .figo-option label { font-size: 0.95rem; }
+            .figo-wrap .figo-stage { font-size: 1.6rem; }
+            .figo-wrap .figo-btn { max-width: 100%; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .figo-wrap *, .figo-wrap *::before, .figo-wrap *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="figo-wrap">
+        <div class="figo-container">
+            <!-- En-tête -->
+            <div class="figo-header">
+                <h1>Classification FIGO — Cancer de l'Ovaire</h1>
+                <p>Stadification selon recommandations FIGO 2014 (en vigueur 2025)</p>
+            </div>
+
+            <!-- Disclaimer médico-légal -->
+            <div class="figo-legal">
+                <strong>⚠️ Avertissement médico-légal</strong>
+                <p>Cet outil est destiné à un usage professionnel éducatif. Il ne remplace pas l'évaluation clinique complète, l'imagerie, ni l'anatomopathologie. La stadification définitive du cancer de l'ovaire relève d'une concertation pluridisciplinaire (RCP).</p>
+                <p style="margin-top:8px"><strong>Source :</strong> Classification FIGO 2014 — Recommandations INCa / ESMO</p>
+            </div>
+
+            <!-- Formulaire -->
+            <div class="figo-form">
+                <div class="figo-question">
+                    <h3 id="figo-question-title">Sélectionnez la situation qui correspond le mieux au cas clinique :</h3>
+                    <div class="figo-options" role="radiogroup" aria-labelledby="figo-question-title">
+                        <!-- STADE I -->
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="1a" id="s1a">
+                            <div>
+                                <strong>Tumeur limitée à un seul ovaire (IA)</strong>
+                                Capsule intacte, pas de tumeur à la surface, cytologie péritonéale négative
+                            </div>
+                        </label>
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="1b" id="s1b">
+                            <div>
+                                <strong>Tumeur limitée aux deux ovaires (IB)</strong>
+                                Capsules intactes, pas de tumeur à la surface, cytologie péritonéale négative
+                            </div>
+                        </label>
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="1c1" id="s1c1">
+                            <div>
+                                <strong>Rupture capsulaire peropératoire (IC1)</strong>
+                                Rupture accidentelle pendant la chirurgie
+                            </div>
+                        </label>
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="1c2" id="s1c2">
+                            <div>
+                                <strong>Rupture capsulaire préopératoire ou surface tumorale (IC2)</strong>
+                                Rupture avant chirurgie OU tumeur visible à la surface
+                            </div>
+                        </label>
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="1c3" id="s1c3">
+                            <div>
+                                <strong>Cytologie péritonéale positive (IC3)</strong>
+                                Cellules malignes dans l'ascite ou le lavage péritonéal
+                            </div>
+                        </label>
+                        
+                        <!-- STADE II -->
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="2a" id="s2a">
+                            <div>
+                                <strong>Extension à l'utérus et/ou aux trompes (IIA)</strong>
+                                Extension ou implants utérins/tubaires
+                            </div>
+                        </label>
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="2b" id="s2b">
+                            <div>
+                                <strong>Extension à d'autres tissus pelviens (IIB)</strong>
+                                Vessie, rectum, péritoine pelvien
+                            </div>
+                        </label>
+                        
+                        <!-- STADE III -->
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="3a1" id="s3a1">
+                            <div>
+                                <strong>Extension microscopique pelvienne + cytologie + (IIIA1)</strong>
+                                Cytologie péritonéale positive, pas de lésions macroscopiques, pas d'atteinte ganglionnaire
+                                <span class="figo-example">Ex : Tumeur bilatérale + ascite maligne, péritoine macroscopiquement sain</span>
+                            </div>
+                        </label>
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="3a2" id="s3a2">
+                            <div>
+                                <strong>Lésions péritonéales macroscopiques limitées au pelvis (IIIA2)</strong>
+                                Implants visibles dans le pelvis uniquement, pas d'atteinte ganglionnaire
+                                <span class="figo-example">Ex : Implants sur vessie/utérus/rectum, sans atteinte épiploon/ganglions</span>
+                            </div>
+                        </label>
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="3b" id="s3b">
+                            <div>
+                                <strong>Métastases péritonéales extra-pelviennes ET/OU atteinte ganglionnaire (IIIB)</strong>
+                                Épiploon, diaphragme, intestin grêle OU ganglions rétropéritonéaux/inguinaux
+                                <span class="figo-example">Ex : Ganglions para-aortiques + OU nodules épiploïques</span>
+                            </div>
+                        </label>
+                        
+                        <!-- STADE IV -->
+                        <label class="figo-option">
+                            <input type="radio" name="figo-stage" value="4" id="s4">
+                            <div>
+                                <strong>Métastases à distance (IV)</strong>
+                                Foie, poumons, os, ou autres organes hors cavité péritonéale
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="figoCalculate()" class="figo-btn" id="figo-calculate-btn" aria-label="Déterminer le stade FIGO">
+                    📊 Déterminer le Stade FIGO
+                </button>
+
+                <!-- Zone résultat -->
+                <div class="figo-result" id="figo-result" role="status" aria-live="polite">
+                    <h2>Résultat de la Stadification</h2>
+                    <div class="figo-stage" id="figo-stage-display"></div>
+                    <div class="figo-description" id="figo-description-display"></div>
+                    <button class="figo-reset" onclick="figoReset()" aria-label="Nouveau calcul">🔄 Nouveau Calcul</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast notification -->
+        <div class="figo-toast" id="figo-toast" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // Toast notification utilitaire
+        function figoToast(msg) {
+            var toast = document.getElementById('figo-toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 2500);
+        }
+
+        // Calcul du stade
+        window.figoCalculate = function() {
+            var selected = document.querySelector('input[name="figo-stage"]:checked');
+            
+            if (!selected) {
+                figoToast('Veuillez sélectionner une option.');
+                // Focus sur le premier radio pour accessibilité
+                var firstRadio = document.querySelector('input[name="figo-stage"]');
+                if (firstRadio) firstRadio.focus();
+                return;
+            }
+            
+            var value = selected.value;
+            var stage = '';
+            var description = '';
+            
+            switch(value) {
+                case '1a':
+                    stage = 'STADE IA';
+                    description = '<strong>Tumeur limitée à un seul ovaire</strong><ul>' +
+                        '<li>Capsule intacte, pas de tumeur à la surface</li>' +
+                        '<li>Cytologie péritonéale négative</li>' +
+                        '<li>Pronostic excellent (survie à 5 ans > 90%)</li></ul>';
+                    break;
+                case '1b':
+                    stage = 'STADE IB';
+                    description = '<strong>Tumeur limitée aux deux ovaires</strong><ul>' +
+                        '<li>Capsules intactes, pas de tumeur à la surface</li>' +
+                        '<li>Cytologie péritonéale négative</li>' +
+                        '<li>Très bon pronostic (survie à 5 ans > 85%)</li></ul>';
+                    break;
+                case '1c1':
+                    stage = 'STADE IC1';
+                    description = '<strong>Rupture capsulaire peropératoire</strong><ul>' +
+                        '<li>Rupture accidentelle pendant la chirurgie</li>' +
+                        '<li>Tumeur initialement limitée aux ovaires</li>' +
+                        '<li>Bon pronostic avec traitement approprié</li></ul>';
+                    break;
+                case '1c2':
+                    stage = 'STADE IC2';
+                    description = '<strong>Rupture capsulaire préopératoire</strong><ul>' +
+                        '<li>Rupture avant la chirurgie OU</li>' +
+                        '<li>Tumeur visible à la surface de l\'ovaire</li>' +
+                        '<li>Nécessite surveillance rapprochée</li></ul>';
+                    break;
+                case '1c3':
+                    stage = 'STADE IC3';
+                    description = '<strong>Cytologie péritonéale positive</strong><ul>' +
+                        '<li>Cellules malignes dans l\'ascite ou le lavage péritonéal</li>' +
+                        '<li>Indication de chimiothérapie adjuvante</li>' +
+                        '<li>Pronostic généralement favorable</li></ul>';
+                    break;
+                case '2a':
+                    stage = 'STADE IIA';
+                    description = '<strong>Extension utérine et/ou tubaire</strong><ul>' +
+                        '<li>Extension ou implants sur l\'utérus et/ou les trompes</li>' +
+                        '<li>Reste confinée au pelvis</li>' +
+                        '<li>Traitement chirurgical + chimiothérapie recommandé</li></ul>';
+                    break;
+                case '2b':
+                    stage = 'STADE IIB';
+                    description = '<strong>Extension à d\'autres tissus pelviens</strong><ul>' +
+                        '<li>Extension à la vessie, rectum, péritoine pelvien</li>' +
+                        '<li>Chirurgie de cytoréduction optimale importante</li>' +
+                        '<li>Chimiothérapie adjuvante systématique</li></ul>';
+                    break;
+                case '3a1':
+                    stage = 'STADE IIIA1';
+                    description = '<strong>Extension microscopique dans le pelvis</strong><ul>' +
+                        '<li>Cytologie péritonéale positive (cellules malignes dans l\'ascite)</li>' +
+                        '<li>Aucune lésion péritonéale macroscopique visible</li>' +
+                        '<li>Aucune atteinte ganglionnaire rétropéritonéale</li>' +
+                        '<li>Ex : Tumeur ovarienne bilatérale + ascite maligne, péritoine macroscopiquement sain</li></ul>';
+                    break;
+                case '3a2':
+                    stage = 'STADE IIIA2';
+                    description = '<strong>Lésions péritonéales macroscopiques limitées au pelvis</strong><ul>' +
+                        '<li>Implants péritonéaux visibles dans le pelvis (toute taille)</li>' +
+                        '<li>Pas d\'extension en dehors du pelvis (épiploon, intestin grêle)</li>' +
+                        '<li>Aucune atteinte ganglionnaire rétropéritonéale</li>' +
+                        '<li>Ex : Implants sur vessie, utérus, rectum, cul-de-sac de Douglas</li></ul>';
+                    break;
+                case '3b':
+                    stage = 'STADE IIIB';
+                    description = '<strong>Métastases péritonéales au-delà du pelvis ET/OU atteinte ganglionnaire</strong><ul>' +
+                        '<li>Métastases sur épiploon, diaphragme, intestin grêle OU</li>' +
+                        '<li>Atteinte des ganglions rétropéritonéaux/inguinaux (même isolée)</li>' +
+                        '<li>Exemples : Ganglions para-aortiques positifs OU nodules sur l\'épiploon</li>' +
+                        '<li>Chirurgie de cytoréduction agressive + chimiothérapie</li></ul>';
+                    break;
+                case '4':
+                    stage = 'STADE IV';
+                    description = '<strong>Métastases à distance</strong><ul>' +
+                        '<li>Foie, poumons, os, ou autres organes distants</li>' +
+                        '<li>Hors cavité péritonéale</li>' +
+                        '<li>Stade le plus avancé</li>' +
+                        '<li>Traitement palliatif et de support + chimiothérapie systémique</li></ul>';
+                    break;
+                default:
+                    stage = 'ERREUR';
+                    description = 'Impossible de déterminer le stade. Veuillez recontacter votre équipe médicale.';
+            }
+            
+            document.getElementById('figo-stage-display').textContent = stage;
+            document.getElementById('figo-description-display').innerHTML = description;
+            document.getElementById('figo-result').classList.add('show');
+            
+            // Scroll smooth vers le résultat
+            document.getElementById('figo-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+        
+        // Reset outil
+        window.figoReset = function() {
+            document.querySelectorAll('input[name="figo-stage"]').forEach(function(radio) {
+                radio.checked = false;
+            });
+            document.getElementById('figo-result').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // Support clavier : Enter/Space sur les labels
+        document.querySelectorAll('.figo-option').forEach(function(option) {
+            option.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    var radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        radio.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+        });
+
+    })();
+    </script>
+</body>
+</html>
