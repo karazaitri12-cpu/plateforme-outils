@@ -1,0 +1,1876 @@
+<!-- ============================================================================ -->
+<!-- GUIDE ANTIBIOTIQUES ADULTES FRANCE 2025-2026 — VERSION 5.3                 -->
+<!-- Corrections v5.3 :                                                          -->
+<!--   [P1] Faute de frappe searchTerms "cefexime" → "cefixime"                 -->
+<!--   [P1] Bug filtre Céphalosporines 1G/2G corrigé                            -->
+<!--   [P2] Ajout PIVMÉCILLINAM (Selexid®) et CÉFADROXIL (Oracéfal®)           -->
+<!--   [P2] Suppression max-height:70px sur .filter-buttons (UX mobile)         -->
+<!--   [P3] Standardisation warnings sur 3 niveaux 🔴🟠🟡                      -->
+<!--   [P3] searchTerms complétés : pneumocystis, cefixime, 5G                  -->
+<!--   [P3] footer-note repositionné dans .container                             -->
+<!-- Sources : RCP ANSM 2025-2026 | HAS | Dernière vérification : Avril 2026   -->
+<!-- ============================================================================ -->
+
+<style>
+/* ===== BLINDAGE POUR ELEMENTOR - ISOLATION COMPLÈTE ===== */
+.antibio-widget-wrapper {
+  all: initial;
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  padding: 0;
+  color: #2c3e50;
+  width: 100%;
+}
+.antibio-widget-wrapper * {
+  box-sizing: border-box;
+}
+.antibio-widget-wrapper *,
+.antibio-widget-wrapper *::before,
+.antibio-widget-wrapper *::after {
+  margin: 0;
+  padding: 0;
+}
+.antibio-widget-wrapper .container {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.antibio-widget-wrapper .header {
+  background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 100%);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 20px rgba(52, 152, 219, 0.08);
+  border: 1px solid rgba(52, 152, 219, 0.1);
+  border-left: 4px solid #3498db;
+}
+.antibio-widget-wrapper h1 {
+  color: #2c3e50;
+  font-size: 1.6em;
+  margin-bottom: 4px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.antibio-widget-wrapper .header-subtitle {
+  font-size: 0.82em;
+  color: #7f8c8d;
+  margin-bottom: 16px;
+  padding-left: 2px;
+}
+.antibio-widget-wrapper .search-box {
+  position: relative;
+  margin-top: 18px;
+}
+.antibio-widget-wrapper .search-box input {
+  width: 100%;
+  padding: 16px 50px 16px 22px;
+  font-size: 15px;
+  border: 2px solid #e3e8ef;
+  border-radius: 50px;
+  outline: none;
+  transition: all 0.3s;
+  background: #ffffff;
+  color: #2c3e50;
+}
+.antibio-widget-wrapper .search-box input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+  background: #fafbfc;
+}
+.antibio-widget-wrapper .search-box input::placeholder {
+  color: #95a5a6;
+}
+.antibio-widget-wrapper .search-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #3498db;
+  font-size: 20px;
+}
+.antibio-widget-wrapper .clear-search {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #95a5a6;
+  font-size: 18px;
+  cursor: pointer;
+  display: none;
+  background: #ecf0f1;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+.antibio-widget-wrapper .clear-search:hover {
+  background: #e74c3c;
+  color: white;
+}
+.antibio-widget-wrapper .clear-search.visible {
+  display: flex;
+}
+.antibio-widget-wrapper .results-counter {
+  text-align: right;
+  margin-top: 12px;
+  font-size: 0.9em;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+.antibio-widget-wrapper .results-counter .count {
+  color: #3498db;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+/* ===== [P2 CORRIGÉ] Suppression max-height:70px — scroll mobile ===== */
+.antibio-widget-wrapper .filter-buttons {
+  display: flex;
+  gap: 6px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+  /* max-height supprimé : évitait l'affichage des filtres sur mobile */
+}
+.antibio-widget-wrapper .filter-btn {
+  padding: 7px 12px;
+  background: #ffffff;
+  border: 2px solid #e3e8ef;
+  border-radius: 22px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #5a6c7d;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.antibio-widget-wrapper .filter-btn:hover {
+  border-color: #3498db;
+  background: #f0f7fc;
+  color: #2c3e50;
+  transform: translateY(-1px);
+}
+.antibio-widget-wrapper .filter-btn.active {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border-color: #3498db;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+}
+
+/* ===== CARTES ===== */
+.antibio-widget-wrapper .antibiotic-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid #e8ecf1;
+  border-left: 4px solid #ecf0f1;
+}
+.antibio-widget-wrapper .antibiotic-card:hover {
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.12);
+  transform: translateY(-2px);
+  border-left-color: #3498db;
+}
+.antibio-widget-wrapper .antibiotic-card.expanded {
+  border-left-color: #27ae60;
+  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.1);
+}
+.antibio-widget-wrapper .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.antibio-widget-wrapper .card-title {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: #2c3e50;
+  flex: 1;
+  letter-spacing: -0.2px;
+}
+.antibio-widget-wrapper .card-category {
+  background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+  color: white;
+  padding: 5px 14px;
+  border-radius: 18px;
+  font-size: 0.72em;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: 12px;
+  box-shadow: 0 2px 8px rgba(142, 68, 173, 0.2);
+}
+.antibio-widget-wrapper .commercial-names {
+  color: #7f8c8d;
+  font-size: 0.92em;
+  margin-bottom: 14px;
+  font-style: italic;
+  font-weight: 400;
+}
+.antibio-widget-wrapper .card-details {
+  display: none;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 2px solid #ecf0f1;
+}
+.antibio-widget-wrapper .card-details.active {
+  display: block;
+  animation: slideDown 0.25s ease-out;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.antibio-widget-wrapper .detail-section {
+  margin-bottom: 18px;
+  background: #f8f9fc;
+  padding: 14px;
+  border-radius: 10px;
+  border-left: 3px solid #ecf0f1;
+}
+.antibio-widget-wrapper .detail-section:nth-child(1) { border-left-color: #3498db; }
+.antibio-widget-wrapper .detail-section:nth-child(2) { border-left-color: #e67e22; }
+.antibio-widget-wrapper .detail-section:nth-child(3) { border-left-color: #e74c3c; }
+.antibio-widget-wrapper .detail-section:nth-child(4) { border-left-color: #27ae60; }
+.antibio-widget-wrapper .detail-title {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 0.95em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.antibio-widget-wrapper .detail-content {
+  color: #5a6c7d;
+  font-size: 0.9em;
+  line-height: 1.7;
+  padding-left: 8px;
+}
+.antibio-widget-wrapper .detail-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+.antibio-widget-wrapper .detail-content li {
+  padding: 5px 0;
+  position: relative;
+  padding-left: 24px;
+}
+/* [Unicode CSS conforme Elementor] */
+.antibio-widget-wrapper .detail-content li::before {
+  content: "\2022";
+  position: absolute;
+  left: 8px;
+  color: #3498db;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* ===== [P3 CORRIGÉ] Badges warnings sur 3 niveaux ===== */
+.antibio-widget-wrapper .quick-info {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.antibio-widget-wrapper .quick-tag {
+  padding: 5px 11px;
+  border-radius: 14px;
+  font-size: 0.74em;
+  border: 1px solid;
+  font-weight: 600;
+}
+/* Niveau 🔴 Contre-indication absolue */
+.antibio-widget-wrapper .quick-tag.warn-red {
+  background: #fff0f0;
+  color: #c0392b;
+  border-color: #e74c3c;
+}
+/* Niveau 🟠 Précaution majeure */
+.antibio-widget-wrapper .quick-tag.warn-orange {
+  background: #fff8f0;
+  color: #d35400;
+  border-color: #e67e22;
+}
+/* Niveau 🟡 Surveillance */
+.antibio-widget-wrapper .quick-tag.warn-yellow {
+  background: #fffdf0;
+  color: #8a7200;
+  border-color: #f1c40f;
+}
+/* Badge info */
+.antibio-widget-wrapper .quick-tag.info-tag {
+  background: #f0fbfa;
+  color: #1a8a80;
+  border-color: #4ecdc4;
+}
+
+.antibio-widget-wrapper .no-results {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 50px;
+  text-align: center;
+  color: #95a5a6;
+  border: 2px dashed #e3e8ef;
+}
+.antibio-widget-wrapper .expand-icon {
+  font-size: 1.2em;
+  color: #3498db;
+  transition: transform 0.3s;
+}
+.antibio-widget-wrapper .antibiotic-card.expanded .expand-icon {
+  transform: rotate(180deg);
+  color: #27ae60;
+}
+.antibio-widget-wrapper .posology-section {
+  background: linear-gradient(135deg, #fff8e6 0%, #fffdf5 100%);
+  border-left-color: #f39c12 !important;
+}
+.antibio-widget-wrapper .presentation {
+  display: block;
+  background: #e8f4fc;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  color: #2980b9;
+  margin-top: 8px;
+  border-left: 3px solid #3498db;
+  font-style: italic;
+}
+.antibio-widget-wrapper .dosage-tag {
+  display: inline-block;
+  background: #e1f0fa;
+  color: #2980b9;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  margin-right: 5px;
+  border: 1px solid #d6e9f8;
+}
+
+/* ===== [P3 CORRIGÉ] Footer dans .container ===== */
+.antibio-widget-wrapper .footer-note {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+  border-radius: 14px;
+  padding: 18px 24px;
+  margin-top: 24px;
+  font-size: 0.88em;
+  color: #5a6c7d;
+  text-align: center;
+  line-height: 1.7;
+  border: 1px solid rgba(231, 76, 60, 0.15);
+  border-left: 4px solid #e74c3c;
+  box-shadow: 0 2px 10px rgba(231, 76, 60, 0.08);
+}
+.antibio-widget-wrapper .footer-note strong {
+  color: #e74c3c;
+  font-weight: 700;
+}
+.antibio-widget-wrapper .version-tag {
+  display: inline-block;
+  background: #eaf4fb;
+  color: #2980b9;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+  border: 1px solid #d6e9f8;
+  letter-spacing: 0.3px;
+}
+
+  /* Anti-scrollbar — style App native */
+html { scrollbar-width: none !important; }
+body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+
+@media (max-width: 600px) {
+  .antibio-widget-wrapper .header { padding: 18px; }
+  .antibio-widget-wrapper h1 { font-size: 1.3em; }
+  .antibio-widget-wrapper .antibiotic-card { padding: 16px; }
+  .antibio-widget-wrapper .filter-btn { padding: 7px 11px; font-size: 11px; }
+}
+</style>
+
+<div class="antibio-widget-wrapper">
+  <div class="container">
+
+    <div class="header">
+      <h1>&#x1F3E5; Guide Antibiotiques 2026 <span class="version-tag">v5.3</span></h1>
+      <div class="header-subtitle">Posologies adultes standard — Sources&nbsp;: RCP ANSM 2025-2026 | HAS</div>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Rechercher un antibiotique, posologie ou indication...">
+        <span class="clear-search" id="clearSearch">&#x2715;</span>
+        <span class="search-icon">&#x1F50D;</span>
+      </div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="beta-lactamines">&beta;-lactamines</button>
+        <button class="filter-btn" data-filter="cephalo-1-2g">C&eacute;phalosporines 1&deg;/2&deg;G</button>
+        <button class="filter-btn" data-filter="cephalo-3-4g">C&eacute;phalosporines 3&deg;/4&deg;G</button>
+        <button class="filter-btn" data-filter="carbapenemes">Carbap&eacute;n&egrave;mes</button>
+        <button class="filter-btn" data-filter="glycopeptides">Glycopeptides</button>
+        <button class="filter-btn" data-filter="aminosides">Aminosides</button>
+        <button class="filter-btn" data-filter="macrolides">Macrolides</button>
+        <button class="filter-btn" data-filter="quinolones">Quinolones</button>
+        <button class="filter-btn" data-filter="tetracyclines">T&eacute;tracyclines</button>
+        <button class="filter-btn" data-filter="autres">Autres classes</button>
+      </div>
+      <div class="results-counter" id="resultsCounter"></div>
+    </div>
+
+    <div id="antibioticsList"></div>
+
+    <!-- [P3 CORRIGÉ] Footer repositionné à l'intérieur du .container -->
+    <div class="footer-note">
+      <strong>&#x26A0;&#xFE0F; Important :</strong> Posologies adultes standard. Adapter impérativement selon fonction rénale, poids, gravité et antibiogramme. Vérifier systématiquement les contre-indications et interactions médicamenteuses. Ce guide ne remplace pas la prescription médicale ni la consultation du RCP.
+    </div>
+
+  </div><!-- /.container -->
+</div><!-- /.antibio-widget-wrapper -->
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Normalisation accents ── */
+  function na(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  /*
+   * Structure des warnings (v5.3 — 3 niveaux standardisés) :
+   *   red    : contre-indication absolue
+   *   orange : précaution majeure / effet grave
+   *   yellow : surveillance recommandée
+   *   info   : information clinique utile
+   */
+
+  const antibiotics = [
+    /* ================================================================
+       β-LACTAMINES — Pénicillines
+    ================================================================ */
+    {
+      id: 1,
+      category: '\u03B2-lactamines',
+      subcategory: 'P\u00E9nicillines anti-staphylocoques',
+      name: 'OXACILLINE',
+      commercialNames: 'ISTOPEN\u00AE',
+      posology: "<span class='dosage-tag'>IV/IM</span> 1 g \u00D7 4/j (max 2 g \u00D7 4/j)<br><span class='dosage-tag'>Perfusion</span> : 30\u201360 min",
+      presentation: 'Flacon poudre pour solution injectable 500 mg, 1 g (bo\u00EEte de 1)',
+      indications: 'Infections \u00E0 staphylocoques sensibles \u00E0 la m\u00E9ticilline (SAMS) : infections cutan\u00E9es s\u00E9v\u00E8res, ost\u00E9o-articulaires, endocardites, septic\u00E9mies',
+      adverseEffects: [
+        'R\u00E9actions allergiques (\u00E9ryth\u00E8me, urticaire)',
+        'Phl\u00E9bite aux points d\u2019injection',
+        'Naus\u00E9es, vomissements',
+        'Neutrop\u00E9nie (traitements prolong\u00E9s > 14 jours)'
+      ],
+      monitoring: [
+        'Surveillance allergique stricte',
+        'NFS si traitement > 14 jours (risque neutrop\u00E9nie)',
+        'Contr\u00F4le de l\u2019efficacit\u00E9 clinique \u00E0 J3',
+        'Adaptation posologique en cas d\u2019insuffisance r\u00E9nale'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie p\u00E9nicillines' },
+        { level: 'yellow', text: 'Neutrop\u00E9nie si > 14 j' }
+      ],
+      info: [],
+      searchTerms: 'oxacilline istopen penicilline anti staphylocoque sams cutane osteo articulaire endocardite'
+    },
+    {
+      id: 3,
+      category: '\u03B2-lactamines',
+      subcategory: 'P\u00E9nicillines',
+      name: 'AMOXICILLINE',
+      commercialNames: 'Clamoxyl\u00AE, Agram\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 1 g \u00D7 3/j<br><span class='dosage-tag'>IV</span> 1 g \u00D7 3\u20134/j (max 12 g/j)",
+      presentation: 'G\u00E9lules 500 mg, 1 g (bo\u00EEte de 12, 16, 24) ; Sachets 1 g (bo\u00EEte de 12, 16) ; Flacon poudre pour solution injectable 500 mg, 1 g (bo\u00EEte de 1)',
+      indications: 'Infections ORL, broncho-pulmonaires, urinaires, cutan\u00E9es \u00E0 germes sensibles',
+      adverseEffects: [
+        'R\u00E9actions allergiques +++ (\u00E9ryth\u00E8me, urticaire, \u0153d\u00E8me de Quincke)',
+        'Troubles digestifs +++ (douleurs abdominales, naus\u00E9es, vomissements, diarrhées)',
+        'Colite pseudomembraneuse (gravit\u00E9 ++)',
+        'Toxicit\u00E9 h\u00E9matologique'
+      ],
+      monitoring: [
+        'Surveillance allergique stricte',
+        'Recherche de Clostridioides difficile en cas de diarrhée',
+        'Pr\u00E9venir le risque de d\u00E9shydratation',
+        'NFS si traitement prolong\u00E9'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie p\u00E9nicillines' },
+        { level: 'orange', text: 'Colite pseudomembraneuse' }
+      ],
+      info: [],
+      searchTerms: 'amoxicilline clamoxyl agram penicilline beta lactamine orl broncho pulmonaire urinaire'
+    },
+    {
+      id: 4,
+      category: '\u03B2-lactamines',
+      subcategory: 'P\u00E9nicillines + Inhibiteur \u03B2-lactamase',
+      name: 'AMOXICILLINE\u2013ACIDE CLAVULANIQUE',
+      commercialNames: 'Augmentin\u00AE, Ciblor\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 1 g/125 mg \u00D7 3/j ou 2 g/125 mg \u00D7 2/j<br><span class='dosage-tag'>IV</span> 1 g/200 mg \u00D7 3\u20134/j",
+      presentation: 'Comprim\u00E9s 1 g/125 mg (bo\u00EEte de 12, 16) ; Sachets (bo\u00EEte de 10, 14) ; Flacon poudre injectable 500 mg/50 mg, 1 g/200 mg (bo\u00EEte de 1)',
+      indications: 'Infections ORL, broncho-pulmonaires, urinaires, cutan\u00E9es \u00E0 germes producteurs de \u03B2-lactamases',
+      adverseEffects: [
+        'R\u00E9actions allergiques +++',
+        'Troubles digestifs +++ (diarrhées plus fr\u00E9quentes qu\u2019amoxicilline seule)',
+        'Colite pseudomembraneuse',
+        'H\u00E9patotoxicit\u00E9 (acide clavulanique)'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Surveillance digestive (arr\u00EAt si diarrhée intense)',
+        'Recherche de Clostridioides difficile',
+        'Surveillance h\u00E9patique si traitement > 14 jours',
+        'Prise au d\u00E9but du repas pour meilleure tol\u00E9rance'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie p\u00E9nicillines' },
+        { level: 'orange', text: 'Troubles digestifs fr\u00E9quents' },
+        { level: 'yellow', text: 'H\u00E9patotoxicit\u00E9 possible' }
+      ],
+      info: [],
+      searchTerms: 'amoxicilline acide clavulanique augmentin ciblor penicilline beta lactamine inhibiteur orl urinaire'
+    },
+    {
+      id: 5,
+      category: '\u03B2-lactamines',
+      subcategory: 'P\u00E9nicillines + Inhibiteur \u03B2-lactamase',
+      name: 'PIP\u00C9RACILLINE\u2013TAZOBACTAM',
+      commercialNames: 'Tazocilline\u00AE',
+      posology: "<span class='dosage-tag'>IV</span> 4 g/0,5 g \u00D7 3\u20134/j en perfusion de 30 min (max 16 g/j)",
+      presentation: 'Flacon poudre pour solution injectable 2 g/0,25 g, 4 g/0,5 g (bo\u00EEte de 1)',
+      indications: 'Infections s\u00E9v\u00E8res nosocomiales \u00E0 germes multir\u00E9sistants, infections intra-abdominales, pneumonies nosocomiales, neutrop\u00E9nie f\u00E9brile',
+      adverseEffects: [
+        'R\u00E9actions allergiques +++',
+        'Troubles digestifs (diarrhées, Clostridioides difficile)',
+        'Colite pseudomembraneuse',
+        'Toxicit\u00E9 h\u00E9matologique (thrombop\u00E9nie)',
+        'Hypokali\u00E9mie'
+      ],
+      monitoring: [
+        'Surveillance allergique stricte',
+        'Ionogramme (hypokali\u00E9mie fr\u00E9quente)',
+        'NFS (thrombop\u00E9nie dose-d\u00E9pendante)',
+        'Fonction r\u00E9nale (adaptation posologique)',
+        'Recherche de Clostridioides difficile'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie p\u00E9nicillines' },
+        { level: 'yellow', text: 'Hypokali\u00E9mie — surveiller ionogramme' }
+      ],
+      info: [{ text: 'Usage hospitalier exclusif' }, { text: 'Spectre large incluant Pseudomonas' }],
+      searchTerms: 'piperacilline tazobactam tazocilline penicilline beta lactamine inhibiteur nosocomial pseudomonas'
+    },
+    {
+      id: 39,
+      category: 'P\u00E9nicillines naturelles',
+      subcategory: 'P\u00E9nicillines naturelles',
+      name: 'BENZATHINE P\u00C9NICILLINE G',
+      commercialNames: 'Extencilline\u00AE',
+      posology: "<span class='dosage-tag'>IM profonde</span> 1,5 MUI (dose unique) ou 2,4 MUI selon indication",
+      presentation: 'Suspension injectable en seringue pr\u00E9remplie 1,5 MUI/2 ml, 2,4 MUI/4 ml (bo\u00EEte de 1)',
+      indications: 'Pr\u00E9vention des r\u00E9cidives de rhumatisme articulaire aigu, syphilis, \u00E9rysip\u00E8le streptococcique',
+      adverseEffects: [
+        'R\u00E9actions allergiques +++ (choc anaphylactique)',
+        'Douleur intense au point d\u2019injection',
+        'R\u00E9action de Jarisch-Herxheimer (syphilis)'
+      ],
+      monitoring: [
+        'Surveillance allergique 30 min post-injection',
+        'V\u00E9rifier ant\u00E9c\u00E9dents d\u2019allergie aux p\u00E9nicillines',
+        'Injection IM profonde (fessier)',
+        'Massage du point d\u2019injection'
+      ],
+      warnings: [
+        { level: 'red', text: 'CI si allergie p\u00E9nicilline' },
+        { level: 'orange', text: 'Surveillance post-injection 30 min obligatoire' }
+      ],
+      info: [{ text: 'Action prolong\u00E9e — 1 injection' }],
+      searchTerms: 'benzathine penicilline extencilline raa rhumatisme articulaire aigu syphilis streptocoque IM'
+    },
+
+    /* ================================================================
+       β-LACTAMINES — Céphalosporines 1G / 2G
+    ================================================================ */
+    {
+      id: 6,
+      category: '\u03B2-lactamines',
+      subcategory: 'C\u00E9phalosporines 1G',
+      name: 'C\u00C9FAZOLINE',
+      commercialNames: 'Ancef\u00AE, Kefzol\u00AE',
+      posology: "<span class='dosage-tag'>IV/IM</span> 1\u20132 g \u00D7 3/j (max 12 g/j)<br><span class='dosage-tag'>Antibioprophylaxie</span> 2 g en IV pr\u00E9op\u00E9ratoire",
+      presentation: 'Flacon poudre pour solution injectable 500 mg, 1 g (bo\u00EEte de 1)',
+      indications: 'Antibioprophylaxie chirurgicale, infections cutan\u00E9es \u00E0 staphylocoques/streptocoques, infections urinaires',
+      adverseEffects: [
+        'R\u00E9actions allergiques (moins fr\u00E9quentes que p\u00E9nicillines)',
+        'Phl\u00E9bites',
+        'Troubles digestifs',
+        'Colite pseudomembraneuse'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Recherche de Clostridioides difficile en cas de diarrhée',
+        'Contr\u00F4le de l\u2019efficacit\u00E9 clinique \u00E0 J2\u2013J3'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' }
+      ],
+      info: [{ text: '1\u00E8re intention — prophylaxie chirurgicale' }],
+      searchTerms: 'cefazoline ancef kefzol cephalosporine 1G premiere generation prophylaxie chirurgicale'
+    },
+    {
+      id: 42,
+      category: '\u03B2-lactamines',
+      subcategory: 'C\u00E9phalosporines 1G',
+      name: 'C\u00C9FADROXIL',
+      commercialNames: 'Orac\u00E9fal\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 1 g \u00D7 2/j (infections cutan\u00E9es courantes)",
+      presentation: 'G\u00E9lules 500 mg (bo\u00EEte de 12)',
+      indications: 'Infections cutan\u00E9es b\u00E9nignes \u00E0 staphylocoques/streptocoques : impétigo, folliculite, furoncle (alternative orale \u00E0 l\u2019oxacilline)',
+      adverseEffects: [
+        'R\u00E9actions allergiques',
+        'Troubles digestifs (naus\u00E9es, diarrhées)',
+        'Colite pseudomembraneuse (rare)'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Contr\u00F4le clinique \u00E0 J3\u2013J5',
+        'Durée courte recommand\u00E9e (5\u20137 jours selon indication)'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' }
+      ],
+      info: [{ text: 'C\u00E9phalosporine 1G voie orale' }, { text: 'Infections cutan\u00E9es ambulatoires' }],
+      searchTerms: 'cefadroxil oracefal cephalosporine 1G premiere generation cutane staphylocoque streptocoque furoncle impetigo ambulatoire'
+    },
+    {
+      id: 7,
+      category: '\u03B2-lactamines',
+      subcategory: 'C\u00E9phalosporines 2G',
+      name: 'C\u00C9FUROXIME',
+      commercialNames: 'Zinacef\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 500 mg \u00D7 2/j<br><span class='dosage-tag'>IV/IM</span> 750 mg\u20131,5 g \u00D7 3/j",
+      presentation: 'Comprim\u00E9s 250 mg, 500 mg (bo\u00EEte de 12, 16) ; Flacon poudre injectable 750 mg, 1,5 g (bo\u00EEte de 1)',
+      indications: 'Infections ORL, pneumonies communautaires, infections urinaires',
+      adverseEffects: [
+        'R\u00E9actions allergiques',
+        'Troubles digestifs',
+        'Colite pseudomembraneuse',
+        '\u00C9l\u00E9vation des transaminases'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Recherche de Clostridioides difficile',
+        'Surveillance h\u00E9patique si traitement prolong\u00E9'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' }
+      ],
+      info: [],
+      searchTerms: 'cefuroxime zinacef cephalosporine 2G deuxieme generation orl pneumonie'
+    },
+
+    /* ================================================================
+       β-LACTAMINES — Céphalosporines 3G
+    ================================================================ */
+    {
+      id: 2,
+      category: '\u03B2-lactamines',
+      subcategory: 'C\u00E9phalosporines 3G',
+      name: 'C\u00C9FIXIME',
+      commercialNames: 'Oroken\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 200\u2013400 mg \u00D7 1/j",
+      presentation: 'Comprim\u00E9s pellicul\u00E9s 200 mg, 400 mg (bo\u00EEte de 6, 12)',
+      indications: 'Infections urinaires, bronchites aiguës, angines, otites moyennes aiguës',
+      adverseEffects: [
+        'R\u00E9actions allergiques',
+        'Troubles digestifs (diarrhées)',
+        'Colite pseudomembraneuse (rare)'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Recherche de Clostridioides difficile en cas de diarrhée',
+        'Adaptation posologique en cas d\u2019insuffisance r\u00E9nale'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' }
+      ],
+      info: [],
+      /* [P3 CORRIGÉ] Faute corrigée : "cefexime" → "cefixime" */
+      searchTerms: 'cefixime cefixime oroken cephalosporine 3G troisieme generation urinaire bronchite angine otite'
+    },
+    {
+      id: 8,
+      category: '\u03B2-lactamines',
+      subcategory: 'C\u00E9phalosporines 3G',
+      name: 'CEFTAZIDIME',
+      commercialNames: 'Fortum\u00AE',
+      posology: "<span class='dosage-tag'>IV</span> 1\u20132 g \u00D7 3/j (max 6 g/j)<br><span class='dosage-tag'>Pseudomonas</span> 2 g \u00D7 3/j",
+      presentation: 'Flacon poudre pour solution injectable 1 g, 2 g (bo\u00EEte de 1)',
+      indications: 'Infections \u00E0 Pseudomonas, infections nosocomiales, septic\u00E9mies',
+      adverseEffects: [
+        'R\u00E9actions allergiques +++',
+        'Troubles digestifs +++',
+        'Colite pseudomembraneuse (gravit\u00E9 ++)',
+        'Toxicit\u00E9 h\u00E9matologique'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Recherche de Clostridioides difficile',
+        'NFS + surveillance clinique',
+        'Adaptation posologique r\u00E9nale'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' },
+        { level: 'yellow', text: 'Pseudomonas — spectre \u00E9tendu' }
+      ],
+      info: [],
+      searchTerms: 'ceftazidime fortum cephalosporine beta lactamine 3G troisieme generation pseudomonas nosocomial'
+    },
+    {
+      id: 9,
+      category: '\u03B2-lactamines',
+      subcategory: 'C\u00E9phalosporines 3G',
+      name: 'CEFOTAXIME',
+      commercialNames: 'Claforan\u00AE',
+      posology: "<span class='dosage-tag'>IV/IM</span> 1\u20132 g \u00D7 3/j (max 12 g/j)",
+      presentation: 'Flacon poudre pour solution injectable 500 mg, 1 g (bo\u00EEte de 1)',
+      indications: 'Infections ORL, broncho-pulmonaires, urinaires, m\u00E9ningites \u00E0 pneumocoque/m\u00E9ningocoque',
+      adverseEffects: [
+        'R\u00E9actions allergiques +++',
+        'Troubles digestifs +++',
+        'Colite pseudomembraneuse',
+        '\u00C9osinophilie, rash maculopapuleux'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Recherche de Clostridioides difficile',
+        'NFS + surveillance clinique',
+        'Adaptation posologique r\u00E9nale'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' },
+        { level: 'yellow', text: 'Rash fr\u00E9quent (non toujours allergique)' }
+      ],
+      info: [],
+      searchTerms: 'cefotaxime claforan cephalosporine beta lactamine 3G troisieme generation meningite pneumocoque'
+    },
+    {
+      id: 10,
+      category: '\u03B2-lactamines',
+      subcategory: 'C\u00E9phalosporines 3G',
+      name: 'CEFTRIAXONE',
+      commercialNames: 'Roc\u00E9phine\u00AE',
+      posology: "<span class='dosage-tag'>IM/IV</span> 1\u20132 g \u00D7 1\u20132/j (max 4 g/j)",
+      presentation: 'Flacon poudre pour solution injectable 250 mg, 500 mg, 1 g, 2 g (bo\u00EEte de 1)',
+      indications: 'M\u00E9ningites bact\u00E9riennes, pneumonies s\u00E9v\u00E8res, infections urinaires compliqu\u00E9es, borr\u00E9liose de Lyme',
+      adverseEffects: [
+        'R\u00E9actions allergiques +++',
+        'Troubles digestifs +++',
+        'Colite pseudomembraneuse',
+        'Lithiase biliaire (sludge)',
+        'Pr\u00E9cipit\u00E9 avec le calcium (CI perfusion concomitante)'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Recherche de Clostridioides difficile',
+        '\u00C9chographie biliaire si traitement > 14 jours',
+        'NFS + surveillance clinique',
+        'CI perfusion concomitante avec solutions calciques'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' },
+        { level: 'red', text: 'Incompatibilit\u00E9 calcium IV' },
+        { level: 'yellow', text: 'Lithiase biliaire si > 14 j' }
+      ],
+      info: [],
+      searchTerms: 'ceftriaxone rocephine cephalosporine beta lactamine 3G troisieme generation meningite lyme urinaire pneumonie'
+    },
+
+    /* ================================================================
+       β-LACTAMINES — Céphalosporines 5G
+    ================================================================ */
+    {
+      id: 41,
+      category: '\u03B2-lactamines',
+      subcategory: 'C\u00E9phalosporines 5G',
+      name: 'CEFTAROLINE',
+      commercialNames: 'Zinforo\u00AE',
+      posology: "<span class='dosage-tag'>IV</span> 600 mg \u00D7 2/j en perfusion de 1h",
+      presentation: 'Flacon poudre pour solution injectable 600 mg (bo\u00EEte de 1)',
+      indications: 'Pneumonies communautaires s\u00E9v\u00E8res, infections cutan\u00E9es compliqu\u00E9es \u00E0 SARM',
+      adverseEffects: [
+        'R\u00E9actions allergiques',
+        'Troubles digestifs',
+        'Neutrop\u00E9nie (rare)'
+      ],
+      monitoring: [
+        'Surveillance allergique',
+        'Surveillance digestive',
+        'NFS si traitement prolong\u00E9'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' }
+      ],
+      /* [P3 CORRIGÉ] Ajout "5G" dans searchTerms */
+      info: [{ text: 'Activit\u00E9 anti-SARM unique parmi les C\u00E9phalo' }],
+      searchTerms: 'ceftaroline zinforo cephalosporine 5G cinquieme generation sarm pneumonie cutane'
+    },
+
+    /* ================================================================
+       β-LACTAMINES — Carbapénèmes
+    ================================================================ */
+    {
+      id: 11,
+      category: '\u03B2-lactamines',
+      subcategory: 'Carbap\u00E9n\u00E8mes',
+      name: 'IMIP\u00C9N\u00C8ME\u2013CILASTATINE',
+      commercialNames: 'Tienam\u00AE',
+      posology: "<span class='dosage-tag'>IV</span> 500 mg \u00D7 3\u20134/j ou 1 g \u00D7 3/j (max 4 g/j)",
+      presentation: 'Flacon poudre pour solution injectable 500 mg, 1 g (bo\u00EEte de 1)',
+      indications: 'Infections s\u00E9v\u00E8res nosocomiales polymicrobiennes, infections intra-abdominales, pneumonies \u00E0 BGN r\u00E9sistants. Spectre tr\u00E8s large incluant Pseudomonas',
+      adverseEffects: [
+        'R\u00E9actions allergiques (risque crois\u00E9 avec p\u00E9nicillines)',
+        'Troubles neurologiques (convulsions si surdosage ou IRC)',
+        'Troubles digestifs (Clostridioides difficile)',
+        'Toxicit\u00E9 h\u00E9matologique'
+      ],
+      monitoring: [
+        'Surveillance neurologique (risque convulsions +++)',
+        'Adaptation posologique stricte selon fonction r\u00E9nale',
+        'Recherche de Clostridioides difficile',
+        'NFS + surveillance clinique'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie p\u00E9nicillines — risque crois\u00E9' },
+        { level: 'red', text: 'Risque convulsions (IRC)' }
+      ],
+      info: [{ text: 'Usage hospitalier' }, { text: 'Pseudomonas sensible' }],
+      searchTerms: 'imipeneme imipenem cilastatine tienam carbapeneme beta lactamine large spectre hospitalier pseudomonas intra abdominal'
+    },
+    {
+      id: 12,
+      category: '\u03B2-lactamines',
+      subcategory: 'Carbap\u00E9n\u00E8mes',
+      name: 'M\u00C9ROP\u00C9N\u00C8ME',
+      commercialNames: 'Meronem\u00AE',
+      posology: "<span class='dosage-tag'>IV</span> 1 g \u00D7 3/j (max 6 g/j)<br><span class='dosage-tag'>M\u00E9ningite</span> 2 g \u00D7 3/j",
+      presentation: 'Flacon poudre pour solution injectable 500 mg, 1 g (bo\u00EEte de 1)',
+      indications: 'Infections s\u00E9v\u00E8res nosocomiales, m\u00E9ningites bact\u00E9riennes, neutrop\u00E9nie f\u00E9brile, infections \u00E0 BGN multir\u00E9sistants. Spectre tr\u00E8s large incluant Pseudomonas',
+      adverseEffects: [
+        'R\u00E9actions allergiques (risque crois\u00E9 avec p\u00E9nicillines)',
+        'Troubles neurologiques (convulsions rares, moins qu\u2019imip\u00E9n\u00E8me)',
+        'Troubles digestifs (Clostridioides difficile)',
+        'Toxicit\u00E9 h\u00E9matologique'
+      ],
+      monitoring: [
+        'Surveillance neurologique',
+        'Adaptation posologique selon fonction r\u00E9nale',
+        'Recherche de Clostridioides difficile',
+        'NFS + surveillance clinique'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie p\u00E9nicillines — risque crois\u00E9' }
+      ],
+      info: [{ text: 'Usage hospitalier' }, { text: 'M\u00E9ningites + Pseudomonas' }],
+      searchTerms: 'meropeneme meropenem meronem carbapeneme beta lactamine large spectre hospitalier meningite neutropenie pseudomonas'
+    },
+    {
+      id: 13,
+      category: '\u03B2-lactamines',
+      subcategory: 'Carbap\u00E9n\u00E8mes',
+      name: 'ERTAP\u00C9N\u00C8ME',
+      commercialNames: 'Invanz\u00AE',
+      posology: "<span class='dosage-tag'>IM/IV</span> 1 g \u00D7 1/j",
+      presentation: 'Flacon poudre pour solution injectable 1 g (bo\u00EEte de 1)',
+      indications: 'Infections communautaires s\u00E9v\u00E8res, infections intra-abdominales, pneumonies communautaires s\u00E9v\u00E8res. PAS d\u2019activit\u00E9 sur Pseudomonas ni entérocoques',
+      adverseEffects: [
+        'R\u00E9actions allergiques (risque crois\u00E9 avec p\u00E9nicillines)',
+        'Troubles neurologiques (convulsions rares)',
+        'Troubles digestifs (Clostridioides difficile)',
+        'R\u00E9actions au point d\u2019injection (IM)'
+      ],
+      monitoring: [
+        'Surveillance neurologique',
+        'Adaptation posologique selon fonction r\u00E9nale',
+        'Recherche de Clostridioides difficile',
+        'Administration IM possible (1 injection/jour)'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie p\u00E9nicillines — risque crois\u00E9' },
+        { level: 'red', text: 'PAS actif sur Pseudomonas' }
+      ],
+      info: [{ text: '1 injection/jour' }, { text: 'Usage ambulatoire possible' }],
+      searchTerms: 'ertapeneme ertapenem invanz carbapeneme beta lactamine spectre communautaire intra abdominal'
+    },
+
+    /* ================================================================
+       GLYCOPEPTIDES
+    ================================================================ */
+    {
+      id: 14,
+      category: 'Glycopeptides',
+      subcategory: 'Glycopeptides',
+      name: 'VANCOMYCINE',
+      commercialNames: 'Vancomycine',
+      posology: "<span class='dosage-tag'>IV</span> 15\u201320 mg/kg \u00D7 2/j (dose de charge 25\u201330 mg/kg)<br>Cibles : r\u00E9siduels 15\u201320 mg/L (infections s\u00E9v\u00E8res) ou 10\u201315 mg/L",
+      presentation: 'Flacon poudre pour solution injectable 500 mg, 1 g (bo\u00EEte de 1)',
+      indications: 'SARM, endocardites, infections ost\u00E9o-articulaires, infections chirurgicales, m\u00E9ningites \u00E0 germes r\u00E9sistants',
+      adverseEffects: [
+        'N\u00E9phrotoxicit\u00E9',
+        'Ototoxicit\u00E9',
+        'Phl\u00E9bite (privil\u00E9gier VVC)',
+        'Red Man Syndrome (perfusion trop rapide)'
+      ],
+      monitoring: [
+        'Dosage des taux r\u00E9siduels (J1 puis ajustement)',
+        'Suivi AUC/CMI selon protocole local',
+        'Perfusion lente obligatoire : > 1h (risque Red Man Syndrome)',
+        'Surveillance r\u00E9nale stricte (cr\u00E9atinine, clairance)',
+        'Surveillance auditive si traitement prolong\u00E9',
+        'Tubulure d\u00E9di\u00E9e (incompatibilit\u00E9s multiples)'
+      ],
+      warnings: [
+        { level: 'red', text: 'Marge th\u00E9rapeutique \u00E9troite — dosage obligatoire' },
+        { level: 'orange', text: 'N\u00E9phrotoxicit\u00E9 + Ototoxicit\u00E9' },
+        { level: 'yellow', text: 'Perfusion lente > 1h' }
+      ],
+      info: [{ text: 'Anti-SARM de r\u00E9f\u00E9rence' }],
+      searchTerms: 'vancomycine glycopeptide sarm endocardite osteo articulaire meningite nephrotoxicite ototoxicite'
+    },
+    {
+      id: 15,
+      category: 'Glycopeptides',
+      subcategory: 'Glycopeptides',
+      name: 'TEICOPLANINE',
+      commercialNames: 'Targocid\u00AE',
+      posology: "<span class='dosage-tag'>IV/IM</span> J1\u2013J2 : 6 mg/kg \u00D7 2/j puis 6 mg/kg \u00D7 1/j<br><span class='dosage-tag'>SARM s\u00E9v\u00E8re</span> : 12 mg/kg J1 puis 6\u201312 mg/kg/j",
+      presentation: 'Flacon poudre pour solution injectable 200 mg, 400 mg (bo\u00EEte de 1)',
+      indications: 'SARM, endocardites, infections ost\u00E9o-articulaires, infections chirurgicales',
+      adverseEffects: [
+        'N\u00E9phrotoxicit\u00E9',
+        'Ototoxicit\u00E9',
+        'Phl\u00E9bite',
+        'Thrombop\u00E9nie (rare)'
+      ],
+      monitoring: [
+        'Taux r\u00E9siduels \u00E0 J3 puis ajustement',
+        'Surveillance r\u00E9nale (cr\u00E9atinine, clairance)',
+        'Surveillance auditive si traitement prolong\u00E9',
+        'Favoriser l\u2019apport hydrique'
+      ],
+      warnings: [
+        { level: 'red', text: 'Marge th\u00E9rapeutique \u00E9troite' },
+        { level: 'orange', text: 'N\u00E9phrotoxicit\u00E9 + Ototoxicit\u00E9' }
+      ],
+      info: [],
+      searchTerms: 'teicoplanine targocid glycopeptide sarm endocardite osteo articulaire'
+    },
+
+    /* ================================================================
+       AMINOSIDES
+    ================================================================ */
+    {
+      id: 16,
+      category: 'Aminosides',
+      subcategory: 'Aminosides',
+      name: 'AMIKACINE',
+      commercialNames: 'Amikacine',
+      posology: "<span class='dosage-tag'>IV/IM</span> 15 mg/kg/j en dose unique<br>Taux pic : 30\u201340 mg/L ; r\u00E9siduel : < 5 mg/L",
+      presentation: 'Ampoule solution injectable 50 mg/2 ml, 100 mg/4 ml, 250 mg/10 ml (bo\u00EEte de 1)',
+      indications: 'Infections graves \u00E0 bacilles \u00E0 Gram n\u00E9gatif multir\u00E9sistants, septic\u00E9mies, pneumonies nosocomiales',
+      adverseEffects: [
+        'N\u00E9phrotoxicit\u00E9',
+        'Ototoxicit\u00E9 cochléo-vestibulaire (irr\u00E9versible)',
+        'Bloc neuromusculaire (rare)'
+      ],
+      monitoring: [
+        'Taux r\u00E9siduels (< 5 mg/L) et pics (30\u201340 mg/L)',
+        'Surveillance r\u00E9nale stricte (diur\u00E8se, cr\u00E9atinine)',
+        'Favoriser l\u2019apport hydrique',
+        'Surveillance audiom\u00E9trique si traitement > 5 jours',
+        'Dose unique journali\u00E8re privil\u00E9gi\u00E9e'
+      ],
+      warnings: [
+        { level: 'red', text: 'Ototoxicit\u00E9 irr\u00E9versible' },
+        { level: 'red', text: 'Marge th\u00E9rapeutique \u00E9troite' },
+        { level: 'orange', text: 'N\u00E9phrotoxicit\u00E9' }
+      ],
+      info: [],
+      searchTerms: 'amikacine aminoside infection grave spectre large gram negatif multiresistant BGN'
+    },
+    {
+      id: 17,
+      category: 'Aminosides',
+      subcategory: 'Aminosides',
+      name: 'GENTAMICINE',
+      commercialNames: 'Gentalline\u00AE, Gentamicine',
+      posology: "<span class='dosage-tag'>IV/IM</span> 5 mg/kg/j en dose unique<br>Taux r\u00E9siduel : < 1 mg/L ; pic : 8\u201310 mg/L",
+      presentation: 'Ampoule solution injectable 40 mg/2 ml, 80 mg/2 ml (bo\u00EEte de 5)',
+      indications: 'Infections graves \u00E0 bacilles \u00E0 Gram n\u00E9gatif, endocardites (en association), septic\u00E9mies',
+      adverseEffects: [
+        'N\u00E9phrotoxicit\u00E9',
+        'Ototoxicit\u00E9 cochléo-vestibulaire (irr\u00E9versible)'
+      ],
+      monitoring: [
+        'Taux r\u00E9siduels (< 1 mg/L) et pics (8\u201310 mg/L)',
+        'Surveillance r\u00E9nale stricte (diur\u00E8se, cr\u00E9atinine)',
+        'Favoriser l\u2019apport hydrique',
+        'Surveillance audiom\u00E9trique',
+        'Dose unique journali\u00E8re privil\u00E9gi\u00E9e'
+      ],
+      warnings: [
+        { level: 'red', text: 'Ototoxicit\u00E9 irr\u00E9versible' },
+        { level: 'red', text: 'Marge th\u00E9rapeutique \u00E9troite' },
+        { level: 'orange', text: 'N\u00E9phrotoxicit\u00E9' }
+      ],
+      info: [],
+      searchTerms: 'gentamicine gentalline aminoside infection grave endocardite BGN gram negatif'
+    },
+
+    /* ================================================================
+       MACROLIDES
+    ================================================================ */
+    {
+      id: 18,
+      category: 'Macrolides',
+      subcategory: 'Macrolides',
+      name: 'JOSAMYCINE',
+      commercialNames: 'Josacine\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 1 g \u00D7 3/j les 2 premiers jours puis 1 g \u00D7 2/j (max 3 g/j)",
+      presentation: 'Comprim\u00E9s pellicul\u00E9s 500 mg (bo\u00EEte de 12, 16)',
+      indications: 'Infections ORL et respiratoires communautaires, pneumonies atypiques',
+      adverseEffects: [
+        'Troubles digestifs (naus\u00E9es, vomissements, diarrhées)',
+        '\u00C9l\u00E9vation transitoire des transaminases',
+        'R\u00E9actions allergiques cutan\u00E9es'
+      ],
+      monitoring: [
+        'Surveillance digestive',
+        'Surveillance h\u00E9patique si traitement prolong\u00E9',
+        'Prise au milieu des repas pour meilleure tol\u00E9rance'
+      ],
+      warnings: [
+        { level: 'yellow', text: 'Troubles digestifs fr\u00E9quents' }
+      ],
+      info: [{ text: 'Tr\u00E8s utilis\u00E9 en France' }],
+      searchTerms: 'josamycine josacine macrolide orl pneumonie atypique france'
+    },
+    {
+      id: 19,
+      category: 'Macrolides',
+      subcategory: 'Macrolides',
+      name: 'AZITHROMYCINE',
+      commercialNames: 'Zithromax\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> J1 : 500 mg puis J2\u2013J5 : 250 mg/j<br><span class='dosage-tag'>IV</span> 500 mg \u00D7 1/j",
+      presentation: 'Comprim\u00E9s 250 mg, 500 mg (bo\u00EEte de 3, 6) ; Flacon poudre pour solution injectable 500 mg (bo\u00EEte de 1)',
+      indications: 'Infections ORL, broncho-pulmonaires, infections g\u00E9nitales (chlamydia), infections cutan\u00E9es',
+      adverseEffects: [
+        'Troubles digestifs',
+        'Allongement du QT (risque de torsade de pointes)',
+        'H\u00E9patotoxicit\u00E9 (rare)'
+      ],
+      monitoring: [
+        'ECG si facteurs de risque cardiaque (allongement QT)',
+        'Surveillance h\u00E9patique si traitement prolong\u00E9',
+        'Prise \u00E0 distance des repas (1h avant ou 2h apr\u00E8s)'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allongement QT' },
+        { level: 'red', text: 'CI m\u00E9dicaments allongeant QT' }
+      ],
+      info: [],
+      searchTerms: 'azithromycine zithromax macrolide orl chlamydia cutane'
+    },
+    {
+      id: 20,
+      category: 'Macrolides',
+      subcategory: 'Macrolides',
+      name: 'CLARITHROMYCINE',
+      commercialNames: 'Klacid\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 500 mg \u00D7 2/j<br><span class='dosage-tag'>IV</span> 500 mg \u00D7 2/j",
+      presentation: 'Comprim\u00E9s 250 mg, 500 mg (bo\u00EEte de 10, 14) ; Comprim\u00E9s LP 500 mg (bo\u00EEte de 7, 14) ; Flacon injectable 500 mg (bo\u00EEte de 1)',
+      indications: 'Infections ORL, pneumonies communautaires, H. pylori (en association), infections cutan\u00E9es',
+      adverseEffects: [
+        'Troubles digestifs',
+        'Allongement du QT',
+        'Interactions m\u00E9dicamenteuses nombreuses (CYP3A4)'
+      ],
+      monitoring: [
+        'ECG si facteurs de risque cardiaque',
+        'V\u00E9rifier les interactions m\u00E9dicamenteuses (CYP3A4 ++)',
+        'Surveillance h\u00E9patique'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allongement QT' },
+        { level: 'orange', text: 'Interactions m\u00E9dicamenteuses (CYP3A4) +++' }
+      ],
+      info: [],
+      searchTerms: 'clarithromycine klacid macrolide orl pneumonie helicobacter pylori cutane'
+    },
+    {
+      id: 21,
+      category: 'Macrolides',
+      subcategory: 'Macrolides',
+      name: 'ROXITHROMYCINE',
+      commercialNames: 'Rulid\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 150 mg \u00D7 2/j ou 300 mg \u00D7 1/j",
+      presentation: 'Comprim\u00E9s pellicul\u00E9s 150 mg (bo\u00EEte de 10, 14, 20)',
+      indications: 'Infections ORL et respiratoires communautaires l\u00E9g\u00E8res \u00E0 mod\u00E9r\u00E9es',
+      adverseEffects: [
+        'Troubles digestifs',
+        'Allongement du QT (moins marqu\u00E9 que clarithromycine)'
+      ],
+      monitoring: [
+        'Surveillance digestive',
+        'ECG si facteurs de risque cardiaque'
+      ],
+      warnings: [
+        { level: 'yellow', text: 'Allongement QT (mod\u00E9r\u00E9)' }
+      ],
+      info: [],
+      searchTerms: 'roxithromycine rulid macrolide orl ambulatoire'
+    },
+    {
+      id: 22,
+      category: 'Macrolides',
+      subcategory: 'Macrolides',
+      name: '\u00C9RYTHROMYCINE',
+      commercialNames: '\u00C9rythromycine',
+      posology: "<span class='dosage-tag'>PO</span> 1 g \u00D7 2\u20133/j<br><span class='dosage-tag'>IV</span> 1 g \u00D7 4/j",
+      presentation: 'Comprim\u00E9s pellicul\u00E9s 250 mg, 500 mg (bo\u00EEte de 20) ; Flacon poudre pour solution injectable 500 mg (bo\u00EEte de 1)',
+      indications: 'Infections ORL et respiratoires (alternative si allergie aux autres macrolides)',
+      adverseEffects: [
+        'Troubles digestifs s\u00E9v\u00E8res (motilité gastrique)',
+        'Allongement du QT',
+        'Interactions m\u00E9dicamenteuses (CYP3A4)'
+      ],
+      monitoring: [
+        'Surveillance digestive',
+        'ECG si facteurs de risque cardiaque',
+        'V\u00E9rifier les interactions m\u00E9dicamenteuses'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Troubles digestifs s\u00E9v\u00E8res' },
+        { level: 'orange', text: 'Allongement QT' }
+      ],
+      info: [],
+      searchTerms: 'erythromycine macrolide orl ambulatoire alternatif allergie'
+    },
+    {
+      id: 23,
+      category: 'Macrolides',
+      subcategory: 'Macrolides',
+      name: 'SPIRAMYCINE',
+      commercialNames: 'Rovamycine\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 3 MUI \u00D7 2\u20133/j (max 9 MUI/j)",
+      presentation: 'Comprim\u00E9s 1,5 MUI, 3 MUI (bo\u00EEte de 10, 12, 16)',
+      indications: 'Infections ORL, stomatologiques, cutan\u00E9es. Toxoplasmose',
+      adverseEffects: [
+        'Troubles digestifs (naus\u00E9es, vomissements)',
+        'R\u00E9actions allergiques',
+        'Allongement du QT (rare)'
+      ],
+      monitoring: [
+        'Surveillance digestive',
+        'Surveillance clinique',
+        'ECG si facteurs de risque cardiaque'
+      ],
+      warnings: [
+        { level: 'yellow', text: 'Allongement QT (rare)' }
+      ],
+      info: [{ text: 'Toxoplasmose — grossesse (hors 1er trim.)' }],
+      searchTerms: 'spiramycine rovamycine macrolide orl toxoplasmose grossesse stomatologie'
+    },
+    {
+      id: 24,
+      category: 'Macrolides',
+      subcategory: 'Synergistines',
+      name: 'PRISTINAMYCINE',
+      commercialNames: 'Pyostacine\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 1 g \u00D7 3/j (max 3 g/j)",
+      presentation: 'Comprim\u00E9s pellicul\u00E9s 500 mg (bo\u00EEte de 20)',
+      indications: 'Infections ORL, stomatologiques, cutan\u00E9es \u00E0 staphylocoques et streptocoques',
+      adverseEffects: [
+        'Troubles digestifs (naus\u00E9es, vomissements, diarrhées)',
+        'R\u00E9actions allergiques',
+        'Colite pseudomembraneuse (rare)'
+      ],
+      monitoring: [
+        'Surveillance digestive',
+        'Prendre au milieu du repas',
+        'Surveillance de l\u2019efficacit\u00E9 clinique'
+      ],
+      warnings: [
+        { level: 'yellow', text: 'Troubles digestifs fr\u00E9quents' }
+      ],
+      info: [{ text: 'ORL et cutané — voie orale uniquement' }],
+      searchTerms: 'pristinamycine pyostacine synergistine macrolide orl staphylocoque streptocoque cutane'
+    },
+
+    /* ================================================================
+       TÉTRACYCLINES
+    ================================================================ */
+    {
+      id: 25,
+      category: 'T\u00E9tracyclines',
+      subcategory: 'T\u00E9tracyclines',
+      name: 'DOXYCYCLINE',
+      commercialNames: 'Doxycline\u00AE, Vibramycine\u00AE',
+      posology: "<span class='dosage-tag'>PO/IV</span> J1 : 200 mg puis 100 mg \u00D7 1\u20132/j<br><span class='dosage-tag'>Acn\u00E9</span> : 50\u2013100 mg/j",
+      presentation: 'G\u00E9lules 100 mg (bo\u00EEte de 10, 14, 20) ; Comprim\u00E9s dispersibles 100 mg (bo\u00EEte de 10) ; Flacon poudre pour solution injectable 100 mg (bo\u00EEte de 1)',
+      indications: 'Infections urinaires et g\u00E9nitales (chlamydia), pneumonies atypiques, maladie de Lyme, acn\u00E9 s\u00E9v\u00E8re, pr\u00E9vention du paludisme',
+      adverseEffects: [
+        '\u0152sophagite (prise sans suffisamment d\u2019eau)',
+        'Candidose',
+        'Photosensibilit\u00E9',
+        'Allergie'
+      ],
+      monitoring: [
+        'Prise avec grand verre d\u2019eau, debout, 1h avant coucher',
+        'Surveillance cutan\u00E9e (photosensibilit\u00E9)',
+        'Surveillance apparition de candidose',
+        '\u00C0 prendre au milieu du repas'
+      ],
+      warnings: [
+        { level: 'orange', text: '\u0152sophagite si prise incorrecte' },
+        { level: 'yellow', text: 'Photosensibilit\u00E9' },
+        { level: 'red', text: 'CI grossesse / enfant < 8 ans' }
+      ],
+      info: [],
+      /* [P3 CORRIGÉ] Ajout minocycline dans contexte chlamydia */
+      searchTerms: 'doxycycline tetracycline cycline chlamydia paludisme acnee lyme atypique minocycline rickettsiose'
+    },
+
+    /* ================================================================
+       QUINOLONES / FLUOROQUINOLONES
+    ================================================================ */
+    {
+      id: 26,
+      category: 'Quinolones',
+      subcategory: 'Fluoroquinolones',
+      name: 'CIPROFLOXACINE',
+      commercialNames: 'Ciflox\u00AE, Ciprofloxacine',
+      posology: "<span class='dosage-tag'>PO</span> 500\u2013750 mg \u00D7 2/j<br><span class='dosage-tag'>IV</span> 400 mg \u00D7 2\u20133/j",
+      presentation: 'Comprim\u00E9s 250 mg, 500 mg, 750 mg (bo\u00EEte de 10, 14) ; Solution buvable 250 mg/5 ml (flacon 100 ml) ; Flacon pour perfusion 200 mg/100 ml, 400 mg/200 ml (bo\u00EEte de 1)',
+      indications: 'Infections urinaires compliqu\u00E9es, prostatites, infections digestives, ost\u00E9o-articulaires, infections \u00E0 Pseudomonas',
+      adverseEffects: [
+        'Photosensibilit\u00E9',
+        'Rupture tendon d\u2019Achille +++',
+        'Diminution du seuil \u00E9pileptog\u00E8ne',
+        'Troubles digestifs',
+        'Neuropathie p\u00E9riph\u00E9rique',
+        'Allongement du QT'
+      ],
+      monitoring: [
+        '\u00C9viter l\u2019exposition solaire (protections SPF 50+)',
+        'Proscrire le sport intensif — arr\u00EAt si douleur tendineuse',
+        'Hydratation +++',
+        'Surveillance neurologique',
+        'ECG si facteurs de risque cardiaque'
+      ],
+      warnings: [
+        { level: 'red', text: 'CI grossesse/allaitement' },
+        { level: 'red', text: 'Rupture tendineuse +++' },
+        { level: 'orange', text: 'Allongement QT' }
+      ],
+      info: [],
+      searchTerms: 'ciprofloxacine ciflox cipro quinolone fluoroquinolone urinaire digestif pseudomonas prostatite'
+    },
+    {
+      id: 27,
+      category: 'Quinolones',
+      subcategory: 'Fluoroquinolones',
+      name: 'OFLOXACINE',
+      commercialNames: 'Oflocet\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 200\u2013400 mg \u00D7 2/j<br><span class='dosage-tag'>IV</span> 200 mg \u00D7 2/j",
+      presentation: 'Comprim\u00E9s 200 mg, 400 mg (bo\u00EEte de 10, 14) ; Flacon pour perfusion 200 mg/100 ml (bo\u00EEte de 1)',
+      indications: 'Infections urinaires, prostatites, infections digestives',
+      adverseEffects: [
+        'Photosensibilit\u00E9',
+        'Rupture tendon d\u2019Achille',
+        'Diminution du seuil \u00E9pileptog\u00E8ne',
+        'Troubles digestifs',
+        'Allongement du QT'
+      ],
+      monitoring: [
+        '\u00C9viter l\u2019exposition solaire',
+        'Proscrire le sport intensif',
+        'Arr\u00EAt imm\u00E9diat si douleur tendineuse',
+        'Hydratation +++',
+        'ECG si facteurs de risque'
+      ],
+      warnings: [
+        { level: 'red', text: 'CI grossesse/allaitement' },
+        { level: 'red', text: 'Rupture tendineuse' },
+        { level: 'orange', text: 'Allongement QT' }
+      ],
+      info: [],
+      searchTerms: 'ofloxacine oflocet quinolone fluoroquinolone urinaire digestif prostatite'
+    },
+    {
+      id: 28,
+      category: 'Quinolones',
+      subcategory: 'Fluoroquinolones',
+      name: 'LEVOFLOXACINE',
+      commercialNames: 'Tavanic\u00AE',
+      posology: "<span class='dosage-tag'>PO/IV</span> 500 mg \u00D7 1\u20132/j (max 750 mg \u00D7 1/j)",
+      presentation: 'Comprim\u00E9s 250 mg, 500 mg, 750 mg (bo\u00EEte de 5, 7, 10) ; Flacon pour perfusion 500 mg/100 ml (bo\u00EEte de 1)',
+      indications: 'Pneumonies communautaires s\u00E9v\u00E8res, exacerbations de BPCO, infections urinaires compliqu\u00E9es',
+      adverseEffects: [
+        'Photosensibilit\u00E9',
+        'Rupture tendon d\u2019Achille',
+        'Diminution du seuil \u00E9pileptog\u00E8ne',
+        'Allongement du QT (dose-d\u00E9pendant)'
+      ],
+      monitoring: [
+        '\u00C9viter l\u2019exposition solaire',
+        'Proscrire le sport intensif',
+        'Hydratation +++',
+        'ECG obligatoire si dose 750 mg/j ou facteurs de risque'
+      ],
+      warnings: [
+        { level: 'red', text: 'CI grossesse/allaitement' },
+        { level: 'red', text: 'Rupture tendineuse' },
+        { level: 'orange', text: 'Allongement QT dose-d\u00E9pendant' }
+      ],
+      info: [],
+      searchTerms: 'levofloxacine tavanic quinolone fluoroquinolone pneumonie bpco urinaire'
+    },
+    {
+      id: 29,
+      category: 'Quinolones',
+      subcategory: 'Fluoroquinolones',
+      name: 'MOXIFLOXACINE',
+      commercialNames: 'Izilox\u00AE',
+      posology: "<span class='dosage-tag'>PO/IV</span> 400 mg \u00D7 1/j",
+      presentation: 'Comprim\u00E9s 400 mg (bo\u00EEte de 5, 10) ; Flacon pour perfusion 400 mg/250 ml (bo\u00EEte de 1)',
+      indications: 'Pneumonies communautaires, sinusites maxillaires aiguës s\u00E9v\u00E8res',
+      adverseEffects: [
+        'Photosensibilit\u00E9',
+        'Rupture tendon d\u2019Achille',
+        'Diminution du seuil \u00E9pileptog\u00E8ne',
+        'Allongement du QT (plus marqu\u00E9 que les autres quinolones)'
+      ],
+      monitoring: [
+        '\u00C9viter l\u2019exposition solaire',
+        'Proscrire le sport intensif',
+        'ECG obligatoire avant traitement',
+        'Hydratation +++',
+        'Surveillance cardiaque'
+      ],
+      warnings: [
+        { level: 'red', text: 'CI grossesse/allaitement' },
+        { level: 'red', text: 'Rupture tendineuse' },
+        { level: 'red', text: 'Allongement QT +++ (plus marqu\u00E9)' }
+      ],
+      info: [],
+      searchTerms: 'moxifloxacine izilox quinolone fluoroquinolone pneumonie sinusite'
+    },
+
+    /* ================================================================
+       AUTRES CLASSES
+    ================================================================ */
+    {
+      id: 30,
+      category: 'Lincosamides',
+      subcategory: 'Lincosamides',
+      name: 'CLINDAMYCINE',
+      commercialNames: 'Dalacine\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 300\u2013600 mg \u00D7 3\u20134/j<br><span class='dosage-tag'>IV</span> 600 mg \u00D7 3\u20134/j (max 2,4 g/j)",
+      presentation: 'G\u00E9lules 150 mg, 300 mg (bo\u00EEte de 16) ; Flacon poudre pour solution injectable 300 mg, 600 mg (bo\u00EEte de 1)',
+      indications: 'Infections \u00E0 staphylocoques et streptocoques, infections ost\u00E9o-articulaires, infections dentaires',
+      adverseEffects: [
+        'Colite pseudomembraneuse +++ (risque \u00E9lev\u00E9)',
+        'Troubles digestifs (diarrhées)',
+        'R\u00E9actions allergiques'
+      ],
+      monitoring: [
+        'Surveillance digestive stricte',
+        'Arr\u00EAt imm\u00E9diat si diarrhée',
+        'Recherche de Clostridioides difficile',
+        'Hydratation',
+        'Prise avec un grand verre d\u2019eau'
+      ],
+      warnings: [
+        { level: 'red', text: 'Colite pseudomembraneuse +++' },
+        { level: 'orange', text: 'Arr\u00EAt imm\u00E9diat si diarrhée' }
+      ],
+      info: [],
+      searchTerms: 'clindamycine dalacine lincosamide staphylocoque streptocoque osteo articulaire dentaire cutane'
+    },
+    {
+      id: 31,
+      category: 'Oxazolidinones',
+      subcategory: 'Oxazolidinones',
+      name: 'LINEZOLIDE',
+      commercialNames: 'Zyvoxid\u00AE',
+      posology: "<span class='dosage-tag'>PO/IV</span> 600 mg \u00D7 2/j",
+      presentation: 'Comprim\u00E9s 600 mg (bo\u00EEte de 10) ; Suspension buvable 100 mg/5 ml (flacon 150 ml) ; Flacon poudre injectable 600 mg (bo\u00EEte de 1)',
+      indications: 'Infections \u00E0 SARM compliqu\u00E9es (pneumonies, infections cutan\u00E9es), entérocoques r\u00E9sistants \u00E0 la vancomycine (ERV)',
+      adverseEffects: [
+        'Toxicit\u00E9 m\u00E9dullaire (an\u00E9mie, thrombop\u00E9nie, leucop\u00E9nie)',
+        'Neuropathie p\u00E9riph\u00E9rique/optique (traitements prolong\u00E9s)',
+        'Interaction IMAO (hypertension avec tyramine)',
+        'C\u00E9phal\u00E9es'
+      ],
+      monitoring: [
+        'NFS 2\u00D7/semaine (risque thrombop\u00E9nie)',
+        'Dur\u00E9e max recommand\u00E9e : 28 jours',
+        'Surveillance neurologique/ophtalmologique si traitement prolong\u00E9',
+        'R\u00E9gime pauvre en tyramine (fromages affin\u00E9s, charcuterie)'
+      ],
+      warnings: [
+        { level: 'red', text: 'Toxicit\u00E9 m\u00E9dullaire' },
+        { level: 'red', text: 'Dur\u00E9e max 28 jours' },
+        { level: 'orange', text: 'Interaction IMAO — tyramine' }
+      ],
+      info: [{ text: 'Anti-SARM non glycopeptide' }],
+      searchTerms: 'linezolide zyvoxid oxazolidinone sarm erv pneumonie cutane'
+    },
+    {
+      id: 32,
+      category: 'Lipopeptides',
+      subcategory: 'Lipopeptides',
+      name: 'DAPTOMYCINE',
+      commercialNames: 'Cubicin\u00AE',
+      posology: "<span class='dosage-tag'>IV</span> 4\u20136 mg/kg \u00D7 1/j (infections cutan\u00E9es)<br>8\u201310 mg/kg \u00D7 1/j (endocardites, bact\u00E9ri\u00E9mies)",
+      presentation: 'Flacon poudre pour solution injectable 350 mg, 500 mg (bo\u00EEte de 1)',
+      indications: 'Infections cutan\u00E9es compliqu\u00E9es \u00E0 SARM, bact\u00E9ri\u00E9mies, endocardites \u00E0 SARM (sauf pneumonies)',
+      adverseEffects: [
+        'Toxicit\u00E9 musculaire (myalgies, \u00E9l\u00E9vation CK)',
+        'Toxicit\u00E9 r\u00E9nale',
+        'Troubles digestifs'
+      ],
+      monitoring: [
+        'CK avant traitement puis 2\u00D7/semaine (arr\u00EAt si CK > 1000 UI/L ou sympt\u00F4mes)',
+        'Surveillance r\u00E9nale',
+        'Ne pas utiliser dans les pneumonies (inactiv\u00E9 par le surfactant)'
+      ],
+      warnings: [
+        { level: 'red', text: 'CI pneumonies (inactiv\u00E9 par surfactant)' },
+        { level: 'orange', text: 'Toxicit\u00E9 musculaire — CK obligatoire' }
+      ],
+      info: [{ text: 'SARM ost\u00E9o-articulaire / endocardite' }],
+      searchTerms: 'daptomycine cubicin lipopeptide sarm endocardite osteo articulaire cutane bacteriemie'
+    },
+    {
+      id: 33,
+      category: 'Nitroimidazol\u00E9s',
+      subcategory: 'Nitroimidazol\u00E9s',
+      name: 'M\u00C9TRONIDAZOLE',
+      commercialNames: 'Flagyl\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 500 mg \u00D7 3/j<br><span class='dosage-tag'>IV</span> 500 mg \u00D7 3/j<br><span class='dosage-tag'>H. pylori</span> : 500 mg \u00D7 2\u20133/j",
+      presentation: 'Comprim\u00E9s 250 mg, 500 mg (bo\u00EEte de 20) ; Comprim\u00E9s s\u00E9cables 500 mg (bo\u00EEte de 16) ; Flacon poudre pour perfusion 500 mg/100 ml (bo\u00EEte de 1)',
+      indications: 'Infections ana\u00E9robies, amibiase, giardiase, vaginoses bact\u00E9riennes, traitement d\u2019\u00E9radication de H. pylori',
+      adverseEffects: [
+        'Troubles digestifs (naus\u00E9es, go\u00FBt m\u00E9tallique)',
+        'Neuropathie p\u00E9riph\u00E9rique (traitements prolong\u00E9s)',
+        'Enc\u00E9phalopathie (rare)',
+        'Effet antabuse (interaction avec l\u2019alcool)'
+      ],
+      monitoring: [
+        '\u00C9viter absolument l\u2019alcool pendant traitement + 48h apr\u00E8s',
+        'Surveillance neurologique si traitement > 10 jours',
+        'Coloration fonc\u00E9e des urines (sans gravit\u00E9)',
+        'Prise pendant les repas'
+      ],
+      warnings: [
+        { level: 'red', text: 'Effet antabuse avec alcool' },
+        { level: 'yellow', text: 'Neuropathie p\u00E9riph\u00E9rique si > 10 j' }
+      ],
+      info: [{ text: 'Infections ana\u00E9robies de r\u00E9f\u00E9rence' }],
+      searchTerms: 'metronidazole flagyl nitroimidazole anaerobie vaginose helicobacter pylori amibiase giardiase'
+    },
+    {
+      id: 34,
+      category: 'Sulfamides',
+      subcategory: 'Sulfamides',
+      name: 'COTRIMOXAZOLE',
+      commercialNames: 'Bactrim\u00AE (Sulfam\u00E9thoxazole 800 mg + Trim\u00E9thoprime 160 mg)',
+      posology: "<span class='dosage-tag'>PO</span> 2 comprim\u00E9s \u00D7 2/j<br><span class='dosage-tag'>PCP</span> : 3\u20134 comprim\u00E9s \u00D7 2/j",
+      presentation: 'Comprim\u00E9s (Sulfam\u00E9thoxazole 400 mg + Trim\u00E9thoprime 80 mg) (bo\u00EEte de 16, 20) ; Comprim\u00E9s forte dose (bo\u00EEte de 12, 16)',
+      indications: 'Pneumocystose (traitement et pr\u00E9vention), toxoplasmose (en association), infections urinaires \u00E0 germes sensibles',
+      adverseEffects: [
+        'Toxicit\u00E9 h\u00E9matologique (an\u00E9mie, leucop\u00E9nie, thrombop\u00E9nie)',
+        '\u00C9ryth\u00E8me polymorphe, syndrome de Stevens-Johnson',
+        'Hyperkali\u00E9mie (trim\u00E9thoprime)',
+        'N\u00E9phrotoxicit\u00E9 cristalline'
+      ],
+      monitoring: [
+        'NFS hebdomadaire',
+        'Surveillance kali\u00E9mie',
+        'Hydratation +++ (2 L/j minimum)',
+        'Arr\u00EAt imm\u00E9diat en cas d\u2019\u00E9ruption cutan\u00E9e'
+      ],
+      warnings: [
+        { level: 'red', text: 'Syndrome de Stevens-Johnson' },
+        { level: 'red', text: 'Toxicit\u00E9 h\u00E9matologique' }
+      ],
+      info: [],
+      /* [P3 CORRIGÉ] Ajout "pneumocystis" */
+      searchTerms: 'cotrimoxazole bactrim sulfamide trimethoprime sulfamethoxazole toxoplasmose pneumocystose pneumocystis jirovecii PCP'
+    },
+    {
+      id: 35,
+      category: 'Rifamycines',
+      subcategory: 'Rifamycines',
+      name: 'RIFAMPICINE',
+      commercialNames: 'Rifadine\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 600 mg \u00D7 1/j \u00E0 jeun<br><span class='dosage-tag'>Staphylocoques</span> : en association (jamais en monoth\u00E9rapie)",
+      presentation: 'G\u00E9lules 300 mg (bo\u00EEte de 30)',
+      indications: 'Associations pour staphylocoques (proth\u00E8ses, mat\u00E9riel \u00E9tranger), tuberculose, l\u00E9gionellose',
+      adverseEffects: [
+        'H\u00E9patotoxicit\u00E9',
+        'Coloration orang\u00E9e des liquides biologiques',
+        'Interactions m\u00E9dicamenteuses majeures (inducteur CYP450)',
+        'R\u00E9actions grippales (prise intermittente)'
+      ],
+      monitoring: [
+        'Surveillance h\u00E9patique (transaminases) avant et pendant traitement',
+        'V\u00E9rifier toutes les interactions m\u00E9dicamenteuses',
+        'Prise \u00E0 jeun (1h avant ou 2h apr\u00E8s repas)',
+        'Jamais en monoth\u00E9rapie pour staphylocoques (risque r\u00E9sistance)'
+      ],
+      warnings: [
+        { level: 'orange', text: 'H\u00E9patotoxicit\u00E9' },
+        { level: 'red', text: 'Interactions m\u00E9dicamenteuses majeures (CYP450)' },
+        { level: 'red', text: 'Jamais en monoth\u00E9rapie' }
+      ],
+      info: [{ text: 'Associations staphylocoques — proth\u00E8ses' }],
+      searchTerms: 'rifampicine rifadine rifamycine staphylocoque tuberculose legionellose prothese materiel etranger'
+    },
+    {
+      id: 36,
+      category: 'Polymyxines',
+      subcategory: 'Polymyxines',
+      name: 'COLISTINE',
+      commercialNames: 'Colimycine\u00AE',
+      posology: "<span class='dosage-tag'>IV</span> 9 MIU \u00D7 3/j (dose de charge 12 MIU)<br><span class='dosage-tag'>Inhal\u00E9e</span> : 1\u20132 MIU \u00D7 2\u20133/j",
+      presentation: 'Flacon poudre pour solution injectable 1 MIU, 2 MIU (bo\u00EEte de 10) ; N\u00E9buliseur 1 MIU, 2 MIU (bo\u00EEte de 10)',
+      indications: 'Infections \u00E0 bacilles \u00E0 Gram n\u00E9gatif multir\u00E9sistants (Pseudomonas, Acinetobacter, Klebsiella) en dernier recours',
+      adverseEffects: [
+        'N\u00E9phrotoxicit\u00E9 (fr\u00E9quente)',
+        'Toxicit\u00E9 neurologique (paresthésies, vertiges)',
+        'Bronchospasme (voie inhal\u00E9e)'
+      ],
+      monitoring: [
+        'Surveillance r\u00E9nale stricte (clairance)',
+        'Adaptation posologique selon fonction r\u00E9nale',
+        'Surveillance neurologique',
+        'Usage en dernier recours apr\u00E8s antibiogramme'
+      ],
+      warnings: [
+        { level: 'red', text: 'Dernier recours — r\u00E9sistances ultimes' },
+        { level: 'orange', text: 'N\u00E9phrotoxicit\u00E9' },
+        { level: 'yellow', text: 'Adaptation r\u00E9nale obligatoire' }
+      ],
+      info: [{ text: 'Multir\u00E9sistants (BMR/BHRe)' }],
+      searchTerms: 'colistine colimycine polymyxine pseudomonas acinetobacter klebsiella multiresistant BMR BHRe dernier recours'
+    },
+    {
+      id: 37,
+      category: 'Glycylcyclines',
+      subcategory: 'Glycylcyclines',
+      name: 'TIGECYCLINE',
+      commercialNames: 'Tygacil\u00AE',
+      posology: "<span class='dosage-tag'>IV</span> Dose de charge 100 mg puis 50 mg \u00D7 2/j",
+      presentation: 'Flacon poudre pour solution injectable 50 mg (bo\u00EEte de 1)',
+      indications: 'Infections intra-abdominales compliqu\u00E9es, infections cutan\u00E9es compliqu\u00E9es \u00E0 germes multir\u00E9sistants',
+      adverseEffects: [
+        'Troubles digestifs s\u00E9v\u00E8res (naus\u00E9es/vomissements > 30 %)',
+        'Augmentation de la mortalit\u00E9 dans certaines indications',
+        'Pancr\u00E9atite (rare)'
+      ],
+      monitoring: [
+        'Surveillance digestive stricte',
+        'Usage r\u00E9serv\u00E9 aux situations o\u00F9 alternatives non disponibles',
+        'Contre-indiqu\u00E9e dans les pneumonies (mortalit\u00E9 \u2191)'
+      ],
+      warnings: [
+        { level: 'red', text: 'CI pneumonies (\u2191 mortalit\u00E9)' },
+        { level: 'orange', text: 'Troubles digestifs s\u00E9v\u00E8res' }
+      ],
+      info: [{ text: 'Dernier recours — intra-abdominal multir\u00E9sistant' }],
+      searchTerms: 'tigecycline tygacil glycylcycline intra abdominale multiresistant dernier recours'
+    },
+    {
+      id: 38,
+      category: 'Inhibiteurs de la synth\u00E8se de la paroi',
+      subcategory: 'Inhibiteurs de la paroi',
+      name: 'FOSFOMYCINE',
+      commercialNames: 'Monuril\u00AE (PO), Fosfomycine IV',
+      posology: "<span class='dosage-tag'>PO</span> 3 g en dose unique (sachet)<br><span class='dosage-tag'>IV</span> 4\u20138 g \u00D7 3/j en perfusion de 2\u20134h",
+      presentation: 'Sachet poudre pour solution buvable 3 g (bo\u00EEte de 1, 2) ; Flacon poudre pour solution injectable 4 g (bo\u00EEte de 1)',
+      indications: 'Cystite aiguë simple (voie orale), infections urinaires s\u00E9v\u00E8res \u00E0 germes multir\u00E9sistants, infections ost\u00E9o-articulaires (en association)',
+      adverseEffects: [
+        'Troubles digestifs (naus\u00E9es, diarrhée)',
+        'Hypokali\u00E9mie (voie IV)',
+        'Phl\u00E9bite (voie IV)',
+        'Allergie (rare)'
+      ],
+      monitoring: [
+        'Hydratation apr\u00E8s prise (voie orale)',
+        'Surveillance kali\u00E9mique (voie IV)',
+        'Adaptation posologique selon fonction r\u00E9nale',
+        'Contr\u00F4le clinique \u00E0 J7 si persistance des sympt\u00F4mes'
+      ],
+      warnings: [
+        { level: 'yellow', text: 'Hypokali\u00E9mie (voie IV)' }
+      ],
+      info: [{ text: 'Dose unique (voie orale — cystite simple)' }],
+      searchTerms: 'fosfomycine monuril urinaire cystite simple intraveineuse osteo articulaire multiresistant dose unique sachet'
+    },
+    {
+      id: 40,
+      category: 'Acides fusidiques',
+      subcategory: 'Acides fusidiques',
+      name: 'ACIDE FUSIDIQUE',
+      commercialNames: 'Fucidine\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 500 mg \u00D7 3/j<br><span class='dosage-tag'>Topique</span> : 2 applications/j",
+      presentation: 'Comprim\u00E9s 250 mg, 500 mg (bo\u00EEte de 20) ; Cr\u00E8me 2 % (tube 15 g, 30 g) ; Pommade 2 % (tube 15 g)',
+      indications: 'Infections cutan\u00E9es \u00E0 staphylocoques sensibles, imp\u00E9tigo, furoncles',
+      adverseEffects: [
+        'Troubles digestifs',
+        'R\u00E9actions allergiques cutan\u00E9es',
+        'H\u00E9patotoxicit\u00E9 (rare, surtout IV)',
+        'Jamais en monoth\u00E9rapie syst\u00E9mique (risque r\u00E9sistance)'
+      ],
+      monitoring: [
+        'Surveillance cutan\u00E9e (efficacit\u00E9)',
+        'Surveillance h\u00E9patique si traitement prolong\u00E9',
+        'Association avec autre antibiotique pour infections s\u00E9v\u00E8res'
+      ],
+      warnings: [
+        { level: 'red', text: 'Jamais en monoth\u00E9rapie syst\u00E9mique' }
+      ],
+      info: [{ text: 'Usage cutané principalement' }],
+      searchTerms: 'acide fusidique fucidine staphylocoque cutane impetigo furoncle peau topique'
+    },
+
+    /* ================================================================
+       NOUVELLE MOLÉCULE [P2] — PIVMÉCILLINAM
+    ================================================================ */
+    {
+      id: 43,
+      category: '\u03B2-lactamines',
+      subcategory: 'Pivmécillinam (Pénicilline)',
+      name: 'PIVM\u00C9CILLINAM',
+      commercialNames: 'Selexid\u00AE',
+      posology: "<span class='dosage-tag'>PO</span> 400 mg \u00D7 3/j pendant 3 jours (cystite simple)<br><span class='dosage-tag'>Prolong\u00E9</span> : 7 jours si doute sur pyél\u00E9, femme enceinte",
+      presentation: 'Comprim\u00E9s pellicul\u00E9s 200 mg (bo\u00EEte de 10)',
+      indications: 'Cystite aiguë simple de la femme (recommand\u00E9 par la HAS en 1\u00E8re intention en alternance avec fosfomycine). Activit\u00E9 sp\u00E9cifique sur les ent\u00E9robact\u00E9ries',
+      adverseEffects: [
+        'Troubles digestifs (naus\u00E9es, diarrhées — fr\u00E9quents)',
+        'R\u00E9actions allergiques (allergie crois\u00E9e \u03B2-lactamines)',
+        'Candidose vulvovaginale'
+      ],
+      monitoring: [
+        'Surveillance digestive (meilleure tol\u00E9rance si prise au repas)',
+        'Contr\u00F4le ECBU post-traitement si sympt\u00F4mes persistants',
+        'Pas d\u2019activit\u00E9 sur Staphylocoques et streptocoques'
+      ],
+      warnings: [
+        { level: 'orange', text: 'Allergie \u03B2-lactamines' },
+        { level: 'yellow', text: 'Troubles digestifs fr\u00E9quents' }
+      ],
+      info: [
+        { text: 'HAS 1\u00E8re intention — cystite simple' },
+        { text: 'Voie orale uniquement — 3 j' }
+      ],
+      searchTerms: 'pivmecillinam selexid penicilline beta lactamine cystite simple femme urinaire HAS enterobacteries ambulatoire ville'
+    }
+  ];
+
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  /* ── Rendu des badges warnings (v5.3) ── */
+  function renderWarnings(ab) {
+    const tags = [];
+    if (ab.warnings) {
+      ab.warnings.forEach(function (w) {
+        var cls = w.level === 'red' ? 'warn-red' : w.level === 'orange' ? 'warn-orange' : 'warn-yellow';
+        var icon = w.level === 'red' ? '\uD83D\uDD34' : w.level === 'orange' ? '\uD83D\uDFE0' : '\uD83D\uDFE1';
+        tags.push("<span class='quick-tag " + cls + "'>" + icon + ' ' + w.text + '</span>');
+      });
+    }
+    if (ab.info) {
+      ab.info.forEach(function (i) {
+        tags.push("<span class='quick-tag info-tag'>\u2139\uFE0F " + i.text + '</span>');
+      });
+    }
+    return tags.join('');
+  }
+
+  /* ── [P1 CORRIGÉ] Filtrage Céphalosporines 1G/2G robuste ── */
+  function matchesFilter(ab) {
+    if (currentFilter === 'all') return true;
+
+    var cat = ab.category ? ab.category.toLowerCase() : '';
+    var sub = ab.subcategory ? ab.subcategory.toLowerCase() : '';
+
+    if (currentFilter === 'beta-lactamines') {
+      return cat.includes('\u03B2-lactamines') || cat.includes('beta-lactamines') || cat.includes('p\u00E9nicillines naturelles') || cat.includes('pivmecillinam') || sub.includes('pivmecillinam');
+    }
+    if (currentFilter === 'cephalo-1-2g') {
+      /* Correspondance sur "1G" ou "2G" dans la subcategory */
+      return (sub.includes('1g') || sub.includes('2g') || sub.includes('1\u1D2C') || sub.includes('2\u1D49'));
+    }
+    if (currentFilter === 'cephalo-3-4g') {
+      return sub.includes('3g') || sub.includes('4g') || sub.includes('3\u1D3F') || sub.includes('4\u1D49') || sub.includes('3\u1D49');
+    }
+    if (currentFilter === 'carbapenemes') {
+      return sub.includes('carbap');
+    }
+    if (currentFilter === 'glycopeptides') {
+      return cat.includes('glycopeptides');
+    }
+    if (currentFilter === 'aminosides') {
+      return cat.includes('aminosides');
+    }
+    if (currentFilter === 'macrolides') {
+      return cat.includes('macrolides') || sub.includes('synergistines');
+    }
+    if (currentFilter === 'quinolones') {
+      return cat.includes('quinolones');
+    }
+    if (currentFilter === 'tetracyclines') {
+      return cat.includes('t\u00E9tracyclines') || cat.includes('tetracyclines');
+    }
+    if (currentFilter === 'autres') {
+      var autresClasses = [
+        'lincosamides', 'oxazolidinones', 'lipopeptides',
+        'nitroimidazol', 'sulfamides', 'rifamycines',
+        'polymyxines', 'glycylcyclines', 'acides fusidiques',
+        'inhibiteurs'
+      ];
+      return autresClasses.some(function (c) { return cat.includes(c); });
+    }
+    return false;
+  }
+
+  function matchesSearch(ab) {
+    var q = na(currentSearch.toLowerCase().trim());
+    if (q === '') return true;
+    var nameMatch = na(ab.name.toLowerCase()).includes(q);
+    var commercialMatch = na(ab.commercialNames.toLowerCase()).includes(q);
+    var termsMatch = na(ab.searchTerms.toLowerCase()).includes(q);
+    var indicationsWords = na(ab.indications.toLowerCase()).split(/\s+/);
+    var indicationsMatch = indicationsWords.some(function (w) { return w.startsWith(q); });
+    return nameMatch || commercialMatch || termsMatch || indicationsMatch;
+  }
+
+  function renderAntibiotics() {
+    var container = document.getElementById('antibioticsList');
+    var filtered = antibiotics.filter(function (ab) {
+      return matchesFilter(ab) && matchesSearch(ab);
+    }).sort(function (a, b) {
+      return a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' });
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = "<div class='no-results'>Aucun antibiotique trouvé pour cette recherche.</div>";
+      document.getElementById('resultsCounter').innerHTML = "<span class='count'>0</span> médicament";
+      return;
+    }
+
+    var counterText = filtered.length === 1 ? 'm\u00E9dicament' : 'm\u00E9dicaments';
+    document.getElementById('resultsCounter').innerHTML =
+      "<span class='count'>" + filtered.length + '</span> ' + counterText;
+
+    container.innerHTML = filtered.map(function (ab) {
+      var effectsHtml = (ab.adverseEffects || []).map(function (e) { return '<li>' + e + '</li>'; }).join('');
+      var monitorHtml = (ab.monitoring || []).map(function (m) { return '<li>' + m + '</li>'; }).join('');
+      return (
+        "<div class='antibiotic-card' data-id='" + ab.id + "'>" +
+          "<div class='card-header'>" +
+            "<div>" +
+              "<div class='card-title'>" + ab.name + '</div>' +
+              "<div class='commercial-names'>" + ab.commercialNames + '</div>' +
+            '</div>' +
+            "<div style='display:flex;align-items:center;gap:5px;'>" +
+              "<span class='card-category'>" + (ab.subcategory || ab.category) + '</span>' +
+              "<span class='expand-icon'>\u25BC</span>" +
+            '</div>' +
+          '</div>' +
+          "<div class='quick-info'>" + renderWarnings(ab) + '</div>' +
+          "<div class='card-details'>" +
+            "<div class='detail-section'>" +
+              "<div class='detail-title'>\uD83D\uDC8A Posologie adulte</div>" +
+              "<div class='detail-content'>" + (ab.posology || 'À adapter selon fonction rénale et gravité') +
+                "<span class='presentation'>" + (ab.presentation || 'Voir RCP pour présentations disponibles') + '</span>' +
+              '</div>' +
+            '</div>' +
+            "<div class='detail-section'>" +
+              "<div class='detail-title'>\uD83D\uDCCB Indications</div>" +
+              "<div class='detail-content'>" + ab.indications + '</div>' +
+            '</div>' +
+            "<div class='detail-section'>" +
+              "<div class='detail-title'>\u26A0\uFE0F Effets ind\u00E9sirables</div>" +
+              "<div class='detail-content'><ul>" + effectsHtml + '</ul></div>' +
+            '</div>' +
+            "<div class='detail-section'>" +
+              "<div class='detail-title'>\uD83D\uDC41\uFE0F Surveillance</div>" +
+              "<div class='detail-content'><ul>" + monitorHtml + '</ul></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    document.querySelectorAll('.antibiotic-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        var details = this.querySelector('.card-details');
+        details.classList.toggle('active');
+        this.classList.toggle('expanded');
+      });
+    });
+  }
+
+  /* ── Événements ── */
+  var searchInput = document.getElementById('searchInput');
+  var clearBtn = document.getElementById('clearSearch');
+
+  searchInput.addEventListener('input', function (e) {
+    currentSearch = e.target.value;
+    renderAntibiotics();
+    clearBtn.classList.toggle('visible', e.target.value.length > 0);
+  });
+
+  clearBtn.addEventListener('click', function () {
+    searchInput.value = '';
+    currentSearch = '';
+    clearBtn.classList.remove('visible');
+    renderAntibiotics();
+    searchInput.focus();
+  });
+
+  document.querySelectorAll('.filter-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      currentFilter = this.dataset.filter;
+      searchInput.value = '';
+      currentSearch = '';
+      clearBtn.classList.remove('visible');
+      renderAntibiotics();
+    });
+  });
+
+  renderAntibiotics();
+
+})();
+</script>
