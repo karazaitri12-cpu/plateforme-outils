@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prise en charge de la Cervicite — v3</title>
+<style>
+/* Uniquement pseudo-éléments, états dynamiques et responsive */
+
+#cerv-root .cerv-btn { cursor:pointer; }
+#cerv-root .cerv-btn:hover { opacity:0.85; }
+
+#cerv-root .cerv-li::before {
+  content: '\2013';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+#cerv-root .cerv-li-check::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #15803d;
+  font-weight: 700;
+  font-size: 13px;
+}
+#cerv-root .cerv-li-alert::before {
+  content: '\25B6';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  color: #b45309;
+  font-size: 9px;
+}
+#cerv-root .cerv-igh-title::before {
+  content: '\26A0\00A0';
+}
+#cerv-root .cerv-myco-title::before {
+  content: '\25AA\00A0';
+  color: #64748b;
+}
+#cerv-root .cerv-fu-label::before {
+  content: '\25C6\00A0';
+  font-size: 9px;
+}
+#cerv-root .cerv-conclu-title::before {
+  content: '\2713\00A0';
+  color: #16a34a;
+}
+#cerv-root .cerv-footer-label::before {
+  content: '\25AA\00A0';
+  color: #94a3b8;
+}
+#cerv-root .cerv-pos-title::before {
+  content: '\2713\00A0';
+}
+#cerv-root .cerv-neg-title::before {
+  content: '\25B3\00A0';
+}
+
+  /* =========================================
+   PRO : Masque l'ascenseur (style App native)
+A placer en fin de css dans chaque outil
+   ========================================= */
+html { scrollbar-width: none; }               /* Firefox */
+body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
+::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
+
+@media (max-width:620px) {
+  #cerv-root .cerv-flex-2 { display:block !important; }
+  #cerv-root .cerv-flex-2 > div { margin-bottom:8px !important; width:100% !important; }
+  #cerv-root .cerv-flex-4 { display:block !important; }
+  #cerv-root .cerv-flex-4 > div { margin-bottom:8px !important; width:100% !important; }
+  #cerv-root .cerv-header-row { display:block !important; }
+  #cerv-root .cerv-ctx-row { display:block !important; }
+}
+</style>
+</head>
+<body style="margin:0;padding:0;background:#f0f4f8;">
+
+<div id="cerv-root" style="display:block;font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#1e293b;background:#f0f4f8;padding:28px 16px 44px 16px;">
+
+<div style="max-width:860px;margin:0 auto;">
+
+  <!-- ═══════════════════════════════════════════════
+       EN-TÊTE
+  ════════════════════════════════════════════════ -->
+  <div style="background:#ffffff;border-top:5px solid #1e3a5f;padding:26px 30px 22px 30px;margin-bottom:4px;box-shadow:0 2px 6px rgba(0,0,0,0.09);border-radius:2px;">
+    <div class="cerv-header-row" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:19px;font-weight:700;color:#1e3a5f;line-height:1.3;margin:0 0 4px 0;">Prise en charge de la Cervicite</div>
+        <div style="font-size:13px;color:#64748b;font-style:italic;">Algorithme décisionnel — Gynécologie-Obstétrique</div>
+      </div>
+      <div style="font-size:12px;background:#eef2f7;color:#1e3a5f;border:1px solid #c8d6e8;padding:5px 12px;border-radius:3px;font-weight:600;white-space:nowrap;">HAS / SPILF 2024 &nbsp;|&nbsp; SFG</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SÉLECTEUR CONTEXTE
+  ════════════════════════════════════════════════ -->
+  <div class="cerv-ctx-row" style="background:#e8eef6;border:1px solid #c8d6e8;padding:12px 20px;margin-bottom:4px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;">
+    <span style="font-size:12px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.07em;">Contexte clinique :</span>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <button id="cerv-btn-standard"  class="cerv-btn" onclick="cervSetCtx('standard')"
+        style="font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;font-weight:600;padding:5px 15px;border-radius:3px;border:1.5px solid #1e3a5f;color:#ffffff;background:#1e3a5f;line-height:1.5;outline:none;">Standard</button>
+      <button id="cerv-btn-grossesse" class="cerv-btn" onclick="cervSetCtx('grossesse')"
+        style="font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;font-weight:500;padding:5px 15px;border-radius:3px;border:1.5px solid #94adc8;color:#334155;background:#ffffff;line-height:1.5;outline:none;">Grossesse</button>
+      <button id="cerv-btn-risque"    class="cerv-btn" onclick="cervSetCtx('risque')"
+        style="font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;font-weight:500;padding:5px 15px;border-radius:3px;border:1.5px solid #94adc8;color:#334155;background:#ffffff;line-height:1.5;outline:none;">Risque élevé / perdue de vue</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       ÉTAPE 1
+  ════════════════════════════════════════════════ -->
+  <div style="background:#ffffff;border-left:5px solid #1e3a5f;padding:22px 26px;margin-bottom:4px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+    <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Étape 1</div>
+    <div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:10px;">Suspicion clinique ou dépistage</div>
+    <div style="font-size:14px;color:#374151;">
+      <div style="position:relative;padding-left:16px;margin:5px 0;"><span class="cerv-li"></span>Leucorrhées mucopurulentes, ectropion friable, saignement au contact</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;"><span class="cerv-li"></span>Syndrome urétral, dyspareunie, spotting intermenstruel</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;"><span class="cerv-li"></span>Forme asymptomatique possible — dépistage systématique si facteurs de risque IST</div>
+      <!-- IGH -->
+      <div style="background:#fff1f2;border:1.5px solid #fda4af;border-radius:3px;padding:14px 18px;margin-top:14px;">
+        <div class="cerv-igh-title" style="font-size:13px;font-weight:700;color:#be123c;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Critères d'alerte — Infection Génitale Haute (IGH)</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li-alert"></span>Douleur pelvienne ou annexielle à la mobilisation utérine</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li-alert"></span>Fièvre &gt; 38 °C + altération de l'état général</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li-alert"></span>Abcès tubo-ovarien suspecté à l'examen ou à l'échographie</div>
+        <div style="font-size:13px;color:#be123c;margin-top:10px;"><strong style="color:#be123c;">Si IGH confirmée ou suspectée :</strong> prise en charge hospitalière selon gravité — ne pas se limiter à ce protocole de cervicite simple.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:5px 0;font-size:18px;color:#94a3b8;line-height:1;">&#9660;</div>
+
+  <!-- ═══════════════════════════════════════════════
+       ÉTAPE 2
+  ════════════════════════════════════════════════ -->
+  <div style="background:#ffffff;border-left:5px solid #1e3a5f;padding:22px 26px;margin-bottom:4px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+    <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Étape 2</div>
+    <div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:10px;">Bilan microbiologique</div>
+    <div style="font-size:14px;color:#374151;">
+      <div style="position:relative;padding-left:16px;margin:5px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">PCR endocervicale</strong> — <em>Neisseria gonorrhoeae</em> + <em>Chlamydia trachomatis</em> (1<sup style="font-size:10px;vertical-align:super;">re</sup> intention)</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">PCR Mycoplasma genitalium</strong> — si échec thérapeutique ou récidive</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">Prélèvements supplémentaires</strong> selon contexte : urétral, rectal, pharyngé</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">Bilan IST complet :</strong> sérologies VIH, syphilis, VHB, VHC</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;"><span class="cerv-li"></span>Frottis vaginal si vaginose bactérienne ou Candida suspectés</div>
+      <div style="height:1px;background:#e2e8f0;margin:12px 0;"></div>
+      <div style="font-size:13px;color:#475569;font-style:italic;">Résultat PCR attendu sous 24–72 h selon laboratoire. Informer la patiente avant de quitter la consultation.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:5px 0;font-size:18px;color:#94a3b8;line-height:1;">&#9660;</div>
+
+  <!-- ═══════════════════════════════════════════════
+       ÉTAPE 3 — TRAITEMENT
+  ════════════════════════════════════════════════ -->
+  <div style="background:#fffbf5;border-left:5px solid #b45309;padding:22px 26px;margin-bottom:4px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+    <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Étape 3</div>
+    <div style="font-size:16px;font-weight:700;color:#b45309;margin-bottom:10px;">Traitement antibiotique</div>
+
+    <!-- Standard -->
+    <div id="cerv-ttt-standard" style="display:block;background:#f0f7ff;border:1.5px solid #93c5fd;border-radius:3px;padding:18px 22px;">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#1d4ed8;margin-bottom:8px;">Protocole standard — Patiente non enceinte</div>
+      <div style="font-size:13px;font-style:italic;color:#334155;margin-bottom:10px;">Traitement guidé par PCR si patiente fiable et résultats disponibles &lt; 72 h. Probabiliste si doute sur l'observance.</div>
+      <div style="font-size:14px;color:#374151;">
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">Ceftriaxone 500 mg IM</strong> <span style="font-size:13px;color:#64748b;font-style:italic;">dose unique</span> — Gonococcie</div>
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">+ Doxycycline 100 mg × 2/j</strong> <span style="font-size:13px;color:#64748b;font-style:italic;">7 jours</span> — Chlamydia <span style="font-size:11px;background:#dcfce7;color:#15803d;border:1px solid #86efac;border-radius:2px;padding:1px 6px;font-weight:700;vertical-align:middle;margin-left:4px;">Réf. SPILF</span></div>
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span>Alternative Chlamydia : Azithromycine 1 g dose unique (observance ++ mais résistances croissantes)</div>
+      </div>
+    </div>
+
+    <!-- Grossesse -->
+    <div id="cerv-ttt-grossesse" style="display:none;background:#fdf4ff;border:1.5px solid #d8b4fe;border-radius:3px;padding:18px 22px;">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#7e22ce;margin-bottom:8px;">Protocole grossesse</div>
+      <div style="font-size:13px;font-style:italic;color:#5b21b6;margin-bottom:10px;">La Doxycycline est contre-indiquée dès le 2<sup style="font-size:10px;vertical-align:super;">e</sup> trimestre. L'Azithromycine reste la référence pour la chlamydiose.</div>
+      <div style="font-size:14px;color:#374151;">
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">Ceftriaxone 500 mg IM</strong> <span style="font-size:13px;color:#64748b;font-style:italic;">dose unique</span> — Gonococcie <span style="font-size:11px;background:#dcfce7;color:#15803d;border:1px solid #86efac;border-radius:2px;padding:1px 6px;font-weight:700;vertical-align:middle;margin-left:4px;">compatible grossesse</span></div>
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">Azithromycine 1 g</strong> <span style="font-size:13px;color:#64748b;font-style:italic;">dose unique</span> — Chlamydia <span style="font-size:11px;background:#dcfce7;color:#15803d;border:1px solid #86efac;border-radius:2px;padding:1px 6px;font-weight:700;vertical-align:middle;margin-left:4px;">compatible grossesse</span></div>
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">Doxycycline</strong> <span style="font-size:11px;background:#fee2e2;color:#be123c;border:1px solid #fca5a5;border-radius:2px;padding:1px 6px;font-weight:700;vertical-align:middle;margin-left:4px;">CI absolue T2–T3</span></div>
+        <div style="font-size:13px;color:#5b21b6;margin-top:10px;">Contrôle de guérison systématique à J30 chez la femme enceinte.</div>
+      </div>
+    </div>
+
+    <!-- Risque élevé -->
+    <div id="cerv-ttt-risque" style="display:none;background:#fff7ed;border:1.5px solid #fdba74;border-radius:3px;padding:18px 22px;">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#c2410c;margin-bottom:8px;">Traitement probabiliste immédiat — Risque élevé / perdue de vue</div>
+      <div style="font-size:13px;font-style:italic;color:#9a3412;margin-bottom:10px;">Couvrir d'emblée sans attendre les résultats PCR.</div>
+      <div style="font-size:14px;color:#374151;">
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">Ceftriaxone 500 mg IM</strong> <span style="font-size:13px;color:#64748b;font-style:italic;">dose unique</span></div>
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span><strong style="color:#1e293b;">+ Doxycycline 100 mg × 2/j × 7 j</strong> <span style="font-size:13px;color:#64748b;font-style:italic;">ou Azithromycine 1 g DU</span></div>
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span>Proposer PrEP si éligibilité VIH identifiée</div>
+        <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li"></span>Dépistage VIH, syphilis, VHB systématique</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:5px 0;font-size:18px;color:#94a3b8;line-height:1;">&#9660;</div>
+
+  <!-- ═══════════════════════════════════════════════
+       ÉTAPE 4
+  ════════════════════════════════════════════════ -->
+  <div style="background:#ffffff;border-left:5px solid #1e3a5f;padding:22px 26px;margin-bottom:4px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+    <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Étape 4</div>
+    <div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:12px;">Résultats microbiologiques</div>
+
+    <div class="cerv-flex-2" style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="flex:1 1 260px;background:#f0fdf4;border:1px solid #86efac;border-radius:3px;padding:16px 18px;">
+        <div class="cerv-pos-title" style="font-size:14px;font-weight:700;color:#15803d;margin-bottom:10px;">PCR positive</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li-check"></span>Confirmer / adapter selon germe et résistances</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li-check"></span>Traiter les partenaires des 60 derniers jours</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li-check"></span>Abstinence ou préservatif jusqu'à fin de traitement des deux partenaires</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li-check"></span>Dépistage complet des autres IST</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li-check"></span>Contrôle de guérison selon germe (cf. Étape 5)</div>
+      </div>
+      <div style="flex:1 1 260px;background:#fef9ec;border:1px solid #fcd34d;border-radius:3px;padding:16px 18px;">
+        <div class="cerv-neg-title" style="font-size:14px;font-weight:700;color:#92400e;margin-bottom:10px;">PCR négative</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li"></span>Éliminer vaginose bactérienne, Candida, herpès (HSV)</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li"></span>PCR <em>Mycoplasma genitalium</em> si non réalisée</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li"></span><em>Trichomonas vaginalis</em> si leucorrhées persistantes</div>
+        <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li"></span>Réévaluation clinique à J7 si symptômes persistants</div>
+      </div>
+    </div>
+
+    <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:3px;padding:14px 18px;margin-top:10px;">
+      <div class="cerv-myco-title" style="font-size:12px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Mycoplasma genitalium — conduite spécifique</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li"></span>Azithromycine 1 g DU en 1<sup style="font-size:10px;vertical-align:super;">re</sup> intention si pas de test de résistance disponible</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li"></span>Moxifloxacine 400 mg/j × 7–10 j si résistance aux macrolides détectée</div>
+      <div style="position:relative;padding-left:16px;margin:5px 0;font-size:13px;color:#374151;"><span class="cerv-li"></span>Contrôle PCR systématique à <strong style="color:#1e293b;">J28</strong> (résistances fréquentes)</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:5px 0;font-size:18px;color:#94a3b8;line-height:1;">&#9660;</div>
+
+  <!-- ═══════════════════════════════════════════════
+       ÉTAPE 5
+  ════════════════════════════════════════════════ -->
+  <div style="background:#f0f7ff;border-left:5px solid #0369a1;padding:22px 26px;margin-bottom:4px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+    <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Étape 5</div>
+    <div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:12px;">Contrôle de guérison — Calendrier</div>
+    <div class="cerv-flex-4" style="display:flex;flex-wrap:wrap;gap:10px;">
+      <div style="flex:1 1 180px;background:#ffffff;border:1px solid #bae6fd;border-radius:3px;padding:14px 16px;">
+        <div class="cerv-fu-label" style="font-size:12px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Gonococcie</div>
+        <div style="font-size:13px;color:#1e293b;line-height:1.6;">Test de cure à <strong style="color:#1e293b;">J5–J7</strong> (PCR ou culture)<br>Contrôle sérologique à <strong style="color:#1e293b;">M3</strong></div>
+      </div>
+      <div style="flex:1 1 180px;background:#ffffff;border:1px solid #bae6fd;border-radius:3px;padding:14px 16px;">
+        <div class="cerv-fu-label" style="font-size:12px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Chlamydiose</div>
+        <div style="font-size:13px;color:#1e293b;line-height:1.6;">Test de cure à <strong style="color:#1e293b;">M1</strong> si traitement dose unique<br>Non systématique si Doxycycline 7 j bien observée</div>
+      </div>
+      <div style="flex:1 1 180px;background:#ffffff;border:1px solid #bae6fd;border-radius:3px;padding:14px 16px;">
+        <div class="cerv-fu-label" style="font-size:12px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Mycoplasma genitalium</div>
+        <div style="font-size:13px;color:#1e293b;line-height:1.6;">PCR de contrôle à <strong style="color:#1e293b;">J28</strong> systématiquement</div>
+      </div>
+      <div style="flex:1 1 180px;background:#ffffff;border:1px solid #bae6fd;border-radius:3px;padding:14px 16px;">
+        <div class="cerv-fu-label" style="font-size:12px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">IST associées</div>
+        <div style="font-size:13px;color:#1e293b;line-height:1.6;">Sérologies VIH, syphilis à <strong style="color:#1e293b;">M1 et M3</strong><br>VHB : vérifier statut vaccinal</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:5px 0;font-size:18px;color:#94a3b8;line-height:1;">&#9660;</div>
+
+  <!-- ═══════════════════════════════════════════════
+       ÉTAPE 6
+  ════════════════════════════════════════════════ -->
+  <div style="background:#fff5f7;border-left:5px solid #be123c;padding:22px 26px;margin-bottom:4px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+    <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Étape 6</div>
+    <div style="font-size:16px;font-weight:700;color:#be123c;margin-bottom:10px;">Échec thérapeutique ou récidive</div>
+    <div style="font-size:14px;color:#374151;">
+      <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li-alert"></span>Nouveau prélèvement PCR + antibiogramme / test de résistance (<em>M. genitalium</em>)</div>
+      <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li-alert"></span>Rechercher réinfection : partenaire(s) non traité(s), nouveaux contacts à risque</div>
+      <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li-alert"></span>Vérifier observance et posologie</div>
+      <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li-alert"></span>Gonococcie résistante : avis infectiologique — Gentamicine 240 mg IM ou Spectinomycine selon antibiogramme</div>
+      <div style="position:relative;padding-left:16px;margin:6px 0;"><span class="cerv-li-alert"></span>Prise en charge spécialisée (infectiologie) si récidive documentée</div>
+    </div>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:3px;padding:18px 24px;margin-bottom:4px;">
+    <div class="cerv-conclu-title" style="font-size:14px;font-weight:700;color:#14532d;margin-bottom:8px;">Objectif de prise en charge</div>
+    <div style="font-size:13px;color:#166534;line-height:1.65;">Éradication microbiologique confirmée, protection du partenaire, prévention des IGH et des complications à long terme (infertilité tubaire, GEU). Toute patiente traitée doit repartir avec une information orale et écrite sur les modalités du suivi.</div>
+  </div>
+
+  <!-- PIED LÉGAL -->
+  <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:3px;padding:14px 20px;margin-top:4px;">
+    <div class="cerv-footer-label" style="font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Avertissement médico-légal</div>
+    <div style="font-size:12px;color:#64748b;line-height:1.65;">Outil d'aide à la décision clinique destiné aux professionnels de santé. Ne se substitue pas au jugement clinique individuel ni aux recommandations en vigueur. Sources : HAS, SPILF, Société Française de Gynécologie — recommandations 2024. Mise à jour : juin 2024. Toute décision thérapeutique engage la responsabilité du praticien.</div>
+  </div>
+
+</div><!-- /wrap -->
+</div><!-- /cerv-root -->
+
+<script>
+(function() {
+  'use strict';
+
+  var S_ACTIVE  = "font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;font-weight:600;padding:5px 15px;border-radius:3px;border:1.5px solid #1e3a5f;color:#ffffff;background:#1e3a5f;line-height:1.5;outline:none;";
+  var S_WARNING = "font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;font-weight:600;padding:5px 15px;border-radius:3px;border:1.5px solid #b45309;color:#ffffff;background:#b45309;line-height:1.5;outline:none;";
+  var S_OFF     = "font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;font-weight:500;padding:5px 15px;border-radius:3px;border:1.5px solid #94adc8;color:#334155;background:#ffffff;line-height:1.5;outline:none;";
+
+  window.cervSetCtx = function(ctx) {
+    ['standard','grossesse','risque'].forEach(function(id) {
+      var btn = document.getElementById('cerv-btn-' + id);
+      if (btn) btn.style.cssText = S_OFF;
+      var blk = document.getElementById('cerv-ttt-' + id);
+      if (blk) blk.style.display = 'none';
+    });
+    var ab = document.getElementById('cerv-btn-' + ctx);
+    if (ab) ab.style.cssText = (ctx === 'risque') ? S_WARNING : S_ACTIVE;
+    var tb = document.getElementById('cerv-ttt-' + ctx);
+    if (tb) tb.style.display = 'block';
+  };
+
+})();
+</script>
+
+</body>
+</html>
