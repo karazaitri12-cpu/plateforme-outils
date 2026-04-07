@@ -108,6 +108,7 @@
             align-items: center; 
             justify-content: space-around;
             min-width: 250px;
+            box-sizing: border-box;
         }
 
         .resume-box.show {
@@ -346,7 +347,7 @@
 
 <div class="container">
     <h1><i class="fas fa-stethoscope"></i> Suivi de grossesse</h1>
-    <p class="subtitle">Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique</p>
+    <p class="subtitle">Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique — Tlemcen</p>
     
     <div class="input-group">
         <label for="ddr"><i class="far fa-calendar-alt"></i> Date des dernières règles (DDR) :</label>
@@ -403,167 +404,91 @@
     let saActuelle = 0;   
     let joursActuels = 0; 
     let saAffichee = 0;   
-    let sgAffichee = 0;   
 
     const dateAujourdhui = new Date();
     dateAujourdhui.setHours(0, 0, 0, 0);
 
     /* ============================================================
-       DONNÉES FŒTUS / MAMAN (Ultra-détaillées)
+       DONNÉES FŒTUS / MAMAN (BASÉES SUR SA - Semaines d'Aménorrhée)
+       Correction : Les tailles et poids correspondent maintenant aux standards médicaux SA
        ============================================================ */
     const FOETUS = {
-      1:  { foetus: "Fécondation en cours de préparation. L'ovocyte mature attend la fécondation.", mama: "Règles en cours. L'endomètre se régénère en préparation d'un éventuel cycle fertile." },
-      2:  { foetus: "Ovulation probable autour du 14e jour. L'ovocyte est libéré et peut être fécondé pendant 12 à 24 heures.", mama: "Période fertile. Glaire cervicale filante et abondante. Légère douleur pelvienne latérale possible (mittelschmerz)." },
-      3:  { foetus: "Fécondation et premières divisions cellulaires (segmentation). Le blastocyste migre vers l'utérus. Début de la différenciation cellulaire.", mama: "Aucun signe extérieur. Début de production d'hCG. Légère sensibilité pelvienne possible." },
-      4:  { foetus: "Implantation dans l'endomètre vers J21-J22. Début de la formation du disque embryonnaire. Deux feuillets : épiblaste et hypoblaste.", mama: "Retard de règles. Fatigue inhabituelle. Seins tendus ou douloureux. Légers saignements d'implantation possibles. Envies fréquentes d'uriner débutantes." },
-      5:  { foetus: "Le cœur commence à battre (environ 22 jours post-fécondation). Formation du tube neural. Bourgeons des membres apparaissent. L'embryon mesure ~2 mm.", mama: "Nausées matinales (pouvant survenir à tout moment de la journée). Hypersensibilité aux odeurs. Fatigue intense. Possible hyperptyalisme." },
-      6:  { foetus: "Le cœur bat à 100-160 bpm. Les yeux et les oreilles internes commencent à se former. Le système nerveux central se développe rapidement. Taille ~4-6 mm.", mama: "Nausées et vomissements souvent à leur pic. Maux de tête. Sautes d'humeur. Aversion alimentaire. Seins très sensibles avec vascularisation visible (réseau veineux de Haller)." },
-      7:  { foetus: "Le visage prend forme : narines, lèvres, langue. Les membres s'allongent ; on distingue les mains et pieds en palette. L'estomac et l'œsophage sont en place. Taille ~10 mm.", mama: "Pollakiurie marquée (utérus qui grossit appuie sur la vessie). Constipation débutante. Hypersensibilité émotionnelle. Scialigorrhée possible." },
-      8:  { foetus: "Les doigts et orteils se séparent. Tous les organes majeurs sont en place mais immatures. L'embryon devient officiellement fœtus. Taille ~16 mm. Mouvements spontanés visibles à l'échographie.", mama: "Vêtements pouvant être serrés à la taille. Mamelons s'assombrissent (aréoles). Troubles digestifs : ballonnements, brûlures d'estomac. Prise de poids minime ou nulle." },
-      9:  { foetus: "Réflexes débuts : réflexe de retrait. Tous les organes internes fonctionnent minimalement. La colonne vertébrale est visible. Taille ~23 mm. Poids ~2 g.", mama: "Augmentation du volume sanguin (+50% en fin de grossesse). Cœur qui travaille davantage. Possible tachycardie physiologique. Fringales ou dégoûts alimentaires marqués." },
-      10: { foetus: "Os et cartilage se forment. Organes sexuels externes en différenciation. Ongles débutants. Le fœtus peut avaler du liquide amniotique. Taille ~31 mm. Poids ~4 g.", mama: "Symptômes souvent à leur maximum ce trimestre. Volume utérin dépasse le pelvis. Possible vertige orthostatique." },
-      11: { foetus: "Le fœtus est très actif : il bouge, s'étire, se retourne. Le visage est plus humain. Les paupières sont soudées (jusqu'à 26-28 SA). Taille ~41 mm. Poids ~7 g.", mama: "Cheveux et ongles poussent plus vite sous l'effet des estrogènes. Ligaments en laxité progressive (relaxine). Tensions ligamentaires pelviennes et lombaires débutantes." },
-      12: { foetus: "Tous les systèmes organiques sont formés et fonctionnels. La clarté nucale est mesurable jusqu'à cette semaine. Taille ~53 mm. Poids ~14 g.", mama: "Nausées commencent à régresser. L'utérus sort du pelvis, palpable en sus-pubien. Le risque de fausse couche diminue significativement après cette semaine." },
-      13: { foetus: "Croissance accélérée. Ossification progressive. Formation des empreintes digitales. La thyroïde fœtale commence à fonctionner. Taille ~65 mm. Poids ~23 g.", mama: "Le 2e trimestre commence : retour de l'énergie, disparition des nausées pour la majorité. L'appétit augmente. Le ventre s'arrondit visiblement." },
-      14: { foetus: "Traits du visage s'affinent. Apparition du lanugo (fin duvet protecteur). Le fœtus peut sucer son pouce. Taille ~80 mm. Poids ~43 g.", mama: "Énergie en hausse, libido parfois retrouvée. Rondeur abdominale visible. Possibles douleurs du ligament rond (douleurs latérales basses)." },
-      15: { foetus: "Le bébé entend les sons et réagit aux voix. Les yeux bougent sous les paupières closes. Taille ~100 mm. Poids ~70 g.", mama: "Premiers frémissements utérins possibles chez les multipares. Douleurs dorsales et pelviennes débutantes liées à l'adaptation posturale. Possible rhinite de grossesse." },
-      16: { foetus: "Le bébé développe sa musculature. Le système nerveux autonome mûrit. Taille ~116 mm. Poids ~100 g.", mama: "Chez les multipares, les premiers mouvements fœtaux (battements d'ailes) peuvent être perçus. Varice vulvaire ou des membres inférieurs possible." },
-      17: { foetus: "Squelette s'ossifie davantage. Le sexe est souvent distinguable à l'échographie. Début de constitution de la graisse sous-cutanée. Taille ~130 mm. Poids ~140 g.", mama: "Douleurs dorsales et pelviennes s'installent. Ballonnements, reflux, retour de quelques envies sucrées. La peau peut commencer à s'étirer." },
-      18: { foetus: "Le bébé bâille, suce son pouce, avale. Myélinisation du système nerveux débute. Taille ~142 mm. Poids ~190 g.", mama: "Chez les primipares, premiers mouvements fœtaux ressentis (sensations de bulles). Mouvements plus distincts et réguliers chez les multipares." },
-      19: { foetus: "Développement neurologique majeur (multiplication neuronale rapide). Les poumons forment les bronchioles. Taille ~152 mm. Poids ~240 g.", mama: "La linea nigra peut apparaître. Mélasma (masque de grossesse) possible au visage. Sommeil agité, rêves plus intenses. Œdèmes discrets des chevilles en fin de journée." },
-      20: { foetus: "Mi-terme atteint. La peau est recouverte de vernix caseosa. Cheveux, sourcils et cils apparaissent. Le bébé réagit à la lumière et au son. Taille ~160 mm. Poids ~300 g.", mama: "Cheveux épais et brillants. Le nombril peut commencer à ressortir. Douleurs ligamentaires fréquentes. Varices possibles. Centre de gravité modifié." },
-      21: { foetus: "Bébé pèse ~400 g et bouge activement. Les papilles gustatives fonctionnent. Le cartilage du nez se forme. Taille ~270 mm (tête-pied).", mama: "Prise de poids plus significative (environ 500 g/semaine). Essoufflement léger possible. Mouvements bien perçus et réguliers." },
-      22: { foetus: "Le fœtus développe des cycles de sommeil et d'éveil (20-30 min). Croissance régulière en poids et en longueur. Taille ~28 cm. Poids ~430 g.", mama: "Douleurs ligamentaires et lombaires normales. Possible syndrome du canal carpien (œdème des poignets). Colostrum peut débuter." },
-      23: { foetus: "Les poumons commencent à produire du surfactant. Les oreilles sont fonctionnelles. Stade de viabilité atteint (très prématuré). Taille ~29 cm. Poids ~500 g.", mama: "Chevilles et pieds gonflent en fin de journée. Peau peut être sèche ou prurigineuse. Crampes nocturnes aux mollets. Constipation fréquente." },
-      24: { foetus: "Oreilles développées, réaction aux sons extérieurs. Sourcils et cils bien formés. Taille ~30 cm. Poids ~600 g.", mama: "Brûlures d'estomac plus fréquentes (utérus refoule l'estomac). Sommeil plus difficile. Ronflements possibles (congestion nasale physiologique)." },
-      25: { foetus: "Les poumons continuent de mûrir rapidement. Le bébé peut ouvrir les yeux. Graisses sous-cutanées se constituent. Taille ~34 cm. Poids ~660 g.", mama: "Reflux gastriques intenses. Hémorroïdes possibles. Diastasis des grands droits débutant. Le fond utérin est à la hauteur du nombril." },
-      26: { foetus: "Bébé pèse environ 900 g. La rétine devient fonctionnelle. Les testicules descendent (garçon). Taille ~36 cm.", mama: "Douleurs lombaires fréquentes et intenses. Bassin qui s'élargit. Possible syndrome de la symphyse pubienne (douleur pubienne)." },
-      27: { foetus: "Fœtus très actif, changements de positions. Le cerveau se développe avec formation des premières circonvolutions. Taille ~37 cm. Poids ~1 kg.", mama: "Essoufflement au moindre effort. Jambes lourdes. Possible syndrome des jambes sans repos. Contractions de Braxton Hicks débutantes." },
-      28: { foetus: "Dépasse 1 kg. Ouverture des paupières. Les poumons, bien que mûrissant, peuvent assurer une survie avec assistance en cas de naissance prématurée. Taille ~38 cm.", mama: "Fatigue qui revient en force. Bébé très actif, coups de pied visibles. Jambes lourdes et varices. Envies fréquentes d'uriner de nuit (nycturie)." },
-      29: { foetus: "Mouvements plus intenses et coordonnés. Réserves de fer et de calcium se constituent. Taille ~39 cm. Poids ~1,2 kg.", mama: "Insomnie due à l'inconfort et aux envies fréquentes d'uriner. Tensions pelviennes. Douleurs sciatiques possibles. Bas du dos douloureux." },
-      30: { foetus: "Cerveau se développe très rapidement, circonvolutions se forment. Yeux sensibles à la lumière. Taille ~40 cm. Poids ~1,4 kg.", mama: "Essoufflement marqué : l'utérus appuie sur le diaphragme. Besoin impérieux de repos. Œdèmes des membres inférieurs fréquents." },
-      31: { foetus: "Muscles et poumons se renforcent. Le fœtus prend de la graisse brune (thermorégulation). Taille ~41 cm. Poids ~1,6 kg.", mama: "Douleurs dorsolombaires et pelviennes s'intensifient. Sommeil de plus en plus difficile. Laxité articulaire du bassin prononcée." },
-      32: { foetus: "Le bébé se retourne souvent tête en bas (présentation céphalique). Ongles et cheveux visibles. Taille ~42 cm. Poids ~1,8 kg.", mama: "Préparation mentale à l'accouchement. Consultations de préparation à la naissance. Contractions de Braxton Hicks plus fréquentes. Possible descente de la tête fœtale dans le bassin." },
-      33: { foetus: "Présentation céphalique généralement acquise. Os durcissent sauf le crâne (sutures molles pour passage). Réflexes s'affinent. Taille ~44 cm. Poids ~2 kg.", mama: "Les coups de pied peuvent être douloureux. Contractions non douloureuses fréquentes. Prise de poids ralentit. Fond utérin à 33 cm." },
-      34: { foetus: "Poumons presque matures (surfactant suffisant). Système immunitaire se renforce. Taille ~45 cm. Poids ~2,1 kg.", mama: "Les seins peuvent produire du colostrum. Mobilité réduite. Difficultés à marcher, à se baisser. Douleur pubienne symphysaire fréquente." },
-      35: { foetus: "Environ 2,4 kg. Formation complète de la majorité des organes. Seul les poumons et le cerveau continuent de mûrir. Taille ~46 cm.", mama: "La tête peut descendre dans le bassin, soulageant l'essoufflement mais augmentant la pression pelvienne et les envies d'uriner. Nycturie majeure." },
-      36: { foetus: "Poumons généralement matures (terme précoce). Le fœtus perd le lanugo. Taille ~47 cm. Poids ~2,6 kg. Considéré 'à terme précoce' (Early Term).", mama: "Instinct de nidification (besoin de tout préparer). Fatigue croissante. Pression pelvienne intense. Possible descente du ventre avec facilitation de la respiration." },
-      37: { foetus: "Terme atteint (grossesse à terme selon OMS). Tous les organes sont matures. Taille ~48 cm. Poids ~2,9 kg.", mama: "Contractions de Braxton Hicks plus fortes et fréquentes. Colostrum abondant possible. L'accouchement peut survenir à tout moment à partir de cette semaine." },
-      38: { foetus: "Tous les organes matures et prêts à fonctionner. Perte du lanugo et du vernix en partie. Descente dans le bassin. Poids moyen 3 kg. Taille ~49 cm.", mama: "Possible perte du bouchon muqueux (signe de modification du col). Contractions réelles peuvent débuter. Besoin de repos impérieux. Surveillance des signes de travail." },
-      39: { foetus: "Organes reproducteurs terminés. Position céphalique bien engagée généralement. Taille ~50 cm. Poids ~3,1-3,3 kg.", mama: "Forte pression pelvienne. Position confortable difficile à trouver. Signes de pré-travail : effacement et dilatation du col. Contractions irrégulières puis régulières." },
-      40: { foetus: "Bébé prêt à naître. Terme prévu. Taille moyenne 50 cm. Poids moyen 3,3 kg.", mama: "Terme prévu. Le corps est prêt pour l'accouchement. Surveiller contractions régulières (<5 min, >30 sec), perte des eaux, saignements. Consulter sans attendre si signes de travail." },
-      41: { foetus: "Grossesse prolongée – surveillance étroite. Liquide amniotique peut diminuer. Placenta peut vieillir. Bébé continue de prendre du poids.", mama: "Surveillance quotidienne (monitoring fœtal, mesure du liquide amniotique). Discuter la date d'induction avec l'équipe obstétricale. Nervosité et impatience normales." }
+      1:  { foetus: "Premier jour des règles. L'ovocyte est en cours de maturation.", mama: "Premier jour des règles. Cycle en cours." },
+      2:  { foetus: "Ovulation probable vers la fin de la semaine. Fécondation possible.", mama: "Période fertile. Glaire cervicale filante." },
+      3:  { foetus: "Fécondation. L'œuf migre vers l'utérus.", mama: "Aucun signe clinique." },
+      4:  { foetus: "Implantation. Taille : < 1 mm.", mama: "Retard de règles. Sensibilité des seins possible." },
+      5:  { foetus: "Le cœur commence à battre (40 battements/min). Taille : ~2 mm.", mama: "Nausées matinales possibles. Fatigue." },
+      6:  { foetus: "Tête distincte. Bourgeons des membres. Taille : ~4-5 mm.", mama: "Nausées souvent intenses. Envies fréquentes d'uriner." },
+      7:  { foetus: "Premiers mouvements. Doigts et orteils se dessinent. Taille : ~9-10 mm.", mama: "Seins lourds. Constipation possible." },
+      8:  { foetus: "Tous les organes principaux formés. Taille : ~16 mm. Poids : ~1 g.", mama: "Taille non modifiée. Sautes d'humeur." },
+      9:  { foetus: "Fin de la phase embryonnaire. Taille : ~23 mm. Poids : ~2 g.", mama: "Fatigue. Besoin de repos." },
+      10: { foetus: "Ongles apparaissent. Mouvements actifs mais imperceptibles. Taille : ~31 mm. Poids : ~4 g.", mama: "Tour de taille inchangé. Peau parfois plus grasse." },
+      11: { foetus: "Tête représente la moitié du corps. Taille : ~41 mm. Poids : ~7 g.", mama: "Ventre plat. Possible linea nigra." },
+      12: { foetus: "Réflexes de succion. Sexe différencié. Taille : ~53 mm. Poids : ~14 g.", mama: "Nausées régressent. Énergie retrouvée." },
+      13: { foetus: "Empreintes digitales formées. Taille : ~65 mm. Poids : ~23 g.", mama: "Ventre commence à s'arrondir." },
+      14: { foetus: "Lanugo (duvet) apparaît. Taille : ~80 mm. Poids : ~43 g.", mama: "Constipation. Hémorroïdes possibles." },
+      15: { foetus: "Paupières soudées. Réagit à la lumière. Taille : ~100 mm. Poids : ~70 g.", mama: "Premiers mouvements ressentis (multipares)." },
+      16: { foetus: "Squelette s'ossifie. Taille : ~116 mm. Poids : ~100 g.", mama: "Premiers mouvements (multipares). Appétit augmente." },
+      17: { foetus: "Graisse brune se forme. Sexe visible à l'écho. Taille : ~130 mm. Poids : ~140 g.", mama: "Ventre bien visible. Douleurs ligamentaires." },
+      18: { foetus: "Bâillements, hoquets. Taille : ~142 mm. Poids : ~190 g.", mama: "Mouvements perçus par les primipares." },
+      19: { foetus: "Myélinisation nerveuse. Taille : ~152 mm. Poids : ~240 g.", mama: "Masque de grossesse. Sommeil agité." },
+      20: { foetus: "Terme de mi-grossesse. Vernix caseosa. Taille : ~160 mm. Poids : ~300 g.", mama: "Essoufflement à l'effort. Brûlures d'estomac." },
+      21: { foetus: "Squelette s'ossifie. Taille : ~18 cm (CR) / 27 cm (T). Poids : ~360 g.", mama: "Appétit soutenu. Prise de poids régulière." },
+      22: { foetus: "Cycles sommeil/éveil. Taille : ~19 cm (CR) / 28 cm (T). Poids : ~430 g.", mama: "Crampes aux jambes. Oedèmes discrets." },
+      23: { foetus: "Poumons produisent du surfactant. Taille : ~20 cm (CR) / 29 cm (T). Poids : ~500 g.", mama: "Vergetures possibles. Ligne brune marquée." },
+      24: { foetus: "Réagit aux bruits extérieurs. Taille : ~30 cm. Poids : ~600 g.", mama: "Essoufflement. Insomnie fréquente." },
+      25: { foetus: "Poumons mûrissent. Yeux s'ouvrent. Taille : ~34 cm. Poids : ~660 g.", mama: "Reflux acides. Diastasis possible." },
+      26: { foetus: "Rétine fonctionnelle. Taille : ~35 cm. Poids : ~760 g.", mama: "Douleurs ligamentaires intenses." },
+      27: { foetus: "Système nerveux mature. Taille : ~36 cm. Poids : ~875 g.", mama: "Jambes lourdes. Hémorroïdes possibles." },
+      28: { foetus: "Dépasse 1 kg. Sommeil paradoxal. Taille : ~37 cm. Poids : ~1000 g.", mama: "Nycturie (envies nocturnes). Fatigue." },
+      29: { foetus: "Graisse sous-cutanée. Taille : ~38 cm. Poids : ~1150 g.", mama: "Douleurs sciatiques. Marche difficile." },
+      30: { foetus: "Poumons produisent surfactant suffisant. Taille : ~39 cm. Poids : ~1300 g.", mama: "Essoufflement marqué. Brûlures d'estomac." },
+      31: { foetus: "Tête proportionnelle au corps. Taille : ~41 cm. Poids : ~1500 g.", mama: "Insomnie. Difficulté à trouver une position." },
+      32: { foetus: "Graisse accumulée. Taille : ~42 cm. Poids : ~1700 g.", mama: "Colostrum possible. Contractions de Braxton Hicks." },
+      33: { foetus: "Système immunitaire se renforce. Taille : ~43 cm. Poids : ~1900 g.", mama: "Peau qui gratte. Tensions pelviennes." },
+      34: { foetus: "Poumons presque matures. Taille : ~45 cm. Poids : ~2100 g.", mama: "Difficulté à marcher. Douleurs pubiennes." },
+      35: { foetus: "Reins matures. Taille : ~46 cm. Poids : ~2300-2400 g.", mama: "Tête engagée (soulagement respiratoire)." },
+      36: { foetus: "Graisse sous-cutanée épaisse. Taille : ~47 cm. Poids : ~2500 g.", mama: "Envies fréquentes d'uriner. Nidification." },
+      37: { foetus: "Terme atteint. Orgasme possible in-utero. Taille : ~48 cm. Poids : ~2900 g.", mama: "Col mature. Contractions irrégulières." },
+      38: { foetus: "Réflexes coordonnés. Taille : ~49 cm. Poids : ~3000 g.", mama: "Bouchon muqueux possible. Fatigue extrême." },
+      39: { foetus: "Prêt à naître. Poumons matures. Taille : ~50 cm. Poids : ~3200 g.", mama: "Douleurs pelviennes. Signes de travail." },
+      40: { foetus: "Terme prévu. Taille : ~51 cm. Poids : ~3400 g.", mama: "Surveillance des signes de travail." },
+      41: { foetus: "Grossesse prolongée. Liquide amniotique diminue. Poids : ~3500+ g.", mama: "Surveillance stricte (monitoring)." },
+      42: { foetus: "Post-terme. Risque de souffrance fœtale.", mama: "Déclenchement proposé." }
     };
 
     /* ============================================================
-       DONNÉES MÉDICALES HAS/CNGOF - Remappées par SA
+       DONNÉES MÉDICALES HAS/CNGOF (Corrigé pour correspondre aux SA)
        ============================================================ */
     const MEDICAL = [
-      {
-        startSA: 3, endSA: 6,
-        titre: "Diagnostic et bilan initial (SA 3–6)",
-        blocs: [
-          { titre: "Diagnostic de grossesse", items: ["Confirmer par dosage β-hCG plasmatique qualitatif ou quantitatif", "Échographie précoce si doute sur localisation ou datation (≥ SA 5-6)", "Calculer la DDR exacte et la DPA (DDR + 287 jours = SA 41)"] },
-          { titre: "Prescriptions immédiates", items: ["<strong>Acide folique 400 µg/j</strong> jusqu'à la fin de la 12e SA (5 mg/j si ATCD spina bifida, épilepsie, BMI >35, malabsorption)", "Arrêt tabac, alcool, médicaments non indispensables", "Vitamine D 100 000 UI en dose unique au 2e trimestre (ou 1000 UI/j)"] },
-          { titre: "Bilan biologique initial", items: ["NFS, groupe sanguin ABO-Rh, RAI", "Sérologie rubéole et toxoplasmose", "Sérologie syphilis (TPHA/VDRL), VIH, VHB (Ag HBs), VHC", "TSH si symptômes ou facteurs de risque thyroïdiens", "Glycémie à jeun si IMC ≥ 25, ATCD diabète gestationnel, âge ≥ 35 ans", "ECBU (dépistage bactériurie asymptomatique)", "Albuminurie / protéinurie sur échantillon"] }
-        ]
-      },
-      {
-        startSA: 7, endSA: 10,
-        titre: "Consultation de début de grossesse (SA 7–10)",
-        blocs: [
-          { titre: "Examen clinique", items: ["Tension artérielle, poids, taille, IMC", "Examen des seins, col utérin (frottis si > 3 ans)", "Évaluation des symptômes : nausées, vomissements, saignements", "Évaluation psychosociale et dépistage de la violence"] },
-          { titre: "Prescriptions", items: ["Acide folique à poursuivre jusqu'à 12 SA", "<strong>Prescrire l'échographie T1</strong> (optimal 11-13 SA + 6j)", "Dépistage combiné T1 trisomie 21 : PAPP-A, β-hCG libre + CN (entre 11 SA et 13 SA + 6j)", "Sérologie toxoplasmose mensuelle si séronégative", "Vaccination grippe si saison épidémique"] },
-          { titre: "Information et éducation", items: ["Alimentation et hygiène de vie (listériose, toxoplasmose)", "Activité physique adaptée", "Déconseiller automédication (AINS interdits > SA 24)", "Information sur la déclaration de grossesse (avant 14 SA)"] }
-        ]
-      },
-      {
-        startSA: 11, endSA: 15,
-        titre: "Consultation 1er trimestre et échographie (SA 11–15)",
-        blocs: [
-          { titre: "Échographie T1 (11 SA – 13 SA + 6j) — Obligatoire", items: ["Vitalité embryonnaire (activité cardiaque)", "Datation précise : longueur cranio-caudale (LCC)", "<strong>Mesure de la clarté nucale (CN)</strong> — seuil > 3 mm pathologique", "Nombre de fœtus, chorionicité si grossesse multiple", "Anatomie précoce : crâne, rachis, parois abdominales, membres"] },
-          { titre: "Dépistage trisomie 21", items: ["Dépistage combiné T1 : risque calculé (âge maternel + CN + PAPP-A + β-hCG libre)", "Si risque ≥ 1/50 : proposer amniocentèse", "Si risque entre 1/51 et 1/1000 : proposer ADN fœtal libre (DPNni)", "Si risque < 1/1000 : rassurant"] },
-          { titre: "Actions administratives", items: ["<strong>Déclaration de grossesse obligatoire avant 14 SA</strong> (CPAM + CAF)", "Remise du carnet de maternité", "Orientation vers la maternité adaptée au niveau de risque"] }
-        ]
-      },
-      {
-        startSA: 16, endSA: 19,
-        titre: "Surveillance 2e trimestre précoce (SA 16–19)",
-        blocs: [
-          { titre: "Consultation mensuelle", items: ["Tension artérielle, poids", "Hauteur utérine (en cm ≈ âge gestationnel en SA ± 2)", "Bruits du cœur fœtaux au Doppler", "Recherche d'œdèmes, de protéinurie"] },
-          { titre: "Dépistage et bilans", items: ["Sérologie toxoplasmose mensuelle si séronégative", "<strong>ECBU mensuel</strong> chez les patientes à risque", "Dépistage pré-éclampsie : TA, protéinurie", "Contrôle NFS si anémie suspectée"] },
-          { titre: "Prescriptions", items: ["<strong>Aspirine 100-150 mg/j avant 16 SA</strong> si risque pré-éclampsie élevé (à initier avant SA 16)", "Supplémentation en fer si ferritine basse ou Hb < 10,5 g/dL", "Calcium 1 g/j si apports alimentaires insuffisants"] }
-        ]
-      },
-      {
-        startSA: 20, endSA: 24,
-        titre: "Échographie morphologique (SA 20–24)",
-        blocs: [
-          { titre: "Échographie T2 (optimal 20–22 SA) — Obligatoire", items: ["<strong>Morphologie fœtale complète</strong> : crâne, cerveau, face, cœur, poumons, abdomen, reins, membres, colonne", "Biométrie : BIP, PC, PA, LF", "Localisation placentaire", "Longueur cervicale transvaginale si ATCD accouchement prématuré", "Liquide amniotique"] },
-          { titre: "Consultation de suivi", items: ["TA, poids, HU, BCF, protéinurie", "Évaluation des mouvements fœtaux actifs", "Sérologie toxoplasmose si séronégative", "Dépistage dépression périnatale"] },
-          { titre: "Éducation à la naissance", items: ["Information sur la préparation à la naissance", "Signes d'alerte : contractions régulières < 37 SA, saignements, perte de liquide", "Aménagements professionnels"] }
-        ]
-      },
-      {
-        startSA: 25, endSA: 28,
-        titre: "Dépistage diabète gestationnel (SA 25–28)",
-        blocs: [
-          { titre: "Dépistage diabète gestationnel (DG)", items: ["<strong>HGPO 75 g — Critères OMS</strong> : G0 ≥ 0,92 g/L, G1h ≥ 1,80 g/L, G2h ≥ 1,53 g/L", "Indications : IMC ≥ 25, âge ≥ 35 ans, ATCD DG ou macrosomie", "Si glycémie à jeun T1 ≥ 0,92 g/L : diagnostic de DG d'emblée"] },
-          { titre: "Bilan biologique 3e trimestre précoce", items: ["NFS (supplémentation si Hb < 10,5 g/dL)", "RAI si rhésus négatif", "<strong>Injection préventive Ig anti-D à 28 SA</strong> chez les patientes Rh négatif non immunisées", "Sérologie toxoplasmose mensuelle"] },
-          { titre: "Surveillance spécifique", items: ["Bilan hépatique si prurit (cholestase gravidique)", "Examen des membres inférieurs : varices, œdèmes, signe de Homans"] }
-        ]
-      },
-      {
-        startSA: 29, endSA: 34,
-        titre: "Surveillance 3e trimestre (SA 29–34)",
-        blocs: [
-          { titre: "Consultations mensuelles", items: ["TA, poids, HU, BCF, recherche d'œdèmes et protéinurie", "Évaluation mouvements actifs fœtaux", "Dépistage pré-éclampsie sévère (céphalées, phosphènes, etc.)"] },
-          { titre: "Échographie T3 (optimal 30–32 SA) — Obligatoire", items: ["<strong>Biométrie fœtale</strong> : BIP, PC, PA, LF — évaluation de la croissance", "Présentation fœtale (céphalique, siège, transverse)", "Localisation et maturité placentaire", "Quantité de liquide amniotique", "Dopplers si suspicion RCIU"] },
-          { titre: "Vaccinations", items: ["<strong>Vaccin coqueluche (dTca)</strong> recommandé entre 20 et 36 SA", "Rappel grippe si saison"] }
-        ]
-      },
-      {
-        startSA: 35, endSA: 39,
-        titre: "Préparation à l'accouchement (SA 35–39)",
-        blocs: [
-          { titre: "Bilan streptocoque B (GBS) — SA 34–38", items: ["<strong>Prélèvement vagino-rectal pour culture GBS</strong> entre 34 et 38 SA", "Si positif : antibioprophylaxie en travail", "Si allergie pénicilline : antibiogramme nécessaire"] },
-          { titre: "Examen clinique obstétrical", items: ["Score de Bishop (dilatation, effacement, consistance, position)", "Présentation fœtale : confirmer céphalique ou planifier VME si siège", "Cliniquement : taille du bassin, engagement"] },
-          { titre: "Consultations spécialisées", items: ["<strong>Consultation anesthésique</strong> obligatoire si péridurale prévue ou prévision de césarienne", "Bilan pré-opératoire si césarienne programmée : NFS, hémostase, groupage + RAI"] }
-        ]
-      },
-      {
-        startSA: 40, endSA: 42,
-        titre: "Terme et post-terme (SA 40–42)",
-        blocs: [
-          { titre: "Surveillance rapprochée", items: ["<strong>Monitoring fœtal (RCF)</strong>", "Mesure échographique du liquide amniotique", "Évaluation du bien-être fœtal", "TA, protéinurie"] },
-          { titre: "Déclenchement du travail", items: ["Déclenchement proposé à <strong>41 SA</strong> si terme dépassé sans travail spontané", "Méthodes : prostaglandines ou ocytocine selon Bishop", "Discuter les bénéfices/risques avec la patiente"] },
-          { titre: "Informations patiente", items: ["Consulter si : perte des eaux, contractions régulières < 5 min, saignements, diminution des mouvements fœtaux", "Valise de maternité prête"] }
-        ]
-      }
+      { startSA: 1, endSA: 6, titre: "Bilan initial (SA 1–6)", blocs: [{ titre: "Consultation de début", items: ["Confirmer grossesse", "Prescrire Acide folique", "Bilan sanguin et sérologies"] }] },
+      { startSA: 7, endSA: 10, titre: "Début de grossesse (SA 7–10)", blocs: [{ titre: "Suivi", items: ["Tension artérielle, poids", "Prescrire écho T1 (11-13 SA)", "Vaccination grippe si saison"] }] },
+      { startSA: 11, endSA: 15, titre: "Échographie T1 (SA 11–15)", blocs: [{ titre: "Examen T1 (11 SA – 13 SA + 6j)", items: ["Clarté nucale (CN)", "Vitalité embryonnaire", "Datation par LCC", "Dépistage T21 combiné"] }] },
+      { startSA: 16, endSA: 19, titre: "2ème Trimestre (SA 16–19)", blocs: [{ titre: "Suivi mensuel", items: ["TA, Poids, HU, BCF", "Sérologie toxo (si négative)", "ECBU", "Aspirine si risque pré-éclampsie"] }] },
+      { startSA: 20, endSA: 24, titre: "Échographie T2 (SA 20–24)", blocs: [{ titre: "Écho Morphologique (20-22 SA)", items: ["Biométrie (BIP, PA, LF)", "Morphologie complète", "Localisation placenta", "Longueur col"] }] },
+      { startSA: 25, endSA: 28, titre: "3ème Trimestre (SA 25–28)", blocs: [{ titre: "Bilans", items: ["HGPO (Diabète gestationnel) si risque", "RAI (Rhésus)", "NFS (Anémie)", "Ig Anti-D (28 SA) si Rh -"] }] },
+      { startSA: 29, endSA: 34, titre: "Surveillance 3ème T (SA 29–34)", blocs: [{ titre: "Échographie T3 (30-32 SA)", items: ["Biométrie fœtale", "Présentation fœtale", "Liquide amniotique", "Placenta", "Vaccin Coqueluche"] }] },
+      { startSA: 35, endSA: 39, titre: "Préparation accouchement (SA 35–39)", blocs: [{ titre: "Préparation", items: ["Prélèvement Streptocoque B", "Consultation anesthésie", "Bilan pré-opératoire si césarienne", "Score de Bishop"] }] },
+      { startSA: 40, endSA: 42, titre: "Terme et Post-terme (SA 40–42)", blocs: [{ titre: "Surveillance rapprochée", items: ["Monitoring fœtal (RCF)", "Mesure liquide amniotique", "Déclenchement à 41 SA"] }] }
     ];
 
     function calculerSuivi() {
         const ddrInput = document.getElementById("ddr").value;
         if (!ddrInput) { alert("Veuillez sélectionner une date de dernières règles."); return; }
 
-        // Utilisation de UTC pour éviter le bug de l'heure d'été
+        // Calcul robuste
         const parts = ddrInput.split('-');
         dateDDR = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); 
 
         const dateAujourdhuiUTC = new Date(Date.UTC(dateAujourdhui.getFullYear(), dateAujourdhui.getMonth(), dateAujourdhui.getDate()));
-
         if (dateDDR > dateAujourdhuiUTC) { alert("⚠️ La DDR ne peut pas être dans le futur."); return; }
 
-        // Calcul exact du temps écoulé en jours (résistant à l'heure d'été)
         const diffJours = Math.floor((dateAujourdhuiUTC - dateDDR) / (1000 * 3600 * 24));
-
-        if (diffJours > 300) { alert("⚠️ Attention : La date sélectionnée remonte à plus de 42 semaines."); }
-
-        // On stocke l'âge exact de la patiente AUJOURD'HUI.
+        
+        // SA est le standard absolu ici
         saActuelle = Math.floor(diffJours / 7);
         joursActuels = diffJours % 7;
 
-        // On initialise la navigation sur la semaine actuelle
         saAffichee = saActuelle;
         if (saAffichee < 1) saAffichee = 1;
         if (saAffichee > 42) saAffichee = 42;
@@ -572,117 +497,79 @@
         document.getElementById("navigation").style.display = "flex";
         document.getElementById("panels-wrapper").classList.add("active");
         document.getElementById("disclaimer").style.display = "block";
-        
-        // Affiche le résumé en haut (à droite du bouton)
         document.getElementById("resume-grossesse").classList.add("show");
         
         afficherUI();
     }
 
     function afficherUI() {
-        sgAffichee = saAffichee - 2;
-        if (sgAffichee < 1) sgAffichee = 1;
+        // On utilise SA directement, plus de SG
+        let sa = saAffichee;
 
-        // Dates de la semaine sur laquelle on NAVIGUE
-        let dateDebutSA = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + (saAffichee * 7), 12, 0, 0);
+        let dateDebutSA = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + (sa * 7), 12, 0, 0);
         let dateFinSA = new Date(dateDebutSA.getFullYear(), dateDebutSA.getMonth(), dateDebutSA.getDate() + 6, 12, 0, 0);
-
         const optionsDate = { day: 'numeric', month: 'long', year: 'numeric' };
-        
-        // Calcul strict de la DPA (DDR + 287 jours = 41 SA)
         let terme = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + 287, 12, 0, 0);
 
-        // Mettez à jour le résumé en haut
+        // Mise à jour du résumé haut
         document.getElementById("resume-sa").textContent = `${saActuelle} SA + ${joursActuels} j`;
         document.getElementById("resume-dpa").textContent = terme.toLocaleDateString("fr-FR", optionsDate);
 
-        // La barre de progression reflète toujours l'âge ACTUEL, pas la semaine naviguée
         let pourcentage = (saActuelle / 41) * 100;
         if (pourcentage > 100) pourcentage = 100;
         document.getElementById("progress-bar").style.width = pourcentage + "%";
         document.getElementById("progress-text").innerHTML = `Grossesse à <strong>${Math.round(pourcentage)}%</strong> du terme théorique (41 SA)`;
 
-        // --- SECTION ROSE (Patiente & Fœtus) ---
+        // --- SECTION FŒTUS/MAMAN ---
         const resultDiv = document.getElementById("result");
-        const fData = FOETUS[sgAffichee];
+        const fData = FOETUS[sa]; // Accès direct par SA (Correction majeure)
 
-        if (fData && saAffichee <= 41) {
+        if (fData && sa <= 41) {
+            // Calcul du mois de grossesse (SA / 4.33)
+            let mois = Math.ceil(sa / 4.33);
+            
             resultDiv.innerHTML = `
                 <h4><i class="fas fa-baby"></i> Évolution fœtale & maternelle</h4>
-                
                 <div class="panel-header-flex">
                     <div>
                         <div class="date-range"><i class="far fa-calendar"></i> Période du ${dateDebutSA.toLocaleDateString("fr-FR", optionsDate)} au ${dateFinSA.toLocaleDateString("fr-FR", optionsDate)}</div>
                         <div style="margin-top:5px;">
-                            <span class="badge">Aperçu : Semaine ${saAffichee} (SA)</span>
-                            <span class="badge" style="background:#8c9ea3">Mois ${Math.ceil(sgAffichee / 4.33)}</span>
+                            <span class="badge">Semaine ${sa} (SA)</span>
+                            <span class="badge" style="background:#8c9ea3">Mois ${mois}</span>
                         </div>
                     </div>
                 </div>
-                
                 <div class="foetus-block">
                     <h5><i class="fas fa-child"></i> Développement fœtal</h5>
                     <p>${fData.foetus}</p>
                 </div>
-                
                 <div class="mama-block">
                     <h5><i class="fas fa-female"></i> Ressenti maternel</h5>
                     <p>${fData.mama}</p>
                 </div>
-                
                 <div class="info-grid">
-                    <div>
-                        <span class="highlight">Aujourd'hui, vous êtes à :</span><br>
-                        ${saActuelle} SA + ${joursActuels} jours
-                    </div>
-                    <div>
-                        <span class="highlight">DPA (Terme 41 SA) :</span><br>
-                        <i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", optionsDate)}
-                    </div>
-                </div>
-            `;
-        } else if (saAffichee > 41) {
-            resultDiv.innerHTML = `
-                <h4><i class="fas fa-exclamation-triangle"></i> Grossesse prolongée</h4>
-                <p>La semaine consultée dépasse le terme (41 SA). Un suivi strict en maternité est requis pour dépassement de terme.</p>
-                <div class="info-grid" style="margin-top:20px;">
-                    <div><span class="highlight">Aujourd'hui, vous êtes à :</span><br>${saActuelle} SA + ${joursActuels} jours</div>
-                    <div><span class="highlight">DPA (Terme 41 SA) :</span><br><i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", optionsDate)}</div>
+                    <div><span class="highlight">Aujourd'hui :</span><br>${saActuelle} SA + ${joursActuels} jours</div>
+                    <div><span class="highlight">DPA (41 SA) :</span><br><i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", optionsDate)}</div>
                 </div>
             `;
         } else {
-             resultDiv.innerHTML = `<h4><i class="fas fa-seedling"></i> Période pré-conceptionnelle</h4><p>Semaine ${saAffichee} SA.</p>`;
+            resultDiv.innerHTML = `<h4>Informations non disponibles pour cette semaine.</h4>`;
         }
 
-        // --- SECTION BLEUE (Check-list Médicale) ---
+        // --- SECTION MÉDICALE ---
         const medicalDisplayDiv = document.getElementById("medical-follow-up-display");
-        const mData = MEDICAL.find(m => saAffichee >= m.startSA && saAffichee <= m.endSA);
+        const mData = MEDICAL.find(m => sa >= m.startSA && sa <= m.endSA);
 
         if (mData) {
             let htmlBlocs = "";
             mData.blocs.forEach(b => {
-                htmlBlocs += `<div class="med-bloc">
-                                <h5><i class="fas fa-notes-medical"></i> ${b.titre}</h5>
-                                <ul>`;
-                b.items.forEach(item => {
-                    htmlBlocs += `<li><i class="fas fa-check-circle"></i> ${item}</li>`;
-                });
-                htmlBlocs += `  </ul>
-                              </div>`;
+                htmlBlocs += `<div class="med-bloc"><h5><i class="fas fa-notes-medical"></i> ${b.titre}</h5><ul>`;
+                b.items.forEach(item => { htmlBlocs += `<li><i class="fas fa-check-circle"></i> ${item}</li>`; });
+                htmlBlocs += `</ul></div>`;
             });
-
-            medicalDisplayDiv.innerHTML = `
-                <h4><i class="fas fa-user-md"></i> Check-list HAS / CNGOF</h4>
-                <div class="date-range">Stade : ${mData.titre}</div>
-                <div>${htmlBlocs}</div>
-            `;
+            medicalDisplayDiv.innerHTML = `<h4><i class="fas fa-user-md"></i> Check-list HAS / CNGOF</h4><div class="date-range">Stade : ${mData.titre}</div><div>${htmlBlocs}</div>`;
         } else {
-            medicalDisplayDiv.innerHTML = `
-                <h4><i class="fas fa-user-md"></i> Check-list Médicale</h4>
-                <div style="display:flex; height:70%; justify-content:center; align-items:center; text-align:center; color:#888; font-style:italic; padding: 20px;">
-                    Aucune recommandation majeure de dépistage pour cette semaine précise.<br><br>Poursuivez la surveillance clinique habituelle.
-                </div>
-            `;
+            medicalDisplayDiv.innerHTML = `<h4><i class="fas fa-user-md"></i> Check-list</h4><p style="text-align:center;color:#888;padding:20px;">Aucune recommandation spécifique pour cette semaine.</p>`;
         }
 
         mettreAJourEtatBoutons();
