@@ -1,1 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi de grossesse – Dr KARA-ZAITRI M.A.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1050px; /* Élargi pour bien afficher les 2 colonnes */
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #c46a8b;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            margin-top: 0;
+        }
+        
+        /* --- Zone de saisie (Ligne horizontale) --- */
+        .input-group {
+            background: #fdf2f6;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #fadce6;
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #a34e6e;
+        }
+        .form-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .form-controls input[type="date"] {
+            flex: 0 1 250px; /* Réduit la largeur du champ de date */
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-controls input[type="date"]:focus { border-color: #c46a8b; }
+        
+        .form-controls button.action-btn {
+            background-color: #c46a8b;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s ease;
+            white-space: nowrap; /* Empêche le texte du bouton de passer à la ligne */
+        }
+        .form-controls button.action-btn:hover { background-color: #a34e6e; }
 
+        /* --- Barre de progression --- */
+        .progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+        .progress-bar-bg {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            background-color: #c46a8b;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        /* --- Navigation --- */
+        .nav-arrows {
+            display: none;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .nav-arrows button {
+            background: #eee;
+            color: #333;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            font-size: 14px;
+            flex: 1;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+        .nav-arrows button:hover:not(:disabled) { background-color: #ddd; }
+        .nav-arrows button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* --- Conteneur des 2 colonnes --- */
+        .panels-wrapper {
+            display: none;
+            grid-template-columns: 1fr 1fr; /* 2 colonnes égales */
+            gap: 20px;
+            margin-top: 20px;
+            align-items: stretch; /* Force la même hauteur pour éviter les sursauts */
+        }
+        .panels-wrapper.active {
+            display: grid;
+        }
+
+        /* --- Panneaux Résultats --- */
+        .result, .medical-follow-up-section {
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 380px; /* Fixe une hauteur de base pour empêcher l'écran de tressauter */
+            box-sizing: border-box;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .result {
+            background: #fff5f9;
+            border-left: 6px solid #c46a8b;
+        }
+        .medical-follow-up-section {
+            background-color: #e6f7ff;
+            border-left: 6px solid #3399ff;
+        }
+
+        h4 { margin-top: 0; font-size: 1.3rem; }
+        .result h4 { color: #c46a8b; }
+        .medical-follow-up-section h4 { color: #1372b2; }
+
+        .date-range {
+            display: inline-block;
+            background: #ffe6f0;
+            color: #a34e6e;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .medical-follow-up-section .date-range {
+            background: #cce6ff;
+            color: #1372b2;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+            font-size: 0.95em;
+        }
+        .highlight { font-weight: bold; color: #c46a8b; }
+        .badge {
+            display: inline-block;
+            background: #c46a8b;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            margin-right: 5px;
+        }
+
+        ul { padding-left: 20px; margin-top: 5px; line-height: 1.6;}
+        li { margin-bottom: 6px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Mode Mobile --- */
+        @media (max-width: 850px) {
+            .panels-wrapper.active {
+                display: flex;
+                flex-direction: column; /* Remet les panneaux l'un sous l'autre sur petit écran */
+            }
+            .result, .medical-follow-up-section {
+                min-height: auto;
+            }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .form-controls { flex-direction: column; align-items: stretch; }
+            .form-controls input[type="date"] { flex: 1; max-width: 100%; }
+            .info-grid { grid-template-columns: 1fr; }
+            .nav-arrows { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1><i class="fas fa-stethoscope"></i> Suivi de grossesse</h1>
+    <p class="subtitle">Dr KARA-ZAITRI M.A.</p>
+    
+    <div class="input-group">
+        <label for="ddr"><i class="far fa-calendar-alt"></i> Date des dernières règles (DDR) :</label>
+        <div class="form-controls">
+            <input type="date" id="ddr" />
+            <button class="action-btn" onclick="calculerSuivi()"><i class="fas fa-calculator"></i> Calculer mon suivi</button>
+        </div>
+    </div>
+
+    <div class="progress-container" id="progress-container">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div class="progress-text" id="progress-text"></div>
+    </div>
+
+    <div class="nav-arrows" id="navigation">
+        <button onclick="changerSemaine(-1)"><i class="fas fa-arrow-left"></i> Sem. précédente</button>
+        <button onclick="revenirAujourdhui()"><i class="fas fa-calendar-day"></i> Revenir à aujourd'hui</button>
+        <button onclick="changerSemaine(1)">Sem. suivante <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <div class="panels-wrapper" id="panels-wrapper">
+        <div class="result" id="result"></div>
+        <div class="medical-follow-up-section" id="medical-follow-up-display"></div>
+    </div>
+</div>
+
+<script>
+    let dateDDR = null;
+    let saAffichee = 0; 
+    let sgAffichee = 0;
+    let joursAffiches = 0;
+    const dateAujourdhui = new Date();
+    dateAujourdhui.setHours(0, 0, 0, 0);
+
+    // --- DONNÉES PATIENTE ---
+    const suiviGrossesse = [
+        { sg: 1, contenu: "👶 Fécondation en préparation. 🤰 Règles en cours." },
+        { sg: 2, contenu: "👶 Ovulation probable. 🤰 Période fertile. Votre corps se prépare à la fécondation." },
+        { sg: 3, contenu: "👶 Fécondation et premières divisions cellulaires. L'œuf voyage vers l'utérus. 🤰 Les hormones (hCG) commencent à être produites." },
+        { sg: 4, contenu: "👶 Nidation dans l'utérus. 🤰 Retard de règles, fatigue, seins tendus, légers saignements d'implantation possibles." },
+        { sg: 5, contenu: "👶 Le cœur commence à battre. Les bourgeons des membres apparaissent. 🤰 Nausées matinales, hypersensibilité aux odeurs, fatigue." },
+        { sg: 6, contenu: "👶 Formation des yeux, oreilles, système digestif et respiratoire. 🤰 Pic des nausées. Maux de tête possibles." },
+        { sg: 7, contenu: "👶 Le visage prend forme. Les membres s'allongent. 🤰 Besoin fréquent d'uriner. Hypersensibilité émotionnelle." },
+        { sg: 8, contenu: "👶 Tous les organes majeurs sont en place. 🤰 Vos vêtements serrent un peu. Troubles digestifs." },
+        { sg: 9, contenu: "👶 L'embryon devient officiellement un fœtus. 🤰 Volume sanguin augmente. Ballonnements." },
+        { sg: 10, contenu: "👶 Os et cartilages se développent. Organes sexuels externes se différencient. 🤰 Symptômes du 1er trimestre marqués." },
+        { sg: 11, contenu: "👶 Le fœtus bouge et s'étire. 🤰 Vos cheveux deviennent plus forts. Tensions ligamentaires." },
+        { sg: 12, contenu: "👶 Le risque de fausse couche chute drastiquement. 🤰 Fin progressive des nausées pour la majorité." },
+        { sg: 13, contenu: "👶 Le fœtus grandit vite, ses os durcissent. 🤰 Regain d'énergie ! Le ventre s'arrondit." },
+        { sg: 14, contenu: "👶 Apparition du lanugo (fin duvet protecteur). 🤰 Libido souvent retrouvée. Période agréable." },
+        { sg: 15, contenu: "👶 Bébé perçoit la lumière et entend vos battements de cœur. 🤰 Le centre de gravité se déplace." },
+        { sg: 16, contenu: "👶 Bébé mesure environ 11 cm. 🤰 Sensation de « bulles » ou « papillons » (premiers mouvements)." },
+        { sg: 17, contenu: "👶 Ossification du squelette. Le sexe est bien visible. 🤰 Retour des envies sucrées." },
+        { sg: 18, contenu: "👶 Bébé bâille et suce son pouce. 🤰 Coups de pied plus francs." },
+        { sg: 19, contenu: "👶 Développement neurologique intense. 🤰 Apparition possible de la ligne brune sur le ventre." },
+        { sg: 20, contenu: "👶 Moitié du parcours ! La peau est couverte de vernix. 🤰 Douleurs ligamentaires possibles." },
+        { sg: 21, contenu: "👶 Il bouge activement, pèse près de 400g. 🤰 Essoufflement léger." },
+        { sg: 22, contenu: "👶 Cycles d'éveil et de sommeil mis en place. 🤰 Jambes lourdes." },
+        { sg: 23, contenu: "👶 Les poumons produisent le surfactant. Seuil de viabilité atteint. 🤰 Chevilles gonflées." },
+        { sg: 24, contenu: "👶 Il réagit très bien aux sons extérieurs. 🤰 Brûlures d'estomac fréquentes." },
+        { sg: 25, contenu: "👶 Prise de poids rapide. Il ouvre les yeux. 🤰 Reflux gastriques. Sommeil perturbé." },
+        { sg: 26, contenu: "👶 Pèse environ 900g. Ses sourcils sont formés. 🤰 Douleurs lombaires." },
+        { sg: 27, contenu: "👶 Très actif, il change souvent de position. 🤰 Essoufflement à l'effort." },
+        { sg: 28, contenu: "👶 Cap des 1 kg franchi ! 🤰 La fatigue revient. Le ventre se déforme sous ses coups." },
+        { sg: 29, contenu: "👶 Ses mouvements sont plus intenses. 🤰 Insomnies, tensions pelviennes." },
+        { sg: 30, contenu: "👶 Le cerveau se développe à grande vitesse. 🤰 Respiration courte (l'utérus appuie sur le diaphragme)." },
+        { sg: 31, contenu: "👶 Les poumons se renforcent. 🤰 Douleurs sacro-iliaques. Difficile de bien dormir." },
+        { sg: 32, contenu: "👶 Le bébé se retourne généralement tête en bas. 🤰 Préparation mentale à l'accouchement." },
+        { sg: 33, contenu: "👶 Les os durcissent, sauf le crâne. 🤰 Coups de pied sous les côtes douloureux." },
+        { sg: 34, contenu: "👶 Maturation pulmonaire presque achevée. 🤰 Les seins peuvent fuir un peu (colostrum)." },
+        { sg: 35, contenu: "👶 Pèse environ 2,4 kg. 🤰 Il descend dans le bassin (soulage la respiration mais pèse sur la vessie)." },
+        { sg: 36, contenu: "👶 Considéré 'à terme précoce'. 🤰 Instinct de nidification (envie de tout préparer)." },
+        { sg: 37, contenu: "👶 Terme officiellement atteint ! 🤰 Faux travail (contractions de Braxton Hicks) fréquent." },
+        { sg: 38, contenu: "👶 Organes matures. Il perd son lanugo. 🤰 Perte possible du bouchon muqueux." },
+        { sg: 39, contenu: "👶 Prêt à naître. 🤰 Forte pression pelvienne. Le grand jour est imminent !" }
+    ];
+
+    // --- DONNÉES MÉDICALES ---
+    const suiviMedicalMedecin = [
+        { startSA: 3, endSA: 6, titre: "Début de grossesse (3-6 SA)", contenu: "- **Diagnostic :** Test urinaire ou β-hCG plasmatique.\n- **Datation :** DPA = DDR + 287 jours (41 SA).\n- **Prescription :** Acide folique (400 µg/j) jusqu'à 12 SA.\n- **Bilan sanguin initial :** Groupe sanguin, RAI, Toxoplasmose, Rubéole, Syphilis, VIH, VHC, Ag HBs, Glycémie à jeun." },
+        { startSA: 7, endSA: 10, titre: "Consultation du 1er trimestre (7-10 SA)", contenu: "- Échographie de datation précoce si DDR incertaine.\n- Évaluation des facteurs de risque (HTA, diabète).\n- Prise de tension, poids." },
+        { startSA: 11, endSA: 14, titre: "Échographie T1 & Déclaration (11-14 SA)", contenu: "- **Échographie T1 :** Datation précise (LCC) et clarté nucale (CN).\n- **Dépistage T21 :** Marqueurs sériques du 1er trimestre.\n- **Administratif :** Déclaration de grossesse avant 15 SA.\n- Toxo mensuelle (si séronégative)." },
+        { startSA: 15, endSA: 19, titre: "Consultation du 4ème mois (15-19 SA)", contenu: "- Écoute des Bruits du Cœur Fœtal (BCF).\n- Dépistage T21 au 2ème trimestre (si non fait au T1).\n- Bandelette Urinaire (protéinurie, glycosurie).\n- Proposition de l'entretien prénatal précoce." },
+        { startSA: 20, endSA: 24, titre: "Échographie T2 (20-24 SA)", contenu: "- **Échographie morphologique (T2) :** Biométrie, morphologie détaillée, placenta, liquide.\n- Surveillance de la tension et poids.\n- Sérologie toxo, BU mensuelle." },
+        { startSA: 25, endSA: 28, titre: "Dépistages du 6ème mois (25-28 SA)", contenu: "- **Dépistage Diabète Gestationnel :** HGPO 75g (si facteurs de risque).\n- **Bilan sanguin 6e mois :** NFS, RAI.\n- **Prévention allo-immunisation :** Injection de Rophylac à 28 SA pour les patientes Rhésus Négatif." },
+        { startSA: 29, endSA: 34, titre: "Échographie T3 (29-34 SA)", contenu: "- **Échographie T3 (vers 32 SA) :** Croissance fœtale, présentation, placenta.\n- Vaccination contre la coqueluche recommandée.\n- Mesure de la hauteur utérine, TA, poids." },
+        { startSA: 35, endSA: 38, titre: "Bilan pré-anesthésique et Strepto B (35-38 SA)", contenu: "- **Prélèvement vaginal :** Dépistage Streptocoque B.\n- **Consultation Anesthésie :** Obligatoire.\n- Évaluation du bassin (pelvimétrie clinique)." },
+        { startSA: 39, endSA: 42, titre: "Le Terme (39-42 SA)", contenu: "- Consultation du 9e mois.\n- À partir de 40 SA : Surveillance rapprochée (monitoring RCF, LA).\n- Déclenchement à envisager à 41 SA + qq jours." }
+    ];
+
+    function calculerSuivi() {
+        const ddrInput = document.getElementById("ddr").value;
+        if (!ddrInput) { alert("Veuillez sélectionner une date de dernières règles."); return; }
+
+        dateDDR = new Date(ddrInput);
+        
+        const diffMax = Math.floor((dateAujourdhui - dateDDR) / (1000 * 60 * 60 * 24));
+        if (dateDDR > dateAujourdhui) { alert("⚠️ La DDR ne peut pas être dans le futur."); return; }
+        if (diffMax > 300) { alert("⚠️ Attention : La date sélectionnée remonte à plus de 42 semaines."); }
+
+        const diffJours = Math.floor((dateAujourdhui - dateDDR) / (1000 * 60 * 60 * 24));
+        saAffichee = Math.floor(diffJours / 7);
+        joursAffiches = diffJours % 7;
+
+        if (saAffichee < 1) saAffichee = 1;
+        if (saAffichee > 42) saAffichee = 42;
+
+        document.getElementById("progress-container").style.display = "block";
+        document.getElementById("navigation").style.display = "flex";
+        document.getElementById("panels-wrapper").classList.add("active");
+        
+        afficherUI();
+    }
+
+    function afficherUI() {
+        sgAffichee = saAffichee - 2;
+        if (sgAffichee < 1) sgAffichee = 1;
+
+        let dateDebutSA = new Date(dateDDR);
+        dateDebutSA.setDate(dateDDR.getDate() + (saAffichee * 7));
+        
+        let dateFinSA = new Date(dateDebutSA);
+        dateFinSA.setDate(dateDebutSA.getDate() + 6);
+
+        const optionsDate = { day: 'numeric', month: 'long', year: 'numeric' };
+        
+        let terme = new Date(dateDDR);
+        terme.setDate(terme.getDate() + 287);
+
+        let pourcentage = (saAffichee / 41) * 100;
+        if (pourcentage > 100) pourcentage = 100;
+        document.getElementById("progress-bar").style.width = pourcentage + "%";
+        document.getElementById("progress-text").innerHTML = `Grossesse à <strong>${Math.round(pourcentage)}%</strong> du terme théorique (41 SA)`;
+
+        // Affichage Patiente
+        const resultDiv = document.getElementById("result");
+        const entryGrossesse = suiviGrossesse.find(e => e.sg === sgAffichee);
+
+        if (entryGrossesse && saAffichee <= 41) {
+            const contenuFormatted = entryGrossesse.contenu.replace('👶', '<br>👶').replace('🤰', '<br><br>🤰');
+            resultDiv.innerHTML = `
+                <h4><i class="fas fa-baby"></i> Évolution de la grossesse</h4>
+                <div class="date-range"><i class="far fa-calendar"></i> Période du ${dateDebutSA.toLocaleDateString("fr-FR", optionsDate)} au ${dateFinSA.toLocaleDateString("fr-FR", optionsDate)}</div>
+                
+                <div>
+                    <span class="badge">Semaine ${saAffichee} d'aménorrhée (SA)</span>
+                    <span class="badge" style="background:#8c9ea3">Mois ${Math.ceil(sgAffichee / 4.33)}</span>
+                </div>
+                
+                <div style="line-height: 1.6; margin-top:10px;">${contenuFormatted}</div>
+                
+                <div class="info-grid">
+                    <div>
+                        <span class="highlight">Âge Gestationnel :</span><br>
+                        ${saAffichee} SA + ${joursAffiches} jours
+                    </div>
+                    <div>
+                        <span class="highlight">DPA :</span><br>
+                        <i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", optionsDate)}
+                    </div>
+                </div>
+            `;
+        } else if (saAffichee > 41) {
+            resultDiv.innerHTML = `<h4><i class="fas fa-exclamation-triangle"></i> Grossesse prolongée</h4><p>Vous êtes à <strong>${saAffichee} SA + ${joursAffiches} jours</strong>. Un suivi strict en maternité est requis.</p>`;
+        } else {
+             resultDiv.innerHTML = `<h4><i class="fas fa-seedling"></i> Période pré-conceptionnelle</h4><p>Semaine ${saAffichee} SA.</p>`;
+        }
+
+        // Affichage Médical
+        const medicalDisplayDiv = document.getElementById("medical-follow-up-display");
+        const medicalEntry = suiviMedicalMedecin.find(me => saAffichee >= me.startSA && saAffichee <= me.endSA);
+
+        if (medicalEntry) {
+            const medicalContenuHtml = medicalEntry.contenu
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/^- (.*)/gm, '<li><i class="fas fa-check-circle" style="color:#3399ff; font-size:0.8em; margin-right:5px;"></i> $1</li>')
+                .replace(/\n\s*<li>/g, '<ul style="list-style-type:none; padding-left:0; margin-top:10px;"><li>')
+                .replace(/<\/li>\n(?!<li>)/g, '</li></ul>')
+                .trim();
+
+            medicalDisplayDiv.innerHTML = `
+                <h4><i class="fas fa-user-md"></i> Check-list Médicale (Médecin/Sage-femme)</h4>
+                <div class="date-range">Stade : ${medicalEntry.titre}</div>
+                <div>${medicalContenuHtml}</div>
+            `;
+        } else {
+            // Emplacement "vide" pour empêcher le tressautement de l'écran
+            medicalDisplayDiv.innerHTML = `
+                <h4><i class="fas fa-user-md"></i> Check-list Médicale (Médecin/Sage-femme)</h4>
+                <div style="display:flex; height:70%; justify-content:center; align-items:center; text-align:center; color:#888; font-style:italic; padding: 20px;">
+                    Aucun examen ou dépistage spécifique recommandé pour cette semaine d'aménorrhée précise.<br><br>Poursuivez la surveillance clinique habituelle.
+                </div>
+            `;
+        }
+
+        mettreAJourEtatBoutons();
+    }
+
+    function changerSemaine(valeur) {
+        let nouvelleSA = saAffichee + valeur;
+        if (nouvelleSA >= 1 && nouvelleSA <= 42) {
+            saAffichee = nouvelleSA;
+            afficherUI();
+        }
+    }
+
+    function revenirAujourdhui() {
+        const diffJours = Math.floor((dateAujourdhui - dateDDR) / (1000 * 60 * 60 * 24));
+        saAffichee = Math.floor(diffJours / 7);
+        joursAffiches = diffJours % 7;
+        
+        if(saAffichee < 1) saAffichee = 1;
+        if(saAffichee > 42) saAffichee = 42;
+        
+        afficherUI();
+    }
+
+    function mettreAJourEtatBoutons() {
+        const btnPrev = document.querySelector(".nav-arrows button:first-child");
+        const btnNext = document.querySelector(".nav-arrows button:last-child");
+        btnPrev.disabled = saAffichee <= 1; 
+        btnNext.disabled = saAffichee >= 42; 
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const ddrInput = document.getElementById("ddr");
+        if (!ddrInput.value) {
+            let defaultDDR = new Date();
+            defaultDDR.setDate(defaultDDR.getDate() - (12 * 7)); 
+            ddrInput.valueAsDate = defaultDDR;
+        }
+    });
+</script>
+
+</body>
+</html>
