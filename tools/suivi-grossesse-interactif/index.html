@@ -88,6 +88,42 @@
         }
         .form-controls button.action-btn:hover { background-color: #a34e6e; }
 
+        /* --- NOUVEAU : Panneau récapitulatif en haut --- */
+        .resume-box {
+            margin-top: 20px;
+            padding: 15px 20px;
+            background: #fff;
+            border: 2px dashed #c46a8b;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .resume-box.show {
+            display: block;
+        }
+
+        .resume-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .resume-item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .resume-divider {
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(to bottom, #c46a8b, #fadce6);
+            border-radius: 2px;
+        }
+
         /* --- Barre de progression --- */
         .progress-container {
             margin-top: 20px;
@@ -175,16 +211,6 @@
             flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 15px;
-        }
-
-        .summary-box {
-            background: #fff;
-            padding: 12px 18px;
-            border-radius: 8px;
-            border: 1px dashed #c46a8b;
-            text-align: right;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-            min-width: 180px;
         }
 
         .date-range {
@@ -303,7 +329,13 @@
             .info-grid { grid-template-columns: 1fr; }
             .nav-arrows { flex-direction: column; }
             .panel-header-flex { flex-direction: column; align-items: stretch; }
-            .summary-box { text-align: left; }
+            .resume-content {
+                flex-direction: column;
+            }
+            .resume-divider {
+                width: 50px;
+                height: 2px;
+            }
         }
     </style>
 </head>
@@ -318,6 +350,21 @@
         <div class="form-controls">
             <input type="date" id="ddr" />
             <button class="action-btn" onclick="calculerSuivi()"><i class="fas fa-calculator"></i> Calculer mon suivi</button>
+        </div>
+        
+        <!-- NOUVEAU : Panneau récapitulatif déplacé ici -->
+        <div id="resume-grossesse" class="resume-box">
+            <div class="resume-content">
+                <div class="resume-item">
+                    <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">Aujourd'hui, vous êtes à :</div>
+                    <div style="color: #c46a8b; font-weight: 800; font-size: 1.3rem;" id="resume-sa">-- SA + -- j</div>
+                </div>
+                <div class="resume-divider"></div>
+                <div class="resume-item">
+                    <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">DPA (Terme 41 SA) :</div>
+                    <div style="color: #c46a8b; font-weight: 700; font-size: 1rem;"><i class="fas fa-flag-checkered"></i> <span id="resume-dpa">--</span></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -520,6 +567,9 @@
         document.getElementById("panels-wrapper").classList.add("active");
         document.getElementById("disclaimer").style.display = "block";
         
+        // Affiche le résumé en haut
+        document.getElementById("resume-grossesse").classList.add("show");
+        
         afficherUI();
     }
 
@@ -535,6 +585,10 @@
         
         // Calcul strict de la DPA (DDR + 287 jours = 41 SA)
         let terme = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + 287, 12, 0, 0);
+
+        // Mettez à jour le résumé en haut
+        document.getElementById("resume-sa").textContent = `${saActuelle} SA + ${joursActuels} j`;
+        document.getElementById("resume-dpa").textContent = terme.toLocaleDateString("fr-FR", optionsDate);
 
         // La barre de progression reflète toujours l'âge ACTUEL, pas la semaine naviguée
         let pourcentage = (saActuelle / 41) * 100;
@@ -557,13 +611,6 @@
                             <span class="badge">Aperçu : Semaine ${saAffichee} (SA)</span>
                             <span class="badge" style="background:#8c9ea3">Mois ${Math.ceil(sgAffichee / 4.33)}</span>
                         </div>
-                    </div>
-                    
-                    <div class="summary-box">
-                        <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">Aujourd'hui, vous êtes à :</div>
-                        <div style="color: #c46a8b; font-weight: 800; font-size: 1.15rem; margin-bottom: 8px;">${saActuelle} SA + ${joursActuels} j</div>
-                        <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">DPA (Terme 41 SA) :</div>
-                        <div style="color: #c46a8b; font-weight: 800; font-size: 0.95rem;"><i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", optionsDate)}</div>
                     </div>
                 </div>
                 
