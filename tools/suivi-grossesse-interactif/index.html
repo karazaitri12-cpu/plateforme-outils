@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suivi de grossesse – Dr KARA-ZAITRI M.A.</title>
+    
+    <!-- 
+      ICÔNES FONT-AWESOME 
+      Avertissement de performance : Actuellement chargé via un CDN externe.
+      Pour une sécurité et une vitesse maximales en production, téléchargez Font Awesome 
+      et remplacez la ligne ci-dessous par un lien local, par exemple : 
+      <link rel="stylesheet" href="votre-dossier/font-awesome/css/all.min.css" />
+    -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -158,6 +167,26 @@
         .result h4 { color: #c46a8b; }
         .medical-follow-up-section h4 { color: #1372b2; }
 
+        /* En-tête Flexbox pour le panneau Rose */
+        .panel-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .summary-box {
+            background: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: 1px dashed #c46a8b;
+            text-align: right;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            min-width: 180px;
+        }
+
         .date-range {
             display: inline-block;
             background: #ffe6f0;
@@ -166,11 +195,12 @@
             border-radius: 4px;
             font-size: 0.9rem;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .medical-follow-up-section .date-range {
             background: #cce6ff;
             color: #1372b2;
+            margin-bottom: 15px;
         }
 
         /* --- Formatage interne des blocs --- */
@@ -237,7 +267,6 @@
             padding: 4px 10px;
             border-radius: 12px;
             font-size: 0.85em;
-            margin-bottom: 10px;
             margin-right: 5px;
         }
 
@@ -273,6 +302,8 @@
             .form-controls input[type="date"] { flex: 1; max-width: 100%; }
             .info-grid { grid-template-columns: 1fr; }
             .nav-arrows { flex-direction: column; }
+            .panel-header-flex { flex-direction: column; align-items: stretch; }
+            .summary-box { text-align: left; }
         }
     </style>
 </head>
@@ -299,7 +330,7 @@
 
     <div class="nav-arrows" id="navigation">
         <button onclick="changerSemaine(-1)"><i class="fas fa-arrow-left"></i> Sem. précédente</button>
-        <button onclick="revenirAujourdhui()"><i class="fas fa-calendar-day"></i> Aujourd'hui</button>
+        <button onclick="revenirAujourdhui()"><i class="fas fa-calendar-day"></i> Revenir à Aujourd'hui</button>
         <button onclick="changerSemaine(1)">Sem. suivante <i class="fas fa-arrow-right"></i></button>
     </div>
 
@@ -316,10 +347,13 @@
 
 <script>
     let dateDDR = null;
-    let saActuelle = 0;   // Âge fixe du jour J
-    let joursActuels = 0; // Jours fixes du jour J
-    let saAffichee = 0;   // Semaine sur laquelle on navigue
+    let saActuelle = 0;   
+    let joursActuels = 0; 
+    let saAffichee = 0;   
     let sgAffichee = 0;   
+
+    const dateAujourdhui = new Date();
+    dateAujourdhui.setHours(0, 0, 0, 0);
 
     /* ============================================================
        DONNÉES FŒTUS / MAMAN (Ultra-détaillées)
@@ -459,18 +493,16 @@
         const ddrInput = document.getElementById("ddr").value;
         if (!ddrInput) { alert("Veuillez sélectionner une date de dernières règles."); return; }
 
-        // Parsing robuste pour éviter le décalage de fuseau horaire
+        // Utilisation de UTC pour éviter le bug de l'heure d'été
         const parts = ddrInput.split('-');
-        dateDDR = new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0); // On force l'heure à midi
+        dateDDR = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); 
 
-        const dateAujourdhui = new Date();
-        dateAujourdhui.setHours(12, 0, 0, 0); // On force l'heure à midi pour le jour actuel
+        const dateAujourdhuiUTC = new Date(Date.UTC(dateAujourdhui.getFullYear(), dateAujourdhui.getMonth(), dateAujourdhui.getDate()));
 
-        if (dateDDR > dateAujourdhui) { alert("⚠️ La DDR ne peut pas être dans le futur."); return; }
+        if (dateDDR > dateAujourdhuiUTC) { alert("⚠️ La DDR ne peut pas être dans le futur."); return; }
 
-        // Calcul exact du temps écoulé, bloqué à midi contre les bugs d'heure d'été
-        const diffTime = dateAujourdhui.getTime() - dateDDR.getTime();
-        const diffJours = Math.round(diffTime / (1000 * 3600 * 24));
+        // Calcul exact du temps écoulé en jours (résistant à l'heure d'été)
+        const diffJours = Math.floor((dateAujourdhuiUTC - dateDDR) / (1000 * 3600 * 24));
 
         if (diffJours > 300) { alert("⚠️ Attention : La date sélectionnée remonte à plus de 42 semaines."); }
 
@@ -495,14 +527,14 @@
         sgAffichee = saAffichee - 2;
         if (sgAffichee < 1) sgAffichee = 1;
 
-        // Dates de la semaine sur laquelle on NAVIGUE (On force l'heure à midi)
-        let dateDebutSA = new Date(dateDDR.getFullYear(), dateDDR.getMonth(), dateDDR.getDate() + (saAffichee * 7), 12, 0, 0);
+        // Dates de la semaine sur laquelle on NAVIGUE (On force l'heure à midi pour l'affichage local)
+        let dateDebutSA = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + (saAffichee * 7), 12, 0, 0);
         let dateFinSA = new Date(dateDebutSA.getFullYear(), dateDebutSA.getMonth(), dateDebutSA.getDate() + 6, 12, 0, 0);
 
         const optionsDate = { day: 'numeric', month: 'long', year: 'numeric' };
         
         // Calcul strict de la DPA (DDR + 287 jours = 41 SA)
-        let terme = new Date(dateDDR.getFullYear(), dateDDR.getMonth(), dateDDR.getDate() + 287, 12, 0, 0);
+        let terme = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + 287, 12, 0, 0);
 
         // La barre de progression reflète toujours l'âge ACTUEL, pas la semaine naviguée
         let pourcentage = (saActuelle / 41) * 100;
@@ -517,11 +549,22 @@
         if (fData && saAffichee <= 41) {
             resultDiv.innerHTML = `
                 <h4><i class="fas fa-baby"></i> Évolution fœtale & maternelle</h4>
-                <div class="date-range"><i class="far fa-calendar"></i> Période du ${dateDebutSA.toLocaleDateString("fr-FR", optionsDate)} au ${dateFinSA.toLocaleDateString("fr-FR", optionsDate)}</div>
                 
-                <div>
-                    <span class="badge">Aperçu : Semaine ${saAffichee} (SA)</span>
-                    <span class="badge" style="background:#8c9ea3">Mois ${Math.ceil(sgAffichee / 4.33)}</span>
+                <div class="panel-header-flex">
+                    <div>
+                        <div class="date-range"><i class="far fa-calendar"></i> Période du ${dateDebutSA.toLocaleDateString("fr-FR", optionsDate)} au ${dateFinSA.toLocaleDateString("fr-FR", optionsDate)}</div>
+                        <div style="margin-top:5px;">
+                            <span class="badge">Aperçu : Semaine ${saAffichee} (SA)</span>
+                            <span class="badge" style="background:#8c9ea3">Mois ${Math.ceil(sgAffichee / 4.33)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-box">
+                        <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">Aujourd'hui, vous êtes à :</div>
+                        <div style="color: #c46a8b; font-weight: 800; font-size: 1.15rem; margin-bottom: 8px;">${saActuelle} SA + ${joursActuels} j</div>
+                        <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">DPA (Terme 41 SA) :</div>
+                        <div style="color: #c46a8b; font-weight: 800; font-size: 0.95rem;"><i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", optionsDate)}</div>
+                    </div>
                 </div>
                 
                 <div class="foetus-block">
