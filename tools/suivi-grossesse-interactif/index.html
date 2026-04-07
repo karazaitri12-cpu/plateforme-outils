@@ -4,13 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suivi de grossesse – Dr KARA-ZAITRI M.A.</title>
-    
-    <!-- 
-      ICÔNES FONT-AWESOME 
-      Avertissement de performance : Actuellement chargé via un CDN externe.
-    -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -60,7 +54,7 @@
         .form-row {
             display: flex;
             gap: 20px;
-            align-items: flex-start; /* Aligne le haut des blocs */
+            align-items: stretch; /* Étire les éléments à la même hauteur */
             flex-wrap: wrap;
         }
 
@@ -69,8 +63,10 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            min-width: 250px;
-            flex: 1;
+            /* C'est ici qu'on limite la largeur pour qu'elle reste à gauche */
+            max-width: 320px; 
+            width: 100%;
+            flex: none; /* Empêche de s'étirer */
         }
 
         .controls-col input[type="date"] {
@@ -101,21 +97,21 @@
 
         /* Colonne Droite : Panneau Récapitulatif */
         .resume-box {
-            flex: 2; /* Prend plus d'espace que la colonne gauche */
+            flex: 1; /* Prend tout l'espace restant à droite */
             background: #fff;
             border: 2px dashed #c46a8b;
             border-radius: 8px;
             padding: 10px 20px;
             display: none; /* Caché par défaut */
             animation: fadeIn 0.4s ease-in-out;
-            min-width: 280px;
-            box-sizing: border-box;
+            /* Aligne le contenu verticalement et horizontalement */
+            align-items: center; 
+            justify-content: space-around;
+            min-width: 250px;
         }
 
         .resume-box.show {
             display: flex;
-            align-items: center;
-            justify-content: space-around;
         }
 
         .resume-item {
@@ -330,6 +326,9 @@
             .form-row {
                 flex-direction: column; /* Sur tablette/mobile, on empile tout */
             }
+            .controls-col {
+                max-width: 100%; /* Sur mobile, le champ prend toute la largeur */
+            }
             .resume-box {
                 width: 100%;
                 margin-top: 10px;
@@ -354,13 +353,13 @@
         
         <!-- NOUVELLE STRUCTURE FLEX -->
         <div class="form-row">
-            <!-- Colonne Gauche : Date + Bouton -->
+            <!-- Colonne Gauche : Date + Bouton (Limité à 320px de large) -->
             <div class="controls-col">
                 <input type="date" id="ddr" />
                 <button class="action-btn" onclick="calculerSuivi()"><i class="fas fa-calculator"></i> Calculer mon suivi</button>
             </div>
             
-            <!-- Colonne Droite : Panneau Récapitulatif -->
+            <!-- Colonne Droite : Panneau Récapitulatif (Prend l'espace restant) -->
             <div id="resume-grossesse" class="resume-box">
                 <div class="resume-item">
                     <div style="font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">Aujourd'hui, vous êtes à :</div>
