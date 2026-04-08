@@ -266,8 +266,10 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         afficherUI();
     }
 
-    function afficherUI() {
-    let sa = saAffichee;
+// REMPLACEZ TOUTE LA FONCTION afficherUI() PAR CELLE-CI :
+
+function afficherUI() {
+    let sa = saAffichee; // Utiliser la semaine affichée (navigation)
     const dateDebut = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + (sa * 7), 12, 0, 0);
     const dateFin = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate() + 6, 12, 0, 0);
     const opts = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -301,10 +303,17 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         `;
     }
 
-    // PANNEAU MÉDICAL - CORRECTION ICI
+    // PANNEAU MÉDICAL - LOGIQUE CORRIGÉE
     const medDiv = document.getElementById("medical-follow-up-display");
-    // Trouve la dernière recommandation dont l'âge est <= à la SA actuelle
-    const medData = MEDICAL.slice().reverse().find(m => sa >= m.sa);
+    
+    // Trouver la recommandation appropriée : la plus récente dont l'âge est <= SA actuelle
+    let medData = null;
+    for (let i = MEDICAL.length - 1; i >= 0; i--) {
+        if (sa >= MEDICAL[i].sa) {
+            medData = MEDICAL[i];
+            break;
+        }
+    }
     
     if (medData) {
         let html = `<h4><i class="fas fa-user-md"></i> Check-list HAS / CNGOF 2023</h4><div class="medical-header">${medData.titre}</div>`;
