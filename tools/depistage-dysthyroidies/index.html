@@ -1,4 +1,3 @@
-
 <div id="thyro-ghr-final-scope" style="all: initial; font-family: 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif;">
     <div class="ghr-container">
         <!-- HEADER -->
@@ -18,8 +17,8 @@
         <!-- FOOTER -->
         <div class="ghr-footer">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <button type="button" id="ghr-back" style="display:none;">← Retour</button>
-                <button type="button" id="ghr-restart">⟲ Recommencer</button>
+                <button type="button" id="ghr-back" class="ghr-back-btn" style="display:none;">← Retour</button>
+                <button type="button" id="ghr-restart" class="ghr-restart-btn">⟲ Recommencer</button>
             </div>
             
             <div class="ghr-legal-box">
@@ -32,549 +31,480 @@
     </div>
 
     <style>
-        /* DESIGN SYSTEM ACCESSIBLE (WCAG compliant) */
-        #thyro-ghr-final-scope { display: block; width: 100%; margin: 20px 0; color: #212121; line-height: 1.6; font-size: 14px; }
-        .ghr-container { max-width: 650px; margin: 0 auto; background: #fff; border-radius: 15px; box-shadow: 0 12px 45px rgba(0,0,0,0.15); overflow: hidden; border: 1px solid #e0e0e0; }
-        
-        /* Vert profond pour le sérieux clinique */
-        .ghr-header { background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color: #fff; padding: 6px; text-align: center; }
-        .ghr-breadcrumb { background: #f9f9f9; padding: 12px 25px; font-size: 12px; color: #555; border-bottom: 1px solid #eee; min-height: 20px; }
-        .ghr-main { padding: 35px 25px; min-height: 400px; }
-        
-        .ghr-step-title { font-size: 21px; font-weight: 700; color: #1b5e20; margin-bottom: 22px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
-        .ghr-info-blue { background: #e8f5e9; border-left: 5px solid #4caf50; padding: 20px; margin-bottom: 25px; border-radius: 6px; }
-        
-        .ghr-reco-box { padding: 25px; border-radius: 8px; margin-top: 15px; animation: fadeIn 0.4s; font-size: 16px; border: 1px solid transparent; }
-        .ghr-reco-box.success { background: #f1f8e9; border-left: 6px solid #4caf50; border-top: 1px solid #c5e1a5; }
-        .ghr-reco-box.warning { background: #fff8e1; border-left: 6px solid #ff9800; border-top: 1px solid #ffecb3; }
-        .ghr-reco-box.danger { background: #ffebee; border-left: 6px solid #f44336; border-top: 1px solid #ffcdd2; }
+        /* =========== RESET & VARIABLES =========== */
+        #thyro-ghr-final-scope { display: block !important; width: 100% !important; margin: 20px 0 !important; color: #212121 !important; line-height: 1.6 !important; font-size: 14px !important; box-sizing: border-box !important; }
+        #thyro-ghr-final-scope * { box-sizing: border-box !important; }
 
-        /* Bronze profond (#856404) pour un contraste WCAG optimal */
-        .ghr-btn { display: block; width: 100%; padding: 18px 25px; margin-bottom: 12px; background: #fff; border: 2px solid #e0e0e0; border-radius: 12px; text-align: left; cursor: pointer; font-size: 16px; transition: 0.25s; box-sizing: border-box; position: relative; color: #333; font-weight: 500; }
-        .ghr-btn:hover { border-color: #856404; background: #fffdf5; transform: translateX(5px); color: #1b5e20; }
-        .ghr-btn:focus { outline: 3px solid #856404; outline-offset: 2px; }
-        .ghr-btn::after { content: "\203A"; position: absolute; right: 25px; color: #856404; font-size: 28px; font-weight: bold; top: 50%; transform: translateY(-50%); }
+        /* =========== CONTENEUR PRINCIPAL =========== */
+        .ghr-container { max-width: 650px !important; margin: 0 auto !important; background: #fff !important; border-radius: 15px !important; box-shadow: 0 12px 45px rgba(0,0,0,0.15) !important; overflow: hidden !important; border: 1px solid #e0e0e0 !important; }
 
-        .ghr-calc-container { margin-top: 25px; background: #f9fdf9; border: 1px solid #e0e0e0; padding: 15px; border-radius: 10px; }
-        .ghr-calc-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
-        .ghr-calc-input { width: 100px; padding: 8px; border: 2px solid #e0e0e0; border-radius: 6px; text-align: center; }
-        .ghr-calc-result { font-weight: 700; color: #856404; font-size: 18px; background: #fff8e1; padding: 4px 10px; border-radius: 4px; }
+        /* =========== HEADER =========== */
+        .ghr-header { background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%) !important; color: #fff !important; padding: 6px !important; text-align: center !important; }
+        .ghr-header h4 { font-size: 23px !important; margin-top: 20px !important; font-weight: 600 !important; color: white !important; text-align: center !important; margin-bottom: 10px !important; }
+        .ghr-header p { font-size: 13px !important; margin-top: 5px !important; font-weight: 400 !important; text-align: center !important; color: white !important; opacity: 0.9 !important; margin-bottom: 12px !important; }
 
-        /* STYLE RAPPORT */
-        .ghr-report-box { width: 100%; height: 200px; padding: 12px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 12px; resize: vertical; margin-bottom: 15px; box-sizing: border-box; color: #333; white-space: pre-wrap; overflow-y: auto; }
+        /* =========== BREADCRUMB =========== */
+        .ghr-breadcrumb { background: #f9f9f9 !important; padding: 12px 25px !important; font-size: 12px !important; color: #555 !important; border-bottom: 1px solid #eee !important; min-height: 20px !important; }
 
-        .ghr-copy-btn { margin-top: 10px; background: #fffdf5; border: 2px solid #856404; color: #856404; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; transition: 0.2s; width: 100%; justify-content: center; }
-        .ghr-copy-btn:hover { background: #856404; color: #fff; box-shadow: 0 4px 12px rgba(133, 100, 4, 0.3); }
-        .ghr-copy-btn:focus { outline: 3px solid #856404; outline-offset: 2px; }
+        /* =========== CONTENU PRINCIPAL =========== */
+        .ghr-main { padding: 35px 25px !important; min-height: 400px !important; }
 
-        .ghr-input { width: 100%; padding: 18px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 20px; margin-bottom: 22px; box-sizing: border-box; transition: border-color 0.3s; }
-        .ghr-input:focus { outline: none; border-color: #856404; }
-        .ghr-input.error { border-color: #f44336; animation: shake 0.3s; }
-        
-        .ghr-submit { background: linear-gradient(135deg, #856404 0%, #6d5203 100%); color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 17px; box-shadow: 0 4px 15px rgba(133, 100, 4, 0.2); transition: 0.3s; }
-        .ghr-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(133, 100, 4, 0.3); }
-        .ghr-submit:focus { outline: 3px solid #856404; outline-offset: 2px; }
-        .ghr-submit.loading { opacity: 0.7; cursor: wait; }
-        .ghr-submit.loading::after { content: " ⏳"; animation: pulse 1s ease-in-out infinite; }
-        
-        .ghr-footer { padding: 25px; background: #fcfcfc; border-top: 1px solid #eee; }
-        .ghr-legal-box { font-size: 11px; color: #555; text-align: justify; line-height: 1.5; border: 1px dashed #ccc; padding: 12px; border-radius: 8px; }
-        
-        #ghr-restart, #ghr-back { background: none; border: none; color: #856404; text-decoration: underline; cursor: pointer; font-size: 14px; font-weight: 600; transition: 0.2s; }
-        #ghr-restart:hover, #ghr-back:hover { color: #6d5203; }
-        #ghr-back { color: #666; }
-        #ghr-back:hover { color: #333; }
+        /* =========== TITRE ÉTAPE =========== */
+        .ghr-step-title { font-size: 21px !important; font-weight: 700 !important; color: #1b5e20 !important; margin-bottom: 22px !important; padding-bottom: 10px !important; border-bottom: 2px solid #f0f0f0 !important; }
 
-        ul.ghr-list { padding-left: 20px; margin: 12px 0; }
-        ul.ghr-list li { margin-bottom: 10px; font-size: 14.5px; }
+        /* =========== BOÎTES D'INFO =========== */
+        .ghr-info-blue { background: #e8f5e9 !important; border-left: 5px solid #4caf50 !important; padding: 20px !important; margin-bottom: 25px !important; border-radius: 6px !important; }
+        .ghr-info-blue ul { padding-left: 20px !important; margin: 12px 0 !important; }
+        .ghr-info-blue li { margin-bottom: 10px !important; font-size: 14.5px !important; }
 
-      /* =========================================
-   PRO : Masque l'ascenseur (style App native)
-A placer en fin de css dans chaque outil
-   ========================================= */
-html { scrollbar-width: none; }               /* Firefox */
-body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
-::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
+        /* =========== BOÎTES RECOMMANDATIONS =========== */
+        .ghr-reco-box { padding: 25px !important; border-radius: 8px !important; margin-top: 15px !important; animation: fadeIn 0.4s !important; font-size: 16px !important; border: 1px solid transparent !important; }
+        .ghr-reco-box.success { background: #f1f8e9 !important; border-left: 6px solid #4caf50 !important; border-top: 1px solid #c5e1a5 !important; }
+        .ghr-reco-box.warning { background: #fff8e1 !important; border-left: 6px solid #ff9800 !important; border-top: 1px solid #ffecb3 !important; }
+        .ghr-reco-box.danger { background: #ffebee !important; border-left: 6px solid #f44336 !important; border-top: 1px solid #ffcdd2 !important; }
+        .ghr-reco-box ul { padding-left: 20px !important; margin: 12px 0 !important; }
+        .ghr-reco-box li { margin-bottom: 10px !important; font-size: 15px !important; }
 
-        @media screen and (max-width: 600px) { 
-            .ghr-main { padding: 20px 15px !important; } 
-            .ghr-btn { font-size: 14px !important; padding: 15px 20px !important; } 
-            .ghr-calc-row { flex-direction: column; align-items: flex-start; }
+        /* =========== BOUTONS OPTIONS =========== */
+        .ghr-btn { display: block !important; width: 100% !important; padding: 18px 25px !important; margin-bottom: 12px !important; background: #fff !important; border: 2px solid #e0e0e0 !important; border-radius: 12px !important; text-align: left !important; cursor: pointer !important; font-size: 16px !important; transition: all 0.25s ease !important; box-sizing: border-box !important; position: relative !important; color: #333 !important; font-weight: 500 !important; font-family: inherit !important; }
+        .ghr-btn:hover { border-color: #856404 !important; background: #fffdf5 !important; transform: translateX(5px) !important; color: #1b5e20 !important; }
+        .ghr-btn:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
+        .ghr-btn::after { content: "\203A" !important; position: absolute !important; right: 25px !important; color: #856404 !important; font-size: 28px !important; font-weight: bold !important; top: 50% !important; transform: translateY(-50%) !important; }
+
+        /* =========== CALCULATEURS =========== */
+        .ghr-calc-container { margin-top: 25px !important; background: #f9fdf9 !important; border: 1px solid #e0e0e0 !important; padding: 15px !important; border-radius: 10px !important; }
+        .ghr-calc-row { display: flex !important; align-items: center !important; gap: 10px !important; margin-top: 8px !important; flex-wrap: wrap !important; }
+        .ghr-calc-input { width: 100px !important; padding: 8px !important; border: 2px solid #e0e0e0 !important; border-radius: 6px !important; text-align: center !important; font-size: 14px !important; font-family: inherit !important; }
+        .ghr-calc-input:focus { outline: none !important; border-color: #856404 !important; }
+        .ghr-calc-result { font-weight: 700 !important; color: #856404 !important; font-size: 18px !important; background: #fff8e1 !important; padding: 4px 10px !important; border-radius: 4px !important; }
+
+        /* =========== RAPPORT CLINIQUE =========== */
+        .ghr-report-box { width: 100% !important; height: 200px !important; padding: 12px !important; background: #f8f9fa !important; border: 1px solid #ddd !important; border-radius: 8px !important; font-family: 'Courier New', Courier, monospace !important; font-size: 12px !important; resize: vertical !important; margin-bottom: 15px !important; box-sizing: border-box !important; color: #333 !important; white-space: pre-wrap !important; overflow-y: auto !important; }
+
+        /* =========== BOUTON COPIER =========== */
+        .ghr-copy-btn { margin-top: 10px !important; background: #fffdf5 !important; border: 2px solid #856404 !important; color: #856404 !important; padding: 12px 20px !important; border-radius: 10px !important; cursor: pointer !important; font-size: 15px !important; font-weight: 600 !important; display: flex !important; align-items: center !important; gap: 10px !important; transition: all 0.2s ease !important; width: 100% !important; justify-content: center !important; font-family: inherit !important; }
+        .ghr-copy-btn:hover { background: #856404 !important; color: #fff !important; box-shadow: 0 4px 12px rgba(133, 100, 4, 0.3) !important; }
+        .ghr-copy-btn:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
+
+        /* =========== CHAMPS INPUT =========== */
+        .ghr-input { width: 100% !important; padding: 18px !important; border: 2px solid #e0e0e0 !important; border-radius: 10px !important; font-size: 20px !important; margin-bottom: 22px !important; box-sizing: border-box !important; transition: border-color 0.3s ease !important; font-family: inherit !important; }
+        .ghr-input:focus { outline: none !important; border-color: #856404 !important; }
+        .ghr-input.error { border-color: #f44336 !important; animation: shake 0.3s !important; }
+
+        /* =========== BOUTON SUBMIT =========== */
+        .ghr-submit { background: linear-gradient(135deg, #856404 0%, #6d5203 100%) !important; color: white !important; border: none !important; padding: 18px !important; width: 100% !important; border-radius: 10px !important; font-weight: 600 !important; cursor: pointer !important; font-size: 17px !important; box-shadow: 0 4px 15px rgba(133, 100, 4, 0.2) !important; transition: all 0.3s ease !important; font-family: inherit !important; }
+        .ghr-submit:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 20px rgba(133, 100, 4, 0.3) !important; }
+        .ghr-submit:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
+        .ghr-submit:disabled { opacity: 0.7 !important; cursor: wait !important; }
+
+        /* =========== FOOTER =========== */
+        .ghr-footer { padding: 25px !important; background: #fcfcfc !important; border-top: 1px solid #eee !important; }
+        .ghr-legal-box { font-size: 11px !important; color: #555 !important; text-align: justify !important; line-height: 1.5 !important; border: 1px dashed #ccc !important; padding: 12px !important; border-radius: 8px !important; }
+        .ghr-legal-box p { margin: 0 !important; }
+
+        /* =========== BOUTONS NAV =========== */
+        .ghr-back-btn, .ghr-restart-btn { background: none !important; border: none !important; color: #856404 !important; text-decoration: underline !important; cursor: pointer !important; font-size: 14px !important; font-weight: 600 !important; transition: color 0.2s ease !important; font-family: inherit !important; padding: 0 !important; }
+        .ghr-back-btn { color: #666 !important; }
+        .ghr-back-btn:hover { color: #333 !important; }
+        .ghr-restart-btn:hover { color: #6d5203 !important; }
+
+        /* =========== ANIMATIONS =========== */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* =========== RESPONSIVE =========== */
+        @media screen and (max-width: 600px) {
+            .ghr-main { padding: 20px 15px !important; }
+            .ghr-btn { font-size: 14px !important; padding: 15px 20px !important; }
+            .ghr-calc-row { flex-direction: column !important; align-items: flex-start !important; }
             .ghr-step-title { font-size: 18px !important; }
+            #thyro-ghr-final-scope .ghr-report-box { height: 150px !important; }
         }
+
+        /* =========== MASQUER SCROLLBAR (Style App Native) =========== */
+        #thyro-ghr-final-scope { scrollbar-width: none !important; }
+        #thyro-ghr-final-scope ::-webkit-scrollbar { display: none !important; }
+        #thyro-ghr-final-scope { -ms-overflow-style: none !important; }
     </style>
 
-    <script>
+    <script type="text/javascript">
 (function() {
-        'use strict';
+    'use strict';
 
-        // --- 1. GESTION DES ERREURS ---
-        window.addEventListener('error', function(e) {
-            console.error('Erreur GHR:', e);
-            const screen = document.getElementById('ghr-content');
-            if(screen) {
-                screen.innerHTML = `<div class="ghr-reco-box danger">
-                    <strong>Une erreur s'est produite.</strong><br><br>
-                    Veuillez recharger la page.<br><br>
-                    <button class="ghr-submit" onclick="location.reload()">🔄 Recharger</button>
-                </div>`;
+    /* ========================================
+       ERREUR GLOBALE HANDLER
+       ======================================== */
+    window.addEventListener('error', function(e) {
+        console.error('Erreur GHR:', e);
+        const screen = document.getElementById('ghr-content');
+        if(screen) {
+            screen.innerHTML = '<div class="ghr-reco-box danger"><strong>Une erreur s\'est produite.</strong><br><br>Veuillez recharger la page.<br><br><button class="ghr-submit" onclick="location.reload()">🔄 Recharger</button></div>';
+        }
+    });
+
+    /* ========================================
+       CALCULATEURS (Utilitaires)
+       ======================================== */
+    window.updateDose = function(el) {
+        const val = parseFloat(el.value);
+        const res = el.parentElement.querySelector('.ghr-calc-result');
+        if(!isNaN(val) && val >= 0) {
+            res.innerText = Math.round(val * 1.3);
+        } else {
+            res.innerText = '---';
+        }
+    };
+
+    window.calcWeightDose = function(el) {
+        const weight = parseFloat(el.value);
+        const res = el.parentElement.querySelector('.ghr-weight-result');
+        if(!isNaN(weight) && weight > 0) {
+            const dose = Math.round(weight * 1.6);
+            res.innerText = dose;
+        } else {
+            res.innerText = '---';
+        }
+    };
+
+    function getCalcHTML() {
+        return '<div class="ghr-calc-container"><p style="margin:0; font-size:13px; color:#666;">Optionnel : Calcul d\'ajustement (+30%)</p><div class="ghr-calc-row"><input type="number" class="ghr-calc-input" placeholder="Dose" min="0" step="5" oninput="updateDose(this)" aria-label="Dose actuelle"><span>µg + 30 % ≈ </span><span class="ghr-calc-result" aria-live="polite">---</span> <span>µg</span></div></div>';
+    }
+
+    function getInitDoseHTML() {
+        return '<div class="ghr-calc-container" style="background-color: #ffebee !important; border-color: #ffcdd2 !important;"><p style="margin:0; font-size:13px; color:#d32f2f;"><strong>Aide à la prescription (Hypothyroïdie avérée)</strong></p><p style="margin:5px 0 8px 0; font-size:12px; color:#555;">Dose théorique de substitution complète (1,6 µg/kg/j) :</p><div class="ghr-calc-row"><input type="number" class="ghr-calc-input" placeholder="Poids kg" min="30" step="1" oninput="calcWeightDose(this)"><span>kg × 1,6 ≈ </span><span class="ghr-weight-result" style="font-weight:bold; color:#d32f2f;">---</span> <span>µg/jour</span></div><p style="font-size:11px; color:#666; margin-top:5px;">À adapter selon la réponse clinique et biologique.</p></div>';
+    }
+
+    /* ========================================
+       DONNÉES DÉCISIONNELLES
+       ======================================== */
+    const data = {
+        "start": {
+            q: "Quelle est la situation clinique ?",
+            options: [
+                { t: "Préconception (Désir de grossesse)", n: "precon_history" },
+                { t: "Grossesse en cours (Suivi / Dépistage)", n: "grossesse_history" },
+                { t: "Post-partum (Surveillance)", n: "postpartum" }
+            ]
+        },
+        "precon_history": {
+            q: "La patiente a-t-elle des antécédents de dysthyroïdie ?",
+            options: [
+                { t: "Oui, hypothyroïdie traitée", n: "precon_traitee" },
+                { t: "Hyperthyroïdie traitée", n: "hyper_traitee" },
+                { t: "Non / Pas de traitement connu", n: "risques" }
+            ]
+        },
+        "precon_traitee": {
+            q: "Objectif Préconceptionnel",
+            isFinal: true,
+            reco: "Objectif TSH cible : 0,5 – 2,5 mUI/L.\n\nRecommandations\n\n• Adapter le traitement pour obtenir une TSH entre 0,5 et 2,5 mUI/L ;\n• Augmenter la dose de lévothyroxine de 30 % dès le diagnostic de grossesse ;\n• Consulter immédiatement pour dosage TSH dès le retard de règles ;\n• Maintenir une supplémentation iodée systématique (200 µg/j).",
+            content: '<div class="ghr-reco-box success"><p><strong>TSH cible : 0,5 – 2,5 mUI/L</strong></p><p style="margin-top: 15px;"><strong>Consignes :</strong></p><ul class="ghr-list"><li>Adapter le traitement pour obtenir une TSH entre 0,5 et 2,5 mUI/L.</li><li>Augmenter la dose de lévothyroxine de 30 % dès le diagnostic de grossesse.</li><li>Consulter immédiatement pour dosage TSH dès le retard de règles.</li><li>Maintenir une supplémentation iodée systématique (200 µg/j via complément prénatal : Gestarelle G3, Oligobs, Gynefam, etc.).</li></ul></div>'
+        },
+        "grossesse_history": {
+            q: "La patiente a-t-elle des antécédents de dysthyroïdie ?",
+            options: [
+                { t: "Hypothyroïdie connue et traitée", n: "hypo_traitee_tri_select" },
+                { t: "Hyperthyroïdie connue et traitée", n: "hyper_traitee" },
+                { t: "Euthyroïdie / pas de dysthyroïdie connue", n: "tpo_check" }
+            ]
+        },
+        "tpo_check": {
+            q: "La patiente a-t-elle des anticorps anti-TPO connus POSITIFS ?",
+            content: '<p style="font-size:13px; color:#666; margin-bottom:15px;">Un statut TPO positif connu modifie la surveillance même en l\'absence de dysthyroïdie antérieure.</p>',
+            options: [
+                { t: "Oui, TPO connus Positifs", n: "tpo_known_input" },
+                { t: "Non / Inconnu", n: "grossesse_tri" }
+            ]
+        },
+        "tpo_known_input": { q: "Dosage TSH actuel (Patiente TPO+ connues)", isInput: true },
+        "hypo_traitee_tri_select": {
+            q: "Quel est le terme actuel de la grossesse ?",
+            options: [
+                { t: "1er Trimestre (jusqu'à 15 SA)", n: "hypo_traitee_t1" },
+                { t: "2ème Trimestre (16-28 SA)", n: "hypo_traitee_t2" },
+                { t: "3ème Trimestre (29 SA et +)", n: "hypo_traitee_t3" }
+            ]
+        },
+        "hypo_traitee_t1": {
+            q: "Objectifs - 1er Trimestre (≤ 15 SA)",
+            isFinal: true,
+            reco: "Objectif TSH T1 : 0,1 – 2,5 mUI/L\n\nConduite à tenir :\n• Si TSH non contrôlée récemment : faire dosage immédiat.\n• Augmenter la dose de Lévothyroxine de 20-30 % dès la confirmation de grossesse.\n• Maintenir supplémentation iodée (200 µg/j).",
+            content: '<div class="ghr-reco-box danger"><p><strong>🎯 Objectif TSH T1 : 0,1 – 2,5 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffcdd2; margin:10px 0;"><strong>Actions requises :</strong><ul class="ghr-list"><li>Augmenter la dose de Lévothyroxine de <strong>20 à 30 %</strong> immédiatement.</li><li>Contrôler la TSH toutes les 4 semaines.</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
+        },
+        "hypo_traitee_t2": {
+            q: "Objectifs - 2ème Trimestre (16-28 SA)",
+            isFinal: true,
+            reco: "Objectif TSH T2 : 0,2 – 3,0 mUI/L\n\nConduite à tenir :\n• Adapter la posologie pour rester dans la cible.\n• Contrôle TSH mensuel.\n• Maintenir supplémentation iodée (200 µg/j).",
+            content: '<div class="ghr-reco-box warning"><p><strong>🎯 Objectif TSH T2 : 0,2 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="ghr-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel (toutes les 4 semaines).</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
+        },
+        "hypo_traitee_t3": {
+            q: "Objectifs - 3ème Trimestre (≥ 29 SA)",
+            isFinal: true,
+            reco: "Objectif TSH T3 : 0,3 – 3,0 mUI/L\n\nConduite à tenir :\n• Adapter la posologie pour rester dans la cible.\n• Contrôle TSH mensuel jusqu'à l'accouchement.\n• Prévoir le retour à la dose pré-conceptionnelle après l'accouchement.",
+            content: '<div class="ghr-reco-box warning"><p><strong>🎯 Objectif TSH T3 : 0,3 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="ghr-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel jusqu\'à l\'accouchement.</li><li><strong>Anticipation Post-partum :</strong> Retour à la dose pré-conceptionnelle juste après l\'accouchement.</li></ul></div>'
+        },
+        "hyper_traitee": {
+            q: "Conclusion",
+            isFinal: true,
+            reco: "Suivi spécialisé par un(e) endocrinologue impératif.",
+            content: '<div class="ghr-reco-box danger"><strong>⚠️ Suivi spécialisé par un(e) endocrinologue impératif.</strong><br><br>La prise en charge de l\'hyperthyroïdie pendant la grossesse nécessite un suivi spécialisé étroit.</div>'
+        },
+        "postpartum": {
+            q: "Surveillance Post-partum",
+            isFinal: true,
+            reco: "Dosage TSH recommandé :\n• Entre 6 et 12 semaines post-partum ;\n• À 6 mois du post-partum.",
+            content: '<div class="ghr-info-blue"><strong>Groupes à haut risque de thyroïdite post-partum (TPP) :</strong><ul class="ghr-list"><li>Anticorps anti-TPO positifs</li><li>Diabète de type 1</li><li>Antécédent personnel de TPP</li><li>Basedow en rémission</li><li>Hépatite C</li></ul></div><div class="ghr-reco-box success"><p><strong>Calendrier TSH recommandé :</strong></p><ul class="ghr-list"><li>Entre 6 et 12 semaines post-accouchement</li><li>À 6 mois du post-partum</li></ul></div>'
+        },
+        "grossesse_tri": {
+            q: "À quel trimestre est la grossesse ?",
+            options: [
+                { t: "1er Trimestre (jusqu'à 15 SA)", n: "risques", tri: 1 },
+                { t: "2ème ou 3ème Trimestre (> 15 SA)", n: "risques", tri: 2 }
+            ]
+        },
+        "risques": {
+            q: "La patiente présente-t-elle un ou plusieurs facteurs de risque ?",
+            content: '<div class="ghr-info-blue"><strong>Facteurs de risque à dépister :</strong><ul class="ghr-list"><li>Âge > 35 ans, IMC ≥ 40 kg/m²</li><li>Antécédent personnel de dysthyroïdie</li><li>Antécédent familial de dysthyroïdie</li><li>Antécédents obstétricaux : accouchement prématuré, fausses couches, infertilité</li><li>Goitre</li><li>Anticorps antithyroïdiens positifs (essentiellement les anti-TPO)</li><li>Symptômes évoquant une hypothyroïdie</li><li>Diabète de type 1 ou autre pathologie auto-immune</li><li>Exposition à des radiations (radiothérapie cervicale)</li><li>Traitement actuel ou antérieur : antithyroïdiens, amiodarone, lithium</li><li>Chirurgie thyroïdienne antérieure (thyroïdectomie partielle ou totale)</li><li>Zone géographique de carence en iode</li></ul></div>',
+            options: [
+                { t: "Oui, au moins un facteur", n: "input_tsh" },
+                { t: "Non, aucun facteur", n: "no_dep" }
+            ]
+        },
+        "no_dep": {
+            q: "Conclusion",
+            isFinal: true,
+            reco: "Dépistage non recommandé.\n\n• Pas d'indication à doser la TSH en l'absence de risque ;\n• Assurer la supplémentation iodée systématique (200 µg/j via complément prénatal).",
+            content: '<div class="ghr-reco-box success"><strong>Dépistage non recommandé</strong> (pas d\'indication à doser la TSH).<br><br><strong>Note :</strong> Assurer la supplémentation iodée systématique (200 µg/j via complément prénatal : Gestarelle G3, Oligobs Grossesse, Gynefam, etc.) dès le désir de grossesse.</div>'
+        },
+        "input_tsh": { q: "Dosage de la TSH.", isInput: true }
+    };
+
+    /* ========================================
+       ÉTAT APP
+       ======================================== */
+    let history = [];
+    let currentStepKey = "start";
+    let tri = 1;
+    let qaLog = [];
+
+    /* ========================================
+       GÉNÉRATEUR RAPPORT
+       ======================================== */
+    function getReportText() {
+        const date = new Date().toLocaleDateString('fr-FR');
+        const time = new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
+        let text = '═══════════════════════════════════════════════\nBILAN CLINIQUE | Dépistage Dysthyroïdie\nGénéré le ' + date + ' à ' + time + '\n═══════════════════════════════════════════════\n\nDONNÉES RECUEILLIES\n───────────────────────────────────────────────\n';
+        qaLog.forEach((h) => { text += '▸ ' + h.q + '\n  → ' + h.ans + '\n\n'; });
+        if(data[currentStepKey] && data[currentStepKey].reco) {
+            text += 'CONCLUSION & RECOMMANDATIONS\n───────────────────────────────────────────────\n' + data[currentStepKey].reco + '\n\n';
+            const reco = data[currentStepKey].reco;
+            if(reco.includes("Lévothyroxine") || reco.includes("traitement")) {
+                text += '\nCONSEILS PRATIQUES\n───────────────────────────────────────────────\n• Interaction Fer/Calcium : Espacer la prise de 4h min.\n  (Ces minéraux bloquent l\'absorption du Lévothyrox)\n';
             }
+        }
+        text += '═══════════════════════════════════════════════\nRéférences : ATA 2017, Consensus SFE/HAS\nOutil : Dr KARA-ZAITRI M.A\nATTENTION : Aide à la décision - Ne remplace pas le jugement clinique\n═══════════════════════════════════════════════';
+        return text;
+    }
+
+    /* ========================================
+       RENDU (ENGINE)
+       ======================================== */
+    function render(key) {
+        currentStepKey = key;
+        const step = data[key];
+        const screen = document.getElementById('ghr-content');
+        const bread = document.getElementById('ghr-breadcrumb');
+        const backBtn = document.getElementById('ghr-back');
+
+        if (!screen || !bread || !step) return;
+
+        backBtn.style.display = history.length > 0 ? "block" : "none";
+        bread.innerText = qaLog.map(h => h.ans).join(" › ") || "Début";
+
+        let html = '<div class="ghr-step-title">' + step.q + '</div>';
+        if(step.content) html += step.content;
+
+        if(step.options) {
+            step.options.forEach((o, idx) => {
+                const escapedText = o.t.replace(/'/g, "\\'");
+                html += '<button class="ghr-btn" data-next="' + o.n + '" data-ans="' + escapedText + '" data-tri="' + (o.tri || 0) + '" tabindex="' + (idx + 1) + '" aria-label="' + o.t + '">' + o.t + '</button>';
+            });
+        } else if(step.isInput) {
+            const threshold = tri === 1 ? 2.5 : 3.0;
+            html += '<div style="font-size:12px; color:#e65100; background:#fff3e0; padding:10px; border-radius:6px; margin-bottom:15px; border-left:3px solid #ff9800;"><strong>⚠️ Attention à la Biotine (Vit B8) :</strong><br>Les compléments "Cheveux/Ongles" faussent le dosage (fausse baisse TSH). Arrêt impératif 48h avant le prélèvement.</div>';
+            html += '<p style="margin-bottom:10px; background: #fff8e1; padding: 12px; border-radius: 6px; border-left: 4px solid #856404;"><strong>Seuil d\'alerte (Consensus) :</strong> ' + threshold + ' mUI/L<br><small>Norme ATA : ~4,0 mUI/L. Utiliser les normes labo trimestre-spécifiques en priorité si disponibles.</small></p><input type="number" id="val-tsh" class="ghr-input" placeholder="Valeur TSH (mUI/L)" min="0" step="0.01" aria-label="Entrez la valeur de TSH" autofocus><button class="ghr-submit" id="btn-analyze">📊 Analyser la TSH</button>';
+        }
+
+        if(step.isFinal) {
+            const reportTxt = getReportText();
+            html += '<div style="margin-top:25px;"><label style="font-size:12px; font-weight:600; color:#555; margin-bottom:5px; display:block;">Aperçu du rapport (Consultation) :</label><textarea class="ghr-report-box" readonly onclick="this.select()">' + reportTxt + '</textarea></div>';
+            html += '<button class="ghr-copy-btn" id="btn-copy">📋 Copier le rapport clinique</button>';
+        }
+
+        screen.innerHTML = html;
+        attachEventListeners();
+    }
+
+    /* ========================================
+       EVENT LISTENERS (Blindage Elementor)
+       ======================================== */
+    function attachEventListeners() {
+        // Boutons options
+        document.querySelectorAll('#thyro-ghr-final-scope .ghr-btn[data-next]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const next = this.getAttribute('data-next');
+                const ans = this.getAttribute('data-ans');
+                const t = parseInt(this.getAttribute('data-tri')) || 0;
+                if(next) window.nextStep(next, ans, t);
+            });
         });
 
-        // --- 2. FONCTIONS UTILITAIRES (Calculateurs) ---
-        
-        // A. Ajustement (+30%) pour patiente déjà traitée
-        window.updateDose = function(el) {
-            const val = parseFloat(el.value);
-            const res = el.parentElement.querySelector('.ghr-calc-result');
-            if(!isNaN(val) && val >= 0) {
-                res.innerText = Math.round(val * 1.3);
+        // Bouton analyse TSH
+        const analyzeBtn = document.getElementById('btn-analyze');
+        if(analyzeBtn) analyzeBtn.addEventListener('click', function(e) { e.preventDefault(); window.handleTsh(); });
+
+        // Bouton copier
+        const copyBtn = document.getElementById('btn-copy');
+        if(copyBtn) copyBtn.addEventListener('click', function(e) { e.preventDefault(); window.copyFinal(); });
+
+        // Bouton retour
+        const backBtn = document.getElementById('ghr-back');
+        if(backBtn) backBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if(history.length > 0) { const prev = history.pop(); tri = prev.tri; qaLog = prev.qaLog.slice(); render(prev.key); }
+        });
+
+        // Bouton redémarrer
+        const restartBtn = document.getElementById('ghr-restart');
+        if(restartBtn) restartBtn.addEventListener('click', function(e) { e.preventDefault(); history = []; qaLog = []; tri = 1; render("start"); });
+    }
+
+    /* ========================================
+       NAVIGATION
+       ======================================== */
+    window.nextStep = function(next, ans, t) {
+        history.push({key: currentStepKey, tri: tri, qaLog: qaLog.slice()});
+        qaLog.push({q: data[currentStepKey].q, ans: ans});
+        if(t > 0) tri = t;
+        render(next);
+    };
+
+    window.handleTsh = function() {
+        const input = document.getElementById('val-tsh');
+        const btn = document.getElementById('btn-analyze');
+        const v = parseFloat(input.value);
+
+        if(isNaN(v) || v <= 0) {
+            input.classList.add('error');
+            setTimeout(() => input.classList.remove('error'), 300);
+            alert("⚠️ Veuillez saisir une valeur TSH positive valide.");
+            input.focus();
+            return;
+        }
+
+        if(v > 100) {
+            if(!confirm("⚠️ Valeur inhabituelle (> 100 mUI/L).\n\nVoulez-vous confirmer cette valeur ?")) { input.focus(); return; }
+        }
+
+        btn.disabled = true;
+        btn.innerText = "⏳ Analyse en cours...";
+
+        setTimeout(() => {
+            const threshold = tri === 1 ? 2.5 : 3.0;
+            let isKnownTpoPos = (currentStepKey === 'tpo_known_input');
+            history.push({key: currentStepKey, tri: tri, qaLog: qaLog.slice()});
+            qaLog.push({q: "Dosage TSH", ans: v + " mUI/L"});
+
+            if(isKnownTpoPos) {
+                window.finalAta(v, true, true);
             } else {
-                res.innerText = "---";
-            }
-        };
-
-        function getCalcHTML() {
-            return `<div class="ghr-calc-container">
-                <p style="margin:0; font-size:13px; color:#666;">Optionnel : Calcul d'ajustement (+30%)</p>
-                <div class="ghr-calc-row">
-                    <input type="number" class="ghr-calc-input" placeholder="Dose" min="0" step="5" oninput="updateDose(this)" aria-label="Dose actuelle">
-                    <span>µg + 30 % ≈ </span>
-                    <span class="ghr-calc-result" aria-live="polite">---</span> 
-                    <span>µg</span>
-                </div>
-            </div>`;
-        }
-
-        // B. Calculateur de dose d'initiation (selon poids)
-        window.calcWeightDose = function(el) {
-            const weight = parseFloat(el.value);
-            const res = el.parentElement.querySelector('.ghr-weight-result');
-            if(!isNaN(weight) && weight > 0) {
-                const dose = Math.round(weight * 1.6);
-                res.innerText = dose;
-            } else {
-                res.innerText = "---";
-            }
-        };
-
-        function getInitDoseHTML() {
-            return `<div class="ghr-calc-container" style="background-color: #ffebee; border-color: #ffcdd2;">
-                <p style="margin:0; font-size:13px; color:#d32f2f;"><strong>Aide à la prescription (Hypothyroïdie avérée)</strong></p>
-                <p style="margin:5px 0 8px 0; font-size:12px; color:#555;">Dose théorique de substitution complète (1,6 µg/kg/j) :</p>
-                <div class="ghr-calc-row">
-                    <input type="number" class="ghr-calc-input" placeholder="Poids kg" min="30" step="1" oninput="calcWeightDose(this)">
-                    <span>kg × 1,6 ≈ </span>
-                    <span class="ghr-weight-result" style="font-weight:bold; color:#d32f2f;">---</span> 
-                    <span>µg/jour</span>
-                </div>
-                <p style="font-size:11px; color:#666; margin-top:5px;">À adapter selon la réponse clinique et biologique.</p>
-            </div>`;
-        }
-
-        // --- 3. DONNÉES DE L'ARBRE DÉCISIONNEL ---
-        const data = {
-            "start": {
-                q: "Quelle est la situation clinique ?",
-                options: [
-                    { t: "Préconception (Désir de grossesse)", n: "precon_history" },
-                    { t: "Grossesse en cours (Suivi / Dépistage)", n: "grossesse_history" },
-                    { t: "Post-partum (Surveillance)", n: "postpartum" }
-                ]
-            },
-            
-            "precon_history": {
-                q: "La patiente a-t-elle des antécédents de dysthyroïdie ?",
-                options: [
-                    { t: "Oui, hypothyroïdie traitée", n: "precon_traitee" },
-                    { t: "Hyperthyroïdie traitée", n: "hyper_traitee" },
-                    { t: "Non / Pas de traitement connu", n: "risques" }
-                ]
-            },
-            "precon_traitee": {
-                q: "Objectif Préconceptionnel",
-                isFinal: true,
-                reco: "Objectif TSH cible : 0,5 – 2,5 mUI/L.\n\nRecommandations\n\n• Adapter le traitement pour obtenir une TSH entre 0,5 et 2,5 mUI/L ;\n• Augmenter la dose de lévothyroxine de 30 % dès le diagnostic de grossesse ;\n• Consulter immédiatement pour dosage TSH dès le retard de règles ;\n• Maintenir une supplémentation iodée systématique (200 µg/j).",
-                content: `<div class="ghr-reco-box success"><p><strong>TSH cible : 0,5 – 2,5 mUI/L</strong></p><p style="margin-top: 15px;"><strong>Consignes :</strong></p><ul class="ghr-list"><li>Adapter le traitement pour obtenir une TSH entre 0,5 et 2,5 mUI/L.</li><li>Augmenter la dose de lévothyroxine de 30 % dès le diagnostic de grossesse.</li><li>Consulter immédiatement pour dosage TSH dès le retard de règles.</li><li>Maintenir une supplémentation iodée systématique (200 µg/j via complément prénatal : Gestarelle G3, Oligobs, Gynefam, etc.).</li></ul></div>${getCalcHTML()}`
-            },
-
-            "grossesse_history": {
-                q: "La patiente a-t-elle des antécédents de dysthyroïdie ?",
-                options: [
-                    { t: "Hypothyroïdie connue et traitée", n: "hypo_traitee_tri_select" },
-                    { t: "Hyperthyroïdie connue et traitée", n: "hyper_traitee" },
-                    { t: "Euthyroïdie / pas de dysthyroïdie connue", n: "tpo_check" }
-                ]
-            },
-
-            "tpo_check": {
-                q: "La patiente a-t-elle des anticorps anti-TPO connus POSITIFS ?",
-                content: `<p style="font-size:13px; color:#666; margin-bottom:15px;">Un statut TPO positif connu modifie la surveillance même en l'absence de dysthyroïdie antérieure.</p>`,
-                options: [
-                    { t: "Oui, TPO connus Positifs", n: "tpo_known_input" },
-                    { t: "Non / Inconnu", n: "grossesse_tri" }
-                ]
-            },
-
-            "tpo_known_input": {
-                q: "Dosage TSH actuel (Patiente TPO+ connues)",
-                isInput: true
-            },
-
-            "hypo_traitee_tri_select": {
-                q: "Quel est le terme actuel de la grossesse ?",
-                options: [
-                    { t: "1er Trimestre (jusqu'à 15 SA)", n: "hypo_traitee_t1" },
-                    { t: "2ème Trimestre (16-28 SA)", n: "hypo_traitee_t2" },
-                    { t: "3ème Trimestre (29 SA et +)", n: "hypo_traitee_t3" }
-                ]
-            },
-            "hypo_traitee_t1": {
-                q: "Objectifs - 1er Trimestre (≤ 15 SA)",
-                isFinal: true,
-                reco: "Objectif TSH T1 : 0,1 – 2,5 mUI/L\n\nConduite à tenir :\n• Si TSH non contrôlée récemment : faire dosage immédiat.\n• Augmenter la dose de Lévothyroxine de 20-30 % dès la confirmation de grossesse.\n• Maintenir supplémentation iodée (200 µg/j).",
-                content: `<div class="ghr-reco-box danger">
-                    <p><strong>🎯 Objectif TSH T1 : 0,1 – 2,5 mUI/L</strong></p>
-                    <hr style="border:0; border-top:1px solid #ffcdd2; margin:10px 0;">
-                    <strong>Actions requises :</strong>
-                    <ul class="ghr-list">
-                        <li>Augmenter la dose de Lévothyroxine de <strong>20 à 30 %</strong> immédiatement.</li>
-                        <li>Contrôler la TSH toutes les 4 semaines.</li>
-                        <li>Supplémentation iodée : 200 µg/j.</li>
-                    </ul>
-                </div>${getCalcHTML()}`
-            },
-            "hypo_traitee_t2": {
-                q: "Objectifs - 2ème Trimestre (16-28 SA)",
-                isFinal: true,
-                reco: "Objectif TSH T2 : 0,2 – 3,0 mUI/L\n\nConduite à tenir :\n• Adapter la posologie pour rester dans la cible.\n• Contrôle TSH mensuel.\n• Maintenir supplémentation iodée (200 µg/j).",
-                content: `<div class="ghr-reco-box warning">
-                    <p><strong>🎯 Objectif TSH T2 : 0,2 – 3,0 mUI/L</strong></p>
-                    <hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;">
-                    <strong>Suivi :</strong>
-                    <ul class="ghr-list">
-                        <li>Ajuster le traitement si TSH hors cible.</li>
-                        <li>Contrôle TSH mensuel (toutes les 4 semaines).</li>
-                        <li>Supplémentation iodée : 200 µg/j.</li>
-                    </ul>
-                </div>`
-            },
-            "hypo_traitee_t3": {
-                q: "Objectifs - 3ème Trimestre (≥ 29 SA)",
-                isFinal: true,
-                reco: "Objectif TSH T3 : 0,3 – 3,0 mUI/L\n\nConduite à tenir :\n• Adapter la posologie pour rester dans la cible.\n• Contrôle TSH mensuel jusqu'à l'accouchement.\n• Prévoir le retour à la dose pré-conceptionnelle après l'accouchement.",
-                content: `<div class="ghr-reco-box warning">
-                    <p><strong>🎯 Objectif TSH T3 : 0,3 – 3,0 mUI/L</strong></p>
-                    <hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;">
-                    <strong>Suivi :</strong>
-                    <ul class="ghr-list">
-                        <li>Ajuster le traitement si TSH hors cible.</li>
-                        <li>Contrôle TSH mensuel jusqu'à l'accouchement.</li>
-                        <li><strong>Anticipation Post-partum :</strong> Retour à la dose pré-conceptionnelle juste après l'accouchement.</li>
-                    </ul>
-                </div>`
-            },
-
-            "hyper_traitee": {
-                q: "Conclusion",
-                isFinal: true,
-                reco: "Suivi spécialisé par un(e) endocrinologue impératif.",
-                content: `<div class="ghr-reco-box danger"><strong>⚠️ Suivi spécialisé par un(e) endocrinologue impératif.</strong><br><br>La prise en charge de l'hyperthyroïdie pendant la grossesse nécessite un suivi spécialisé étroit.</div>`
-            },
-            "postpartum": {
-                q: "Surveillance Post-partum",
-                isFinal: true,
-                reco: "Dosage TSH recommandé :\n• Entre 6 et 12 semaines post-partum ;\n• À 6 mois du post-partum.",
-                content: `<div class="ghr-info-blue"><strong>Groupes à haut risque de thyroïdite post-partum (TPP) :</strong><ul class="ghr-list"><li>Anticorps anti-TPO positifs</li><li>Diabète de type 1</li><li>Antécédent personnel de TPP</li><li>Basedow en rémission</li><li>Hépatite C</li></ul></div><div class="ghr-reco-box success"><p><strong>Calendrier TSH recommandé :</strong></p><ul class="ghr-list"><li>Entre 6 et 12 semaines post-accouchement</li><li>À 6 mois du post-partum</li></ul></div>`
-            },
-
-            "grossesse_tri": {
-                q: "À quel trimestre est la grossesse ?",
-                options: [
-                    { t: "1er Trimestre (jusqu'à 15 SA)", n: "risques", tri: 1 },
-                    { t: "2ème ou 3ème Trimestre (> 15 SA)", n: "risques", tri: 2 }
-                ]
-            },
-            "risques": {
-                q: "La patiente présente-t-elle un ou plusieurs facteurs de risque ?",
-                content: `<div class="ghr-info-blue"><strong>Facteurs de risque à dépister :</strong><ul class="ghr-list"><li>Âge > 35 ans, IMC ≥ 40 kg/m²</li><li>Antécédent personnel de dysthyroïdie</li><li>Antécédent familial de dysthyroïdie</li><li>Antécédents obstétricaux : accouchement prématuré, fausses couches, infertilité</li><li>Goitre</li><li>Anticorps antithyroïdiens positifs (essentiellement les anti-TPO)</li><li>Symptômes évoquant une hypothyroïdie</li><li>Diabète de type 1 ou autre pathologie auto-immune</li><li>Exposition à des radiations (radiothérapie cervicale)</li><li>Traitement actuel ou antérieur : antithyroïdiens, amiodarone, lithium</li><li>Chirurgie thyroïdienne antérieure (thyroïdectomie partielle ou totale)</li><li>Zone géographique de carence en iode</li></ul></div>`,
-                options: [ 
-                    { t: "Oui, au moins un facteur", n: "input_tsh" }, 
-                    { t: "Non, aucun facteur", n: "no_dep" } 
-                ]
-            },
-            "no_dep": {
-                q: "Conclusion",
-                isFinal: true,
-                reco: "Dépistage non recommandé.\n\n• Pas d'indication à doser la TSH en l'absence de risque ;\n• Assurer la supplémentation iodée systématique (200 µg/j via complément prénatal).",
-                content: `<div class="ghr-reco-box success"><strong>Dépistage non recommandé</strong> (pas d'indication à doser la TSH).<br><br><strong>Note :</strong> Assurer la supplémentation iodée systématique (200 µg/j via complément prénatal : Gestarelle G3, Oligobs Grossesse, Gynefam, etc.) dès le désir de grossesse.</div>`
-            },
-            "input_tsh": { 
-                q: "Dosage de la TSH.", 
-                isInput: true 
-            }
-        };
-
-        // --- 4. ETAT DE L'APPLICATION ---
-        let history = []; 
-        let currentStepKey = "start";
-        let tri = 1;
-        let qaLog = [];
-
-        // --- 5. MOTEUR DU RAPPORT CLINIQUE ---
-        function getReportText() {
-            const date = new Date().toLocaleDateString('fr-FR');
-            const time = new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
-            
-            let text = `═══════════════════════════════════════════════\nBILAN CLINIQUE | Dépistage Dysthyroïdie\nGénéré le ${date} à ${time}\n═══════════════════════════════════════════════\n\nDONNÉES RECUEILLIES\n───────────────────────────────────────────────\n`;
-            
-            qaLog.forEach((h) => { 
-                text += `▸ ${h.q}\n  → ${h.ans}\n\n`; 
-            });
-            
-            if(data[currentStepKey] && data[currentStepKey].reco) {
-                text += `CONCLUSION & RECOMMANDATIONS\n───────────────────────────────────────────────\n${data[currentStepKey].reco}\n\n`;
-                const reco = data[currentStepKey].reco;
-                if(reco.includes("Lévothyroxine") || reco.includes("traitement")) {
-                    text += `\nCONSEILS PRATIQUES\n───────────────────────────────────────────────\n• Interaction Fer/Calcium : Espacer la prise de 4h min.\n  (Ces minéraux bloquent l'absorption du Lévothyrox)\n`;
-                }
-            }
-            
-            text += `═══════════════════════════════════════════════\nRéférences : ATA 2017, Consensus SFE/HAS\nOutil : Dr KARA-ZAITRI M.A\nATTENTION : Aide à la décision - Ne remplace pas le jugement clinique\n═══════════════════════════════════════════════`;
-            return text;
-        }
-
-        // --- 6. MOTEUR DE RENDU (AFFICHAGE) ---
-        function render(key) {
-            currentStepKey = key;
-            const step = data[key];
-            const screen = document.getElementById('ghr-content');
-            const bread = document.getElementById('ghr-breadcrumb');
-            const backBtn = document.getElementById('ghr-back');
-
-            if (!screen || !bread || !step) return;
-
-            backBtn.style.display = history.length > 0 ? "block" : "none";
-            bread.innerText = qaLog.map(h => h.ans).join(" › ") || "Début";
-
-            let html = `<div class="ghr-step-title">${step.q}</div>`;
-            if(step.content) html += step.content;
-
-            if(step.options) {
-                step.options.forEach((o, idx) => {
-                    const escapedText = o.t.replace(/'/g, "\\'");
-                    html += `<button class="ghr-btn" 
-                             onclick="nextStep('${o.n}', '${escapedText}', ${o.tri || 0})"
-                             tabindex="${idx + 1}"
-                             aria-label="${o.t}"
-                             >${o.t}</button>`;
-                });
-            } else if(step.isInput) {
-                const threshold = tri === 1 ? 2.5 : 3.0;
-                
-                html += `<div style="font-size:12px; color:#e65100; background:#fff3e0; padding:10px; border-radius:6px; margin-bottom:15px; border-left:3px solid #ff9800;">
-                    <strong>⚠️ Attention à la Biotine (Vit B8) :</strong><br>
-                    Les compléments "Cheveux/Ongles" faussent le dosage (fausse baisse TSH). Arrêt impératif 48h avant le prélèvement.
-                </div>`;
-
-                html += `<p style="margin-bottom:10px; background: #fff8e1; padding: 12px; border-radius: 6px; border-left: 4px solid #856404;">
-                    <strong>Seuil d'alerte (Consensus) :</strong> ${threshold} mUI/L<br>
-                    <small>Norme ATA : ~4,0 mUI/L. Utiliser les normes labo trimestre-spécifiques en priorité si disponibles.</small>
-                </p>
-                <input type="number" 
-                       id="val-tsh" 
-                       class="ghr-input" 
-                       placeholder="Valeur TSH (mUI/L)" 
-                       min="0" 
-                       step="0.01"
-                       aria-label="Entrez la valeur de TSH"
-                       autofocus>
-                <button class="ghr-submit" onclick="handleTsh()" id="btn-analyze">📊 Analyser la TSH</button>`;
-            }
-
-            if(step.isFinal) {
-                const reportTxt = getReportText();
-                html += `<div style="margin-top:25px;">
-                            <label style="font-size:12px; font-weight:600; color:#555; margin-bottom:5px; display:block;">Aperçu du rapport (Consultation) :</label>
-                            <textarea class="ghr-report-box" readonly onclick="this.select()">${reportTxt}</textarea>
-                         </div>`;
-                html += `<button class="ghr-copy-btn" onclick="copyFinal()">📋 Copier le rapport clinique</button>`;
-            }
-            
-            screen.innerHTML = html;
-        }
-
-        // --- 7. NAVIGATION ET LOGIQUE ---
-        window.nextStep = function(next, ans, t) {
-            history.push({key: currentStepKey, tri: tri, qaLog: [...qaLog]});
-            qaLog.push({q: data[currentStepKey].q, ans: ans});
-            if(t > 0) tri = t;
-            render(next);
-        };
-
-        window.handleTsh = function() {
-            const input = document.getElementById('val-tsh');
-            const btn = document.getElementById('btn-analyze');
-            const v = parseFloat(input.value);
-            
-            if(isNaN(v) || v <= 0) {
-                input.classList.add('error');
-                setTimeout(() => input.classList.remove('error'), 300);
-                alert("⚠️ Veuillez saisir une valeur TSH positive valide.");
-                input.focus();
-                return;
-            }
-            
-            if(v > 100) {
-                if(!confirm("⚠️ Valeur inhabituelle (> 100 mUI/L).\n\nVoulez-vous confirmer cette valeur ?")) {
-                    input.focus();
-                    return;
-                }
-            }
-            
-            btn.classList.add('loading');
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                const threshold = tri === 1 ? 2.5 : 3.0;
-                let isKnownTpoPos = (currentStepKey === 'tpo_known_input');
-
-                history.push({key: currentStepKey, tri: tri, qaLog: [...qaLog]});
-                qaLog.push({q: "Dosage TSH", ans: v + " mUI/L"});
-
-                if(isKnownTpoPos) {
-                     finalAta(v, true, true);
+                if(v <= threshold) {
+                    renderFinal("Conclusion", "TSH Normale (TSH = " + v + " mUI/L)\n\nRecommandations\n\n• Fonction thyroïdienne normale ;\n• Pas de surveillance ni de traitement spécifique ;\n• Maintenir la supplémentation iodée systématique (200 µg/j via complément prénatal).");
                 } else {
-                    if(v <= threshold) {
-                        // Incorpore les données dans la conclusion normale aussi
-                        renderFinal("Conclusion", `TSH Normale (TSH = ${v} mUI/L)\n\nRecommandations\n\n• Fonction thyroïdienne normale ;\n• Pas de surveillance ni de traitement spécifique ;\n• Maintenir la supplémentation iodée systématique (200 µg/j via complément prénatal).`);
-                    } else {
-                        const screen = document.getElementById('ghr-content');
-                        screen.innerHTML = `<div class="ghr-step-title">Statut Anticorps anti-TPO ?</div>
-                            <p style="margin-bottom: 15px; color: #666;">La TSH est élevée (${v} mUI/L). Le statut des anticorps anti-TPO orientera la prise en charge.</p>
-                            <button class="ghr-btn" onclick="finalAta(${v}, true, false)">Anticorps anti-TPO Positifs</button>
-                            <button class="ghr-btn" onclick="finalAta(${v}, false, false)">Anticorps anti-TPO Négatifs ou Inconnus</button>`;
+                    const screen = document.getElementById('ghr-content');
+                    if(screen) {
+                        screen.innerHTML = '<div class="ghr-step-title">Statut Anticorps anti-TPO ?</div><p style="margin-bottom: 15px; color: #666;">La TSH est élevée (' + v + ' mUI/L). Le statut des anticorps anti-TPO orientera la prise en charge.</p><button class="ghr-btn" data-tpo="pos">Anticorps anti-TPO Positifs</button><button class="ghr-btn" data-tpo="neg">Anticorps anti-TPO Négatifs ou Inconnus</button>';
+
+                        const tpoPosBtn = screen.querySelector('[data-tpo="pos"]');
+                        const tpoNegBtn = screen.querySelector('[data-tpo="neg"]');
+
+                        if(tpoPosBtn) tpoPosBtn.addEventListener('click', function(e) { e.preventDefault(); window.finalAta(v, true, false); });
+                        if(tpoNegBtn) tpoNegBtn.addEventListener('click', function(e) { e.preventDefault(); window.finalAta(v, false, false); });
                     }
                 }
-                btn.classList.remove('loading');
-                btn.disabled = false;
-            }, 300);
-        };
-
-        window.finalAta = function(tsh, isPos, isKnownPrior) {
-            if(!isKnownPrior) {
-                history.push({key: "tpo_ask", tri: tri, qaLog: [...qaLog]});
-                qaLog.push({q: "Anticorps anti-TPO", ans: isPos ? "Positifs" : "Négatifs/Inconnus"});
-            }
-            
-            let result = "";
-            let dosageInfo = "";
-            let showSuivi = true;
-            let showInitCalc = false;
-
-            const targetVal = (tri === 1) ? "2,5" : "3,0";
-            const targetText = `Objectif TSH : valeur basse de la norme à ${targetVal} mUI/L.`;
-            const tpoText = isPos ? "positifs" : "négatifs/inconnus";
-            
-            // Construction de la chaîne descriptive dynamique
-            const details = `(TSH = ${tsh} mUI/L ; ATPO ${tpoText})`;
-
-            if (tsh > 10.0) {
-                result = `Hypothyroïdie AVÉRÉE ${details} - Traitement IMPÉRATIF`;
-                dosageInfo = "Lévothyroxine 50-100 µg/j (dose d'attaque selon poids : 1,6 µg/kg/j).";
-                showInitCalc = true;
-            } 
-            else if (tsh > 4.0) {
-                result = `Hypothyroïdie fruste confirmée ${details} - Traitement recommandé`;
-                dosageInfo = "Lévothyroxine 25 à 50 µg/j (adapter selon poids et âge).";
-            } 
-            else if (tsh > parseFloat(targetVal)) {
-                if (isPos) {
-                    result = `Hypothyroïdie infraclinique avec TPO+ ${details} - Traitement à discuter`;
-                    dosageInfo = "Envisager Lévothyroxine 25-50 µg/j (bénéfice probable avec TPO+).";
-                } else {
-                    result = `Euthyroïdie probable ${details} (TSH < 4 et TPO-)`;
-                    dosageInfo = "Ne pas traiter systématiquement. Maintenir supplémentation iodée. Surveillance.";
-                    showSuivi = false;
-                }
-            } 
-            else if (isKnownPrior && isPos) {
-                result = `Euthyroïdie avec TPO+ connus ${details} - Surveillance requise`;
-                dosageInfo = "Pas de traitement immédiat (TSH normale). Surveillance rapprochée impérative.";
-                showSuivi = true;
-            }
-            else {
-                result = `Euthyroïdie ${details}`;
-                dosageInfo = "Pas de traitement.";
-                showSuivi = false;
             }
 
-            let reco = `${result}\n\nRecommandations\n\n• ${dosageInfo}\n• ${targetText}\n• Supplémentation iodée : 200 µg/j.`;
-            
-            if (showSuivi) {
-                let followUp = (tri === 1) 
-                    ? "• TSH toutes les 4-6 semaines jusqu'à 22 SA ;\n• TSH une fois par mois de 22 SA jusqu'à 34 SA ;\n• TSH en post-partum." 
-                    : "• TSH une fois par mois jusqu'à 34 SA ;\n• TSH en post-partum.";
-                reco += `\n\nSuivi :\n${followUp}`;
-            } else if (!reco.includes("Euthyroïdie")) {
-                 reco += `\n• Surveillance TSH mensuelle recommandée.`;
-            }
-            
-            renderFinal("Conclusion", reco, showInitCalc);
-        };
+            btn.disabled = false;
+            btn.innerText = "📊 Analyser la TSH";
+        }, 300);
+    };
 
-        function renderFinal(title, reco, showInitCalc) {
-            let boxClass = "success";
-            if (reco.includes("AVÉRÉE") || reco.includes("IMPÉRATIF")) { boxClass = "danger"; } 
-            else if (reco.includes("fruste confirmée")) { boxClass = "danger"; } 
-            else if (reco.includes("infraclinique") || reco.includes("Surveillance requise")) { boxClass = "warning"; }
-            
-            let finalHTML = `<div class="ghr-reco-box ${boxClass}">${reco.replace(/\n/g, '<br>')}</div>`;
-            
-            if(reco.includes("Lévothyroxine") || reco.includes("traitement") || reco.includes("adapter")) {
-                 finalHTML += `<div style="margin-top:15px; font-size:13px; background:#e3f2fd; color:#0277bd; padding:10px; border-radius:6px; border-left:4px solid #0288d1;">
-                    <strong>💊 Conseil Prise :</strong> Le Fer et le Calcium bloquent l'absorption du Lévothyrox.<br>
-                    → Espacer les prises d'au moins <strong>4 heures</strong> (ex: Lévothyrox le matin à jeun, Fer le midi).
-                </div>`;
-            }
-            
-            if(showInitCalc) {
-                finalHTML += getInitDoseHTML();
-            }
-
-            data["final_node"] = {
-                q: title, 
-                reco: reco, 
-                content: finalHTML, 
-                isFinal: true
-            };
-            render("final_node");
+    window.finalAta = function(tsh, isPos, isKnownPrior) {
+        if(!isKnownPrior) {
+            history.push({key: "tpo_ask", tri: tri, qaLog: qaLog.slice()});
+            qaLog.push({q: "Anticorps anti-TPO", ans: isPos ? "Positifs" : "Négatifs/Inconnus"});
         }
 
-        window.copyFinal = function() {
-            const text = getReportText();
-            navigator.clipboard.writeText(text).then(
-                () => { alert("✅ Rapport copié dans le presse-papiers !"); },
-                () => { alert("⚠️ Erreur : impossible de copier."); }
-            );
-        };
+        let result = "", dosageInfo = "", showSuivi = true, showInitCalc = false;
+        const targetVal = (tri === 1) ? "2,5" : "3,0";
+        const targetText = "Objectif TSH : valeur basse de la norme à " + targetVal + " mUI/L.";
+        const tpoText = isPos ? "positifs" : "négatifs/inconnus";
+        const details = "(TSH = " + tsh + " mUI/L ; ATPO " + tpoText + ")";
 
-        document.getElementById('ghr-back').onclick = function() {
-            if(history.length > 0) { 
-                const prev = history.pop(); 
-                tri = prev.tri; 
-                qaLog = [...prev.qaLog]; 
-                render(prev.key);
-            }
-        };
+        if (tsh > 10.0) { result = "Hypothyroïdie AVÉRÉE " + details + " - Traitement IMPÉRATIF"; dosageInfo = "Lévothyroxine 50-100 µg/j (dose d'attaque selon poids : 1,6 µg/kg/j)."; showInitCalc = true; }
+        else if (tsh > 4.0) { result = "Hypothyroïdie fruste confirmée " + details + " - Traitement recommandé"; dosageInfo = "Lévothyroxine 25 à 50 µg/j (adapter selon poids et âge)."; }
+        else if (tsh > parseFloat(targetVal)) {
+            if (isPos) { result = "Hypothyroïdie infraclinique avec TPO+ " + details + " - Traitement à discuter"; dosageInfo = "Envisager Lévothyroxine 25-50 µg/j (bénéfice probable avec TPO+)."; }
+            else { result = "Euthyroïdie probable " + details + " (TSH < 4 et TPO-)"; dosageInfo = "Ne pas traiter systématiquement. Maintenir supplémentation iodée. Surveillance."; showSuivi = false; }
+        }
+        else if (isKnownPrior && isPos) { result = "Euthyroïdie avec TPO+ connus " + details + " - Surveillance requise"; dosageInfo = "Pas de traitement immédiat (TSH normale). Surveillance rapprochée impérative."; showSuivi = true; }
+        else { result = "Euthyroïdie " + details; dosageInfo = "Pas de traitement."; showSuivi = false; }
 
-        document.getElementById('ghr-restart').onclick = function() { 
-            history = []; qaLog = []; tri = 1; render("start");
-        };
+        let reco = result + "\n\nRecommandations\n\n• " + dosageInfo + "\n• " + targetText + "\n• Supplémentation iodée : 200 µg/j.";
 
-        function init() { render("start"); }
+        if (showSuivi) {
+            let followUp = (tri === 1) ? "• TSH toutes les 4-6 semaines jusqu'à 22 SA ;\n• TSH une fois par mois de 22 SA jusqu'à 34 SA ;\n• TSH en post-partum." : "• TSH une fois par mois jusqu'à 34 SA ;\n• TSH en post-partum.";
+            reco += "\n\nSuivi :\n" + followUp;
+        } else if (!reco.includes("Euthyroïdie")) { reco += "\n• Surveillance TSH mensuelle recommandée."; }
 
-        if (document.readyState === 'complete' || document.readyState === 'interactive') { init(); } else { document.addEventListener('DOMContentLoaded', init); }
-    })();
-       </script>
+        renderFinal("Conclusion", reco, showInitCalc);
+    };
+
+    function renderFinal(title, reco, showInitCalc) {
+        let boxClass = "success";
+        if (reco.includes("AVÉRÉE") || reco.includes("IMPÉRATIF")) { boxClass = "danger"; }
+        else if (reco.includes("fruste confirmée")) { boxClass = "danger"; }
+        else if (reco.includes("infraclinique") || reco.includes("Surveillance requise")) { boxClass = "warning"; }
+
+        let finalHTML = '<div class="ghr-reco-box ' + boxClass + '">' + reco.replace(/\n/g, '<br>') + '</div>';
+
+        if(reco.includes("Lévothyroxine") || reco.includes("traitement") || reco.includes("adapter")) {
+            finalHTML += '<div style="margin-top:15px; font-size:13px; background:#e3f2fd; color:#0277bd; padding:10px; border-radius:6px; border-left:4px solid #0288d1;"><strong>💊 Conseil Prise :</strong> Le Fer et le Calcium bloquent l\'absorption du Lévothyrox.<br>→ Espacer les prises d\'au moins <strong>4 heures</strong> (ex: Lévothyrox le matin à jeun, Fer le midi).</div>';
+        }
+
+        if(showInitCalc) finalHTML += getInitDoseHTML();
+        finalHTML += getCalcHTML();
+
+        data["final_node"] = { q: title, reco: reco, content: finalHTML, isFinal: true };
+        render("final_node");
+    }
+
+    window.copyFinal = function() {
+        const text = getReportText();
+        navigator.clipboard.writeText(text).then(
+            function() { alert("✅ Rapport copié dans le presse-papiers !"); },
+            function() { alert("⚠️ Erreur : impossible de copier."); }
+        );
+    };
+
+    /* ========================================
+       INIT
+       ======================================== */
+    function init() { render("start"); }
+    if (document.readyState === 'complete' || document.readyState === 'interactive') { init(); } else { document.addEventListener('DOMContentLoaded', init); }
+
+})();
+    </script>
 </div>
