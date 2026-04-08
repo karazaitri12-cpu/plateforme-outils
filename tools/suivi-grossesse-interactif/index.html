@@ -267,59 +267,60 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     }
 
     function afficherUI() {
-        let sa = saAffichee;
-        const dateDebut = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + (sa * 7), 12, 0, 0);
-        const dateFin = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate() + 6, 12, 0, 0);
-        const opts = { day: 'numeric', month: 'long', year: 'numeric' };
-        const terme = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + 287, 12, 0, 0);
+    let sa = saAffichee;
+    const dateDebut = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + (sa * 7), 12, 0, 0);
+    const dateFin = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate() + 6, 12, 0, 0);
+    const opts = { day: 'numeric', month: 'long', year: 'numeric' };
+    const terme = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + 287, 12, 0, 0);
 
-        document.getElementById("resume-sa").textContent = `${saActuelle} SA + ${joursActuels} j`;
-        document.getElementById("resume-dpa").textContent = terme.toLocaleDateString("fr-FR", opts);
+    document.getElementById("resume-sa").textContent = `${saActuelle} SA + ${joursActuels} j`;
+    document.getElementById("resume-dpa").textContent = terme.toLocaleDateString("fr-FR", opts);
 
-        const pct = Math.min(100, (saActuelle / 41) * 100);
-        document.getElementById("progress-bar").style.width = pct + "%";
-        document.getElementById("progress-text").innerHTML = `Progression : <strong>${Math.round(pct)}%</strong> vers le terme (41 SA)`;
+    const pct = Math.min(100, (saActuelle / 41) * 100);
+    document.getElementById("progress-bar").style.width = pct + "%";
+    document.getElementById("progress-text").innerHTML = `Progression : <strong>${Math.round(pct)}%</strong> vers le terme (41 SA)`;
 
-        // PANNEAU FŒTUS/MAMAN
-        const resDiv = document.getElementById("result");
-        const data = FOETUS[sa];
-        if (data) {
-            resDiv.innerHTML = `
-                <h4><i class="fas fa-baby"></i> Évolution fœtale & maternelle</h4>
-                <div class="panel-header-flex">
-                    <div>
-                        <div class="date-range"><i class="far fa-calendar"></i> Semaine ${sa} SA : ${dateDebut.toLocaleDateString("fr-FR", opts)} → ${dateFin.toLocaleDateString("fr-FR", opts)}</div>
-                        <div style="margin-top:8px;"><span class="badge">SA ${sa}</span><span class="badge" style="background:#64748b">Mois ${Math.ceil(sa/4.33)}</span></div>
-                    </div>
+    // PANNEAU FŒTUS/MAMAN
+    const resDiv = document.getElementById("result");
+    const data = FOETUS[sa];
+    if (data) {
+        resDiv.innerHTML = `
+            <h4><i class="fas fa-baby"></i> Évolution fœtale & maternelle</h4>
+            <div class="panel-header-flex">
+                <div>
+                    <div class="date-range"><i class="far fa-calendar"></i> Semaine ${sa} SA : ${dateDebut.toLocaleDateString("fr-FR", opts)} → ${dateFin.toLocaleDateString("fr-FR", opts)}</div>
+                    <div style="margin-top:8px;"><span class="badge">SA ${sa}</span><span class="badge" style="background:#64748b">Mois ${Math.ceil(sa/4.33)}</span></div>
                 </div>
-                <div class="foetus-block"><h5><i class="fas fa-child"></i> Développement fœtal</h5><p>${data.f}</p></div>
-                <div class="mama-block"><h5><i class="fas fa-female"></i> Ressenti maternel</h5><p>${data.m}</p></div>
-                <div class="info-grid">
-                    <div><span class="highlight">Âge actuel :</span><br>${saActuelle} SA + ${joursActuels} j</div>
-                    <div><span class="highlight">Terme (41 SA) :</span><br><i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", opts)}</div>
-                </div>
-            `;
-        }
-
-        // PANNEAU MÉDICAL
-        const medDiv = document.getElementById("medical-follow-up-display");
-        const medData = MEDICAL.slice().reverse().find(m => sa >= m.sa);
-        if (medData) {
-            let html = `<h4><i class="fas fa-user-md"></i> Check-list HAS / CNGOF 2023</h4><div class="medical-header">${medData.titre}</div>`;
-            medData.sections.forEach(sec => {
-                html += `<div class="med-section"><h5>${sec.cat}</h5><ul>`;
-                sec.items.forEach(it => html += `<li><span class="med-highlight">${it.split(':')[0]}:</span> ${it.includes(':') ? it.split(':').slice(1).join(':') : it}</li>`);
-                html += `</ul></div>`;
-            });
-            medDiv.innerHTML = html;
-        } else {
-            medDiv.innerHTML = `<h4><i class="fas fa-user-md"></i> Suivi Médical</h4><p style="text-align:center;color:#64748b;padding:20px;">Poursuivez la surveillance clinique habituelle.</p>`;
-        }
-        
-        document.querySelector("#navigation button:first-child").disabled = saAffichee <= 1;
-        document.querySelector("#navigation button:last-child").disabled = saAffichee >= 42;
+            </div>
+            <div class="foetus-block"><h5><i class="fas fa-child"></i> Développement fœtal</h5><p>${data.f}</p></div>
+            <div class="mama-block"><h5><i class="fas fa-female"></i> Ressenti maternel</h5><p>${data.m}</p></div>
+            <div class="info-grid">
+                <div><span class="highlight">Âge actuel :</span><br>${saActuelle} SA + ${joursActuels} j</div>
+                <div><span class="highlight">Terme (41 SA) :</span><br><i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", opts)}</div>
+            </div>
+        `;
     }
 
+    // PANNEAU MÉDICAL - CORRECTION ICI
+    const medDiv = document.getElementById("medical-follow-up-display");
+    // Trouve la dernière recommandation dont l'âge est <= à la SA actuelle
+    const medData = MEDICAL.slice().reverse().find(m => sa >= m.sa);
+    
+    if (medData) {
+        let html = `<h4><i class="fas fa-user-md"></i> Check-list HAS / CNGOF 2023</h4><div class="medical-header">${medData.titre}</div>`;
+        medData.sections.forEach(sec => {
+            html += `<div class="med-section"><h5>${sec.cat}</h5><ul>`;
+            sec.items.forEach(it => html += `<li><span class="med-highlight">${it.split(':')[0]}:</span> ${it.includes(':') ? it.split(':').slice(1).join(':') : it}</li>`);
+            html += `</ul></div>`;
+        });
+        medDiv.innerHTML = html;
+    } else {
+        medDiv.innerHTML = `<h4><i class="fas fa-user-md"></i> Suivi Médical</h4><p style="text-align:center;color:#64748b;padding:20px;">Poursuivez la surveillance clinique habituelle.</p>`;
+    }
+    
+    document.querySelector("#navigation button:first-child").disabled = saAffichee <= 1;
+    document.querySelector("#navigation button:last-child").disabled = saAffichee >= 42;
+}
     function changerSemaine(v) {
         const n = saAffichee + v;
         if (n >= 1 && n <= 42) { saAffichee = n; afficherUI(); }
