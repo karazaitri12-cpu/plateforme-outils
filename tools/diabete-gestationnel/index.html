@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diabète Gestationnel – Outil Diagnostique</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR – isolation totale via #dkz-dg-root
+   Tous les sélecteurs sont préfixés #dkz-dg-root
+   Unicode CSS pour pseudo-éléments (pas d'entités HTML)
+   ============================================================ */
+
+#dkz-dg-root * {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  font-family: 'Georgia', 'Times New Roman', serif !important;
+}
+
+#dkz-dg-root {
+  max-width: 860px !important;
+  margin: 0 auto !important;
+  padding: 28px 24px !important;
+  background: #fafafa !important;
+  color: #1a1a2e !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+}
+
+/* ── EN-TÊTE ── */
+#dkz-dg-root .dkz-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  margin-bottom: 28px !important;
+  padding-bottom: 18px !important;
+  border-bottom: 2px solid #1a3a5c !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+
+#dkz-dg-root .dkz-title-block {}
+
+#dkz-dg-root .dkz-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  letter-spacing: 0.3px !important;
+  line-height: 1.3 !important;
+  display: block !important;
+}
+
+#dkz-dg-root .dkz-subtitle {
+  font-size: 12px !important;
+  color: #5a6a7a !important;
+  margin-top: 4px !important;
+  font-style: italic !important;
+  display: block !important;
+}
+
+#dkz-dg-root .dkz-badge {
+  display: inline-block !important;
+  padding: 3px 10px !important;
+  border-radius: 3px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  margin-top: 8px !important;
+  font-style: normal !important;
+  font-family: 'Georgia', serif !important;
+}
+
+#dkz-dg-root .dkz-badge.risk-high {
+  background: #fde8e8 !important;
+  color: #b91c1c !important;
+  border: 1px solid #fca5a5 !important;
+}
+
+#dkz-dg-root .dkz-badge.hidden {
+  display: none !important;
+}
+
+#dkz-dg-root .dkz-btn-reset {
+  background: #fff !important;
+  border: 1px solid #cbd5e1 !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  transition: background 0.2s !important;
+  font-family: 'Georgia', serif !important;
+  white-space: nowrap !important;
+}
+
+#dkz-dg-root .dkz-btn-reset:hover {
+  background: #f1f5f9 !important;
+}
+
+/* ── BARRE DE PROGRESSION ── */
+#dkz-dg-root .dkz-progress {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 32px !important;
+  gap: 0 !important;
+}
+
+#dkz-dg-root .dkz-step-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  flex: 1 !important;
+  position: relative !important;
+  cursor: pointer !important;
+}
+
+#dkz-dg-root .dkz-step-circle {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  background: #e2e8f0 !important;
+  color: #64748b !important;
+  border: 2px solid #e2e8f0 !important;
+  transition: all 0.25s !important;
+  position: relative !important;
+  z-index: 2 !important;
+  font-family: 'Georgia', serif !important;
+}
+
+#dkz-dg-root .dkz-step-circle.active {
+  background: #1a3a5c !important;
+  color: #fff !important;
+  border-color: #1a3a5c !important;
+  box-shadow: 0 0 0 4px rgba(26,58,92,0.15) !important;
+}
+
+#dkz-dg-root .dkz-step-circle.done {
+  background: #e8f0e8 !important;
+  color: #166534 !important;
+  border-color: #86efac !important;
+}
+
+#dkz-dg-root .dkz-step-label {
+  font-size: 11px !important;
+  color: #64748b !important;
+  margin-top: 6px !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  font-family: 'Georgia', serif !important;
+}
+
+#dkz-dg-root .dkz-step-label.active {
+  color: #1a3a5c !important;
+}
+
+#dkz-dg-root .dkz-step-line {
+  flex: 1 !important;
+  height: 2px !important;
+  background: #e2e8f0 !important;
+  margin-bottom: 22px !important;
+  transition: background 0.25s !important;
+}
+
+#dkz-dg-root .dkz-step-line.done {
+  background: #1a3a5c !important;
+}
+
+/* ── CONTENU DES ÉTAPES ── */
+#dkz-dg-root .dkz-step-content {
+  display: none !important;
+}
+
+#dkz-dg-root .dkz-step-content.active {
+  display: block !important;
+}
+
+/* ── TITRES ── */
+#dkz-dg-root .dkz-section-title {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  margin-bottom: 18px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 2px solid #1a3a5c !important;
+  display: block !important;
+}
+
+#dkz-dg-root .dkz-subsection-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  margin: 18px 0 10px 0 !important;
+  display: block !important;
+}
+
+/* ── BOÎTES INFO ── */
+#dkz-dg-root .dkz-infobox {
+  padding: 14px 16px !important;
+  border-radius: 4px !important;
+  margin-bottom: 14px !important;
+  border-left: 3px solid !important;
+}
+
+#dkz-dg-root .dkz-infobox.blue {
+  background: #eff6ff !important;
+  border-left-color: #2563eb !important;
+}
+
+#dkz-dg-root .dkz-infobox.red {
+  background: #fef2f2 !important;
+  border-left-color: #dc2626 !important;
+}
+
+#dkz-dg-root .dkz-infobox.green {
+  background: #f0fdf4 !important;
+  border-left-color: #16a34a !important;
+}
+
+#dkz-dg-root .dkz-infobox.yellow {
+  background: #fefce8 !important;
+  border-left-color: #ca8a04 !important;
+}
+
+#dkz-dg-root .dkz-infobox.navy {
+  background: #f0f4f8 !important;
+  border-left-color: #1a3a5c !important;
+}
+
+#dkz-dg-root .dkz-infobox p {
+  margin-bottom: 5px !important;
+  font-size: 14px !important;
+  color: #374151 !important;
+}
+
+#dkz-dg-root .dkz-infobox p:last-child {
+  margin-bottom: 0 !important;
+}
+
+#dkz-dg-root .dkz-infobox p strong {
+  font-weight: 700 !important;
+}
+
+#dkz-dg-root .dkz-infobox-title {
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+  display: block !important;
+}
+
+/* ── CHECKBOXES ── */
+#dkz-dg-root .dkz-checkbox-group {
+  display: grid !important;
+  gap: 6px !important;
+  margin: 14px 0 !important;
+}
+
+#dkz-dg-root .dkz-cb-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: #fff !important;
+  padding: 10px 14px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  border: 1px solid #e2e8f0 !important;
+  transition: border-color 0.2s, background 0.2s !important;
+}
+
+#dkz-dg-root .dkz-cb-label:hover {
+  background: #f8fafc !important;
+  border-color: #1a3a5c !important;
+}
+
+#dkz-dg-root .dkz-cb-label input[type="checkbox"] {
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer !important;
+  accent-color: #1a3a5c !important;
+  flex-shrink: 0 !important;
+}
+
+#dkz-dg-root .dkz-cb-label span {
+  font-size: 14px !important;
+  color: #1a1a2e !important;
+  font-weight: 500 !important;
+}
+
+/* ── CHAMPS DE SAISIE ── */
+#dkz-dg-root .dkz-input-group {
+  margin-bottom: 14px !important;
+}
+
+#dkz-dg-root .dkz-input-group label {
+  display: block !important;
+  font-weight: 700 !important;
+  margin-bottom: 5px !important;
+  color: #1a3a5c !important;
+  font-size: 13px !important;
+  letter-spacing: 0.2px !important;
+}
+
+#dkz-dg-root .dkz-input-group input,
+#dkz-dg-root .dkz-input-group select {
+  width: 100% !important;
+  padding: 9px 12px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  height: 40px !important;
+  background: #fff !important;
+  color: #1a1a2e !important;
+  transition: border-color 0.2s !important;
+  font-family: 'Georgia', serif !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+#dkz-dg-root .dkz-input-group input:focus,
+#dkz-dg-root .dkz-input-group select:focus {
+  outline: none !important;
+  border-color: #1a3a5c !important;
+  box-shadow: 0 0 0 2px rgba(26,58,92,0.1) !important;
+}
+
+#dkz-dg-root .dkz-input-hint {
+  font-size: 11px !important;
+  color: #64748b !important;
+  margin-top: 3px !important;
+  font-style: italic !important;
+  display: block !important;
+}
+
+/* ── BOUTONS ── */
+#dkz-dg-root .dkz-btn-group {
+  display: flex !important;
+  gap: 12px !important;
+  margin-top: 22px !important;
+  flex-wrap: wrap !important;
+}
+
+#dkz-dg-root .dkz-btn-primary {
+  flex: 1 !important;
+  background: #1a3a5c !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 12px 20px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: background 0.2s, transform 0.15s !important;
+  font-family: 'Georgia', serif !important;
+  min-width: 140px !important;
+}
+
+#dkz-dg-root .dkz-btn-primary:hover:not(:disabled) {
+  background: #0f2744 !important;
+  transform: translateY(-1px) !important;
+}
+
+#dkz-dg-root .dkz-btn-primary:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+#dkz-dg-root .dkz-btn-secondary {
+  flex: 1 !important;
+  background: #fff !important;
+  color: #374151 !important;
+  border: 1px solid #cbd5e1 !important;
+  padding: 12px 20px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+  font-family: 'Georgia', serif !important;
+  min-width: 120px !important;
+}
+
+#dkz-dg-root .dkz-btn-secondary:hover:not(:disabled) {
+  background: #f8fafc !important;
+}
+
+#dkz-dg-root .dkz-btn-secondary:disabled {
+  opacity: 0.3 !important;
+  cursor: not-allowed !important;
+}
+
+#dkz-dg-root .dkz-btn-copy {
+  background: #15803d !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 10px 22px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+  display: block !important;
+  margin: 14px auto !important;
+  font-family: 'Georgia', serif !important;
+}
+
+#dkz-dg-root .dkz-btn-copy:hover {
+  background: #166534 !important;
+}
+
+/* ── RÉSULTATS ── */
+#dkz-dg-root .dkz-result-box {
+  padding: 18px 20px !important;
+  border-radius: 4px !important;
+  margin-bottom: 16px !important;
+  border: 1px solid !important;
+}
+
+#dkz-dg-root .dkz-result-box.normal {
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+}
+
+#dkz-dg-root .dkz-result-box.abnormal {
+  background: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+}
+
+#dkz-dg-root .dkz-result-title {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  margin-bottom: 12px !important;
+  display: block !important;
+}
+
+/* ── TABLEAU ── */
+#dkz-dg-root .dkz-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-top: 12px !important;
+  font-size: 13px !important;
+  background: #fff !important;
+}
+
+#dkz-dg-root .dkz-table th,
+#dkz-dg-root .dkz-table td {
+  padding: 9px 12px !important;
+  text-align: left !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+#dkz-dg-root .dkz-table th {
+  background: #f8fafc !important;
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+#dkz-dg-root .dkz-table tr.row-ok {
+  background: #f0fdf4 !important;
+}
+
+#dkz-dg-root .dkz-table tr.row-ko {
+  background: #fef2f2 !important;
+}
+
+/* ── RÉSUMÉ CLINIQUE ── */
+#dkz-dg-root .dkz-summary-wrap {
+  margin: 22px 0 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 4px !important;
+  background: #fff !important;
+}
+
+#dkz-dg-root .dkz-summary-header {
+  background: #1a3a5c !important;
+  color: #fff !important;
+  padding: 10px 16px !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.3px !important;
+  border-radius: 4px 4px 0 0 !important;
+}
+
+#dkz-dg-root .dkz-summary-body {
+  padding: 16px 20px !important;
+  font-family: 'Courier New', monospace !important;
+  font-size: 12px !important;
+  line-height: 1.7 !important;
+  white-space: pre-wrap !important;
+  color: #1a1a2e !important;
+  background: #fafafa !important;
+  border-radius: 0 0 4px 4px !important;
+}
+
+/* ── BLOC TRAITEMENT ── */
+#dkz-dg-root .dkz-treatment {
+  margin-top: 18px !important;
+}
+
+#dkz-dg-root .dkz-treatment-section {
+  background: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 4px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 10px !important;
+}
+
+#dkz-dg-root .dkz-treatment-title {
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+
+#dkz-dg-root .dkz-treatment-section p {
+  font-size: 13px !important;
+  color: #374151 !important;
+  margin-bottom: 4px !important;
+}
+
+#dkz-dg-root .dkz-treatment-section p:last-child {
+  margin-bottom: 0 !important;
+}
+
+#dkz-dg-root .dkz-insulin-box {
+  background: #fefce8 !important;
+  border: 1px solid #fde047 !important;
+  border-radius: 4px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 10px !important;
+}
+
+#dkz-dg-root .dkz-insulin-box h4 {
+  color: #854d0e !important;
+  margin-bottom: 8px !important;
+  font-size: 14px !important;
+}
+
+#dkz-dg-root .dkz-insulin-box p,
+#dkz-dg-root .dkz-insulin-box li {
+  font-size: 13px !important;
+  color: #374151 !important;
+  margin-bottom: 3px !important;
+}
+
+#dkz-dg-root .dkz-insulin-box ul {
+  padding-left: 18px !important;
+  margin-top: 6px !important;
+}
+
+#dkz-dg-root .dkz-section-blue {
+  background: #eff6ff !important;
+  border: 1px solid #bfdbfe !important;
+  border-radius: 4px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 10px !important;
+}
+
+#dkz-dg-root .dkz-section-green {
+  background: #f0fdf4 !important;
+  border: 1px solid #86efac !important;
+  border-radius: 4px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 10px !important;
+}
+
+/* ── NOTIFICATION ── */
+#dkz-dg-root .dkz-notif {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  background: #15803d !important;
+  color: #fff !important;
+  padding: 10px 20px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  z-index: 99999 !important;
+  display: none !important;
+  font-family: 'Georgia', serif !important;
+}
+
+/* ── PIED DE PAGE ── */
+#dkz-dg-root .dkz-footer {
+  margin-top: 32px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid #e2e8f0 !important;
+  text-align: center !important;
+}
+
+#dkz-dg-root .dkz-footer p {
+  font-size: 11px !important;
+  color: #94a3b8 !important;
+  margin-bottom: 3px !important;
+  font-style: italic !important;
+}
+
+/* ── MÉDICO-LÉGAL ── */
+#dkz-dg-root .dkz-legal {
+  font-size: 10px !important;
+  color: #94a3b8 !important;
+  text-align: center !important;
+  margin-top: 10px !important;
+  font-style: italic !important;
+  display: block !important;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  #dkz-dg-root {
+    padding: 16px 12px !important;
+  }
+  #dkz-dg-root .dkz-title {
+    font-size: 16px !important;
+  }
+  #dkz-dg-root .dkz-step-label {
+    font-size: 10px !important;
+  }
+  #dkz-dg-root .dkz-btn-group {
+    flex-direction: column !important;
+  }
+  #dkz-dg-root .dkz-btn-primary,
+  #dkz-dg-root .dkz-btn-secondary {
+    width: 100% !important;
+  }
+  #dkz-dg-root .dkz-table th,
+  #dkz-dg-root .dkz-table td {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+  }
+}
+</style>
+</head>
+<body>
+<div id="dkz-dg-root">
+
+  <!-- EN-TÊTE -->
+  <div class="dkz-header">
+    <div class="dkz-title-block">
+      <span class="dkz-title">Diabète Gestationnel — Outil Diagnostique</span>
+      <span class="dkz-subtitle">Algorithme HAS 2021 · CNGOF 2023 · ADA 2024</span>
+      <span id="dkz-badge" class="dkz-badge hidden"></span>
+    </div>
+    <button class="dkz-btn-reset" onclick="dkzReset()">&#8635; Réinitialiser</button>
+  </div>
+
+  <!-- BARRE DE PROGRESSION -->
+  <div class="dkz-progress" id="dkz-progress"></div>
+
+  <!-- ÉTAPE 1 : Facteurs de risque -->
+  <div class="dkz-step-content active" id="dkz-step1">
+    <span class="dkz-section-title">1. Identification des Facteurs de Risque</span>
+
+    <div class="dkz-infobox blue">
+      <span class="dkz-infobox-title">Principes du dépistage (HAS 2021)</span>
+      <p>&#8226; Dépistage <strong>ciblé</strong> : uniquement en présence d'au moins un facteur de risque</p>
+      <p>&#8226; <strong>Dès la 1re consultation</strong> si facteur(s) présent(s) : glycémie à jeun plasmatique</p>
+      <p>&#8226; En l'absence de facteur de risque : glycosurie mensuelle par bandelette</p>
+    </div>
+
+    <div class="dkz-infobox red">
+      <span class="dkz-infobox-title" style="color:#b91c1c;">Signes d'appel — Dépistage immédiat même sans facteur de risque</span>
+      <p>&#8226; Macrosomie fœtale (biométries &#8805; 97e percentile)</p>
+      <p>&#8226; Hydramnios</p>
+      <p>&#8226; Mort in utero inexpliquée (MIU)</p>
+      <p>&#8226; Malformation fœtale</p>
+      <p style="margin-top:6px;font-weight:700;color:#b91c1c;">&#8594; Glycémie à jeun + HGPO 75 g en urgence relative</p>
+    </div>
+
+    <span class="dkz-subsection-title">Cochez les facteurs de risque présents :</span>
+
+    <div class="dkz-checkbox-group">
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="age"><span>Âge &#8805; 35 ans</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="imc"><span>Surpoids ou obésité (IMC &#8805; 25 kg/m² avant grossesse)</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="atcd-dg"><span>ATCD personnel de diabète gestationnel</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="atcd-macro"><span>ATCD de macrosomie (enfant &gt; 4 kg)</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="atcd-obst"><span>ATCD obstétrical : MIU inexpliquée, hydramnios, malformation</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="family"><span>ATCD familial de diabète type 2 au 1er degré (parents, frères/sœurs)</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="ethnic"><span>Origine ethnique à risque (Afrique du Nord, Asie du Sud, Moyen-Orient, Antilles)</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="sopk"><span>Syndrome des ovaires polykystiques (SOPK)</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="birth-weight"><span>Poids de naissance personnel &gt; 4 kg</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="multiple"><span>Grossesse multiple en cours</span></label>
+      <label class="dkz-cb-label"><input type="checkbox" class="dkz-rf" value="weight-gain"><span>Prise de poids excessive pendant cette grossesse</span></label>
+    </div>
+
+    <div id="dkz-risk-assess"></div>
+
+    <div class="dkz-btn-group">
+      <button class="dkz-btn-secondary" disabled>&#8592; Précédent</button>
+      <button class="dkz-btn-primary" onclick="dkzAssessRisk()">Évaluer le niveau de risque &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 : Dépistage -->
+  <div class="dkz-step-content" id="dkz-step2">
+    <span class="dkz-section-title">2. Tests de Dépistage</span>
+
+    <div id="dkz-protocol"></div>
+
+    <div class="dkz-input-group">
+      <label>Type de test réalisé</label>
+      <select id="dkz-test-type" onchange="dkzHandleTestChange()">
+        <option value="">— Sélectionner un test —</option>
+        <option value="gaj">Glycémie à jeun (1re consultation si facteur de risque)</option>
+        <option value="hgpo75">HGPO 75 g (24–28 SA — test de référence)</option>
+        <option value="gaj-pp">Glycémie à jeun + post-prandiale (suivi)</option>
+        <option value="glycosurie">Glycosurie &#8805; 2+ sur bandelette (sans facteur de risque)</option>
+      </select>
+    </div>
+
+    <div id="dkz-test-inputs"></div>
+
+    <div class="dkz-btn-group">
+      <button class="dkz-btn-secondary" onclick="dkzGoTo(1)">&#8592; Précédent</button>
+      <button class="dkz-btn-primary" id="dkz-btn-analyze" onclick="dkzAnalyze()" style="display:none;" disabled>
+        Analyser les résultats &#8594;
+      </button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 : Résultats -->
+  <div class="dkz-step-content" id="dkz-step3">
+    <span class="dkz-section-title">3. Résultats et Prise en Charge</span>
+
+    <div id="dkz-results"></div>
+
+    <div id="dkz-summary-container" style="display:none;">
+      <div class="dkz-summary-wrap">
+        <div class="dkz-summary-header">&#128203; RÉSUMÉ CLINIQUE — Dr KARA-ZAITRI M.A.</div>
+        <div class="dkz-summary-body" id="dkz-summary-text"></div>
+      </div>
+      <button class="dkz-btn-copy" onclick="dkzCopy()">&#128203; Copier le résumé</button>
+    </div>
+
+    <div class="dkz-btn-group">
+      <button class="dkz-btn-secondary" onclick="dkzGoTo(2)">&#8592; Précédent</button>
+      <button class="dkz-btn-primary" onclick="dkzGoTo(1)">&#8635; Nouvelle évaluation</button>
+    </div>
+  </div>
+
+  <!-- PIED DE PAGE -->
+  <div class="dkz-footer">
+    <p>Algorithme basé sur les recommandations HAS 2021, CNGOF 2023 et ADA 2024</p>
+    <p>Sources : Cngof.fr · has-sante.fr · diabetecare.diabetesjournals.org</p>
+  </div>
+  <span class="dkz-legal">Outil d'aide à la décision — ne se substitue pas au jugement clinique du praticien.</span>
+
+</div><!-- #dkz-dg-root -->
+
+<div id="dkz-notif" class="dkz-notif"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  var currentStep = 1;
+  var riskLevel = 'low';
+  var rfCount = 0;
+
+  /* ── INITIALISATION ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    dkzBuildProgress();
+    document.querySelectorAll('.dkz-rf').forEach(function(cb) {
+      cb.addEventListener('change', dkzUpdateBadge);
+    });
+  });
+
+  /* ── BARRE DE PROGRESSION ── */
+  function dkzBuildProgress() {
+    var bar = document.getElementById('dkz-progress');
+    var labels = ['Facteurs de risque', 'Dépistage', 'Prise en charge'];
+    bar.innerHTML = '';
+    for (var i = 1; i <= 3; i++) {
+      var item = document.createElement('div');
+      item.className = 'dkz-step-item';
+      (function(step) {
+        item.onclick = function() { dkzNavigate(step); };
+      })(i);
+
+      var circle = document.createElement('div');
+      circle.className = 'dkz-step-circle' +
+        (currentStep === i ? ' active' : '') +
+        (currentStep > i ? ' done' : '');
+      circle.textContent = currentStep > i ? '\u2713' : i;
+
+      var lbl = document.createElement('div');
+      lbl.className = 'dkz-step-label' + (currentStep === i ? ' active' : '');
+      lbl.textContent = labels[i - 1];
+
+      item.appendChild(circle);
+      item.appendChild(lbl);
+      bar.appendChild(item);
+
+      if (i < 3) {
+        var line = document.createElement('div');
+        line.className = 'dkz-step-line' + (currentStep > i ? ' done' : '');
+        bar.appendChild(line);
+      }
+    }
+  }
+
+  function dkzNavigate(step) {
+    if (step === 2 && !document.getElementById('dkz-risk-assess').innerHTML) {
+      alert('Veuillez d\'abord évaluer les facteurs de risque à l\'étape 1.');
+      return;
+    }
+    if (step === 3 && !document.getElementById('dkz-results').innerHTML) {
+      alert('Veuillez d\'abord analyser les résultats à l\'étape 2.');
+      return;
+    }
+    dkzGoTo(step);
+  }
+
+  window.dkzGoTo = function(step) {
+    document.querySelectorAll('.dkz-step-content').forEach(function(el) {
+      el.classList.remove('active');
+    });
+    currentStep = step;
+    document.getElementById('dkz-step' + step).classList.add('active');
+    dkzBuildProgress();
+    window.scrollTo({ top: document.getElementById('dkz-dg-root').offsetTop - 20, behavior: 'smooth' });
+  };
+
+  /* ── BADGE ── */
+  function dkzUpdateBadge() {
+    rfCount = document.querySelectorAll('.dkz-rf:checked').length;
+    var badge = document.getElementById('dkz-badge');
+    if (rfCount > 0) {
+      badge.className = 'dkz-badge risk-high';
+      badge.textContent = rfCount + ' facteur' + (rfCount > 1 ? 's' : '') + ' de risque';
+    } else {
+      badge.className = 'dkz-badge hidden';
+    }
+  }
+
+  /* ── ÉTAPE 1 : ÉVALUATION DU RISQUE ── */
+  window.dkzAssessRisk = function() {
+    rfCount = document.querySelectorAll('.dkz-rf:checked').length;
+    var html = '';
+    if (rfCount >= 1) {
+      riskLevel = 'high';
+      html = '<div class="dkz-infobox red" style="margin-top:14px;">' +
+        '<span class="dkz-infobox-title" style="color:#b91c1c;">' +
+        'Au moins 1 facteur de risque présent (' + rfCount + ' facteur' + (rfCount > 1 ? 's' : '') + ')</span>' +
+        '<p>&#8226; <strong>Dès la 1re consultation</strong> : glycémie à jeun plasmatique</p>' +
+        '<p>&#8226; Si GAJ &lt; 0,92 g/L : HGPO 75 g entre 24–28 SA</p>' +
+        '<p>&#8226; Si GAJ &#8805; 0,92 g/L : diabète gestationnel diagnostiqué</p>' +
+        '<p>&#8226; Si GAJ &#8805; 1,26 g/L : diabète de type 2 préexistant</p>' +
+        '</div>';
+    } else {
+      riskLevel = 'low';
+      html = '<div class="dkz-infobox green" style="margin-top:14px;">' +
+        '<span class="dkz-infobox-title" style="color:#166534;">Aucun facteur de risque identifié</span>' +
+        '<p>Pas de dépistage systématique recommandé (HAS 2021).</p>' +
+        '<p>Surveillance standard : glycosurie mensuelle par bandelette urinaire.</p>' +
+        '<p>Si glycosurie &#8805; 2+ : réaliser glycémie à jeun et HGPO 75 g.</p>' +
+        '</div>';
+    }
+    document.getElementById('dkz-risk-assess').innerHTML = html;
+    dkzGoTo(2);
+    dkzSetupProtocol();
+  };
+
+  function dkzSetupProtocol() {
+    var html = riskLevel === 'high'
+      ? '<div class="dkz-infobox red" style="margin-bottom:14px;">' +
+        '<span class="dkz-infobox-title" style="color:#b91c1c;">Rappel des seuils diagnostiques (GAJ plasmatique)</span>' +
+        '<p>&#8226; &#8805; 1,26 g/L : diabète de type 2 préexistant &#8594; orientation diabétologie</p>' +
+        '<p>&#8226; 0,92–1,25 g/L : diabète gestationnel diagnostiqué</p>' +
+        '<p>&#8226; &lt; 0,92 g/L : HGPO 75 g à programmer entre 24–28 SA</p>' +
+        '</div>'
+      : '<div class="dkz-infobox navy" style="margin-bottom:14px;">' +
+        '<p>Aucun facteur de risque — pas de dépistage systématique (HAS 2021).</p>' +
+        '<p>Sélectionnez un test ci-dessous uniquement si glycosurie &#8805; 2+ sur bandelette.</p>' +
+        '</div>';
+    document.getElementById('dkz-protocol').innerHTML = html;
+  }
+
+  /* ── ÉTAPE 2 : SAISIE DES RÉSULTATS ── */
+  window.dkzHandleTestChange = function() {
+    var type = document.getElementById('dkz-test-type').value;
+    dkzShowInputs(type);
+  };
+
+  function dkzShowInputs(type) {
+    var html = '';
+    var btn = document.getElementById('dkz-btn-analyze');
+    btn.style.display = 'none';
+    btn.disabled = true;
+
+    if (type === 'gaj') {
+      html = '<div class="dkz-input-group">' +
+        '<label>Glycémie à jeun (g/L)</label>' +
+        '<input type="number" step="0.01" id="dkz-gaj" placeholder="Ex : 0,85" oninput="dkzCheckSimple()">' +
+        '<span class="dkz-input-hint">Seuils : &#8805; 0,92 g/L = DG &nbsp;|&nbsp; &#8805; 1,26 g/L = Diabète type 2</span>' +
+        '</div>';
+      btn.style.display = 'block';
+
+    } else if (type === 'hgpo75') {
+      html = dkzHGPOInputs('dkz-checkHGPO');
+      btn.style.display = 'block';
+
+    } else if (type === 'gaj-pp') {
+      html = '<div class="dkz-input-group">' +
+        '<label>Glycémie à jeun (g/L)</label>' +
+        '<input type="number" step="0.01" id="dkz-gaj" placeholder="Ex : 0,85" oninput="dkzCheckPP()">' +
+        '<span class="dkz-input-hint">Seuil : &#8805; 0,92 g/L</span>' +
+        '</div>' +
+        '<div class="dkz-input-group">' +
+        '<label>Glycémie post-prandiale 2 h après le repas (g/L)</label>' +
+        '<input type="number" step="0.01" id="dkz-pp" placeholder="Ex : 1,15" oninput="dkzCheckPP()">' +
+        '<span class="dkz-input-hint">Seuil : &#8805; 1,20 g/L</span>' +
+        '</div>';
+      btn.style.display = 'block';
+
+    } else if (type === 'glycosurie') {
+      html = '<div class="dkz-infobox yellow" style="margin-bottom:14px;">' +
+        '<span class="dkz-infobox-title" style="color:#854d0e;">Glycosurie &#8805; 2+ détectée sur bandelette</span>' +
+        '<p>&#8226; Compléter par une <strong>glycémie à jeun plasmatique</strong> en premier</p>' +
+        '<p>&#8226; Si GAJ &lt; 0,92 g/L : réaliser ensuite l\'HGPO 75 g</p>' +
+        '</div>' +
+        '<div class="dkz-input-group">' +
+        '<label>Glycémie à jeun (g/L) — 1er temps</label>' +
+        '<input type="number" step="0.01" id="dkz-gaj-glyc" placeholder="Ex : 0,85" oninput="dkzHandleGlyco(this.value)">' +
+        '<span class="dkz-input-hint">Seuils : &#8805; 0,92 g/L = DG &nbsp;|&nbsp; &#8805; 1,26 g/L = Diabète type 2</span>' +
+        '</div>' +
+        '<div id="dkz-glyco-hgpo" style="display:none;">' +
+        '<div style="border:1px solid #e2e8f0;border-radius:4px;overflow:hidden;margin:12px 0;">' +
+        '<div style="background:#f8fafc;padding:8px 14px;font-weight:700;font-size:13px;color:#1a3a5c;border-bottom:1px solid #e2e8f0;">HGPO 75 g — 2e temps</div>' +
+        '<div style="padding:14px;">' + dkzHGPOInputs('dkzCheckGlyco') + '</div>' +
+        '</div></div>';
+      btn.style.display = 'block';
+    }
+
+    document.getElementById('dkz-test-inputs').innerHTML = html;
+  }
+
+  function dkzHGPOInputs(checkFn) {
+    return '<div class="dkz-input-group">' +
+      '<label>Glycémie T0 — à jeun (g/L)</label>' +
+      '<input type="number" step="0.01" id="dkz-t0" placeholder="Ex : 0,85" oninput="' + checkFn + '()">' +
+      '<span class="dkz-input-hint">Seuil : &#8805; 0,92 g/L</span>' +
+      '</div>' +
+      '<div class="dkz-input-group">' +
+      '<label>Glycémie T60 — 1 heure (g/L)</label>' +
+      '<input type="number" step="0.01" id="dkz-t60" placeholder="Ex : 1,75" oninput="' + checkFn + '()">' +
+      '<span class="dkz-input-hint">Seuil : &#8805; 1,80 g/L (IADPSG/ADA) — non retenu isolément par la HAS comme critère unique</span>' +
+      '</div>' +
+      '<div class="dkz-input-group">' +
+      '<label>Glycémie T120 — 2 heures (g/L)</label>' +
+      '<input type="number" step="0.01" id="dkz-t120" placeholder="Ex : 1,50" oninput="' + checkFn + '()">' +
+      '<span class="dkz-input-hint">Seuil : &#8805; 1,53 g/L</span>' +
+      '</div>';
+  }
+
+  /* Fonctions de vérification de complétion */
+  window.dkzCheckSimple = function() {
+    var v = document.getElementById('dkz-gaj') && document.getElementById('dkz-gaj').value;
+    document.getElementById('dkz-btn-analyze').disabled = !v || isNaN(parseFloat(v));
+  };
+  window.dkzCheckHGPO = function() {
+    var t0 = document.getElementById('dkz-t0') && document.getElementById('dkz-t0').value;
+    var t60 = document.getElementById('dkz-t60') && document.getElementById('dkz-t60').value;
+    var t120 = document.getElementById('dkz-t120') && document.getElementById('dkz-t120').value;
+    document.getElementById('dkz-btn-analyze').disabled =
+      !t0 || !t60 || !t120 || isNaN(parseFloat(t0)) || isNaN(parseFloat(t60)) || isNaN(parseFloat(t120));
+  };
+  window.dkzCheckPP = function() {
+    var gaj = document.getElementById('dkz-gaj') && document.getElementById('dkz-gaj').value;
+    var pp = document.getElementById('dkz-pp') && document.getElementById('dkz-pp').value;
+    document.getElementById('dkz-btn-analyze').disabled =
+      !gaj || !pp || isNaN(parseFloat(gaj)) || isNaN(parseFloat(pp));
+  };
+  window.dkzHandleGlyco = function(val) {
+    var gaj = parseFloat(val);
+    var hgpoBlock = document.getElementById('dkz-glyco-hgpo');
+    var btn = document.getElementById('dkz-btn-analyze');
+    if (isNaN(gaj) || val === '') { hgpoBlock.style.display = 'none'; btn.disabled = true; return; }
+    if (gaj >= 0.92) { hgpoBlock.style.display = 'none'; btn.disabled = false; }
+    else { hgpoBlock.style.display = 'block'; btn.disabled = true; }
+  };
+  window.dkzCheckGlyco = function() {
+    var t0 = document.getElementById('dkz-t0') && document.getElementById('dkz-t0').value;
+    var t60 = document.getElementById('dkz-t60') && document.getElementById('dkz-t60').value;
+    var t120 = document.getElementById('dkz-t120') && document.getElementById('dkz-t120').value;
+    document.getElementById('dkz-btn-analyze').disabled =
+      !t0 || !t60 || !t120 || isNaN(parseFloat(t0)) || isNaN(parseFloat(t60)) || isNaN(parseFloat(t120));
+  };
+
+  /* ── ANALYSE ── */
+  window.dkzAnalyze = function() {
+    var type = document.getElementById('dkz-test-type').value;
+    var resultsHTML = '', summary = '', hasDG = false;
+    var vals = {};
+
+    try {
+      if (type === 'gaj') {
+        var gaj = parseFloat(document.getElementById('dkz-gaj').value);
+        if (!dkzValNum(gaj, 'la glycémie à jeun')) return;
+        vals = { gaj: gaj, type: 'GAJ' };
+        if (gaj >= 1.26) { hasDG = true; resultsHTML = dkzHtmlDT2(gaj); summary = dkzSummary('DT2', vals); }
+        else if (gaj >= 0.92) { hasDG = true; resultsHTML = dkzHtmlDGgaj(gaj); summary = dkzSummary('DG', vals); }
+        else { resultsHTML = dkzHtmlNormalGAJ(gaj); summary = dkzSummary('NORMAL', vals); }
+
+      } else if (type === 'hgpo75') {
+        var t0 = parseFloat(document.getElementById('dkz-t0').value);
+        var t60 = parseFloat(document.getElementById('dkz-t60').value);
+        var t120 = parseFloat(document.getElementById('dkz-t120').value);
+        if (!dkzValNum(t0,'T0') || !dkzValNum(t60,'T60') || !dkzValNum(t120,'T120')) return;
+        vals = { t0:t0, t60:t60, t120:t120, type:'HGPO' };
+        var ab0=t0>=0.92, ab60=t60>=1.80, ab120=t120>=1.53;
+        var nb=(ab0?1:0)+(ab60?1:0)+(ab120?1:0);
+        hasDG = nb >= 1;
+        resultsHTML = dkzHtmlHGPO(t0,t60,t120,ab0,ab60,ab120,nb);
+        summary = dkzSummary(hasDG?'DG':'NORMAL', vals);
+
+      } else if (type === 'gaj-pp') {
+        var gajP = parseFloat(document.getElementById('dkz-gaj').value);
+        var pp = parseFloat(document.getElementById('dkz-pp').value);
+        if (!dkzValNum(gajP,'GAJ') || !dkzValNum(pp,'post-prandiale')) return;
+        vals = { gaj:gajP, pp:pp, type:'GAJ-PP' };
+        hasDG = gajP>=0.92 || pp>=1.20;
+        resultsHTML = dkzHtmlGAJPP(gajP, pp, hasDG);
+        summary = dkzSummary(hasDG?'DG':'NORMAL', vals);
+
+      } else if (type === 'glycosurie') {
+        var gajG = parseFloat(document.getElementById('dkz-gaj-glyc').value);
+        if (!dkzValNum(gajG,'GAJ')) return;
+        if (gajG >= 0.92) {
+          hasDG = true;
+          vals = { gaj:gajG, type:'GAJ' };
+          resultsHTML = gajG>=1.26 ? dkzHtmlDT2(gajG) : dkzHtmlDGgaj(gajG);
+          summary = dkzSummary(gajG>=1.26?'DT2':'DG', vals);
+        } else {
+          var t0G = parseFloat(document.getElementById('dkz-t0').value);
+          var t60G = parseFloat(document.getElementById('dkz-t60').value);
+          var t120G = parseFloat(document.getElementById('dkz-t120').value);
+          if (!dkzValNum(t0G,'T0') || !dkzValNum(t60G,'T60') || !dkzValNum(t120G,'T120')) return;
+          vals = { t0:t0G, t60:t60G, t120:t120G, type:'HGPO' };
+          var ab0G=t0G>=0.92, ab60G=t60G>=1.80, ab120G=t120G>=1.53;
+          var nbG=(ab0G?1:0)+(ab60G?1:0)+(ab120G?1:0);
+          hasDG = nbG >= 1;
+          resultsHTML = dkzHtmlHGPO(t0G,t60G,t120G,ab0G,ab60G,ab120G,nbG);
+          summary = dkzSummary(hasDG?'DG':'NORMAL', vals);
+        }
+      }
+
+      if (hasDG) resultsHTML += dkzHtmlTreatment(vals);
+
+      document.getElementById('dkz-results').innerHTML = resultsHTML;
+      if (summary) {
+        document.getElementById('dkz-summary-container').style.display = 'block';
+        document.getElementById('dkz-summary-text').textContent = summary;
+      }
+      dkzGoTo(3);
+
+    } catch(e) {
+      alert('Erreur lors de l\'analyse. Vérifiez les valeurs saisies.');
+      console.error(e);
+    }
+  };
+
+  function dkzValNum(v, field) {
+    if (isNaN(v) || v <= 0) { alert('Valeur invalide pour : ' + field); return false; }
+    return true;
+  }
+
+  /* ── GÉNÉRATEURS HTML RÉSULTATS ── */
+  function dkzHtmlDT2(gaj) {
+    return '<div class="dkz-result-box abnormal">' +
+      '<span class="dkz-result-title" style="color:#b91c1c;">Diabète de type 2 préexistant</span>' +
+      '<p style="font-size:13px;color:#374151;">Glycémie à jeun : <strong>' + gaj.toFixed(2) + ' g/L</strong> (&#8805; 1,26 g/L)</p>' +
+      '<p style="font-size:13px;color:#b91c1c;font-weight:700;margin-top:10px;">&#8594; Orientation urgente en diabétologie — ce résultat dépasse le cadre du dépistage du DG</p>' +
+      '</div>';
+  }
+
+  function dkzHtmlDGgaj(gaj) {
+    return '<div class="dkz-result-box abnormal">' +
+      '<span class="dkz-result-title" style="color:#b91c1c;">Diabète gestationnel diagnostiqué (GAJ)</span>' +
+      '<p style="font-size:13px;color:#374151;">Glycémie à jeun : <strong>' + gaj.toFixed(2) + ' g/L</strong> (&#8805; 0,92 g/L)</p>' +
+      '</div>';
+  }
+
+  function dkzHtmlNormalGAJ(gaj) {
+    return '<div class="dkz-result-box normal">' +
+      '<span class="dkz-result-title" style="color:#166534;">Glycémie à jeun normale</span>' +
+      '<p style="font-size:13px;color:#374151;">Glycémie à jeun : <strong>' + gaj.toFixed(2) + ' g/L</strong> (&lt; 0,92 g/L)</p>' +
+      '<p style="font-size:13px;font-weight:700;margin-top:10px;color:#1a3a5c;">&#8594; HGPO 75 g à réaliser entre 24 et 28 SA</p>' +
+      '</div>';
+  }
+
+  function dkzHtmlHGPO(t0,t60,t120,ab0,ab60,ab120,nb) {
+    var table = '<table class="dkz-table" style="margin-top:12px;">' +
+      '<tr><th>Temps</th><th>Valeur</th><th>Seuil</th><th>Statut</th></tr>' +
+      '<tr class="' + (ab0?'row-ko':'row-ok') + '"><td>T0 (jeun)</td><td><strong>' + t0.toFixed(2) + ' g/L</strong></td><td>&#8805; 0,92 g/L</td><td>' + (ab0?'\u274C Pathologique':'\u2713 Normal') + '</td></tr>' +
+      '<tr class="' + (ab60?'row-ko':'row-ok') + '"><td>T60 (1 h)</td><td><strong>' + t60.toFixed(2) + ' g/L</strong></td><td>&#8805; 1,80 g/L</td><td>' + (ab60?'\u274C Pathologique':'\u2713 Normal') + '</td></tr>' +
+      '<tr class="' + (ab120?'row-ko':'row-ok') + '"><td>T120 (2 h)</td><td><strong>' + t120.toFixed(2) + ' g/L</strong></td><td>&#8805; 1,53 g/L</td><td>' + (ab120?'\u274C Pathologique':'\u2713 Normal') + '</td></tr>' +
+      '</table>';
+    if (nb >= 1) {
+      return '<div class="dkz-result-box abnormal">' +
+        '<span class="dkz-result-title" style="color:#b91c1c;">Diabète gestationnel diagnostiqué (HGPO 75 g)</span>' +
+        '<p style="font-size:13px;color:#374151;">' + nb + ' valeur' + (nb>1?'s':'') + ' pathologique' + (nb>1?'s':'') + ' sur 3 — critère diagnostique : &#8805; 1 valeur au seuil</p>' +
+        table + '</div>';
+    }
+    return '<div class="dkz-result-box normal">' +
+      '<span class="dkz-result-title" style="color:#166534;">HGPO 75 g normale</span>' +
+      '<p style="font-size:13px;color:#374151;">Aucune valeur pathologique.</p>' +
+      table +
+      '<p style="font-size:13px;font-weight:700;margin-top:12px;color:#1a3a5c;">&#8594; Pas de diabète gestationnel. Surveillance standard.</p>' +
+      '</div>';
+  }
+
+  function dkzHtmlGAJPP(gaj, pp, hasDG) {
+    return '<div class="dkz-result-box ' + (hasDG?'abnormal':'normal') + '">' +
+      '<span class="dkz-result-title" style="color:' + (hasDG?'#b91c1c':'#166534') + ';">' +
+      (hasDG ? 'Diabète gestationnel diagnostiqué' : 'Glycémies normales') + '</span>' +
+      '<p style="font-size:13px;color:#374151;">GAJ : <strong>' + gaj.toFixed(2) + ' g/L</strong> ' +
+      (gaj>=0.92?'<span style="color:#b91c1c;">(&#8805; 0,92 — Pathologique)</span>':'(Normal)') + '</p>' +
+      '<p style="font-size:13px;color:#374151;margin-top:4px;">Post-prandiale 2 h : <strong>' + pp.toFixed(2) + ' g/L</strong> ' +
+      (pp>=1.20?'<span style="color:#b91c1c;">(&#8805; 1,20 — Pathologique)</span>':'(Normal)') + '</p>' +
+      '</div>';
+  }
+
+  /* ── PLAN THÉRAPEUTIQUE ── */
+  function dkzNeedsInsulin(vals) {
+    if (vals.gaj && vals.gaj > 0.95) return true;
+    if (vals.pp && vals.pp > 1.20) return true;
+    if (vals.t120 && vals.t120 > 1.20) return true;
+    return false;
+  }
+
+  function dkzHtmlTreatment(vals) {
+    var insulin = dkzNeedsInsulin(vals);
+    return '<div class="dkz-treatment">' +
+      '<span class="dkz-section-title" style="margin-top:20px;">Prise en Charge du Diabète Gestationnel</span>' +
+
+      '<div class="dkz-treatment-section">' +
+      '<span class="dkz-treatment-title">1. Mesures hygiéno-diététiques (1re intention)</span>' +
+      '<p>&#8226; Apport calorique : 1 800–2 000 kcal/jour (non restrictif)</p>' +
+      '<p>&#8226; Répartition : 3 repas + 2 à 3 collations</p>' +
+      '<p>&#8226; Réduire les glucides à index glycémique élevé ; privilégier fibres et IG bas</p>' +
+      '<p>&#8226; Activité physique modérée : 30 min/jour après les repas (marche, natation)</p>' +
+      '</div>' +
+
+      '<div class="dkz-treatment-section">' +
+      '<span class="dkz-treatment-title">2. Autosurveillance glycémique — 4 à 6 mesures/jour</span>' +
+      '<p style="font-weight:700;color:#b91c1c;">Objectifs glycémiques :</p>' +
+      '<table class="dkz-table">' +
+      '<tr><th>Moment</th><th>Objectif</th></tr>' +
+      '<tr><td>GAJ (au réveil)</td><td><strong>&lt; 0,95 g/L (5,3 mmol/L)</strong></td></tr>' +
+      '<tr><td>1 h post-prandiale</td><td><strong>&lt; 1,40 g/L (7,8 mmol/L)</strong></td></tr>' +
+      '<tr><td>2 h post-prandiale</td><td><strong>&lt; 1,20 g/L (6,7 mmol/L)</strong></td></tr>' +
+      '</table>' +
+      '</div>' +
+
+      '<div class="dkz-insulin-box">' +
+      '<h4>Indication de l\'insulinothérapie</h4>' +
+      '<p><strong>Après 7–10 jours de mesures hygiéno-diététiques, insulinothérapie si :</strong></p>' +
+      '<ul><li>GAJ répétées &gt; 0,95 g/L</li>' +
+      '<li>Glycémies post-prandiales 2 h &gt; 1,20 g/L à répétition</li></ul>' +
+      '<p style="margin-top:10px;font-weight:700;color:' + (insulin?'#b91c1c':'#166534') + ';">' +
+      (insulin ? '&#9888; Insulinothérapie à envisager — glycémies au-dessus des objectifs' :
+        '\u2713 Pas d\'indication immédiate à l\'insulinothérapie — réévaluation dans 7–10 jours') +
+      '</p>' +
+      '<p style="margin-top:8px;color:#b91c1c;font-weight:700;">Hypoglycémiants oraux : non recommandés en France pendant la grossesse (hors protocoles spécialisés)</p>' +
+      '</div>' +
+
+      '<div class="dkz-treatment-section">' +
+      '<span class="dkz-treatment-title">3. Insulinothérapie (si échec des MHD à 7–10 jours)</span>' +
+      '<p>&#8226; Insuline rapide pré-prandiale si glycémies post-prandiales élevées</p>' +
+      '<p>&#8226; Insuline intermédiaire au coucher si GAJ élevée</p>' +
+      '<p>&#8226; Débuter à faible dose — adaptation selon carnet glycémique</p>' +
+      '</div>' +
+
+      '<div class="dkz-treatment-section">' +
+      '<span class="dkz-treatment-title">4. Surveillance fœtale renforcée</span>' +
+      '<p>&#8226; Biométries échographiques toutes les 3–4 semaines dès 28 SA</p>' +
+      '<p>&#8226; Dépistage de macrosomie (biométries &#8805; 97e percentile)</p>' +
+      '<p>&#8226; RCF à partir de 32–34 SA selon équilibre glycémique</p>' +
+      '</div>' +
+
+      '<div class="dkz-section-blue">' +
+      '<span class="dkz-treatment-title" style="color:#1e40af;">Accouchement (CNGOF 2023)</span>' +
+      '<p>&#8226; DG équilibré sous régime seul : terme spontané (40–41 SA)</p>' +
+      '<p>&#8226; DG sous insulinothérapie : déclenchement à 38–39 SA</p>' +
+      '<p>&#8226; Macrosomie suspecte : déclenchement à 38 SA</p>' +
+      '<p style="font-weight:700;color:#b91c1c;">&#8226; EPF &#8805; 4 250 g : césarienne de principe à discuter</p>' +
+      '</div>' +
+
+      '<div class="dkz-section-green">' +
+      '<span class="dkz-treatment-title" style="color:#166534;">Suivi post-partum (maternel)</span>' +
+      '<p>&#8226; Arrêt de l\'insulinothérapie dès l\'accouchement</p>' +
+      '<p>&#8226; Allaitement maternel conseillé</p>' +
+      '<p>&#8226; Contraception : microprogestatif recommandé en 1re intention</p>' +
+      '<p style="font-weight:700;color:#b91c1c;">&#8226; HGPO 75 g obligatoire à 3 mois post-partum (HAS 2021)</p>' +
+      '<p>&#8226; Risque de diabète type 2 : ~50 % à 10 ans &#8594; dépistage annuel recommandé</p>' +
+      '<p>&#8226; Risque de récidive lors d\'une prochaine grossesse : &gt; 40 %</p>' +
+      '</div>' +
+
+      '</div>';
+  }
+
+  /* ── RÉSUMÉ CLINIQUE ── */
+  function dkzSummary(diag, vals) {
+    var now = new Date();
+    var d = now.toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric'});
+    var h = now.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+    var s = 'RÉSUMÉ CLINIQUE – Dr KARA-ZAITRI M.A.\n';
+    s += d + ' à ' + h + '\n';
+    s += '=========================================\n\n';
+
+    s += 'DIAGNOSTIC : ';
+    if (diag==='DT2') s += 'DIABÈTE DE TYPE 2 PRÉEXISTANT\n';
+    else if (diag==='DG') s += 'DIABÈTE GESTATIONNEL\n';
+    else s += 'Absence de diabète gestationnel\n';
+    s += '\n';
+
+    s += 'FACTEURS DE RISQUE IDENTIFIÉS :\n';
+    var rfs = Array.from(document.querySelectorAll('.dkz-rf:checked')).map(function(cb) {
+      return cb.nextElementSibling.textContent;
+    });
+    if (rfs.length > 0) rfs.forEach(function(f) { s += '• ' + f + '\n'; });
+    else s += '• Aucun facteur de risque identifié\n';
+    s += '\n';
+
+    s += 'RÉSULTATS BIOLOGIQUES :\n';
+    if (vals.type==='GAJ') {
+      s += '• Glycémie à jeun : ' + vals.gaj.toFixed(2) + ' g/L';
+      if (vals.gaj >= 0.92) s += '  [seuil diagnostique ≥ 0,92 g/L]';
+      s += '\n';
+    } else if (vals.type==='HGPO') {
+      s += '• HGPO 75 g :\n';
+      s += '  - T0 (jeun)  : ' + vals.t0.toFixed(2) + ' g/L  (seuil ≥ 0,92)\n';
+      s += '  - T60 (1 h)  : ' + vals.t60.toFixed(2) + ' g/L  (seuil ≥ 1,80)\n';
+      s += '  - T120 (2 h) : ' + vals.t120.toFixed(2) + ' g/L  (seuil ≥ 1,53)\n';
+    } else if (vals.type==='GAJ-PP') {
+      s += '• GAJ              : ' + vals.gaj.toFixed(2) + ' g/L\n';
+      s += '• Post-prandiale 2h : ' + vals.pp.toFixed(2) + ' g/L\n';
+    }
+    s += '\n';
+
+    if (diag==='DG') {
+      s += 'PRISE EN CHARGE :\n';
+      s += '• Mesures hygiéno-diététiques en 1re intention\n';
+      s += '• Autosurveillance glycémique : 4–6 mesures/jour\n';
+      s += '  Objectifs : GAJ < 0,95 g/L | Post-prandiale 2h < 1,20 g/L\n';
+      if (dkzNeedsInsulin(vals)) {
+        s += '• INSULINOTHÉRAPIE INDIQUÉE (après échec MHD 7–10 j)\n';
+      } else {
+        s += '• Pas d\'indication à l\'insulinothérapie à ce stade\n';
+        s += '  Réévaluation dans 7–10 jours si objectifs non atteints\n';
+      }
+      s += '• Surveillance fœtale renforcée (biométries toutes les 3–4 SA dès 28 SA)\n';
+      s += '• HGPO 75 g obligatoire à 3 mois post-partum (HAS 2021)\n';
+      s += '\n';
+    }
+
+    s += '---\n';
+    s += 'Résultat indicatif – décision sous la responsabilité du prescripteur.\n';
+    s += 'Sources : HAS 2021 · CNGOF 2023 · ADA 2024\n';
+    return s;
+  }
+
+  /* ── COPIER ── */
+  window.dkzCopy = function() {
+    var text = document.getElementById('dkz-summary-text').textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        dkzNotif('\u2713 Résumé copié dans le presse-papier');
+      });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      dkzNotif('\u2713 Résumé copié dans le presse-papier');
+    }
+  };
+
+  function dkzNotif(msg) {
+    var n = document.getElementById('dkz-notif');
+    n.textContent = msg;
+    n.style.display = 'block';
+    setTimeout(function() { n.style.display = 'none'; }, 3000);
+  }
+
+  /* ── RÉINITIALISER ── */
+  window.dkzReset = function() {
+    currentStep = 1;
+    riskLevel = 'low';
+    rfCount = 0;
+    document.querySelectorAll('.dkz-rf').forEach(function(cb) { cb.checked = false; });
+    document.getElementById('dkz-risk-assess').innerHTML = '';
+    document.getElementById('dkz-test-type').value = '';
+    document.getElementById('dkz-test-inputs').innerHTML = '';
+    document.getElementById('dkz-btn-analyze').style.display = 'none';
+    document.getElementById('dkz-results').innerHTML = '';
+    document.getElementById('dkz-protocol').innerHTML = '';
+    document.getElementById('dkz-summary-container').style.display = 'none';
+    document.getElementById('dkz-badge').className = 'dkz-badge hidden';
+    dkzGoTo(1);
+  };
+
+})();
+</script>
+</body>
+</html>
