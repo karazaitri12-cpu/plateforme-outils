@@ -491,12 +491,48 @@
         render("final_node");
     }
 
-    window.copyFinal = function() {
+window.copyFinal = function() {
         const text = getReportText();
-        navigator.clipboard.writeText(text).then(
-            function() { alert("✅ Rapport copié dans le presse-papiers !"); },
-            function() { alert("⚠️ Erreur : impossible de copier."); }
-        );
+
+        // 1. Essayer l'API moderne (Nécessite HTTPS)
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(
+                function() { alert("✅ Rapport copié dans le presse-papiers !"); },
+                function() { fallbackCopyTextToClipboard(text); }
+            );
+        } else {
+            // 2. Si non sécurisé (HTTP) ou bloqué par WordPress, utiliser la méthode de secours
+            fallbackCopyTextToClipboard(text);
+        }
+    };
+
+    // Fonction de secours universelle
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Rendre le textarea invisible
+        textArea.style.position = "fixed";
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.opacity = "0";
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            if (successful) {
+                alert("✅ Rapport copié dans le presse-papiers !");
+            } else {
+                alert("⚠️ Erreur : impossible de copier automatiquement. Le texte est sélectionné, faites CTRL+C (ou CMD+C) pour copier.");
+            }
+        } catch (err) {
+            alert("⚠️ Erreur de copie. Veuillez sélectionner le texte manuellement.");
+        }
+
+        document.body.removeChild(textArea);
     };
 
     /* ========================================
