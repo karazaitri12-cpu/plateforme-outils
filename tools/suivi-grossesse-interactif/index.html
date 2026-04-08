@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         /* ============================================================
-           DESIGN EXISTANT (Validé sur capture)
+           DESIGN VALIDÉ (Rose/Bleu, cartes ombrées, responsive)
            ============================================================ */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; margin: 0; padding: 20px; color: #1e293b; }
         .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
@@ -70,6 +70,14 @@
         .disclaimer { margin-top: 32px; padding: 16px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; font-size: 0.85rem; color: #92400e; line-height: 1.6; display: none; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* =========================================
+   PRO : Masque l'ascenseur (style App native)
+A placer en fin de css dans chaque outil
+   ========================================= */
+html { scrollbar-width: none; }               /* Firefox */
+body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
+::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
         
         @media (max-width: 950px) { .panels-wrapper.active { display: flex; flex-direction: column; } .form-row { flex-direction: column; } .controls-col { max-width: 100%; } .resume-box { width: 100%; margin-top: 12px; } }
         @media (max-width: 600px) { .container { padding: 16px; } .info-grid { grid-template-columns: 1fr; } .nav-arrows { flex-direction: column; } .panel-header-flex { flex-direction: column; align-items: stretch; } }
@@ -79,7 +87,7 @@
 
 <div class="container">
     <h1><i class="fas fa-baby-carriage"></i> Suivi de grossesse</h1>
-    <p class="subtitle">Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique — Tlemcen | Conforme HAS 2023 / CNGOF 2022</p>
+    <p class="subtitle">Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique | Conforme HAS 2023 / CNGOF 2022</p>
     
     <div class="input-group">
         <label for="ddr"><i class="far fa-calendar-alt"></i> Date des dernières règles (DDR) :</label>
@@ -125,11 +133,11 @@
 </div>
 
 <script>
+    // Variables globales
     let dateDDR = null, saActuelle = 0, joursActuels = 0, saAffichee = 0;
-    const dateAujourdhui = new Date(); dateAujourdhui.setHours(0,0,0,0);
 
     /* ============================================================
-       DONNÉES FŒTUS / MAMAN (STRICTEMENT EN SA - STANDARDS FRANÇAIS)
+       DONNÉES FŒTUS / MAMAN (STRICTEMENT EN SA)
        ============================================================ */
     const FOETUS = {
       1: { f: "Premier jour des règles. Sélection du follicule dominant.", m: "Règles. Cycle débutant." },
@@ -147,94 +155,108 @@
       13: { f: "Empreintes digitales uniques. Intestins rentrent dans l'abdomen. Taille ~65 mm. Poids ~23 g.", m: "Ventre s'arrondit légèrement. Constipation. Libido variable." },
       14: { f: "Lanugo (duvet fin) apparaît. Foie produit de la bile. Taille ~80 mm. Poids ~43 g.", m: "Deuxième trimestre commence. Bien-être général. Appétit augmente." },
       15: { f: "Paupières soudées. Réagit à la lumière vive. Taille ~100 mm. Poids ~70 g.", m: "Premiers frémissements (multipares). Peau plus lumineuse." },
-      16: { f: "Squelette s'ossifie. Mouvements de succion/thumbsucking. Taille ~116 mm. Poids ~100 g.", m: "Mouvements ressentis (multipares). Appétit soutenu. Prise de poids +1-2 kg." },
-      17: { f: "Graisse brune (thermorégulation) se forme. Sexe visible à l'écho. Taille ~130 mm. Poids ~140 g.", m: "Ventre bien visible. Douleurs ligamentaires (ligaments ronds)." },
-      18: { f: "Myélinisation nerveuse. Bâillements/hoquets. Taille ~142 mm. Poids ~190 g.", m: "Mouvements perçus (primipares). Masque de grossesse possible." },
-      19: { f: "Vernix caseosa protège la peau. Système vestibulaire actif. Taille ~152 mm. Poids ~240 g.", m: "Sommeil agité. Rêves intenses. Oedèmes discrets le soir." },
-      20: { f: "Mi-grossesse. Audition fonctionnelle. Réagit aux voix/bruits. Taille ~160 mm. Poids ~300 g.", m: "Essoufflement à l'effort. Brûlures d'estomac. Vergetures possibles." },
-      21: { f: "Squelette s'ossifie activement. Réflexes de préhension. Taille ~18 cm (CR). Poids ~360 g.", m: "Appétit régulier. Prise de poids +4-5 kg. Énergie stable." },
-      22: { f: "Cycles sommeil/éveil établis. Sourcils/cils visibles. Taille ~19 cm. Poids ~430 g.", m: "Crampes nocturnes. Oedèmes malléolaires. Hémorroïdes possibles." },
-      23: { f: "Poumons produisent surfactant (viabilité débutante). Taille ~20 cm. Poids ~500 g.", m: "Ligne brune marquée. Peau qui tire. Besoin d'hydratation." },
-      24: { f: "Réagit aux stimuli externes. Goût développé (liquide amniotique). Taille ~30 cm. Poids ~600 g.", m: "Insomnie fréquente. Essoufflement. Reflux acides." },
-      25: { f: "Poumons mûrissent. Yeux s'ouvrent. Graisse sous-cutanée. Taille ~34 cm. Poids ~660 g.", m: "Reflux gastriques intenses. Diastasis débutant. Fond utérin au nombril." },
-      26: { f: "Rétine fonctionnelle. Testicules descendent (garçon). Taille ~35 cm. Poids ~760 g.", m: "Douleurs ligamentaires. Bassin qui s'élargit. Symphyse pubienne." },
-      27: { f: "Système nerveux mature. Rêves REM détectables. Taille ~36 cm. Poids ~875 g.", m: "Jambes lourdes. Hémorroïdes. Constipation. Varices possibles." },
-      28: { f: "Dépasse 1 kg. Sommeil paradoxal actif. Immunité passive débute. Taille ~37 cm. Poids ~1 kg.", m: "Nycturie. Fatigue accrue. Colostrom possible. Vergetures." },
-      29: { f: "Graisse blanche s'accumule. Contrôle thermique s'améliore. Taille ~38 cm. Poids ~1.15 kg.", m: "Douleurs sciatiques. Marche en canard. Difficulté à se baisser." },
-      30: { f: "Poumons produisent surfactant suffisant. Cerveau se plisse. Taille ~39 cm. Poids ~1.3 kg.", m: "Essoufflement marqué. Brûlures d'estomac. Insomnie." },
-      31: { f: "Tête proportionnelle. Système immunitaire se renforce. Taille ~41 cm. Poids ~1.5 kg.", m: "Difficulté à trouver position sommeil. Dos douloureux. Nidification." },
-      32: { f: "Graisse accumulée. Ongles atteignent le bout des doigts. Taille ~42 cm. Poids ~1.7 kg.", m: "Colostrum visible. Braxton Hicks fréquentes. Tensions pelviennes." },
-      33: { f: "Os durcissent (sauf crâne). Anticorps maternels transférés. Taille ~43 cm. Poids ~1.9 kg.", m: "Démangeaisons (vergetures/cholestase). Difficultés respiratoires." },
-      34: { f: "Poumons presque matures. Système digestif prêt. Taille ~45 cm. Poids ~2.1 kg.", m: "Mobilité réduite. Douleurs pubiennes. Envies urinaires fréquentes." },
-      35: { f: "Reins matures. Foie fonctionne. Taille ~46 cm. Poids ~2.3-2.4 kg.", m: "Tête engagée (souffle facilité). Pression pelvienne accrue." },
-      36: { f: "Graisse sous-cutanée épaisse. Lanugo disparaît. Taille ~47 cm. Poids ~2.5 kg.", m: "Nidification intense. Fatigue. Contractions irrégulières." },
-      37: { f: "Terme atteint. Organes matures. Réflexes coordonnés. Taille ~48 cm. Poids ~2.9 kg.", m: "Col mature. Pertes augmentent. Signes de travail possibles." },
-      38: { f: "Prêt à naître. Vernix s'estompe. Taille ~49 cm. Poids ~3 kg.", m: "Bouchon muqueux. Fatigue extrême. Besoin de repos." },
-      39: { f: "Poumons/Cerveau matures. Graisse protectrice. Taille ~50 cm. Poids ~3.2 kg.", m: "Douleurs pelviennes. Contractions de travail possibles." },
-      40: { f: "Terme prévu. Taille ~51 cm. Poids ~3.4 kg. Prêt pour vie extra-utérine.", m: "Surveillance stricte. Signes de travail : consulter." },
-      41: { f: "Grossesse prolongée. Liquide amniotique ↓. Placenta vieillit. Poids >3.5 kg.", m: "Monitoring fréquent. Déclenchement discuté." },
-      42: { f: "Post-terme. Risque souffrance fœtale ↑. Nécessite extraction.", m: "Hospitalisation. Déclenchement ou césarienne." }
+      16: { f: "Squelette s'ossifie. Mouvements de succion. Taille ~116 mm. Poids ~100 g.", m: "Mouvements ressentis (multipares). Appétit soutenu. Prise de poids +1-2 kg." },
+      17: { f: "Graisse brune se forme. Sexe visible à l'écho. Taille ~130 mm. Poids ~140 g.", m: "Ventre bien visible. Douleurs ligamentaires." },
+      18: { f: "Myélinisation nerveuse. Bâillements. Taille ~142 mm. Poids ~190 g.", m: "Mouvements perçus (primipares). Masque de grossesse possible." },
+      19: { f: "Vernix caseosa. Système vestibulaire actif. Taille ~152 mm. Poids ~240 g.", m: "Sommeil agité. Rêves intenses. Oedèmes discrets." },
+      20: { f: "Mi-grossesse. Audition fonctionnelle. Taille ~160 mm. Poids ~300 g.", m: "Essoufflement à l'effort. Brûlures d'estomac." },
+      21: { f: "Squelette s'ossifie. Réflexes de préhension. Taille ~18 cm (CR). Poids ~360 g.", m: "Appétit régulier. Prise de poids stable. Énergie bonne." },
+      22: { f: "Cycles sommeil/éveil. Sourcils visibles. Taille ~19 cm. Poids ~430 g.", m: "Crampes nocturnes. Oedèmes malléolaires." },
+      23: { f: "Poumons produisent surfactant. Viabilité débutante. Taille ~20 cm. Poids ~500 g.", m: "Ligne brune marquée. Peau qui tire." },
+      24: { f: "Réagit aux stimuli. Goût développé. Taille ~30 cm. Poids ~600 g.", m: "Insomnie fréquente. Essoufflement. Reflux." },
+      25: { f: "Poumons mûrissent. Yeux s'ouvrent. Taille ~34 cm. Poids ~660 g.", m: "Reflux gastriques. Diastasis débutant. Fond utérin au nombril." },
+      26: { f: "Rétine fonctionnelle. Testicules descendent. Taille ~35 cm. Poids ~760 g.", m: "Douleurs ligamentaires. Symphyse pubienne." },
+      27: { f: "Système nerveux mature. Rêves REM. Taille ~36 cm. Poids ~875 g.", m: "Jambes lourdes. Hémorroïdes. Varices possibles." },
+      28: { f: "Dépasse 1 kg. Immunité passive débute. Taille ~37 cm. Poids ~1 kg.", m: "Nycturie. Fatigue accrue. Vergetures." },
+      29: { f: "Graisse blanche s'accumule. Contrôle thermique. Taille ~38 cm. Poids ~1.15 kg.", m: "Douleurs sciatiques. Marche en canard." },
+      30: { f: "Poumons produisent surfactant suffisant. Taille ~39 cm. Poids ~1.3 kg.", m: "Essoufflement marqué. Brûlures d'estomac." },
+      31: { f: "Tête proportionnelle. Immunité renforcée. Taille ~41 cm. Poids ~1.5 kg.", m: "Difficulté sommeil. Dos douloureux. Nidification." },
+      32: { f: "Graisse accumulée. Ongles au bout des doigts. Taille ~42 cm. Poids ~1.7 kg.", m: "Colostrum visible. Braxton Hicks fréquentes." },
+      33: { f: "Os durcissent (sauf crâne). Anticorps transférés. Taille ~43 cm. Poids ~1.9 kg.", m: "Démangeaisons. Difficultés respiratoires." },
+      34: { f: "Poumons presque matures. Digestif prêt. Taille ~45 cm. Poids ~2.1 kg.", m: "Mobilité réduite. Douleurs pubiennes." },
+      35: { f: "Reins matures. Foie fonctionne. Taille ~46 cm. Poids ~2.4 kg.", m: "Tête engagée (souffle facilité). Pression pelvienne." },
+      36: { f: "Graisse épaisse. Lanugo disparaît. Taille ~47 cm. Poids ~2.5 kg.", m: "Nidification intense. Contractions irrégulières." },
+      37: { f: "Terme atteint. Organes matures. Taille ~48 cm. Poids ~2.9 kg.", m: "Col mature. Pertes augmentent. Travail possible." },
+      38: { f: "Prêt à naître. Vernix s'estompe. Taille ~49 cm. Poids ~3 kg.", m: "Bouchon muqueux. Fatigue extrême." },
+      39: { f: "Poumons/Cerveau matures. Taille ~50 cm. Poids ~3.2 kg.", m: "Douleurs pelviennes. Contractions de travail." },
+      40: { f: "Terme prévu. Taille ~51 cm. Poids ~3.4 kg.", m: "Surveillance stricte. Signes de travail." },
+      41: { f: "Grossesse prolongée. Liquide amniotique ↓. Poids >3.5 kg.", m: "Monitoring fréquent. Déclenchement discuté." },
+      42: { f: "Post-terme. Risque souffrance fœtale ↑.", m: "Hospitalisation. Extraction nécessaire." }
     };
 
     /* ============================================================
-       RECOMMANDATIONS MÉDICALES DÉTAILLÉES (HAS 2023 / CNGOF 2022)
+       RECOMMANDATIONS MÉDICALES (HAS 2023 / CNGOF 2022)
        ============================================================ */
     const MEDICAL = [
       { sa: 1, titre: "Confirmation & Bilan Initial", sections: [
-        { cat: "CONSULTATION", items: ["Interrogatoire complet (ATCD, traitements, mode de vie, désir de grossesse)", "Poids, Taille, IMC, Tension Artérielle", "Examen clinique général et gynécologique si besoin", "Prescription du bilan sanguin du 1er trimestre"] },
-        { cat: "BIOLOGIE (HAS)", items: ["Groupe ABO/Rh + RAI (systématique)", "Sérologies : Rubéole, Toxoplasmose, Syphilis (TPHA/VDRL), HIV, VHB (Ag HBs)", "NFS, Glycémie à jeun (si IMC≥25, âge≥35 ou ATCD)", "ECBU (dépistage bactériurie asymptomatique)", "TSH si symptômes thyroïdiens ou ATCD personnels/familiaux"] },
-        { cat: "DÉPISTAGE & IMAGERIE", items: ["FCV si > 3 ans ou jamais réalisé (dépistage cancer col)", "Test HPV si ≥ 30 ans", "Échographie de datation si DDR incertaine, cycles longs ou saignements", "Information sur le dépistage de la T21 (combiné T1)"] }
+        { cat: "CONSULTATION", items: ["Interrogatoire complet (ATCD, traitements, mode de vie)", "Poids, Taille, IMC, Tension Artérielle", "Examen clinique général et gynécologique", "Prescription bilan sanguin T1"] },
+        { cat: "BIOLOGIE (HAS)", items: ["Groupe ABO/Rh + RAI", "Sérologies : Rubéole, Toxoplasmose, Syphilis, HIV, VHB, VHC", "NFS, Glycémie à jeun (si IMC≥25 ou âge≥35)", "ECBU (bactériurie asymptomatique)", "TSH si symptômes/facteurs de risque"] },
+        { cat: "DÉPISTAGE & IMAGERIE", items: ["FCV si > 3 ans", "Test HPV si ≥ 30 ans", "Écho de datation si DDR incertaine", "Info dépistage T21 (combiné T1)"] }
       ]},
       { sa: 7, titre: "Début de Grossesse & Prévention", sections: [
-        { cat: "SUIVI", items: ["Vérification tolérance grossesse (nausées, douleurs, saignements)", "Poids, TA, Bandelette urinaire (protéines/glucose)", "Renouvellement sérologie Toxo/Rubéole si négative au T1"] },
-        { cat: "PRESCRIPTIONS", items: ["Acide Folique 400 µg/j jusqu'à 12 SA (5 mg si ATCD spina bifida/épilepsie)", "Vitamine D 100 000 UI unique (2e trimestre) ou 1000 UI/j", "Vaccin Grippe si période épidémique (recommandé à tout stade)", "Arrêt tabac/alcool/substances. Éducation thérapeutique"] },
-        { cat: "IMAGERIE", items: ["Prescription Échographie T1 (réalisée entre 11 et 13+6 SA)", "Mesure Clarté Nucale (CN) + LCC pour datation précise"] }
+        { cat: "SUIVI", items: ["Tolérance grossesse (nausées, douleurs, saignements)", "Poids, TA, Bandelette urinaire", "Renouvellement sérologie Toxo/Rubéole si négative"] },
+        { cat: "PRESCRIPTIONS", items: ["Acide Folique 400 µg/j jusqu'à 12 SA (5 mg si haut risque)", "Vitamine D 100 000 UI (2e trimestre)", "Vaccin Grippe si épidémie", "Arrêt tabac/alcool/substances"] },
+        { cat: "IMAGERIE", items: ["Prescription Échographie T1 (11-13+6 SA)", "Mesure Clarté Nucale (CN) + LCC"] }
       ]},
       { sa: 11, titre: "Échographie T1 & Dépistage T21", sections: [
-        { cat: "ÉCHOGRAPHIE T1 (11-13+6 SA)", items: ["Vitalité embryonnaire (activité cardiaque)", "Datation précise par Longueur Cranio-Caudale (LCC)", "Nombre d'embryons + chorionicité si grossesse multiple", "Mesure de la Clarté Nucale (CN) — seuil pathologique > 3.5 mm ou > 99e percentile", "Anatomie précoce : crâne, paroi abdominale, membres, vessie"] },
-        { cat: "DÉPISTAGE TRISOMIE 21", items: ["Test combiné du 1er trimestre : Âge maternel + CN + PAPP-A + β-hCG libre", "Risque calculé : < 1/1000 (rassurant) | 1/51-1000 (DPNI proposé) | ≥ 1/50 (Amniocentèse)", "Information claire sur les options de dépistage et diagnostic"] },
-        { cat: "ADMINISTRATIF", items: ["Déclaration de grossesse (CPAM/CAF) avant 14 SA", "Remise du carnet de maternité", "Orientation maternité adaptée au niveau de risque"] }
+        { cat: "ÉCHOGRAPHIE T1 (11-13+6 SA)", items: ["Vitalité embryonnaire", "Datation par LCC", "Clarté Nucale (CN) > 3.5 mm = pathologique", "Chorionicité si multiple", "Anatomie précoce"] },
+        { cat: "DÉPISTAGE T21", items: ["Test combiné : Âge + CN + PAPP-A + β-hCG libre", "Risque ≥ 1/50 : Amniocentèse", "Risque 1/51-1000 : DPNI", "Risque < 1/1000 : Rassurant"] },
+        { cat: "ADMINISTRATIF", items: ["Déclaration grossesse avant 14 SA", "Carnet de maternité", "Orientation maternité selon risque"] }
       ]},
-      { sa: 16, titre: "2ème Trimestre : Surveillance & Prévention", sections: [
-        { cat: "CONSULTATION MENSUELLE", items: ["Poids, TA, Recherche d'œdèmes, Bandelette urinaire", "Hauteur Utérine (HU ≈ âge gestationnel en SA ± 2 cm)", "Bruits du Cœur Fœtal (BCF) au Doppler", "Évaluation mouvements actifs fœtaux (à partir de 20 SA)"] },
-        { cat: "BIOLOGIE", items: ["Sérologie Toxoplasmose mensuelle si séronégative", "ECBU si symptômes ou ATCD d'infection urinaire", "NFS si pâleur, fatigue ou ATCD d'anémie", "RAI si Rhésus négatif"] },
-        { cat: "PRÉVENTION", items: ["Aspirine 100-150 mg/j si risque élevé de pré-éclampsie (à initier avant 16 SA)", "Supplémentation Fer si Ferritine < 30 µg/L ou Hb < 10.5 g/dL", "Calcium 1 g/j si apports alimentaires insuffisants", "Soins dentaires autorisés et recommandés (2e trimestre idéal)"] }
+      { sa: 16, titre: "2ème Trimestre : Surveillance", sections: [
+        { cat: "CONSULTATION MENSUELLE", items: ["Poids, TA, Œdèmes, BU", "Hauteur Utérine (HU ≈ SA ± 2 cm)", "BCF au Doppler", "Mouvements fœtaux (dès 20 SA)"] },
+        { cat: "BIOLOGIE", items: ["Sérologie Toxo mensuelle si négative", "ECBU si risque", "NFS si anémie", "RAI si Rhésus -"] },
+        { cat: "PRÉVENTION", items: ["Aspirine 100-150 mg/j si risque pré-éclampsie (avant 16 SA)", "Fer si Ferritine < 30 µg/L", "Calcium 1 g/j si carence", "Soins dentaires autorisés"] }
       ]},
       { sa: 20, titre: "Échographie Morphologique T2", sections: [
-        { cat: "ÉCHOGRAPHIE T2 (20-24 SA) — OBLIGATOIRE", items: ["Morphologie fœtale complète : crâne, cerveau, face, cœur (4 cavités+axes), poumons, diaphragme, paroi abdominale, reins, vessie, membres, colonne", "Biométrie : BIP, PC, PA, LF → estimation poids fœtal", "Localisation placentaire et rapport avec le col", "Longueur cervicale (si ATCD d'accouchement prématuré)", "Quantité de liquide amniotique"] },
-        { cat: "DÉPISTAGE DIABÈTE GESTATIONNEL (24-28 SA)", items: ["HGPO 75g si facteurs de risque : IMC ≥ 25, âge ≥ 35, ATCD DG/macroscmie, ATCD familial diabète T2, prise de poids excessive", "Critères OMS/IADPSG : G0 ≥ 0.92 g/L OU G1h ≥ 1.80 g/L OU G2h ≥ 1.53 g/L", "Si Glycémie à jeun T1 ≥ 0.92 g/L : diagnostic DG d'emblée, pas d'HGPO nécessaire", "Prise en charge : régime alimentaire, autocontrôle glycémique, activité physique, consultation diététique"] },
-        { cat: "BIOLOGIE 3E TRIMESTRE PRÉCOCE", items: ["NFS (anémie ferriprive fréquente : Hb < 10.5 g/dL = supplémentation)", "RAI si Rhésus négatif", "Injection préventive Ig anti-D à 28 SA chez les patientes Rh négatif non immunisées", "Sérologie toxoplasmose mensuelle si séronégative", "Bilan hépatique si prurit (cholestase gravidique : acides biliaires, ALAT, ASAT)"] }
+        { cat: "ÉCHOGRAPHIE T2 (20-24 SA)", items: ["Morphologie complète (cœur, cerveau, membres, reins...)", "Biométrie : BIP, PC, PA, LF", "Placenta & Col", "Liquide amniotique", "Sexe si demandé"] },
+        { cat: "DÉPISTAGE DIABÈTE (24-28 SA)", items: ["HGPO 75g si facteurs de risque (IMC≥25, âge≥35, ATCD...)", "Critères OMS : G0≥0.92, G1h≥1.80, G2h≥1.53 g/L", "Régime + autocontrôle si DG confirmé"] },
+        { cat: "BIOLOGIE T3 PRÉCOCE", items: ["NFS (Hb < 10.5 g/dL = supplémentation)", "Ig anti-D à 28 SA si Rhésus -", "Bilan hépatique si prurit"] }
       ]},
-      { sa: 29, titre: "3ème Trimestre : Croissance & Préparation", sections: [
-        { cat: "SURVEILLANCE MENSUELLE", items: ["Poids, TA, HU, BCF, Recherche œdèmes/protéinurie", "Évaluation des mouvements actifs fœtaux quotidiens", "Dépistage signes de pré-éclampsie : céphalées, phosphènes, acouphènes, epigastralgies, œdèmes brutaux"] },
-        { cat: "ÉCHOGRAPHIE T3 (30-32 SA)", items: ["Biométrie fœtale : BIP, PC, PA, LF → surveillance croissance (RCIU/Macrosomie)", "Présentation fœtale (céphalique, siège, transverse)", "Localisation et maturité placentaire", "Quantité de liquide amniotique", "Dopplers artères utérines/ombilicales si suspicion RCIU ou HTA"] },
-        { cat: "VACCINATION & PRÉVENTION", items: ["Vaccin Coqueluche (dTca) recommandé entre 20 et 36 SA (idéalement 2e/3e trimestre)", "Rappel Grippe si saison épidémique", "Éducation : signes d'accouchement prématuré, rupture des membranes, diminution des mouvements fœtaux"] }
+      { sa: 29, titre: "3ème Trimestre : Croissance", sections: [
+        { cat: "SURVEILLANCE", items: ["Poids, TA, HU, BCF, BU", "Mouvements fœtaux quotidiens", "Signes pré-éclampsie : céphalées, phosphènes, épigastralgies"] },
+        { cat: "ÉCHOGRAPHIE T3 (30-32 SA)", items: ["Biométrie (RCIU/Macrosomie)", "Présentation fœtale", "Placenta & Liquide", "Dopplers si besoin"] },
+        { cat: "VACCINATION", items: ["Coqueluche (dTca) entre 20 et 36 SA", "Grippe si saison"] }
       ]},
-      { sa: 35, titre: "Préparation à l'Accouchement", sections: [
-        { cat: "BILAN PRÉ-ACCOUCHEMENT", items: ["Prélèvement vagino-rectal Streptocoque B (GBS) entre 35 et 37 SA", "Si positif : antibioprophylaxie per-partum (Amoxicilline ou alternative si allergie)", "Score de Bishop (dilatation, effacement, consistance, position, hauteur)", "Évaluation clinique du bassin et engagement fœtal"] },
-        { cat: "CONSULTATIONS SPÉCIALISÉES", items: ["Consultation anesthésique (obligatoire si péridurale prévue ou césarienne)", "Bilan pré-opératoire si césarienne programmée : NFS, hémostase, groupage + RAI", "Discussion mode d'accouchement selon présentation, ATCD et souhaits patiente", "Projet de naissance : accompagnement, douleur, post-partum, allaitement"] },
-        { cat: "SURVEILLANCE", items: ["TA, poids, HU, BCF chaque semaine si terme approchant", "Monitoring fœtal (RCF) si dépassement terme ou facteurs de risque", "Échographie de contrôle si doute sur croissance ou liquide amniotique"] }
+      { sa: 35, titre: "Préparation Accouchement", sections: [
+        { cat: "BILAN PRÉ-ACCOUCHEMENT", items: ["Prélèvement Streptocoque B (35-37 SA)", "Score de Bishop", "Engagement fœtal"] },
+        { cat: "CONSULTATIONS", items: ["Anesthésie (obligatoire si péridurale)", "Pédiatrie si pathologie", "Bilan pré-op si césarienne programmée"] },
+        { cat: "SURVEILLANCE", items: ["TA, poids, HU hebdomadaire", "Monitoring si dépassement", "Écho de contrôle si doute"] }
       ]},
       { sa: 40, titre: "Terme & Post-Terme", sections: [
-        { cat: "SURVEILLANCE RAPPROCHÉE", items: ["Monitoring fœtal (RCF) 2x/semaine si ≥ 41 SA", "Mesure échographique du liquide amniotique (Index ILA)", "Évaluation du bien-être fœtal (Mouvements, RCF, Doppler si besoin)", "TA, protéinurie quotidienne si suspicion de pré-éclampsie tardive"] },
-        { cat: "DÉCLENCHEMENT DU TRAVAIL", items: ["Déclenchement proposé à 41 SA si terme dépassé sans travail spontané", "Méthodes : Prostaglandines (Dinoprostone) ou Ocytocine selon Score de Bishop", "Discussion bénéfices/risques avec la patiente", "Surveillance continue du RCF pendant le travail"] },
-        { cat: "INFORMATION PATIENTE", items: ["Consulter urgence si : perte des eaux, contractions régulières < 5 min, saignements, diminution des mouvements fœtaux, fièvre", "Valise de maternité prête. Accompagnement identifié.", "Projet d'allaitement ou biberon discuté et préparé."] }
+        { cat: "SURVEILLANCE RAPPROCHÉE", items: ["Monitoring fœtal (RCF) 2x/sem si ≥ 41 SA", "Index liquide amniotique", "TA, protéinurie"] },
+        { cat: "DÉCLENCHEMENT", items: ["Proposé à 41 SA sans travail", "Prostaglandines ou Ocytocine selon Bishop", "Discussion bénéfices/risques"] },
+        { cat: "ALERTE", items: ["Urgence si : perte des eaux, contractions <5 min, saignements, baisse mouvements, fièvre"] }
       ]}
     ];
 
+    /* ============================================================
+       CALCUL PRINCIPAL (CORRIGÉ & ROBUSTE)
+       ============================================================ */
     function calculerSuivi() {
         const ddrInput = document.getElementById("ddr").value;
         if (!ddrInput) { alert("Veuillez sélectionner une date de dernières règles."); return; }
-        const parts = ddrInput.split('-');
-        dateDDR = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); 
-        const aujUTC = new Date(Date.UTC(dateAujourdhui.getFullYear(), dateAujourdhui.getMonth(), dateAujourdhui.getDate()));
+
+        // 1. Date du jour calculée DYNAMIQUEMENT (évite les caches)
+        const now = new Date();
+        const aujUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+
+        // 2. Parsing robuste de la DDR (YYYY-MM-DD -> Numbers)
+        const [y, m, d] = ddrInput.split('-').map(Number);
+        dateDDR = new Date(Date.UTC(y, m - 1, d));
+
         if (dateDDR > aujUTC) { alert("⚠️ La DDR ne peut pas être dans le futur."); return; }
 
-        const diffJours = Math.floor((aujUTC - dateDDR) / (1000 * 3600 * 24));
+        // 3. Calcul exact de la différence en jours
+        const diffMs = aujUTC - dateDDR;
+        const diffJours = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+        // 4. Conversion SA / Jours
         saActuelle = Math.floor(diffJours / 7);
         joursActuels = diffJours % 7;
         saAffichee = Math.max(1, Math.min(42, saActuelle));
 
+        // 5. Affichage UI
         document.getElementById("progress-container").style.display = "block";
         document.getElementById("navigation").style.display = "flex";
         document.getElementById("panels-wrapper").classList.add("active");
@@ -281,7 +303,6 @@
 
         // PANNEAU MÉDICAL
         const medDiv = document.getElementById("medical-follow-up-display");
-        // Trouver la plage qui correspond
         const medData = MEDICAL.find(m => sa >= m.sa && sa < (MEDICAL[MEDICAL.indexOf(m)+1]?.sa || 99));
         if (medData) {
             let html = `<h4><i class="fas fa-user-md"></i> Check-list HAS / CNGOF 2023</h4><div class="medical-header">${medData.titre}</div>`;
@@ -292,10 +313,9 @@
             });
             medDiv.innerHTML = html;
         } else {
-            medDiv.innerHTML = `<h4><i class="fas fa-user-md"></i> Suivi Médical</h4><p style="text-align:center;color:#64748b;padding:20px;">Poursuivez la surveillance clinique habituelle. Consultez en cas de signe d'alerte.</p>`;
+            medDiv.innerHTML = `<h4><i class="fas fa-user-md"></i> Suivi Médical</h4><p style="text-align:center;color:#64748b;padding:20px;">Poursuivez la surveillance clinique habituelle.</p>`;
         }
         
-        // BOUTONS NAV
         document.querySelector("#navigation button:first-child").disabled = saAffichee <= 1;
         document.querySelector("#navigation button:last-child").disabled = saAffichee >= 42;
     }
