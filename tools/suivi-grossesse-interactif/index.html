@@ -1,373 +1,1368 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suivi de grossesse – Dr KARA-ZAITRI M.A.</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <style>
-        /* ============================================================
-           DESIGN VALIDÉ (Rose/Bleu, cartes ombrées, responsive)
-           ============================================================ */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; margin: 0; padding: 20px; color: #1e293b; }
-        .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-        h1 { color: #c46a8b; font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; text-align: center; }
-        .subtitle { text-align: center; color: #64748b; margin-bottom: 25px; font-size: 0.95rem; }
-        
-        .input-group { background: #fdf2f8; padding: 20px; border-radius: 12px; border: 1px solid #fce7f3; margin-bottom: 24px; }
-        .input-group label { font-weight: 600; display: block; margin-bottom: 12px; color: #9d174d; font-size: 0.95rem; }
-        
-        .form-row { display: flex; gap: 20px; align-items: stretch; flex-wrap: wrap; }
-        .controls-col { display: flex; flex-direction: column; gap: 12px; max-width: 340px; width: 100%; flex: none; }
-        .controls-col input[type="date"] { padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; outline: none; width: 100%; box-sizing: border-box; background: #fff; }
-        .controls-col input[type="date"]:focus { border-color: #c46a8b; box-shadow: 0 0 0 3px rgba(196, 106, 139, 0.15); }
-        .controls-col button.action-btn { background: linear-gradient(135deg, #c46a8b, #a34e6e); color: #fff; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; transition: 0.3s ease; width: 100%; box-shadow: 0 4px 12px rgba(196, 106, 139, 0.3); }
-        .controls-col button.action-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(196, 106, 139, 0.4); }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suivi de grossesse — Dr KARA-ZAITRI M.A.</title>
+  <style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — isolation totale
+   ============================================================ */
+#sgk-root {
+  all: initial;
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #1e293b;
+  background: #f5f7fa;
+  padding: 20px;
+  box-sizing: border-box;
+}
+#sgk-root *, #sgk-root *::before, #sgk-root *::after {
+  box-sizing: border-box;
+}
+/* Reset scrollbar */
+#sgk-root { scrollbar-width: none; -ms-overflow-style: none; }
+#sgk-root::-webkit-scrollbar { display: none; }
 
-        .resume-box { flex: 1; background: #fff; border: 2px dashed #c46a8b; border-radius: 12px; padding: 16px 24px; display: none; align-items: center; justify-content: space-around; min-width: 280px; box-sizing: border-box; }
-        .resume-box.show { display: flex; }
-        .resume-item { text-align: center; }
-        .resume-divider { width: 2px; height: 50px; background: linear-gradient(to bottom, #c46a8b, #fce7f3); border-radius: 2px; }
+/* ============================================================
+   CONTENEUR PRINCIPAL
+   ============================================================ */
+.sgk-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 28px 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
 
-        .progress-container { margin-top: 24px; display: none; }
-        .progress-bar-bg { background-color: #e2e8f0; border-radius: 10px; height: 10px; width: 100%; overflow: hidden; }
-        .progress-bar-fill { background: linear-gradient(90deg, #c46a8b, #a34e6e); height: 100%; width: 0%; transition: width 0.6s ease; }
-        .progress-text { font-size: 0.85rem; color: #64748b; text-align: right; margin-top: 6px; }
+/* ============================================================
+   EN-TÊTE
+   ============================================================ */
+.sgk-h1 {
+  color: #c46a8b;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+  text-align: center;
+}
+.sgk-subtitle {
+  text-align: center;
+  color: #64748b;
+  margin: 0 0 22px 0;
+  font-size: 0.9rem;
+}
 
-        .nav-arrows { display: none; justify-content: space-between; margin-top: 24px; gap: 12px; }
-        .nav-arrows button { background: #f1f5f9; color: #334155; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer; font-size: 14px; flex: 1; font-weight: 600; transition: 0.2s; }
-        .nav-arrows button:hover:not(:disabled) { background: #e2e8f0; }
-        .nav-arrows button:disabled { opacity: 0.5; cursor: not-allowed; }
+/* ============================================================
+   ONGLETS PRINCIPAUX
+   ============================================================ */
+.sgk-tabs-main {
+  display: flex;
+  gap: 6px;
+  border-bottom: 2px solid #fce7f3;
+  margin-bottom: 22px;
+}
+.sgk-tab-main {
+  padding: 10px 20px;
+  border-radius: 8px 8px 0 0;
+  background: #fdf2f8;
+  color: #9d174d;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: 2px solid #fce7f3;
+  border-bottom: none;
+  transition: background 0.2s, color 0.2s;
+  user-select: none;
+}
+.sgk-tab-main:hover { background: #fce7f3; }
+.sgk-tab-main.sgk-active {
+  background: #c46a8b;
+  color: #fff;
+  border-color: #c46a8b;
+}
 
-        .panels-wrapper { display: none; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; align-items: start; }
-        .panels-wrapper.active { display: grid; }
-        
-        .result, .medical-follow-up-section { padding: 24px; border-radius: 12px; box-sizing: border-box; animation: fadeIn 0.4s ease; }
-        .result { background: #fff5f8; border-left: 5px solid #c46a8b; }
-        .medical-follow-up-section { background: #f0f9ff; border-left: 5px solid #0ea5e9; }
+/* ============================================================
+   SECTION SAISIE DDR
+   ============================================================ */
+.sgk-input-group {
+  background: #fdf2f8;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid #fce7f3;
+  margin-bottom: 20px;
+}
+.sgk-input-label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10px;
+  color: #9d174d;
+  font-size: 0.9rem;
+}
+.sgk-form-row {
+  display: flex;
+  gap: 18px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.sgk-controls-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 320px;
+  width: 100%;
+  flex: none;
+}
+.sgk-date-input {
+  padding: 11px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  background: #fff;
+  color: #1e293b;
+  font-family: inherit;
+}
+.sgk-date-input:focus { border-color: #c46a8b; box-shadow: 0 0 0 3px rgba(196,106,139,0.15); }
+.sgk-btn-calc {
+  background: linear-gradient(135deg, #c46a8b, #a34e6e);
+  color: #fff;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.25s ease;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(196,106,139,0.28);
+  font-family: inherit;
+}
+.sgk-btn-calc:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(196,106,139,0.38); }
 
-        h4 { margin-top: 0; font-size: 1.25rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .result h4 { color: #9d174d; }
-        .medical-follow-up-section h4 { color: #0369a1; }
+/* Résumé gestationnel */
+.sgk-resume {
+  flex: 1;
+  background: #fff;
+  border: 2px dashed #c46a8b;
+  border-radius: 12px;
+  padding: 14px 22px;
+  display: none;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 260px;
+}
+.sgk-resume.sgk-show { display: flex; }
+.sgk-resume-item { text-align: center; }
+.sgk-resume-label {
+  font-size: 0.72rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.sgk-resume-val {
+  color: #9d174d;
+  font-weight: 800;
+  font-size: 1.45rem;
+}
+.sgk-resume-val2 {
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.sgk-resume-divider {
+  width: 2px;
+  height: 48px;
+  background: linear-gradient(to bottom, #c46a8b, #fce7f3);
+  border-radius: 2px;
+}
 
-        .panel-header-flex { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
-        .date-range { display: inline-block; background: #fce7f3; color: #9d174d; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
-        .medical-header { background: #e0f2fe; color: #0369a1; padding: 8px 14px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; margin-bottom: 20px; display: inline-block; }
+/* ============================================================
+   BARRE DE PROGRESSION
+   ============================================================ */
+.sgk-progress-wrap { margin-top: 18px; display: none; }
+.sgk-progress-bg {
+  background: #e2e8f0;
+  border-radius: 10px;
+  height: 9px;
+  width: 100%;
+  overflow: hidden;
+}
+.sgk-progress-fill {
+  background: linear-gradient(90deg, #c46a8b, #a34e6e);
+  height: 100%;
+  width: 0%;
+  transition: width 0.6s ease;
+}
+.sgk-progress-txt {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: right;
+  margin-top: 5px;
+}
 
-        .med-section { margin-bottom: 20px; background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .med-section h5 { color: #0f172a; margin: 0 0 10px 0; font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
-        .med-section ul { list-style: none; padding: 0; margin: 0; }
-        .med-section li { font-size: 0.9rem; line-height: 1.6; margin-bottom: 6px; padding-left: 20px; position: relative; color: #334155; }
-        .med-section li::before { content: "•"; position: absolute; left: 4px; color: #0ea5e9; font-weight: bold; }
-        .med-highlight { font-weight: 600; color: #0f172a; }
+/* ============================================================
+   NAVIGATION SEMAINES
+   ============================================================ */
+.sgk-nav {
+  display: none;
+  justify-content: space-between;
+  margin-top: 18px;
+  gap: 10px;
+}
+.sgk-nav-btn {
+  background: #f1f5f9;
+  color: #334155;
+  padding: 11px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  font-size: 13px;
+  flex: 1;
+  font-weight: 600;
+  transition: 0.2s;
+  font-family: inherit;
+}
+.sgk-nav-btn:hover:not(:disabled) { background: #e2e8f0; }
+.sgk-nav-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-        .foetus-block h5, .mama-block h5 { color: #475569; margin: 16px 0 8px 0; font-size: 1rem; font-weight: 700; }
-        .foetus-block p, .mama-block p { margin-top: 0; line-height: 1.7; font-size: 0.95rem; color: #334155; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px dashed #cbd5e1; font-size: 0.9rem; }
-        .highlight { font-weight: 600; color: #9d174d; }
-        .badge { display: inline-block; background: #c46a8b; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-right: 6px; }
+/* ============================================================
+   PANNEAUX FOETUS / MÉDICAL
+   ============================================================ */
+.sgk-panels {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 20px;
+  align-items: start;
+}
+.sgk-panels.sgk-active { display: grid; }
 
-        .disclaimer { margin-top: 32px; padding: 16px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 8px; font-size: 0.85rem; color: #92400e; line-height: 1.6; display: none; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.sgk-panel-foetus {
+  padding: 22px;
+  border-radius: 12px;
+  background: #fff5f8;
+  border-left: 5px solid #c46a8b;
+  animation: sgkFadeIn 0.4s ease;
+}
+.sgk-panel-medical {
+  padding: 22px;
+  border-radius: 12px;
+  background: #f0f9ff;
+  border-left: 5px solid #0ea5e9;
+  animation: sgkFadeIn 0.4s ease;
+}
 
-/* =========================================
-   PRO : Masque l'ascenseur (style App native)
-A placer en fin de css dans chaque outil
-   ========================================= */
-html { scrollbar-width: none; }               /* Firefox */
-body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
-::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
-        
-        @media (max-width: 950px) { .panels-wrapper.active { display: flex; flex-direction: column; } .form-row { flex-direction: column; } .controls-col { max-width: 100%; } .resume-box { width: 100%; margin-top: 12px; } }
-        @media (max-width: 600px) { .container { padding: 16px; } .info-grid { grid-template-columns: 1fr; } .nav-arrows { flex-direction: column; } .panel-header-flex { flex-direction: column; align-items: stretch; } }
-    </style>
+.sgk-panel-h4 {
+  margin: 0 0 14px 0;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.sgk-panel-foetus .sgk-panel-h4 { color: #9d174d; }
+.sgk-panel-medical .sgk-panel-h4 { color: #0369a1; }
+
+.sgk-panel-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.sgk-date-range {
+  display: inline-block;
+  background: #fce7f3;
+  color: #9d174d;
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.sgk-badge {
+  display: inline-block;
+  background: #c46a8b;
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 5px;
+}
+.sgk-badge-grey { background: #64748b; }
+
+.sgk-block-h5 {
+  color: #475569;
+  margin: 14px 0 7px 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.sgk-block-p {
+  margin: 0;
+  line-height: 1.7;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.sgk-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 0.85rem;
+}
+.sgk-highlight { font-weight: 600; color: #9d174d; }
+
+/* Panneau médical */
+.sgk-medical-header {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 7px 13px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+.sgk-med-section {
+  margin-bottom: 16px;
+  background: #fff;
+  padding: 14px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.sgk-med-section-h5 {
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 5px;
+}
+.sgk-med-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sgk-med-ul li {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 5px;
+  padding-left: 18px;
+  position: relative;
+  color: #334155;
+}
+.sgk-med-ul li::before {
+  content: "\2022";
+  position: absolute;
+  left: 4px;
+  color: #0ea5e9;
+  font-weight: bold;
+}
+.sgk-med-highlight { font-weight: 600; color: #0f172a; }
+
+/* ============================================================
+   SECTION CHECKLIST
+   ============================================================ */
+.sgk-chk-wrap { animation: sgkFadeIn 0.35s ease; }
+
+.sgk-chk-top {
+  background: #fdf2f8;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid #fce7f3;
+  margin-bottom: 18px;
+}
+.sgk-chk-row {
+  display: flex;
+  gap: 18px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.sgk-chk-field { display: flex; flex-direction: column; gap: 5px; }
+.sgk-chk-field label {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.sgk-chk-field input {
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1e293b;
+  background: #fff;
+  outline: none;
+}
+.sgk-chk-field input:focus { border-color: #c46a8b; box-shadow: 0 0 0 3px rgba(196,106,139,0.12); }
+.sgk-chk-field input[readonly] { background: #f8fafc; color: #475569; }
+.sgk-chk-amenorrhea {
+  display: inline-block;
+  background: #c46a8b;
+  color: #fff;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  min-width: 120px;
+  text-align: center;
+  align-self: flex-end;
+}
+.sgk-error-msg {
+  font-size: 0.78rem;
+  color: #dc2626;
+  margin-top: 3px;
+  display: none;
+}
+
+/* Onglets trimestres */
+.sgk-trim-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.sgk-trim-tab {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+  transition: 0.2s;
+  font-family: inherit;
+}
+.sgk-trim-tab:hover { background: #e2e8f0; }
+.sgk-trim-tab.sgk-active {
+  background: linear-gradient(90deg, #0ea5e9, #0284c7);
+  color: #fff;
+  border-color: #0ea5e9;
+}
+
+/* Sections checklist */
+.sgk-chk-section { margin-bottom: 20px; }
+.sgk-chk-section-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sgk-chk-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+.sgk-chk-section-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.sgk-badge-oblig { background: #fee2e2; color: #991b1b; }
+.sgk-badge-recom { background: #e0f2fe; color: #0369a1; }
+.sgk-chk-dates {
+  font-size: 0.78rem;
+  color: #0ea5e9;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.sgk-chk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #eef2f6;
+  margin-bottom: 7px;
+  background: #fff;
+  transition: background 0.15s;
+}
+.sgk-chk-item:hover { background: #f8fafc; }
+.sgk-chk-cb {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  accent-color: #c46a8b;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.sgk-chk-item-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.4;
+}
+.sgk-chk-item-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.sgk-chk-item.sgk-done { background: #f0fdf4; border-color: #bbf7d0; }
+.sgk-chk-item.sgk-done .sgk-chk-item-title { color: #166534; text-decoration: line-through; opacity: 0.7; }
+
+/* Stats + actions */
+.sgk-chk-stats {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sgk-chk-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.sgk-btn-action {
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: 0.2s;
+}
+.sgk-btn-save {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+.sgk-btn-save:hover { background: #e2e8f0; }
+.sgk-btn-reset {
+  background: #fff0f3;
+  color: #9d174d;
+  border: 1px solid #fce7f3;
+}
+.sgk-btn-reset:hover { background: #fce7f3; }
+.sgk-btn-print {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #fff;
+}
+.sgk-btn-print:hover { opacity: 0.9; }
+
+/* ============================================================
+   MENTION MÉDICO-LÉGALE
+   ============================================================ */
+.sgk-disclaimer {
+  margin-top: 24px;
+  padding: 13px 16px;
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: #92400e;
+  line-height: 1.6;
+  display: none;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes sgkFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 950px) {
+  .sgk-panels.sgk-active { display: flex; flex-direction: column; }
+  .sgk-form-row { flex-direction: column; }
+  .sgk-controls-col { max-width: 100%; }
+  .sgk-resume { width: 100%; margin-top: 10px; }
+  .sgk-panels { display: flex; flex-direction: column; }
+}
+@media (max-width: 600px) {
+  #sgk-root { padding: 10px; }
+  .sgk-wrap { padding: 14px; }
+  .sgk-h1 { font-size: 1.4rem; }
+  .sgk-info-grid { grid-template-columns: 1fr; }
+  .sgk-nav { flex-direction: column; }
+  .sgk-panel-header-flex { flex-direction: column; align-items: stretch; }
+  .sgk-chk-row { flex-direction: column; }
+  .sgk-trim-tabs { gap: 4px; }
+}
+  </style>
 </head>
 <body>
+<div id="sgk-root">
+<div class="sgk-wrap">
 
-<div class="container">
-    <h1><i class="fas fa-baby-carriage"></i> Suivi de grossesse</h1>
-    <p class="subtitle">Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique | Conforme HAS 2023 / CNGOF 2022</p>
-    
-    <div class="input-group">
-        <label for="ddr"><i class="far fa-calendar-alt"></i> Date des dernières règles (DDR) :</label>
-        <div class="form-row">
-            <div class="controls-col">
-                <input type="date" id="ddr" />
-                <button class="action-btn" onclick="calculerSuivi()"><i class="fas fa-calculator"></i> Afficher le suivi</button>
-            </div>
-            <div id="resume-grossesse" class="resume-box">
-                <div class="resume-item">
-                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Âge gestationnel</div>
-                    <div style="color: #9d174d; font-weight: 800; font-size: 1.5rem;" id="resume-sa">-- SA + -- j</div>
-                </div>
-                <div class="resume-divider"></div>
-                <div class="resume-item">
-                    <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Terme (41 SA)</div>
-                    <div style="color: #0f172a; font-weight: 700; font-size: 1.1rem;"><i class="fas fa-flag-checkered"></i> <span id="resume-dpa">--</span></div>
-                </div>
-            </div>
+  <!-- EN-TÊTE -->
+  <h1 class="sgk-h1">&#128118; Suivi de grossesse</h1>
+  <p class="sgk-subtitle">Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique &nbsp;|&nbsp; Conforme HAS 2023 / CNGOF 2022</p>
+
+  <!-- ONGLETS PRINCIPAUX -->
+  <div class="sgk-tabs-main">
+    <button class="sgk-tab-main sgk-active" data-tab="suivi">&#128337; Suivi semaine par semaine</button>
+    <button class="sgk-tab-main" data-tab="checklist">&#10003; Checklist des examens</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       ONGLET 1 — SUIVI SEMAINE PAR SEMAINE
+       ═══════════════════════════════════════════════════════ -->
+  <div id="sgk-pane-suivi">
+
+    <!-- Saisie DDR -->
+    <div class="sgk-input-group">
+      <label class="sgk-input-label" for="sgk-ddr">&#128197; Date des dernières règles (DDR) :</label>
+      <div class="sgk-form-row">
+        <div class="sgk-controls-col">
+          <input type="date" id="sgk-ddr" class="sgk-date-input" />
+          <button class="sgk-btn-calc" onclick="sgkCalculer()">&#128300; Afficher le suivi</button>
         </div>
+        <div id="sgk-resume" class="sgk-resume">
+          <div class="sgk-resume-item">
+            <div class="sgk-resume-label">Âge gestationnel</div>
+            <div class="sgk-resume-val" id="sgk-resume-sa">-- SA</div>
+          </div>
+          <div class="sgk-resume-divider"></div>
+          <div class="sgk-resume-item">
+            <div class="sgk-resume-label">Terme (41 SA)</div>
+            <div class="sgk-resume-val2">&#127937; <span id="sgk-resume-dpa">--</span></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="progress-container" id="progress-container">
-        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
-        <div class="progress-text" id="progress-text"></div>
+    <!-- Progression -->
+    <div class="sgk-progress-wrap" id="sgk-progress-wrap">
+      <div class="sgk-progress-bg"><div class="sgk-progress-fill" id="sgk-progress-fill"></div></div>
+      <div class="sgk-progress-txt" id="sgk-progress-txt"></div>
     </div>
 
-    <div class="nav-arrows" id="navigation">
-        <button onclick="changerSemaine(-1)"><i class="fas fa-arrow-left"></i> Semaine précédente</button>
-        <button onclick="revenirAujourdhui()"><i class="fas fa-calendar-day"></i> Aujourd'hui</button>
-        <button onclick="changerSemaine(1)">Semaine suivante <i class="fas fa-arrow-right"></i></button>
+    <!-- Navigation semaines -->
+    <div class="sgk-nav" id="sgk-nav">
+      <button class="sgk-nav-btn" onclick="sgkChangerSa(-1)">&#8592; Semaine précédente</button>
+      <button class="sgk-nav-btn" onclick="sgkRevenirAujourdhui()">&#128197; Aujourd'hui</button>
+      <button class="sgk-nav-btn" onclick="sgkChangerSa(1)">Semaine suivante &#8594;</button>
     </div>
 
-    <div class="panels-wrapper" id="panels-wrapper">
-        <div class="result" id="result"></div>
-        <div class="medical-follow-up-section" id="medical-follow-up-display"></div>
+    <!-- Panneaux -->
+    <div class="sgk-panels" id="sgk-panels">
+      <div class="sgk-panel-foetus" id="sgk-panel-foetus"></div>
+      <div class="sgk-panel-medical" id="sgk-panel-medical"></div>
     </div>
 
-    <div class="disclaimer" id="disclaimer">
-        <strong><i class="fas fa-exclamation-triangle"></i> Avertissement médico-légal</strong><br>
-        Cet outil est une aide à la décision clinique. Il ne remplace pas l'examen médical, l'échographie ni le jugement du praticien. Les données sont conformes aux recommandations HAS 2023 et CNGOF 2022.
+    <!-- Disclaimer -->
+    <div class="sgk-disclaimer" id="sgk-disclaimer-suivi">
+      <strong>&#9888; Avertissement médico-légal</strong><br>
+      Cet outil est une aide à la décision clinique. Il ne remplace pas l'examen médical, l'échographie ni le jugement du praticien. Les données sont conformes aux recommandations HAS 2023 et CNGOF 2022.
     </div>
-</div>
+  </div><!-- /pane-suivi -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       ONGLET 2 — CHECKLIST DES EXAMENS
+       ═══════════════════════════════════════════════════════ -->
+  <div id="sgk-pane-checklist" style="display:none;">
+    <div class="sgk-chk-wrap">
+
+      <!-- Saisie DDR/DPA pour checklist -->
+      <div class="sgk-chk-top">
+        <div class="sgk-chk-row">
+          <div class="sgk-chk-field">
+            <label for="sgk-chk-ddr">Date dernières règles (DDR)</label>
+            <input type="date" id="sgk-chk-ddr" />
+            <div class="sgk-error-msg" id="sgk-chk-ddr-err"></div>
+          </div>
+          <div class="sgk-chk-field">
+            <label for="sgk-chk-dpa">Date prévue d'accouchement (DPA)</label>
+            <input type="date" id="sgk-chk-dpa" />
+            <div class="sgk-error-msg" id="sgk-chk-dpa-err"></div>
+          </div>
+          <div class="sgk-chk-field">
+            <label>Aménorrhée actuelle</label>
+            <div class="sgk-chk-amenorrhea" id="sgk-chk-amenorrhea">-- SA</div>
+          </div>
+          <div class="sgk-chk-field">
+            <label for="sgk-chk-nom">Nom patiente (optionnel)</label>
+            <input type="text" id="sgk-chk-nom" placeholder="Prénom Nom" style="width:160px;" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Onglets trimestres -->
+      <div class="sgk-trim-tabs">
+        <button class="sgk-trim-tab sgk-active" data-trim="1">1er trimestre</button>
+        <button class="sgk-trim-tab" data-trim="2">2e trimestre</button>
+        <button class="sgk-trim-tab" data-trim="3">3e trimestre</button>
+      </div>
+
+      <!-- Contenu checklist -->
+      <div id="sgk-chk-content"></div>
+
+      <!-- Stats + actions -->
+      <div class="sgk-chk-stats" id="sgk-chk-stats">Saisissez la DDR ou la DPA pour générer la checklist.</div>
+      <div class="sgk-chk-actions">
+        <button class="sgk-btn-action sgk-btn-save" onclick="sgkChkSave()">&#128190; Sauvegarder</button>
+        <button class="sgk-btn-action sgk-btn-reset" onclick="sgkChkReset()">&#8635; Réinitialiser</button>
+        <button class="sgk-btn-action sgk-btn-print" onclick="sgkChkPrint()">&#128438; Imprimer</button>
+      </div>
+
+      <!-- Disclaimer checklist -->
+      <div class="sgk-disclaimer" style="display:block; margin-top:16px;">
+        <strong>&#9888; Note</strong> — Protocole français (HAS / CNGOF). Cette checklist est informative et ne remplace pas la prise en charge clinique individualisée.
+      </div>
+    </div>
+  </div><!-- /pane-checklist -->
+
+</div><!-- /sgk-wrap -->
+</div><!-- /sgk-root -->
 
 <script>
-    // Variables globales
-    let dateDDR = null, saActuelle = 0, joursActuels = 0, saAffichee = 0;
+(function() {
+  'use strict';
 
-    /* ============================================================
-       DONNÉES FŒTUS / MAMAN (STRICTEMENT EN SA)
-       ============================================================ */
-    const FOETUS = {
-      1: { f: "Premier jour des règles. Sélection du follicule dominant.", m: "Règles. Cycle débutant." },
-      2: { f: "Ovulation vers J14. Fécondation possible dans les 24h.", m: "Période fertile. Glaire cervicale élastique." },
-      3: { f: "Fécondation. Zygote migre vers l'utérus. Premières divisions.", m: "Aucun signe. hCG commence à augmenter." },
-      4: { f: "Implantation. Blastocyste fixé. Taille < 0.5 mm.", m: "Retard de règles. Seins tendus. Fatigue légère." },
-      5: { f: "Tub neural se ferme. Cœur commence à battre (100-115 bpm). Taille ~2 mm.", m: "Nausées matinales. Hypersensibilité olfactive. Pollakiurie." },
-      6: { f: "Bourgeons des membres. Arcs pharyngés visibles. Taille ~4-5 mm.", m: "Nausées intenses. Sautes d'humeur. Constipation débutante." },
-      7: { f: "Doigts/orteils ébauchés. Cerveau se divise en hémisphères. Taille ~9 mm.", m: "Seins lourds. Émotions fluctuantes. Besoin de repos." },
-      8: { f: "Organes majeurs formés. Mouvements spontanés (imperceptibles). Taille ~16 mm. Poids ~1 g.", m: "Tour de taille inchangé. Peau parfois plus grasse/acnéique." },
-      9: { f: "Fin phase embryonnaire. Queue disparaît. Taille ~23 mm. Poids ~2 g.", m: "Fatigue persistante. Appétit variable. Humeur sensible." },
-      10: { f: "Ongles apparaissent. Os commencent à durcir. Taille ~31 mm. Poids ~4 g.", m: "Nausées souvent à leur pic. Vertiges orthostatiques possibles." },
-      11: { f: "Tête = 50% du corps. Réflexes débutent. Taille ~41 mm. Poids ~7 g.", m: "Ventre plat. Linea nigra possible. Odeurs repoussantes." },
-      12: { f: "Réflexe de succion. Sexe indifférencié mais gonades actives. Taille ~53 mm. Poids ~14 g.", m: "Nausées régressent. Énergie retrouvée. Risque FC chute <2%." },
-      13: { f: "Empreintes digitales uniques. Intestins rentrent dans l'abdomen. Taille ~65 mm. Poids ~23 g.", m: "Ventre s'arrondit légèrement. Constipation. Libido variable." },
-      14: { f: "Lanugo (duvet fin) apparaît. Foie produit de la bile. Taille ~80 mm. Poids ~43 g.", m: "Deuxième trimestre commence. Bien-être général. Appétit augmente." },
-      15: { f: "Paupières soudées. Réagit à la lumière vive. Taille ~100 mm. Poids ~70 g.", m: "Premiers frémissements (multipares). Peau plus lumineuse." },
-      16: { f: "Squelette s'ossifie. Mouvements de succion. Taille ~116 mm. Poids ~100 g.", m: "Mouvements ressentis (multipares). Appétit soutenu. Prise de poids +1-2 kg." },
-      17: { f: "Graisse brune se forme. Sexe visible à l'écho. Taille ~130 mm. Poids ~140 g.", m: "Ventre bien visible. Douleurs ligamentaires." },
-      18: { f: "Myélinisation nerveuse. Bâillements. Taille ~142 mm. Poids ~190 g.", m: "Mouvements perçus (primipares). Masque de grossesse possible." },
-      19: { f: "Vernix caseosa. Système vestibulaire actif. Taille ~152 mm. Poids ~240 g.", m: "Sommeil agité. Rêves intenses. Oedèmes discrets." },
-      20: { f: "Mi-grossesse. Audition fonctionnelle. Taille ~160 mm. Poids ~300 g.", m: "Essoufflement à l'effort. Brûlures d'estomac." },
-      21: { f: "Squelette s'ossifie. Réflexes de préhension. Taille ~18 cm (CR). Poids ~360 g.", m: "Appétit régulier. Prise de poids stable. Énergie bonne." },
-      22: { f: "Cycles sommeil/éveil. Sourcils visibles. Taille ~19 cm. Poids ~430 g.", m: "Crampes nocturnes. Oedèmes malléolaires." },
-      23: { f: "Poumons produisent surfactant. Viabilité débutante. Taille ~20 cm. Poids ~500 g.", m: "Ligne brune marquée. Peau qui tire." },
-      24: { f: "Réagit aux stimuli. Goût développé. Taille ~30 cm. Poids ~600 g.", m: "Insomnie fréquente. Essoufflement. Reflux." },
-      25: { f: "Poumons mûrissent. Yeux s'ouvrent. Taille ~34 cm. Poids ~660 g.", m: "Reflux gastriques. Diastasis débutant. Fond utérin au nombril." },
-      26: { f: "Rétine fonctionnelle. Testicules descendent. Taille ~35 cm. Poids ~760 g.", m: "Douleurs ligamentaires. Symphyse pubienne." },
-      27: { f: "Système nerveux mature. Rêves REM. Taille ~36 cm. Poids ~875 g.", m: "Jambes lourdes. Hémorroïdes. Varices possibles." },
-      28: { f: "Dépasse 1 kg. Immunité passive débute. Taille ~37 cm. Poids ~1 kg.", m: "Nycturie. Fatigue accrue. Vergetures." },
-      29: { f: "Graisse blanche s'accumule. Contrôle thermique. Taille ~38 cm. Poids ~1.15 kg.", m: "Douleurs sciatiques. Marche en canard." },
-      30: { f: "Poumons produisent surfactant suffisant. Taille ~39 cm. Poids ~1.3 kg.", m: "Essoufflement marqué. Brûlures d'estomac." },
-      31: { f: "Tête proportionnelle. Immunité renforcée. Taille ~41 cm. Poids ~1.5 kg.", m: "Difficulté sommeil. Dos douloureux. Nidification." },
-      32: { f: "Graisse accumulée. Ongles au bout des doigts. Taille ~42 cm. Poids ~1.7 kg.", m: "Colostrum visible. Braxton Hicks fréquentes." },
-      33: { f: "Os durcissent (sauf crâne). Anticorps transférés. Taille ~43 cm. Poids ~1.9 kg.", m: "Démangeaisons. Difficultés respiratoires." },
-      34: { f: "Poumons presque matures. Digestif prêt. Taille ~45 cm. Poids ~2.1 kg.", m: "Mobilité réduite. Douleurs pubiennes." },
-      35: { f: "Reins matures. Foie fonctionne. Taille ~46 cm. Poids ~2.4 kg.", m: "Tête engagée (souffle facilité). Pression pelvienne." },
-      36: { f: "Graisse épaisse. Lanugo disparaît. Taille ~47 cm. Poids ~2.5 kg.", m: "Nidification intense. Contractions irrégulières." },
-      37: { f: "Terme atteint. Organes matures. Taille ~48 cm. Poids ~2.9 kg.", m: "Col mature. Pertes augmentent. Travail possible." },
-      38: { f: "Prêt à naître. Vernix s'estompe. Taille ~49 cm. Poids ~3 kg.", m: "Bouchon muqueux. Fatigue extrême." },
-      39: { f: "Poumons/Cerveau matures. Taille ~50 cm. Poids ~3.2 kg.", m: "Douleurs pelviennes. Contractions de travail." },
-      40: { f: "Terme prévu. Taille ~51 cm. Poids ~3.4 kg.", m: "Surveillance stricte. Signes de travail." },
-      41: { f: "Grossesse prolongée. Liquide amniotique ↓. Poids >3.5 kg.", m: "Monitoring fréquent. Déclenchement discuté." },
-      42: { f: "Post-terme. Risque souffrance fœtale ↑.", m: "Hospitalisation. Extraction nécessaire." }
-    };
+  /* ============================================================
+     DONNÉES FŒTUS / MAMAN
+     ============================================================ */
+  var FOETUS = {
+    1:  { f: "Premier jour des règles. Sélection du follicule dominant.", m: "Règles. Cycle débutant." },
+    2:  { f: "Ovulation vers J14. Fécondation possible dans les 24h.", m: "Période fertile. Glaire cervicale élastique." },
+    3:  { f: "Fécondation. Zygote migre vers l'utérus. Premières divisions.", m: "Aucun signe. hCG commence à augmenter." },
+    4:  { f: "Implantation. Blastocyste fixé. Taille < 0.5 mm.", m: "Retard de règles. Seins tendus. Fatigue légère." },
+    5:  { f: "Tube neural se ferme. Cœur commence à battre (100-115 bpm). Taille ~2 mm.", m: "Nausées matinales. Hypersensibilité olfactive. Pollakiurie." },
+    6:  { f: "Bourgeons des membres. Arcs pharyngés visibles. Taille ~4-5 mm.", m: "Nausées intenses. Sautes d'humeur. Constipation débutante." },
+    7:  { f: "Doigts/orteils ébauchés. Cerveau se divise en hémisphères. Taille ~9 mm.", m: "Seins lourds. Émotions fluctuantes. Besoin de repos." },
+    8:  { f: "Organes majeurs formés. Mouvements spontanés (imperceptibles). Taille ~16 mm. Poids ~1 g.", m: "Tour de taille inchangé. Peau parfois plus grasse/acnéique." },
+    9:  { f: "Fin phase embryonnaire. Queue disparaît. Taille ~23 mm. Poids ~2 g.", m: "Fatigue persistante. Appétit variable. Humeur sensible." },
+    10: { f: "Ongles apparaissent. Os commencent à durcir. Taille ~31 mm. Poids ~4 g.", m: "Nausées souvent à leur pic. Vertiges orthostatiques possibles." },
+    11: { f: "Tête = 50% du corps. Réflexes débutent. Taille ~41 mm. Poids ~7 g.", m: "Ventre plat. Linea nigra possible. Odeurs repoussantes." },
+    12: { f: "Réflexe de succion. Sexe indifférencié mais gonades actives. Taille ~53 mm. Poids ~14 g.", m: "Nausées régressent. Énergie retrouvée. Risque FC chute <2%." },
+    13: { f: "Empreintes digitales uniques. Intestins rentrent dans l'abdomen. Taille ~65 mm. Poids ~23 g.", m: "Ventre s'arrondit légèrement. Constipation. Libido variable." },
+    14: { f: "Lanugo (duvet fin) apparaît. Foie produit de la bile. Taille ~80 mm. Poids ~43 g.", m: "Deuxième trimestre commence. Bien-être général. Appétit augmente." },
+    15: { f: "Paupières soudées. Réagit à la lumière vive. Taille ~100 mm. Poids ~70 g.", m: "Premiers frémissements (multipares). Peau plus lumineuse." },
+    16: { f: "Squelette s'ossifie. Mouvements de succion. Taille ~116 mm. Poids ~100 g.", m: "Mouvements ressentis (multipares). Appétit soutenu. Prise de poids +1-2 kg." },
+    17: { f: "Graisse brune se forme. Sexe visible à l'écho. Taille ~130 mm. Poids ~140 g.", m: "Ventre bien visible. Douleurs ligamentaires." },
+    18: { f: "Myélinisation nerveuse. Bâillements. Taille ~142 mm. Poids ~190 g.", m: "Mouvements perçus (primipares). Masque de grossesse possible." },
+    19: { f: "Vernix caseosa. Système vestibulaire actif. Taille ~152 mm. Poids ~240 g.", m: "Sommeil agité. Rêves intenses. Œdèmes discrets." },
+    20: { f: "Mi-grossesse. Audition fonctionnelle. Taille ~160 mm. Poids ~300 g.", m: "Essoufflement à l'effort. Brûlures d'estomac." },
+    21: { f: "Squelette s'ossifie. Réflexes de préhension. Taille ~18 cm. Poids ~360 g.", m: "Appétit régulier. Prise de poids stable. Énergie bonne." },
+    22: { f: "Cycles sommeil/éveil. Sourcils visibles. Taille ~19 cm. Poids ~430 g.", m: "Crampes nocturnes. Œdèmes malléolaires." },
+    23: { f: "Poumons produisent surfactant. Viabilité débutante. Taille ~20 cm. Poids ~500 g.", m: "Ligne brune marquée. Peau qui tire." },
+    24: { f: "Réagit aux stimuli. Goût développé. Taille ~30 cm. Poids ~600 g.", m: "Insomnie fréquente. Essoufflement. Reflux." },
+    25: { f: "Poumons mûrissent. Yeux s'ouvrent. Taille ~34 cm. Poids ~660 g.", m: "Reflux gastriques. Diastasis débutant. Fond utérin au nombril." },
+    26: { f: "Rétine fonctionnelle. Testicules descendent. Taille ~35 cm. Poids ~760 g.", m: "Douleurs ligamentaires. Symphyse pubienne." },
+    27: { f: "Système nerveux mature. Rêves REM. Taille ~36 cm. Poids ~875 g.", m: "Jambes lourdes. Hémorroïdes. Varices possibles." },
+    28: { f: "Dépasse 1 kg. Immunité passive débute. Taille ~37 cm. Poids ~1 kg.", m: "Nycturie. Fatigue accrue. Vergetures." },
+    29: { f: "Graisse blanche s'accumule. Contrôle thermique. Taille ~38 cm. Poids ~1.15 kg.", m: "Douleurs sciatiques. Marche en canard." },
+    30: { f: "Poumons produisent surfactant suffisant. Taille ~39 cm. Poids ~1.3 kg.", m: "Essoufflement marqué. Brûlures d'estomac." },
+    31: { f: "Tête proportionnelle. Immunité renforcée. Taille ~41 cm. Poids ~1.5 kg.", m: "Difficulté sommeil. Dos douloureux. Nidification." },
+    32: { f: "Graisse accumulée. Ongles au bout des doigts. Taille ~42 cm. Poids ~1.7 kg.", m: "Colostrum visible. Contractions de Braxton Hicks fréquentes." },
+    33: { f: "Os durcissent (sauf crâne). Anticorps transférés. Taille ~43 cm. Poids ~1.9 kg.", m: "Démangeaisons. Difficultés respiratoires." },
+    34: { f: "Poumons presque matures. Digestif prêt. Taille ~45 cm. Poids ~2.1 kg.", m: "Mobilité réduite. Douleurs pubiennes." },
+    35: { f: "Reins matures. Foie fonctionne. Taille ~46 cm. Poids ~2.4 kg.", m: "Tête engagée (souffle facilité). Pression pelvienne." },
+    36: { f: "Graisse épaisse. Lanugo disparaît. Taille ~47 cm. Poids ~2.5 kg.", m: "Nidification intense. Contractions irrégulières." },
+    37: { f: "Terme atteint. Organes matures. Taille ~48 cm. Poids ~2.9 kg.", m: "Col mature. Pertes augmentent. Travail possible." },
+    38: { f: "Prêt à naître. Vernix s'estompe. Taille ~49 cm. Poids ~3 kg.", m: "Bouchon muqueux. Fatigue extrême." },
+    39: { f: "Poumons/Cerveau matures. Taille ~50 cm. Poids ~3.2 kg.", m: "Douleurs pelviennes. Contractions de travail." },
+    40: { f: "Terme prévu. Taille ~51 cm. Poids ~3.4 kg.", m: "Surveillance stricte. Signes de travail." },
+    41: { f: "Grossesse prolongée. Liquide amniotique &#8595;. Poids >3.5 kg.", m: "Monitoring fréquent. Déclenchement discuté." },
+    42: { f: "Post-terme. Risque souffrance fœtale &#8593;.", m: "Hospitalisation. Extraction nécessaire." }
+  };
 
-    /* ============================================================
-       RECOMMANDATIONS MÉDICALES (HAS 2023 / CNGOF 2022)
-       ============================================================ */
-    const MEDICAL = [
-      { sa: 1, titre: "Confirmation & Bilan Initial", sections: [
-        { cat: "CONSULTATION", items: ["Interrogatoire complet (ATCD, traitements, mode de vie)", "Poids, Taille, IMC, Tension Artérielle", "Examen clinique général et gynécologique", "Prescription bilan sanguin T1"] },
-        { cat: "BIOLOGIE (HAS)", items: ["Groupe ABO/Rh + RAI", "Sérologies : Rubéole, Toxoplasmose, Syphilis, HIV, VHB, VHC", "NFS, Glycémie à jeun (si IMC≥25 ou âge≥35)", "ECBU (bactériurie asymptomatique)", "TSH si symptômes/facteurs de risque"] },
-        { cat: "DÉPISTAGE & IMAGERIE", items: ["FCV si > 3 ans", "Test HPV si ≥ 30 ans", "Écho de datation si DDR incertaine", "Info dépistage T21 (combiné T1)"] }
-      ]},
-      { sa: 7, titre: "Début de Grossesse & Prévention", sections: [
-        { cat: "SUIVI", items: ["Tolérance grossesse (nausées, douleurs, saignements)", "Poids, TA, Bandelette urinaire", "Renouvellement sérologie Toxo/Rubéole si négative"] },
-        { cat: "PRESCRIPTIONS", items: ["Acide Folique 400 µg/j jusqu'à 12 SA (5 mg si haut risque)", "Vitamine D 100 000 UI (2e trimestre)", "Vaccin Grippe si épidémie", "Arrêt tabac/alcool/substances"] },
-        { cat: "IMAGERIE", items: ["Prescription Échographie T1 (11-13+6 SA)", "Mesure Clarté Nucale (CN) + LCC"] }
-      ]},
-      { sa: 11, titre: "Échographie T1 & Dépistage T21", sections: [
-        { cat: "ÉCHOGRAPHIE T1 (11-13+6 SA)", items: ["Vitalité embryonnaire", "Datation par LCC", "Clarté Nucale (CN) > 3.5 mm = pathologique", "Chorionicité si multiple", "Anatomie précoce"] },
-        { cat: "DÉPISTAGE T21", items: ["Test combiné : Âge + CN + PAPP-A + β-hCG libre", "Risque ≥ 1/50 : Amniocentèse", "Risque 1/51-1000 : DPNI", "Risque < 1/1000 : Rassurant"] },
-        { cat: "ADMINISTRATIF", items: ["Déclaration grossesse avant 14 SA", "Carnet de maternité", "Orientation maternité selon risque"] }
-      ]},
-      { sa: 16, titre: "2ème Trimestre : Surveillance", sections: [
-        { cat: "CONSULTATION MENSUELLE", items: ["Poids, TA, Œdèmes, BU", "Hauteur Utérine (HU ≈ SA ± 2 cm)", "BCF au Doppler", "Mouvements fœtaux (dès 20 SA)"] },
-        { cat: "BIOLOGIE", items: ["Sérologie Toxo mensuelle si négative", "ECBU si risque", "NFS si anémie", "RAI si Rhésus -"] },
-        { cat: "PRÉVENTION", items: ["Aspirine 100-150 mg/j si risque pré-éclampsie (avant 16 SA)", "Fer si Ferritine < 30 µg/L", "Calcium 1 g/j si carence", "Soins dentaires autorisés"] }
-      ]},
-     // REMPLACEZ l'entrée sa: 20 par ces DEUX entrées séparées :
-{
-  sa: 20, 
-  titre: "Échographie Morphologique T2", 
-  sections: [
-    { cat: "ÉCHOGRAPHIE T2 (20-24 SA) — OBLIGATOIRE", items: [
-      "Morphologie complète (cœur, cerveau, membres, reins...)",
-      "Biométrie : BIP, PC, PA, LF",
-      "Placenta & Col",
-      "Liquide amniotique",
-      "Sexe si demandé"
-    ]}
-  ]
-},
-{
-  sa: 24, 
-  titre: "Dépistage Diabète Gestationnel", 
-  sections: [
-    { cat: "DÉPISTAGE DIABÈTE (24-28 SA)", items: [
-      "HGPO 75g si facteurs de risque (IMC≥25, âge≥35, ATCD...)",
-      "Critères OMS : G0≥0.92, G1h≥1.80, G2h≥1.53 g/L",
-      "Régime + autocontrôle si DG confirmé"
+  /* ============================================================
+     RECOMMANDATIONS MÉDICALES
+     ============================================================ */
+  var MEDICAL = [
+    { sa: 1,  titre: "Confirmation & Bilan Initial", sections: [
+      { cat: "CONSULTATION", items: ["Interrogatoire complet (ATCD, traitements, mode de vie)", "Poids, Taille, IMC, Tension Artérielle", "Examen clinique général et gynécologique", "Prescription bilan sanguin T1"] },
+      { cat: "BIOLOGIE (HAS)", items: ["Groupe ABO/Rh + RAI", "Sérologies : Rubéole, Toxoplasmose, Syphilis, HIV, VHB, VHC", "NFS, Glycémie à jeun (si IMC\u226525 ou âge\u226535)", "ECBU (bactériurie asymptomatique)", "TSH si symptômes/facteurs de risque"] },
+      { cat: "DÉPISTAGE & IMAGERIE", items: ["FCV si > 3 ans", "Test HPV si \u2265 30 ans", "Écho de datation si DDR incertaine", "Info dépistage T21 (combiné T1)"] }
     ]},
-    { cat: "BIOLOGIE T3 PRÉCOCE", items: [
-      "NFS (Hb < 10.5 g/dL = supplémentation)",
-      "Ig anti-D à 28 SA si Rhésus -",
-      "Bilan hépatique si prurit"
+    { sa: 7,  titre: "Début de Grossesse & Prévention", sections: [
+      { cat: "SUIVI", items: ["Tolérance grossesse (nausées, douleurs, saignements)", "Poids, TA, Bandelette urinaire", "Renouvellement sérologie Toxo/Rubéole si négative"] },
+      { cat: "PRESCRIPTIONS", items: ["Acide Folique 400 µg/j jusqu'à 12 SA (5 mg si haut risque)", "Vitamine D 100 000 UI (2e trimestre)", "Vaccin Grippe si épidémie", "Arrêt tabac/alcool/substances"] },
+      { cat: "IMAGERIE", items: ["Prescription Échographie T1 (11-13+6 SA)", "Mesure Clarté Nucale (CN) + LCC"] }
+    ]},
+    { sa: 11, titre: "Échographie T1 & Dépistage T21", sections: [
+      { cat: "ÉCHOGRAPHIE T1 (11-13+6 SA)", items: ["Vitalité embryonnaire", "Datation par LCC", "Clarté Nucale (CN) > 3.5 mm = pathologique", "Chorionicité si grossesse multiple", "Anatomie précoce"] },
+      { cat: "DÉPISTAGE T21", items: ["Test combiné : Âge + CN + PAPP-A + \u03b2-hCG libre", "Risque \u2265 1/50 : Amniocentèse", "Risque 1/51-1000 : DPNI", "Risque < 1/1000 : Rassurant"] },
+      { cat: "ADMINISTRATIF", items: ["Déclaration grossesse avant 14 SA", "Carnet de maternité", "Orientation maternité selon risque"] }
+    ]},
+    { sa: 16, titre: "2ème Trimestre : Surveillance", sections: [
+      { cat: "CONSULTATION MENSUELLE", items: ["Poids, TA, Œdèmes, BU", "Hauteur Utérine (HU \u2248 SA \u00b1 2 cm)", "BCF au Doppler", "Mouvements fœtaux (dès 20 SA)"] },
+      { cat: "BIOLOGIE", items: ["Sérologie Toxo mensuelle si négative", "ECBU si risque", "NFS si anémie", "RAI si Rhésus\u00a0–"] },
+      { cat: "PRÉVENTION", items: ["Aspirine 100-150 mg/j si risque pré-éclampsie (avant 16 SA)", "Fer si Ferritine < 30 µg/L", "Calcium 1 g/j si carence", "Soins dentaires autorisés"] }
+    ]},
+    { sa: 20, titre: "Échographie Morphologique T2", sections: [
+      { cat: "ÉCHOGRAPHIE T2 (20-24 SA) — OBLIGATOIRE", items: ["Morphologie complète (cœur, cerveau, membres, reins…)", "Biométrie : BIP, PC, PA, LF", "Placenta & Col", "Liquide amniotique", "Sexe si demandé"] }
+    ]},
+    { sa: 24, titre: "Dépistage Diabète Gestationnel", sections: [
+      { cat: "DÉPISTAGE DIABÈTE (24-28 SA)", items: ["HGPO 75 g si facteurs de risque (IMC\u226525, âge\u226535, ATCD…)", "Critères OMS : G0\u22650.92, G1h\u22651.80, G2h\u22651.53 g/L", "Régime + autocontrôle si DG confirmé"] },
+      { cat: "BIOLOGIE T3 PRÉCOCE", items: ["NFS (Hb < 10.5 g/dL = supplémentation)", "Ig anti-D à 28 SA si Rhésus\u00a0–", "Bilan hépatique si prurit"] }
+    ]},
+    { sa: 29, titre: "3ème Trimestre : Croissance", sections: [
+      { cat: "SURVEILLANCE", items: ["Poids, TA, HU, BCF, BU", "Mouvements fœtaux quotidiens", "Signes pré-éclampsie : céphalées, phosphènes, épigastralgies"] },
+      { cat: "ÉCHOGRAPHIE T3 (30-32 SA)", items: ["Biométrie (RCIU/Macrosomie)", "Présentation fœtale", "Placenta & Liquide", "Dopplers si besoin"] },
+      { cat: "VACCINATION", items: ["Coqueluche (dTca) entre 20 et 36 SA", "Grippe si saison"] }
+    ]},
+    { sa: 35, titre: "Préparation Accouchement", sections: [
+      { cat: "BILAN PRÉ-ACCOUCHEMENT", items: ["Prélèvement Streptocoque B (35-37 SA)", "Score de Bishop", "Engagement fœtal"] },
+      { cat: "CONSULTATIONS", items: ["Anesthésie (obligatoire si péridurale)", "Pédiatrie si pathologie", "Bilan pré-op si césarienne programmée"] },
+      { cat: "SURVEILLANCE", items: ["TA, poids, HU hebdomadaire", "Monitoring si dépassement", "Écho de contrôle si doute"] }
+    ]},
+    { sa: 40, titre: "Terme & Post-Terme", sections: [
+      { cat: "SURVEILLANCE RAPPROCHÉE", items: ["Monitoring fœtal (RCF) 2x/sem si \u2265 41 SA", "Index liquide amniotique", "TA, protéinurie"] },
+      { cat: "DÉCLENCHEMENT", items: ["Proposé à 41 SA sans travail", "Prostaglandines ou Ocytocine selon Bishop", "Discussion bénéfices/risques"] },
+      { cat: "ALERTE", items: ["Urgence si : perte des eaux, contractions <5 min, saignements, baisse mouvements, fièvre"] }
     ]}
-  ]
-},
-      { sa: 29, titre: "3ème Trimestre : Croissance", sections: [
-        { cat: "SURVEILLANCE", items: ["Poids, TA, HU, BCF, BU", "Mouvements fœtaux quotidiens", "Signes pré-éclampsie : céphalées, phosphènes, épigastralgies"] },
-        { cat: "ÉCHOGRAPHIE T3 (30-32 SA)", items: ["Biométrie (RCIU/Macrosomie)", "Présentation fœtale", "Placenta & Liquide", "Dopplers si besoin"] },
-        { cat: "VACCINATION", items: ["Coqueluche (dTca) entre 20 et 36 SA", "Grippe si saison"] }
-      ]},
-      { sa: 35, titre: "Préparation Accouchement", sections: [
-        { cat: "BILAN PRÉ-ACCOUCHEMENT", items: ["Prélèvement Streptocoque B (35-37 SA)", "Score de Bishop", "Engagement fœtal"] },
-        { cat: "CONSULTATIONS", items: ["Anesthésie (obligatoire si péridurale)", "Pédiatrie si pathologie", "Bilan pré-op si césarienne programmée"] },
-        { cat: "SURVEILLANCE", items: ["TA, poids, HU hebdomadaire", "Monitoring si dépassement", "Écho de contrôle si doute"] }
-      ]},
-      { sa: 40, titre: "Terme & Post-Terme", sections: [
-        { cat: "SURVEILLANCE RAPPROCHÉE", items: ["Monitoring fœtal (RCF) 2x/sem si ≥ 41 SA", "Index liquide amniotique", "TA, protéinurie"] },
-        { cat: "DÉCLENCHEMENT", items: ["Proposé à 41 SA sans travail", "Prostaglandines ou Ocytocine selon Bishop", "Discussion bénéfices/risques"] },
-        { cat: "ALERTE", items: ["Urgence si : perte des eaux, contractions <5 min, saignements, baisse mouvements, fièvre"] }
-      ]}
-    ];
+  ];
 
-    /* ============================================================
-       CALCUL PRINCIPAL (CORRIGÉ & ROBUSTE)
-       ============================================================ */
-    function calculerSuivi() {
-        const ddrInput = document.getElementById("ddr").value;
-        if (!ddrInput) { alert("Veuillez sélectionner une date de dernières règles."); return; }
-
-        // 1. Date du jour calculée DYNAMIQUEMENT (évite les caches)
-        const now = new Date();
-        const aujUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-
-        // 2. Parsing robuste de la DDR (YYYY-MM-DD -> Numbers)
-        const [y, m, d] = ddrInput.split('-').map(Number);
-        dateDDR = new Date(Date.UTC(y, m - 1, d));
-
-        if (dateDDR > aujUTC) { alert("⚠️ La DDR ne peut pas être dans le futur."); return; }
-
-        // 3. Calcul exact de la différence en jours
-        const diffMs = aujUTC - dateDDR;
-        const diffJours = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-        // 4. Conversion SA / Jours
-        saActuelle = Math.floor(diffJours / 7);
-        joursActuels = diffJours % 7;
-        saAffichee = Math.max(1, Math.min(42, saActuelle));
-
-        // 5. Affichage UI
-        document.getElementById("progress-container").style.display = "block";
-        document.getElementById("navigation").style.display = "flex";
-        document.getElementById("panels-wrapper").classList.add("active");
-        document.getElementById("disclaimer").style.display = "block";
-        document.getElementById("resume-grossesse").classList.add("show");
-        
-        afficherUI();
+  /* ============================================================
+     DONNÉES CHECKLIST EXAMENS
+     ============================================================ */
+  var EXAMS = {
+    1: {
+      mandatory: [
+        { id: 'c1_1', title: 'Groupage sanguin (ABO, Rh, phénotype Kell inclus)', desc: 'Deux déterminations sont indispensables.' },
+        { id: 'c1_2', title: 'Recherche d\u2019agglutinines irrégulières (RAI)', desc: 'Systématique chez toute femme enceinte au cours du 1er trimestre, quel que soit le groupage.' },
+        { id: 'c1_3', title: 'Sérologie de la rubéole et de la toxoplasmose', desc: 'Sauf en cas d\u2019immunité antérieure prouvée.' },
+        { id: 'c1_4', title: 'Sérologie de la syphilis (VDRL ou TPHA)', desc: '' },
+        { id: 'c1_5', title: 'Sérologie de l\u2019hépatite B (antigène HBs)', desc: '' },
+        { id: 'c1_6', title: 'Recherche de glycosurie et d\u2019albuminurie (bandelettes)', desc: '' }
+      ],
+      recommended: [
+        { id: 'r1_1', title: 'NFS en cas de suspicion d\u2019anémie', desc: '' },
+        { id: 'r1_2', title: 'Glycémie à jeun en cas de facteurs de risque', desc: 'IMC \u2265 25, âge \u2265 35 ans, ATCD de diabète gestationnel.' },
+        { id: 'r1_3', title: 'Tests sérologiques VIH et hépatite C', desc: 'Après accord explicite de la patiente.' },
+        { id: 'r1_4', title: 'Marqueurs sériques trisomie 21 (11-13 SA)', desc: 'PAPP-A et \u03b2-HCG libre. Combiné avec clarté nucale.' },
+        { id: 'r1_5', title: 'FCV', desc: 'Impératif si le dernier frottis remonte à plus de 2 ans.' },
+        { id: 'r1_6', title: 'ECBU', desc: 'Surtout si antécédents d\u2019infection urinaire, uropathie préexistante ou diabète.' },
+        { id: 'r1_7', title: 'ECB des pertes vaginales', desc: 'Si antécédents d\u2019avortements précoces à répétition, prématurité ou avortement tardif.' },
+        { id: 'r1_8', title: 'Échographie obstétricale de datation', desc: 'Généralement entre 11 et 14 SA. Mesure LCC et clarté nucale.' }
+      ]
+    },
+    2: {
+      mandatory: [
+        { id: 'c2_1', title: 'NFS', desc: 'Dépistage anémie ferriprive.' },
+        { id: 'c2_2', title: 'Recherche d\u2019agglutinines irrégulières (RAI) — 6e mois', desc: 'Pour femmes Rh\u00a0\u2013 ou précédemment transfusées.' },
+        { id: 'c2_3', title: 'Sérologie toxoplasmose (mensuelle si négative)', desc: 'Surveillance mensuelle si séronégative tout au long de la grossesse.' },
+        { id: 'c2_4', title: 'Sérologie hépatite B (antigène HBs)', desc: '' },
+        { id: 'c2_5', title: 'Glycosurie et albuminurie (6e mois)', desc: 'Recherche par bandelettes urinaires.' }
+      ],
+      recommended: [
+        { id: 'r2_1', title: 'RAI à chaque consultation', desc: 'Si Rh\u00a0\u2013 ou ATCD transfusionnel.' },
+        { id: 'r2_2', title: 'Glycosurie et albuminurie à chaque consultation', desc: 'Recherche par bandelettes urinaires.' },
+        { id: 'r2_3', title: 'HGPO 75 g (24-28 SA) — Diabète gestationnel', desc: 'Si IMC \u2265 25, âge \u2265 35 ans, ATCD diabète gestationnel ou macrosomie.' },
+        { id: 'r2_4', title: 'Échographie morphologique (20-24 SA)', desc: 'Morphologie fœtale complète, biométrie (BIP, PC, PA, LF), placenta, liquide amniotique.' },
+        { id: 'r2_5', title: 'Consultation dentaire', desc: 'Prévention des infections bucco-dentaires. Idéalement entre 15 et 24 SA.' }
+      ]
+    },
+    3: {
+      mandatory: [
+        { id: 'c3_1', title: 'RAI (8e et 9e mois)', desc: 'Pour femmes Rh\u00a0\u2013 ou précédemment transfusées.' },
+        { id: 'c3_2', title: 'Sérologie toxoplasmose (mensuelle si négative)', desc: 'Surveillance mensuelle si séronégative.' },
+        { id: 'c3_3', title: 'Glycosurie et albuminurie (8e et 9e mois)', desc: 'Recherche par bandelettes urinaires.' }
+      ],
+      recommended: [
+        { id: 'r3_1', title: 'Glycémies si facteurs de risque persistants', desc: 'Si dépistage non fait au T2 ou nouveau facteur de risque.' },
+        { id: 'r3_2', title: 'NFS', desc: 'Dépistage carence martiale ou folique.' },
+        { id: 'r3_3', title: 'Sérologie hépatite B (antigène HBs)', desc: '' },
+        { id: 'r3_4', title: 'Sérologie hépatite C', desc: 'Si non faite au T1, pour groupes à risque.' },
+        { id: 'r3_5', title: 'Dépistage streptocoque B (35-37 SA)', desc: 'Prélèvement vaginal et rectal. Prévention des infections néonatales à SGB.' },
+        { id: 'r3_6', title: 'Échographie du 3e trimestre (~32 SA)', desc: 'Croissance fœtale, présentation, liquide amniotique.' },
+        { id: 'r3_7', title: 'Radiopelvimétrie (36 SA)', desc: 'Si bassin suspect ou présentation du siège.' },
+        { id: 'r3_8', title: 'Consultation d\u2019anesthésie (avant 36 SA)', desc: 'Obligatoire si péridurale envisagée. Bilan pré-op si césarienne programmée.' }
+      ]
     }
+  };
 
-// REMPLACEZ TOUTE LA FONCTION afficherUI() PAR CELLE-CI :
+  /* ============================================================
+     ÉTAT GLOBAL
+     ============================================================ */
+  var dateDDR = null, saActuelle = 0, joursActuels = 0, saAffichee = 0;
+  var chkTrimActif = 1;
+  var chkUpdating = false;
 
-function afficherUI() {
-    let sa = saAffichee; // Utiliser la semaine affichée (navigation)
-    const dateDebut = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + ((sa - 1) * 7), 12, 0, 0);
-    const dateFin = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate() + 6, 12, 0, 0);
-    const opts = { day: 'numeric', month: 'long', year: 'numeric' };
-    const terme = new Date(dateDDR.getUTCFullYear(), dateDDR.getUTCMonth(), dateDDR.getUTCDate() + 287, 12, 0, 0);
-
-    document.getElementById("resume-sa").textContent = `${saActuelle} SA + ${joursActuels} j`;
-    document.getElementById("resume-dpa").textContent = terme.toLocaleDateString("fr-FR", opts);
-
-    const pct = Math.min(100, (saActuelle / 41) * 100);
-    document.getElementById("progress-bar").style.width = pct + "%";
-    document.getElementById("progress-text").innerHTML = `Progression : <strong>${Math.round(pct)}%</strong> vers le terme (41 SA)`;
-
-    // PANNEAU FŒTUS/MAMAN
-    const resDiv = document.getElementById("result");
-    const data = FOETUS[sa];
-    if (data) {
-        resDiv.innerHTML = `
-            <h4><i class="fas fa-baby"></i> Évolution fœtale & maternelle</h4>
-            <div class="panel-header-flex">
-                <div>
-                    <div class="date-range"><i class="far fa-calendar"></i> Semaine ${sa} SA : ${dateDebut.toLocaleDateString("fr-FR", opts)} → ${dateFin.toLocaleDateString("fr-FR", opts)}</div>
-                    <div style="margin-top:8px;"><span class="badge">SA ${sa}</span><span class="badge" style="background:#64748b">Mois ${Math.ceil(sa/4.33)}</span></div>
-                </div>
-            </div>
-            <div class="foetus-block"><h5><i class="fas fa-child"></i> Développement fœtal</h5><p>${data.f}</p></div>
-            <div class="mama-block"><h5><i class="fas fa-female"></i> Ressenti maternel</h5><p>${data.m}</p></div>
-            <div class="info-grid">
-                <div><span class="highlight">Âge actuel :</span><br>${saActuelle} SA + ${joursActuels} j</div>
-                <div><span class="highlight">Terme (41 SA) :</span><br><i class="fas fa-flag-checkered"></i> ${terme.toLocaleDateString("fr-FR", opts)}</div>
-            </div>
-        `;
-    }
-
-    // PANNEAU MÉDICAL - LOGIQUE CORRIGÉE
-    const medDiv = document.getElementById("medical-follow-up-display");
-    
-    // Trouver la recommandation appropriée : la plus récente dont l'âge est <= SA actuelle
-    let medData = null;
-    for (let i = MEDICAL.length - 1; i >= 0; i--) {
-        if (sa >= MEDICAL[i].sa) {
-            medData = MEDICAL[i];
-            break;
-        }
-    }
-    
-    if (medData) {
-        let html = `<h4><i class="fas fa-user-md"></i> Check-list HAS / CNGOF 2023</h4><div class="medical-header">${medData.titre}</div>`;
-        medData.sections.forEach(sec => {
-            html += `<div class="med-section"><h5>${sec.cat}</h5><ul>`;
-            sec.items.forEach(it => html += `<li><span class="med-highlight">${it.split(':')[0]}:</span> ${it.includes(':') ? it.split(':').slice(1).join(':') : it}</li>`);
-            html += `</ul></div>`;
-        });
-        medDiv.innerHTML = html;
-    } else {
-        medDiv.innerHTML = `<h4><i class="fas fa-user-md"></i> Suivi Médical</h4><p style="text-align:center;color:#64748b;padding:20px;">Poursuivez la surveillance clinique habituelle.</p>`;
-    }
-    
-    document.querySelector("#navigation button:first-child").disabled = saAffichee <= 1;
-    document.querySelector("#navigation button:last-child").disabled = saAffichee >= 42;
-}
-    function changerSemaine(v) {
-        const n = saAffichee + v;
-        if (n >= 1 && n <= 42) { saAffichee = n; afficherUI(); }
-    }
-    function revenirAujourdhui() {
-        saAffichee = Math.max(1, Math.min(42, saActuelle));
-        afficherUI();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const inp = document.getElementById("ddr");
-        if (!inp.value) { const d = new Date(); d.setDate(d.getDate()-84); inp.valueAsDate = d; }
+  /* ============================================================
+     NAVIGATION ONGLETS PRINCIPAUX
+     ============================================================ */
+  var tabBtns = document.querySelectorAll('#sgk-root .sgk-tab-main');
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tabBtns.forEach(function(b) { b.classList.remove('sgk-active'); });
+      btn.classList.add('sgk-active');
+      var t = btn.getAttribute('data-tab');
+      document.getElementById('sgk-pane-suivi').style.display     = (t === 'suivi')     ? '' : 'none';
+      document.getElementById('sgk-pane-checklist').style.display = (t === 'checklist') ? '' : 'none';
     });
+  });
+
+  /* ============================================================
+     OUTIL 1 — SUIVI SEMAINE PAR SEMAINE
+     ============================================================ */
+  window.sgkCalculer = function() {
+    var val = document.getElementById('sgk-ddr').value;
+    if (!val) { alert('Veuillez sélectionner une date de dernières règles.'); return; }
+    var now = new Date();
+    var aujUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    var parts = val.split('-').map(Number);
+    dateDDR = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+    if (dateDDR > aujUTC) { alert('\u26a0\ufe0f La DDR ne peut pas être dans le futur.'); return; }
+    var diffMs   = aujUTC - dateDDR;
+    var diffJours = Math.floor(diffMs / 86400000);
+    saActuelle   = Math.floor(diffJours / 7);
+    joursActuels = diffJours % 7;
+    saAffichee   = Math.max(1, Math.min(42, saActuelle));
+
+    document.getElementById('sgk-progress-wrap').style.display = 'block';
+    document.getElementById('sgk-nav').style.display = 'flex';
+    document.getElementById('sgk-panels').classList.add('sgk-active');
+    document.getElementById('sgk-disclaimer-suivi').style.display = 'block';
+    document.getElementById('sgk-resume').classList.add('sgk-show');
+
+    // Synchroniser DDR avec la checklist
+    document.getElementById('sgk-chk-ddr').value = val;
+    sgkChkSyncDDR(val);
+
+    sgkAfficherUI();
+  };
+
+  function sgkAfficherUI() {
+    var sa = saAffichee;
+    var baseDate = new Date(Date.UTC(
+      dateDDR.getUTCFullYear(),
+      dateDDR.getUTCMonth(),
+      dateDDR.getUTCDate() + ((sa - 1) * 7)
+    ));
+    var dateDebut = new Date(baseDate.getUTCFullYear(), baseDate.getUTCMonth(), baseDate.getUTCDate() + 0, 12);
+    var dateFin   = new Date(baseDate.getUTCFullYear(), baseDate.getUTCMonth(), baseDate.getUTCDate() + 6, 12);
+    var terme     = new Date(
+      dateDDR.getUTCFullYear(),
+      dateDDR.getUTCMonth(),
+      dateDDR.getUTCDate() + 287,
+      12
+    );
+    var opts = { day: 'numeric', month: 'long', year: 'numeric' };
+
+    // Résumé
+    document.getElementById('sgk-resume-sa').textContent  = saActuelle + ' SA + ' + joursActuels + ' j';
+    document.getElementById('sgk-resume-dpa').textContent = terme.toLocaleDateString('fr-FR', opts);
+
+    // Progression
+    var pct = Math.min(100, (saActuelle / 41) * 100);
+    document.getElementById('sgk-progress-fill').style.width = pct + '%';
+    document.getElementById('sgk-progress-txt').innerHTML = 'Progression\u00a0: <strong>' + Math.round(pct) + '%</strong> vers le terme (41 SA)';
+
+    // Panneau fœtus/maman
+    var res  = document.getElementById('sgk-panel-foetus');
+    var data = FOETUS[sa];
+    if (data) {
+      res.innerHTML =
+        '<div class="sgk-panel-h4">\u{1F476} Évolution f\u0153tale & maternelle</div>' +
+        '<div class="sgk-panel-header-flex">' +
+          '<div>' +
+            '<div class="sgk-date-range">\uD83D\uDCC5 Semaine ' + sa + ' SA\u00a0: ' +
+              dateDebut.toLocaleDateString('fr-FR', opts) + ' \u2192 ' +
+              dateFin.toLocaleDateString('fr-FR', opts) + '</div>' +
+            '<div style="margin-top:7px;">' +
+              '<span class="sgk-badge">SA ' + sa + '</span>' +
+              '<span class="sgk-badge sgk-badge-grey">Mois ' + Math.ceil(sa / 4.33) + '</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="sgk-block-h5">\uD83D\uDC76 Développement f\u0153tal</div>' +
+        '<p class="sgk-block-p">' + data.f + '</p>' +
+        '<div class="sgk-block-h5">\uD83D\uDEB6 Ressenti maternel</div>' +
+        '<p class="sgk-block-p">' + data.m + '</p>' +
+        '<div class="sgk-info-grid">' +
+          '<div><span class="sgk-highlight">\xC2ge actuel\u00a0:</span><br>' + saActuelle + ' SA + ' + joursActuels + ' j</div>' +
+          '<div><span class="sgk-highlight">Terme (41 SA)\u00a0:</span><br>\uD83C\uDFC1 ' + terme.toLocaleDateString('fr-FR', opts) + '</div>' +
+        '</div>';
+    }
+
+    // Panneau médical
+    var med = document.getElementById('sgk-panel-medical');
+    var medData = null;
+    for (var i = MEDICAL.length - 1; i >= 0; i--) {
+      if (sa >= MEDICAL[i].sa) { medData = MEDICAL[i]; break; }
+    }
+    if (medData) {
+      var html = '<div class="sgk-panel-h4">\uD83D\uDC68\u200D\u2695\uFE0F Check-list HAS / CNGOF 2023</div>' +
+                 '<div class="sgk-medical-header">' + medData.titre + '</div>';
+      medData.sections.forEach(function(sec) {
+        html += '<div class="sgk-med-section"><div class="sgk-med-section-h5">' + sec.cat + '</div><ul class="sgk-med-ul">';
+        sec.items.forEach(function(it) {
+          var parts2 = it.split(':');
+          var bold   = parts2[0];
+          var rest   = parts2.length > 1 ? ':' + parts2.slice(1).join(':') : '';
+          html += '<li><span class="sgk-med-highlight">' + bold + '</span>' + rest + '</li>';
+        });
+        html += '</ul></div>';
+      });
+      med.innerHTML = html;
+    } else {
+      med.innerHTML = '<div class="sgk-panel-h4">\uD83D\uDC68\u200D\u2695\uFE0F Suivi médical</div><p style="text-align:center;color:#64748b;padding:20px;">Poursuivez la surveillance clinique habituelle.</p>';
+    }
+
+    // Boutons nav
+    document.querySelectorAll('#sgk-nav .sgk-nav-btn')[0].disabled = saAffichee <= 1;
+    document.querySelectorAll('#sgk-nav .sgk-nav-btn')[2].disabled = saAffichee >= 42;
+  }
+
+  window.sgkChangerSa = function(v) {
+    var n = saAffichee + v;
+    if (n >= 1 && n <= 42) { saAffichee = n; sgkAfficherUI(); }
+  };
+  window.sgkRevenirAujourdhui = function() {
+    saAffichee = Math.max(1, Math.min(42, saActuelle));
+    sgkAfficherUI();
+  };
+
+  /* ============================================================
+     OUTIL 2 — CHECKLIST DES EXAMENS
+     ============================================================ */
+
+  // Onglets trimestres
+  var trimTabs = document.querySelectorAll('#sgk-root .sgk-trim-tab');
+  trimTabs.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      trimTabs.forEach(function(b) { b.classList.remove('sgk-active'); });
+      btn.classList.add('sgk-active');
+      chkTrimActif = parseInt(btn.getAttribute('data-trim'));
+      sgkChkRender();
+    });
+  });
+
+  // Helpers date
+  function chkIsValid(d) { return d instanceof Date && !isNaN(d); }
+  function chkAddDays(d, n) { var r = new Date(d); r.setDate(r.getDate() + n); return r; }
+  function chkFmt(d) {
+    if (!chkIsValid(d)) return '';
+    return d.getDate().toString().padStart(2,'0') + '/' +
+           (d.getMonth()+1).toString().padStart(2,'0') + '/' +
+           d.getFullYear();
+  }
+  function chkIso(d) { return chkIsValid(d) ? d.toISOString().slice(0,10) : ''; }
+
+  function chkComputeAmenorrhea(ddrStr) {
+    if (!ddrStr) return '--';
+    var d = new Date(ddrStr);
+    if (!chkIsValid(d)) return '--';
+    var diff = Math.floor((new Date() - d) / 86400000);
+    if (diff < 0) return '--';
+    var w = Math.floor(diff / 7), j = diff % 7;
+    return w + ' SA' + (j > 0 ? ' + ' + j + ' j' : '');
+  }
+
+  function chkRanges(dpa) {
+    if (!chkIsValid(dpa)) return null;
+    var s = new Date(dpa); s.setDate(s.getDate() - 283);
+    return {
+      1: { from: chkAddDays(s, 14),         to: chkAddDays(s, 15*7) },
+      2: { from: chkAddDays(s, 15*7 + 1),   to: chkAddDays(s, 28*7) },
+      3: { from: chkAddDays(s, 28*7 + 1),   to: chkAddDays(s, 40*7 + 3) }
+    };
+  }
+
+  function sgkChkRender() {
+    var cont = document.getElementById('sgk-chk-content');
+    cont.innerHTML = '';
+    var ddrVal = document.getElementById('sgk-chk-ddr').value;
+    var dpaVal = document.getElementById('sgk-chk-dpa').value;
+
+    var errDdr = document.getElementById('sgk-chk-ddr-err');
+    var errDpa = document.getElementById('sgk-chk-dpa-err');
+    errDdr.style.display = 'none';
+    errDpa.style.display = 'none';
+
+    if (!ddrVal && !dpaVal) {
+      document.getElementById('sgk-chk-stats').textContent = 'Saisissez la DDR ou la DPA pour générer la checklist.';
+      return;
+    }
+
+    var dpa = dpaVal ? new Date(dpaVal) : null;
+    if (!chkIsValid(dpa) && ddrVal) {
+      var ddr2 = new Date(ddrVal);
+      if (chkIsValid(ddr2) && ddr2 <= new Date()) {
+        dpa = new Date(ddr2); dpa.setDate(dpa.getDate() + 283);
+      }
+    }
+
+    var ranges  = dpa ? chkRanges(dpa) : null;
+    var group   = EXAMS[chkTrimActif];
+    var dateStr = '';
+    if (ranges && ranges[chkTrimActif]) {
+      dateStr = chkFmt(ranges[chkTrimActif].from) + ' — ' + chkFmt(ranges[chkTrimActif].to);
+    }
+
+    function mkSection(titre, items, obligatoire) {
+      var sec = document.createElement('div');
+      sec.className = 'sgk-chk-section';
+
+      var hdr = document.createElement('div');
+      hdr.className = 'sgk-chk-section-hdr';
+
+      var t = document.createElement('div');
+      t.className = 'sgk-chk-section-title';
+      t.textContent = titre;
+
+      var badge = document.createElement('span');
+      badge.className = 'sgk-chk-section-badge ' + (obligatoire ? 'sgk-badge-oblig' : 'sgk-badge-recom');
+      badge.textContent = obligatoire ? 'Obligatoire' : 'Recommandé';
+
+      hdr.appendChild(t);
+      hdr.appendChild(badge);
+      sec.appendChild(hdr);
+
+      if (dateStr) {
+        var dt = document.createElement('div');
+        dt.className = 'sgk-chk-dates';
+        dt.textContent = '\uD83D\uDCC5 ' + dateStr;
+        sec.appendChild(dt);
+      }
+
+      items.forEach(function(it) {
+        var row = document.createElement('div');
+        row.className = 'sgk-chk-item' + (chkLoad(it.id) ? ' sgk-done' : '');
+
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'sgk-chk-cb';
+        cb.id = 'sgkcb_' + it.id;
+        cb.checked = chkLoad(it.id);
+        cb.addEventListener('change', function() {
+          chkSave(it.id, cb.checked);
+          row.classList.toggle('sgk-done', cb.checked);
+          sgkChkUpdateStats();
+        });
+
+        var left = document.createElement('div');
+        var titDiv = document.createElement('div');
+        titDiv.className = 'sgk-chk-item-title';
+        titDiv.textContent = it.title;
+        left.appendChild(titDiv);
+
+        if (it.desc) {
+          var descDiv = document.createElement('div');
+          descDiv.className = 'sgk-chk-item-desc';
+          descDiv.textContent = it.desc;
+          left.appendChild(descDiv);
+        }
+
+        row.appendChild(cb);
+        row.appendChild(left);
+        sec.appendChild(row);
+      });
+      return sec;
+    }
+
+    cont.appendChild(mkSection('Examens obligatoires', group.mandatory, true));
+    cont.appendChild(mkSection('Examens recommandés', group.recommended, false));
+    sgkChkUpdateStats();
+  }
+
+  function sgkChkUpdateStats() {
+    var group = EXAMS[chkTrimActif];
+    var all = group.mandatory.concat(group.recommended);
+    var total = all.length;
+    var done  = all.filter(function(it) { return chkLoad(it.id); }).length;
+    document.getElementById('sgk-chk-stats').textContent =
+      done + ' / ' + total + ' examens cochés — ' + chkTrimActif + 'e trimestre';
+  }
+
+  function chkSave(id, val) {
+    try { localStorage.setItem('sgkchk_' + id, val ? '1' : '0'); } catch(e) {}
+  }
+  function chkLoad(id) {
+    try { return localStorage.getItem('sgkchk_' + id) === '1'; } catch(e) { return false; }
+  }
+
+  // Synchronisation DDR → DPA → Aménorrhée
+  function sgkChkSyncDDR(ddrStr) {
+    document.getElementById('sgk-chk-ddr-err').style.display = 'none';
+    document.getElementById('sgk-chk-dpa-err').style.display = 'none';
+    if (!ddrStr) {
+      document.getElementById('sgk-chk-dpa').value = '';
+      document.getElementById('sgk-chk-amenorrhea').textContent = '-- SA';
+      return;
+    }
+    var d = new Date(ddrStr);
+    if (!chkIsValid(d) || d > new Date()) {
+      document.getElementById('sgk-chk-ddr-err').textContent = 'Date invalide ou dans le futur.';
+      document.getElementById('sgk-chk-ddr-err').style.display = 'block';
+      return;
+    }
+    var dpa = new Date(d); dpa.setDate(dpa.getDate() + 283);
+    document.getElementById('sgk-chk-dpa').value = chkIso(dpa);
+    document.getElementById('sgk-chk-amenorrhea').textContent = chkComputeAmenorrhea(ddrStr);
+    sgkChkRender();
+  }
+
+  function sgkChkSyncDPA(dpaStr) {
+    document.getElementById('sgk-chk-dpa-err').style.display = 'none';
+    document.getElementById('sgk-chk-ddr-err').style.display = 'none';
+    if (!dpaStr) {
+      document.getElementById('sgk-chk-ddr').value = '';
+      document.getElementById('sgk-chk-amenorrhea').textContent = '-- SA';
+      return;
+    }
+    var dpa = new Date(dpaStr);
+    if (!chkIsValid(dpa)) {
+      document.getElementById('sgk-chk-dpa-err').textContent = 'Date invalide.';
+      document.getElementById('sgk-chk-dpa-err').style.display = 'block';
+      return;
+    }
+    var ddr = new Date(dpa); ddr.setDate(ddr.getDate() - 283);
+    if (ddr > new Date()) {
+      document.getElementById('sgk-chk-dpa-err').textContent = 'La DPA implique une DDR future.';
+      document.getElementById('sgk-chk-dpa-err').style.display = 'block';
+      return;
+    }
+    document.getElementById('sgk-chk-ddr').value = chkIso(ddr);
+    document.getElementById('sgk-chk-amenorrhea').textContent = chkComputeAmenorrhea(chkIso(ddr));
+    sgkChkRender();
+  }
+
+  document.getElementById('sgk-chk-ddr').addEventListener('input', function() {
+    if (chkUpdating) return;
+    chkUpdating = true;
+    sgkChkSyncDDR(this.value);
+    chkUpdating = false;
+  });
+
+  document.getElementById('sgk-chk-dpa').addEventListener('input', function() {
+    if (chkUpdating) return;
+    chkUpdating = true;
+    sgkChkSyncDPA(this.value);
+    chkUpdating = false;
+  });
+
+  // Actions checklist
+  window.sgkChkSave = function() {
+    try {
+      var ddr = document.getElementById('sgk-chk-ddr').value;
+      var dpa = document.getElementById('sgk-chk-dpa').value;
+      var nom = document.getElementById('sgk-chk-nom').value;
+      if (ddr) localStorage.setItem('sgkchk_ddr', ddr);
+      if (dpa) localStorage.setItem('sgkchk_dpa', dpa);
+      if (nom) localStorage.setItem('sgkchk_nom', nom);
+      alert('Session sauvegardée localement.');
+    } catch(e) { alert('Erreur lors de la sauvegarde.'); }
+  };
+
+  window.sgkChkReset = function() {
+    if (!confirm('Réinitialiser toutes les cases cochées ?')) return;
+    var all = [];
+    [1,2,3].forEach(function(t) {
+      all = all.concat(EXAMS[t].mandatory).concat(EXAMS[t].recommended);
+    });
+    all.forEach(function(it) { chkSave(it.id, false); });
+    sgkChkRender();
+  };
+
+  window.sgkChkPrint = function() {
+    var nom = document.getElementById('sgk-chk-nom').value || '';
+    var ddr = document.getElementById('sgk-chk-ddr').value || '';
+    var amenorrhee = document.getElementById('sgk-chk-amenorrhea').textContent;
+    var w = window.open('', '_blank', 'width=800,height=700');
+    if (!w) return;
+
+    var body = '<html><head><meta charset="UTF-8"><title>Checklist examens grossesse</title>' +
+      '<style>body{font-family:Arial,sans-serif;padding:24px;color:#1e293b;font-size:13px}' +
+      'h2{color:#c46a8b}h3{color:#0369a1;margin-top:18px}' +
+      '.hdr{margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #fce7f3}' +
+      '.sec{margin-top:12px}.sec-title{font-weight:700;font-size:13px;margin-bottom:6px}' +
+      '.item{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px}' +
+      '.item-title{font-weight:600}' +
+      '.item-desc{font-size:11px;color:#64748b}' +
+      '.badge-o{background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}' +
+      '.badge-r{background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}' +
+      '.foot{margin-top:20px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:11px;color:#64748b}' +
+      '</style></head><body>';
+
+    body += '<div class="hdr">';
+    body += '<h2>&#10003; Checklist Examens de Grossesse</h2>';
+    body += '<div>Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique</div>';
+    if (nom) body += '<div><strong>Patiente :</strong> ' + nom + '</div>';
+    if (ddr) body += '<div><strong>DDR :</strong> ' + new Date(ddr).toLocaleDateString('fr-FR') + ' — Aménorrhée : ' + amenorrhee + '</div>';
+    body += '</div>';
+
+    [1,2,3].forEach(function(t) {
+      body += '<h3>' + t + (t===1?'er':'e') + ' trimestre</h3>';
+      var g = EXAMS[t];
+      body += '<div class="sec"><div class="sec-title">Examens obligatoires <span class="badge-o">Obligatoire</span></div>';
+      g.mandatory.forEach(function(it) {
+        var chk = chkLoad(it.id) ? '\u2611' : '\u2610';
+        body += '<div class="item"><span>' + chk + '</span><div><div class="item-title">' + it.title + '</div>';
+        if (it.desc) body += '<div class="item-desc">' + it.desc + '</div>';
+        body += '</div></div>';
+      });
+      body += '</div>';
+      body += '<div class="sec"><div class="sec-title">Examens recommandés <span class="badge-r">Recommandé</span></div>';
+      g.recommended.forEach(function(it) {
+        var chk = chkLoad(it.id) ? '\u2611' : '\u2610';
+        body += '<div class="item"><span>' + chk + '</span><div><div class="item-title">' + it.title + '</div>';
+        if (it.desc) body += '<div class="item-desc">' + it.desc + '</div>';
+        body += '</div></div>';
+      });
+      body += '</div>';
+    });
+
+    body += '<div class="foot">Protocole français — HAS / CNGOF. Document informatif, non substitutif de la prise en charge clinique. ' +
+            'Imprimé le ' + new Date().toLocaleDateString('fr-FR') + '.</div>';
+    body += '</body></html>';
+    w.document.write(body);
+    w.document.close();
+    w.print();
+  };
+
+  /* ============================================================
+     INIT AU CHARGEMENT
+     ============================================================ */
+  document.addEventListener('DOMContentLoaded', function() {
+    // Valeur par défaut DDR outil suivi = 12 semaines passées
+    var inp = document.getElementById('sgk-ddr');
+    if (!inp.value) {
+      var d = new Date();
+      d.setDate(d.getDate() - 84);
+      inp.valueAsDate = d;
+    }
+
+    // Restauration checklist depuis localStorage
+    try {
+      var savedDDR = localStorage.getItem('sgkchk_ddr');
+      var savedDPA = localStorage.getItem('sgkchk_dpa');
+      var savedNom = localStorage.getItem('sgkchk_nom');
+      if (savedDDR) {
+        document.getElementById('sgk-chk-ddr').value = savedDDR;
+        document.getElementById('sgk-chk-amenorrhea').textContent = chkComputeAmenorrhea(savedDDR);
+      }
+      if (savedDPA) document.getElementById('sgk-chk-dpa').value = savedDPA;
+      if (savedNom) document.getElementById('sgk-chk-nom').value = savedNom;
+    } catch(e) {}
+
+    sgkChkRender();
+  });
+
+})();
 </script>
 </body>
 </html>
