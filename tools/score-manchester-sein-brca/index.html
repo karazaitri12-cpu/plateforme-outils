@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score de Manchester - Risque BRCA ≥ 10%</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #a0a6ab 0%, #34495e 100%); 
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        .results-section .section-title {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .radio-group {
+            display: grid;
+            gap: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .radio-item:hover {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .radio-item.active {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .radio-item input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #3498db;
+        }
+
+        .radio-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .checkbox-group {
+            display: grid;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            justify-content: space-between;
+        }
+
+        .checkbox-item:hover {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .checkbox-item.active {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .checkbox-content {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        .counter-btn {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .counter-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .counter-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .counter-display {
+            min-width: 25px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .score-display {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .risk-level {
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 10px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .risk-low {
+            background: rgba(39, 174, 96, 0.3);
+            color: white;
+        }
+
+        .risk-medium {
+            background: rgba(243, 156, 18, 0.3);
+            color: white;
+        }
+
+        .risk-high {
+            background: rgba(231, 76, 60, 0.3);
+            color: white;
+        }
+
+        .recommendations {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .recommendations h4 {
+            margin-bottom: 8px;
+        }
+
+        .recommendations ul {
+            padding-left: 18px;
+        }
+
+        .recommendations li {
+            margin-bottom: 3px;
+            font-size: 0.95em;
+            line-height: 1.3;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ff7675, #d63031);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        .age-input {
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 1em;
+            background: white;
+        }
+
+        .age-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .age-input:disabled {
+            background: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        #age-help {
+            display: none;
+            color: #d63031;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            .results-section {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Score de Manchester</h1>
+      <p>Calculateur de risque BRCA1/BRCA2 (selon NHS & critères cliniques)</p>
+    </div>
+
+    <div class="content">
+      <!-- FORMULAIRE -->
+      <div class="form-section">
+
+        <div class="info-box">
+          <h3>À propos</h3>
+          <p>Le score de Manchester, avec ajustement histologique, estime la probabilité d'une mutation BRCA1/BRCA2.</p>
+          <p><strong>Seuil NHS :</strong> test indiqué si :</p>
+          <ul>
+            <li>Score combiné ajusté ≥ 15, <strong>ou</strong></li>
+            <li>Score pour un seul gène ≥ 10.</li>
+          </ul>
+          <p><strong>Indications directes :</strong> sein < 36 ans, TNBC < 50 ans, ovaire, sein homme, bilatéral.</p>
+        </div>
+
+        <!-- ANTÉCÉDENTS PERSONNELS -->
+        <h2 class="section-title">Antécédents Personnels</h2>
+
+        <div class="form-group">
+          <label>Cancer du sein (sélection unique) :</label>
+          <div class="radio-group" id="personal-breast">
+            <div class="radio-item">
+              <input type="radio" name="personal-breast" id="personal-none" value="0" checked />
+              <label for="personal-none">Pas de cancer du sein</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="personal-breast" id="personal-under-30" value="6" />
+              <label for="personal-under-30">Avant 30 ans (6 pts)</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="personal-breast" id="personal-30-35" value="4" />
+              <label for="personal-30-35">30–35 ans (4 pts) — <em>indication directe</em></label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="personal-breast" id="personal-36-39" value="4" />
+              <label for="personal-36-39">36–39 ans (4 pts)</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="personal-breast" id="personal-40-49" value="3" />
+              <label for="personal-40-49">40–49 ans (3 pts)</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="personal-breast" id="personal-50-59" value="2" />
+              <label for="personal-50-59">50–59 ans (2 pts)</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="personal-breast" id="personal-over-60" value="1" />
+              <label for="personal-over-60">Après 60 ans (1 pt)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ÂGE AU DIAGNOSTIC -->
+        <div class="form-group">
+          <label for="diagnosis-age">Âge au diagnostic du cancer du sein :</label>
+          <input 
+            type="number" 
+            id="diagnosis-age" 
+            class="age-input" 
+            placeholder="Ex. 45" 
+            min="0" 
+            max="120"
+            oninput="calculateScore()"
+          />
+         <small id="age-help" style="color: #d63031; font-weight: bold;">⚠️ Ce champ est obligatoire pour évaluer les critères cliniques.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Autres cancers personnels :</label>
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <div class="checkbox-content">
+                <label for="personal-bilateral">
+                  <input type="checkbox" id="personal-bilateral" class="personal-check" data-points="4" />
+                  Cancer du sein bilatéral (4 pts) — <em>indication directe</em>
+                </label>
+              </div>
+            </div>
+            <div class="checkbox-item">
+              <div class="checkbox-content">
+                <label for="personal-ovarian">
+                  <input type="checkbox" id="personal-ovarian" class="personal-check" data-points="5" />
+                  Cancer de l'ovaire (5 pts) — <em>indication directe</em>
+                </label>
+              </div>
+            </div>
+            <div class="checkbox-item">
+              <div class="checkbox-content">
+                <label for="personal-male-breast">
+                  <input type="checkbox" id="personal-male-breast" class="personal-check" data-points="8" />
+                  Cancer du sein chez l'homme (8 pts) — <em>indication directe</em>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HISTOLOGIE TUMORALE -->
+        <h2 class="section-title">Histologie Tumorale</h2>
+        <div class="form-group">
+          <label>Phénotype tumoral (si cancer du sein) :</label>
+          <div class="radio-group">
+            <div class="radio-item">
+              <input type="radio" name="tumor-type" id="tumor-tnbc" value="brca1" />
+              <label for="tumor-tnbc">Triple négatif (favorise BRCA1)</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="tumor-type" id="tumor-her2" value="brca2" />
+              <label for="tumor-her2">HER2+ (légèrement BRCA2)</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="tumor-type" id="tumor-re" value="none" />
+              <label for="tumor-re">RE+/HER2−</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="tumor-type" id="tumor-none" value="none" checked />
+              <label for="tumor-none">Pas de cancer du sein ou type inconnu</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORIGINE ETHNIQUE -->
+        <h2 class="section-title">Origine ethnique</h2>
+        <div class="form-group">
+          <label>Origine :</label>
+          <div class="radio-group">
+            <div class="radio-item">
+              <input type="radio" name="ethnicity" id="ethnicity-non-ashkenazi" value="0" checked />
+              <label for="ethnicity-non-ashkenazi">Non ashkénaze</label>
+            </div>
+            <div class="radio-item">
+              <input type="radio" name="ethnicity" id="ethnicity-ashkenazi" value="5" />
+              <label for="ethnicity-ashkenazi">Ashkénaze (5 pts)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAMILIAL -->
+        <h2 class="section-title">Antécédents Familiaux</h2>
+        <div class="form-group">
+          <label>Comptez les apparentés du 1er/2e degré avec cancer :</label>
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <div class="checkbox-content"><label>Cancer du sein < 40 ans (4 pts)</label></div>
+              <div class="counter-controls">
+                <button class="counter-btn" onclick="decrementCounter('fam-breast-under-40')">−</button>
+                <span class="counter-display" id="count-fam-breast-under-40">0</span>
+                <button class="counter-btn" onclick="incrementCounter('fam-breast-under-40')">+</button>
+              </div>
+            </div>
+            <div class="checkbox-item">
+              <div class="checkbox-content"><label>Cancer du sein ≥ 40 ans (2 pts)</label></div>
+              <div class="counter-controls">
+                <button class="counter-btn" onclick="decrementCounter('fam-breast-over-40')">−</button>
+                <span class="counter-display" id="count-fam-breast-over-40">0</span>
+                <button class="counter-btn" onclick="incrementCounter('fam-breast-over-40')">+</button>
+              </div>
+            </div>
+            <div class="checkbox-item">
+              <div class="checkbox-content"><label>Cancer de l'ovaire (5 pts)</label></div>
+              <div class="counter-controls">
+                <button class="counter-btn" onclick="decrementCounter('fam-ovarian')">−</button>
+                <span class="counter-display" id="count-fam-ovarian">0</span>
+                <button class="counter-btn" onclick="incrementCounter('fam-ovarian')">+</button>
+              </div>
+            </div>
+            <div class="checkbox-item">
+              <div class="checkbox-content"><label>Cancer du sein chez un homme (8 pts)</label></div>
+              <div class="counter-controls">
+                <button class="counter-btn" onclick="decrementCounter('fam-male-breast')">−</button>
+                <span class="counter-display" id="count-fam-male-breast">0</span>
+                <button class="counter-btn" onclick="incrementCounter('fam-male-breast')">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RÉSULTATS -->
+      <div class="results-section">
+        <h2>Résultats</h2>
+
+        <div class="score-display">
+          <div>Score total :</div>
+          <div class="score-number" id="total-score">0</div>
+        </div>
+
+        <div class="score-display">
+          <div>Score ajusté BRCA1 :</div>
+          <div class="score-number" id="score-brca1">0</div>
+        </div>
+
+        <div class="score-display">
+          <div>Score ajusté BRCA2 :</div>
+          <div class="score-number" id="score-brca2">0</div>
+        </div>
+
+        <div class="risk-level risk-low" id="risk-level">Risque Faible</div>
+
+        <div class="recommendations" id="recommendations">
+          <h4>Recommandations :</h4>
+          <ul id="recommendations-list">
+            <li>Surveillance standard</li>
+          </ul>
+        </div>
+
+        <button class="reset-btn" onclick="resetForm()">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+     const counters = {};
+    const pointValues = {
+      'fam-breast-under-40': 4,
+      'fam-breast-over-40': 2,
+      'fam-ovarian': 5,
+      'fam-male-breast': 8
+    };
+
+    Object.keys(pointValues).forEach(id => counters[id] = 0);
+
+    function incrementCounter(id) {
+      counters[id]++;
+      updateCounterDisplay(id);
+      calculateScore();
+    }
+
+    function decrementCounter(id) {
+      if (counters[id] > 0) {
+        counters[id]--;
+        updateCounterDisplay(id);
+        calculateScore();
+      }
+    }
+
+    function updateCounterDisplay(id) {
+      const span = document.getElementById('count-' + id);
+      if (span) {
+        span.textContent = counters[id];
+        const decBtn = span.previousElementSibling;
+        if (decBtn) decBtn.disabled = (counters[id] === 0);
+      }
+    }
+
+    function calculateScore() {
+      const riskEl = document.getElementById('risk-level');
+      const list = document.getElementById('recommendations-list');
+      list.innerHTML = '';
+
+      const personalBreastOption = document.querySelector('input[name="personal-breast"]:checked');
+      const diagnosisAgeInput = document.getElementById('diagnosis-age').value.trim();
+      const diagnosisAge = diagnosisAgeInput ? parseInt(diagnosisAgeInput, 10) : null;
+
+      const tumorType = document.querySelector('input[name="tumor-type"]:checked')?.value;
+      const isTripleNegative = tumorType === 'brca1';
+
+      const ageHelp = document.getElementById('age-help');
+      const ageInput = document.getElementById('diagnosis-age');
+
+      // Déterminer si on a un cancer du sein
+      const hasCancer = personalBreastOption && personalBreastOption.id !== 'personal-none';
+      
+      // Déterminer si l'option sélectionnée utilise une plage d'âge prédéfinie
+      const hasAgeRange = personalBreastOption && [
+        'personal-under-30', 'personal-30-35', 'personal-36-39',
+        'personal-40-49', 'personal-50-59', 'personal-over-60'
+      ].includes(personalBreastOption.id);
+
+      // GESTION DU CHAMP ÂGE
+      if (!hasCancer) {
+        // Pas de cancer → champ désactivé et vidé
+        ageInput.disabled = true;
+        ageInput.value = '';
+        ageHelp.style.display = 'none';
+      } else if (isTripleNegative) {
+        // TNBC → champ OBLIGATOIREMENT activé (priorité absolue)
+        ageInput.disabled = false;
+        
+        // Afficher l'aide si l'âge est manquant
+        if (!diagnosisAgeInput) {
+          ageHelp.style.display = 'block';
+          ageHelp.innerHTML = '⚠️ Âge obligatoire pour évaluer le critère TNBC < 50 ans';
+        } else {
+          ageHelp.style.display = 'none';
+        }
+      } else if (hasAgeRange) {
+        // Cancer avec plage d'âge ET pas TNBC → champ désactivé car redondant
+        ageInput.disabled = true;
+        ageInput.value = '';
+        ageHelp.style.display = 'none';
+      } else {
+        // Cancer sans plage d'âge → champ activé
+        ageInput.disabled = false;
+        
+        // Afficher l'aide si l'âge est manquant
+        if (!diagnosisAgeInput) {
+          ageHelp.style.display = 'block';
+          ageHelp.innerHTML = '⚠️ Ce champ est obligatoire pour évaluer les critères cliniques.';
+        } else {
+          ageHelp.style.display = 'none';
+        }
+      }
+
+      // VALIDATION DE L'ÂGE QUAND NÉCESSAIRE
+      if (hasCancer && (!hasAgeRange || isTripleNegative)) {
+        if (!diagnosisAgeInput) {
+          if (isTripleNegative) {
+            riskEl.textContent = 'Âge obligatoire pour TNBC';
+            riskEl.className = 'risk-level risk-medium';
+            list.innerHTML = '<li><strong>⚠️ Veuillez saisir l\'âge au diagnostic</strong></li><li>Nécessaire pour évaluer le critère TNBC < 50 ans</li>';
+          } else {
+            riskEl.textContent = 'Âge au diagnostic manquant';
+            riskEl.className = 'risk-level risk-low';
+            list.innerHTML = '<li>Veuillez indiquer l\'âge au diagnostic du cancer du sein.</li>';
+          }
+          return;
+        }
+        
+        if (!diagnosisAge || diagnosisAge < 0 || diagnosisAge > 120) {
+          riskEl.textContent = 'Âge au diagnostic invalide';
+          riskEl.className = 'risk-level risk-low';
+          list.innerHTML = '<li>Veuillez entrer un âge valide (0–120 ans).</li>';
+          return;
+        }
+      }
+
+      // 🔴 1. INDICATIONS DIRECTES
+
+      // 1.1 Sein < 36 ans (basé sur la plage OU l'âge saisi)
+      if (personalBreastOption) {
+        const id = personalBreastOption.id;
+        if (id === 'personal-under-30' || id === 'personal-30-35') {
+          riskEl.textContent = 'Indication directe (sein < 36 ans)';
+          riskEl.className = 'risk-level risk-high';
+          list.innerHTML = 
+            '<li><strong>🎯 Test génétique BRCA1/BRCA2 fortement recommandé</strong></li>' +
+            '<li>Cancer du sein diagnostiqué avant 36 ans</li>' +
+            '<li>Critère clinique évocateur de mutation BRCA</li>' +
+            '<li>Conseil génétique prioritaire</li>';
+          return;
+        }
+        
+        // Si âge saisi précis < 36 ans (pour les cas sans plage prédéfinie)
+        if (diagnosisAge && diagnosisAge < 36) {
+          riskEl.textContent = 'Indication directe (sein < 36 ans)';
+          riskEl.className = 'risk-level risk-high';
+          list.innerHTML = 
+            '<li><strong>🎯 Test génétique BRCA1/BRCA2 fortement recommandé</strong></li>' +
+            '<li>Cancer du sein diagnostiqué à ' + diagnosisAge + ' ans (< 36 ans)</li>' +
+            '<li>Critère clinique évocateur de mutation BRCA</li>' +
+            '<li>Conseil génétique prioritaire</li>';
+          return;
+        }
+      }
+
+      // 1.2 TNBC < 50 ans
+      if (isTripleNegative && diagnosisAge && diagnosisAge < 50) {
+        riskEl.textContent = 'Indication directe (TNBC < 50 ans)';
+        riskEl.className = 'risk-level risk-high';
+        list.innerHTML = 
+          '<li><strong>🎯 Test génétique BRCA1/BRCA2 fortement recommandé</strong></li>' +
+          '<li>Cancer du sein triple négatif diagnostiqué à ' + diagnosisAge + ' ans (< 50 ans)</li>' +
+          '<li>Conseil génétique prioritaire</li>';
+        return;
+      }
+
+      // 1.3 Cancer de l'ovaire
+      if (document.getElementById('personal-ovarian').checked) {
+        riskEl.textContent = 'Indication directe (cancer de l\'ovaire)';
+        riskEl.className = 'risk-level risk-high';
+        list.innerHTML = 
+          '<li><strong>🎯 Test génétique BRCA1/BRCA2 fortement recommandé</strong></li>' +
+          '<li>Cancer de l\'ovaire à tout âge</li>' +
+          '<li>Conseil génétique prioritaire</li>';
+        return;
+      }
+
+      // 1.4 Cancer du sein chez l'homme
+      if (document.getElementById('personal-male-breast').checked) {
+        riskEl.textContent = 'Indication directe (sein homme)';
+        riskEl.className = 'risk-level risk-high';
+        list.innerHTML = 
+          '<li><strong>🎯 Test génétique BRCA1/BRCA2 fortement recommandé</strong></li>' +
+          '<li>Cancer du sein chez l\'homme</li>' +
+          '<li>Conseil génétique prioritaire</li>';
+        return;
+      }
+
+      // 1.5 Cancer du sein bilatéral
+      if (document.getElementById('personal-bilateral').checked) {
+        riskEl.textContent = 'Indication directe (sein bilatéral)';
+        riskEl.className = 'risk-level risk-high';
+        list.innerHTML = 
+          '<li><strong>🎯 Test génétique BRCA1/BRCA2 fortement recommandé</strong></li>' +
+          '<li>Cancer du sein bilatéral</li>' +
+          '<li>Conseil génétique prioritaire</li>';
+        return;
+      }
+
+      // 🔢 2. CALCUL DU SCORE (si pas d'indication directe)
+
+      let total = 0;
+
+      // Score du cancer du sein personnel
+      if (personalBreastOption) {
+        total += parseInt(personalBreastOption.value, 10);
+      }
+
+      // Scores des autres cancers personnels
+      document.querySelectorAll('.personal-check').forEach(cb => {
+        if (cb.checked) {
+          total += parseInt(cb.getAttribute('data-points') || '0', 10);
+        }
+      });
+
+      // Scores familiaux
+      Object.keys(counters).forEach(id => {
+        total += counters[id] * (pointValues[id] || 0);
+      });
+
+      // Score ethnique
+      const isAshkenazi = document.getElementById('ethnicity-ashkenazi').checked;
+      if (isAshkenazi) total += 5;
+
+      // Ajustement histologique
+      let brca1Score = total;
+      let brca2Score = total;
+
+      if (tumorType === 'brca1') {
+        brca1Score = total + 5;
+        brca2Score = Math.max(0, total - 2);
+      } else if (tumorType === 'brca2') {
+        brca2Score = total + 3;
+        brca1Score = Math.max(0, total - 2);
+      }
+
+      // Affichage des scores
+      document.getElementById('total-score').textContent = total;
+      document.getElementById('score-brca1').textContent = brca1Score;
+      document.getElementById('score-brca2').textContent = brca2Score;
+
+      // Détection des antécédents significatifs
+      const hasSignificantHistory = total > 5 || counters['fam-ovarian'] > 0 || counters['fam-male-breast'] > 0;
+
+      // 🔑 CAS 1 : Ashkénaze sans antécédents significatifs
+      if (isAshkenazi && !hasSignificantHistory) {
+        riskEl.textContent = 'Discussion de test ciblé';
+        riskEl.className = 'risk-level risk-medium';
+        list.innerHTML = 
+          '<li><strong>🎯 Origine ashkénaze sans antécédents</strong></li>' +
+          '<li>Test ciblé BRCA discuté (185delAG, etc.)</li>' +
+          '<li>Conseil génétique recommandé</li>';
+        return;
+      }
+
+      // 🔑 CAS 2 : Score atteint (seuil NHS)
+      if (total >= 15 || brca1Score >= 10 || brca2Score >= 10) {
+        riskEl.textContent = 'Risque ≥ 10 % → test indiqué';
+        riskEl.className = 'risk-level risk-high';
+        list.innerHTML = 
+          '<li><strong>🎯 Test génétique BRCA1/BRCA2 fortement recommandé</strong></li>' +
+          '<li>Probabilité ≥ 10 % de porter une mutation</li>' +
+          '<li>Conseil génétique prioritaire</li>';
+        return;
+      }
+
+      // 🔑 CAS 3 : Risque faible
+      riskEl.textContent = 'Risque < 10 %';
+      riskEl.className = 'risk-level risk-low';
+      list.innerHTML = 
+        '<li>Surveillance standard selon l\'âge</li>' +
+        '<li>Test génétique non indiqué actuellement</li>' +
+        '<li>Réévaluer si nouveaux antécédents</li>';
+    }
+
+    function resetForm() {
+      document.getElementById('personal-none').checked = true;
+      document.querySelectorAll('.personal-check').forEach(cb => cb.checked = false);
+      document.querySelectorAll('input[name="tumor-type"]')[3].checked = true;
+      document.getElementById('ethnicity-non-ashkenazi').checked = true;
+      document.getElementById('diagnosis-age').value = '';
+      Object.keys(counters).forEach(id => {
+        counters[id] = 0;
+        updateCounterDisplay(id);
+      });
+      calculateScore();
+    }
+
+    // Fonction pour gérer les styles actifs des radio items
+    function updateRadioStyles() {
+      // Mise à jour des styles pour tous les groupes radio
+      document.querySelectorAll('.radio-group').forEach(group => {
+        const radioItems = group.querySelectorAll('.radio-item');
+        radioItems.forEach(item => {
+          const radio = item.querySelector('input[type="radio"]');
+          if (radio && radio.checked) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      });
+
+      // Mise à jour des styles pour les checkboxes
+      document.querySelectorAll('.checkbox-item').forEach(item => {
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        if (checkbox && checkbox.checked) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialiser les compteurs
+      Object.keys(pointValues).forEach(id => updateCounterDisplay(id));
+      
+      // Ajouter les listeners pour tous les inputs
+      document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => {
+        el.addEventListener('change', () => {
+          updateRadioStyles();
+          calculateScore();
+        });
+      });
+      
+      // Listener pour l'âge
+      document.getElementById('diagnosis-age').addEventListener('input', calculateScore);
+      
+      // Listeners pour les clics sur les radio-item et checkbox-item
+      document.querySelectorAll('.radio-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.tagName !== 'INPUT') {
+            const radio = item.querySelector('input[type="radio"]');
+            if (radio) {
+              radio.checked = true;
+              updateRadioStyles();
+              calculateScore();
+            }
+          }
+        });
+      });
+
+      document.querySelectorAll('.checkbox-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'SPAN') {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+              checkbox.checked = !checkbox.checked;
+              updateRadioStyles();
+              calculateScore();
+            }
+          }
+        });
+      });
+      
+      // Calcul initial
+      updateRadioStyles();
+      calculateScore();
+    });
+  </script>
+</body>
+</html>
