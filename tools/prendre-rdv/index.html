@@ -1865,82 +1865,41 @@ function buildRecap() {
    SOUMISSION — via wp-ajax
 ═══════════════════════════════════════════ */
 function submitForm() {
-  var btn = document.getElementById('btn-next');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="rdv-spinner"></span> Envoi en cours\u2026';
+    var btn = document.getElementById('btn-next');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="rdv-spinner"></span> Envoi en cours…';
 
-  var p = state.patient;
-
-  var payload = {
-    action:    'rdv_submit',
-    website:   '',
-    nonce:     (window.rdv_ajax && window.rdv_ajax.nonce) || '',
-    motif:     state.motif ? state.motif.id : '',
-    date:      dateKey(state.dateSelected),
-    slot:      state.slotSelected,
-    nom:       p.nom,
-    prenom:    p.prenom,
-    naissance: p.naissance || '',
-    tel:       p.tel,
-    email:     p.email,
-    remarque:  p.remarque || '',
-  };
-
-  var fd = new FormData();
-  Object.keys(payload).forEach(function(k) {
-    var v = payload[k];
-    fd.append(k, (v !== null && v !== undefined) ? String(v) : '');
-  });
-
-  var xhr     = new XMLHttpRequest();
-  var ajaxUrl = (window.rdv_ajax && window.rdv_ajax.url)
-    ? window.rdv_ajax.url : '/wp-admin/admin-ajax.php';
-
-  xhr.open('POST', ajaxUrl, true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState !== 4) return;
-    var btn2 = document.getElementById('btn-next');
-    var ok = false;
-    var msg = 'Une erreur est survenue. Veuillez réessayer ou contacter le cabinet.';
-    try {
-      var resp = JSON.parse(xhr.responseText);
-      if (resp && resp.success) {
-        ok = true;
-        var slotKey = payload.date + '|' + payload.slot;
-        if (window.rdv_ajax) {
-          if (!Array.isArray(window.rdv_ajax.slots_pris)) window.rdv_ajax.slots_pris = [];
-          if (window.rdv_ajax.slots_pris.indexOf(slotKey) === -1) window.rdv_ajax.slots_pris.push(slotKey);
+    var p = state.patient;
+    
+    fetch('https://dr-karazaitri-ma.net/wp-json/rdv/v1/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            motif: state.motif ? state.motif.label : '',
+            date: formatDate(state.dateSelected),
+            slot: state.slotSelected,
+            nom: p.nom,
+            prenom: p.prenom,
+            naissance: p.naissance,
+            tel: p.tel,
+            email: p.email,
+            remarque: p.remarque
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showSuccess();
+        } else {
+            throw new Error(data.message || 'Erreur');
         }
-      } else if (resp && resp.data && resp.data.message) {
-        msg = resp.data.message;
-      }
-    } catch(e) {
-      msg = 'Erreur serveur (' + xhr.status + '). Veuillez réessayer.';
-    }
-
-    if (ok) {
-      showSuccess();
-    } else {
-      if (btn2) { btn2.disabled = false; btn2.innerHTML = 'Confirmer le rendez-vous'; }
-      var errDiv = document.getElementById('rdv-submit-error');
-      if (!errDiv) {
-        errDiv = document.createElement('div');
-        errDiv.id = 'rdv-submit-error';
-        errDiv.style.cssText = 'margin:12px 0 0;padding:12px 16px;background:#fff0f0;border:1px solid #e74c3c;border-radius:6px;color:#c0392b;font-size:14px;';
-        if (btn2 && btn2.parentNode) btn2.parentNode.insertBefore(errDiv, btn2);
-      }
-      errDiv.textContent = msg;
-      errDiv.style.display = 'block';
-    }
-  };
-  xhr.onerror = function() {
-    var btn2 = document.getElementById('btn-next');
-    if (btn2) { btn2.disabled = false; btn2.innerHTML = 'Confirmer le rendez-vous'; }
-    alert('Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.');
-  };
-  xhr.send(fd);
+    })
+    .catch(error => {
+        btn.disabled = false;
+        btn.innerHTML = 'Confirmer le rendez-vous';
+        alert('Erreur: ' + error.message);
+    });
 }
-
 function showSuccess() {
   var box = document.getElementById('success-box');
   var p   = state.patient;
