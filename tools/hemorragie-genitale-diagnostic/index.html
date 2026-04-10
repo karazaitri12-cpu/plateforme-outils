@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hémorragie Génitale - Outil Diagnostique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h1 {
+            color: #dc2626;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .btn-reset {
+            background: #f3f4f6;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-reset:hover {
+            background: #e5e7eb;
+        }
+
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: #e5e7eb;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .step-circle.active {
+            background: #dc2626;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .step-line {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            right: -50%;
+            height: 4px;
+            background: #e5e7eb;
+            z-index: -1;
+        }
+
+        .step-line.active {
+            background: #dc2626;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #dc2626;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #fef2f2;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc2626;
+        }
+
+        .info-box.blue {
+            background: #eff6ff;
+            border-left-color: #3b82f6;
+        }
+
+        .info-box.green {
+            background: #f0fdf4;
+            border-left-color: #16a34a;
+        }
+
+        .info-box.yellow {
+            background: #fefce8;
+            border-left-color: #eab308;
+        }
+
+        .choice-btn {
+            width: 100%;
+            background: white;
+            border: 2px solid #dc2626;
+            color: #dc2626;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .choice-btn:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .diagnostic-box {
+            background: #dcfce7;
+            border: 2px solid #16a34a;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .diagnostic-box h3 {
+            color: #16a34a;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .exam-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .exam-item {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #374151;
+        }
+
+        .exam-item:last-child {
+            border-bottom: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🩸 Hémorragie Génitale</h1>
+            <button class="btn-reset" onclick="resetTool()">🔄 Réinitialiser</button>
+        </div>
+
+        <div class="progress-bar" id="progressBar"></div>
+
+        <!-- STEP 1: Contexte -->
+        <div class="step-content active" id="step1">
+            <h2>Contexte de l'hémorragie</h2>
+            <div class="info-box">
+                <p style="margin-bottom: 16px; color: #4b5563; font-weight: bold;">Dans quel contexte survient l'hémorragie ?</p>
+            </div>
+            
+            <button class="choice-btn" onclick="setContext('activite')">
+                Période d'activité génitale
+            </button>
+            
+            <button class="choice-btn" onclick="setContext('grossesse')">
+                Grossesse connue ou suspectée
+            </button>
+            
+            <button class="choice-btn" onclick="setContext('postmenopause')">
+                Post-ménopause (sans THS)
+            </button>
+        </div>
+
+        <!-- STEP 2: Période d'activité -->
+        <div class="step-content" id="step2-activite">
+            <h2>Période d'Activité Génitale</h2>
+            
+            <div class="info-box yellow">
+                <p style="font-weight: bold; margin-bottom: 12px;">⚠️ Première étape : Éliminer une grossesse</p>
+                <p style="color: #4b5563;">Dosage des β-HCG plasmatiques systématique</p>
+            </div>
+
+            <div class="info-box blue">
+                <h3 style="font-weight: bold; margin-bottom: 12px;">Examen clinique complet</h3>
+                <div style="padding-left: 0;">
+                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
+                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
+                        Toucher vaginal : utérus, annexes
+                    </p>
+                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
+                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
+                        Speculum : col, vagin, cervicite ?
+                    </p>
+                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
+                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
+                        Frottis ± colposcopie si lésions cervicales
+                    </p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <p style="font-weight: bold; margin-bottom: 12px;">Résultat β-HCG :</p>
+                <button class="choice-btn" onclick="showResult('negative')">β-HCG négatif</button>
+                <button class="choice-btn" onclick="showResult('positive')">β-HCG positif</button>
+            </div>
+
+            <div id="result-negative" style="display: none;">
+                <div class="diagnostic-box">
+                    <h3>Diagnostic à évoquer selon l'examen clinique</h3>
+                    
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Si examen clinique normal :</strong> Échographie pelvienne + Hystéroscopie</div>
+                        <div class="exam-item"><strong>Causes utérines :</strong> Polype, myome sous-muqueux, adénomyose, hyperplasie endomètre, cancer endomètre</div>
+                        <div class="exam-item"><strong>Causes cervicales :</strong> Cancer du col (biopsies), cervicite (prélèvements)</div>
+                        <div class="exam-item"><strong>Causes ovariennes :</strong> Tumeur ovarienne (échographie)</div>
+                        <div class="exam-item"><strong>Causes vaginales :</strong> Cancer vagin, vaginite</div>
+                    </div>
+
+                    <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin-top: 16px;">
+                        <p style="font-weight: bold; color: #92400e; margin-bottom: 8px;">⚠️ Suspicion de salpingite ?</p>
+                        <p style="color: #92400e; font-size: 14px;">Douleurs pelviennes + fièvre + glaire louche → Cœlioscopie diagnostique</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="result-positive" style="display: none;">
+                <div class="diagnostic-box">
+                    <h3>β-HCG Positif → Hémorragies du 1er trimestre</h3>
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Échographie pelvienne endovaginale</strong> en urgence</div>
+                        <div class="exam-item">• Grossesse intra-utérine évolutive (± hématome)</div>
+                        <div class="exam-item">• Fausse couche spontanée</div>
+                        <div class="exam-item">• Grossesse extra-utérine (GEU)</div>
+                        <div class="exam-item">• Môle hydatiforme</div>
+                    </div>
+                    <p style="margin-top: 16px; color: #dc2626; font-weight: bold;">→ Voir outil spécifique "Hémorragie 1er trimestre"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: Grossesse -->
+        <div class="step-content" id="step2-grossesse">
+            <h2>Hémorragie et Grossesse</h2>
+            
+            <div class="info-box yellow">
+                <p style="font-weight: bold; margin-bottom: 12px;">⚠️ Préciser le terme de la grossesse</p>
+            </div>
+
+            <button class="choice-btn" onclick="showGrossesseResult('t1')">
+                1er Trimestre (< 14 SA)
+            </button>
+            
+            <button class="choice-btn" onclick="showGrossesseResult('t3')">
+                3ème Trimestre (≥ 28 SA)
+            </button>
+
+            <div id="grossesse-t1" style="display: none;">
+                <div class="diagnostic-box">
+                    <h3>Hémorragie du 1er Trimestre</h3>
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Échographie endovaginale</strong> + dosage β-HCG</div>
+                        <div class="exam-item">• <strong>Grossesse évolutive intra-utérine</strong> (± hématome décollement)</div>
+                        <div class="exam-item">• <strong>Fausse couche spontanée</strong> (œuf mort, embryon sans BDC)</div>
+                        <div class="exam-item">• <strong>Grossesse extra-utérine</strong> (masse latéro-utérine, épanchement Douglas)</div>
+                        <div class="exam-item">• <strong>Môle hydatiforme</strong> (aspect vésiculaire + β-HCG très élevés)</div>
+                    </div>
+                    <p style="margin-top: 16px; color: #dc2626; font-weight: bold;">→ Voir outil détaillé "Hémorragie 1er trimestre"</p>
+                </div>
+            </div>
+
+            <div id="grossesse-t3" style="display: none;">
+                <div class="diagnostic-box" style="background: #fef2f2; border-color: #dc2626;">
+                    <h3 style="color: #dc2626;">🚨 Hémorragie du 3ème Trimestre - URGENCE</h3>
+                    
+                    <div style="background: #fee2e2; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                        <p style="font-weight: bold; color: #991b1b; margin-bottom: 8px;">Conduite immédiate :</p>
+                        <div style="padding-left: 20px; color: #991b1b;">
+                            <p>• Hospitalisation d'urgence</p>
+                            <p>• Voies d'abord veineuses + groupe sanguin</p>
+                            <p>• PAS de TV avant échographie (éliminer placenta praevia)</p>
+                            <p>• Transfert immédiat en salle de travail</p>
+                            <p>• Enregistrement du RCF + échographie</p>
+                        </div>
+                    </div>
+
+                    <div class="exam-list">
+                        <div class="exam-item">
+                            <strong>Placenta Praevia</strong>
+                            <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Hémorragie indolore, utérus souple, diagnostic échographique</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Hématome Rétro-Placentaire (HRP)</strong>
+                            <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Douleurs abdominales, contracture utérine, HTA, signes CIVD, souffrance fœtale</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Rupture Utérine</strong>
+                            <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Surtout si utérus cicatriciel, douleur intense, signes de choc</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Rupture vaisseau chorial</strong>
+                            <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Signes de souffrance fœtale aiguë</p>
+                        </div>
+                    </div>
+                    <p style="margin-top: 16px; color: #dc2626; font-weight: bold;">→ Voir outil détaillé "Hémorragie 3ème trimestre"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: Post-ménopause -->
+        <div class="step-content" id="step2-postmenopause">
+            <h2>Hémorragie Post-Ménopausique</h2>
+            
+            <div class="info-box yellow">
+                <p style="font-weight: bold; margin-bottom: 12px;">⚠️ Métrorragies post-ménopausiques = Cancer jusqu'à preuve du contraire</p>
+                <p style="color: #4b5563;">En l'absence de THS</p>
+            </div>
+
+            <div class="info-box blue">
+                <h3 style="font-weight: bold; margin-bottom: 12px;">Examen clinique</h3>
+                <div style="padding-left: 0;">
+                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
+                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
+                        Inspection vulvaire : cancer de la vulve ?
+                    </p>
+                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
+                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
+                        Speculum : cancer du col, du vagin, vaginite atrophique ?
+                    </p>
+                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
+                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
+                        Toucher vaginal : masse utérine, masse annexielle ?
+                    </p>
+                </div>
+            </div>
+
+            <div class="diagnostic-box">
+                <h3>Si examen clinique négatif</h3>
+                
+                <div class="exam-list">
+                    <div class="exam-item">
+                        <strong>1. Hystéroscopie +++</strong>
+                        <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Examen de référence : visualisation directe + biopsies dirigées</p>
+                        <ul style="margin-left: 20px; margin-top: 8px; color: #6b7280; font-size: 14px;">
+                            <li>Cancer de l'endomètre</li>
+                            <li>Polype endomètre</li>
+                            <li>Hyperplasie endomètre</li>
+                            <li>Atrophie endomètre</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="exam-item">
+                        <strong>2. Échographie pelvienne</strong>
+                        <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Évaluation de l'épaisseur endomètre (> 5 mm suspect) + masse ovarienne</p>
+                        <ul style="margin-left: 20px; margin-top: 8px; color: #6b7280; font-size: 14px;">
+                            <li>Tumeur de l'ovaire (marqueurs CA125, CA19.9)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin-top: 16px;">
+                    <p style="font-weight: bold; color: #92400e; margin-bottom: 8px;">Facteurs de risque cancer endomètre</p>
+                    <p style="color: #92400e; font-size: 14px;">Obésité, ménopause tardive, œstrogénothérapie isolée, hyperplasie atypique, diabète, HTA</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Algorithme basé sur les recommandations du CNGOF et de la FIGO</p>
+            <p style="margin-top: 8px;">⚕️ Outil d'aide à la décision - Ne remplace pas l'évaluation clinique</p>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let selectedContext = '';
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const labels = ['Contexte', 'Évaluation'];
+            progressBar.innerHTML = '';
+
+            for (let i = 1; i <= 2; i++) {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'progress-step';
+
+                const circle = document.createElement('div');
+                circle.className = 'step-circle' + (currentStep >= i ? ' active' : '');
+                circle.textContent = i;
+                
+                const label = document.createElement('div');
+                label.className = 'step-label';
+                label.textContent = labels[i - 1];
+                
+                stepDiv.appendChild(circle);
+                stepDiv.appendChild(label);
+
+                if (i < 2) {
+                    const line = document.createElement('div');
+                    line.className = 'step-line' + (currentStep > i ? ' active' : '');
+                    stepDiv.appendChild(line);
+                }
+
+                progressBar.appendChild(stepDiv);
+            }
+        }
+
+        function setContext(context) {
+            selectedContext = context;
+            document.querySelectorAll('.step-content').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            currentStep = 2;
+            document.getElementById('step2-' + context).classList.add('active');
+            updateProgressBar();
+        }
+
+        function showResult(type) {
+            document.getElementById('result-negative').style.display = 'none';
+            document.getElementById('result-positive').style.display = 'none';
+            
+            if (type === 'negative') {
+                document.getElementById('result-negative').style.display = 'block';
+            } else {
+                document.getElementById('result-positive').style.display = 'block';
+            }
+        }
+
+        function showGrossesseResult(trimestre) {
+            document.getElementById('grossesse-t1').style.display = 'none';
+            document.getElementById('grossesse-t3').style.display = 'none';
+            
+            if (trimestre === 't1') {
+                document.getElementById('grossesse-t1').style.display = 'block';
+            } else {
+                document.getElementById('grossesse-t3').style.display = 'block';
+            }
+        }
+
+        function resetTool() {
+            currentStep = 1;
+            selectedContext = '';
+            document.querySelectorAll('.step-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById('step1').classList.add('active');
+            
+            document.getElementById('result-negative').style.display = 'none';
+            document.getElementById('result-positive').style.display = 'none';
+            document.getElementById('grossesse-t1').style.display = 'none';
+            document.getElementById('grossesse-t3').style.display = 'none';
+            
+            updateProgressBar();
+        }
+
+        updateProgressBar();
+    </script>
+</body>
+</html>
