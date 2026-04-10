@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur DPNI - Trisomie 21</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+  
+
+  
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+      
+      
+           
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+       }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.5s ease;
+        }
+
+        .result.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .result.low-risk {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+        }
+
+        .result.moderate-risk {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            color: #2d3436;
+        }
+
+        .result.high-risk {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+        }
+
+        .result h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .result p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .disclaimer h4 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .disclaimer p {
+            color: #856404;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            padding: 25px;
+            margin-top: 20px;
+            border-radius: 15px;
+        }
+
+        .info-section h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .info-section ul {
+            color: #6c757d;
+            line-height: 1.6;
+            padding-left: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+
+            .button-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧬 Calculateur DPNI</h1>
+            <p>Estimation du risque de Trisomie 21</p>
+        </div>
+
+        <div class="form-container">
+            <form id="dpniForm">
+                <div class="form-group">
+                    <label for="age">Âge maternel (années) :</label>
+                    <input type="number" id="age" min="15" max="55" value="30" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="weeks">Âge gestationnel (semaines) :</label>
+                    <input type="number" id="weeks" min="10" max="42" step="0.1" value="12" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pappa">PAPP-A (MoM - Multiple of Median) :</label>
+                    <input type="number" id="pappa" step="0.01" value="1.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bhcg">β-hCG libre (MoM) :</label>
+                    <input type="number" id="bhcg" step="0.01" value="1.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nt">Clarté nucale (mm) :</label>
+                    <input type="number" id="nt" step="0.1" min="0.5" max="10" value="1.5">
+                </div>
+
+                <div class="form-group">
+                    <label for="history">Antécédents :</label>
+                    <select id="history">
+                        <option value="none">Aucun antécédent</option>
+                        <option value="previous">Grossesse antérieure avec trisomie 21</option>
+                        <option value="family">Antécédents familiaux</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="calculate-btn" style="width:100%; padding:16px; margin-top:10px; 
+                    color:white; border:none; border-radius:12px; 
+               font-size:1.2em; font-weight:600; cursor:pointer;">Calculer le risque</button>
+                
+                
+                <button type="button" class="reset-btn" onclick="resetForm()" 
+               style="width:100%; padding:16px; margin-top:10px; 
+               background:linear-gradient(135deg,#fc4a1a 0%,#f7b733 100%);
+               color:white; border:none; border-radius:12px; 
+               font-size:1.2em; font-weight:600; cursor:pointer;">
+    Réinitialiser
+            </button>
+
+                
+            </form>
+
+            <div id="result" class="result"></div>
+
+            <div class="disclaimer">
+                <h4>⚠️ Avertissement médical</h4>
+                <p>Ce calculateur est fourni à titre informatif uniquement et ne remplace pas l'avis d'un professionnel de santé. Les résultats doivent toujours être interprétés par un médecin qualifié. Le DPNI nécessite une analyse sanguine spécialisée pour des résultats précis.</p>
+            </div>
+
+            <div class="info-section">
+                <h4>📊 À propos du DPNI</h4>
+                <ul>
+                    <li><strong>Sensibilité :</strong> >99% pour la trisomie 21</li>
+                    <li><strong>Spécificité :</strong> >99.5%</li>
+                    <li><strong>Période optimale :</strong> 10-22 semaines de grossesse</li>
+                    <li><strong>Méthode :</strong> Analyse de l'ADN fœtal circulant</li>
+                    <li><strong>Confirmation :</strong> Amniocentèse si résultat positif</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Attendre que le DOM soit chargé
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('dpniForm');
+            console.log('Formulaire trouvé:', form);
+            
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    console.log('Soumission du formulaire détectée');
+                    e.preventDefault();
+                    calculateRisk();
+                });
+            }
+        });
+
+        function calculateRisk() {
+            console.log('Début du calcul du risque');
+            
+            try {
+                // Récupération des valeurs avec vérification
+                const ageElement = document.getElementById('age');
+                const weeksElement = document.getElementById('weeks');
+                const pappaElement = document.getElementById('pappa');
+                const bhcgElement = document.getElementById('bhcg');
+                const ntElement = document.getElementById('nt');
+                const historyElement = document.getElementById('history');
+                
+                console.log('Éléments trouvés:', {
+                    age: ageElement?.value,
+                    weeks: weeksElement?.value,
+                    pappa: pappaElement?.value,
+                    bhcg: bhcgElement?.value,
+                    nt: ntElement?.value,
+                    history: historyElement?.value
+                });
+
+                const age = parseFloat(ageElement.value);
+                const weeks = parseFloat(weeksElement.value);
+                const pappa = parseFloat(pappaElement.value);
+                const bhcg = parseFloat(bhcgElement.value);
+                const nt = parseFloat(ntElement.value) || 1.5;
+                const history = historyElement.value;
+
+                console.log('Valeurs converties:', { age, weeks, pappa, bhcg, nt, history });
+
+                // Validation des données
+                if (isNaN(age) || isNaN(weeks) || isNaN(pappa) || isNaN(bhcg)) {
+                    showResult('error', 'Erreur', 'Veuillez remplir tous les champs numériques.');
+                    return;
+                }
+                
+                if (age < 15 || age > 55 || weeks < 10 || weeks > 42) {
+                    showResult('error', 'Erreur', 'Veuillez vérifier les valeurs saisies (âge: 15-55 ans, semaines: 10-42).');
+                    return;
+                }
+
+                // Calcul du risque basé sur l'âge maternel (risque de base)
+                let baseRisk = calculateAgeRisk(age);
+                console.log('Risque de base (âge):', baseRisk);
+                
+                // Ajustements basés sur les marqueurs biochimiques
+                let biochemicalMultiplier = calculateBiochemicalRisk(pappa, bhcg);
+                console.log('Multiplicateur biochimique:', biochemicalMultiplier);
+                
+                // Ajustement pour la clarté nucale
+                let ntMultiplier = calculateNTRisk(nt, weeks);
+                console.log('Multiplicateur NT:', ntMultiplier);
+                
+                // Ajustement pour les antécédents
+                let historyMultiplier = 1;
+                if (history === 'previous') historyMultiplier = 3.5;
+                else if (history === 'family') historyMultiplier = 1.8;
+                console.log('Multiplicateur antécédents:', historyMultiplier);
+
+                // Calcul du risque final
+                let finalRisk = baseRisk * biochemicalMultiplier * ntMultiplier * historyMultiplier;
+                console.log('Risque final avant limitation:', finalRisk);
+                
+                // Limitation du risque maximum
+                finalRisk = Math.min(finalRisk, 0.5);
+                console.log('Risque final:', finalRisk);
+                
+                displayResult(finalRisk, age, { pappa, bhcg, nt, weeks, history });
+                
+            } catch (error) {
+                console.error('Erreur dans calculateRisk:', error);
+                showResult('error', 'Erreur', 'Une erreur est survenue lors du calcul. Veuillez réessayer.');
+            }
+        }
+
+        function calculateAgeRisk(age) {
+            // Risque de base selon l'âge maternel (basé sur les données épidémiologiques)
+            if (age < 25) return 1/1500;
+            if (age < 30) return 1/1200;
+            if (age < 35) return 1/900;
+            if (age < 37) return 1/350;
+            if (age < 40) return 1/250;
+            if (age < 42) return 1/150;
+            if (age < 44) return 1/85;
+            return 1/50;
+        }
+
+        function calculateBiochemicalRisk(pappa, bhcg) {
+            // Ajustement basé sur PAPP-A et β-hCG (valeurs MoM)
+            let multiplier = 1.0;
+            
+            // PAPP-A faible augmente le risque
+            if (pappa < 0.3) {
+                multiplier *= 3.0;
+            } else if (pappa < 0.5) {
+                multiplier *= 2.5;
+            } else if (pappa < 0.7) {
+                multiplier *= 1.5;
+            } else if (pappa > 2.5) {
+                multiplier *= 0.6;
+            } else if (pappa > 2.0) {
+                multiplier *= 0.7;
+            }
+            
+            // β-hCG élevé augmente le risque
+            if (bhcg > 3.0) {
+                multiplier *= 3.5;
+            } else if (bhcg > 2.5) {
+                multiplier *= 2.5;
+            } else if (bhcg > 2.0) {
+                multiplier *= 1.8;
+            } else if (bhcg < 0.3) {
+                multiplier *= 1.2;
+            } else if (bhcg < 0.5) {
+                multiplier *= 0.9;
+            }
+            
+            return multiplier;
+        }
+
+        function calculateNTRisk(nt, weeks) {
+            // Valeur normale de la clarté nucale selon l'âge gestationnel
+            let normalNT = 1.0 + (weeks - 11) * 0.1;
+            let deviation = nt - normalNT;
+            
+            if (deviation > 2.0) return 8.0;
+            if (deviation > 1.5) return 5.0;
+            if (deviation > 1.0) return 3.0;
+            if (deviation > 0.5) return 2.0;
+            if (deviation < -0.5) return 0.7;
+            
+            return 1.0;
+        }
+
+        function displayResult(risk, age, params) {
+            const resultDiv = document.getElementById('result');
+            
+            if (!resultDiv) {
+                console.error('Élément result introuvable');
+                return;
+            }
+            
+            const riskRatio = Math.round(1 / risk);
+            const riskPercent = (risk * 100).toFixed(4);
+            
+            let riskLevel, className, icon, interpretation, recommendation;
+            
+            if (risk < 1/1000) {
+                riskLevel = 'Risque très faible';
+                className = 'low-risk';
+                icon = '✅';
+                interpretation = 'Le risque calculé est très faible.';
+                recommendation = 'Suivi de grossesse standard recommandé.';
+            } else if (risk < 1/300) {
+                riskLevel = 'Risque faible';
+                className = 'low-risk';
+                icon = '✅';
+                interpretation = 'Le risque calculé est faible.';
+                recommendation = 'Suivi standard, DPNI optionnel selon préférences.';
+            } else if (risk < 1/100) {
+                riskLevel = 'Risque modéré';
+                className = 'moderate-risk';
+                icon = '⚠️';
+                interpretation = 'Le risque est modérément élevé.';
+                recommendation = 'DPNI recommandé. Conseil génétique conseillé.';
+            } else {
+                riskLevel = 'Risque élevé';
+                className = 'high-risk';
+                icon = '🔴';
+                interpretation = 'Le risque calculé est élevé.';
+                recommendation = 'DPNI fortement recommandé. Conseil génétique indispensable.';
+            }
+
+            resultDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <h4 style="font-size: 2.2em; margin-bottom: 20px;color: white;">${icon} ${riskLevel}</h4>
+                    
+                    <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                        <h1 style="font-size: 3em; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: white;font-weight: 800;">
+                            📊 SCORE : 1/${riskRatio.toLocaleString()}
+                        </h1>
+                        <p style="font-size: 1.5em; margin: 10px 0; font-weight: bold;">
+                            ${riskPercent}% de risque
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="text-align: left;">
+                    <p style="font-size: 1.2em; margin-bottom: 15px;"><strong>🔬 Interprétation :</strong><br>${interpretation}</p>
+                    <p style="font-size: 1.2em; margin-bottom: 20px;"><strong>💡 Recommandation :</strong><br>${recommendation}</p>
+                    
+                    <hr style="margin: 20px 0; border: none; height: 2px; background: rgba(255,255,255,0.3); border-radius: 1px;">
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+                        <p style="font-size: 1em; margin: 0;"><strong>📋 Paramètres de calcul :</strong></p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                            <div>• <strong>Âge maternel :</strong> ${age} ans</div>
+                            <div>• <strong>Âge gestationnel :</strong> ${params.weeks} SA</div>
+                            <div>• <strong>PAPP-A :</strong> ${params.pappa} MoM</div>
+                            <div>• <strong>β-hCG libre :</strong> ${params.bhcg} MoM</div>
+                            <div>• <strong>Clarté nucale :</strong> ${params.nt} mm</div>
+                            <div>• <strong>Antécédents :</strong> ${params.history === 'none' ? 'Aucun' : params.history === 'previous' ? 'T21 antérieure' : 'Familiaux'}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.className = `result ${className} show`;
+            
+            console.log('Résultat affiché:', {
+                risk: risk,
+                ratio: riskRatio,
+                percent: riskPercent,
+                level: riskLevel
+            });
+        }
+
+        function showResult(type, title, message) {
+            const resultDiv = document.getElementById('result');
+            if (!resultDiv) return;
+            
+            resultDiv.innerHTML = `
+                <h3>❌ ${title}</h3>
+                <p>${message}</p>
+            `;
+            resultDiv.className = `result high-risk show`;
+        }
+
+        // Fonction de réinitialisation
+        function resetForm() {
+            console.log('Réinitialisation du formulaire');
+            
+            // Réinitialiser tous les champs aux valeurs par défaut
+            document.getElementById('age').value = 30;
+            document.getElementById('weeks').value = 12;
+            document.getElementById('pappa').value = 1.0;
+            document.getElementById('bhcg').value = 1.0;
+            document.getElementById('nt').value = 1.5;
+            document.getElementById('history').value = 'none';
+            
+            // Masquer les résultats avec animation
+            const resultDiv = document.getElementById('result');
+            if (resultDiv) {
+                resultDiv.classList.remove('show');
+                setTimeout(() => {
+                    resultDiv.innerHTML = '';
+                    resultDiv.className = 'result';
+                }, 300);
+            }
+            
+            // Réinitialiser les styles des inputs
+            document.querySelectorAll('input').forEach(input => {
+                input.style.borderColor = '#e1e5e9';
+            });
+            
+            // Animation de confirmation
+            const resetBtn = document.querySelector('.reset-btn');
+            const originalText = resetBtn.innerHTML;
+            resetBtn.innerHTML = '✅ Réinitialisé';
+            resetBtn.style.background = 'linear-gradient(135deg, #00b894, #00cec9)';
+            
+            setTimeout(() => {
+                resetBtn.innerHTML = originalText;
+                resetBtn.style.background = 'linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%)';
+            }, 1000);
+            
+            console.log('Formulaire réinitialisé avec succès');
+        }
+
+        // Test de fonctionnement au chargement
+        window.addEventListener('load', function() {
+            console.log('Page chargée, formulaire disponible');
+            
+            // Test simple
+            setTimeout(() => {
+                const testButton = document.createElement('button');
+                testButton.textContent = 'Test rapide';
+                testButton.style.cssText = `
+                    position: fixed;
+                    top: 10px;
+                    right: 10px;
+                    z-index: 1000;
+                    padding: 5px 10px;
+                    background: #ff6b6b;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 12px;
+                `;
+                testButton.onclick = function() {
+                    // Remplir avec des valeurs de test
+                    document.getElementById('age').value = 35;
+                    document.getElementById('weeks').value = 12;
+                    document.getElementById('pappa').value = 0.8;
+                    document.getElementById('bhcg').value = 1.2;
+                    document.getElementById('nt').value = 1.8;
+                    calculateRisk();
+                    this.remove();
+                };
+                document.body.appendChild(testButton);
+            }, 1000);
+        });
+
+        // Validation en temps réel
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', function() {
+                    this.style.borderColor = this.validity.valid ? '#4facfe' : '#e74c3c';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
