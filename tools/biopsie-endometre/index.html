@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outil Décisionnel : Biopsie d'Endomètre</title>
+    <style>
+        /* CONTENEUR PRINCIPAL */
+        #decision-tool-container {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 100%;
+            margin: 0 auto;
+            /* Hauteur min pour éviter les sursauts */
+            min-height: 600px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* TYPOGRAPHIE (Vos tailles personnalisées conservées) */
+        
+        #decision-tool-container h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            line-height: 1.2;
+        }
+
+        #decision-tool-container .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        /* Animation */
+        .dt-step {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .dt-step.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.4s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Boites de questions */
+        .dt-question-box {
+            background-color: #f8f9fa;
+            border-left: 6px solid #3498db;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .dt-question-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        .dt-question-desc {
+            font-size: 1.7rem;
+            font-weight: 400;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* BOUTONS (Flexbox) */
+        .dt-buttons-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .dt-btn {
+            flex: 1 1 auto;
+            min-width: 220px;
+            padding: 18px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.6rem; 
+            font-weight: 400;
+            text-align: center;
+            color: white;
+            background-color: #3498db;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none !important;
+            line-height: 1.2;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .dt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: #2980b9;
+        }
+
+        .dt-btn-yes { background-color: #27ae60; }
+        .dt-btn-yes:hover { background-color: #219150; }
+        
+        .dt-btn-no { background-color: #c0392b; }
+        .dt-btn-no:hover { background-color: #a93226; }
+        
+        .dt-btn-neutral { background-color: #7f8c8d; }
+        .dt-btn-neutral:hover { background-color: #626d6e; }
+
+        /* ZONE NAVIGATION BAS (Précédent / Réinitialiser) */
+        .dt-navigation-area {
+            display: flex;
+            justify-content: space-between; /* Espace entre les deux boutons */
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Bouton Précédent (Style Outline) */
+        .dt-btn-prev {
+            background: transparent;
+            color: #95a5a6;
+            border: 2px solid #bdc3c7;
+            padding: 10px 25px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.2s;
+        }
+        .dt-btn-prev:hover {
+            background: #ecf0f1;
+            color: #333;
+            border-color: #95a5a6;
+        }
+
+        /* Bouton Réinitialiser (Style Discret mais visible) */
+        .dt-btn-reset {
+            background: transparent;
+            color: #e74c3c;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: 500;
+            text-decoration: underline;
+        }
+        .dt-btn-reset:hover {
+            color: #c0392b;
+            background: #fff5f5;
+            border-radius: 5px;
+        }
+
+        /* Boites de Résultats */
+        .dt-result-box {
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .dt-res-biopsy { background-color: #fef5f5; border-left: 8px solid #c0392b; color: #922b21; }
+        .dt-res-surveillance { background-color: #f0fdf4; border-left: 8px solid #27ae60; color: #145a32; }
+        .dt-res-discuss { background-color: #fffaf0; border-left: 8px solid #f39c12; color: #7d6608; }
+
+        .dt-result-box h3 { 
+            margin-top: 0; 
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        .dt-result-box p, .dt-result-box ul { 
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="decision-tool-container">
+    <h1>Outil décisionnel : Biopsie d'endomètre</h1>
+    <p class="subtitle">Algorithme basé sur les critères cliniques et échographiques</p>
+
+    <!-- STEP 0: ACCUEIL -->
+    <div class="dt-step active" id="step0">
+        <div class="dt-question-box">
+            <div class="dt-question-title">Motif de consultation</div>
+            <div class="dt-question-desc">Quelle est la situation clinique principale ?</div>
+        </div>
+        <div class="dt-buttons-flex">
+            <button class="dt-btn" onclick="nextStep('step_bleeding')">Saignements utérins anormaux</button>
+            <button class="dt-btn" onclick="nextStep('step_asymptomatic')">Découverte fortuite échographique (Asymptomatique)</button>
+            <button class="dt-btn" onclick="nextStep('step_infertility')">Infertilité / Fausses couches</button>
+            <button class="dt-btn" onclick="nextStep('step_surveillance')">Surveillance spécifique (Tamoxifène, THS, Lynch)</button>
+        </div>
+        <!-- Pas de bouton précédent sur l'accueil -->
+    </div>
+
+    <!-- BRANCHE 1 : SAIGNEMENTS -->
+    <div class="dt-step" id="step_bleeding">
+        <div class="dt-question-box">
+            <div class="dt-question-title">Statut Ménopausique</div>
+            <div class="dt-question-desc">La patiente est-elle ménopausée ?</div>
+        </div>
+        <div class="dt-buttons-flex">
+            <button class="dt-btn dt-btn-yes" onclick="nextStep('step_postmeno_bleeding_echo')">OUI (Ménopausée)</button>
+            <button class="dt-btn dt-btn-no" onclick="nextStep('step_premeno_age')">NON (En activité génitale)</button>
+        </div>
+        <!-- Navigation Bas -->
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <!-- Saignement Post-Ménopause -->
+    <div class="dt-step" id="step_postmeno_bleeding_echo">
+        <div class="dt-question-box">
+            <div class="dt-question-title">Échographie (Saignements Post-Ménopause)</div>
+            <div class="dt-question-desc">Quelle est l'épaisseur de l'endomètre (double feuillet) ?</div>
+        </div>
+        <div class="dt-buttons-flex">
+            <button class="dt-btn dt-btn-no" onclick="nextStep('res_surveillance_postmeno')">Fine (≤ 4 mm)</button>
+            <button class="dt-btn dt-btn-yes" onclick="nextStep('res_biopsy_postmeno')">Épaissie (> 4 mm)</button>
+            <button class="dt-btn dt-btn-neutral" onclick="nextStep('res_biopsy_postmeno_noecho')">Échographie non faite</button>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <!-- Saignement Pré-Ménopause -->
+    <div class="dt-step" id="step_premeno_age">
+        <div class="dt-question-box">
+            <div class="dt-question-title">Âge de la patiente</div>
+            <div class="dt-question-desc">La patiente a-t-elle <strong>45 ans ou plus</strong> ?</div>
+        </div>
+        <div class="dt-buttons-flex">
+            <button class="dt-btn dt-btn-yes" onclick="nextStep('res_biopsy_premeno_45')">OUI (≥ 45 ans)</button>
+            <button class="dt-btn dt-btn-no" onclick="nextStep('step_premeno_risk')">NON (< 45 ans)</button>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="step_premeno_risk">
+        <div class="dt-question-box">
+            <div class="dt-question-title">Facteurs de risque (< 45 ans)</div>
+            <div class="dt-question-desc">Présente-t-elle un des critères suivants ?</div>
+            <ul style="color:#555; font-size:1.3rem; margin-top:15px;">
+                <li>Obésité (IMC > 30)</li>
+                <li>Exposition prolongée aux œstrogènes (SOPK)</li>
+                <li>Traitement médical inefficace</li>
+                <li>Antécédents familiaux (Lynch, etc.)</li>
+            </ul>
+        </div>
+        <div class="dt-buttons-flex">
+            <button class="dt-btn dt-btn-yes" onclick="nextStep('res_biopsy_premeno_risk')">OUI</button>
+            <button class="dt-btn dt-btn-no" onclick="nextStep('res_surveillance_premeno')">NON</button>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <!-- BRANCHE 2 : ASYMPTOMATIQUE -->
+    <div class="dt-step" id="step_asymptomatic">
+        <div class="dt-question-box">
+            <div class="dt-question-title">Contexte de la découverte</div>
+            <div class="dt-question-desc">Quel est le statut de la patiente ?</div>
+        </div>
+        <div class="dt-buttons-flex">
+            <button class="dt-btn dt-btn-yes" onclick="nextStep('step_asymptomatic_postmeno_size')">Ménopausée</button>
+            <button class="dt-btn dt-btn-no" onclick="nextStep('res_surveillance_asymptomatic_pre')">Non Ménopausée</button>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="step_asymptomatic_postmeno_size">
+        <div class="dt-question-box">
+            <div class="dt-question-title">Épaisseur (Ménopausée Asymptomatique)</div>
+            <div class="dt-question-desc">Mesure à l'échographie endovaginale :</div>
+        </div>
+        <div class="dt-buttons-flex">
+            <button class="dt-btn dt-btn-yes" onclick="nextStep('res_biopsy_asymptomatic_11')">Supérieure à 11 mm</button>
+            <button class="dt-btn dt-btn-neutral" onclick="nextStep('res_discuss_asymptomatic')">Entre 5 et 11 mm</button>
+            <button class="dt-btn dt-btn-no" onclick="nextStep('res_surveillance_simple')">Inférieure à 5 mm</button>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <!-- BRANCHE 3 : SURVEILLANCE -->
+    <div class="dt-step" id="step_surveillance">
+        <div class="dt-question-box">
+            <div class="dt-question-title">Type de surveillance</div>
+        </div>
+        <div class="dt-buttons-flex">
+            <button class="dt-btn" onclick="nextStep('res_tamoxifen')">Sous Tamoxifène</button>
+            <button class="dt-btn" onclick="nextStep('res_lynch')">Syndrome de Lynch</button>
+            <button class="dt-btn" onclick="nextStep('res_ths')">Sous THS (Hormones)</button>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <!-- RESULTATS -->
+    
+    <div class="dt-step" id="step_infertility">
+        <div class="dt-result-box dt-res-discuss">
+            <h3>💊 Biopsie à visée étiologique</h3>
+            <p><strong>Indication :</strong> Bilan d'infertilité (échecs d'implantation) ou fausses couches à répétition.</p>
+            <ul>
+                <li><strong>Recherche :</strong> Endométrite Chronique (plasmocytes CD138).</li>
+                <li><strong>Timing :</strong> Phase lutéale moyenne (J21-J24).</li>
+            </ul>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_biopsy_postmeno">
+        <div class="dt-result-box dt-res-biopsy">
+            <h3>🔴 BIOPSIE INDIQUÉE</h3>
+            <p>Patiente ménopausée avec saignements + Endomètre > 4 mm.</p>
+            <p>Exploration histologique indispensable.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_biopsy_postmeno_noecho">
+        <div class="dt-result-box dt-res-discuss">
+            <h3>⚠️ ÉCHOGRAPHIE REQUISE</h3>
+            <p>Devant des métrorragies post-ménopausiques, l'échographie est le triage.</p>
+            <ul>
+                <li>> 4 mm : Biopsie.</li>
+                <li>≤ 4 mm : Surveillance.</li>
+            </ul>
+            <p>Si écho impossible : Biopsie par défaut.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_surveillance_postmeno">
+        <div class="dt-result-box dt-res-surveillance">
+            <h3>🟢 SURVEILLANCE (Pas de biopsie)</h3>
+            <p>Métrorragies avec endomètre fin (≤ 4 mm).</p>
+            <p>Risque cancer < 1%. Biopsie uniquement si récidive des saignements.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_biopsy_asymptomatic_11">
+        <div class="dt-result-box dt-res-biopsy">
+            <h3>🔴 BIOPSIE RECOMMANDÉE</h3>
+            <p>Ménopausée asymptomatique > 11 mm.</p>
+            <p>Risque d'hyperplasie/cancer justifiant une histologie.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_discuss_asymptomatic">
+        <div class="dt-result-box dt-res-discuss">
+            <h3>🔸 DISCUSSION</h3>
+            <p>Endomètre épaissi modérément (5-11 mm) sans saignement.</p>
+            <p>Décision au cas par cas selon les facteurs de risque (Obésité, Diabète).</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_surveillance_simple">
+        <div class="dt-result-box dt-res-surveillance">
+            <h3>🟢 PAS DE BIOPSIE</h3>
+            <p>Épaisseur normale et absence de symptômes.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_biopsy_premeno_45">
+        <div class="dt-result-box dt-res-biopsy">
+            <h3>🔴 BIOPSIE INDIQUÉE</h3>
+            <p>Saignements anormaux après 45 ans = Biopsie nécessaire.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_biopsy_premeno_risk">
+        <div class="dt-result-box dt-res-biopsy">
+            <h3>🔴 BIOPSIE INDIQUÉE</h3>
+            <p>Moins de 45 ans mais présence de facteurs de risque significatifs.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+    
+    <div class="dt-step" id="res_surveillance_premeno">
+        <div class="dt-result-box dt-res-surveillance">
+            <h3>🟢 TRAITEMENT MÉDICAL</h3>
+            <p>Pas de biopsie en première intention. Essai de traitement hormonal.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+    
+     <div class="dt-step" id="res_surveillance_asymptomatic_pre">
+        <div class="dt-result-box dt-res-surveillance">
+            <h3>🟢 PAS D'INDICATION</h3>
+            <p>Chez la femme non ménopausée, l'épaisseur varie avec le cycle. Pas de biopsie sur simple critère échographique sans symptômes.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_tamoxifen">
+        <div class="dt-result-box dt-res-discuss">
+            <h3>⚠️ TAMOXIFÈNE</h3>
+            <p><strong>Asymptomatique :</strong> Pas de surveillance, pas de biopsie.</p>
+            <p><strong>Si Saignements :</strong> Biopsie Indispensable.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_lynch">
+        <div class="dt-result-box dt-res-biopsy">
+            <h3>🧬 SYNDROME DE LYNCH</h3>
+            <p>Haut risque de cancer.</p>
+            <p><strong>Recommandation :</strong> Biopsie annuelle souvent préconisée dès 30-35 ans.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <div class="dt-step" id="res_ths">
+        <div class="dt-result-box dt-res-discuss">
+            <h3>💊 SOUS THS</h3>
+            <p>Biopsie indiquée si saignements persistants > 6 mois ou hors fenêtre thérapeutique.</p>
+        </div>
+        <div class="dt-navigation-area">
+            <button class="dt-btn-prev" onclick="prevStep()">← Précédent</button>
+            <button class="dt-btn-reset" onclick="location.reload()">Réinitialiser</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- SCRIPT DE NAVIGATION ---
+    
+    let historyStack = ['step0'];
+
+    function showStep(stepId) {
+        // Cacher toutes les étapes
+        document.querySelectorAll('.dt-step').forEach(el => el.classList.remove('active'));
+        
+        // Afficher l'étape demandée
+        const target = document.getElementById(stepId);
+        if(target) {
+            target.classList.add('active');
+            // Pas de scroll auto (désactivé pour éviter les sauts)
+        }
+    }
+
+    function nextStep(stepId) {
+        historyStack.push(stepId);
+        showStep(stepId);
+    }
+
+    function prevStep() {
+        if (historyStack.length > 1) {
+            historyStack.pop(); 
+            const prevStepId = historyStack[historyStack.length - 1]; 
+            showStep(prevStepId);
+        }
+    }
+</script>
+
+</body>
+</html>
