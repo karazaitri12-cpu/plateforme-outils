@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Outil d'échographie obstétricale — Biométrie fœtale</title>
+  <style>
+  
+ 
+  
+  
+    .echo-ob-tool *, .echo-ob-tool *::before, .echo-ob-tool *::after {
+      box-sizing: border-box; margin: 0; padding: 0;
+    }
+    .echo-ob-tool {
+      --bg: #f4f6f9; --card: #ffffff; --accent: #0056b3; --accent-dark: #003d80;
+      --muted: #5a6474; --danger: #c0392b; --success: #1a7a4a; --border: #d0d7e2;
+      --text: #1a1f2e; --label: #4a5568; --shadow: 0 2px 8px rgba(0,0,0,0.07);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10); --radius: 6px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px; color: var(--text); background: var(--bg); padding: 20px; line-height: 1.5;
+    }
+    .echo-ob-tool .eot-header {
+      border-bottom: 2px solid var(--accent); padding-bottom: 14px; margin-bottom: 20px;
+      display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .echo-ob-tool .eot-header-left h1 { font-size: 20px; font-weight: 700; color: var(--accent); margin: 0 0 4px 0; }
+    .echo-ob-tool .eot-header-left p { font-size: 12px; color: var(--muted); margin: 0; }
+    .echo-ob-tool .eot-btn-print-all {
+      background: var(--accent); color: #fff; border: none; padding: 10px 18px;
+      border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 7px; transition: background 0.2s; white-space: nowrap;
+    }
+    .echo-ob-tool .eot-btn-print-all:hover { background: var(--accent-dark); }
+    .echo-ob-tool .eot-btn-print-all svg { width: 16px; height: 16px; fill: #fff; }
+    .echo-ob-tool .eot-grid {
+      display: grid; grid-template-columns: minmax(300px, 380px) 1fr; gap: 20px; align-items: start;
+    }
+    .echo-ob-tool .eot-left { display: flex; flex-direction: column; gap: 16px; }
+    .echo-ob-tool .eot-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px; box-shadow: var(--shadow);
+    }
+    .echo-ob-tool .eot-card-title {
+      font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase;
+      letter-spacing: 0.06em; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 14px;
+    }
+    .echo-ob-tool .eot-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .echo-ob-tool .eot-form-grid .eot-full { grid-column: 1 / -1; }
+    .echo-ob-tool .eot-field { display: flex; flex-direction: column; gap: 4px; }
+    .echo-ob-tool .eot-label {
+      font-size: 13px; font-weight: 600; color: var(--label); text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .echo-ob-tool .eot-input {
+      width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius);
+      font-size: 13px; color: var(--text); background: #fff; transition: border-color 0.2s, box-shadow 0.2s; font-family: inherit;
+    }
+    .echo-ob-tool .eot-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,86,179,0.12); }
+    .echo-ob-tool .eot-input[readonly] { background: #f0f3f7; color: var(--muted); cursor: default; }
+    .echo-ob-tool .eot-bio-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .echo-ob-tool .eot-bio-row:last-child { margin-bottom: 0; }
+    .echo-ob-tool .eot-bio-input-wrap { flex: 1; }
+    .echo-ob-tool .eot-bio-input-wrap label {
+      display: block; font-size: 13px; font-weight: 600; color: var(--label);
+      text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;
+    }
+    .echo-ob-tool .eot-num-input {
+      width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius);
+      font-size: 14px; color: var(--text); background: #fff; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .echo-ob-tool .eot-num-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,86,179,0.12); }
+    .echo-ob-tool .eot-num-input.eot-error-input { border-color: var(--danger); }
+    .echo-ob-tool .eot-percentile-badge { min-width: 72px; font-size: 12px; font-weight: 700; color: var(--accent); text-align: right; padding-top: 20px; }
+    .echo-ob-tool .eot-error-msg { font-size: 11px; color: var(--danger); min-height: 14px; margin-top: 2px; font-weight: 500; }
+    .echo-ob-tool .eot-ga-row { display: flex; gap: 10px; }
+    .echo-ob-tool .eot-ga-row .eot-bio-input-wrap:last-child { max-width: 110px; }
+    .echo-ob-tool .eot-btn-calc {
+      width: 100%; background: var(--accent); color: #fff; border: none; padding: 12px;
+      border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px;
+      transition: background 0.2s; font-family: inherit;
+    }
+    .echo-ob-tool .eot-btn-calc:hover { background: var(--accent-dark); }
+    .echo-ob-tool .eot-efw-box {
+      background: #eef3fb; border: 1px solid #b8cceb; border-radius: var(--radius); padding: 14px 16px; margin-top: 14px;
+    }
+    .echo-ob-tool .eot-efw-value { font-size: 22px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+    .echo-ob-tool .eot-efw-sub { font-size: 13px; color: var(--muted);font-weight:500; }
+    .echo-ob-tool .eot-disclaimer {
+      font-size: 13px; color: #7a6200; background: #fffbea; border-left: 3px solid #e6b800;font-weight: 400;  padding: 10px 12px; border-radius: 0 var(--radius) var(--radius) 0; margin-top: 14px; line-height: 1.5;
+    }
+    .echo-ob-tool .eot-charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .echo-ob-tool .eot-chart-wrap {
+      position: relative; cursor: pointer; border-radius: var(--radius);
+      border: 1px solid var(--border); background: #fff; padding: 10px;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .echo-ob-tool .eot-chart-wrap:hover { box-shadow: 0 4px 20px rgba(0,86,179,0.15); border-color: var(--accent); }
+    .echo-ob-tool .eot-chart-hint {
+      position: absolute; top: 6px; right: 6px; background: rgba(0,86,179,0.85); color: #fff;
+      font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 3px; opacity: 0;
+      transition: opacity 0.25s; pointer-events: none;
+    }
+    .echo-ob-tool .eot-chart-wrap:hover .eot-chart-hint { opacity: 1; }
+    .echo-ob-tool .eot-chart-wrap canvas { display: block; width: 100% !important; height: 230px !important; opacity: 1 !important; filter: none !important; }
+    .echo-ob-tool .eot-chart-wrap { opacity: 1 !important; filter: none !important; }
+    .echo-ob-tool .eot-modal {
+      display: none; position: fixed; z-index: 99999; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+    }
+    .echo-ob-tool .eot-modal-content {
+      background: #fff; margin: 3% auto; padding: 20px; border-radius: 8px;
+      width: 92%; max-width: 860px; height: 78vh; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .echo-ob-tool .eot-modal-close {
+      position: absolute; top: 12px; right: 18px; font-size: 28px; color: #aaa;
+      cursor: pointer; line-height: 1; background: none; border: none; font-family: inherit;
+    }
+    .echo-ob-tool .eot-modal-close:hover { color: #000; }
+    .echo-ob-tool .eot-modal-title { font-size: 18px; font-weight: 700; color: var(--accent); text-align: center; margin-bottom: 10px; }
+    .echo-ob-tool #eotZoomCanvas { width: 100% !important; height: calc(100% - 50px) !important; }
+    
+   .grand-texte {
+  font-size: 1.5rem !important;   /* 150% de la taille racine */}
+
+    @media (max-width: 900px) {
+      .echo-ob-tool .eot-grid { grid-template-columns: 1fr; }
+      .echo-ob-tool .eot-charts-grid { grid-template-columns: 1fr; }
+      .echo-ob-tool .eot-modal-content { width: 96%; height: 88vh; margin: 1% auto; }
+    }
+    @media (max-width: 480px) {
+      .echo-ob-tool .eot-form-grid { grid-template-columns: 1fr; }
+      .echo-ob-tool .eot-form-grid .eot-full { grid-column: 1; }
+    }
+    @media print {
+      body * { visibility: hidden !important; }
+      #eotPrintZone, #eotPrintZone * { visibility: visible !important; }
+      #eotPrintZone {
+        position: fixed !important; inset: 0 !important; background: #fff !important;
+        z-index: 999999 !important; padding: 6mm !important; box-sizing: border-box !important;
+      }
+      @page { size: A5 landscape; margin: 0; }
+    }
+    
+    
+    /* --- PROTECTION CONTRE LE THEME ELEMENTOR --- */
+
+/* 1. Rendre leurs couleurs aux champs de saisie */
+.echo-ob-tool input.eot-input,
+.echo-ob-tool input.eot-num-input {
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  background-color: #fff !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+}
+
+/* 2. Assombrir les textes "fantômes" (placeholders) */
+.echo-ob-tool input::placeholder {
+  color: #8893a6 !important;
+  opacity: 1 !important;
+}
+
+/* 3. Redonner de l'épaisseur aux petits labels ("NOM", "PRÉNOM"...) */
+.echo-ob-tool .eot-label,
+.echo-ob-tool .eot-bio-input-wrap label {
+  color: var(--label) !important;
+  font-weight: 700 !important;
+}
+
+/* 4. Protéger la police de caractères globale de l'outil */
+.echo-ob-tool {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+}
+    
+    
+  </style>
+</head>
+<body>
+
+<div class="echo-ob-tool" id="eotRoot">
+  <div class="eot-header">
+    <div class="eot-header-left">
+      <h1>Aide à l'interprétation de l'échographie fœtale</h1>
+      <p class="grand-texte">Biométrie fœtale · Courbes INTERGROWTH-21st / OMS · Formule de Hadlock (1985)</p>
+    </div>
+    <button class="eot-btn-print-all" id="eotBtnPrintAll">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+      Imprimer compte-rendu A5
+    </button>
+  </div>
+
+  <div class="eot-grid">
+    <div class="eot-left">
+      <div class="eot-card">
+        <div class="eot-card-title">Identité de la patiente</div>
+        <div class="eot-form-grid">
+          <div class="eot-field">
+            <label class="eot-label" for="eotNom">Nom</label>
+            <input class="eot-input" type="text" id="eotNom" placeholder="Nom de famille" autocomplete="off">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotPrenom">Prénom</label>
+            <input class="eot-input" type="text" id="eotPrenom" placeholder="Prénom" autocomplete="off">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotDdn">Date de naissance</label>
+            <input class="eot-input" type="date" id="eotDdn">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotAge">Âge calculé</label>
+            <input class="eot-input" type="text" id="eotAge" readonly placeholder="—">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotParite">Parité (ex. G3P2)</label>
+            <input class="eot-input" type="text" id="eotParite" placeholder="G… P…" autocomplete="off">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotProfession">Profession</label>
+            <input class="eot-input" type="text" id="eotProfession" placeholder="Optionnel" autocomplete="off">
+          </div>
+          <div class="eot-field eot-full">
+            <label class="eot-label" for="eotAdresse">Adresse</label>
+            <input class="eot-input" type="text" id="eotAdresse" placeholder="Adresse complète" autocomplete="off">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotDdr">DDR</label>
+            <input class="eot-input" type="date" id="eotDdr">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotDpa">DPA calculée</label>
+            <input class="eot-input" type="text" id="eotDpa" readonly placeholder="—">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotAmenoDdr">Aménorrhée / DDR</label>
+            <input class="eot-input" type="text" id="eotAmenoDdr" readonly placeholder="—">
+          </div>
+          <div class="eot-field">
+            <label class="eot-label" for="eotDateEcho">Date de l'écho</label>
+            <input class="eot-input" type="date" id="eotDateEcho">
+          </div>
+        </div>
+      </div>
+
+      <div class="eot-card">
+        <div class="eot-card-title">Biométrie fœtale</div>
+        <p class="grand-texte">AG en semaines d'aménorrhée (SA) + jours. Mesures en <strong>mm</strong>.</p>
+        <br>
+        
+        <div class="eot-ga-row">
+          <div class="eot-bio-input-wrap">
+            <label for="eotGaSA">AG (SA)</label>
+            <input class="eot-num-input" id="eotGaSA" type="number" min="14" max="42" value="28">
+            <div class="eot-error-msg" id="eotErr-gaWeeks"></div>
+          </div>
+          <div class="eot-bio-input-wrap">
+            <label for="eotGaJours">Jours</label>
+            <input class="eot-num-input" id="eotGaJours" type="number" min="0" max="6" value="0">
+            <div class="eot-error-msg" id="eotErr-gaDays"></div>
+          </div>
+        </div>
+        <div class="eot-bio-row" style="margin-top:12px;">
+          <div class="eot-bio-input-wrap">
+            <label for="eotBpd">BIP / BPD (mm)</label>
+            <input class="eot-num-input" id="eotBpd" type="number" step="0.1" value="72">
+            <div class="eot-error-msg" id="eotErr-bpd"></div>
+          </div>
+          <div class="eot-percentile-badge" id="eotPc-bpd"></div>
+        </div>
+        <div class="eot-bio-row">
+          <div class="eot-bio-input-wrap">
+            <label for="eotHc">PC / HC (mm)</label>
+            <input class="eot-num-input" id="eotHc" type="number" step="0.1" value="266">
+            <div class="eot-error-msg" id="eotErr-hc"></div>
+          </div>
+          <div class="eot-percentile-badge" id="eotPc-hc"></div>
+        </div>
+        <div class="eot-bio-row">
+          <div class="eot-bio-input-wrap">
+            <label for="eotAc">PA / AC (mm)</label>
+            <input class="eot-num-input" id="eotAc" type="number" step="0.1" value="242">
+            <div class="eot-error-msg" id="eotErr-ac"></div>
+          </div>
+          <div class="eot-percentile-badge" id="eotPc-ac"></div>
+        </div>
+        <div class="eot-bio-row">
+          <div class="eot-bio-input-wrap">
+            <label for="eotFl">LF / FL (mm)</label>
+            <input class="eot-num-input" id="eotFl" type="number" step="0.1" value="55">
+            <div class="eot-error-msg" id="eotErr-fl"></div>
+          </div>
+          <div class="eot-percentile-badge" id="eotPc-fl"></div>
+        </div>
+        <button class="eot-btn-calc" id="eotBtnCalc">Calculer &amp; Actualiser</button>
+        <div class="eot-efw-box">
+          <div class="eot-efw-value">PFE : <span id="eotEfw">—</span> g</div>
+          <div class="eot-efw-sub">Formule de Hadlock (1985) · PC + PA + LF</div>
+        </div>
+        <div class="eot-disclaimer">
+          <strong>Usage professionnel uniquement.</strong> Aide à l'interprétation pour les professionnels de santé. Cet outil n'est pas un dispositif médical certifié et ne remplace pas le jugement clinique.
+        </div>
+      </div>
+    </div>
+
+    <div class="eot-card">
+      <div class="eot-card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>Courbes de référence (INTERGROWTH-21st)</span>
+        <span style="font-size:11px;color:var(--muted);font-weight:400;font-style:italic;">Cliquez sur un graphique pour zoomer</span>
+      </div>
+      <div class="eot-charts-grid">
+        <div class="eot-chart-wrap" data-bio="bpd">
+          <canvas id="eotChBpd"></canvas>
+          <div class="eot-chart-hint">Zoomer</div>
+        </div>
+        <div class="eot-chart-wrap" data-bio="hc">
+          <canvas id="eotChHc"></canvas>
+          <div class="eot-chart-hint">Zoomer</div>
+        </div>
+        <div class="eot-chart-wrap" data-bio="ac">
+          <canvas id="eotChAc"></canvas>
+          <div class="eot-chart-hint">Zoomer</div>
+        </div>
+        <div class="eot-chart-wrap" data-bio="fl">
+          <canvas id="eotChFl"></canvas>
+          <div class="eot-chart-hint">Zoomer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="echo-ob-tool" id="eotModalWrap">
+  <div class="eot-modal" id="eotModal">
+    <div class="eot-modal-content">
+      <button class="eot-modal-close" id="eotModalClose">&times;</button>
+      <div class="eot-modal-title" id="eotModalTitle"></div>
+      <canvas id="eotZoomCanvas"></canvas>
+    </div>
+  </div>
+</div>
+
+<div id="eotPrintZone" style="display:none;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  var REF = {
+    bpd: {
+      14:{p3:23.5,p5:24,p10:24.5,p50:27,p90:29,p95:30,p97:30.5},
+      15:{p3:26.5,p5:27,p10:27.5,p50:30,p90:32,p95:33,p97:33.5},
+      16:{p3:29.5,p5:30,p10:30.5,p50:33,p90:36,p95:37,p97:37.5},
+      17:{p3:32.5,p5:33,p10:33.5,p50:36,p90:39,p95:40,p97:40.5},
+      18:{p3:35.5,p5:36,p10:37,p50:40,p90:43,p95:44,p97:44.5},
+      19:{p3:38.5,p5:39,p10:40,p50:43,p90:46,p95:47,p97:47.5},
+      20:{p3:41.5,p5:42,p10:43,p50:47,p90:50,p95:51,p97:51.5},
+      21:{p3:44.5,p5:45,p10:46,p50:50,p90:53,p95:54,p97:54.5},
+      22:{p3:47.5,p5:48,p10:50,p50:53,p90:57,p95:58,p97:58.5},
+      23:{p3:50.5,p5:52,p10:53,p50:57,p90:60,p95:61,p97:62},
+      24:{p3:53.5,p5:55,p10:56,p50:60,p90:64,p95:65,p97:65.5},
+      25:{p3:56.5,p5:58,p10:59,p50:63,p90:67,p95:68,p97:69},
+      26:{p3:59.5,p5:60,p10:62,p50:66,p90:70,p95:71,p97:72},
+      27:{p3:62,p5:63,p10:65,p50:69,p90:73,p95:74,p97:75},
+      28:{p3:64.5,p5:66,p10:67,p50:72,p90:76,p95:77,p97:78},
+      29:{p3:67,p5:68,p10:70,p50:74,p90:78,p95:80,p97:81},
+      30:{p3:69.5,p5:71,p10:72,p50:77,p90:81,p95:82,p97:83},
+      31:{p3:71.5,p5:73,p10:74,p50:79,p90:83,p95:85,p97:86},
+      32:{p3:73.5,p5:75,p10:76,p50:81,p90:86,p95:87,p97:88},
+      33:{p3:75.5,p5:77,p10:78,p50:83,p90:88,p95:89,p97:90},
+      34:{p3:77.5,p5:79,p10:80,p50:85,p90:90,p95:91,p97:92},
+      35:{p3:79,p5:80,p10:82,p50:87,p90:92,p95:93,p97:94},
+      36:{p3:80.5,p5:82,p10:84,p50:89,p90:93,p95:95,p97:96},
+      37:{p3:82,p5:84,p10:85,p50:90,p90:95,p95:96,p97:97},
+      38:{p3:84,p5:85,p10:87,p50:92,p90:97,p95:98,p97:99},
+      39:{p3:85,p5:87,p10:89,p50:94,p90:99,p95:100,p97:101},
+      40:{p3:87,p5:88,p10:90,p50:96,p90:100,p95:101,p97:102}
+    },
+    hc: {
+      14:{p5:80,p50:87,p95:94},15:{p5:96,p50:104,p95:112},
+      16:{p5:112,p50:121,p95:130},17:{p5:128,p50:138,p95:148},
+      18:{p5:144,p50:155,p95:166},19:{p5:154,p50:166,p95:178},
+      20:{p5:163,p50:177,p95:191},21:{p5:175,p50:189,p95:203},
+      22:{p5:186,p50:201,p95:216},23:{p5:197,p50:213,p95:229},
+      24:{p5:207,p50:224,p95:241},25:{p5:216,p50:234,p95:252},
+      26:{p5:225,p50:244,p95:263},27:{p5:233,p50:253,p95:273},
+      28:{p5:248,p50:266,p95:284},29:{p5:255,p50:274,p95:293},
+      30:{p5:262,p50:281,p95:300},31:{p5:268,p50:288,p95:308},
+      32:{p5:273,p50:294,p95:315},33:{p5:279,p50:300,p95:321},
+      34:{p5:298,p50:317,p95:336},35:{p5:300,p50:320,p95:340},
+      36:{p5:302,p50:323,p95:344},37:{p5:305,p50:326,p95:347},
+      38:{p5:310,p50:332,p95:354},39:{p5:315,p50:338,p95:361},
+      40:{p5:326,p50:346,p95:365}
+    },
+    ac: {
+      14:{p5:69,p50:76,p95:84},15:{p5:80,p50:89,p95:98},
+      16:{p5:92,p50:102,p95:112},17:{p5:105,p50:116,p95:127},
+      18:{p5:117,p50:129,p95:141},19:{p5:125,p50:139,p95:153},
+      20:{p5:135,p50:150,p95:165},21:{p5:146,p50:162,p95:178},
+      22:{p5:156,p50:173,p95:190},23:{p5:165,p50:184,p95:203},
+      24:{p5:175,p50:195,p95:215},25:{p5:185,p50:206,p95:227},
+      26:{p5:195,p50:218,p95:241},27:{p5:207,p50:230,p95:253},
+      28:{p5:222,p50:242,p95:262},29:{p5:228,p50:252,p95:276},
+      30:{p5:237,p50:262,p95:287},31:{p5:246,p50:272,p95:298},
+      32:{p5:255,p50:281,p95:307},33:{p5:264,p50:292,p95:320},
+      34:{p5:282,p50:307,p95:332},35:{p5:289,p50:315,p95:341},
+      36:{p5:296,p50:324,p95:352},37:{p5:302,p50:330,p95:358},
+      38:{p5:308,p50:337,p95:366},39:{p5:315,p50:345,p95:375},
+      40:{p5:327,p50:357,p95:387}
+    },
+    fl: {
+      14:{p5:13,p50:15,p95:17},15:{p5:16,p50:18,p95:21},
+      16:{p5:19,p50:22,p95:25},17:{p5:22,p50:26,p95:29},
+      18:{p5:25,p50:29,p95:33},19:{p5:27,p50:31,p95:35},
+      20:{p5:30,p50:34,p95:37},21:{p5:32,p50:37,p95:41},
+      22:{p5:35,p50:39,p95:44},23:{p5:38,p50:42,p95:47},
+      24:{p5:40,p50:45,p95:49},25:{p5:42,p50:47,p95:52},
+      26:{p5:44,p50:49,p95:54},27:{p5:46,p50:51,p95:56},
+      28:{p5:51,p50:55,p95:59},29:{p5:52,p50:57,p95:62},
+      30:{p5:54,p50:59,p95:64},31:{p5:56,p50:61,p95:66},
+      32:{p5:57,p50:63,p95:68},33:{p5:59,p50:65,p95:70},
+      34:{p5:63,p50:68,p95:72},35:{p5:64,p50:69,p95:74},
+      36:{p5:65,p50:70,p95:75},37:{p5:66,p50:71,p95:77},
+      38:{p5:67,p50:73,p95:78},39:{p5:69,p50:74,p95:79},
+      40:{p5:71,p50:76,p95:81}
+    }
+  };
+
+  var LABELS = {
+    bpd: { short: 'BIP / BPD', long: 'Diamètre Bipariétal', unit: 'mm' },
+    hc:  { short: 'PC / HC',  long: 'Périmètre Céphalique', unit: 'mm' },
+    ac:  { short: 'PA / AC',  long: 'Périmètre Abdominal',  unit: 'mm' },
+    fl:  { short: 'LF / FL',  long: 'Longueur Fémorale',    unit: 'mm' }
+  };
+
+  var CHART_IDS = { bpd:'eotChBpd', hc:'eotChHc', ac:'eotChAc', fl:'eotChFl' };
+  var charts = {};
+  var zoomChart = null;
+  var currentBio = null;
+  var debounce;
+
+  function lerp(x, x1, y1, x2, y2) { return y1 + (y2 - y1) * (x - x1) / (x2 - x1); }
+
+  function getRef(bio, pct, ga) {
+    var data = REF[bio];
+    var weeks = Object.keys(data).map(Number).sort(function(a,b){return a-b;});
+    if (ga <= weeks[0]) return data[weeks[0]][pct];
+    if (ga >= weeks[weeks.length-1]) return data[weeks[weeks.length-1]][pct];
+    for (var i=0; i<weeks.length-1; i++) {
+      var w1=weeks[i], w2=weeks[i+1];
+      if (ga>=w1 && ga<=w2) {
+        var v1=data[w1][pct], v2=data[w2][pct];
+        if (v1==null||v2==null) return null;
+        return lerp(ga, w1,v1, w2,v2);
+      }
+    }
+    return null;
+  }
+
+  function calcPercentile(bio, ga, val) {
+    var p5=getRef(bio,'p5',ga), p50=getRef(bio,'p50',ga), p95=getRef(bio,'p95',ga);
+    if (p5==null||p50==null||p95==null) return NaN;
+    if (val <= p5)  return lerp(val, p5-(p50-p5)*0.4, 1, p5, 5);
+    if (val <= p50) return lerp(val, p5, 5, p50, 50);
+    if (val <= p95) return lerp(val, p50, 50, p95, 95);
+    return lerp(val, p95, 95, p95+(p95-p50)*0.4, 99);
+  }
+
+  function hadlock(bpd, hc, ac, fl) {
+    var hc_cm=hc/10, ac_cm=ac/10, fl_cm=fl/10;
+    var log10=1.326 + 0.0107*hc_cm + 0.0438*ac_cm + 0.158*fl_cm - 0.00326*ac_cm*fl_cm;
+    var efw=Math.pow(10, log10);
+    return (isNaN(efw)||!isFinite(efw)) ? 0 : Math.round(efw);
+  }
+
+  function getGA() {
+    return (Number(document.getElementById('eotGaSA').value)||0)
+         + (Number(document.getElementById('eotGaJours').value)||0)/7;
+  }
+
+  function formatDate(d) {
+    if (!d) return '';
+    var parts = d.split('-');
+    if (parts.length !== 3) return d;
+    return parts[2]+'/'+parts[1]+'/'+parts[0];
+  }
+
+  function calcAge(dob) {
+    if (!dob) return '';
+    var today = new Date();
+    var birth = new Date(dob);
+    var y = today.getFullYear() - birth.getFullYear();
+    var m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) y--;
+    return y + ' ans';
+  }
+
+  function addDays(dateStr, days) {
+    if (!dateStr) return '';
+    var d = new Date(dateStr);
+    d.setDate(d.getDate() + days);
+    return d.toISOString().split('T')[0];
+  }
+
+  function diffInDays(d1Str, d2Str) {
+    if (!d1Str || !d2Str) return null;
+    var d1=new Date(d1Str), d2=new Date(d2Str);
+    return Math.round((d2-d1)/(1000*3600*24));
+  }
+
+  function updatePatientCalc(e) {
+    var ddn = document.getElementById('eotDdn').value;
+    document.getElementById('eotAge').value = calcAge(ddn) || '—';
+    var ddr = document.getElementById('eotDdr').value;
+    
+    if (ddr) {
+      var dpa = addDays(ddr, 280);
+      document.getElementById('eotDpa').value = formatDate(dpa) || '—';
+      var dateEcho = document.getElementById('eotDateEcho').value;
+      var ref = dateEcho || new Date().toISOString().split('T')[0];
+      var jours = diffInDays(ddr, ref);
+      
+      if (jours !== null && jours >= 0) {
+        var sa = Math.floor(jours/7);
+        var j  = jours % 7;
+        document.getElementById('eotAmenoDdr').value = sa + ' SA + ' + j + ' j';
+
+        // --- NOUVEAUTÉ : Mise à jour automatique de la biométrie ---
+        // Si la modification vient d'une saisie utilisateur (DDR ou Date de l'écho)
+        if (e && (e.target.id === 'eotDdr' || e.target.id === 'eotDateEcho')) {
+          
+          // On limite le calcul entre 14 et 40 SA (les limites des courbes de référence)
+          var safeSa = Math.max(14, Math.min(sa, 40));
+          var safeJ  = (sa >= 14 && sa <= 40) ? j : 0;
+
+          // 1. Mise à jour de l'Âge Gestationnel dans la partie Biométrie
+          document.getElementById('eotGaSA').value = safeSa;
+          document.getElementById('eotGaJours').value = safeJ;
+
+          // 2. Calcul du GA décimal pour lire les courbes
+          var ga = safeSa + (safeJ / 7);
+
+          // 3. Récupération des valeurs médianes (50e percentile)
+          var bpd50 = getRef('bpd', 'p50', ga);
+          var hc50  = getRef('hc', 'p50', ga);
+          var ac50  = getRef('ac', 'p50', ga);
+          var fl50  = getRef('fl', 'p50', ga);
+
+          // 4. Injection dans les champs du formulaire (arrondi à 1 décimale)
+          if (bpd50 !== null) document.getElementById('eotBpd').value = bpd50.toFixed(1);
+          if (hc50 !== null)  document.getElementById('eotHc').value  = hc50.toFixed(1);
+          if (ac50 !== null)  document.getElementById('eotAc').value  = ac50.toFixed(1);
+          if (fl50 !== null)  document.getElementById('eotFl').value  = fl50.toFixed(1);
+
+          // 5. Actualisation globale (Poids fœtal estimé, graphiques et percentiles)
+          validateAndRun();
+        }
+        // --- FIN DE LA NOUVEAUTÉ ---
+
+      } else {
+        document.getElementById('eotAmenoDdr').value = '—';
+      }
+    } else {
+      document.getElementById('eotDpa').value = '—';
+      document.getElementById('eotAmenoDdr').value = '—';
+    }
+  }
+
+  ['eotDdn','eotDdr','eotDateEcho'].forEach(function(id){
+    document.getElementById(id).addEventListener('change', updatePatientCalc);
+  });
+
+  var RULES = {
+    gaWeeks: {id:'eotGaSA', min:14, max:40, label:'SA'},
+    gaDays:  {id:'eotGaJours', min:0, max:6, label:'Jours'},
+    bpd:     {id:'eotBpd', min:20, max:110, label:'BIP'},
+    hc:      {id:'eotHc',  min:80, max:400, label:'PC'},
+    ac:      {id:'eotAc',  min:70, max:420, label:'PA'},
+    fl:      {id:'eotFl',  min:10, max:90,  label:'LF'}
+  };
+
+  function validateAndRun() {
+    var ok = true;
+    Object.keys(RULES).forEach(function(k){
+      var r = RULES[k];
+      var v = parseFloat(document.getElementById(r.id).value);
+      var errEl = document.getElementById('eotErr-'+k);
+      document.getElementById(r.id).classList.remove('eot-error-input');
+      if (errEl) errEl.textContent = '';
+      if (isNaN(v) || v<r.min || v>r.max) {
+        if (errEl) errEl.textContent = r.label+' : valeur entre '+r.min+' et '+r.max;
+        document.getElementById(r.id).classList.add('eot-error-input');
+        ok = false;
+      }
+    });
+    if (!ok) {
+      document.getElementById('eotEfw').textContent = '—';
+      ['bpd','hc','ac','fl'].forEach(function(b){
+        document.getElementById('eotPc-'+b).textContent='';
+      });
+      return;
+    }
+    var ga = getGA();
+    var vals = {
+      bpd: parseFloat(document.getElementById('eotBpd').value),
+      hc:  parseFloat(document.getElementById('eotHc').value),
+      ac:  parseFloat(document.getElementById('eotAc').value),
+      fl:  parseFloat(document.getElementById('eotFl').value)
+    };
+    document.getElementById('eotEfw').textContent =
+      hadlock(vals.bpd, vals.hc, vals.ac, vals.fl).toLocaleString('fr-FR');
+    ['bpd','hc','ac','fl'].forEach(function(b){
+      var p = calcPercentile(b, ga, vals[b]);
+      var el = document.getElementById('eotPc-'+b);
+      el.textContent = isNaN(p) ? '' : '\u2248 '+Math.round(p)+'e p.';
+    });
+    buildChart('eotChBpd','BIP/BPD','mm','bpd',vals.bpd,ga,false);
+    buildChart('eotChHc', 'PC/HC', 'mm','hc', vals.hc, ga,false);
+    buildChart('eotChAc', 'PA/AC', 'mm','ac', vals.ac, ga,false);
+    buildChart('eotChFl', 'LF/FL', 'mm','fl', vals.fl, ga,false);
+  }
+
+  /* Plugin fond blanc : dessine AVANT Chart.js — imperméable aux filtres CSS Elementor */
+  var eotWhiteBg = {
+    id: 'eotWhiteBg',
+    beforeDraw: function(chart) {
+      var c = chart.canvas.getContext('2d');
+      c.save();
+      c.globalCompositeOperation = 'destination-over';
+      c.fillStyle = '#ffffff';
+      c.fillRect(0, 0, chart.width, chart.height);
+      c.restore();
+    }
+  };
+
+  function buildChart(canvasId, label, unit, bio, pointVal, ga, isZoom) {
+    var weeks = [];
+    for (var w=14; w<=40; w++) weeks.push(w);
+    var p5s  = weeks.map(function(w){ return getRef(bio,'p5',w); });
+    var p50s = weeks.map(function(w){ return getRef(bio,'p50',w); });
+    var p95s = weeks.map(function(w){ return getRef(bio,'p95',w); });
+    var pointData = weeks.map(function(w){
+      return (Math.abs(w - ga) < 0.5) ? pointVal : null;
+    });
+    var lw  = isZoom ? 3.5 : 3;
+    var pr  = isZoom ? 10  : 8;
+    var fs  = isZoom ? 13  : 11;
+    var tfs = isZoom ? 16  : 14;
+
+    /* Couleurs rgb() pleines — sans alpha — imperméables aux filtres Elementor */
+    var C_BAND   = 'rgb(70,120,195)';
+    var C_FILL   = 'rgba(70,120,195,0.15)';
+    var C_MEDIAN = 'rgb(0,45,130)';
+    var C_GRID   = 'rgba(40,40,40,0.35)';
+    var C_TEXT   = 'rgb(15,25,45)';
+
+    var datasets = [
+      { label:'p95', data:p95s, borderColor:C_BAND, borderWidth:lw, pointRadius:0, borderDash:[6,3], fill:false },
+      { label:'5e\u202295e\u00a0p.', data:p5s, borderColor:C_BAND, backgroundColor:C_FILL, borderWidth:lw, pointRadius:0, borderDash:[6,3], fill:'-1' },
+      { label:'M\u00e9diane', data:p50s, borderColor:C_MEDIAN, borderWidth:isZoom?4:3.5, pointRadius:0, fill:false },
+      { label:'Mesure', data:pointData, backgroundColor:'rgb(192,57,43)', borderColor:'rgb(110,10,10)', pointRadius:pr, pointHoverRadius:pr+2, showLine:false, fill:false }
+    ];
+    var config = {
+      type:'line',
+      data:{ labels:weeks, datasets:datasets },
+      plugins:[ eotWhiteBg ],
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        animation:{ duration: isZoom?600:200 },
+        plugins:{
+          legend:{
+            position:'bottom',
+            labels:{
+              filter:function(item){ return ['M\u00e9diane','5e\u202295e\u00a0p.','Mesure'].indexOf(item.text)>-1; },
+              usePointStyle:true, padding:isZoom?24:14,
+              font:{ size:fs, weight:'700' }, color:C_TEXT
+            }
+          },
+          title:{
+            display:true, text:label+' ('+unit+')',
+            font:{ size:tfs, weight:'700' }, color:C_MEDIAN,
+            padding:{ bottom:6 }
+          }
+        },
+        scales:{
+          x:{ min:14, max:40,
+              grid:{ color:C_GRID, lineWidth:1 },
+              ticks:{ color:C_TEXT, font:{ size:fs, weight:'700' } },
+              title:{ display:true, text:'AG (SA)', font:{ size:fs, weight:'700' }, color:C_TEXT } },
+          y:{ beginAtZero:false,
+              grid:{ color:C_GRID, lineWidth:1 },
+              ticks:{ color:C_TEXT, font:{ size:fs, weight:'700' } },
+              title:{ display:true, text:unit, font:{ size:fs, weight:'700' }, color:C_TEXT } }
+        },
+        interaction:{ mode:'index', intersect:false }
+      }
+    };
+    var ctx = document.getElementById(canvasId).getContext('2d');
+    if (isZoom) {
+      if (zoomChart) { zoomChart.destroy(); zoomChart=null; }
+      zoomChart = new Chart(ctx, config);
+    } else {
+      if (charts[canvasId]) { charts[canvasId].destroy(); }
+      charts[canvasId] = new Chart(ctx, config);
+    }
+  }
+
+  document.querySelectorAll('.eot-chart-wrap').forEach(function(el){
+    el.addEventListener('click', function(){
+      var bio = el.dataset.bio;
+      currentBio = bio;
+      var info = LABELS[bio];
+      document.getElementById('eotModalTitle').textContent = info.long + ' (' + info.short + ')';
+      document.getElementById('eotModal').style.display = 'block';
+      var ga = getGA();
+      var val = parseFloat(document.getElementById(
+        bio==='bpd'?'eotBpd': bio==='hc'?'eotHc': bio==='ac'?'eotAc':'eotFl'
+      ).value);
+      setTimeout(function(){
+        buildChart('eotZoomCanvas', info.short, info.unit, bio, val, ga, true);
+      }, 80);
+    });
+  });
+
+  function closeModal() {
+    document.getElementById('eotModal').style.display = 'none';
+    if (zoomChart) { zoomChart.destroy(); zoomChart=null; }
+  }
+  document.getElementById('eotModalClose').addEventListener('click', closeModal);
+  document.getElementById('eotModal').addEventListener('click', function(e){ if (e.target === this) closeModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key==='Escape') closeModal(); });
+
+  /* =============================================
+     IMPRESSION A5 PAYSAGE — CORRIGÉE
+     Layout : EN-TÊTE → PATIENT + BIO (ligne compacte) → 4 COURBES 2×2
+     ============================================= */
+  document.getElementById('eotBtnPrintAll').addEventListener('click', function(){
+    var ga  = getGA();
+    var gaW = Math.floor(ga);
+    var gaJ = Math.round((ga - gaW) * 7);
+    var vals = {
+      bpd: parseFloat(document.getElementById('eotBpd').value),
+      hc:  parseFloat(document.getElementById('eotHc').value),
+      ac:  parseFloat(document.getElementById('eotAc').value),
+      fl:  parseFloat(document.getElementById('eotFl').value)
+    };
+
+    var nom        = document.getElementById('eotNom').value.trim();
+    var prenom     = document.getElementById('eotPrenom').value.trim();
+    var ddn        = document.getElementById('eotDdn').value;
+    var age        = document.getElementById('eotAge').value;
+    var parite     = document.getElementById('eotParite').value.trim();
+    var profession = document.getElementById('eotProfession').value.trim();
+    var adresse    = document.getElementById('eotAdresse').value.trim();
+    var ddr        = document.getElementById('eotDdr').value;
+    var dpa        = document.getElementById('eotDpa').value;
+    var amenoDdr   = document.getElementById('eotAmenoDdr').value;
+    var dateEcho   = document.getElementById('eotDateEcho').value;
+    var efw        = document.getElementById('eotEfw').textContent;
+
+    function pcStr(bio, val) {
+      var p = calcPercentile(bio, ga, val);
+      return isNaN(p) ? '\u2014' : '\u2248\u00a0' + Math.round(p) + 'e\u00a0p.';
+    }
+
+    /* Génération des canvas offscreen — 560×380px chacun */
+    var bios = ['bpd','hc','ac','fl'];
+    var canvasImgs = {};
+    var weeks = []; for (var ww=14; ww<=40; ww++) weeks.push(ww);
+
+    bios.forEach(function(b) {
+      var off = document.createElement('canvas');
+      off.width  = 560;
+      off.height = 380;
+      var info = LABELS[b];
+      var p5s  = weeks.map(function(w){ return getRef(b,'p5',w);  });
+      var p50s = weeks.map(function(w){ return getRef(b,'p50',w); });
+      var p95s = weeks.map(function(w){ return getRef(b,'p95',w); });
+      var pd   = weeks.map(function(w){ return (Math.abs(w - ga) < 0.5) ? vals[b] : null; });
+
+      var tc = new Chart(off.getContext('2d'), {
+        type: 'line',
+        data: { labels: weeks, datasets: [
+          { label:'p95',            data:p95s, borderColor:'rgba(0,55,130,0.60)', borderWidth:2,   pointRadius:0, borderDash:[6,3], fill:false },
+          { label:'5e\u202295e p.', data:p5s,  borderColor:'rgba(0,55,130,0.60)', backgroundColor:'rgba(0,86,179,0.20)', borderWidth:2, pointRadius:0, borderDash:[6,3], fill:'-1' },
+          { label:'M\u00e9diane',   data:p50s, borderColor:'#003d8f',             borderWidth:3,   pointRadius:0, fill:false },
+          { label:'Mesure',         data:pd,   backgroundColor:'#c0392b', borderColor:'#7b0e0e', pointRadius:9, pointHoverRadius:9, showLine:false, fill:false }
+        ]},
+        options: {
+          responsive: false,
+          animation:  false,
+          layout: { padding: { top:4, bottom:4, left:4, right:4 } },
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                filter: function(i){ return ['M\u00e9diane','5e\u202295e p.','Mesure'].indexOf(i.text) > -1; },
+                usePointStyle: true, padding: 10,
+                font: { size: 12, weight: '700' }, color: '#1a1f2e', boxWidth: 9
+              }
+            },
+            title: {
+              display: true,
+              text: info.short + ' (' + info.unit + ')',
+              font: { size: 14, weight: '700' }, color: '#003d8f',
+              padding: { top: 4, bottom: 5 }
+            }
+          },
+          scales: {
+            x: {
+              min: 14, max: 40,
+              grid:  { color: 'rgba(0,0,0,0.28)', lineWidth: 1 },
+              ticks: { color: '#1a1f2e', font: { size: 10, weight: '700' }, maxTicksLimit: 8 },
+              title: { display: true, text: 'AG (SA)', font: { size: 10, weight: '700' }, color: '#1a1f2e', padding: { top: 2 } }
+            },
+            y: {
+              beginAtZero: false,
+              grid:  { color: 'rgba(0,0,0,0.28)', lineWidth: 1 },
+              ticks: { color: '#1a1f2e', font: { size: 10, weight: '700' }, maxTicksLimit: 6 },
+              title: { display: true, text: info.unit, font: { size: 10, weight: '700' }, color: '#1a1f2e', padding: { bottom: 2 } }
+            }
+          }
+        }
+      });
+      canvasImgs[b] = off.toDataURL('image/png', 1.0);
+      tc.destroy();
+    });
+
+    /* Construction HTML d'impression */
+    var dateEchoFmt = dateEcho ? formatDate(dateEcho) : formatDate(new Date().toISOString().split('T')[0]);
+    var ddnFmt  = formatDate(ddn);
+    var ddrFmt  = formatDate(ddr);
+    var patLine = (nom || prenom) ? ((nom ? nom.toUpperCase() + ' ' : '') + prenom) : 'Patiente non identifi\u00e9e';
+
+    /* Infos patient compactes */
+    var infoItems = [];
+    if (ddnFmt)                            infoItems.push({l:'N\u00e9e le',    v: ddnFmt + (age && age !== '\u2014' ? ' (' + age + ')' : '')});
+    if (parite)                            infoItems.push({l:'Parit\u00e9',    v: parite});
+    if (profession)                        infoItems.push({l:'Profession',     v: profession});
+    if (adresse)                           infoItems.push({l:'Adresse',        v: adresse});
+    if (ddrFmt)                            infoItems.push({l:'DDR',            v: ddrFmt});
+    if (amenoDdr && amenoDdr !== '\u2014') infoItems.push({l:'Am\u00e9norrh\u00e9e', v: amenoDdr});
+    if (dpa && dpa !== '\u2014')           infoItems.push({l:'DPA',            v: dpa});
+
+    var patInfoHtml = infoItems.map(function(i){
+      return '<span class="pi"><b>' + i.l + '&nbsp;:</b>&nbsp;' + i.v + '</span>';
+    }).join('');
+
+    /* Ligne biométrie compacte — 4 cellules + PFE */
+    var bioData = [
+      {k:'bpd', lbl:'BIP / BPD', val:vals.bpd},
+      {k:'hc',  lbl:'PC / HC',   val:vals.hc},
+      {k:'ac',  lbl:'PA / AC',   val:vals.ac},
+      {k:'fl',  lbl:'LF / FL',   val:vals.fl}
+    ];
+    var bioCellsHtml = bioData.map(function(r){
+      return '<div class="bio-cell">'
+        + '<span class="bio-cell-lbl">' + r.lbl + '</span>'
+        + '<span class="bio-cell-val">' + r.val + ' mm</span>'
+        + '<span class="bio-cell-pc">' + pcStr(r.k, r.val) + '</span>'
+        + '</div>';
+    }).join('');
+
+    /* 4 courbes en grille 2×2 */
+    var chartsHtml = bios.map(function(b){
+      return '<div class="ch"><img src="' + canvasImgs[b] + '" alt="' + LABELS[b].short + '"></div>';
+    }).join('');
+
+    var printHtml = '<!DOCTYPE html>'
+    + '<html lang="fr"><head><meta charset="utf-8">'
+    + '<title>Compte-rendu \u00e9chographie \u2013 ' + patLine + '</title>'
+    + '<style>'
+    + '@page { size: 210mm 148mm; margin: 6mm 7mm; }'
+    + '* { box-sizing: border-box; margin: 0; padding: 0; }'
+    + 'html, body { width: 100%; background: #fff; font-family: Arial, Helvetica, sans-serif; font-size: 8.5pt; color: #1a1f2e; }'
+
+    /* PAGE = colonne flex, hauteur = zone utile A5 paysage */
+    + '.page { display: flex; flex-direction: column; gap: 3px; height: 136mm; }'
+
+    /* EN-TÊTE */
+    + '.hdr { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1.5pt solid #0056b3; padding-bottom: 3px; flex-shrink: 0; }'
+    + '.hdr-t { font-size: 10pt; font-weight: 700; color: #0056b3; line-height: 1.2; }'
+    + '.hdr-s { font-size: 6.5pt; color: #5a6474; margin-top: 1px; }'
+    + '.hdr-r { font-size: 7.5pt; color: #5a6474; text-align: right; line-height: 1.6; }'
+
+    /* BLOC PATIENT */
+    + '.pat { background: #f4f6f9; border: 0.5pt solid #d0d7e2; border-radius: 2pt; padding: 4px 7px; flex-shrink: 0; }'
+    + '.pat-n { font-size: 10pt; font-weight: 700; color: #0056b3; margin-bottom: 3px; }'
+    + '.pat-i { display: flex; flex-wrap: wrap; column-gap: 12px; row-gap: 1px; }'
+    + '.pi { font-size: 7pt; white-space: nowrap; }'
+
+    /* LIGNE BIOMÉTRIE — bande compacte horizontale */
+    + '.bio-strip { display: flex; align-items: stretch; border: 0.5pt solid #d0d7e2; border-radius: 2pt; overflow: hidden; flex-shrink: 0; }'
+    + '.bio-cell { flex: 1; padding: 3px 6px; border-right: 0.4pt solid #d0d7e2; display: flex; flex-direction: column; gap: 1px; }'
+    + '.bio-cell:last-of-type { border-right: none; }'
+    + '.bio-cell-lbl { font-size: 6pt; color: #5a6474; }'
+    + '.bio-cell-val { font-size: 8.5pt; font-weight: 700; color: #0056b3; }'
+    + '.bio-cell-pc  { font-size: 6.5pt; color: #1a7a4a; font-weight: 600; }'
+    + '.bio-efw { background: #eef3fb; border-left: 2pt solid #0056b3; padding: 4px 10px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }'
+    + '.bio-efw-v { font-size: 10pt; font-weight: 700; color: #0056b3; white-space: nowrap; }'
+    + '.bio-efw-s { font-size: 5.5pt; color: #5a6474; margin-top: 1px; }'
+
+    /* 4 COURBES 2×2 — occupe tout l'espace restant */
+    + '.charts { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; flex: 1; min-height: 0; }'
+    + '.ch { border: 0.4pt solid #d0d7e2; border-radius: 2pt; overflow: hidden; background: #fff; }'
+    + '.ch img { width: 100%; height: 100%; object-fit: fill; display: block; }'
+
+    /* DISCLAIMER */
+    + '.disc { font-size: 5.5pt; color: #7a6200; background: #fffbea; border-left: 2pt solid #e6b800; padding: 2px 6px; line-height: 1.4; flex-shrink: 0; }'
+    + '</style></head><body>'
+
+    + '<div class="page">'
+
+    /* En-tête */
+    + '<div class="hdr">'
+    +   '<div>'
+    +     '<div class="hdr-t">Compte-rendu d\u2019\u00e9chographie obst\u00e9tricale</div>'
+    +     '<div class="hdr-s">Biom\u00e9trie f\u0153tale &middot; INTERGROWTH-21st / OMS &middot; Hadlock 1985</div>'
+    +   '</div>'
+    +   '<div class="hdr-r">Date&nbsp;: <b>' + dateEchoFmt + '</b><br>AG&nbsp;: <b>' + gaW + '&nbsp;SA&nbsp;+&nbsp;' + gaJ + '&nbsp;j</b></div>'
+    + '</div>'
+
+    /* Bloc patient */
+    + '<div class="pat">'
+    +   '<div class="pat-n">' + patLine + '</div>'
+    +   '<div class="pat-i">' + patInfoHtml + '</div>'
+    + '</div>'
+
+    /* Bande biométrie compacte */
+    + '<div class="bio-strip">'
+    +   bioCellsHtml
+    +   '<div class="bio-efw">'
+    +     '<div class="bio-efw-v">PFE&nbsp;: ' + efw + '&nbsp;g</div>'
+    +     '<div class="bio-efw-s">Hadlock 1985 &middot; PC+PA+LF</div>'
+    +   '</div>'
+    + '</div>'
+
+    /* 4 courbes 2×2 — occupe tout le reste */
+    + '<div class="charts">' + chartsHtml + '</div>'
+
+    /* Disclaimer */
+    + '<div class="disc"><b>Usage professionnel uniquement.</b> Outil d\u2019aide \u00e0 l\u2019interpr\u00e9tation pour professionnels de sant\u00e9. Non certifi\u00e9 DM. Ne remplace pas le jugement clinique.</div>'
+
+    + '</div>'
+    + '</body></html>';
+
+    var pw = window.open('', '_blank', 'width=900,height=700');
+    if (!pw) { alert('Veuillez autoriser les pop-ups pour imprimer.'); return; }
+    pw.document.open();
+    pw.document.write(printHtml);
+    pw.document.close();
+
+    pw.onload = function() {
+      var imgs = pw.document.querySelectorAll('img');
+      var loaded = 0;
+      var total  = imgs.length;
+      function tryPrint() { if (++loaded >= total) { setTimeout(function(){ pw.print(); }, 250); } }
+      if (total === 0) { setTimeout(function(){ pw.print(); }, 250); }
+      else { imgs.forEach(function(img){ if (img.complete) { tryPrint(); } else { img.onload = tryPrint; img.onerror = tryPrint; } }); }
+    };
+  });
+
+  document.getElementById('eotBtnCalc').addEventListener('click', validateAndRun);
+  ['eotGaSA','eotGaJours','eotBpd','eotHc','eotAc','eotFl'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', function(){
+      clearTimeout(debounce);
+      debounce = setTimeout(validateAndRun, 250);
+    });
+  });
+
+  window.addEventListener('load', function(){ setTimeout(function(){ validateAndRun(); updatePatientCalc(); }, 120); });
+
+})();
+</script>
+
+</body>
+</html>
