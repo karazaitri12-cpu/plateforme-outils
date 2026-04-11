@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithme Diagnostique — Leucorrhées</title>
+    <style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — Isolation totale par ID
+   Toutes les règles sont préfixées par #lcr-app
+   Unicode CSS pour pseudo-éléments (pas d'entités HTML)
+   Aucune dépendance externe
+   ============================================================ */
+
+#lcr-app {
+    all: initial;
+    display: block;
+    font-family: 'Segoe UI', Helvetica Neue, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1a2236;
+    background: #f5f6f8;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+#lcr-app *,
+#lcr-app *::before,
+#lcr-app *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- LAYOUT PRINCIPAL --- */
+#lcr-app .lcr-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #dde1e9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* --- EN-TÊTE --- */
+#lcr-app .lcr-header {
+    background: #1a3a5c;
+    color: #ffffff;
+    padding: 24px 28px 20px;
+    border-bottom: 3px solid #2a6496;
+}
+
+#lcr-app .lcr-header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+#lcr-app .lcr-header-icon {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+#lcr-app .lcr-header-text {}
+
+#lcr-app .lcr-header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    margin: 0 0 4px 0;
+    line-height: 1.3;
+}
+
+#lcr-app .lcr-header p {
+    font-size: 12px;
+    color: #a8c4de;
+    margin: 0;
+    letter-spacing: 0.03em;
+}
+
+#lcr-app .lcr-header-meta {
+    margin-top: 14px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 12px;
+}
+
+#lcr-app .lcr-meta-tag {
+    font-size: 11px;
+    color: #7aadcc;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 2px;
+    padding: 2px 8px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* --- BARRE DE PROGRESSION --- */
+#lcr-app .lcr-progress-wrap {
+    background: #eef0f4;
+    border-bottom: 1px solid #dde1e9;
+    padding: 0 28px;
+}
+
+#lcr-app .lcr-progress-track {
+    height: 3px;
+    background: #dde1e9;
+    border-radius: 2px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+#lcr-app .lcr-progress-fill {
+    height: 100%;
+    background: #2a6496;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+#lcr-app .lcr-progress-label {
+    font-size: 11px;
+    color: #7a8599;
+    padding-bottom: 8px;
+    text-align: right;
+}
+
+/* --- ZONE DE CONTENU --- */
+#lcr-app .lcr-content {
+    padding: 28px;
+}
+
+/* --- ÉTAPES --- */
+#lcr-app .lcr-step {
+    display: none;
+}
+
+#lcr-app .lcr-step.active {
+    display: block;
+    animation: lcrFadeIn 0.3s ease-out;
+}
+
+@keyframes lcrFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- BOÎTES D'INFORMATION --- */
+#lcr-app .lcr-infobox {
+    background: #eaf3fb;
+    border-left: 4px solid #2a6496;
+    border-radius: 0 3px 3px 0;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+}
+
+#lcr-app .lcr-infobox .lcr-box-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a3a5c;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+#lcr-app .lcr-infobox p,
+#lcr-app .lcr-infobox ul {
+    font-size: 14px;
+    color: #3a5068;
+}
+
+/* --- BOÎTE QUESTION --- */
+#lcr-app .lcr-questionbox {
+    background: #f8f9fb;
+    border: 1px solid #dde1e9;
+    border-radius: 3px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+}
+
+#lcr-app .lcr-questionbox .lcr-q-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a2236;
+    margin-bottom: 14px;
+    line-height: 1.4;
+}
+
+#lcr-app .lcr-questionbox .lcr-q-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2a6496;
+    background: #daeaf7;
+    border-radius: 2px;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#lcr-app .lcr-questionbox p {
+    font-size: 14px;
+    color: #4a5568;
+    margin-bottom: 10px;
+}
+
+/* --- ALERTE --- */
+#lcr-app .lcr-alert {
+    border-left: 4px solid #e6a817;
+    background: #fef9ec;
+    border-radius: 0 3px 3px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: #5a4010;
+}
+
+#lcr-app .lcr-alert.danger {
+    border-color: #c0392b;
+    background: #fdf2f2;
+    color: #7b1d1d;
+}
+
+#lcr-app .lcr-alert .lcr-alert-title {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* --- LISTES UNIVERSELLES --- */
+/* Listes standards (points) dans infobox / questionbox / alert */
+#lcr-app .lcr-infobox ul,
+#lcr-app .lcr-questionbox ul,
+#lcr-app .lcr-alert ul {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+}
+
+#lcr-app .lcr-infobox ul li,
+#lcr-app .lcr-questionbox ul li,
+#lcr-app .lcr-alert ul li {
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #4a5568;
+    margin-bottom: 6px;
+    padding: 0;
+    list-style: none;
+}
+
+#lcr-app .lcr-infobox ul li::before,
+#lcr-app .lcr-questionbox ul li::before,
+#lcr-app .lcr-alert ul li::before {
+    content: "\2013";
+    color: #2a6496;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.4;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+/* Listes résultats (coches) dans .lcr-section */
+#lcr-app .lcr-section {
+    margin-bottom: 20px;
+}
+
+#lcr-app .lcr-section .lcr-sec-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a3a5c;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #eef0f4;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+}
+
+#lcr-app .lcr-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#lcr-app .lcr-section ul li {
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    padding: 0;
+    list-style: none;
+    line-height: 1.5;
+}
+
+#lcr-app .lcr-section ul li::before {
+    content: "\2713";
+    color: #27ae60;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+/* Listes résultats IST (cercle rouge) */
+#lcr-app .lcr-section.lcr-ist ul li::before {
+    content: "\2713";
+    color: #c0392b;
+}
+
+/* --- BOUTONS --- */
+#lcr-app .lcr-btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+#lcr-app .lcr-btn {
+    flex: 1;
+    min-width: 170px;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: filter 0.15s ease, transform 0.1s ease;
+    color: #ffffff;
+    line-height: 1.3;
+}
+
+#lcr-app .lcr-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+#lcr-app .lcr-btn:active {
+    transform: translateY(0);
+    filter: brightness(0.95);
+}
+
+#lcr-app .lcr-btn-oui   { background: #c0392b; }
+#lcr-app .lcr-btn-non   { background: #27ae60; }
+#lcr-app .lcr-btn-next  { background: #2a6496; }
+#lcr-app .lcr-btn-back  { background: #7f8c9a; margin-top: 10px; flex: none; min-width: auto; padding: 9px 16px; font-size: 12px; }
+#lcr-app .lcr-btn-reset { background: #2c3e50; width: 100%; margin-top: 22px; font-size: 13px; padding: 12px; }
+#lcr-app .lcr-btn-confirm { background: #27ae60; }
+
+/* --- RÉSULTATS DIAGNOSTIQUES --- */
+#lcr-app .lcr-result {
+    border-radius: 3px;
+    border: 2px solid #27ae60;
+    padding: 24px;
+    margin-top: 10px;
+    animation: lcrFadeIn 0.35s ease-out;
+}
+
+#lcr-app .lcr-result.vaginose    { border-color: #e67e22; }
+#lcr-app .lcr-result.candidose   { border-color: #8e44ad; }
+#lcr-app .lcr-result.trichomonase{ border-color: #c0392b; }
+#lcr-app .lcr-result.cervicite   { border-color: #c0392b; }
+#lcr-app .lcr-result.incertain   { border-color: #e67e22; }
+
+#lcr-app .lcr-result-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a2236;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eef0f4;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#lcr-app .lcr-badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 3px 9px;
+    color: #fff;
+}
+
+#lcr-app .lcr-badge-ist    { background: #c0392b; }
+#lcr-app .lcr-badge-nonist { background: #27ae60; }
+#lcr-app .lcr-badge-normal { background: #2a6496; }
+
+/* --- MENTION MÉDICO-LÉGALE --- */
+#lcr-app .lcr-footer {
+    background: #f0f2f5;
+    border-top: 1px solid #dde1e9;
+    padding: 12px 28px;
+    font-size: 11px;
+    color: #8a96a8;
+    line-height: 1.5;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 580px) {
+    #lcr-app .lcr-content  { padding: 18px 16px; }
+    #lcr-app .lcr-header   { padding: 18px 16px 14px; }
+    #lcr-app .lcr-footer   { padding: 10px 16px; }
+    #lcr-app .lcr-btn      { min-width: 100%; flex: none; }
+    #lcr-app .lcr-btn-back { width: 100%; }
+    #lcr-app .lcr-result   { padding: 18px 14px; }
+    #lcr-app .lcr-progress-wrap { padding: 0 16px; }
+}
+    </style>
+</head>
+<body>
+
+<div id="lcr-app">
+  <div class="lcr-wrapper">
+
+    <!-- EN-TÊTE -->
+    <div class="lcr-header">
+      <div class="lcr-header-top">
+        <div class="lcr-header-icon">&#128300;</div>
+        <div class="lcr-header-text">
+          <h1>Algorithme Diagnostique — Leucorrhées</h1>
+          <p>Outil d'aide à la décision clinique &mdash; Usage médical professionnel</p>
+        </div>
+      </div>
+      <div class="lcr-header-meta">
+        <span class="lcr-meta-tag">Gynécologie</span>
+        <span class="lcr-meta-tag">Infectiologie vaginale</span>
+        <span class="lcr-meta-tag">Référentiels HAS / SPILF 2024</span>
+      </div>
+    </div>
+
+    <!-- PROGRESSION -->
+    <div class="lcr-progress-wrap">
+      <div class="lcr-progress-track">
+        <div class="lcr-progress-fill" id="lcrProgressFill"></div>
+      </div>
+      <div class="lcr-progress-label" id="lcrProgressLabel">Étape 0 / 8</div>
+    </div>
+
+    <!-- CONTENU -->
+    <div class="lcr-content">
+
+      <!-- ÉTAPE 0 : Introduction -->
+      <div class="lcr-step active" id="lcrStep0">
+        <div class="lcr-infobox">
+          <div class="lcr-box-title">Avant de commencer</div>
+          <p>Cet algorithme guide le diagnostic étiologique des leucorrhées anormales sur la base de l'examen clinique et des examens simples de première intention.</p>
+        </div>
+        <div class="lcr-questionbox">
+          <div class="lcr-q-label">Prérequis — Conditions de prélèvement optimal</div>
+          <ul>
+            <li>Arrêt des antibiotiques : 7 à 10 jours minimum avant le prélèvement</li>
+            <li>Pas de toilette vaginale : 48 heures avant</li>
+            <li>Pas de rapport sexuel : 24 à 48 heures avant</li>
+            <li>En dehors des règles (sauf contexte d'urgence)</li>
+            <li>Pas d'antiseptiques locaux : 48 heures avant</li>
+          </ul>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-next" onclick="lcrGo(1)">Démarrer le diagnostic &#8594;</button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 1 : Cervicite -->
+      <div class="lcr-step" id="lcrStep1">
+        <div class="lcr-questionbox">
+          <div class="lcr-q-label">Question 1</div>
+          <div class="lcr-q-title">Présence d'une cervicite clinique ?</div>
+          <p><strong>Signes évocateurs à rechercher :</strong></p>
+          <ul>
+            <li>Col utérin inflammatoire, friable, oedématié</li>
+            <li>Écoulement mucopurulent endocervical</li>
+            <li>Saignement au contact (test de la spatule)</li>
+            <li>Attention : souvent asymptomatique (50 % des cas)</li>
+          </ul>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-oui" onclick="lcrDiagCervicite()">OUI — Cervicite présente</button>
+          <button class="lcr-btn lcr-btn-non" onclick="lcrGo(2)">NON — Pas de cervicite</button>
+        </div>
+        <button class="lcr-btn lcr-btn-back" onclick="lcrGo(0)">&#8592; Retour</button>
+      </div>
+
+      <!-- ÉTAPE 2 : pH vaginal -->
+      <div class="lcr-step" id="lcrStep2">
+        <div class="lcr-questionbox">
+          <div class="lcr-q-label">Question 2</div>
+          <div class="lcr-q-title">Mesure du pH vaginal</div>
+          <p>Utiliser une bandelette pH colorimétrique en contact avec la paroi vaginale latérale (éviter le col et les sécrétions cervicales).</p>
+          <ul>
+            <li>pH normal : 4,0 – 4,5</li>
+            <li>pH élevé (&gt; 4,5) : évoque une vaginose, trichomonase ou autre infection bactérienne</li>
+          </ul>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-non" onclick="lcrSet('pH','bas'); lcrGo(3)">pH &lt; 4,5 — Normal</button>
+          <button class="lcr-btn lcr-btn-oui" onclick="lcrSet('pH','haut'); lcrGo(4)">pH &gt; 4,5 — Élevé</button>
+        </div>
+        <button class="lcr-btn lcr-btn-back" onclick="lcrGo(1)">&#8592; Retour</button>
+      </div>
+
+      <!-- ÉTAPE 3 : pH bas → Levures -->
+      <div class="lcr-step" id="lcrStep3">
+        <div class="lcr-infobox">
+          <div class="lcr-box-title">pH &lt; 4,5 — Acidité vaginale normale</div>
+          <p>Rechercher une candidose par examen direct (état frais ou coloration de Gram).</p>
+        </div>
+        <div class="lcr-questionbox">
+          <div class="lcr-q-label">Question 3</div>
+          <div class="lcr-q-title">Examen direct : présence de levures ou de filaments ?</div>
+          <ul>
+            <li>Levures bourgeonnantes (blastospores)</li>
+            <li>Pseudo-filaments (mycélium)</li>
+            <li>Visibles à l'état frais ou après coloration de Gram</li>
+          </ul>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-oui" onclick="lcrSet('levures','oui'); lcrDiagCandidose()">OUI — Levures présentes</button>
+          <button class="lcr-btn lcr-btn-non" onclick="lcrSet('levures','non'); lcrGo(8)">NON — Absence de levures</button>
+        </div>
+        <button class="lcr-btn lcr-btn-back" onclick="lcrGo(2)">&#8592; Retour</button>
+      </div>
+
+      <!-- ÉTAPE 4 : pH haut → Test aux amines -->
+      <div class="lcr-step" id="lcrStep4">
+        <div class="lcr-infobox">
+          <div class="lcr-box-title">pH &gt; 4,5 — Alcalinisation vaginale</div>
+          <p>Évoquer une vaginose bactérienne ou une trichomonase. Réaliser le test aux amines.</p>
+        </div>
+        <div class="lcr-questionbox">
+          <div class="lcr-q-label">Question 4</div>
+          <div class="lcr-q-title">Test aux amines (Whiff test)</div>
+          <p><strong>Technique :</strong> déposer une goutte de KOH 10 % sur les sécrétions vaginales.</p>
+          <ul>
+            <li>Positif : odeur de poisson caractéristique (amines volatiles)</li>
+            <li>Fortement évocateur de vaginose bactérienne</li>
+          </ul>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-oui" onclick="lcrSet('whiff','pos'); lcrGo(5)">POSITIF — Odeur caractéristique</button>
+          <button class="lcr-btn lcr-btn-non" onclick="lcrSet('whiff','neg'); lcrGo(6)">NÉGATIF — Pas d'odeur</button>
+        </div>
+        <button class="lcr-btn lcr-btn-back" onclick="lcrGo(2)">&#8592; Retour</button>
+      </div>
+
+      <!-- ÉTAPE 5 : Whiff+ → Clue cells -->
+      <div class="lcr-step" id="lcrStep5">
+        <div class="lcr-questionbox">
+          <div class="lcr-q-label">Question 5</div>
+          <div class="lcr-q-title">Examen direct : présence de clue cells ?</div>
+          <ul>
+            <li>Cellules épithéliales à contours irréguliers, aspect granuleux</li>
+            <li>Surface recouverte de bactéries (Gardnerella, anaérobies)</li>
+            <li>Pathognomoniques de vaginose bactérienne si proportion &gt; 20 %</li>
+            <li>Visibles à l'état frais ou après coloration de Gram</li>
+          </ul>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-oui" onclick="lcrSet('cluecells','oui'); lcrDiagVaginose()">OUI — Clue cells présentes</button>
+          <button class="lcr-btn lcr-btn-non" onclick="lcrSet('cluecells','non'); lcrGo(6)">NON — Absence de clue cells</button>
+        </div>
+        <button class="lcr-btn lcr-btn-back" onclick="lcrGo(4)">&#8592; Retour</button>
+      </div>
+
+      <!-- ÉTAPE 6 : Trichomonas -->
+      <div class="lcr-step" id="lcrStep6">
+        <div class="lcr-questionbox">
+          <div class="lcr-q-label">Question 6</div>
+          <div class="lcr-q-title">Examen direct : présence de Trichomonas vaginalis ?</div>
+          <ul>
+            <li>Protozoaire flagellé mobile, taille d'un leucocyte</li>
+            <li>Mouvements saccadés caractéristiques à l'état frais</li>
+            <li>Examen à réaliser dans les 30 minutes (mobilité indispensable au diagnostic)</li>
+            <li>PCR Trichomonas si doute (sensibilité supérieure &gt; 95 %)</li>
+          </ul>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-oui" onclick="lcrSet('tricho','oui'); lcrDiagTrichomonase()">OUI — Trichomonas présents</button>
+          <button class="lcr-btn lcr-btn-non" onclick="lcrSet('tricho','non'); lcrGo(7)">NON — Absence de Trichomonas</button>
+        </div>
+        <button class="lcr-btn lcr-btn-back" onclick="lcrGo(4)">&#8592; Retour</button>
+      </div>
+
+      <!-- ÉTAPE 7 : Incertain -->
+      <div class="lcr-step" id="lcrStep7">
+        <div class="lcr-alert">
+          <div class="lcr-alert-title">&#9888; Situation diagnostique non résolue</div>
+          Les examens initiaux ne permettent pas de conclure. Des examens complémentaires sont nécessaires.
+        </div>
+        <div class="lcr-questionbox">
+          <div class="lcr-q-label">Étape 7 — Examens complémentaires</div>
+          <ul>
+            <li>Score de Nugent (coloration de Gram) : évaluation précise de la flore</li>
+            <li>PCR multiplex IST (CT / NG / MG / TV) — sensibilité &gt; 95 %</li>
+            <li>Culture bactérienne standard avec antibiogramme</li>
+            <li>Réévaluation clinique complète</li>
+          </ul>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-next" onclick="lcrDiagIncertain()">Afficher la conduite à tenir</button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 8 : Physiologique -->
+      <div class="lcr-step" id="lcrStep8">
+        <div class="lcr-infobox">
+          <div class="lcr-box-title">Tous les paramètres sont dans les limites normales</div>
+          <p>pH normal, absence de levures, de clue cells et de protozoaires. Absence de signes d'infection.</p>
+        </div>
+        <div class="lcr-btn-group">
+          <button class="lcr-btn lcr-btn-confirm" onclick="lcrDiagPhysio()">Confirmer — Leucorrhées physiologiques</button>
+          <button class="lcr-btn lcr-btn-back" onclick="lcrGo(2)" style="flex:none;min-width:auto;">&#8592; Revérifier</button>
+        </div>
+      </div>
+
+      <!-- ZONE RÉSULTAT -->
+      <div id="lcrResult"></div>
+
+    </div><!-- /lcr-content -->
+
+    <!-- PIED DE PAGE MÉDICO-LÉGAL -->
+    <div class="lcr-footer">
+      <strong>Outil d'aide à la décision — Usage médical réservé.</strong> Cet algorithme ne se substitue pas au jugement clinique. Il ne constitue pas une prescription ni un avis médical individuel. Toute décision thérapeutique reste de la responsabilité du praticien en charge de la patiente, au regard du contexte clinique global. Références : HAS, SPILF, BASHH 2024.
+    </div>
+
+  </div><!-- /lcr-wrapper -->
+</div><!-- /lcr-app -->
+
+<script>
+(function () {
+    'use strict';
+
+    var _data = {};
+
+    function lcrSet(key, val) {
+        _data[key] = val;
+    }
+    window.lcrSet = lcrSet;
+
+    function lcrGo(n) {
+        var steps = document.querySelectorAll('#lcr-app .lcr-step');
+        steps.forEach(function (s) { s.classList.remove('active'); });
+        var target = document.getElementById('lcrStep' + n);
+        if (target) {
+            target.classList.add('active');
+            var fill  = document.getElementById('lcrProgressFill');
+            var label = document.getElementById('lcrProgressLabel');
+            var pct   = Math.round((n / 8) * 100);
+            if (fill)  fill.style.width = pct + '%';
+            if (label) label.textContent = 'Étape ' + n + ' / 8';
+        }
+    }
+    window.lcrGo = lcrGo;
+
+    function showResult(html) {
+        var zone = document.getElementById('lcrResult');
+        if (!zone) return;
+        zone.innerHTML = html;
+        setTimeout(function () {
+            zone.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+    }
+
+    function resetBtn() {
+        return '<button class="lcr-btn lcr-btn-reset" onclick="lcrReset()">&#8635; Nouveau diagnostic</button>';
+    }
+
+    // ---- CERVICITE ----
+    window.lcrDiagCervicite = function () {
+        showResult(
+            '<div class="lcr-result cervicite">' +
+            '<div class="lcr-result-title">&#128308; Cervicite &mdash; Suspicion IST <span class="lcr-badge lcr-badge-ist">IST</span></div>' +
+
+            '<div class="lcr-alert danger"><div class="lcr-alert-title">&#9888; Prise en charge urgente</div>' +
+            'Infection sexuellement transmissible possible. Traitement du ou des partenaires obligatoire. Information sur le risque d\'infection génitale haute.</div>' +
+
+            '<div class="lcr-section lcr-ist"><div class="lcr-sec-title">Examens obligatoires</div><ul>' +
+            '<li>PCR multiplex endocervicale : Chlamydia trachomatis (CT), Neisseria gonorrhoeae (NG), Mycoplasma genitalium (MG)</li>' +
+            '<li>Sérologie VIH, syphilis (TPHA-VDRL), hépatites B et C</li>' +
+            '<li>Bilan IST complet systématique</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Traitement selon résultats PCR</div><ul>' +
+            '<li><strong>Chlamydia trachomatis :</strong> Doxycycline 100 mg x2/j pendant 7 jours — ou Azithromycine 1 g per os dose unique</li>' +
+            '<li><strong>Neisseria gonorrhoeae :</strong> Ceftriaxone 1 g IM dose unique + Azithromycine 1 g per os — antibiogramme obligatoire</li>' +
+            '<li><strong>Mycoplasma genitalium :</strong> Doxycycline 7 jours puis Azithromycine séquentiel 5 jours</li>' +
+            '<li><strong>Traitement probabiliste (si PCR différée) :</strong> Ceftriaxone 1 g IM + Doxycycline 100 mg x2/j (7 j) + Métronidazole 500 mg x2/j (7 j)</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-alert danger"><div class="lcr-alert-title">Mesures obligatoires</div>' +
+            '<ul style="margin-top:6px;">' +
+            '<li>Traitement simultané du ou des partenaires</li>' +
+            '<li>Abstinence ou préservatifs jusqu\'à guérison confirmée</li>' +
+            '<li>Test de contrôle à J7 si gonocoque ou M. genitalium</li>' +
+            '<li>Nouveau dépistage à 3 mois (risque de réinfection)</li>' +
+            '</ul></div>' +
+
+            resetBtn() +
+            '</div>'
+        );
+    };
+
+    // ---- CANDIDOSE ----
+    window.lcrDiagCandidose = function () {
+        showResult(
+            '<div class="lcr-result candidose">' +
+            '<div class="lcr-result-title">&#128992; Candidose vulvo-vaginale <span class="lcr-badge lcr-badge-nonist">Non IST</span></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Critères diagnostiques</div><ul>' +
+            '<li>pH vaginal normal (&lt; 4,5)</li>' +
+            '<li>Levures bourgeonnantes et/ou pseudo-filaments à l\'examen direct</li>' +
+            '<li>Prurit vulvaire intense, parfois brûlures</li>' +
+            '<li>Leucorrhées blanches caillebottées, inodores</li>' +
+            '<li>Érythème vulvaire, fissures</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Traitement de première intention</div><ul>' +
+            '<li>Éconazole ovule 150 mg — dose unique intravaginale</li>' +
+            '<li>ou Sertaconazole ovule 300 mg — dose unique intravaginale</li>' +
+            '<li>ou Fluconazole 150 mg per os — dose unique</li>' +
+            '<li>Crème antifongique locale si atteinte vulvaire associée (éconazole, miconazole)</li>' +
+            '<li>Pas de traitement du partenaire, sauf si symptomatique</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Mesures associées</div><ul>' +
+            '<li>Sous-vêtements en coton, éviter les vêtements synthétiques serrés</li>' +
+            '<li>Séchage soigneux après la toilette</li>' +
+            '<li>Éviter savons agressifs, antiseptiques locaux, douches vaginales</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-alert"><div class="lcr-alert-title">&#9888; Candidose récidivante (&ge; 4 épisodes / an)</div>' +
+            '<ul style="margin-top:6px;">' +
+            '<li>Traitement d\'attaque : Fluconazole 150 mg à J1, J4, J7</li>' +
+            '<li>Traitement d\'entretien : Fluconazole 150 mg / semaine pendant 6 mois</li>' +
+            '<li>Rechercher facteurs favorisants : diabète, immunodépression, antibiothérapie prolongée</li>' +
+            '<li>Culture fongique avec identification d\'espèce (Candida glabrata : résistance possible)</li>' +
+            '</ul></div>' +
+
+            resetBtn() +
+            '</div>'
+        );
+    };
+
+    // ---- VAGINOSE ----
+    window.lcrDiagVaginose = function () {
+        showResult(
+            '<div class="lcr-result vaginose">' +
+            '<div class="lcr-result-title">&#128992; Vaginose bactérienne <span class="lcr-badge lcr-badge-nonist">Non IST</span></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Critères diagnostiques — Amsel (3 sur 4 requis)</div><ul>' +
+            '<li>pH vaginal &gt; 4,5</li>' +
+            '<li>Test aux amines (Whiff test) positif</li>' +
+            '<li>Clue cells &gt; 20 % à l\'examen direct</li>' +
+            '<li>Leucorrhées grisâtres, homogènes, fluides</li>' +
+            '<li>Score de Nugent &ge; 7 si coloration de Gram disponible</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-infobox" style="margin-bottom:16px;"><div class="lcr-box-title">Physiopathologie</div>' +
+            '<p>Dysbiose vaginale non sexuellement transmissible : diminution des lactobacilles et prolifération de bactéries anaérobies (Gardnerella vaginalis, Prevotella sp., Mobiluncus sp.). Pas une IST au sens strict.</p></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Traitement de première intention</div><ul>' +
+            '<li><strong>Métronidazole 500 mg x2/j per os pendant 7 jours</strong> — traitement de référence</li>' +
+            '<li>ou Métronidazole gel 0,75 % : 1 applicateur/j intravaginal pendant 5 jours</li>' +
+            '<li>ou Clindamycine ovule 100 mg/j pendant 3 jours</li>' +
+            '<li>ou Clindamycine crème 2 % : 1 applicateur/j pendant 7 jours</li>' +
+            '<li><strong>Pas de traitement du partenaire</strong></li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Mesures associées</div><ul>' +
+            '<li>Arrêt absolu des douches vaginales</li>' +
+            '<li>Toilette externe uniquement, savon doux pH neutre</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-alert"><div class="lcr-alert-title">&#9888; Vaginose récidivante (&gt; 3 épisodes / an)</div>' +
+            '<ul style="margin-top:6px;">' +
+            '<li>Traitement d\'entretien : Métronidazole gel 0,75 % — 2 applications / semaine pendant 4 à 6 mois</li>' +
+            '<li>Probiotiques vaginaux à base de lactobacilles (efficacité en cours d\'évaluation)</li>' +
+            '<li>Rechercher facteurs favorisants : tabagisme, partenaires multiples, DIU</li>' +
+            '</ul></div>' +
+
+            resetBtn() +
+            '</div>'
+        );
+    };
+
+    // ---- TRICHOMONASE ----
+    window.lcrDiagTrichomonase = function () {
+        showResult(
+            '<div class="lcr-result trichomonase">' +
+            '<div class="lcr-result-title">&#128308; Trichomonase <span class="lcr-badge lcr-badge-ist">IST</span></div>' +
+
+            '<div class="lcr-alert danger"><div class="lcr-alert-title">&#9888; IST — Traitement des partenaires obligatoire</div>' +
+            'Infection sexuellement transmissible. Notification et traitement simultané de tous les partenaires.</div>' +
+
+            '<div class="lcr-section lcr-ist"><div class="lcr-sec-title">Critères diagnostiques</div><ul>' +
+            '<li>pH vaginal &gt; 5 (très élevé)</li>' +
+            '<li>Trichomonas vaginalis mobiles à l\'examen direct (état frais &lt; 30 min)</li>' +
+            '<li>ou PCR Trichomonas positive (sensibilité supérieure &gt; 95 %)</li>' +
+            '<li>Leucorrhées verdâtres, spumeuses, abondantes</li>' +
+            '<li>Col framboisé (pétéchies muqueuses) — pathognomonique</li>' +
+            '<li>Leucocytes abondants à l\'examen direct</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Traitement</div><ul>' +
+            '<li><strong>Métronidazole 2 g per os en dose unique</strong></li>' +
+            '<li>ou Métronidazole 500 mg x2/j pendant 7 jours (meilleure efficacité en cas de récidive)</li>' +
+            '<li>Traitement simultané de tous les partenaires — même schéma</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section lcr-ist"><div class="lcr-sec-title">Bilan IST complémentaire systématique</div><ul>' +
+            '<li>PCR Chlamydia trachomatis et Neisseria gonorrhoeae</li>' +
+            '<li>Sérologie VIH</li>' +
+            '<li>Sérologie syphilis (TPHA-VDRL)</li>' +
+            '<li>Sérologie hépatites B et C</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-alert danger"><div class="lcr-alert-title">Mesures obligatoires</div>' +
+            '<ul style="margin-top:6px;">' +
+            '<li>Abstinence ou préservatifs pendant toute la durée du traitement</li>' +
+            '<li><strong>Alcool formellement contre-indiqué</strong> pendant le traitement (effet antabuse)</li>' +
+            '<li>Test de contrôle à distance si persistance des symptômes</li>' +
+            '</ul></div>' +
+
+            resetBtn() +
+            '</div>'
+        );
+    };
+
+    // ---- PHYSIOLOGIQUE ----
+    window.lcrDiagPhysio = function () {
+        showResult(
+            '<div class="lcr-result">' +
+            '<div class="lcr-result-title">&#10003; Leucorrhées physiologiques <span class="lcr-badge lcr-badge-normal">Normal</span></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Éléments en faveur</div><ul>' +
+            '<li>pH vaginal normal (4,0 – 4,5)</li>' +
+            '<li>Flore de Döderlein prédominante (lactobacilles abondants)</li>' +
+            '<li>Absence de leucocytes en excès</li>' +
+            '<li>Absence de clue cells, de levures, de protozoaires</li>' +
+            '<li>Score de Nugent : 0 – 3 (si disponible)</li>' +
+            '<li>Leucorrhées claires ou blanchâtres, inodores</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Conduite à tenir</div><ul>' +
+            '<li>Aucun traitement indiqué</li>' +
+            '<li>Rassurer la patiente et expliquer la physiologie vaginale normale</li>' +
+            '<li>Informer sur les variations normales selon le cycle menstruel</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Conseils d\'hygiène</div><ul>' +
+            '<li>Toilette externe uniquement — pas de douche vaginale</li>' +
+            '<li>Savon doux, pH neutre</li>' +
+            '<li>Sous-vêtements en coton</li>' +
+            '<li>Éviter vêtements synthétiques serrés et humidité prolongée</li>' +
+            '<li>Éviter antiseptiques locaux</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-alert"><div class="lcr-alert-title">Variations physiologiques normales</div>' +
+            '<ul style="margin-top:6px;">' +
+            '<li>Abondance accrue à la période péri-ovulatoire</li>' +
+            '<li>Augmentation normale durant la grossesse</li>' +
+            '<li>Modifications possibles sous contraception hormonale</li>' +
+            '<li>Augmentation lors de l\'excitation sexuelle</li>' +
+            '</ul></div>' +
+
+            resetBtn() +
+            '</div>'
+        );
+    };
+
+    // ---- INCERTAIN ----
+    window.lcrDiagIncertain = function () {
+        showResult(
+            '<div class="lcr-result incertain">' +
+            '<div class="lcr-result-title">&#9888; Diagnostic incertain — Examens complémentaires requis</div>' +
+
+            '<div class="lcr-alert"><div class="lcr-alert-title">Causes possibles d\'absence de conclusion</div>' +
+            '<ul style="margin-top:6px;">' +
+            '<li>Infection mixte (plusieurs pathogènes coexistants)</li>' +
+            '<li>Conditions de prélèvement sous-optimales</li>' +
+            '<li>Traitement antibiotique ou antifongique récent</li>' +
+            '<li>Pathologie atypique ou hôte immunodéprimé</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Examens complémentaires recommandés</div><ul>' +
+            '<li><strong>Score de Nugent</strong> (coloration de Gram) : évaluation quantitative et qualitative de la flore vaginale</li>' +
+            '<li><strong>PCR multiplex IST</strong> : CT / NG / MG / TV — sensibilité &gt; 95 %</li>' +
+            '<li><strong>Culture bactérienne standard</strong> avec antibiogramme : identification d\'espèces et sensibilités</li>' +
+            '<li>PCR HSV si ulcérations ou lésions vésiculeuses associées</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Réévaluation clinique</div><ul>' +
+            '<li>Vérifier les conditions de prélèvement (respect des prérequis)</li>' +
+            '<li>Rechercher un contexte particulier : grossesse, diabète, immunodépression, corticothérapie</li>' +
+            '<li>Interroger sur les traitements récents (antibiotiques, antifongiques, antiseptiques)</li>' +
+            '<li>Examen gynécologique complet — rechercher des signes d\'infection génitale haute</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-section"><div class="lcr-sec-title">Traitement empirique (si symptômes importants)</div><ul>' +
+            '<li>Adapter selon la clinique dominante dans l\'attente des résultats</li>' +
+            '<li>Envisager une couverture probabiliste si infection génitale haute suspectée</li>' +
+            '<li>Réévaluation clinique et biologique à 48 – 72 heures</li>' +
+            '</ul></div>' +
+
+            '<div class="lcr-alert"><div class="lcr-alert-title">Indications à la consultation spécialisée</div>' +
+            '<ul style="margin-top:6px;">' +
+            '<li>Échec de deux traitements bien conduits</li>' +
+            '<li>Récidives fréquentes inexpliquées (&gt; 3 / an)</li>' +
+            '<li>Suspicion d\'infection génitale haute</li>' +
+            '<li>Grossesse avec complication infectieuse</li>' +
+            '<li>Contexte d\'immunodépression</li>' +
+            '</ul></div>' +
+
+            resetBtn() +
+            '</div>'
+        );
+    };
+
+    // ---- RESET ----
+    window.lcrReset = function () {
+        _data = {};
+        document.getElementById('lcrResult').innerHTML = '';
+        lcrGo(0);
+        var app = document.getElementById('lcr-app');
+        if (app) { app.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    };
+
+})();
+</script>
+
+</body>
+</html>
