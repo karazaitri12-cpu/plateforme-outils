@@ -658,29 +658,38 @@
             var horm = document.getElementById("cs-surv-hormono").options[document.getElementById("cs-surv-hormono").selectedIndex].text;
             var risk = document.getElementById("cs-surv-risques").options[document.getElementById("cs-surv-risques").selectedIndex].text;
 
+            var dateStrA4 = new Date().toLocaleDateString('fr-FR');
             var content = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">' +
-                '<title>Calendrier de Surveillance - Cancer du Sein</title>' +
+                '<title>Calendrier de Surveillance \u2013 Cancer du Sein</title>' +
                 '<style>' +
-                'body{font-family:Arial,sans-serif;margin:10mm;line-height:1.6;color:#333;font-size:11pt}' +
-                'h1,h2{color:#B71C1C;text-align:center}' +
-                '.cs-surv-section-title{font-size:14pt;color:#B71C1C;font-weight:bold;border-bottom:2px solid #B71C1C;padding-bottom:5px;margin-top:20px;margin-bottom:10px}' +
-                'p{margin:10px 0;line-height:1.7}' +
-                '.cs-surv-legal{margin:20px 0;padding:10px;background:#FFFBEB;font-size:9pt;border-left:3px solid #D69E2E;line-height:1.5}' +
-                '@page{size:A4 portrait;margin:15mm}' +
+                '@page{size:A4 portrait;margin:12mm}' +
+                'body{font-family:Arial,sans-serif;margin:0;line-height:1.35;color:#1a2030;font-size:9px}' +
+                'h1{color:#B71C1C;text-align:center;font-size:14px;margin:0 0 4px}' +
+                '.cs-a4-header{border-bottom:3px solid #C8A951;padding-bottom:6px;margin-bottom:8px;display:flex;align-items:center;gap:10px}' +
+                '.cs-a4-logo{width:36px;height:36px;object-fit:contain;flex-shrink:0}' +
+                '.cs-a4-meta{font-size:9px;color:#5a6478;margin-top:2px}' +
+                '.cs-a4-legal{margin:0 0 7px;padding:5px 8px;background:#FFFBEB;font-size:8px;border-left:3px solid #D69E2E;line-height:1.4;color:#744210}' +
+                '.cs-a4-params{width:100%;border-collapse:collapse;margin:0 0 7px;font-size:8px}' +
+                '.cs-a4-params td,.cs-a4-params th{padding:2px 5px;border:1px solid #e0e5ef}' +
+                '.cs-a4-params th{background:#FFF5F5;font-weight:700;color:#B71C1C;text-align:left}' +
+                '.cs-a4-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}' +
+                '.cs-surv-section-title{font-size:8px;color:#B71C1C;font-weight:bold;border-bottom:1px solid #E2E8F0;padding-bottom:2px;margin-top:7px;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.2px}' +
+                'h2{font-size:11px;color:#B71C1C;text-align:center;margin:0 0 5px;display:none}' +
+                'p{margin:2px 0;font-size:8px;line-height:1.4}' +
+                '.footer-a4{margin-top:8px;font-size:7.5px;color:#888;border-top:1px dotted #ccc;padding-top:3px;display:flex;justify-content:space-between}' +
                 '</style></head><body>' +
-                '<h1>Algorithme de Surveillance \u2013 Cancer du Sein</h1>' +
-                '<div class="cs-surv-legal">' +
-                '<p><strong>Avertissement :</strong> Cet outil est destiné à un usage professionnel. Les recommandations doivent être adaptées au contexte clinique de chaque patiente sous la responsabilité du médecin traitant.</p>' +
-                '<p><strong>Source :</strong> Recommandations HAS 2023 \u2013 \u00C0 jour au 15/02/2026</p>' +
+                '<div class="cs-a4-header">' +
+                '<img src="https://www.dr-karazaitri-ma.net/wp-content/uploads/2025/06/Logo.jpg" alt="" class="cs-a4-logo" onerror="this.style.display:none">' +
+                '<div><h1>Algorithme de Surveillance \u2013 Cancer du Sein</h1>' +
+                '<div class="cs-a4-meta">Outil de surveillance post-th\u00E9rapeutique &nbsp;&bull;&nbsp; ' + dateStrA4 + '</div></div>' +
                 '</div>' +
-                '<div class="cs-surv-section-title">Choix effectués</div>' +
-                '<p><strong>Type de chirurgie :</strong> ' + chir + '</p>' +
-                '<p><strong>Reconstruction mammaire :</strong> ' + rec + '</p>' +
-                '<p><strong>Statut tumoral :</strong> ' + stat + '</p>' +
-                '<p><strong>Hormonothérapie :</strong> ' + horm + '</p>' +
-                '<p><strong>Risques supplémentaires :</strong> ' + risk + '</p>' +
-                '<div style="page-break-after:always"></div>' +
+                '<div class="cs-a4-legal"><strong>Avertissement :</strong> Cet outil est destin\u00E9 \u00E0 un usage professionnel. Les recommandations doivent \u00EAtre adapt\u00E9es au contexte clinique de chaque patiente. <strong>Source :</strong> Recommandations HAS 2023.</div>' +
+                '<table class="cs-a4-params"><tr><th>Chirurgie</th><th>Reconstruction</th><th>Statut tumoral</th><th>Hormonoth\u00E9rapie</th><th>Facteurs de risque</th></tr>' +
+                '<tr><td>' + chir + '</td><td>' + rec + '</td><td>' + stat + '</td><td>' + horm + '</td><td>' + risk + '</td></tr></table>' +
+                '<div class="cs-a4-grid">' +
                 document.getElementById("cs-surv-result").innerHTML +
+                '</div>' +
+                '<div class="footer-a4"><span>R\u00E9f. HAS 2023 \u2014 Ne se substitue pas \u00E0 la d\u00E9cision m\u00E9dicale individualis\u00E9e. Responsabilit\u00E9 du praticien.</span><span>' + dateStrA4 + '</span></div>' +
                 '</body></html>';
 
             printWindow.document.write(content);
@@ -782,7 +791,8 @@
             var c = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">';
             c += '<title>Surveillance \u2013 ' + id.nom + ' ' + id.prenom + '</title>';
             c += '<style>';
-            c += '@page{size:A5 portrait;margin:13mm}';
+            c += '@page{size:A5 portrait;margin:13mm 13mm 18mm 13mm}';
+            c += '@page{@bottom-right{content:"Page " counter(page) " / " counter(pages);font-family:Arial,sans-serif;font-size:8px;color:#888}}';
             c += 'body{font-family:Arial,sans-serif;font-size:10.5px;color:#1a2030;margin:0;padding:0}';
             c += 'h1{font-size:13px;margin:0;color:#B71C1C}';
             c += '.meta{font-size:10px;color:#5a6478;margin-top:2px}';
