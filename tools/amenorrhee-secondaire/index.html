@@ -637,7 +637,7 @@
         <div class="ams2-title">Aménorrhée Secondaire</div>
         <div class="ams2-subtitle">Algorithme diagnostique étiologique — CNGOF / Endocrine Society</div>
       </div>
-      <button class="ams2-btn-reset" onclick="AMS2.reset()" aria-label="Réinitialiser l'outil">
+      <button class="ams2-btn-reset" id="ams2-btn-reset" aria-label="Réinitialiser l'outil">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
         Réinitialiser
       </button>
@@ -683,7 +683,7 @@
         </ul>
       </div>
 
-      <button class="ams2-btn-primary" onclick="AMS2.goToStep(2)">
+      <button class="ams2-btn-primary" id="ams2-btn-step1">
         Passer aux dosages hormonaux
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px; margin-left:6px"><path d="m9 18 6-6-6-6"/></svg>
       </button>
@@ -739,11 +739,11 @@
         </div>
       </div>
 
-      <button class="ams2-btn-primary" onclick="AMS2.analyze()">
+      <button class="ams2-btn-primary" id="ams2-btn-analyze">
         Analyser et orienter le diagnostic
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px; margin-left:6px"><path d="m9 18 6-6-6-6"/></svg>
       </button>
-      <button class="ams2-btn-back" onclick="AMS2.goToStep(1)">
+      <button class="ams2-btn-back" id="ams2-btn-back1">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
         Retour à l'étape 1
       </button>
@@ -759,7 +759,7 @@
 
       <div id="ams2-results" aria-live="polite" aria-atomic="true"></div>
 
-      <button class="ams2-btn-back" onclick="AMS2.goToStep(2)" style="margin-top:8px;">
+      <button class="ams2-btn-back" id="ams2-btn-back2" style="margin-top:8px;">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
         Modifier les valeurs (retour étape 2)
       </button>
@@ -798,10 +798,10 @@
   // ── NAVIGATION ──────────────────────────────────────────
   function goToStep(n) {
     if (n < 1 || n > 3) return;
-    // Ne pas sauter à l'étape 3 sans passer par l'analyse
-    if (n === 3 && state.maxReached < 3) return;
-    // Autoriser le retour uniquement si on a déjà atteint cette étape
-    if (n > state.maxReached && n !== state.maxReached + 1) return;
+    // Autoriser retour arrière seulement si étape déjà atteinte
+    if (n < state.step && n > state.maxReached) return;
+    // Avancer uniquement d'une étape à la fois (sauf si déjà atteinte)
+    if (n > state.step && n > state.maxReached + 1) return;
 
     state.step = n;
     if (n > state.maxReached) state.maxReached = n;
@@ -830,10 +830,9 @@
       var canClick = state.maxReached >= n && !isActive;
 
       var stateClass = isDone ? ' done' : (isActive ? ' active' : '');
-      var clickAttr  = canClick ? ' clickable tabindex="0" role="button" aria-label="Aller à l\'étape ' + n + ' — ' + STEPS[i].label + '"' : '';
-      var clickEvt   = canClick ? ' onclick="AMS2.goToStep(' + n + ')" onkeydown="if(event.key===\'Enter\')AMS2.goToStep(' + n + ')"' : '';
+      var clickable  = canClick ? ' clickable tabindex="0" role="button" aria-label="Aller à l\'étape ' + n + ' \u2014 ' + STEPS[i].label + '" data-ams2-step="' + n + '"' : '';
 
-      html += '<div class="ams2-step-item' + stateClass + '"' + clickAttr + clickEvt + '>';
+      html += '<div class="ams2-step-item' + stateClass + '"' + clickable + '>';
       html += '<div class="ams2-step-circle">';
       if (isDone) {
         // Le \2713 est injecté via CSS ::after — on n'affiche rien ici
@@ -896,7 +895,7 @@
     var lh   = parseFloat(getVal('ams2-lh'));
     var prl  = parseFloat(getVal('ams2-prl'));
     var tsh  = parseFloat(getVal('ams2-tsh'));
-    var hirs = getVal('ams2-hirsutisme');
+    var hirs = getVal('ams2-hirsutisme').toLowerCase(); // normalize casse (Elementor-safe)
 
     var html = '';
     var diagnosesMade = [];
@@ -1126,6 +1125,8 @@
     }
 
     document.getElementById('ams2-results').innerHTML = html;
+    // Forcer maxReached avant d'appeler goToStep — sinon la garde bloque
+    state.maxReached = 3;
     goToStep(3);
   }
 
@@ -1188,10 +1189,41 @@
     goToStep(1);
   }
 
-  // ── INIT ─────────────────────────────────────────────────
-  renderProgress();
+  // ── INIT & LIAISONS D'ÉVÉNEMENTS ────────────────────────
+  // On attend que le DOM soit disponible (sécurité Elementor)
+  function bindEvents() {
+    var btnStep1  = document.getElementById('ams2-btn-step1');
+    var btnAnalyze= document.getElementById('ams2-btn-analyze');
+    var btnBack1  = document.getElementById('ams2-btn-back1');
+    var btnBack2  = document.getElementById('ams2-btn-back2');
+    var btnReset  = document.getElementById('ams2-btn-reset');
+    var bar       = document.getElementById('ams2-progress');
 
-  // Exposition publique
+    if (btnStep1)   btnStep1.addEventListener('click',   function(){ goToStep(2); });
+    if (btnAnalyze) btnAnalyze.addEventListener('click', function(){ analyze(); });
+    if (btnBack1)   btnBack1.addEventListener('click',   function(){ goToStep(1); });
+    if (btnBack2)   btnBack2.addEventListener('click',   function(){ goToStep(2); });
+    if (btnReset)   btnReset.addEventListener('click',   function(){ reset(); });
+
+    // Délégation sur la barre de progression (éléments générés dynamiquement)
+    if (bar) {
+      bar.addEventListener('click', function(e) {
+        var el = e.target.closest('[data-ams2-step]');
+        if (el) goToStep(parseInt(el.getAttribute('data-ams2-step'), 10));
+      });
+      bar.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          var el = e.target.closest('[data-ams2-step]');
+          if (el) goToStep(parseInt(el.getAttribute('data-ams2-step'), 10));
+        }
+      });
+    }
+  }
+
+  renderProgress();
+  bindEvents();
+
+  // Exposition publique (compatibilité si jamais utilisé par d'autres scripts)
   window.AMS2 = { goToStep: goToStep, analyze: analyze, reset: reset };
 
 })();
