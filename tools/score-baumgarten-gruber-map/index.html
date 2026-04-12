@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score de Baumgarten &amp; Grüber — Calculateur clinique</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — tous les sélecteurs préfixés #bg-tool
+   ============================================================ */
+
+#bg-tool *,
+#bg-tool *::before,
+#bg-tool *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#bg-tool {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #ffffff;
+  max-width: 720px;
+  margin: 0 auto;
+  border: 1px solid #d0d0d0;
+}
+
+#bg-tool .bgt-header {
+  padding: 22px 28px 18px;
+  border-bottom: 2px solid #4a2060;
+  background: #f9f7fc;
+}
+
+#bg-tool .bgt-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#bg-tool .bgt-title {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: normal;
+  color: #4a2060;
+  letter-spacing: 0.01em;
+}
+
+#bg-tool .bgt-subtitle {
+  font-size: 13px;
+  color: #555;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+#bg-tool .bgt-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  align-items: flex-start;
+}
+
+#bg-tool .bgt-badge {
+  font-size: 11px;
+  background: #4a2060;
+  color: #ffffff !important;
+  padding: 3px 9px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+#bg-tool .bgt-badge-outline {
+  font-size: 11px;
+  background: transparent;
+  color: #4a2060 !important;
+  border: 1px solid #4a2060;
+  padding: 2px 8px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+#bg-tool .bgt-body {
+  padding: 24px 28px;
+}
+
+#bg-tool .bgt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+  overflow: visible !important;
+}
+
+#bg-tool .bgt-param {
+  border: 1px solid #ddd;
+  padding: 14px 14px 12px;
+  background: #fafafa;
+  overflow: visible !important;
+  min-width: 0 !important;
+}
+
+#bg-tool .bgt-param-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #4a2060;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#bg-tool .bgt-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #4a2060;
+  color: #ffffff !important;
+  font-size: 11px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+#bg-tool .bgt-select-wrap {
+  position: relative !important;
+  display: block !important;
+  overflow: visible !important;
+}
+
+#bg-tool .bgt-select-wrap::after {
+  content: "\25BC" !important;
+  font-size: 9px !important;
+  color: #4a2060 !important;
+  position: absolute !important;
+  right: 10px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+  line-height: 1 !important;
+}
+
+#bg-tool select.bgt-select {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 36px !important;
+  max-height: none !important;
+  padding: 8px 28px 8px 10px !important;
+  border: 1px solid #c0c0c0 !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  background-clip: padding-box !important;
+  color: #1a1a1a !important;
+  font-family: Georgia, serif !important;
+  font-size: 13px !important;
+  font-weight: normal !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  box-shadow: none !important;
+  transition: border-color 0.15s !important;
+  display: block !important;
+}
+
+#bg-tool select.bgt-select:focus {
+  outline: none !important;
+  border-color: #4a2060 !important;
+}
+
+/* Score partiel */
+#bg-tool .bgt-partial {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: #f9f7fc;
+  border: 1px solid #d0c8da;
+  margin-bottom: 16px;
+}
+
+#bg-tool .bgt-partial-score {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: normal;
+  color: #4a2060;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+#bg-tool .bgt-partial-label {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+#bg-tool .bgt-partial-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: #e0d8ea;
+  min-width: 40px;
+}
+
+#bg-tool .bgt-partial-bar {
+  height: 4px;
+  background: #4a2060;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+#bg-tool .bgt-partial-filled {
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+}
+
+/* Champ SA */
+#bg-tool .bgt-sa-block {
+  border-left: 3px solid #4a2060;
+  padding: 14px 16px;
+  background: #f9f7fc;
+  margin-bottom: 16px;
+}
+
+#bg-tool .bgt-sa-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #4a2060;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+#bg-tool .bgt-sa-note {
+  font-size: 12px;
+  color: #777;
+  font-style: italic;
+  margin-top: 6px;
+}
+
+#bg-tool input.bgt-input {
+  width: 140px !important;
+  padding: 7px 10px !important;
+  border: 1px solid #c0c0c0 !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  font-family: Georgia, serif !important;
+  font-size: 13px !important;
+  box-shadow: none !important;
+}
+
+#bg-tool input.bgt-input:focus {
+  outline: none !important;
+  border-color: #4a2060 !important;
+}
+
+/* Fibronectine */
+#bg-tool .bgt-fibro-block {
+  border-left: 3px solid #888;
+  padding: 14px 16px;
+  background: #f7f7f7;
+  margin-bottom: 20px;
+}
+
+#bg-tool .bgt-fibro-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+#bg-tool .bgt-fibro-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#bg-tool .bgt-radio-btn {
+  display: inline-block;
+  font-size: 13px;
+  padding: 6px 16px;
+  border: 1px solid #c0c0c0;
+  background: #ffffff;
+  color: #444 !important;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+#bg-tool .bgt-radio-btn:hover {
+  border-color: #4a2060;
+}
+
+#bg-tool .bgt-fibro-nd-default {
+  background: #f0f0f0 !important;
+  color: #888 !important;
+  border-color: #ccc !important;
+}
+
+#bg-tool .bgt-radio-active-pos {
+  background: #f7e5e5 !important;
+  border-color: #8b1a1a !important;
+  color: #8b1a1a !important;
+  font-weight: bold !important;
+}
+
+#bg-tool .bgt-radio-active-neg {
+  background: #e5f2eb !important;
+  border-color: #1a5c3a !important;
+  color: #1a5c3a !important;
+  font-weight: bold !important;
+}
+
+#bg-tool .bgt-fibro-note {
+  font-size: 11.5px;
+  color: #777;
+  font-style: italic;
+  margin-top: 8px;
+}
+
+/* Résultat */
+#bg-tool .bgt-result {
+  display: none;
+  border: 1px solid #d0d0d0;
+  margin-bottom: 20px;
+}
+
+#bg-tool .bgt-result-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #d0d0d0;
+  flex-wrap: wrap;
+}
+
+#bg-tool .bgt-score-wrap {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 3px !important;
+  flex-shrink: 0;
+}
+
+#bg-tool .bgt-score-big {
+  font-family: Georgia, serif !important;
+  font-size: 40px !important;
+  font-weight: normal !important;
+  line-height: 1 !important;
+  display: inline !important;
+}
+
+#bg-tool .bgt-score-denom {
+  font-size: 16px !important;
+  color: #777 !important;
+  display: inline !important;
+  margin-top: 0 !important;
+}
+
+#bg-tool .bgt-result-label {
+  flex: 1;
+  min-width: 160px;
+}
+
+#bg-tool .bgt-result-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+#bg-tool .bgt-result-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 8px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+/* Niveau maternité */
+#bg-tool .bgt-maternite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-bottom: 1px solid #d0d0d0;
+  background: #fafafa;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+#bg-tool .bgt-maternite-label {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #777;
+  white-space: nowrap;
+}
+
+#bg-tool .bgt-niv {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 12px;
+  letter-spacing: 0.03em;
+  border: 1px solid;
+}
+
+#bg-tool .bgt-niv-1  { background: #e5f2eb; color: #1a5c3a !important; border-color: #90c4a0; }
+#bg-tool .bgt-niv-2a { background: #fdf8ef; color: #7a4a00 !important; border-color: #e0c070; }
+#bg-tool .bgt-niv-2b { background: #fdf3e3; color: #7a4a00 !important; border-color: #e0c070; }
+#bg-tool .bgt-niv-3  { background: #f7e5e5; color: #8b1a1a !important; border-color: #e0b0b0; }
+
+#bg-tool .bgt-niv-note {
+  font-size: 12px;
+  color: #555;
+  font-style: italic;
+}
+
+/* Fibronectine dans résultat */
+#bg-tool .bgt-fibro-result {
+  padding: 9px 18px;
+  border-bottom: 1px solid #d0d0d0;
+  font-size: 12.5px;
+  font-style: italic;
+  background: #fafafa;
+}
+
+#bg-tool .bgt-result-body {
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.6;
+}
+
+#bg-tool .bgt-result-body ul {
+  margin: 8px 0 0 0;
+  padding-left: 18px;
+}
+
+#bg-tool .bgt-result-body li {
+  margin-bottom: 5px;
+  color: #333 !important;
+}
+
+/* Sévérité */
+#bg-tool .bgt-lv-leger  .bgt-result-head { background: #f0faf4; }
+#bg-tool .bgt-lv-leger  .bgt-score-big   { color: #1a5c3a !important; }
+#bg-tool .bgt-lv-leger  .bgt-result-title{ color: #1a5c3a !important; }
+#bg-tool .bgt-lv-leger  .bgt-result-tag  { background: #e5f2eb; color: #1a5c3a !important; border-color: #90c4a0; }
+
+#bg-tool .bgt-lv-modere .bgt-result-head { background: #fdf8ef; }
+#bg-tool .bgt-lv-modere .bgt-score-big   { color: #7a4a00 !important; }
+#bg-tool .bgt-lv-modere .bgt-result-title{ color: #7a4a00 !important; }
+#bg-tool .bgt-lv-modere .bgt-result-tag  { background: #fdf3e3; color: #7a4a00 !important; border-color: #e0c070; }
+
+#bg-tool .bgt-lv-severe .bgt-result-head { background: #fdf2f2; }
+#bg-tool .bgt-lv-severe .bgt-score-big   { color: #8b1a1a !important; }
+#bg-tool .bgt-lv-severe .bgt-result-title{ color: #8b1a1a !important; }
+#bg-tool .bgt-lv-severe .bgt-result-tag  { background: #f7e5e5; color: #8b1a1a !important; border-color: #e0b0b0; }
+
+#bg-tool .bgt-lv-terme  .bgt-result-head { background: #f7f9fc; }
+#bg-tool .bgt-lv-terme  .bgt-score-big   { color: #1a3a5c !important; }
+#bg-tool .bgt-lv-terme  .bgt-result-title{ color: #1a3a5c !important; }
+#bg-tool .bgt-lv-terme  .bgt-result-tag  { background: #e5ecf5; color: #1a3a5c !important; border-color: #90a8c8; }
+
+/* Reset */
+#bg-tool .bgt-reset-wrap {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+#bg-tool button.bgt-reset {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  background: none !important;
+  border: 1px solid #9a8aaa !important;
+  color: #4a2060 !important;
+  padding: 7px 18px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, color 0.15s;
+}
+
+#bg-tool button.bgt-reset:hover {
+  background: #4a2060 !important;
+  color: #ffffff !important;
+}
+
+/* Accordéon */
+#bg-tool .bgt-ref-toggle {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  background: none !important;
+  border: none !important;
+  color: #4a2060 !important;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+#bg-tool .bgt-ref-panel {
+  display: none;
+  background: #f9f7fc;
+  border: 1px solid #d0c8da;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 12.5px;
+}
+
+#bg-tool .bgt-ref-panel.bgt-open { display: block; }
+
+#bg-tool .bgt-ref-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+#bg-tool .bgt-ref-panel table th {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 8px;
+  background: #ede8f4;
+  border: 1px solid #c8b8d8;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #4a2060 !important;
+}
+
+#bg-tool .bgt-ref-panel table td {
+  padding: 5px 8px;
+  border: 1px solid #ddd8e8;
+  color: #333 !important;
+  background: #ffffff !important;
+  font-size: 12px;
+}
+
+#bg-tool .bgt-ref-bib {
+  font-size: 11.5px;
+  color: #555;
+  line-height: 1.55;
+}
+
+#bg-tool .bgt-ref-bib strong { color: #4a2060; }
+
+/* Pied */
+#bg-tool .bgt-footer {
+  border-top: 1px solid #d0d0d0;
+  padding: 14px 28px;
+  background: #fafafa;
+}
+
+#bg-tool .bgt-maj {
+  font-size: 11px;
+  color: #aaa;
+  text-align: right;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+#bg-tool .bgt-legal {
+  font-size: 11.5px;
+  color: #666;
+  line-height: 1.55;
+}
+
+#bg-tool .bgt-legal strong {
+  color: #333;
+  display: block;
+  margin-bottom: 3px;
+  font-size: 12px;
+}
+
+@media (max-width: 560px) {
+  #bg-tool .bgt-header,
+  #bg-tool .bgt-body { padding: 16px; }
+  #bg-tool .bgt-footer { padding: 12px 16px; }
+  #bg-tool .bgt-grid { grid-template-columns: 1fr; gap: 12px; }
+  #bg-tool .bgt-score-big { font-size: 32px !important; }
+  #bg-tool .bgt-maternite { flex-direction: column; align-items: flex-start; }
+  #bg-tool .bgt-partial { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<div id="bg-tool" role="main" aria-label="Calculateur Score de Baumgarten et Grüber">
+
+  <!-- EN-TÊTE -->
+  <div class="bgt-header">
+    <div class="bgt-header-top">
+      <div>
+        <div class="bgt-title">Score de Baumgarten &amp; Grüber — Menace d'accouchement prématuré</div>
+        <div class="bgt-subtitle">Outil d'aide à la décision obstétricale — Usage réservé aux professionnels de santé</div>
+      </div>
+      <div class="bgt-badges">
+        <span class="bgt-badge">CNGOF 2016</span>
+        <span class="bgt-badge-outline">MAP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORPS -->
+  <div class="bgt-body">
+
+    <!-- 4 PARAMÈTRES -->
+    <div class="bgt-grid" role="group" aria-label="Paramètres du score">
+
+      <div class="bgt-param">
+        <div class="bgt-param-label"><span class="bgt-num">1</span> Contractions utérines</div>
+        <div class="bgt-select-wrap">
+          <select class="bgt-select" id="bgt-contractions" aria-label="Contractions utérines">
+            <option value="">Sélectionner...</option>
+            <option value="0">0 — Absentes</option>
+            <option value="1">1 — Irrégulières</option>
+            <option value="2">2 — Régulières</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bgt-param">
+        <div class="bgt-param-label"><span class="bgt-num">2</span> Métrorragies</div>
+        <div class="bgt-select-wrap">
+          <select class="bgt-select" id="bgt-metrorragies" aria-label="Métrorragies">
+            <option value="">Sélectionner...</option>
+            <option value="0">0 — Absentes</option>
+            <option value="1">1 — Peu importantes</option>
+            <option value="2">2 — Hémorragies</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bgt-param">
+        <div class="bgt-param-label"><span class="bgt-num">3</span> État des membranes</div>
+        <div class="bgt-select-wrap">
+          <select class="bgt-select" id="bgt-membranes" aria-label="État des membranes">
+            <option value="">Sélectionner...</option>
+            <option value="0">0 — Intactes</option>
+            <option value="2">2 — Rupture haute</option>
+            <option value="4">4 — Rupture basse</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bgt-param">
+        <div class="bgt-param-label"><span class="bgt-num">4</span> Dilatation cervicale</div>
+        <div class="bgt-select-wrap">
+          <select class="bgt-select" id="bgt-dilatation" aria-label="Dilatation cervicale">
+            <option value="">Sélectionner...</option>
+            <option value="0">0 — Fermé (0 cm)</option>
+            <option value="1">1 — 1 cm</option>
+            <option value="2">2 — 2 cm</option>
+            <option value="3">3 — 3 cm</option>
+            <option value="4">4 — &#8805; 4 cm</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SCORE PARTIEL -->
+    <div class="bgt-partial" aria-live="polite" aria-label="Score partiel">
+      <div>
+        <div class="bgt-partial-label">Score en cours</div>
+        <div class="bgt-partial-score">
+          <span id="bgt-partial-num">0</span><span style="font-size:13px;color:#aaa;">&thinsp;/ 12</span>
+        </div>
+      </div>
+      <div class="bgt-partial-bar-wrap">
+        <div class="bgt-partial-bar" id="bgt-partial-bar"></div>
+      </div>
+      <div class="bgt-partial-filled" id="bgt-partial-filled">0 / 4 critères</div>
+    </div>
+
+    <!-- ÂGE GESTATIONNEL -->
+    <div class="bgt-sa-block">
+      <div class="bgt-sa-label">Âge gestationnel (SA) — Optionnel</div>
+      <input class="bgt-input" type="number" id="bgt-sa" min="20" max="42" placeholder="Ex. : 32">
+      <div class="bgt-sa-note">Adapte les recommandations et le niveau de maternité recommandé — n'influence pas le calcul du score.</div>
+    </div>
+
+    <!-- FIBRONECTINE FŒTALE -->
+    <div class="bgt-fibro-block">
+      <div class="bgt-fibro-label">Fibronectine fœtale (fFN) — Optionnel</div>
+      <div class="bgt-fibro-row">
+        <span class="bgt-radio-btn" id="bgt-fibro-pos" role="button" tabindex="0" aria-pressed="false">Positive</span>
+        <span class="bgt-radio-btn" id="bgt-fibro-neg" role="button" tabindex="0" aria-pressed="false">Négative</span>
+        <span class="bgt-radio-btn bgt-fibro-nd-default" id="bgt-fibro-nd" role="button" tabindex="0" aria-pressed="true">Non dosée</span>
+      </div>
+      <div class="bgt-fibro-note">La fFN n'est pas incluse dans le score original. Sa valeur prédictive négative élevée (&gt; 95 %) peut pondérer la décision clinique en cas de score limite.</div>
+    </div>
+
+    <!-- RÉSULTAT -->
+    <div class="bgt-result" id="bgt-result" aria-live="polite" aria-atomic="true">
+
+      <div class="bgt-result-head">
+        <div class="bgt-score-wrap">
+          <span class="bgt-score-big" id="bgt-score-num">—</span>
+          <span class="bgt-score-denom">&thinsp;/ 12</span>
+        </div>
+        <div class="bgt-result-label">
+          <div class="bgt-result-title" id="bgt-result-title"></div>
+          <span class="bgt-result-tag" id="bgt-result-tag"></span>
+        </div>
+      </div>
+
+      <div class="bgt-maternite" id="bgt-maternite-block" style="display:none;">
+        <span class="bgt-maternite-label">Maternité recommandée :</span>
+        <span class="bgt-niv" id="bgt-niv-badge"></span>
+        <span class="bgt-niv-note" id="bgt-niv-note"></span>
+      </div>
+
+      <div class="bgt-fibro-result" id="bgt-fibro-result" style="display:none;"></div>
+
+      <div class="bgt-result-body" id="bgt-result-body"></div>
+    </div>
+
+    <!-- RESET -->
+    <div class="bgt-reset-wrap">
+      <button class="bgt-reset" id="bgt-reset" type="button">Réinitialiser</button>
+    </div>
+
+    <!-- ACCORDÉON -->
+    <button class="bgt-ref-toggle" id="bgt-ref-btn" type="button" aria-expanded="false" aria-controls="bgt-ref-panel">
+      <span id="bgt-ref-arrow">&#9656;</span> Tableau de référence &amp; bibliographie
+    </button>
+
+    <div class="bgt-ref-panel" id="bgt-ref-panel" role="region" aria-label="Tableau de référence">
+
+      <table>
+        <thead><tr><th>Score</th><th>Sévérité</th><th>Conduite recommandée</th></tr></thead>
+        <tbody>
+          <tr><td>0 – 3</td><td>Menace légère</td><td>Surveillance ambulatoire, repos ; pas de tocolyse ni corticothérapie systématique</td></tr>
+          <tr><td>4 – 5</td><td>Menace modérée</td><td>Hospitalisation ; tocolyse et corticothérapie selon le terme et les protocoles locaux</td></tr>
+          <tr><td>&#8805; 6</td><td>Menace sévère</td><td>Hospitalisation immédiate ; tocolyse, corticothérapie (24–34 SA), MgSO4 si &lt; 32 SA, transfert in utero niveau III si nécessaire</td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead><tr><th>Paramètre</th><th>0 pt</th><th>1 pt</th><th>2 pts</th><th>3 pts</th><th>4 pts</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Contractions</strong></td><td>Absentes</td><td>Irrégulières</td><td>Régulières</td><td>—</td><td>—</td></tr>
+          <tr><td><strong>Métrorragies</strong></td><td>Absentes</td><td>Peu imp.</td><td>Hémorragies</td><td>—</td><td>—</td></tr>
+          <tr><td><strong>Membranes</strong></td><td>Intactes</td><td>—</td><td>Rupture haute</td><td>—</td><td>Rupture basse</td></tr>
+          <tr><td><strong>Dilatation</strong></td><td>0 cm</td><td>1 cm</td><td>2 cm</td><td>3 cm</td><td>&#8805; 4 cm</td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead><tr><th>Âge gestationnel</th><th>Niveau maternité (CNGOF)</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>&lt; 28 SA</td><td>Niveau III</td><td>Très grande prématurité — réanimation néonatale sur place obligatoire</td></tr>
+          <tr><td>28 – 31 SA</td><td>Niveau III</td><td>Grande prématurité — soins intensifs néonatals de niveau III requis</td></tr>
+          <tr><td>32 – 33 SA</td><td>Niveau II b min.</td><td>Prématurité modérée — USC néonatale avec pédiatre disponible</td></tr>
+          <tr><td>34 – 36 SA</td><td>Niveau II a min.</td><td>Prématurité tardive — surveillance néonatale spécialisée</td></tr>
+          <tr><td>&#8805; 37 SA</td><td>Niveau I</td><td>Terme — maternité de proximité suffisante</td></tr>
+        </tbody>
+      </table>
+
+      <div class="bgt-ref-bib">
+        <strong>Références</strong><br>
+        1. Baumgarten K, Grüber W. Tocolyseindex. In : Dudenhausen JW, Saling E (eds). <em>Perinatale Medizin.</em> Stuttgart : Georg Thieme, 1974.<br>
+        2. CNGOF. <em>Recommandations — Menace d'accouchement prématuré.</em> 2016.<br>
+        3. HAS. <em>Menace d'accouchement prématuré : prise en charge.</em> 2016.<br>
+        4. Honest H et al. Accuracy of cervicovaginal fetal fibronectin test in predicting preterm birth. <em>BMJ.</em> 2002;325:301.
+      </div>
+    </div>
+
+  </div><!-- /bgt-body -->
+
+  <!-- PIED -->
+  <div class="bgt-footer">
+    <div class="bgt-maj">Dernière mise à jour : avril 2025 — Référentiel CNGOF 2016 / HAS 2016</div>
+    <div class="bgt-legal">
+      <strong>Avertissement médico-légal</strong>
+      Outil d'aide à la décision destiné exclusivement aux professionnels de santé qualifiés. Ce calculateur ne se substitue pas au jugement clinique, à l'examen obstétrical complet, aux examens complémentaires (tocographie, échographie cervicale, fibronectine fœtale) ni aux protocoles institutionnels en vigueur. Toute décision thérapeutique relève de la responsabilité du praticien, après évaluation individuelle du dossier maternel et fœtal.
+    </div>
+  </div>
+
+</div><!-- /#bg-tool -->
+
+<script>
+(function () {
+  "use strict";
+
+  var FIELDS = ["bgt-contractions", "bgt-metrorragies", "bgt-membranes", "bgt-dilatation"];
+  var fibroState = "nd";
+
+  function getVal(id) {
+    var el = document.getElementById(id);
+    return el ? el.value : "";
+  }
+
+  function getSA() {
+    var v = document.getElementById("bgt-sa").value;
+    return v === "" ? null : parseInt(v, 10);
+  }
+
+  function filledCount() {
+    return FIELDS.filter(function (id) { return getVal(id) !== ""; }).length;
+  }
+
+  function partialScore() {
+    var s = 0;
+    FIELDS.forEach(function (id) {
+      var v = getVal(id);
+      if (v !== "") s += parseInt(v, 10);
+    });
+    return s;
+  }
+
+  /* Score partiel temps réel */
+  function updatePartial() {
+    var filled = filledCount();
+    var score  = partialScore();
+    document.getElementById("bgt-partial-num").textContent = score;
+    document.getElementById("bgt-partial-filled").textContent = filled + " / 4 crit\u00e8res";
+    var pct = Math.min(Math.round((score / 12) * 100), 100);
+    document.getElementById("bgt-partial-bar").style.width = pct + "%";
+  }
+
+  /* Niveau maternité */
+  function getNiveau(sa) {
+    if (sa === null) return null;
+    if (sa >= 37)   return { cls: "bgt-niv-1",  label: "Niveau I",    note: "Grossesse \u00e0 terme" };
+    if (sa < 28)    return { cls: "bgt-niv-3",  label: "Niveau III",  note: "Tr\u00e8s grande pr\u00e9maturit\u00e9 (\u003C\u00a028\u00a0SA)" };
+    if (sa < 32)    return { cls: "bgt-niv-3",  label: "Niveau III",  note: "Grande pr\u00e9maturit\u00e9 (28\u201331\u00a0SA)" };
+    if (sa < 34)    return { cls: "bgt-niv-2b", label: "Niveau II\u00a0b", note: "Pr\u00e9maturit\u00e9 mod\u00e9r\u00e9e (32\u201333\u00a0SA)" };
+    return           { cls: "bgt-niv-2a", label: "Niveau II\u00a0a", note: "Pr\u00e9maturit\u00e9 tardive (34\u201336\u00a0SA)" };
+  }
+
+  /* Message fibronectine */
+  function getFibroMsg() {
+    if (fibroState === "neg") return {
+      txt: "Fibronectine f\u0153tale n\u00e9gative\u00a0: valeur pr\u00e9dictive n\u00e9gative \u003E\u00a095\u00a0% pour un accouchement dans les 7\u00a0jours. Peut moduler l\u2019intensit\u00e9 de la prise en charge selon contexte clinique.",
+      col: "#1a5c3a"
+    };
+    if (fibroState === "pos") return {
+      txt: "Fibronectine f\u0153tale positive\u00a0: probabilit\u00e9 accrue d\u2019accouchement pr\u00e9matur\u00e9 dans les 7\u201314\u00a0jours. Renforce l\u2019indication de prise en charge active.",
+      col: "#8b1a1a"
+    };
+    return null;
+  }
+
+  /* Calcul principal */
+  function compute() {
+    updatePartial();
+
+    var filled = filledCount();
+    var score  = partialScore();
+    var sa     = getSA();
+
+    var resultEl  = document.getElementById("bgt-result");
+    var numEl     = document.getElementById("bgt-score-num");
+    var titleEl   = document.getElementById("bgt-result-title");
+    var tagEl     = document.getElementById("bgt-result-tag");
+    var bodyEl    = document.getElementById("bgt-result-body");
+    var matEl     = document.getElementById("bgt-maternite-block");
+    var nivBadge  = document.getElementById("bgt-niv-badge");
+    var nivNote   = document.getElementById("bgt-niv-note");
+    var fibroEl   = document.getElementById("bgt-fibro-result");
+
+    if (filled < 4) {
+      resultEl.style.display = "none";
+      return;
+    }
+
+    numEl.textContent = score;
+
+    /* Niveau maternité */
+    var niv = getNiveau(sa);
+    if (niv) {
+      matEl.style.display  = "";
+      nivBadge.className   = "bgt-niv " + niv.cls;
+      nivBadge.textContent = niv.label;
+      nivNote.textContent  = niv.note;
+    } else {
+      matEl.style.display = "none";
+    }
+
+    /* Fibronectine */
+    var fm = getFibroMsg();
+    if (fm) {
+      fibroEl.textContent    = fm.txt;
+      fibroEl.style.color    = fm.col;
+      fibroEl.style.display  = "";
+    } else {
+      fibroEl.style.display = "none";
+    }
+
+    /* Terme */
+    if (sa !== null && sa >= 37) {
+      resultEl.className    = "bgt-result bgt-lv-terme";
+      titleEl.textContent   = "Grossesse \u00e0 terme (" + sa + "\u00a0SA) \u2014 Score non applicable";
+      tagEl.textContent     = "TERME";
+      bodyEl.innerHTML      =
+        "<strong>Conclusion\u00a0:</strong> \u00c0 partir de 37\u00a0SA le score de Baumgarten &amp; Gr\u00fcber n\u2019est pas applicable.<br><br>" +
+        "<strong>Conduite\u00a0:</strong><ul>" +
+        "<li>Prise en charge obst\u00e9tricale standard selon l\u2019\u00e9volution du travail</li>" +
+        "<li>Pas de tocolyse ni de corticoth\u00e9rapie syst\u00e9matique</li>" +
+        "<li>Surveillance maternelle et f\u0153tale habituelle</li></ul>";
+      resultEl.style.display = "block";
+      return;
+    }
+
+    /* Légère 0–3 */
+    if (score <= 3) {
+      resultEl.className  = "bgt-result bgt-lv-leger";
+      titleEl.textContent = "Menace d\u2019accouchement pr\u00e9matur\u00e9 l\u00e9g\u00e8re";
+      tagEl.textContent   = "L\u00c9G\u00c8RE";
+      var h = "<strong>Conduite recommand\u00e9e\u00a0:</strong><ul>" +
+        "<li>Surveillance clinique ambulatoire rapproch\u00e9e</li>" +
+        "<li>Repos et hydratation</li>" +
+        "<li>R\u00e9\u00e9valuation des param\u00e8tres cliniques</li>" +
+        "<li>\u00c9ducation sur les signes d\u2019alarme</li>";
+      if (sa !== null && sa < 34) h += "<li>Surveillance renforc\u00e9e (" + sa + "\u00a0SA\u00a0&lt;\u00a034\u00a0SA)</li>";
+      h += "</ul><br><em>Pas de corticoth\u00e9rapie ni de tocolyse syst\u00e9matique \u00e0 ce stade.</em>";
+      bodyEl.innerHTML = h;
+    }
+
+    /* Modérée 4–5 */
+    else if (score <= 5) {
+      resultEl.className  = "bgt-result bgt-lv-modere";
+      titleEl.textContent = "Menace d\u2019accouchement pr\u00e9matur\u00e9 mod\u00e9r\u00e9e";
+      tagEl.textContent   = "MOD\u00c9R\u00c9E";
+      var h = "<strong>Conduite recommand\u00e9e\u00a0:</strong><ul>" +
+        "<li>Hospitalisation pour surveillance materno-f\u0153tale</li>" +
+        "<li>Tocographie continue</li>" +
+        "<li>Bilan infectieux si suspicion de rupture des membranes</li>";
+      if (sa === null) {
+        h += "<li>Corticoth\u00e9rapie et tocolyse\u00a0: d\u00e9cision selon l\u2019\u00e2ge gestationnel (non renseign\u00e9)</li>";
+      } else if (sa < 32) {
+        h += "<li>Tocolyse pour permettre la corticoth\u00e9rapie (atosiban\u00a01<sup>re</sup>\u00a0intention)</li>" +
+             "<li>Corticoth\u00e9rapie pour maturation pulmonaire f\u0153tale (24\u201334\u00a0SA)</li>" +
+             "<li>Sulfate de magn\u00e9sium pour neuroprotection f\u0153tale si accouchement imminent</li>" +
+             "<li>Orientation vers maternit\u00e9 de niveau adapt\u00e9</li>";
+      } else if (sa < 34) {
+        h += "<li>Tocolyse indiqu\u00e9e pour permettre la corticoth\u00e9rapie</li>" +
+             "<li>Corticoth\u00e9rapie pour maturation pulmonaire f\u0153tale (24\u201334\u00a0SA)</li>" +
+             "<li>Orientation vers maternit\u00e9 de niveau adapt\u00e9</li>";
+      } else {
+        h += "<li>Corticoth\u00e9rapie \u00e0 discuter selon protocoles locaux (34\u201336\u00a0SA)</li>" +
+             "<li>Tocolyse rarement indiqu\u00e9e au-del\u00e0 de 34\u00a0SA</li>";
+      }
+      h += "</ul>";
+      bodyEl.innerHTML = h;
+    }
+
+    /* Sévère ≥ 6 */
+    else {
+      resultEl.className  = "bgt-result bgt-lv-severe";
+      titleEl.textContent = "Menace d\u2019accouchement pr\u00e9matur\u00e9 s\u00e9v\u00e8re";
+      tagEl.textContent   = "S\u00c9V\u00c8RE";
+      var h = "<strong>Prise en charge urgente\u00a0:</strong><ul>" +
+        "<li>Hospitalisation imm\u00e9diate</li>" +
+        "<li>Surveillance materno-f\u0153tale intensive (tocographie, monitoring)</li>";
+      if (sa === null) {
+        h += "<li>Tocolyse si indiqu\u00e9e selon l\u2019\u00e2ge gestationnel (non renseign\u00e9)</li>" +
+             "<li>Corticoth\u00e9rapie selon l\u2019\u00e2ge gestationnel</li>" +
+             "<li>Transfert in utero vers maternit\u00e9 de niveau\u00a0III si n\u00e9cessaire</li>";
+      } else if (sa < 28) {
+        h += "<li>Tocolyse imm\u00e9diate si appropri\u00e9e</li>" +
+             "<li>Corticoth\u00e9rapie en urgence</li>" +
+             "<li>Sulfate de magn\u00e9sium pour neuroprotection f\u0153tale</li>" +
+             "<li>Consultation n\u00e9onatale urgente</li>" +
+             "<li>Transfert in utero vers maternit\u00e9 de niveau\u00a0III</li>";
+      } else if (sa < 32) {
+        h += "<li>Tocolyse imm\u00e9diate (atosiban\u00a01<sup>re</sup>\u00a0intention)</li>" +
+             "<li>Corticoth\u00e9rapie pour maturation pulmonaire f\u0153tale</li>" +
+             "<li>Sulfate de magn\u00e9sium pour neuroprotection f\u0153tale</li>" +
+             "<li>Transfert in utero vers maternit\u00e9 de niveau\u00a0III</li>";
+      } else if (sa < 34) {
+        h += "<li>Tocolyse pour permettre la corticoth\u00e9rapie</li>" +
+             "<li>Corticoth\u00e9rapie pour maturation pulmonaire f\u0153tale</li>" +
+             "<li>Orientation vers maternit\u00e9 de niveau\u00a0adapt\u00e9</li>";
+      } else {
+        h += "<li>Corticoth\u00e9rapie selon protocoles (34\u201336\u00a0SA)</li>" +
+             "<li>Pr\u00e9paration \u00e0 l\u2019accouchement pr\u00e9matur\u00e9 tardif</li>";
+      }
+      h += "</ul>";
+      bodyEl.innerHTML = h;
+    }
+
+    resultEl.style.display = "block";
+  }
+
+  /* Écouteurs */
+  FIELDS.forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener("change", compute);
+  });
+  document.getElementById("bgt-sa").addEventListener("input", compute);
+
+  /* Fibronectine */
+  function setFibro(state) {
+    fibroState = state;
+    var pos = document.getElementById("bgt-fibro-pos");
+    var neg = document.getElementById("bgt-fibro-neg");
+    var nd  = document.getElementById("bgt-fibro-nd");
+    pos.className = "bgt-radio-btn" + (state === "pos" ? " bgt-radio-active-pos" : "");
+    neg.className = "bgt-radio-btn" + (state === "neg" ? " bgt-radio-active-neg" : "");
+    nd.className  = "bgt-radio-btn" + (state === "nd"  ? " bgt-fibro-nd-default" : "");
+    pos.setAttribute("aria-pressed", state === "pos" ? "true" : "false");
+    neg.setAttribute("aria-pressed", state === "neg" ? "true" : "false");
+    nd.setAttribute("aria-pressed",  state === "nd"  ? "true" : "false");
+    compute();
+  }
+
+  document.getElementById("bgt-fibro-pos").addEventListener("click", function () { setFibro("pos"); });
+  document.getElementById("bgt-fibro-neg").addEventListener("click", function () { setFibro("neg"); });
+  document.getElementById("bgt-fibro-nd").addEventListener("click",  function () { setFibro("nd"); });
+  ["bgt-fibro-pos","bgt-fibro-neg","bgt-fibro-nd"].forEach(function (id) {
+    document.getElementById(id).addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.click(); }
+    });
+  });
+
+  /* Reset */
+  document.getElementById("bgt-reset").addEventListener("click", function () {
+    FIELDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.value = "";
+    });
+    document.getElementById("bgt-sa").value = "";
+    fibroState = "nd";
+    setFibro("nd");
+    updatePartial();
+    document.getElementById("bgt-result").style.display = "none";
+  });
+
+  /* Accordéon */
+  var refBtn   = document.getElementById("bgt-ref-btn");
+  var refPanel = document.getElementById("bgt-ref-panel");
+  var refArrow = document.getElementById("bgt-ref-arrow");
+  refBtn.addEventListener("click", function () {
+    var open = refPanel.classList.toggle("bgt-open");
+    refBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    refArrow.innerHTML = open ? "&#9662;" : "&#9656;";
+  });
+
+  /* Init */
+  updatePartial();
+
+})();
+</script>
+
+</body>
+</html>
