@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score de Bishop — Calculateur clinique</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — tous les sélecteurs sont préfixés
+   par #bishop-tool pour éviter toute collision avec le thème
+   ============================================================ */
+
+#bishop-tool *,
+#bishop-tool *::before,
+#bishop-tool *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#bishop-tool {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #ffffff;
+  max-width: 680px;
+  margin: 0 auto;
+  border: 1px solid #d0d0d0;
+}
+
+/* --- En-tête --- */
+#bishop-tool .bt-header {
+  padding: 22px 28px 18px;
+  border-bottom: 2px solid #1a3a5c;
+  background: #f7f9fb;
+}
+
+#bishop-tool .bt-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#bishop-tool .bt-title {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: normal;
+  color: #1a3a5c;
+  letter-spacing: 0.01em;
+}
+
+#bishop-tool .bt-subtitle {
+  font-size: 13px;
+  color: #555;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+#bishop-tool .bt-ref-badge {
+  font-size: 11px;
+  background: #1a3a5c;
+  color: #ffffff;
+  padding: 3px 9px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+/* --- Corps du formulaire --- */
+#bishop-tool .bt-body {
+  padding: 24px 28px;
+}
+
+#bishop-tool .bt-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+#bishop-tool table.bt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  table-layout: fixed;
+}
+
+#bishop-tool table.bt-table thead tr {
+  background: #1a3a5c;
+  color: #ffffff;
+}
+
+#bishop-tool table.bt-table thead th {
+  padding: 9px 10px;
+  font-weight: normal;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: none;
+}
+
+#bishop-tool table.bt-table thead th:first-child {
+  width: 30%;
+  text-align: left;
+}
+
+#bishop-tool table.bt-table thead th:not(:first-child) {
+  text-align: center;
+  width: 17.5%;
+}
+
+#bishop-tool table.bt-table tbody tr {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+#bishop-tool table.bt-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+#bishop-tool table.bt-table tbody td {
+  padding: 10px 10px !important;
+  vertical-align: middle !important;
+  color: #1a1a1a !important;
+  background: #ffffff !important;
+  font-size: 13px !important;
+}
+
+#bishop-tool table.bt-table tbody td:first-child {
+  font-weight: bold;
+  font-size: 13px;
+  color: #1a3a5c;
+  border-right: 1px solid #e5e5e5;
+}
+
+#bishop-tool table.bt-table tbody td:not(:first-child) {
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#bishop-tool table.bt-table tbody td:not(:first-child):hover {
+  background: #eef3f8;
+}
+
+#bishop-tool table.bt-table tbody td.bt-selected {
+  background: #1a3a5c !important;
+  color: #ffffff !important;
+  font-weight: bold !important;
+}
+
+#bishop-tool table.bt-table tbody td.bt-selected:hover {
+  background: #14304f !important;
+  color: #ffffff !important;
+}
+
+#bishop-tool table.bt-table .bt-score-header {
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(255,255,255,0.75);
+  display: block;
+}
+
+/* --- Bloc résultat --- */
+#bishop-tool .bt-result {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  border: 1px solid #d0d0d0;
+  background: #f7f9fb;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+#bishop-tool .bt-score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  border-right: 1px solid #d0d0d0;
+  padding-right: 20px;
+  flex-shrink: 0;
+}
+
+#bishop-tool .bt-score-number {
+  font-family: Georgia, serif;
+  font-size: 44px;
+  font-weight: normal;
+  color: #1a3a5c;
+  line-height: 1;
+}
+
+#bishop-tool .bt-score-denom {
+  font-size: 13px;
+  color: #777;
+  margin-top: 4px;
+}
+
+#bishop-tool .bt-interp {
+  flex: 1;
+  min-width: 200px;
+}
+
+#bishop-tool .bt-interp-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #1a3a5c;
+}
+
+#bishop-tool .bt-interp-text {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.55;
+}
+
+#bishop-tool .bt-placeholder {
+  font-size: 13px;
+  color: #888;
+  font-style: italic;
+  padding: 4px 0;
+}
+
+/* Couleurs sémantiques interprétation */
+#bishop-tool .bt-level-defav { color: #8b1a1a; }
+#bishop-tool .bt-level-interm { color: #7a4a00; }
+#bishop-tool .bt-level-fav { color: #1a5c3a; }
+#bishop-tool .bt-level-trefav { color: #1a3a5c; }
+
+#bishop-tool .bt-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  margin-right: 6px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+#bishop-tool .bt-tag-defav { background: #f7e5e5; color: #8b1a1a; border: 1px solid #e0b0b0; }
+#bishop-tool .bt-tag-interm { background: #fdf3e3; color: #7a4a00; border: 1px solid #e0c070; }
+#bishop-tool .bt-tag-fav { background: #e5f2eb; color: #1a5c3a; border: 1px solid #90c4a0; }
+#bishop-tool .bt-tag-trefav { background: #e5ecf5; color: #1a3a5c; border: 1px solid #90a8c8; }
+
+/* --- Bouton reset --- */
+#bishop-tool .bt-reset-wrap {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+#bishop-tool button.bt-reset {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  background: none;
+  border: 1px solid #9aabb8;
+  color: #1a3a5c;
+  padding: 7px 18px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, color 0.15s;
+}
+
+#bishop-tool button.bt-reset:hover {
+  background: #1a3a5c;
+  color: #ffffff;
+}
+
+/* --- Tableau de référence (accordéon) --- */
+#bishop-tool .bt-ref-toggle {
+  font-family: Georgia, serif;
+  font-size: 13px;
+  background: none;
+  border: none;
+  color: #1a3a5c;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+#bishop-tool .bt-ref-section {
+  display: none;
+  background: #f7f9fb;
+  border: 1px solid #d0d0d0;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 12.5px;
+}
+
+#bishop-tool .bt-ref-section.bt-open {
+  display: block;
+}
+
+#bishop-tool .bt-ref-section table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+#bishop-tool .bt-ref-section table th {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 8px;
+  background: #e8eef4;
+  border: 1px solid #c8d4de;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #1a3a5c;
+}
+
+#bishop-tool .bt-ref-section table td {
+  padding: 5px 8px;
+  border: 1px solid #dde5ec;
+  color: #333;
+}
+
+#bishop-tool .bt-ref-bib {
+  margin-top: 12px;
+  font-size: 11.5px;
+  color: #555;
+  line-height: 1.5;
+}
+
+#bishop-tool .bt-ref-bib strong {
+  color: #1a3a5c;
+}
+
+/* --- Avertissement médico-légal --- */
+#bishop-tool .bt-legal {
+  border-top: 1px solid #d0d0d0;
+  padding: 14px 28px;
+  background: #fafafa;
+  font-size: 11.5px;
+  color: #666;
+  line-height: 1.55;
+}
+
+#bishop-tool .bt-legal strong {
+  color: #333;
+  display: block;
+  margin-bottom: 3px;
+  font-size: 12px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 560px) {
+  #bishop-tool .bt-header,
+  #bishop-tool .bt-body {
+    padding: 16px;
+  }
+  #bishop-tool .bt-legal {
+    padding: 12px 16px;
+  }
+  #bishop-tool .bt-score-box {
+    border-right: none;
+    border-bottom: 1px solid #d0d0d0;
+    padding-right: 0;
+    padding-bottom: 12px;
+    flex-direction: row;
+    gap: 12px;
+    align-items: baseline;
+    width: 100%;
+  }
+  #bishop-tool .bt-score-number {
+    font-size: 32px;
+  }
+  #bishop-tool table.bt-table thead th,
+  #bishop-tool table.bt-table tbody td {
+    font-size: 11.5px;
+    padding: 7px 6px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="bishop-tool" role="main" aria-label="Calculateur Score de Bishop">
+
+  <!-- EN-TÊTE -->
+  <div class="bt-header">
+    <div class="bt-header-top">
+      <div>
+        <div class="bt-title">Score de Bishop — Évaluation de la maturation cervicale</div>
+        <div class="bt-subtitle">Outil d'aide à la décision obstétricale — Usage réservé aux professionnels de santé</div>
+      </div>
+      <div class="bt-ref-badge">CNGOF 2017</div>
+    </div>
+  </div>
+
+  <!-- CORPS -->
+  <div class="bt-body">
+
+    <!-- TABLEAU DE SAISIE INTERACTIF -->
+    <div class="bt-table-wrap" role="group" aria-label="Critères du score de Bishop">
+      <table class="bt-table" id="bt-grid">
+        <thead>
+          <tr>
+            <th scope="col">Critère</th>
+            <th scope="col">0 pt<span class="bt-score-header">Score</span></th>
+            <th scope="col">1 pt<span class="bt-score-header">Score</span></th>
+            <th scope="col">2 pts<span class="bt-score-header">Score</span></th>
+            <th scope="col">3 pts<span class="bt-score-header">Score</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-crit="dilatation">
+            <td>Dilatation (cm)</td>
+            <td data-val="0" tabindex="0" role="button" aria-label="Dilatation fermé, 0 point">Fermé</td>
+            <td data-val="1" tabindex="0" role="button" aria-label="Dilatation 1-2 cm, 1 point">1 – 2</td>
+            <td data-val="2" tabindex="0" role="button" aria-label="Dilatation 3-4 cm, 2 points">3 – 4</td>
+            <td data-val="3" tabindex="0" role="button" aria-label="Dilatation 5 cm ou plus, 3 points">&ge; 5</td>
+          </tr>
+          <tr data-crit="effacement">
+            <td>Effacement (%)</td>
+            <td data-val="0" tabindex="0" role="button" aria-label="Effacement 0 à 30%, 0 point">0 – 30</td>
+            <td data-val="1" tabindex="0" role="button" aria-label="Effacement 40 à 50%, 1 point">40 – 50</td>
+            <td data-val="2" tabindex="0" role="button" aria-label="Effacement 60 à 70%, 2 points">60 – 70</td>
+            <td data-val="3" tabindex="0" role="button" aria-label="Effacement 80% ou plus, 3 points">&ge; 80</td>
+          </tr>
+          <tr data-crit="consistance">
+            <td>Consistance</td>
+            <td data-val="0" tabindex="0" role="button" aria-label="Consistance ferme, 0 point">Ferme</td>
+            <td data-val="1" tabindex="0" role="button" aria-label="Consistance moyenne, 1 point">Moyenne</td>
+            <td data-val="2" tabindex="0" role="button" aria-label="Consistance molle, 2 points">Molle</td>
+            <td data-val="-" aria-hidden="true" style="background:#f0f0f0;color:#bbb;cursor:default;font-size:18px;">—</td>
+          </tr>
+          <tr data-crit="position">
+            <td>Position</td>
+            <td data-val="0" tabindex="0" role="button" aria-label="Position postérieure, 0 point">Post.</td>
+            <td data-val="1" tabindex="0" role="button" aria-label="Position centrale, 1 point">Centrale</td>
+            <td data-val="2" tabindex="0" role="button" aria-label="Position antérieure, 2 points">Ant.</td>
+            <td data-val="-" aria-hidden="true" style="background:#f0f0f0;color:#bbb;cursor:default;font-size:18px;">—</td>
+          </tr>
+          <tr data-crit="presentation">
+            <td>Présentation</td>
+            <td data-val="0" tabindex="0" role="button" aria-label="Présentation haute et mobile, 0 point">Haute / mobile</td>
+            <td data-val="1" tabindex="0" role="button" aria-label="Présentation appliquée, 1 point">Appliqu&eacute;e</td>
+            <td data-val="2" tabindex="0" role="button" aria-label="Présentation fixée, 2 points">Fix&eacute;e</td>
+            <td data-val="3" tabindex="0" role="button" aria-label="Présentation engagée, 3 points">Engag&eacute;e</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RÉSULTAT -->
+    <div class="bt-result" aria-live="polite" aria-atomic="true" id="bt-result-block">
+      <div class="bt-score-box">
+        <div class="bt-score-number" id="bt-score-num">—</div>
+        <div class="bt-score-denom">/ 13</div>
+      </div>
+      <div class="bt-interp" id="bt-interp-zone">
+        <p class="bt-placeholder">Sélectionner les 5 critères pour obtenir le score et l'interprétation.</p>
+      </div>
+    </div>
+
+    <!-- BOUTON RESET -->
+    <div class="bt-reset-wrap">
+      <button class="bt-reset" id="bt-reset-btn" type="button">Réinitialiser</button>
+    </div>
+
+    <!-- TABLEAU DE RÉFÉRENCE (accordéon) -->
+    <button class="bt-ref-toggle" id="bt-ref-btn" type="button" aria-expanded="false" aria-controls="bt-ref-panel">
+      <span id="bt-ref-arrow">&#9656;</span> Tableau de référence &amp; bibliographie
+    </button>
+    <div class="bt-ref-section" id="bt-ref-panel" role="region" aria-label="Tableau de référence Bishop">
+      <table>
+        <thead>
+          <tr>
+            <th>Score de Bishop</th>
+            <th>Interprétation</th>
+            <th>Conduite recommandée (CNGOF 2017)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0 – 3</td>
+            <td>Col défavorable</td>
+            <td>Maturation cervicale indispensable (prostaglandines E2 ou ballonnet transcervical) avant tout déclenchement</td>
+          </tr>
+          <tr>
+            <td>4 – 5</td>
+            <td>Col limite</td>
+            <td>Maturation cervicale recommandée ; déclenchement direct par ocytocine à discuter selon contexte clinique</td>
+          </tr>
+          <tr>
+            <td>6 – 9</td>
+            <td>Col favorable</td>
+            <td>Déclenchement par ocytocine IV possible ; bonnes conditions de mise en travail</td>
+          </tr>
+          <tr>
+            <td>&ge; 10</td>
+            <td>Col très favorable</td>
+            <td>Conditions optimales ; déclenchement par ocytocine avec probabilité élevée de succès</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="bt-ref-bib">
+        <strong>Références</strong><br>
+        1. Bishop EH. Pelvic scoring for elective induction. <em>Obstet Gynecol.</em> 1964;24:266–268.<br>
+        2. Collège National des Gynécologues-Obstétriciens Français (CNGOF). <em>Recommandations pour la pratique clinique — Déclenchement artificiel du travail à partir de 37 SA.</em> 2017.<br>
+        3. Haute Autorité de Santé (HAS). Déclenchement artificiel du travail à partir de 37 semaines d'aménorrhée. 2008 (actualisation CNGOF 2017).
+      </div>
+    </div>
+
+  </div><!-- /bt-body -->
+
+  <!-- AVERTISSEMENT MÉDICO-LÉGAL -->
+  <div class="bt-legal" role="note">
+    <strong>Avertissement médico-légal</strong>
+    Outil d'aide à la décision destiné exclusivement aux professionnels de santé qualifiés. Ce calculateur ne se substitue pas au jugement clinique, à l'examen obstétrical complet ni aux recommandations institutionnelles en vigueur (CNGOF 2017). Toute décision de déclenchement relève de la responsabilité du praticien, en concertation avec l'équipe obstétricale, après évaluation individuelle du dossier maternel et fœtal.
+  </div>
+
+</div><!-- /#bishop-tool -->
+
+<script>
+(function () {
+  "use strict";
+
+  /* --- Données de score --- */
+  var CRITS = ["dilatation", "effacement", "consistance", "position", "presentation"];
+  var state = {};
+  CRITS.forEach(function (c) { state[c] = null; });
+
+  /* --- Interprétation --- */
+  function interp(score) {
+    if (score <= 3) return {
+      level: "defav",
+      label: "Col défavorable",
+      tag: "DÉFAVORABLE",
+      text: "Maturation cervicale préalable indispensable (prostaglandines E2 ou ballonnet transcervical) avant tout déclenchement du travail. Risque élevé d'échec et de césarienne en l'absence de préparation cervicale."
+    };
+    if (score <= 5) return {
+      level: "interm",
+      label: "Col limite",
+      tag: "LIMITE",
+      text: "Maturation cervicale recommandée avant déclenchement par ocytocine. La décision doit prendre en compte le contexte clinique (indication, parité, terme, état fœtal)."
+    };
+    if (score <= 9) return {
+      level: "fav",
+      label: "Col favorable",
+      tag: "FAVORABLE",
+      text: "Déclenchement par ocytocine IV possible. Bonnes conditions de mise en travail. Surveillance standard du travail."
+    };
+    return {
+      level: "trefav",
+      label: "Col très favorable",
+      tag: "TRÈS FAVORABLE",
+      text: "Conditions optimales de déclenchement. Probabilité élevée de succès par ocytocine IV. Possibilité d'amniotomie associée selon protocole de service."
+    };
+  }
+
+  /* --- Mise à jour de l'affichage --- */
+  function update() {
+    var filled = CRITS.filter(function (c) { return state[c] !== null; });
+    var total = 0;
+    CRITS.forEach(function (c) { if (state[c] !== null) total += state[c]; });
+
+    var scoreEl = document.getElementById("bt-score-num");
+    var interpZone = document.getElementById("bt-interp-zone");
+
+    if (filled.length < 5) {
+      scoreEl.textContent = "\u2014";
+      interpZone.innerHTML = '<p class="bt-placeholder">S\u00e9lectionner les 5 crit\u00e8res pour obtenir le score et l\u2019interpr\u00e9tation.</p>';
+      return;
+    }
+
+    scoreEl.textContent = total;
+    var r = interp(total);
+    interpZone.innerHTML =
+      '<div class="bt-interp-title bt-level-' + r.level + '">' +
+        '<span class="bt-tag bt-tag-' + r.level + '">' + r.tag + '</span>' +
+        r.label +
+      '</div>' +
+      '<div class="bt-interp-text">' + r.text + '</div>';
+  }
+
+  /* --- Gestion des clics sur le tableau --- */
+  var grid = document.getElementById("bt-grid");
+  grid.addEventListener("click", function (e) {
+    var td = e.target.closest("td[data-val]");
+    if (!td) return;
+    var val = td.getAttribute("data-val");
+    if (val === "-") return;
+    var row = td.closest("tr[data-crit]");
+    if (!row) return;
+    var crit = row.getAttribute("data-crit");
+
+    /* déselection si déjà sélectionné */
+    if (td.classList.contains("bt-selected")) {
+      td.classList.remove("bt-selected");
+      td.setAttribute("aria-pressed", "false");
+      state[crit] = null;
+    } else {
+      /* retirer sélection précédente sur la même ligne */
+      row.querySelectorAll("td.bt-selected").forEach(function (el) {
+        el.classList.remove("bt-selected");
+        el.setAttribute("aria-pressed", "false");
+      });
+      td.classList.add("bt-selected");
+      td.setAttribute("aria-pressed", "true");
+      state[crit] = parseInt(val, 10);
+    }
+    update();
+  });
+
+  /* Accessibilité clavier (Enter/Espace) */
+  grid.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
+      var td = e.target.closest("td[data-val]");
+      if (td) { e.preventDefault(); td.click(); }
+    }
+  });
+
+  /* --- Reset --- */
+  document.getElementById("bt-reset-btn").addEventListener("click", function () {
+    CRITS.forEach(function (c) { state[c] = null; });
+    grid.querySelectorAll("td.bt-selected").forEach(function (el) {
+      el.classList.remove("bt-selected");
+      el.removeAttribute("aria-pressed");
+    });
+    update();
+  });
+
+  /* --- Accordéon référence --- */
+  var refBtn = document.getElementById("bt-ref-btn");
+  var refPanel = document.getElementById("bt-ref-panel");
+  var refArrow = document.getElementById("bt-ref-arrow");
+  refBtn.addEventListener("click", function () {
+    var open = refPanel.classList.toggle("bt-open");
+    refBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    refArrow.innerHTML = open ? "&#9662;" : "&#9656;";
+  });
+
+})();
+</script>
+
+</body>
+</html>
