@@ -623,6 +623,155 @@
   #ams2-root .ams2-step-label { display: none; }
   #ams2-root .ams2-diag-values { flex-direction: column; gap: 8px; }
 }
+
+/* ============================================================
+   SÉPARATEUR DE SECTION FORMULAIRE
+   ============================================================ */
+#ams2-root .ams2-form-section {
+  margin-top: 20px;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ams2-border);
+}
+#ams2-root .ams2-form-section-title {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ams2-slate);
+}
+
+/* ============================================================
+   CHECKBOX CUSHING
+   ============================================================ */
+#ams2-root .ams2-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+#ams2-root .ams2-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ams2-text-muted);
+  line-height: 1.5;
+  padding: 10px 14px;
+  background: var(--ams2-white);
+  border: 1.5px solid var(--ams2-border);
+  border-radius: var(--ams2-radius);
+  transition: border-color 0.2s, background 0.2s;
+}
+#ams2-root .ams2-checkbox-label:hover {
+  border-color: var(--ams2-blue);
+  background: var(--ams2-blue-light);
+}
+#ams2-root .ams2-checkbox-label input[type="checkbox"] {
+  all: unset;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 2px solid var(--ams2-border);
+  border-radius: 3px;
+  background: var(--ams2-white);
+  cursor: pointer;
+  position: relative;
+  margin-top: 1px;
+  transition: background 0.15s, border-color 0.15s;
+}
+#ams2-root .ams2-checkbox-label input[type="checkbox"]:checked {
+  background: var(--ams2-blue-dark);
+  border-color: var(--ams2-blue-dark);
+}
+#ams2-root .ams2-checkbox-label input[type="checkbox"]:checked::after {
+  content: '\2713';
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+}
+#ams2-root .ams2-checkbox-label.checked {
+  border-color: var(--ams2-blue-dark);
+  background: var(--ams2-blue-light);
+}
+
+/* ============================================================
+   BARRE D'ACTIONS RÉSULTATS (Imprimer / Copier)
+   ============================================================ */
+#ams2-root .ams2-actions-bar {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+#ams2-root .ams2-btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 10px 16px;
+  border-radius: var(--ams2-radius);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  border: 1.5px solid var(--ams2-border);
+}
+#ams2-root .ams2-btn-action.print {
+  background: var(--ams2-white);
+  color: var(--ams2-blue-dark);
+  border-color: var(--ams2-blue-dark);
+}
+#ams2-root .ams2-btn-action.print:hover {
+  background: var(--ams2-blue-light);
+}
+#ams2-root .ams2-btn-action.copy {
+  background: var(--ams2-white);
+  color: var(--ams2-teal);
+  border-color: var(--ams2-teal);
+}
+#ams2-root .ams2-btn-action.copy:hover {
+  background: var(--ams2-teal-light);
+}
+#ams2-root .ams2-copy-toast {
+  display: none;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--ams2-teal);
+  font-weight: 600;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 0;
+}
+#ams2-root .ams2-copy-toast.visible {
+  display: inline-flex;
+}
+
+/* ============================================================
+   IMPRESSION
+   ============================================================ */
+@media print {
+  body * { visibility: hidden !important; }
+  #ams2-print-zone, #ams2-print-zone * { visibility: visible !important; }
+  #ams2-print-zone {
+    position: absolute !important;
+    left: 0 !important; top: 0 !important;
+    width: 100% !important;
+    font-family: Georgia, serif !important;
+    font-size: 12pt !important;
+    color: #000 !important;
+  }
+  .ams2-actions-bar, .ams2-btn-back, .ams2-btn-primary { display: none !important; }
+  .ams2-diag-header { background: #1a3560 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 </style>
 </head>
 <body>
@@ -739,6 +888,33 @@
         </div>
       </div>
 
+      <!-- Section optionnelle : marqueurs complémentaires -->
+      <div class="ams2-form-section">
+        <div class="ams2-form-section-title">Marqueurs complémentaires — optionnels mais orientants</div>
+      </div>
+
+      <div class="ams2-form-grid">
+        <div class="ams2-field" style="grid-column: 1 / -1;">
+          <label for="ams2-ohp">17-OH Progestérone basale <span class="ams2-unit">ng/mL</span></label>
+          <input type="number" id="ams2-ohp" step="0.1" min="0" placeholder="ex : 1,2  (laisser vide si non dosée)" aria-describedby="ams2-ohp-hint">
+          <span class="ams2-hint" id="ams2-ohp-hint">Normale phase folliculaire : &lt; 2 ng/mL — Seuil HCS forme tardive : &gt; 2 ng/mL (test Synacthène si 2–10) — Seuil classique : &gt; 10 ng/mL</span>
+        </div>
+      </div>
+
+      <!-- Checkbox Cushing -->
+      <div class="ams2-form-section" style="margin-top:14px;">
+        <div class="ams2-form-section-title">Signes cliniques évocateurs</div>
+      </div>
+      <div class="ams2-checkbox-group">
+        <label class="ams2-checkbox-label" id="ams2-cushing-label" for="ams2-cushing">
+          <input type="checkbox" id="ams2-cushing">
+          <span>
+            <strong>Signes d'hypercorticisme (Syndrome de Cushing)</strong><br>
+            <span style="font-size:12px;color:var(--ams2-slate);">Obésité facio-tronculaire, vergetures pourpres, fragilité cutanée, amyotrophie proximale, HTA, diabète, faciès lunaire, bosse de bison</span>
+          </span>
+        </label>
+      </div>
+
       <button class="ams2-btn-primary" id="ams2-btn-analyze">
         Analyser et orienter le diagnostic
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px; margin-left:6px"><path d="m9 18 6-6-6-6"/></svg>
@@ -758,6 +934,25 @@
       </div>
 
       <div id="ams2-results" aria-live="polite" aria-atomic="true"></div>
+
+      <!-- Barre d'actions export -->
+      <div class="ams2-actions-bar" id="ams2-actions-bar" style="display:none;">
+        <button class="ams2-btn-action print" id="ams2-btn-print">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimer les résultats
+        </button>
+        <button class="ams2-btn-action copy" id="ams2-btn-copy">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copier pour le dossier
+        </button>
+        <span class="ams2-copy-toast" id="ams2-copy-toast">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Copié dans le presse-papier
+        </span>
+      </div>
+
+      <!-- Zone cachée pour impression propre -->
+      <div id="ams2-print-zone" style="display:none;"></div>
 
       <button class="ams2-btn-back" id="ams2-btn-back2" style="margin-top:8px;">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
@@ -891,11 +1086,15 @@
   function analyze() {
     if (!validate()) return;
 
-    var fsh  = parseFloat(getVal('ams2-fsh'));
-    var lh   = parseFloat(getVal('ams2-lh'));
-    var prl  = parseFloat(getVal('ams2-prl'));
-    var tsh  = parseFloat(getVal('ams2-tsh'));
-    var hirs = getVal('ams2-hirsutisme').toLowerCase(); // normalize casse (Elementor-safe)
+    var fsh    = parseFloat(getVal('ams2-fsh'));
+    var lh     = parseFloat(getVal('ams2-lh'));
+    var prl    = parseFloat(getVal('ams2-prl'));
+    var tsh    = parseFloat(getVal('ams2-tsh'));
+    var hirs   = getVal('ams2-hirsutisme').toLowerCase(); // normalize casse (Elementor-safe)
+    var ohpEl  = document.getElementById('ams2-ohp');
+    var ohp    = ohpEl && ohpEl.value.trim() !== '' ? parseFloat(ohpEl.value) : NaN;
+    var cush   = document.getElementById('ams2-cushing');
+    var cushing = cush ? cush.checked : false;
 
     var html = '';
     var diagnosesMade = [];
@@ -996,40 +1195,114 @@
     }
 
     // ─────────────────────────────────────────────────────
+    // 3b. SYNDROME DE CUSHING (hypercorticisme)
+    //     Coché cliniquement + FSH/LH basses compatibles
+    // ─────────────────────────────────────────────────────
+    if (cushing) {
+      html += diagBox(
+        'Hypercorticisme — Syndrome de Cushing',
+        'Orientation prioritaire',
+        '',
+        [{ label: 'Signes cliniques', val: 'Présents', info: 'Coch\u00e9' }],
+        'L\'hypercorticisme entraîne une suppression de l\'axe gonadotrope (inhibition de la GnRH) responsable d\'une aménorrhée par hypogonadisme hypogonadotrope fonctionnel. À éliminer avant tout diagnostic de SOPK ou d\'aménorrhée hypothalamique.',
+        [
+          'Cortisolurie des 24h (2 mesures) — seuil > 3× la normale',
+          'Test de freinage minute à la dexaméthasone (1 mg à minuit) : cortisol 8h < 1,8 µg/dL = normal',
+          'Cortisol salivaire nocturne (23h-minuit) × 2',
+          'Si freinage positif : IRM hypophysaire (maladie de Cushing) + TDM surrénalien',
+          'ACTH plasmatique : élevée = origine centrale, effondrée = adénome surrénalien',
+          'Avis endocrinologique spécialisé systématique'
+        ],
+        [
+          'Traitement étiologique : chirurgie (adénome hypophysaire, surrénalien) ou radiothérapie',
+          'Médicaments freinateurs : métyrapone, kétoconazole, mitotane (en attente chirurgie)',
+          'Restauration des cycles après traitement du Cushing dans la majorité des cas'
+        ]
+      );
+      diagnosesMade.push('cushing');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 3c. HCS À RÉVÉLATION TARDIVE (17-OHP élevée)
+    //     Seuil > 2 ng/mL en phase folliculaire basale
+    //     Diagnostic différentiel majeur du SOPK
+    // ─────────────────────────────────────────────────────
+    if (!isNaN(ohp) && ohp >= 2) {
+      var hcsNote, hcsNiveau;
+      if (ohp > 10) {
+        hcsNiveau = 'Forme classique probable';
+        hcsNote = '17-OHP très élevée (' + ohp + ' ng/mL). Évocatrice d\'une hyperplasie congénitale des surrénales forme classique (déficit en 21-hydroxylase). Confirmation par génotypage CYP21A2.';
+      } else {
+        hcsNiveau = 'Forme tardive (NCAH) — Test Synacthène requis';
+        hcsNote = '17-OHP basale entre 2 et 10 ng/mL (' + ohp + ' ng/mL). Suspicion de forme non classique (tardive) d\'HCS. Le test au Synacthène® 250 µg est indispensable : 17-OHP stimulée > 10 ng/mL confirme le diagnostic. Mimétisme clinique avec le SOPK.';
+      }
+      html += diagBox(
+        'Hyperplasie Cong\u00e9nitale des Surr\u00e9nales — Forme Tardive (HCS-FT)',
+        hcsNiveau,
+        'amber',
+        [{ label: '17-OHP basale', val: ohp + ' ng/mL', info: ohp > 10 ? '\u2191\u2191\u2191' : '\u2191 (> 2)' }],
+        hcsNote,
+        [
+          'Test au Synacthène\u00ae 250 \u00b5g IV : 17-OHP à T0 et T60 min (seuil diagnostic > 10 ng/mL)',
+          'G\u00e9notypage CYP21A2 (si test Synacth\u00e8ne positif)',
+          'Bilan androg\u00e8nes : testost\u00e9rone totale, SDHA, \u039445-androst\u00e8nedione',
+          'Cortisol basal et apr\u00e8s Synacth\u00e8ne',
+          'Enqu\u00eate familiale (parents, fr\u00e8res et s\u0153urs)',
+          '\u00c9chographie surr\u00e9nalienne si suspi\u00e7ion de l\u00e9sion'
+        ],
+        [
+          'Hydrocortisone \u00e0 faible dose (si symptomatique ou d\u00e9sir de grossesse) : 10-20 mg/j',
+          'Fludrocortisone si d\u00e9ficit en min\u00e9ralocortico\u00efde associ\u00e9',
+          'Antiandrog\u00e8nes si hirsutisme g\u00eanant (acide acétique de cyprotérone, spironolactone)',
+          'Suivi endocrinologique sp\u00e9cialis\u00e9 \u00e0 vie',
+          'Conseil g\u00e9n\u00e9tique si projet de grossesse'
+        ]
+      );
+      diagnosesMade.push('hcs');
+    }
+
+    // ─────────────────────────────────────────────────────
     // 4. SOPK — critères de Rotterdam
     //    Rapport LH/FSH > 1,5 + FSH dans la zone normale
     //    + (hirsutisme OU LH/FSH élevé)
+    //    Ne pas afficher si HCS déjà confirmée (17-OHP > 10)
     // ─────────────────────────────────────────────────────
     if (!isNaN(fsh) && !isNaN(lh) && fsh >= 2 && fsh <= 12 && lh > 0) {
       var ratio = lh / fsh;
       // Seuil LH/FSH > 1 avec au moins un critère clinique, ou > 2 seul
       var sopkSuspicion = (ratio > 2) || (ratio > 1 && hirs === 'oui');
-      if (sopkSuspicion && !diagnosesMade.includes('iop')) {
+      // Ne pas afficher si HCS classique confirmée (17-OHP > 10)
+      var hcsClassique = !isNaN(ohp) && ohp > 10;
+      if (sopkSuspicion && !diagnosesMade.includes('iop') && !hcsClassique) {
+        // Note sur 17-OHP si non dosée ou intermédiaire
+        var ohpNote17 = isNaN(ohp)
+          ? '17-OHP basale non disponible — \u00e0 doser imp\u00e9rativement pour exclure une HCS forme tardive'
+          : (ohp < 2 ? '17-OHP basale normale (' + ohp + ' ng/mL) — HCS peu probable' : '17-OHP interm\u00e9diaire (' + ohp + ' ng/mL) — Test Synacth\u00e8ne requis pour exclure HCS');
         html += diagBox(
-          'SOPK — Syndrome des Ovaires Polykystiques',
-          'Critères de Rotterdam (2/3)',
+          'SOPK \u2014 Syndrome des Ovaires Polykystiques',
+          'Crit\u00e8res de Rotterdam (2/3)',
           '',
           [
             { label: 'LH/FSH', val: ratio.toFixed(2), info: ratio > 2 ? '\u2191\u2191' : '\u2191' },
             { label: 'FSH', val: fsh + ' UI/L', info: 'normale' },
             { label: 'LH', val: lh + ' UI/L', info: '\u2191' }
           ],
-          'Diagnostic par critères de Rotterdam : 2 critères sur 3 requis — (1) oligo/anovulation, (2) hyperandrogénie clinique ou biologique, (3) ovaires polykystiques à l\'échographie. Éliminer HCS, hyperprolactinémie, dysthyroïdie (déjà vérifiés).',
+          'Diagnostic par crit\u00e8res de Rotterdam : 2 crit\u00e8res sur 3 requis \u2014 (1) oligo/anovulation, (2) hyperandrog\u00e9nie clinique ou biologique, (3) ovaires polykystiques \u00e0 l\u2019\u00e9chographie. Diagnostic d\u2019exclusion : \u00e9liminer HCS, hyperprolactin\u00e9mie, dysthyro\u00efdie (d\u00e9j\u00e0 v\u00e9rifi\u00e9s).',
           [
-            'Echographie pelvienne : \u2265 12 follicules 2–9 mm ou volume ovarien > 10 cm\u00b3',
-            'Bilan androgènes : testostérone totale, SDHA, \u03944-androstènedione',
-            'AMH (souvent élevée, > 5 ng/mL)',
-            '17-OHP basale (éliminer hyperplasie congénitale des surrénales)',
-            'Bilan métabolique : glycémie à jeun, insuline, HOMA-IR, bilan lipidique',
-            hirs === 'oui' ? 'Score de Ferriman-Gallwey complet' : 'Rechercher hyperandrogénie biologique même en l\u2019absence de signe clinique'
+            ohpNote17,
+            '\u00c9chographie pelvienne : \u2265 12 follicules 2\u20139 mm ou volume ovarien > 10 cm\u00b3',
+            'Bilan androg\u00e8nes : testost\u00e9rone totale, SDHA, \u03944-androst\u00e8nedione',
+            'AMH (souvent \u00e9lev\u00e9e, > 5 ng/mL)',
+            'Bilan m\u00e9tabolique : glyc\u00e9mie \u00e0 jeun, insuline, HOMA-IR, bilan lipidique',
+            hirs === 'oui' ? 'Score de Ferriman-Gallwey complet' : 'Rechercher hyperandrog\u00e9nie biologique m\u00eame en l\u2019absence de signe clinique'
           ],
           [
-            'Mesures hygiéno-diététiques — perte de poids si IMC > 25 (restaure l\'ovulation dans 50 % des cas)',
-            'Metformine 500 mg – 1500 mg/j si résistance à l\'insuline',
-            'Contraception œstroprogestative ou progestatif séquentiel (si pas de désir de grossesse)',
-            hirs === 'oui' ? 'Antiandrogènes : acétate de cyprotérone, spironolactone (hirsutisme sévère)' : '',
-            'Induction de l\u2019ovulation si désir de grossesse : citrate de clomifène, gonadotrophines',
-            'Voir outil détaillé : SOPK — Critères de Rotterdam'
+            'Mesures hygi\u00e9no-di\u00e9t\u00e9tiques \u2014 perte de poids si IMC > 25 (restaure l\u2019ovulation dans 50 % des cas)',
+            'Metformine 500 mg \u2013 1500 mg/j si r\u00e9sistance \u00e0 l\u2019insuline',
+            'Contraception \u0153stroprogestative ou progestatif s\u00e9quentiel (si pas de d\u00e9sir de grossesse)',
+            hirs === 'oui' ? 'Antiandrog\u00e8nes : ac\u00e9tate de cyprotérone, spironolactone (hirsutisme s\u00e9v\u00e8re)' : '',
+            'Induction de l\u2019ovulation si d\u00e9sir de grossesse : citrate de clomif\u00e8ne, gonadotrophines',
+            'Voir outil d\u00e9taill\u00e9 : SOPK \u2014 Crit\u00e8res de Rotterdam'
           ].filter(Boolean)
         );
         diagnosesMade.push('sopk');
@@ -1125,9 +1398,102 @@
     }
 
     document.getElementById('ams2-results').innerHTML = html;
+    // Afficher la barre d'actions export
+    var actBar = document.getElementById('ams2-actions-bar');
+    if (actBar) actBar.style.display = 'flex';
+    // Préparer la zone d'impression
+    var printZone = document.getElementById('ams2-print-zone');
+    if (printZone) printZone.innerHTML = buildPrintContent(fsh, lh, prl, tsh, ohp, hirs, cushing, html);
     // Forcer maxReached avant d'appeler goToStep — sinon la garde bloque
     state.maxReached = 3;
     goToStep(3);
+  }
+
+  // ── CONSTRUCTION CONTENU IMPRESSION ─────────────────────
+  function buildPrintContent(fsh, lh, prl, tsh, ohp, hirs, cushing, diagHtml) {
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+    var vals = [
+      'FSH : ' + (isNaN(fsh) ? 'nd' : fsh + ' UI/L'),
+      'LH : '  + (isNaN(lh)  ? 'nd' : lh  + ' UI/L'),
+      'Prolactine : ' + (isNaN(prl) ? 'nd' : prl + ' ng/mL'),
+      'TSH : ' + (isNaN(tsh) ? 'nd' : tsh + ' mUI/L'),
+      !isNaN(ohp) ? '17-OHP : ' + ohp + ' ng/mL' : null,
+      hirs === 'oui' ? 'Hyperandrog\u00e9nie clinique : Oui' : 'Hyperandrog\u00e9nie clinique : Non',
+      cushing ? 'Signes de Cushing : Oui' : null
+    ].filter(Boolean);
+    return '<div style="font-family:Georgia,serif;padding:20px;">'
+      + '<h2 style="color:#1a3560;border-bottom:2px solid #1a3560;padding-bottom:8px;">Am\u00e9norrh\u00e9e Secondaire \u2014 Orientation diagnostique</h2>'
+      + '<p style="font-size:12px;color:#64748b;">Dr. Kara-Zaitri M.A. \u2014 Gyn\u00e9cologie-Obst\u00e9trique, Tlemcen \u2014 ' + dateStr + '</p>'
+      + '<h3 style="color:#1a3560;margin-top:16px;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;">Valeurs saisies</h3>'
+      + '<p style="font-size:13px;line-height:1.8;">' + vals.join(' \u2014 ') + '</p>'
+      + '<h3 style="color:#1a3560;margin-top:16px;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;">R\u00e9sultats</h3>'
+      + diagHtml
+      + '<p style="font-size:10px;color:#94a3b8;margin-top:20px;border-top:1px solid #e2e8f0;padding-top:10px;">'
+      + 'Outil d\u2019aide \u00e0 la d\u00e9cision clinique. Ne se substitue pas au jugement m\u00e9dical. R\u00e9f. : CNGOF, Endocrine Society 2017, ESHRE PCOS 2023.</p>'
+      + '</div>';
+  }
+
+  // ── IMPRIMER ─────────────────────────────────────────────
+  function printResults() {
+    var pz = document.getElementById('ams2-print-zone');
+    if (!pz) return;
+    pz.style.display = 'block';
+    window.print();
+    pz.style.display = 'none';
+  }
+
+  // ── COPIER POUR LE DOSSIER ───────────────────────────────
+  function copyResults() {
+    var results = document.getElementById('ams2-results');
+    if (!results) return;
+
+    // Construire texte brut lisible
+    var lines = [];
+    var date = new Date().toLocaleDateString('fr-FR');
+    lines.push('=== AM\u00c9NORR H\u00c9E SECONDAIRE \u2014 Orientation diagnostique ===');
+    lines.push('Dr. Kara-Zaitri M.A. \u2014 ' + date);
+    lines.push('');
+
+    var boxes = results.querySelectorAll('.ams2-diag-box');
+    boxes.forEach(function(box) {
+      var header = box.querySelector('.ams2-diag-header');
+      if (header) lines.push('\u25ba ' + header.textContent.replace(/\s+/g,' ').trim());
+      var items = box.querySelectorAll('.ams2-diag-list li, .ams2-pec-list li');
+      items.forEach(function(li) { lines.push('  \u2022 ' + li.textContent.replace(/\s+/g,' ').trim()); });
+      lines.push('');
+    });
+    lines.push('--- Outil d\u2019aide \u00e0 la d\u00e9cision. Ne remplace pas l\u2019examen clinique. ---');
+
+    var text = lines.join('\n');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        showCopyToast();
+      }).catch(function() {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try { document.execCommand('copy'); showCopyToast(); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  function showCopyToast() {
+    var toast = document.getElementById('ams2-copy-toast');
+    if (!toast) return;
+    toast.classList.add('visible');
+    setTimeout(function() { toast.classList.remove('visible'); }, 3000);
   }
 
   // ── CONSTRUCTEUR DE BOÎTE DIAGNOSTIC ────────────────────
@@ -1173,37 +1539,59 @@
 
   // ── RESET ────────────────────────────────────────────────
   function reset() {
-    ['ams2-fsh','ams2-lh','ams2-prl','ams2-tsh'].forEach(function(id) {
+    ['ams2-fsh','ams2-lh','ams2-prl','ams2-tsh','ams2-ohp'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) { el.value = ''; el.classList.remove('ams2-error'); }
     });
     var sel = document.getElementById('ams2-hirsutisme');
     if (sel) { sel.value = ''; sel.classList.remove('ams2-error'); }
+    var cush = document.getElementById('ams2-cushing');
+    if (cush) cush.checked = false;
+    var cl = document.getElementById('ams2-cushing-label');
+    if (cl) cl.classList.remove('checked');
     var results = document.getElementById('ams2-results');
     if (results) results.innerHTML = '';
     var banner = document.getElementById('ams2-error-banner');
     if (banner) banner.classList.remove('visible');
-
+    var actBar = document.getElementById('ams2-actions-bar');
+    if (actBar) actBar.style.display = 'none';
+    var toast = document.getElementById('ams2-copy-toast');
+    if (toast) toast.classList.remove('visible');
+    var pz = document.getElementById('ams2-print-zone');
+    if (pz) { pz.innerHTML = ''; pz.style.display = 'none'; }
     state.step = 1;
     state.maxReached = 1;
     goToStep(1);
   }
 
   // ── INIT & LIAISONS D'ÉVÉNEMENTS ────────────────────────
-  // On attend que le DOM soit disponible (sécurité Elementor)
   function bindEvents() {
     var btnStep1  = document.getElementById('ams2-btn-step1');
     var btnAnalyze= document.getElementById('ams2-btn-analyze');
     var btnBack1  = document.getElementById('ams2-btn-back1');
     var btnBack2  = document.getElementById('ams2-btn-back2');
     var btnReset  = document.getElementById('ams2-btn-reset');
+    var btnPrint  = document.getElementById('ams2-btn-print');
+    var btnCopy   = document.getElementById('ams2-btn-copy');
     var bar       = document.getElementById('ams2-progress');
+    var cushLabel = document.getElementById('ams2-cushing-label');
+    var cushCb    = document.getElementById('ams2-cushing');
 
     if (btnStep1)   btnStep1.addEventListener('click',   function(){ goToStep(2); });
     if (btnAnalyze) btnAnalyze.addEventListener('click', function(){ analyze(); });
     if (btnBack1)   btnBack1.addEventListener('click',   function(){ goToStep(1); });
     if (btnBack2)   btnBack2.addEventListener('click',   function(){ goToStep(2); });
     if (btnReset)   btnReset.addEventListener('click',   function(){ reset(); });
+    if (btnPrint)   btnPrint.addEventListener('click',   function(){ printResults(); });
+    if (btnCopy)    btnCopy.addEventListener('click',    function(){ copyResults(); });
+
+    // Feedback visuel sur le label checkbox
+    if (cushCb && cushLabel) {
+      cushCb.addEventListener('change', function() {
+        if (this.checked) { cushLabel.classList.add('checked'); }
+        else { cushLabel.classList.remove('checked'); }
+      });
+    }
 
     // Délégation sur la barre de progression (éléments générés dynamiquement)
     if (bar) {
