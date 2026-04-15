@@ -47,11 +47,39 @@ body { font-family: var(--police-corps); color: var(--gris-texte); background: #
 /* === CONTEXTE CLINIQUE === */
 .contexte-clinique { background: var(--bleu-tres-clair); padding: 16px 32px; border-bottom: 1px solid var(--bordure); }
 .contexte-titre { font-size: 12px; font-weight: 700; color: var(--bleu-medical); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-.contexte-grille { display: flex; gap: 15px; flex-wrap: wrap; }
-.contexte-item { display: flex; align-items: center; gap: 8px; background: var(--blanc); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--bordure); }
-.contexte-item label { font-size: 13px; color: var(--gris-moyen); font-weight: 600; }
-.contexte-item input { border: none; border-bottom: 1px solid var(--bordure); width: 50px; text-align: center; font-size: 13px; font-weight: 700; color: var(--bleu-medical); outline: none; }
-.contexte-item input:focus { border-bottom-color: var(--bleu-medical); }
+
+.grille-contexte-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.ctx-box {
+  background: var(--blanc);
+  border: 2px solid var(--bleu-medical);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.ctx-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--bleu-medical);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.ctx-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--bordure);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gris-texte);
+  outline: none;
+  background: transparent;
+  padding-bottom: 2px;
+}
+.ctx-input:focus { border-bottom-color: var(--bleu-medical); }
 
 /* === ONGLETS === */
 .onglets-nav { display: flex; background: var(--blanc); border-bottom: 1px solid var(--bordure); overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 2px; }
@@ -104,7 +132,7 @@ ul.liste-med li::before { content: "\2014"; position: absolute; left: 0; color: 
 .bilan-corps { display: none; background: var(--blanc); }
 .bilan-section.ouvert .bilan-corps { display: block; }
 
-/* BOUTONS D'ETATS (Nouveau Design) */
+/* BOUTONS D'ETATS */
 .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--gris-leger); transition: background 0.2s; }
 .check-item:last-child { border-bottom: none; }
 .check-item:hover { background: #fafbfc; }
@@ -126,11 +154,6 @@ ul.liste-med li::before { content: "\2014"; position: absolute; left: 0; color: 
 .check-resultat-zone { display: none; margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.6); border-radius: 8px; border: 1px dashed var(--bordure); }
 .check-item.prescrit .check-resultat-zone, .check-item.coche .check-resultat-zone { display: block; }
 .check-resultat-select { width: 100%; max-width: 400px; padding: 6px; border: 1px solid var(--bordure); border-radius: 6px; font-size: 12px; }
-
-/* SAPL Sous-options */
-.sapl-options { display: none; margin-top: 8px; font-size: 11px; gap: 15px; flex-wrap: wrap; }
-.sapl-options.visible { display: flex; }
-.sapl-options label { display: flex; align-items: center; gap: 4px; color: var(--gris-texte); }
 
 /* === DASHBOARD === */
 .dashboard-recap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
@@ -179,18 +202,21 @@ ul.liste-med li::before { content: "\2014"; position: absolute; left: 0; color: 
 
 /* =========================================
    PRO : Masque l'ascenseur (style App native)
-   A placer en fin de css dans chaque outil
    ========================================= */
-html { scrollbar-width: none; }               /* Firefox */
-body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
-::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
-  
+html { scrollbar-width: none; }               
+body { -ms-overflow-style: none; overflow-y: auto; } 
+::-webkit-scrollbar { display: none; }         
+
 /* MEDIA QUERIES */
+@media (max-width: 900px) {
+  .grille-contexte-5 { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 768px) {
   .dashboard-recap, .grille-2, .grille-3 { grid-template-columns: 1fr; }
   .dashboard-recap { grid-template-columns: 1fr 1fr; }
   .check-item { flex-direction: column; }
   .etat-boutons { width: 100%; justify-content: flex-end; margin-top: 8px; }
+  .grille-contexte-5 { grid-template-columns: 1fr 1fr; }
 }
 @media print {
   body { background: white; padding: 0; }
@@ -213,24 +239,40 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     <div class="entete-ref">Réf. : ASRM · ESHRE 2023 · CNGOF 2022 — ≥ 2 échecs de grossesse clinique avant 24 SA</div>
   </div>
 
-  <!-- CONTEXTE CLINIQUE (Anonymisé) -->
+  <!-- CONTEXTE CLINIQUE (Anonymisé) : Alignement sur 1 ligne (5 colonnes) -->
   <div class="contexte-clinique">
-    <div class="contexte-titre">&#128100; Contexte Clinique (Anonymisé)</div>
-    <div class="contexte-grille">
-      <div class="contexte-item">
-        <label for="ctx-age">Âge maternel :</label>
-        <input type="number" id="ctx-age" placeholder="ex: 36" min="15" max="55" onchange="verifierAlertes(); autoSaveBilan();">
+    <div class="contexte-titre">&#128100; Contexte Clinique (Anonymis&eacute;)</div>
+
+    <div class="grille-contexte-5">
+      <div class="ctx-box">
+        <div class="ctx-label">Patiente (Nom/Init.)</div>
+        <input type="text" class="ctx-input" id="ctx-patiente" placeholder="Ex: Dupont M." maxlength="30" oninput="autoSaveBilan()">
       </div>
-      <div class="contexte-item">
-        <label for="ctx-imc">IMC :</label>
-        <input type="number" id="ctx-imc" placeholder="ex: 24" step="0.1" min="10" max="60" onchange="verifierAlertes(); autoSaveBilan();">
+
+      <div class="ctx-box">
+        <div class="ctx-label">&Acirc;ge Patiente</div>
+        <input type="number" class="ctx-input" id="ctx-age" placeholder="Ans" min="15" max="55" onchange="verifierAlertes(); autoSaveBilan();">
       </div>
-      <div class="contexte-item">
-        <label for="ctx-fcs">Nbr FCS :</label>
-        <input type="number" id="ctx-fcs" placeholder="ex: 2" min="1" max="10" onchange="verifierAlertes(); autoSaveBilan();">
+
+      <div class="ctx-box">
+        <div class="ctx-label">Conjoint (Nom/Init.)</div>
+        <input type="text" class="ctx-input" id="ctx-conjoint" placeholder="Ex: Martin P." maxlength="30" oninput="autoSaveBilan()">
+      </div>
+
+      <div class="ctx-box">
+        <div class="ctx-label">Nombre de FCR</div>
+        <input type="number" class="ctx-input" id="ctx-fcs" placeholder="&#8805; 2" min="1" max="10" onchange="verifierAlertes(); autoSaveBilan();">
+      </div>
+
+      <div class="ctx-box">
+        <div class="ctx-label">IMC</div>
+        <input type="number" class="ctx-input" id="ctx-imc" placeholder="kg/m&#178;" step="0.1" min="10" max="60" onchange="verifierAlertes(); autoSaveBilan();">
       </div>
     </div>
-    <div style="font-size:12px; color:var(--gris-moyen); margin-top:8px; font-style:italic;">Les données saisies déclenchent des alertes dynamiques dans le Bilan interactif. Aucune donnée n'est envoyée sur un serveur (100 % local).</div>
+    
+    <div style="font-size:11px; color:var(--gris-moyen); font-style:italic; margin-top: 6px;">
+      &#128274; Les donn&eacute;es saisies restent 100 % locales — aucune transmission serveur. Elles d&eacute;clenchent des alertes cliniques dynamiques.
+    </div>
   </div>
 
   <!-- ONGLETS -->
@@ -251,18 +293,15 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     </div>
 
     <div class="grille-2">
-
       <div class="etio-carte genetique">
         <div class="etio-header"><span class="etio-dot"></span>&#129514; Causes génétiques</div>
         <div class="etio-body">
           <ul class="liste-med">
-            <li>Aberrations chromosomiques embryonnaires : <strong>50–60 %</strong> des 1er trimestre (anomalies de nombre : 86 %)</li>
-            <li>Anomalies de structure (4–6 %) : translocations équilibrées parentales dans 2–4 % des couples</li>
-            <li><strong>Âge maternel :</strong> risque d'anomalie chromosomique ×2 entre 35–40 ans, ×10 après 40 ans</li>
-            <li>Thrombophilie héréditaire : facteur V Leiden (2–15 % selon ethnies), facteur II (prothrombine)</li>
-            <li>Mutation du gène <strong>MTHFR</strong> (métabolisme acide folique)</li>
+            <li>Aberrations chromosomiques embryonnaires : <strong>50–60 %</strong> des 1er trimestre</li>
+            <li>Anomalies de structure (4–6 %) : translocations équilibrées parentales</li>
+            <li><strong>Âge maternel :</strong> risque d'anomalie chromosomique ×10 après 40 ans</li>
+            <li>Thrombophilie héréditaire / Mutation MTHFR</li>
           </ul>
-          <div class="note">&#128300; Caryotype parental systématique après 2 avortements du 1er trimestre (recommandation CNGOF 2022)</div>
         </div>
       </div>
 
@@ -270,14 +309,10 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         <div class="etio-header"><span class="etio-dot"></span>&#128138; Causes hormonales</div>
         <div class="etio-body">
           <ul class="liste-med">
-            <li><strong>Insuffisance lutéale</strong> : sécrétion insuffisante de progestérone — défaut d'implantation</li>
-            <li>Pic LH déficient <span class="tag orange">+++</span></li>
-            <li>SOPK : hypersécrétion LH → maturation prématurée ovocytaire</li>
-            <li>Hyperandrogénie (surrénalienne ou ovarienne)</li>
-            <li>Hyperprolactinémie</li>
+            <li><strong>Insuffisance lutéale</strong> : défaut d'implantation</li>
+            <li>SOPK : hypersécrétion LH</li>
             <li>Dysthyroïdie (hypothyroïdie <span class="tag orange">++</span>)</li>
-            <li>Insuffisance ovarienne (périménopause)</li>
-            <li>Diabète (cause diversement appréciée)</li>
+            <li>Diabète mal équilibré</li>
           </ul>
         </div>
       </div>
@@ -286,11 +321,9 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         <div class="etio-header"><span class="etio-dot"></span>&#128295; Causes mécaniques (utérines)</div>
         <div class="etio-body">
           <ul class="liste-med">
-            <li>Malformations utérines : hypoplasie, utérus unicorne, bicorne, cloisonné</li>
-            <li>Fibromes sous-muqueux (<em>effet stérilet</em>)</li>
-            <li>Polypes utérins, synéchies utérines</li>
-            <li><strong>BCI</strong> : congénitale ou traumatique (avortements tardifs ++)</li>
-            <li>Rétroversions utérines fixées</li>
+            <li>Malformations utérines : utérus unicorne, bicorne, cloisonné</li>
+            <li>Fibromes sous-muqueux, Polypes, Synéchies</li>
+            <li><strong>BCI</strong> : congénitale ou traumatique (tardifs ++)</li>
           </ul>
         </div>
       </div>
@@ -299,39 +332,20 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         <div class="etio-header"><span class="etio-dot"></span>&#128737; Causes immunologiques</div>
         <div class="etio-body">
           <ul class="liste-med">
-            <li>Incompatibilité fœto-maternelle (rejet allo-immun)</li>
-            <li><strong>SAPL</strong> (thrombophilie acquise) : mauvaise circulation utérine</li>
-            <li>LED (lupus érythémateux systémique)</li>
-            <li>Hypothyroïdie auto-immune, thyroïdite de Hashimoto</li>
-            <li>Maladie cœliaque</li>
-            <li>Réponse inflammatoire chronique de l'endomètre</li>
+            <li>Incompatibilité fœto-maternelle</li>
+            <li><strong>SAPL</strong> (thrombophilie acquise)</li>
+            <li>LED, Hashimoto, Maladie cœliaque</li>
           </ul>
-          <div class="note">&#128300; Nécessite une évaluation spécialisée (immunologie, médecine de la reproduction).</div>
         </div>
       </div>
-
+      
       <div class="etio-carte infectieuse">
         <div class="etio-header"><span class="etio-dot"></span>&#129440; Causes infectieuses</div>
         <div class="etio-body">
           <ul class="liste-med">
-            <li>IST : chlamydiose (avortements à répétition <span class="tag rouge">++</span>), gonorrhée</li>
-            <li>Infections à mycoplasmes et ureaplasma</li>
-            <li><em>Listeria monocytogenes</em> : surtout avortements sporadiques tardifs et MFIU — rôle dans les FCS à répétition non établi</li>
-            <li>Infections virales : rubéole, CMV, parvovirus B19, herpès, varicelle</li>
-            <li>Parasitaires : toxoplasmose, paludisme</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="etio-carte mode-vie">
-        <div class="etio-header"><span class="etio-dot"></span>&#127939; Facteurs de risque modifiables</div>
-        <div class="etio-body">
-          <ul class="liste-med">
-            <li><strong>Tabagisme :</strong> risque augmenté de 20–30 % (délétion directe sur l'ADN ovocytaire)</li>
-            <li><strong>IMC > 30 :</strong> risque ×2 (perturbation endocrinienne et inflammatoire)</li>
-            <li><strong>Alcool > 3 verres/semaine :</strong> risque ×1,5</li>
-            <li><strong>Caféine > 300 mg/j :</strong> risque modérément augmenté</li>
-            <li><strong>Stress chronique :</strong> hypercortisolisme → altération de l'implantation</li>
+            <li>IST : chlamydiose (<span class="tag rouge">++</span>), gonorrhée</li>
+            <li>Infections à mycoplasmes</li>
+            <li>Infections virales : rubéole, CMV, parvovirus B19</li>
           </ul>
         </div>
       </div>
@@ -341,22 +355,10 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         <div class="etio-body">
           <ul class="liste-med">
             <li><strong>Fragmentation de l'ADN spermatique</strong> (DFI > 15–25 %)</li>
-            <li>Présence d'agglutinats au spermogramme <span class="tag orange">+++</span></li>
+            <li>Présence d'agglutinats <span class="tag orange">+++</span></li>
           </ul>
         </div>
       </div>
-
-      <div class="etio-carte inexpliquee">
-        <div class="etio-header"><span class="etio-dot"></span>&#10067; Causes inexpliquées</div>
-        <div class="etio-body">
-          <ul class="liste-med">
-            <li>Environ <strong>20–50 % des cas</strong></li>
-            <li>Conflits psychologiques · traumatismes</li>
-            <li>Conditions socio-économiques</li>
-          </ul>
-        </div>
-      </div>
-
     </div>
   </div>
 
@@ -365,7 +367,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     
     <div class="alerte bleu">
       <span class="alerte-icone">&#8505;&#65039;</span>
-      <span>Le bilan doit être exhaustif d'emblée dès <strong>2 fausses couches</strong>. Cliquez sur <strong>⏳ Prescrire</strong> lors de la consultation, puis sur <strong>✅ Reçu</strong> au retour des résultats.</span>
+      <span>Cliquez sur <strong>⏳ Prescrire</strong> lors de la consultation, puis sur <strong>✅ Reçu</strong> au retour des résultats.</span>
     </div>
 
     <!-- Dashboard -->
@@ -393,496 +395,499 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 
     <!-- === SECTIONS DU BILAN === -->
 
-    <!-- Section 1 : Infectieux -->
-    <div class="bilan-section ouvert" id="sec-infectieux">
-      <div class="bilan-titre" onclick="toggleSec(this)">
-        <div class="bilan-titre-icon" style="background:#c0392b;">&#129440;</div>
-        <div class="bilan-titre-text">Bilan infectieux</div>
-        <div class="bilan-titre-fleche">&#9660;</div>
-      </div>
-      <div class="bilan-corps">
-        <div class="check-item" data-id="inf-ecbp">
-          <div class="check-content">
-            <div class="check-nom">ECBP</div>
-            <div class="check-detail">Examen cytobactériologique du prélèvement de col/vaginal</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="inf-ecbu">
-          <div class="check-content">
-            <div class="check-nom">ECBU</div>
-            <div class="check-detail">Examen cytobactériologique des urines</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="inf-hemo">
-          <div class="check-content">
-            <div class="check-nom">Hémocultures</div>
-            <div class="check-detail">En cas de contexte fébrile</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="inf-sero">
-          <div class="check-content">
-            <div class="check-nom">Sérologies infectieuses</div>
-            <div class="check-detail">Rubéole · CMV · toxoplasmose · parvovirus B19 · herpès · chlamydia · mycoplasmes</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="inf-anapath">
-          <div class="check-content">
-            <div class="check-nom">ANA-PATH produit d'expulsion</div>
-            <div class="check-detail">Culture bactériologique du produit d'expulsion (organes, placenta, cordon) si disponible</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 2 : Anatomique -->
-    <div class="bilan-section ouvert" id="sec-anatomique">
-      <div class="bilan-titre" onclick="toggleSec(this)">
-        <div class="bilan-titre-icon" style="background:#1e8449;">&#128300;</div>
-        <div class="bilan-titre-text">Bilan anatomique — Utérus, trompes, endomètre</div>
-        <div class="bilan-titre-fleche">&#9660;</div>
-      </div>
-      <div class="bilan-corps">
-        <div class="check-item" data-id="ana-echo">
-          <div class="check-content">
-            <div class="check-nom">Échographie pelvienne 3D (idéalement)</div>
-            <div class="check-detail">Malformations utérines · fibromes · polypes · BCI · utérus myomateux</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="ana-sono">
-          <div class="check-content">
-            <div class="check-nom">Hystérosonographie</div>
-            <div class="check-detail">Synéchies · polypes · cloison utérine — examen de 2e intention</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="ana-hystero">
-          <div class="check-content">
-            <div class="check-nom">Hystéroscopie diagnostique</div>
-            <div class="check-detail">Examen de référence pour les lésions intra-cavitaires</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="ana-irm">
-          <div class="check-content">
-            <div class="check-nom">HSG / IRM pelvienne</div>
-            <div class="check-detail">Malformations müllériennes complexes · utérus bicorne / cloisonné / unicorne</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="ana-col">
-          <div class="check-content">
-            <div class="check-nom">Mesure longueur cervicale</div>
-            <div class="check-detail">Béance cervico-isthmique (BCI) — mesure échographique de la longueur cervicale</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 3 : Hormonal -->
-    <div class="bilan-section ouvert" id="sec-hormonal">
-      <div class="bilan-titre" onclick="toggleSec(this)">
-        <div class="bilan-titre-icon" style="background:#d35400;">&#128138;</div>
-        <div class="bilan-titre-text">Bilan hormonal</div>
-        <div class="bilan-titre-fleche">&#9660;</div>
-      </div>
-      <div class="bilan-corps">
-        <div class="check-item" data-id="horm-fsh">
-          <div class="check-content">
-            <div class="check-nom">FSH / LH / E2</div>
-            <div class="check-detail">J2-J3 du cycle — évaluation de la réserve ovarienne et de l'axe gonadotrope</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="horm-amh">
-          <div class="check-content">
-            <div class="check-nom">AMH + compte follicules antraux</div>
-            <div class="check-detail">Évaluation de la réserve ovarienne — insuffisance ovarienne en périménopause</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="horm-prog">
-          <div class="check-content">
-            <div class="check-nom">Progestérone phase lutéale</div>
-            <div class="check-detail">J21 (cycle de 28j) — insuffisance lutéale si &lt; 10 ng/mL</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="horm-prol">
-          <div class="check-content">
-            <div class="check-nom">Prolactinémie</div>
-            <div class="check-detail">Hyperprolactinémie fonctionnelle ou adénome à prolactine</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="horm-tsh">
-          <div class="check-content">
-            <div class="check-nom">TSH (+ T3/T4 si anomalie)</div>
-            <div class="check-detail">Hypothyroïdie <span class="tag orange">++</span> — indication à l'opothérapie substitutive si avérée</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="horm-andro">
-          <div class="check-content">
-            <div class="check-nom">Androgènes</div>
-            <div class="check-detail">Testostérone totale · Delta-4-androstènedione · SDHA — hyperandrogénie</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="horm-glyc">
-          <div class="check-content">
-            <div class="check-nom">Glycémie à jeun / HGPO</div>
-            <div class="check-detail">Le diabète mal équilibré est fortement abortif</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 4 : Auto-immunité (SAPL) -->
-<div class="bilan-section ouvert" id="sec-autoimmun">
-  <div class="bilan-titre" onclick="toggleSec(this)">
-    <div class="bilan-titre-icon" style="background:#6c3483;">&#128737;</div>
-    <div class="bilan-titre-text">Bilan Auto-immunité — SAPL · Thrombophilie</div>
-    <div class="bilan-titre-fleche">&#9660;</div>
-  </div>
-  <div class="bilan-corps">
-
-    <!-- SOUS-TITRE 1 : SAPL -->
-    <div style="padding:10px 18px 4px; background:var(--violet-leger); border-bottom:1px solid var(--bordure);">
-      <span style="font-size:12px; font-weight:700; color:var(--violet); text-transform:uppercase; letter-spacing:0.4px;">
-        Syndrome des Anticorps Anti-Phospholipides (SAPL) &mdash; Recommand&eacute;
-      </span>
-    </div>
-
-    <div class="check-item" data-id="immu-lupique">
-      <div class="check-content">
-        <div class="check-nom">Anticoagulant circulant (Lupique)</div>
-        <div class="check-detail">Test de d&eacute;pistage fonctionnel — m&eacute;thode de r&eacute;f&eacute;rence (DRVVT + TCA)</div>
-        <div class="check-resultat-zone">
-          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
-            <option value="">-- R&eacute;sultat --</option>
-            <option value="negatif">N&eacute;gatif</option>
-            <option value="positif">Positif (&#192; confirmer &agrave; 12 sem.)</option>
-          </select>
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <div class="check-item" data-id="immu-cardio">
-      <div class="check-content">
-        <div class="check-nom">Anticorps Anti-Cardiolipine (IgG / IgM)</div>
-        <div class="check-detail">Titre moyen ou &eacute;lev&eacute; significatif — titre faible non retenu pour le diagnostic SAPL</div>
-        <div class="check-resultat-zone">
-          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
-            <option value="">-- R&eacute;sultat --</option>
-            <option value="negatif">N&eacute;gatif</option>
-            <option value="faible">Positif faible (non significatif)</option>
-            <option value="positif">Positif moyen/&eacute;lev&eacute; (&#192; confirmer &agrave; 12 sem.)</option>
-          </select>
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <div class="check-item" data-id="immu-b2gp1">
-      <div class="check-content">
-        <div class="check-nom">Anticorps Anti-B2-Glycoprot&eacute;ine 1 (IgG / IgM)</div>
-        <div class="check-detail">Titre &gt; 99e percentile — sp&eacute;cificit&eacute; &eacute;lev&eacute;e pour le SAPL</div>
-        <div class="check-resultat-zone">
-          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
-            <option value="">-- R&eacute;sultat --</option>
-            <option value="negatif">N&eacute;gatif</option>
-            <option value="positif">Positif (&#192; confirmer &agrave; 12 sem.)</option>
-          </select>
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <!-- SOUS-TITRE 2 : Thrombophilie Héréditaire -->
-    <div style="padding:10px 18px 4px; background:#eaf0fb; border-bottom:1px solid var(--bordure); border-top:2px solid var(--bordure); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-      <span style="font-size:12px; font-weight:700; color:var(--bleu-medical); text-transform:uppercase; letter-spacing:0.4px;">
-        Thrombophilie H&eacute;r&eacute;ditaire
-      </span>
-      <span style="font-size:10px; font-weight:700; color:#7d5800; background:var(--orange-leger); border:1px solid #f0c040; border-radius:5px; padding:2px 8px; letter-spacing:0.3px; text-transform:uppercase;">
-        Sur point d&apos;appel (ATCD MTEV)
-      </span>
-    </div>
-
-    <div class="check-item" data-id="immu-f5">
-      <div class="check-content">
-        <div class="check-nom">Mutation du Facteur V (Leiden)</div>
-        <div class="check-detail">Thrombophilie h&eacute;r&eacute;ditaire la plus fr&eacute;quente — h&eacute;t&eacute;rozygote : risque &#215;4 ; homozygote : risque &#215;80</div>
-        <div class="check-resultat-zone">
-          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
-            <option value="">-- R&eacute;sultat --</option>
-            <option value="normal">Normal (sauvage)</option>
-            <option value="hetero">H&eacute;t&eacute;rozygote</option>
-            <option value="homo">Homozygote</option>
-          </select>
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <div class="check-item" data-id="immu-f2">
-      <div class="check-content">
-        <div class="check-nom">Mutation du Facteur II (Prothrombine)</div>
-        <div class="check-detail">G20210A — 2e thrombophilie h&eacute;r&eacute;ditaire la plus fr&eacute;quente</div>
-        <div class="check-resultat-zone">
-          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
-            <option value="">-- R&eacute;sultat --</option>
-            <option value="normal">Normal (sauvage)</option>
-            <option value="hetero">H&eacute;t&eacute;rozygote</option>
-            <option value="homo">Homozygote</option>
-          </select>
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <div class="check-item" data-id="immu-pcs">
-      <div class="check-content">
-        <div class="check-nom">Dosage Prot&eacute;ine C, Prot&eacute;ine S, Antithrombine III</div>
-        <div class="check-detail">D&eacute;ficits en inhibiteurs de la coagulation — interpr&eacute;tation hors anticoagulant et hors grossesse</div>
-        <div class="check-resultat-zone">
-          <input type="text" placeholder="D&eacute;ficit ?" style="width:100%; max-width:300px; padding:5px 8px; border:1px solid var(--bordure); border-radius:6px; font-size:12px;" oninput="autoSaveBilan()">
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <div class="check-item" data-id="immu-mthfr">
-      <div class="check-content">
-        <div class="check-nom">Mutation MTHFR</div>
-        <div class="check-detail">M&eacute;tabolisme de l&apos;acide folique — homocyst&eacute;in&eacute;mie &agrave; doser si mutation d&eacute;tect&eacute;e</div>
-        <div class="check-resultat-zone">
-          <select class="check-resultat-select" onchange="autoSaveBilan();">
-            <option value="">-- R&eacute;sultat --</option>
-            <option value="normal">Normal</option>
-            <option value="hetero_677">H&eacute;t&eacute;rozygote C677T</option>
-            <option value="homo_677">Homozygote C677T</option>
-            <option value="double">Double h&eacute;t&eacute;rozygote (C677T + A1298C)</option>
-          </select>
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <!-- SOUS-TITRE 3 : Auto-immunité générale -->
-    <div style="padding:10px 18px 4px; background:#f0f4ff; border-bottom:1px solid var(--bordure); border-top:2px solid var(--bordure);">
-      <span style="font-size:12px; font-weight:700; color:#2c5282; text-transform:uppercase; letter-spacing:0.4px;">
-        Auto-immunit&eacute; g&eacute;n&eacute;rale
-      </span>
-    </div>
-
-    <div class="check-item" data-id="immu-ana">
-      <div class="check-content">
-        <div class="check-nom">Anticorps antinucl&eacute;aires (AAN)</div>
-        <div class="check-detail">D&eacute;pistage LED et autres maladies auto-immunes — compl&eacute;ter par anti-ADN natifs si positifs</div>
-        <div class="check-resultat-zone">
-          <input type="text" placeholder="Titrage / Aspect" style="width:100%; max-width:300px; padding:5px 8px; border:1px solid var(--bordure); border-radius:6px; font-size:12px;" oninput="autoSaveBilan()">
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <div class="check-item" data-id="immu-adn">
-      <div class="check-content">
-        <div class="check-nom">Anti-ADN natifs</div>
-        <div class="check-detail">En cas d&apos;AAN positifs — sp&eacute;cifiques du LED</div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <div class="check-item" data-id="immu-tpo">
-      <div class="check-content">
-        <div class="check-nom">Anticorps anti-thyro&iuml;diens (Anti-TPO / Anti-TG)</div>
-        <div class="check-detail">Thyro&iuml;dite de Hashimoto — substitution si TSH &gt; 2,5 mUI/L en projet de grossesse</div>
-        <div class="check-resultat-zone">
-          <input type="text" placeholder="Positif / N&eacute;gatif" style="width:100%; max-width:300px; padding:5px 8px; border:1px solid var(--bordure); border-radius:6px; font-size:12px;" oninput="autoSaveBilan()">
-        </div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-    <div class="check-item" data-id="immu-coel">
-      <div class="check-content">
-        <div class="check-nom">Anticorps anti-transglutaminase (IgA)</div>
-        <div class="check-detail">Maladie c&oelig;liaque silencieuse — r&eacute;gime sans gluten si confirm&eacute;e</div>
-      </div>
-      <div class="etat-boutons">
-        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-    <!-- Section 5 : Spermatique -->
-    <div class="bilan-section ouvert" id="sec-sperme">
-      <div class="bilan-titre" onclick="toggleSec(this)">
-        <div class="bilan-titre-icon" style="background:#2d6a9f;">&#128104;</div>
-        <div class="bilan-titre-text">Bilan spermatique</div>
-        <div class="bilan-titre-fleche">&#9660;</div>
-      </div>
-      <div class="bilan-corps">
-        <div class="check-item" data-id="sperm-spermo">
-          <div class="check-content">
-            <div class="check-nom">Spermogramme / spermocytogramme</div>
-            <div class="check-detail">Recherche d'agglutinats <span class="tag orange">+++</span> — source d'avortements précoces et tardifs</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="sperm-dfi">
-          <div class="check-content">
-            <div class="check-nom">Fragmentation ADN spermatique (DFI)</div>
-            <div class="check-detail">DFI (DNA Fragmentation Index) — seuil critique : &gt; 15–25 % selon les laboratoires</div>
-            <div class="check-resultat-zone">
-              <select class="check-resultat-select" id="res-dfi" onchange="verifierAlertes(); autoSaveBilan();">
-                <option value="">-- Résultat DFI --</option>
-                <option value="normal">Normal (&lt; 15%)</option>
-                <option value="limite">Limite (15-25%)</option>
-                <option value="eleve">Élevé (&gt; 25%) ➔ Andrologie</option>
-              </select>
-            </div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 6 : Chromosomique -->
-    <div class="bilan-section ouvert" id="sec-caryotype">
+    <!-- Section 1 : Génétique & Cytogénétique -->
+    <div class="bilan-section ouvert" id="sec-genetique">
       <div class="bilan-titre" onclick="toggleSec(this)">
         <div class="bilan-titre-icon" style="background:#1a4a6b;">&#129514;</div>
-        <div class="bilan-titre-text">Anomalies chromosomiques parentales</div>
+        <div class="bilan-titre-text">1. G&eacute;n&eacute;tique &amp; Cytog&eacute;n&eacute;tique</div>
         <div class="bilan-titre-fleche">&#9660;</div>
       </div>
       <div class="bilan-corps">
-        
+
         <div class="check-item" data-id="caryo-parents">
           <div class="check-content">
             <div class="check-nom">Caryotype des deux parents</div>
-            <div class="check-detail">Si œuf porteur d'anomalie chromosomique de structure · ou au-delà de 2 FCS pour éliminer une translocation.</div>
+            <div class="check-detail">Translocation &eacute;quilibr&eacute;e parentale — indiqu&eacute; d&egrave;s 2 FCS (recommandation CNGOF 2022)</div>
             <div class="check-resultat-zone">
               <select class="check-resultat-select" id="res-caryotype" onchange="verifierAlertes(); autoSaveBilan();">
-                <option value="">-- Résultat --</option>
+                <option value="">-- R&eacute;sultat --</option>
                 <option value="normal">Normal (46,XX / 46,XY)</option>
-                <option value="anomalie">Anomalie détectée (Translocation, etc.) ➔ Conseil génétique</option>
+                <option value="anomalie">Anomalie d&eacute;tect&eacute;e (Translocation, etc.) &#10145; Conseil g&eacute;n&eacute;tique</option>
               </select>
             </div>
           </div>
           <div class="etat-boutons">
             <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
           </div>
         </div>
 
         <div class="check-item" data-id="caryo-expul">
           <div class="check-content">
-            <div class="check-nom">Caryotype du produit d'expulsion</div>
-            <div class="check-detail">ANA-PATH obligatoire — recherche d'anomalie de structure ou de nombre</div>
+            <div class="check-nom">Caryotype du produit d&apos;expulsion</div>
+            <div class="check-detail">ANA-PATH obligatoire — recherche d&apos;anomalie de structure ou de nombre</div>
           </div>
           <div class="etat-boutons">
             <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 2 : Bilan Anatomique & Endométrial -->
+    <div class="bilan-section ouvert" id="sec-anatomique">
+      <div class="bilan-titre" onclick="toggleSec(this)">
+        <div class="bilan-titre-icon" style="background:#1e8449;">&#128300;</div>
+        <div class="bilan-titre-text">2. Bilan Anatomique &amp; Endom&eacute;trial</div>
+        <div class="bilan-titre-fleche">&#9660;</div>
+      </div>
+      <div class="bilan-corps">
+
+        <div class="check-item" data-id="ana-echo">
+          <div class="check-content">
+            <div class="check-nom">&Eacute;chographie pelvienne 3D (id&eacute;alement)</div>
+            <div class="check-detail">Malformations ut&eacute;rines &middot; fibromes &middot; polypes &middot; BCI &middot; ut&eacute;rus myomateux</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="ana-sono">
+          <div class="check-content">
+            <div class="check-nom">Hyst&eacute;rosonographie</div>
+            <div class="check-detail">Syn&eacute;chies &middot; polypes &middot; cloison ut&eacute;rine — examen de 2e intention</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="ana-hystero">
+          <div class="check-content">
+            <div class="check-nom">Hyst&eacute;roscopie diagnostique</div>
+            <div class="check-detail">Examen de r&eacute;f&eacute;rence pour les l&eacute;sions intra-cavitaires</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="ana-irm">
+          <div class="check-content">
+            <div class="check-nom">HSG / IRM pelvienne</div>
+            <div class="check-detail">Malformations m&uuml;ll&eacute;riennes complexes &middot; ut&eacute;rus bicorne / cloison&eacute; / unicorne</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="ana-col">
+          <div class="check-content">
+            <div class="check-nom">Mesure longueur cervicale</div>
+            <div class="check-detail">B&eacute;ance cervico-isthmique (BCI) — mesure &eacute;chographique</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 3 : Thrombophilie & Immunologie -->
+    <div class="bilan-section ouvert" id="sec-autoimmun">
+      <div class="bilan-titre" onclick="toggleSec(this)">
+        <div class="bilan-titre-icon" style="background:#6c3483;">&#128737;</div>
+        <div class="bilan-titre-text">3. Thrombophilie &amp; Immunologie</div>
+        <div class="bilan-titre-fleche">&#9660;</div>
+      </div>
+      <div class="bilan-corps">
+
+        <!-- SAPL -->
+        <div style="padding:10px 18px 4px; background:var(--violet-leger); border-bottom:1px solid var(--bordure);">
+          <span style="font-size:12px; font-weight:700; color:var(--violet); text-transform:uppercase; letter-spacing:0.4px;">
+            Syndrome des Anticorps Anti-Phospholipides (SAPL) &mdash; Recommand&eacute;
+          </span>
+        </div>
+
+        <div class="check-item" data-id="immu-lupique">
+          <div class="check-content">
+            <div class="check-nom">Anticoagulant circulant (Lupique)</div>
+            <div class="check-detail">Test fonctionnel DRVVT + TCA — m&eacute;thode de r&eacute;f&eacute;rence</div>
+            <div class="check-resultat-zone">
+              <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+                <option value="">-- R&eacute;sultat --</option>
+                <option value="negatif">N&eacute;gatif</option>
+                <option value="positif">Positif (&#192; confirmer &agrave; 12 sem.)</option>
+              </select>
+            </div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="immu-cardio">
+          <div class="check-content">
+            <div class="check-nom">Anticorps Anti-Cardiolipine (IgG / IgM)</div>
+            <div class="check-detail">Titre moyen ou &eacute;lev&eacute; significatif — titre faible non retenu pour le diagnostic SAPL</div>
+            <div class="check-resultat-zone">
+              <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+                <option value="">-- R&eacute;sultat --</option>
+                <option value="negatif">N&eacute;gatif</option>
+                <option value="faible">Positif faible (non significatif)</option>
+                <option value="positif">Positif moyen/&eacute;lev&eacute; (&#192; confirmer &agrave; 12 sem.)</option>
+              </select>
+            </div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="immu-b2gp1">
+          <div class="check-content">
+            <div class="check-nom">Anticorps Anti-B2-Glycoprot&eacute;ine 1 (IgG / IgM)</div>
+            <div class="check-detail">Titre &gt; 99e percentile — sp&eacute;cificit&eacute; &eacute;lev&eacute;e pour le SAPL</div>
+            <div class="check-resultat-zone">
+              <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+                <option value="">-- R&eacute;sultat --</option>
+                <option value="negatif">N&eacute;gatif</option>
+                <option value="positif">Positif (&#192; confirmer &agrave; 12 sem.)</option>
+              </select>
+            </div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <!-- Thrombophilie Héréditaire -->
+        <div style="padding:10px 18px 4px; background:#eaf0fb; border-bottom:1px solid var(--bordure); border-top:2px solid var(--bordure); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-size:12px; font-weight:700; color:var(--bleu-medical); text-transform:uppercase; letter-spacing:0.4px;">Thrombophilie H&eacute;r&eacute;ditaire</span>
+          <span style="font-size:10px; font-weight:700; color:#7d5800; background:var(--orange-leger); border:1px solid #f0c040; border-radius:5px; padding:2px 8px; letter-spacing:0.3px; text-transform:uppercase;">Sur point d&apos;appel (ATCD MTEV)</span>
+        </div>
+
+        <div class="check-item" data-id="immu-f5">
+          <div class="check-content">
+            <div class="check-nom">Mutation du Facteur V (Leiden)</div>
+            <div class="check-detail">Thrombophilie h&eacute;r&eacute;ditaire la plus fr&eacute;quente — h&eacute;t&eacute;rozygote : risque &#215;4 ; homozygote : risque &#215;80</div>
+            <div class="check-resultat-zone">
+              <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+                <option value="">-- R&eacute;sultat --</option>
+                <option value="normal">Normal (sauvage)</option>
+                <option value="hetero">H&eacute;t&eacute;rozygote</option>
+                <option value="homo">Homozygote</option>
+              </select>
+            </div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="immu-f2">
+          <div class="check-content">
+            <div class="check-nom">Mutation du Facteur II (Prothrombine)</div>
+            <div class="check-detail">G20210A — 2e thrombophilie h&eacute;r&eacute;ditaire la plus fr&eacute;quente</div>
+            <div class="check-resultat-zone">
+              <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+                <option value="">-- R&eacute;sultat --</option>
+                <option value="normal">Normal (sauvage)</option>
+                <option value="hetero">H&eacute;t&eacute;rozygote</option>
+                <option value="homo">Homozygote</option>
+              </select>
+            </div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <!-- ICI LA CORRECTION DEMANDÉE : AJOUT DE LA ZONE DE RESULTAT POUR LA PROTEINE C/S -->
+        <div class="check-item" data-id="immu-pcs">
+          <div class="check-content">
+            <div class="check-nom">Dosage Prot&eacute;ine C, Prot&eacute;ine S, Antithrombine III</div>
+            <div class="check-detail">D&eacute;ficits en inhibiteurs de la coagulation — interpr&eacute;tation hors anticoagulant et hors grossesse</div>
+            <div class="check-resultat-zone">
+              <input type="text" id="res-pcs" placeholder="D&eacute;ficit d&eacute;tect&eacute; ?" style="width:100%; max-width:300px; padding:6px 10px; border:1px solid var(--bordure); border-radius:6px; font-size:12px; outline:none;" oninput="autoSaveBilan()">
+            </div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <!-- Auto-immunité générale -->
+        <div style="padding:10px 18px 4px; background:#f0f4ff; border-bottom:1px solid var(--bordure); border-top:2px solid var(--bordure);">
+          <span style="font-size:12px; font-weight:700; color:#2c5282; text-transform:uppercase; letter-spacing:0.4px;">Auto-immunit&eacute; g&eacute;n&eacute;rale</span>
+        </div>
+
+        <div class="check-item" data-id="immu-ana">
+          <div class="check-content">
+            <div class="check-nom">Anticorps antinucl&eacute;aires (AAN)</div>
+            <div class="check-detail">D&eacute;pistage LED et autres maladies auto-immunes — compl&eacute;ter par anti-ADN natifs si positifs</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="immu-adn">
+          <div class="check-content">
+            <div class="check-nom">Anti-ADN natifs</div>
+            <div class="check-detail">En cas d&apos;AAN positifs — sp&eacute;cifiques du LED</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="immu-coel">
+          <div class="check-content">
+            <div class="check-nom">Anticorps anti-transglutaminase (IgA)</div>
+            <div class="check-detail">Maladie c&oelig;liaque silencieuse — r&eacute;gime sans gluten si confirm&eacute;e</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 4 : Endocrinologie, Métabolisme & Vitamines -->
+    <div class="bilan-section ouvert" id="sec-hormonal">
+      <div class="bilan-titre" onclick="toggleSec(this)">
+        <div class="bilan-titre-icon" style="background:#d35400;">&#128138;</div>
+        <div class="bilan-titre-text">4. Endocrinologie, M&eacute;tabolisme &amp; Vitamines</div>
+        <div class="bilan-titre-fleche">&#9660;</div>
+      </div>
+      <div class="bilan-corps">
+
+        <div class="check-item" data-id="horm-tsh">
+          <div class="check-content">
+            <div class="check-nom">TSH et Anticorps Anti-TPO</div>
+            <div class="check-detail">Hypothyro&iuml;die / Hashimoto <span class="tag orange">++</span> — substitution si TSH &gt; 2,5 mUI/L en projet de grossesse</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="horm-prol">
+          <div class="check-content">
+            <div class="check-nom">Prolactin&eacute;mie</div>
+            <div class="check-detail">Hyperprolactin&eacute;mie fonctionnelle ou ad&eacute;nome &agrave; prolactine</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="horm-fsh">
+          <div class="check-content">
+            <div class="check-nom">FSH / LH / E2</div>
+            <div class="check-detail">J2-J3 du cycle — &eacute;valuation de la r&eacute;serve ovarienne et de l&apos;axe gonadotrope</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="horm-amh">
+          <div class="check-content">
+            <div class="check-nom">AMH + compte follicules antraux</div>
+            <div class="check-detail">&Eacute;valuation de la r&eacute;serve ovarienne — insuffisance ovarienne en p&eacute;rim&eacute;nopause</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="horm-prog">
+          <div class="check-content">
+            <div class="check-nom">Progest&eacute;rone phase lut&eacute;ale</div>
+            <div class="check-detail">J21 (cycle de 28j) — insuffisance lut&eacute;ale si &lt; 10 ng/mL</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="horm-andro">
+          <div class="check-content">
+            <div class="check-nom">Androg&egrave;nes</div>
+            <div class="check-detail">Testost&eacute;rone totale &middot; Delta-4-androst&egrave;nedione &middot; SDHA — hyperandrog&eacute;nie</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="horm-glyc">
+          <div class="check-content">
+            <div class="check-nom">Glyc&eacute;mie &agrave; jeun / HbA1c</div>
+            <div class="check-detail">Le diab&egrave;te mal &eacute;quilibr&eacute; est fortement abortif</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="horm-vitd">
+          <div class="check-content">
+            <div class="check-nom">Vitamine D (25-OH)</div>
+            <div class="check-detail">Carence associ&eacute;e aux FCR — suppl&eacute;mentation si &lt; 30 ng/mL</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="immu-mthfr">
+          <div class="check-content">
+            <div class="check-nom">Mutation MTHFR &amp; Homocyst&eacute;ine</div>
+            <div class="check-detail">M&eacute;tabolisme de l'acide folique (Vit B9) — hyperhomocyst&eacute;in&eacute;mie abortive</div>
+            <div class="check-resultat-zone">
+              <select class="check-resultat-select" onchange="autoSaveBilan();">
+                <option value="">-- R&eacute;sultat MTHFR --</option>
+                <option value="normal">Normal</option>
+                <option value="hetero_677">H&eacute;t&eacute;rozygote C677T</option>
+                <option value="homo_677">Homozygote C677T</option>
+                <option value="double">Double h&eacute;t&eacute;rozygote</option>
+              </select>
+            </div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 5 : Bilan Infectieux -->
+    <div class="bilan-section ouvert" id="sec-infectieux">
+      <div class="bilan-titre" onclick="toggleSec(this)">
+        <div class="bilan-titre-icon" style="background:#c0392b;">&#129440;</div>
+        <div class="bilan-titre-text">5. Bilan Infectieux
+          <span style="font-size:11px; font-weight:400; color:var(--gris-moyen); margin-left:12px; font-style:italic;">(Sur point d&apos;appel clinique)</span>
+        </div>
+        <div class="bilan-titre-fleche">&#9660;</div>
+      </div>
+      <div class="bilan-corps">
+
+        <div class="check-item" data-id="inf-ecbp">
+          <div class="check-content">
+            <div class="check-nom">ECBP</div>
+            <div class="check-detail">Examen cytobact&eacute;riologique du pr&eacute;l&egrave;vement de col/vaginal</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="inf-ecbu">
+          <div class="check-content">
+            <div class="check-nom">ECBU</div>
+            <div class="check-detail">Examen cytobact&eacute;riologique des urines</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="inf-sero">
+          <div class="check-content">
+            <div class="check-nom">S&eacute;rologies infectieuses</div>
+            <div class="check-detail">Rub&eacute;ole &middot; CMV &middot; toxoplasmose &middot; parvovirus B19 &middot; herp&egrave;s &middot; chlamydia &middot; mycoplasmes</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="inf-anapath">
+          <div class="check-content">
+            <div class="check-nom">ANA-PATH produit d&apos;expulsion</div>
+            <div class="check-detail">Culture bact&eacute;riologique du produit d&apos;expulsion (organes, placenta, cordon) si disponible</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 6 : Facteur Masculin (Conjoint) -->
+    <div class="bilan-section ouvert" id="sec-sperme">
+      <div class="bilan-titre" onclick="toggleSec(this)">
+        <div class="bilan-titre-icon" style="background:#2d6a9f;">&#128104;</div>
+        <div class="bilan-titre-text">6. Facteur Masculin (Conjoint)</div>
+        <div class="bilan-titre-fleche">&#9660;</div>
+      </div>
+      <div class="bilan-corps">
+
+        <div class="check-item" data-id="sperm-spermo">
+          <div class="check-content">
+            <div class="check-nom">Spermogramme / spermocytogramme</div>
+            <div class="check-detail">Recherche d&apos;agglutinats <span class="tag orange">+++</span> — source d&apos;avortements pr&eacute;coces et tardifs</div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+          </div>
+        </div>
+
+        <div class="check-item" data-id="sperm-dfi">
+          <div class="check-content">
+            <div class="check-nom">Fragmentation ADN spermatique (DFI)</div>
+            <div class="check-detail">DNA Fragmentation Index — seuil critique : &gt; 15&ndash;25 % selon les laboratoires</div>
+            <div class="check-resultat-zone">
+              <select class="check-resultat-select" id="res-dfi" onchange="verifierAlertes(); autoSaveBilan();">
+                <option value="">-- R&eacute;sultat DFI --</option>
+                <option value="normal">Normal (&lt; 15%)</option>
+                <option value="limite">Limite (15-25%)</option>
+                <option value="eleve">&Eacute;lev&eacute; (&gt; 25%) &#10145; Andrologie</option>
+              </select>
+            </div>
+          </div>
+          <div class="etat-boutons">
+            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
           </div>
         </div>
 
@@ -892,10 +897,10 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     <!-- Zone Action Export -->
     <div style="background:var(--bleu-tres-clair); padding:20px; border-radius:12px; border:1px solid var(--bordure); margin-top:20px;">
       <h3 style="margin-top:0;">Notes & Export DPI</h3>
-      <textarea id="notes-libres" rows="4" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--bordure); margin-bottom:10px; font-family:inherit; font-size:12px;" placeholder="Notes cliniques libres (ex: patiente mise sous acide folique 5mg...)"></textarea>
+      <textarea id="notes-libres" rows="4" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--bordure); margin-bottom:10px; font-family:inherit; font-size:13px;" placeholder="Notes cliniques libres (ex: patiente mise sous acide folique 5mg...)" oninput="autoSaveBilan()"></textarea>
       
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn-resume copy" onclick="copierPourDossier()">&#128203; Copier pour le dossier médical (Orbis, Crossway...)</button>
+        <button class="btn-resume copy" onclick="copierPourDossier()">&#128203; Copier pour le dossier médical</button>
         <button class="btn-resume primary" onclick="exporterTxt()">&#128190; Exporter fichier (.txt)</button>
         <button class="btn-resume" style="background:white; color:var(--rouge-alerte); border:1px solid var(--bordure); margin-left:auto;" onclick="resetComplet()">&#128465; Tout réinitialiser</button>
       </div>
@@ -951,9 +956,9 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
       <div style="background: linear-gradient(135deg, #e8f0fe, white); border-radius: 12px; padding: 18px; border: 1px solid var(--bordure);">
         <div style="font-weight: 700; color: var(--bleu-medical); margin-bottom: 12px;">&#128200; Stratégie & Taux de réussite</div>
         <div style="font-size: 12px; line-height: 1.8;">
-          <div>&#10003; <strong>Cause traitée (ex: SAPL sous Aspirine+HBPM)</strong> : 70–80 % de grossesses évolutives</div>
-          <div>&#10067; <strong>Cause inexpliquée (TLC)</strong> : 50–60 % de réussite (taux comparable après 3 FCS)</div>
-          <div>&#9888; <strong>Âge &gt; 40 ans</strong> : diminution de 30 % des chances de succès spontané</div>
+          <div>&#10003; <strong>Cause traitée (ex: SAPL)</strong> : 70–80 % de grossesses évolutives</div>
+          <div>&#10067; <strong>Cause inexpliquée</strong> : 50–60 % de réussite</div>
+          <div>&#9888; <strong>Âge &gt; 40 ans</strong> : diminution de 30 % des chances</div>
         </div>
       </div>
     </div>
@@ -965,10 +970,8 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 
     <div class="alerte orange">
       <span class="alerte-icone">&#9888;&#65039;</span>
-      <span><strong>Note clinique :</strong> La relation de cause à effet est souvent difficile à établir. La <em>Listeria monocytogenes</em> est responsable d'avortements <strong>sporadiques tardifs</strong> et de MFIU, mais son rôle dans les FCS à répétition au sens strict n'est pas établi (ESHRE 2023).</span>
+      <span><strong>Note clinique :</strong> La relation de cause à effet est souvent difficile à établir. La <em>Listeria monocytogenes</em> est responsable d'avortements <strong>sporadiques tardifs</strong> et de MFIU, mais son rôle dans les FCS à répétition au sens strict n'est pas établi.</span>
     </div>
-
-    <p class="para">Elle sera suspectée devant un syndrome grippal, des adénopathies, une éruption cutanée, une infection urinaire ou une vulvovaginite. Confirmation par prélèvements bactériologiques, sérodiagnostics et cytobactériologie du produit d'expulsion.</p>
 
     <table class="table-agents">
       <thead>
@@ -981,91 +984,44 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
       <tbody>
         <tr>
           <td><span class="tag rouge">Bactériens</span></td>
-          <td><em>Chlamydia trachomatis</em>, <em>Mycoplasma hominis</em>, <em>Ureaplasma urealyticum</em>, tréponème, <em>E. coli</em>, <em>Listeria monocytogenes</em></td>
-          <td>Chlamydiose : rôle établi dans les FCS à répétition +++. Listériose : surtout avortements tardifs sporadiques, rôle dans les FCS récurrents non établi.</td>
+          <td><em>Chlamydia trachomatis</em>, <em>Mycoplasma hominis</em>, <em>Ureaplasma</em>, <em>Listeria monocytogenes</em></td>
+          <td>Chlamydiose : rôle établi. Listériose : surtout avortements tardifs sporadiques.</td>
         </tr>
         <tr>
           <td><span class="tag orange">Viraux</span></td>
-          <td>Rubéole, CMV, parvovirus B19, grippe, herpès, varicelle, rougeole</td>
-          <td>Toute hyperthermie maternelle peut être abortive — tissus embryonnaires non thermorégulés très sensibles.</td>
+          <td>Rubéole, CMV, parvovirus B19, herpès</td>
+          <td>Toute hyperthermie maternelle peut être abortive.</td>
         </tr>
         <tr>
           <td><span class="tag bleu">Parasitaires</span></td>
           <td>Toxoplasmose, paludisme</td>
-          <td>Voie hématogène principalement. Avortements sporadiques plutôt que récurrents.</td>
+          <td>Avortements sporadiques plutôt que récurrents.</td>
         </tr>
       </tbody>
     </table>
-
-    <h3>Voies de contamination ovulaire</h3>
-    <div class="grille-2" style="margin-top: 12px;">
-      <div style="border:1px solid var(--bordure); border-radius:12px; padding:14px;">
-        <div style="font-size:12px; font-weight:700; color:var(--bleu-medical); margin-bottom:8px;">&#11014; Voie locale ascendante</div>
-        <ul class="liste-med">
-          <li>Voie ascendante vaginale</li>
-          <li>Endométrite chronique</li>
-          <li>Cervicite chronique</li>
-        </ul>
-      </div>
-      <div style="border:1px solid var(--bordure); border-radius:12px; padding:14px;">
-        <div style="font-size:12px; font-weight:700; color:var(--bleu-medical); margin-bottom:8px;">&#129656; Voie hématogène</div>
-        <ul class="liste-med">
-          <li>Septicémie maternelle</li>
-          <li>Virémie</li>
-          <li>Parasitémie (paludisme)</li>
-        </ul>
-      </div>
-    </div>
   </div>
 
   <!-- ===== ONGLET 5 : IMMUNOLOGIE ===== -->
   <div class="onglet-contenu" id="onglet-immunologie">
     <h2>Causes immunologiques</h2>
-
     <div class="alerte violet">
       <span class="alerte-icone">&#128737;</span>
-      <span>Les causes immunologiques nécessitent une évaluation spécialisée et une prise en charge multidisciplinaire (obstétricien, immunologue, interniste, médecine de la reproduction).</span>
+      <span>Les causes immunologiques nécessitent une évaluation spécialisée (interniste, médecine de la reproduction).</span>
     </div>
-
-    <h3>Incompatibilité fœto-maternelle (allo-immunité)</h3>
-    <p class="para">La grossesse peut être considérée comme une greffe semi-allogénique. Sa tolérance s'explique par la reconnaissance maternelle des antigènes trophoblastiques, conduisant à la production de facteurs de tolérance spécifiques des antigènes paternels. Un déficit de ces facteurs peut conduire à un rejet de la grossesse.</p>
-    <div class="note">&#128204; <strong>Immunothérapie par lymphocytes du conjoint :</strong> non recommandée en routine (ESHRE 2023, recommandation de grade A). Les essais contrôlés n'ont pas démontré de bénéfice supérieur au placebo.</div>
 
     <h3>Syndrome des antiphospholipides (SAPL)</h3>
     <div class="grille-2">
       <div style="border:1px solid var(--bordure); border-radius:12px; padding:14px;">
         <div style="font-size:12px; font-weight:700; color:var(--rouge-alerte); margin-bottom:6px;">&#9881; Mécanisme</div>
-        <p style="font-size:12px;">Thromboses des vaisseaux placentaires → mauvaise perfusion utéro-placentaire → avortements récurrents. Également appelé <em>thrombophilie acquise</em>. Confirmation requiert 2 dosages positifs à 12 semaines d'intervalle.</p>
+        <p style="font-size:12px;">Thromboses des vaisseaux placentaires → mauvaise perfusion utéro-placentaire → avortements. Confirmation requiert 2 dosages positifs à 12 semaines d'intervalle.</p>
       </div>
       <div style="border:1px solid var(--bordure); border-radius:12px; padding:14px;">
-        <div style="font-size:12px; font-weight:700; color:var(--rouge-alerte); margin-bottom:6px;">&#128138; Traitement (meilleur niveau de preuve)</div>
+        <div style="font-size:12px; font-weight:700; color:var(--rouge-alerte); margin-bottom:6px;">&#128138; Traitement</div>
         <ul class="liste-med">
           <li>Aspirine faible dose (75–100 mg/j) dès la conception</li>
-          <li>Héparine de bas poids moléculaire (HBPM) dès la grossesse confirmée</li>
-          <li>Surveillance spécialisée obligatoire</li>
+          <li>Héparine de bas poids moléculaire (HBPM) dès grossesse confirmée</li>
         </ul>
       </div>
-    </div>
-
-    <h3>Maladies auto-immunes associées</h3>
-    <div class="grille-3">
-      <div style="border:1px solid var(--bordure); border-radius:12px; padding:14px;">
-        <div style="font-size:12px; font-weight:700; color:var(--violet); margin-bottom:6px;">&#129419; LED</div>
-        <p style="font-size:12px;">Lupus érythémateux systémique — syndromes lupiques et apparentés. Prise en charge par un interniste indispensable.</p>
-      </div>
-      <div style="border:1px solid var(--bordure); border-radius:12px; padding:14px;">
-        <div style="font-size:12px; font-weight:700; color:var(--violet); margin-bottom:6px;">&#129419; Hashimoto</div>
-        <p style="font-size:12px;">Hypothyroïdie auto-immune — dosage TSH et anti-TPO systématique. Substitution si TSH &gt; 2,5 mUI/L en projet de grossesse.</p>
-      </div>
-      <div style="border:1px solid var(--bordure); border-radius:12px; padding:14px;">
-        <div style="font-size:12px; font-weight:700; color:var(--violet); margin-bottom:6px;">&#127807; Maladie cœliaque</div>
-        <p style="font-size:12px;">Souvent silencieuse — dépistage par anti-transglutaminase IgA. Régime sans gluten si confirmée.</p>
-      </div>
-    </div>
-
-    <div class="alerte bleu" style="margin-top:20px;">
-      <span class="alerte-icone">&#8505;&#65039;</span>
-      <span>La thrombophilie acquise (SAPL) bénéficie du meilleur niveau de preuve pour le traitement anticoagulant. La corticothérapie n'est pas recommandée en routine. La prise en charge doit être multidisciplinaire.</span>
     </div>
   </div>
 
@@ -1108,15 +1064,12 @@ function toast(msg, type) {
 function setEtat(btn, etatCible) {
   const item = btn.closest('.check-item');
   
-  // Reset des classes
   item.classList.remove('prescrit', 'coche');
   
-  // Si on clique sur un bouton déjà actif, ça le désactive (retour à l'état vide)
   if (item.dataset.etat === etatCible) {
     item.dataset.etat = 'vide';
-    let select = item.querySelector('select');
-    if(select) select.value = '';
-    toggleSaplOptions();
+    let inputs = item.querySelectorAll('select, input[type="text"]');
+    inputs.forEach(i => i.value = '');
   } else {
     item.dataset.etat = etatCible;
     item.classList.add(etatCible);
@@ -1125,22 +1078,6 @@ function setEtat(btn, etatCible) {
   mettreAJourDashboard();
   verifierAlertes();
   autoSaveBilan();
-}
-
-// --- GESTION AFFICHAGE SAPL ---
-function toggleSaplOptions() {
-  const select = document.getElementById('res-sapl');
-  const divOptions = document.getElementById('sapl-details');
-  if (select && divOptions) {
-    if (select.value === 'positif_isole' || select.value === 'positif_confirme') {
-      divOptions.classList.add('visible');
-    } else {
-      divOptions.classList.remove('visible');
-      document.getElementById('sapl-lupique').checked = false;
-      document.getElementById('sapl-cardio').checked = false;
-      document.getElementById('sapl-b2gp1').checked = false;
-    }
-  }
 }
 
 // --- INTELLIGENCE CLINIQUE (ALERTES) ---
@@ -1153,11 +1090,7 @@ function verifierAlertes() {
 
   if (age && age >= 38) alertes.push("Âge ≥ 38 ans : Risque élevé d'anomalie chromosomique embryonnaire (Aneuploïdie).");
   if (imc && imc >= 30) alertes.push("IMC ≥ 30 : L'obésité est un facteur de risque indépendant de fausse couche. Conseil diététique recommandé.");
-  if (fcs && fcs >= 3) alertes.push("≥ 3 FCS : Risque de récurrence augmenté. Prise en charge psychologique indispensable.");
-
-  const sapl = document.getElementById('res-sapl')?.value;
-  if (sapl === 'positif_confirme') alertes.push("🔴 <strong>SAPL Confirmé :</strong> Indication à un traitement par Aspirine + HBPM dès le diagnostic de la prochaine grossesse.");
-  if (sapl === 'positif_isole') alertes.push("🟠 <strong>Anticorps APL isolés :</strong> Contrôle obligatoire à 12 semaines pour confirmer le SAPL.");
+  if (fcs && fcs >= 3) alertes.push("≥ 3 FCR : Risque de récurrence augmenté. Prise en charge psychologique indispensable.");
 
   const caryotype = document.getElementById('res-caryotype')?.value;
   if (caryotype === 'anomalie') alertes.push("🔴 <strong>Anomalie du caryotype :</strong> Adresser en conseil génétique.");
@@ -1201,15 +1134,19 @@ function genererTexteExport() {
   let texte = "BILAN DE MALADIE ABORTIVE (FCS À RÉPÉTITION)\n";
   texte += "=================================================\n\n";
 
+  const patiente = document.getElementById('ctx-patiente').value;
   const age = document.getElementById('ctx-age').value;
+  const conjoint = document.getElementById('ctx-conjoint').value;
   const imc = document.getElementById('ctx-imc').value;
   const fcs = document.getElementById('ctx-fcs').value;
   
-  if(age || imc || fcs) {
+  if(patiente || age || conjoint || imc || fcs) {
     texte += "CONTEXTE CLINIQUE :\n";
+    if(patiente) texte += `- Patiente : ${patiente}\n`;
     if(age) texte += `- Âge : ${age} ans\n`;
-    if(imc) texte += `- IMC : ${imc}\n`;
-    if(fcs) texte += `- Nombre de FCS : ${fcs}\n`;
+    if(conjoint) texte += `- Conjoint : ${conjoint}\n`;
+    if(imc) texte += `- IMC : ${imc} kg/m²\n`;
+    if(fcs) texte += `- Nombre de FCR : ${fcs}\n`;
     texte += "\n";
   }
 
@@ -1260,8 +1197,14 @@ function exporterTxt() {
   const texte = genererTexteExport();
   const blob = new Blob([texte], {type: "text/plain;charset=utf-8"});
   const a = document.createElement("a");
+  
+  let nomFichier = "bilan_abortive";
+  const nomPatiente = document.getElementById('ctx-patiente').value;
+  if(nomPatiente) nomFichier += "_" + nomPatiente.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+  nomFichier += ".txt";
+
   a.href = URL.createObjectURL(blob);
-  a.download = "bilan_abortive_export.txt";
+  a.download = nomFichier;
   a.click();
   URL.revokeObjectURL(a.href);
 }
@@ -1270,18 +1213,17 @@ function exporterTxt() {
 function autoSaveBilan() {
   const data = {
     ctx: {
+      patiente: document.getElementById('ctx-patiente').value,
       age: document.getElementById('ctx-age').value,
+      conjoint: document.getElementById('ctx-conjoint').value,
       imc: document.getElementById('ctx-imc').value,
       fcs: document.getElementById('ctx-fcs').value
     },
     items: {},
     res: {
-      sapl: document.getElementById('res-sapl')?.value,
-      sapl_lup: document.getElementById('sapl-lupique')?.checked,
-      sapl_card: document.getElementById('sapl-cardio')?.checked,
-      sapl_b2: document.getElementById('sapl-b2gp1')?.checked,
       caryotype: document.getElementById('res-caryotype')?.value,
-      dfi: document.getElementById('res-dfi')?.value
+      dfi: document.getElementById('res-dfi')?.value,
+      pcs: document.getElementById('res-pcs')?.value
     },
     notes: document.getElementById('notes-libres').value
   };
@@ -1290,19 +1232,21 @@ function autoSaveBilan() {
     data.items[item.dataset.id] = item.dataset.etat || 'vide';
   });
 
-  localStorage.setItem('drkz_abortive_v3', JSON.stringify(data));
+  localStorage.setItem('drkz_abortive_v5', JSON.stringify(data));
 }
 
 function chargerBilan() {
-  const save = localStorage.getItem('drkz_abortive_v3');
+  const save = localStorage.getItem('drkz_abortive_v5');
   if (!save) return;
   try {
     const data = JSON.parse(save);
     
     if (data.ctx) {
-      document.getElementById('ctx-age').value = data.ctx.age || '';
-      document.getElementById('ctx-imc').value = data.ctx.imc || '';
-      document.getElementById('ctx-fcs').value = data.ctx.fcs || '';
+      if(document.getElementById('ctx-patiente')) document.getElementById('ctx-patiente').value = data.ctx.patiente || '';
+      if(document.getElementById('ctx-age')) document.getElementById('ctx-age').value = data.ctx.age || '';
+      if(document.getElementById('ctx-conjoint')) document.getElementById('ctx-conjoint').value = data.ctx.conjoint || '';
+      if(document.getElementById('ctx-imc')) document.getElementById('ctx-imc').value = data.ctx.imc || '';
+      if(document.getElementById('ctx-fcs')) document.getElementById('ctx-fcs').value = data.ctx.fcs || '';
     }
 
     if (data.items) {
@@ -1316,13 +1260,9 @@ function chargerBilan() {
     }
 
     if (data.res) {
-      if(document.getElementById('res-sapl')) document.getElementById('res-sapl').value = data.res.sapl || '';
-      if(document.getElementById('sapl-lupique')) document.getElementById('sapl-lupique').checked = data.res.sapl_lup || false;
-      if(document.getElementById('sapl-cardio')) document.getElementById('sapl-cardio').checked = data.res.sapl_card || false;
-      if(document.getElementById('sapl-b2gp1')) document.getElementById('sapl-b2gp1').checked = data.res.sapl_b2 || false;
       if(document.getElementById('res-caryotype')) document.getElementById('res-caryotype').value = data.res.caryotype || '';
       if(document.getElementById('res-dfi')) document.getElementById('res-dfi').value = data.res.dfi || '';
-      toggleSaplOptions();
+      if(document.getElementById('res-pcs')) document.getElementById('res-pcs').value = data.res.pcs || '';
     }
 
     if(data.notes) document.getElementById('notes-libres').value = data.notes;
@@ -1333,14 +1273,13 @@ function chargerBilan() {
 
 function resetComplet() {
   if(confirm("Effacer toutes les données de cette patiente ?")) {
-    localStorage.removeItem('drkz_abortive_v3');
+    localStorage.removeItem('drkz_abortive_v5');
     location.reload();
   }
 }
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('notes-libres').addEventListener('input', autoSaveBilan);
   chargerBilan();
   mettreAJourDashboard();
   verifierAlertes();
