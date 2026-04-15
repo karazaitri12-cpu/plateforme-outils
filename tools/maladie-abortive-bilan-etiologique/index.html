@@ -597,124 +597,217 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     </div>
 
     <!-- Section 4 : Auto-immunité (SAPL) -->
-    <div class="bilan-section ouvert" id="sec-autoimmun">
-      <div class="bilan-titre" onclick="toggleSec(this)">
-        <div class="bilan-titre-icon" style="background:#6c3483;">&#128737;</div>
-        <div class="bilan-titre-text">Bilan Auto-immunité — SAPL · Thrombophilie</div>
-        <div class="bilan-titre-fleche">&#9660;</div>
+<div class="bilan-section ouvert" id="sec-autoimmun">
+  <div class="bilan-titre" onclick="toggleSec(this)">
+    <div class="bilan-titre-icon" style="background:#6c3483;">&#128737;</div>
+    <div class="bilan-titre-text">Bilan Auto-immunité — SAPL · Thrombophilie</div>
+    <div class="bilan-titre-fleche">&#9660;</div>
+  </div>
+  <div class="bilan-corps">
+
+    <!-- SOUS-TITRE 1 : SAPL -->
+    <div style="padding:10px 18px 4px; background:var(--violet-leger); border-bottom:1px solid var(--bordure);">
+      <span style="font-size:12px; font-weight:700; color:var(--violet); text-transform:uppercase; letter-spacing:0.4px;">
+        Syndrome des Anticorps Anti-Phospholipides (SAPL) &mdash; Recommand&eacute;
+      </span>
+    </div>
+
+    <div class="check-item" data-id="immu-lupique">
+      <div class="check-content">
+        <div class="check-nom">Anticoagulant circulant (Lupique)</div>
+        <div class="check-detail">Test de d&eacute;pistage fonctionnel — m&eacute;thode de r&eacute;f&eacute;rence (DRVVT + TCA)</div>
+        <div class="check-resultat-zone">
+          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+            <option value="">-- R&eacute;sultat --</option>
+            <option value="negatif">N&eacute;gatif</option>
+            <option value="positif">Positif (&#192; confirmer &agrave; 12 sem.)</option>
+          </select>
+        </div>
       </div>
-      <div class="bilan-corps">
-        
-        <div class="check-item" data-id="immu-sapl">
-          <div class="check-content">
-            <div class="check-nom">Anticorps antiphospholipides (SAPL)</div>
-            <div class="check-detail">Anticoagulant lupique, Anticardiolipine (IgG/IgM), Anti-β2-glycoprotéine I.</div>
-            
-            <div class="check-resultat-zone">
-              <label style="font-size:11px; font-weight:bold; color:var(--bleu-medical);">Résultat global :</label>
-              <select class="check-resultat-select" id="res-sapl" onchange="toggleSaplOptions(); verifierAlertes(); autoSaveBilan();">
-                <option value="">-- Sélectionner --</option>
-                <option value="negatif">Négatif</option>
-                <option value="positif_isole">Positif isolé (À confirmer à 12 sem.)</option>
-                <option value="positif_confirme">Positif Confirmé ➔ SAPL</option>
-              </select>
-              
-              <div class="sapl-options" id="sapl-details">
-                <label><input type="checkbox" id="sapl-lupique" onchange="autoSaveBilan()"> Anticoagulant Lupique</label>
-                <label><input type="checkbox" id="sapl-cardio" onchange="autoSaveBilan()"> Anticardiolipine</label>
-                <label><input type="checkbox" id="sapl-b2gp1" onchange="autoSaveBilan()"> Anti-β2GP1</label>
-              </div>
-            </div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-
-        <div class="check-item" data-id="immu-ana">
-          <div class="check-content">
-            <div class="check-nom">Anticorps antinucléaires (ANA)</div>
-            <div class="check-detail">Dépistage LED et autres maladies auto-immunes</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="immu-adn">
-          <div class="check-content">
-            <div class="check-nom">Anti-ADN natifs</div>
-            <div class="check-detail">En cas d'ANA positifs</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="immu-f5">
-          <div class="check-content">
-            <div class="check-nom">Facteur V Leiden</div>
-            <div class="check-detail">Thrombophilie héréditaire — mutation la plus fréquente</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="immu-f2">
-          <div class="check-content">
-            <div class="check-nom">Mutation gène prothrombine (F II)</div>
-            <div class="check-detail">G20210A — 2e thrombophilie héréditaire la plus fréquente</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="immu-pcs">
-          <div class="check-content">
-            <div class="check-nom">Protéines C, S · ATIII</div>
-            <div class="check-detail">Déficits en inhibiteurs de la coagulation</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="immu-mthfr">
-          <div class="check-content">
-            <div class="check-nom">Mutation MTHFR</div>
-            <div class="check-detail">Métabolisme de l'acide folique — homocystéinémie à doser</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="immu-tpo">
-          <div class="check-content">
-            <div class="check-nom">Anticorps anti-thyroïde</div>
-            <div class="check-detail">Anti-TPO · anti-thyroglobuline — thyroïdite de Hashimoto</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-        <div class="check-item" data-id="immu-coel">
-          <div class="check-content">
-            <div class="check-nom">Anticorps anti-transglutaminase</div>
-            <div class="check-detail">Maladie cœliaque silencieuse</div>
-          </div>
-          <div class="etat-boutons">
-            <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
-            <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Reçu</button>
-          </div>
-        </div>
-
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
       </div>
     </div>
+
+    <div class="check-item" data-id="immu-cardio">
+      <div class="check-content">
+        <div class="check-nom">Anticorps Anti-Cardiolipine (IgG / IgM)</div>
+        <div class="check-detail">Titre moyen ou &eacute;lev&eacute; significatif — titre faible non retenu pour le diagnostic SAPL</div>
+        <div class="check-resultat-zone">
+          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+            <option value="">-- R&eacute;sultat --</option>
+            <option value="negatif">N&eacute;gatif</option>
+            <option value="faible">Positif faible (non significatif)</option>
+            <option value="positif">Positif moyen/&eacute;lev&eacute; (&#192; confirmer &agrave; 12 sem.)</option>
+          </select>
+        </div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <div class="check-item" data-id="immu-b2gp1">
+      <div class="check-content">
+        <div class="check-nom">Anticorps Anti-B2-Glycoprot&eacute;ine 1 (IgG / IgM)</div>
+        <div class="check-detail">Titre &gt; 99e percentile — sp&eacute;cificit&eacute; &eacute;lev&eacute;e pour le SAPL</div>
+        <div class="check-resultat-zone">
+          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+            <option value="">-- R&eacute;sultat --</option>
+            <option value="negatif">N&eacute;gatif</option>
+            <option value="positif">Positif (&#192; confirmer &agrave; 12 sem.)</option>
+          </select>
+        </div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <!-- SOUS-TITRE 2 : Thrombophilie Héréditaire -->
+    <div style="padding:10px 18px 4px; background:#eaf0fb; border-bottom:1px solid var(--bordure); border-top:2px solid var(--bordure); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-size:12px; font-weight:700; color:var(--bleu-medical); text-transform:uppercase; letter-spacing:0.4px;">
+        Thrombophilie H&eacute;r&eacute;ditaire
+      </span>
+      <span style="font-size:10px; font-weight:700; color:#7d5800; background:var(--orange-leger); border:1px solid #f0c040; border-radius:5px; padding:2px 8px; letter-spacing:0.3px; text-transform:uppercase;">
+        Sur point d&apos;appel (ATCD MTEV)
+      </span>
+    </div>
+
+    <div class="check-item" data-id="immu-f5">
+      <div class="check-content">
+        <div class="check-nom">Mutation du Facteur V (Leiden)</div>
+        <div class="check-detail">Thrombophilie h&eacute;r&eacute;ditaire la plus fr&eacute;quente — h&eacute;t&eacute;rozygote : risque &#215;4 ; homozygote : risque &#215;80</div>
+        <div class="check-resultat-zone">
+          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+            <option value="">-- R&eacute;sultat --</option>
+            <option value="normal">Normal (sauvage)</option>
+            <option value="hetero">H&eacute;t&eacute;rozygote</option>
+            <option value="homo">Homozygote</option>
+          </select>
+        </div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <div class="check-item" data-id="immu-f2">
+      <div class="check-content">
+        <div class="check-nom">Mutation du Facteur II (Prothrombine)</div>
+        <div class="check-detail">G20210A — 2e thrombophilie h&eacute;r&eacute;ditaire la plus fr&eacute;quente</div>
+        <div class="check-resultat-zone">
+          <select class="check-resultat-select" onchange="verifierAlertes(); autoSaveBilan();">
+            <option value="">-- R&eacute;sultat --</option>
+            <option value="normal">Normal (sauvage)</option>
+            <option value="hetero">H&eacute;t&eacute;rozygote</option>
+            <option value="homo">Homozygote</option>
+          </select>
+        </div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <div class="check-item" data-id="immu-pcs">
+      <div class="check-content">
+        <div class="check-nom">Dosage Prot&eacute;ine C, Prot&eacute;ine S, Antithrombine III</div>
+        <div class="check-detail">D&eacute;ficits en inhibiteurs de la coagulation — interpr&eacute;tation hors anticoagulant et hors grossesse</div>
+        <div class="check-resultat-zone">
+          <input type="text" placeholder="D&eacute;ficit ?" style="width:100%; max-width:300px; padding:5px 8px; border:1px solid var(--bordure); border-radius:6px; font-size:12px;" oninput="autoSaveBilan()">
+        </div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <div class="check-item" data-id="immu-mthfr">
+      <div class="check-content">
+        <div class="check-nom">Mutation MTHFR</div>
+        <div class="check-detail">M&eacute;tabolisme de l&apos;acide folique — homocyst&eacute;in&eacute;mie &agrave; doser si mutation d&eacute;tect&eacute;e</div>
+        <div class="check-resultat-zone">
+          <select class="check-resultat-select" onchange="autoSaveBilan();">
+            <option value="">-- R&eacute;sultat --</option>
+            <option value="normal">Normal</option>
+            <option value="hetero_677">H&eacute;t&eacute;rozygote C677T</option>
+            <option value="homo_677">Homozygote C677T</option>
+            <option value="double">Double h&eacute;t&eacute;rozygote (C677T + A1298C)</option>
+          </select>
+        </div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <!-- SOUS-TITRE 3 : Auto-immunité générale -->
+    <div style="padding:10px 18px 4px; background:#f0f4ff; border-bottom:1px solid var(--bordure); border-top:2px solid var(--bordure);">
+      <span style="font-size:12px; font-weight:700; color:#2c5282; text-transform:uppercase; letter-spacing:0.4px;">
+        Auto-immunit&eacute; g&eacute;n&eacute;rale
+      </span>
+    </div>
+
+    <div class="check-item" data-id="immu-ana">
+      <div class="check-content">
+        <div class="check-nom">Anticorps antinucl&eacute;aires (AAN)</div>
+        <div class="check-detail">D&eacute;pistage LED et autres maladies auto-immunes — compl&eacute;ter par anti-ADN natifs si positifs</div>
+        <div class="check-resultat-zone">
+          <input type="text" placeholder="Titrage / Aspect" style="width:100%; max-width:300px; padding:5px 8px; border:1px solid var(--bordure); border-radius:6px; font-size:12px;" oninput="autoSaveBilan()">
+        </div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <div class="check-item" data-id="immu-adn">
+      <div class="check-content">
+        <div class="check-nom">Anti-ADN natifs</div>
+        <div class="check-detail">En cas d&apos;AAN positifs — sp&eacute;cifiques du LED</div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <div class="check-item" data-id="immu-tpo">
+      <div class="check-content">
+        <div class="check-nom">Anticorps anti-thyro&iuml;diens (Anti-TPO / Anti-TG)</div>
+        <div class="check-detail">Thyro&iuml;dite de Hashimoto — substitution si TSH &gt; 2,5 mUI/L en projet de grossesse</div>
+        <div class="check-resultat-zone">
+          <input type="text" placeholder="Positif / N&eacute;gatif" style="width:100%; max-width:300px; padding:5px 8px; border:1px solid var(--bordure); border-radius:6px; font-size:12px;" oninput="autoSaveBilan()">
+        </div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+    <div class="check-item" data-id="immu-coel">
+      <div class="check-content">
+        <div class="check-nom">Anticorps anti-transglutaminase (IgA)</div>
+        <div class="check-detail">Maladie c&oelig;liaque silencieuse — r&eacute;gime sans gluten si confirm&eacute;e</div>
+      </div>
+      <div class="etat-boutons">
+        <button class="btn-etat btn-prescrit" onclick="setEtat(this, 'prescrit')">&#8987; Prescrire</button>
+        <button class="btn-etat btn-coche" onclick="setEtat(this, 'coche')">&#10003; Re&ccedil;u</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
     <!-- Section 5 : Spermatique -->
     <div class="bilan-section ouvert" id="sec-sperme">
