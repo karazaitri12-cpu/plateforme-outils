@@ -6,8 +6,6 @@
   <title>Plateforme d'outils médicaux | Dr. Kara Zaitri</title>
   <meta name="description" content="Outils professionnels d'aide à la décision en gynécologie-obstétrique." />
   
-  <!-- Lien pour installer la PWA (Étape suivante) -->
-  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#2B6CB0">
 
   <style>
@@ -17,16 +15,14 @@
       --accent: #2F855A; --warning: #B7791F;
       --bg: #F7FAFC; --card: #FFFFFF;
       --text: #2D3748; --text-muted: #718096;
-      --border: #E2E8F0; --radius: 12px;
-      --shadow: 0 4px 12px rgba(0,0,0,0.05);
-      --modal-bg: rgba(0,0,0,0.5);
+      --border: #E2E8F0; --radius: 8px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
     body.dark-mode {
       --bg: #1A202C; --card: #2D3748;
       --text: #F7FAFC; --text-muted: #A0AEC0;
       --border: #4A5568; --shadow: 0 4px 12px rgba(0,0,0,0.3);
-      --modal-bg: rgba(0,0,0,0.8);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,8 +33,8 @@
     .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 0; transition: background 0.3s; }
     .header-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
-    .brand-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; box-shadow: var(--shadow); }
-    .brand-text h1 { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+    .brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; box-shadow: var(--shadow); }
+    .brand-text h1 { font-size: 1.05rem; font-weight: 600; color: var(--primary); }
     .brand-text p { font-size: 0.8rem; color: var(--text-muted); }
     
     .header-actions { display: flex; gap: 10px; align-items: center; }
@@ -46,63 +42,57 @@
     .icon-btn:hover { background: var(--border); }
     
     /* === DISCLAIMER === */
-    .disclaimer { background: rgba(214, 158, 46, 0.1); border-left: 4px solid var(--warning); padding: 12px 16px; font-size: 0.85rem; color: var(--warning); margin: 20px 0; border-radius: 0 var(--radius) var(--radius) 0; }
-    
+    .disclaimer { background: rgba(214, 158, 46, 0.1); border-left: 3px solid var(--warning); padding: 10px 14px; font-size: 0.85rem; color: #975A16; margin: 16px 0; }
+    body.dark-mode .disclaimer { color: #F6AD55; }
+
     /* === RECHERCHE & FILTRES === */
-    .search-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 24px 0; box-shadow: var(--shadow); transition: background 0.3s; }
+    .search-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 24px 0; transition: background 0.3s; }
     .search-box { position: relative; margin-bottom: 16px; }
-    .search-box input { width: 100%; padding: 14px 44px; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; background: var(--bg); color: var(--text); transition: all 0.2s; }
-    .search-box input:focus { outline: none; border-color: var(--primary); background: var(--card); }
+    .search-box input { width: 100%; padding: 12px 44px 12px 44px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; background: var(--bg); color: var(--text); transition: all 0.2s; }
+    .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); background: var(--card); }
     .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
-    .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); background: var(--border); width: 22px; height: 22px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; }
+    
+    /* Petite croix d'effacement */
+    .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); background: var(--border); width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; transition: background 0.2s, color 0.2s; }
     .clear-icon:hover { background: var(--text-muted); color: var(--card); }
     
-    .filters { display: flex; gap: 8px; flex-wrap: wrap; }
-    .filter-btn { padding: 6px 14px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); transition: all 0.2s; }
-    .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; color: var(--text); }
+    .filter-btn:hover { background: #EBF8FF; border-color: var(--primary); color: var(--primary); }
     .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    body.dark-mode .filter-btn:hover { background: rgba(43,108,176,0.2); }
+    
+    /* Bouton Favoris */
     .filter-btn.fav-btn { background: rgba(214, 158, 46, 0.1); border-color: #D69E2E; color: #D69E2E; }
-    .filter-btn.fav-btn.active { background: #D69E2E; color: white; }
+    .filter-btn.fav-btn.active { background: #D69E2E; color: white; border-color: #D69E2E; }
     
     /* === GRID OUTILS === */
-    .section-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin: 30px 0 16px; display: flex; align-items: center; gap: 8px; }
-    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 40px; }
+    .section-title { font-size: 1.05rem; font-weight: 600; color: var(--primary); margin: 28px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-bottom: 32px; }
     
-    .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; transition: all 0.2s; text-decoration: none; color: inherit; display: flex; gap: 14px; position: relative; box-shadow: var(--shadow); }
-    .tool-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+    .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; transition: all 0.2s; text-decoration: none; color: inherit; display: flex; gap: 12px; position: relative; }
+    .tool-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px); }
+    .tool-card.disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
     
     /* Étoile Favoris */
-    .star-btn { position: absolute; top: 14px; right: 14px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--border); transition: 0.2s; z-index: 2; }
+    .star-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--border); transition: 0.2s; z-index: 2; padding: 0; line-height: 1; }
     .star-btn:hover { transform: scale(1.1); }
     .star-btn.is-fav { color: #D69E2E; }
 
     /* Badges (Nouveau / MAJ) */
-    .tool-badge { position: absolute; top: -8px; right: 40px; background: #E53E3E; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; border: 2px solid var(--card); z-index: 2; box-shadow: var(--shadow); }
+    .tool-badge { position: absolute; top: -8px; right: 40px; background: #E53E3E; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; border: 1px solid var(--card); z-index: 2; box-shadow: var(--shadow); }
     .tool-badge.maj { background: var(--primary); }
 
-    .tool-icon { width: 46px; height: 46px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
-    .tool-content { flex: 1; min-width: 0; padding-right: 20px; }
-    .tool-content h3 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin: 0 0 6px; line-height: 1.3; }
-    .tool-content p { font-size: 0.8rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+    /* Icône colorée restaurée */
+    .tool-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; flex-shrink: 0; }
+    .tool-card.disabled .tool-icon { background: linear-gradient(135deg, #718096, #4A5568); }
     
-    /* === MODALS (Contexte & Presse-Papier) === */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); backdrop-filter: blur(3px); z-index: 1000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
-    .modal-overlay.active { display: flex; opacity: 1; }
-    .modal-content { background: var(--card); border-radius: var(--radius); width: 90%; max-width: 500px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; border: 1px solid var(--border); transform: translateY(20px); transition: transform 0.2s; }
-    .modal-overlay.active .modal-content { transform: translateY(0); }
-    .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
-    .modal-title { font-size: 1.2rem; color: var(--primary); margin-bottom: 16px; font-weight: 700; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
+    .tool-content { flex: 1; min-width: 0; padding-right: 15px; }
+    .tool-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin: 0 0 4px; line-height: 1.3; }
+    .tool-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
     
-    /* Formulaire Contexte */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-    .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-    .form-group input { padding: 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); font-family: inherit; }
-    .btn-save { background: var(--primary); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-    .btn-save:hover { background: var(--primary-dark); }
-
-    /* Zone Presse-papier */
-    textarea.clipboard-area { width: 100%; height: 200px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.85rem; resize: vertical; margin-bottom: 12px; }
+    /* === FOOTER === */
+    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; transition: background 0.3s; }
 
     /* ASTUCE PRO : MASQUER L'ASCENSEUR VERTICAL */
     ::-webkit-scrollbar { width: 0px; background: transparent; }
@@ -110,9 +100,9 @@
     body { -ms-overflow-style: none; overflow-y: auto; }
     
     @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .header-inner { flex-direction: column; align-items: flex-start; }
-      .header-actions { width: 100%; justify-content: space-between; margin-top: 10px; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .header-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .header-actions { width: 100%; justify-content: flex-end; }
     }
   </style>
 </head>
@@ -125,18 +115,11 @@
         <div class="brand-icon">🩺</div>
         <div class="brand-text">
           <h1>Plateforme d'outils médicaux</h1>
-          <p>Dr. Kara Zaitri — Gynécologie-Obstétrique</p>
+          <p>DR KARA-ZAITRI M.A - Gynécologie-Obstétrique</p>
         </div>
       </a>
       
-      <!-- NOUVEAU : Barre d'actions -->
       <div class="header-actions">
-        <button class="icon-btn" onclick="toggleModal('modal-contexte')" title="Contexte Patient Global">
-          👤 <span id="ctx-badge">Patient</span>
-        </button>
-        <button class="icon-btn" onclick="toggleModal('modal-clipboard')" title="Mon Dossier (Presse-papier)">
-          📋 Dossier
-        </button>
         <button class="icon-btn" id="themeToggle" title="Mode Sombre" onclick="toggleTheme()">
           🌙
         </button>
@@ -146,13 +129,13 @@
 
   <main class="container">
     <div class="disclaimer">
-      <strong>Avertissement :</strong> Outils d'information médicale basés sur les recommandations officielles. Ne se substituent en aucun cas au jugement clinique individuel.
+      <strong>Outils d'information médicale.</strong> Basés sur les recommandations HAS/INCa/CNGOF. Ne remplacent pas une consultation.
     </div>
 
     <section class="search-section">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Rechercher un outil... (Raccourci: Ctrl+K)" autocomplete="off">
+        <input type="text" id="searchInput" placeholder="Rechercher un outil (ex: Bishop, IMC, sein...)" autocomplete="off">
         <span class="clear-icon" id="clearSearch" title="Effacer">✖</span>
       </div>
       <div class="filters" id="filtersContainer">
@@ -166,66 +149,12 @@
     </div>
   </main>
 
-  <!-- MODAL : CONTEXTE PATIENT -->
-  <div class="modal-overlay" id="modal-contexte" onclick="closeModal(event, 'modal-contexte')">
-    <div class="modal-content">
-      <button class="modal-close" onclick="toggleModal('modal-contexte')">&times;</button>
-      <h2 class="modal-title">👤 Contexte Patient Global</h2>
-      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">
-        Saisissez ces données une seule fois. Elles s'afficheront automatiquement dans tous les outils que vous ouvrirez. (Effacées à la fermeture du navigateur).
-      </p>
-      
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Initiales / Nom</label>
-          <input type="text" id="g-nom" placeholder="Ex: Dupont M.">
-        </div>
-        <div class="form-group">
-          <label>Âge (ans)</label>
-          <input type="number" id="g-age" placeholder="Ex: 34">
-        </div>
-        <div class="form-group">
-          <label>Poids (kg)</label>
-          <input type="number" id="g-poids" placeholder="Ex: 65">
-        </div>
-        <div class="form-group">
-          <label>Taille (cm)</label>
-          <input type="number" id="g-taille" placeholder="Ex: 165">
-        </div>
-        <div class="form-group">
-          <label>Gestité (G)</label>
-          <input type="number" id="g-gestite" placeholder="Ex: 2">
-        </div>
-        <div class="form-group">
-          <label>Parité (P)</label>
-          <input type="number" id="g-parite" placeholder="Ex: 1">
-        </div>
-      </div>
-      <button class="btn-save" onclick="saveGlobalContext()">Enregistrer pour cette session</button>
-    </div>
-  </div>
-
-  <!-- MODAL : DOSSIER / PRESSE-PAPIER -->
-  <div class="modal-overlay" id="modal-clipboard" onclick="closeModal(event, 'modal-clipboard')">
-    <div class="modal-content">
-      <button class="modal-close" onclick="toggleModal('modal-clipboard')">&times;</button>
-      <h2 class="modal-title">📋 Mon Dossier en cours</h2>
-      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">
-        Tous les résumés générés dans les différents outils s'accumulent ici. Prêt à être copié dans votre logiciel médical.
-      </p>
-      <textarea class="clipboard-area" id="g-clipboard" placeholder="Votre dossier est vide pour le moment..."></textarea>
-      
-      <div style="display:flex; gap:10px;">
-        <button class="btn-save" style="flex:2;" onclick="copyGlobalClipboard()">Copier tout le texte</button>
-        <button class="btn-save" style="flex:1; background:#E53E3E;" onclick="clearGlobalClipboard()">Vider</button>
-      </div>
-    </div>
-  </div>
+  <footer class="footer">
+    <p><strong>Mention légale :</strong> Outils destinés aux professionnels de santé. Ne se substituent pas au jugement clinique.</p>
+    <p style="margin-top:6px;">© 2026 DR KARA-ZAITRI M.A</p>
+  </footer>
 
   <script>
-    /* ==========================================
-       VARIABLES GLOBALES
-       ========================================== */
     const grid = document.getElementById('toolsGrid');
     const filtersContainer = document.getElementById('filtersContainer');
     const searchInput = document.getElementById('searchInput');
@@ -238,21 +167,13 @@
     // Charger Favoris depuis LocalStorage
     let favorites = JSON.parse(localStorage.getItem('drkz_favorites')) || [];
 
-    /* ==========================================
-       INITIALISATION (Thème, Contexte, JSON)
-       ========================================== */
+    // Initialisation
     (async function init() {
-      // 1. Initialiser le thème sombre
       if (localStorage.getItem('drkz_theme') === 'dark') {
         document.body.classList.add('dark-mode');
         document.getElementById('themeToggle').innerText = '☀️';
       }
 
-      // 2. Charger le contexte patient si existant
-      loadGlobalContext();
-      loadGlobalClipboard();
-
-      // 3. Charger le fichier JSON
       try {
         const res = await fetch('/tools.json');
         if (!res.ok) throw new Error('Erreur chargement JSON');
@@ -260,34 +181,20 @@
         renderFilters();
         renderTools();
       } catch (err) {
-        grid.innerHTML = '<p style="color:#E53E3E;">⚠️ Erreur de chargement des outils.</p>';
+        grid.innerHTML = '<p style="color:#C53030;">⚠️ Impossible de charger la liste des outils. Vérifiez que tools.json est présent à la racine.</p>';
       }
     })();
 
-    /* ==========================================
-       MODE SOMBRE
-       ========================================== */
+    // Fonction Mode Sombre
     function toggleTheme() {
       const isDark = document.body.classList.toggle('dark-mode');
       document.getElementById('themeToggle').innerText = isDark ? '☀️' : '🌙';
       localStorage.setItem('drkz_theme', isDark ? 'dark' : 'light');
     }
 
-    /* ==========================================
-       RACCOURCI CLAVIER (Ctrl+K)
-       ========================================== */
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        searchInput.focus();
-      }
-    });
-
-    /* ==========================================
-       GESTION DES FAVORIS
-       ========================================== */
+    // Gestion des favoris
     function toggleFav(e, id) {
-      e.preventDefault(); // Empêche l'ouverture du lien de l'outil
+      e.preventDefault(); 
       const index = favorites.indexOf(id);
       if (index === -1) {
         favorites.push(id);
@@ -295,18 +202,15 @@
         favorites.splice(index, 1);
       }
       localStorage.setItem('drkz_favorites', JSON.stringify(favorites));
-      renderTools(); // Rafraîchir l'affichage des étoiles
+      renderTools();
     }
 
-    /* ==========================================
-       MOTEUR DE RENDU (Filtres & Cartes)
-       ========================================== */
+    // Rendu des filtres
     function renderFilters() {
       const cats = new Set();
       allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
       const sortedCats = Array.from(cats).sort((a, b) => a.localeCompare(b, 'fr'));
       
-      // Bouton "Tous" et "Favoris" en premier
       let html = `
         <button class="filter-btn active" data-cat="all">Tous</button>
         <button class="filter-btn fav-btn" data-cat="favorites">⭐ Favoris</button>
@@ -325,15 +229,14 @@
       });
     }
 
+    // Rendu des cartes d'outils
     function renderTools() {
       let filtered = allTools.filter(t => {
-        // Filtrage par catégorie
         let matchCat = false;
         if (activeCategory === 'all') matchCat = true;
         else if (activeCategory === 'favorites') matchCat = favorites.includes(t.id);
         else matchCat = t.categorie.includes(activeCategory);
 
-        // Filtrage par recherche
         const term = searchTerm.toLowerCase();
         const matchSearch = !term || 
           t.titre.toLowerCase().includes(term) || 
@@ -343,7 +246,6 @@
         return matchCat && matchSearch;
       });
 
-      // Tri : Les favoris s'affichent toujours en premier si on est sur "Tous"
       if (activeCategory === 'all' && !searchTerm) {
         filtered.sort((a, b) => {
           const aFav = favorites.includes(a.id) ? 1 : 0;
@@ -353,13 +255,12 @@
       }
 
       if (filtered.length === 0) {
-        grid.innerHTML = '<p style="color:var(--text-muted);">Aucun outil ne correspond à ces critères.</p>';
+        grid.innerHTML = '<p style="color:var(--text-muted);">Aucun outil ne correspond à votre recherche.</p>';
         return;
       }
 
       grid.innerHTML = filtered.map(t => {
         const isFav = favorites.includes(t.id);
-        // Gestion du badge (si présent dans le JSON ex: "badge": "Nouveau")
         const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
         
         return `
@@ -377,7 +278,7 @@
       `}).join('');
     }
 
-    // Gestion de la barre de recherche
+    // Gestion de la recherche
     searchInput.addEventListener('input', e => {
       searchTerm = e.target.value.trim();
       clearSearchBtn.style.display = searchTerm.length > 0 ? 'flex' : 'none';
@@ -392,79 +293,6 @@
       renderTools();
     });
 
-    /* ==========================================
-       MODALS (Fenêtres popup)
-       ========================================== */
-    function toggleModal(id) {
-      const modal = document.getElementById(id);
-      modal.classList.toggle('active');
-    }
-    function closeModal(e, id) {
-      if(e.target.id === id) { document.getElementById(id).classList.remove('active'); }
-    }
-
-    /* ==========================================
-       CONTEXTE PATIENT GLOBAL (SessionStorage)
-       ========================================== */
-    function saveGlobalContext() {
-      const ctx = {
-        nom: document.getElementById('g-nom').value,
-        age: document.getElementById('g-age').value,
-        poids: document.getElementById('g-poids').value,
-        taille: document.getElementById('g-taille').value,
-        gestite: document.getElementById('g-gestite').value,
-        parite: document.getElementById('g-parite').value
-      };
-      sessionStorage.setItem('drkz_global_ctx', JSON.stringify(ctx));
-      updateContextBadge();
-      toggleModal('modal-contexte');
-    }
-
-    function loadGlobalContext() {
-      const saved = sessionStorage.getItem('drkz_global_ctx');
-      if (saved) {
-        const ctx = JSON.parse(saved);
-        document.getElementById('g-nom').value = ctx.nom || '';
-        document.getElementById('g-age').value = ctx.age || '';
-        document.getElementById('g-poids').value = ctx.poids || '';
-        document.getElementById('g-taille').value = ctx.taille || '';
-        document.getElementById('g-gestite').value = ctx.gestite || '';
-        document.getElementById('g-parite').value = ctx.parite || '';
-        updateContextBadge(ctx.nom);
-      }
-    }
-
-    function updateContextBadge(nom) {
-      const badge = document.getElementById('ctx-badge');
-      const ctxName = nom || document.getElementById('g-nom').value;
-      if (ctxName) {
-        badge.innerText = "Patient : " + ctxName.substring(0, 10) + (ctxName.length > 10 ? '.' : '');
-        badge.style.color = 'var(--primary)';
-      }
-    }
-
-    /* ==========================================
-       DOSSIER CENTRALISÉ (Presse-papier)
-       ========================================== */
-    function loadGlobalClipboard() {
-      const saved = sessionStorage.getItem('drkz_global_clipboard');
-      if (saved) { document.getElementById('g-clipboard').value = saved; }
-    }
-
-    function clearGlobalClipboard() {
-      if(confirm("Vider complètement le dossier en cours ?")) {
-        sessionStorage.removeItem('drkz_global_clipboard');
-        document.getElementById('g-clipboard').value = '';
-      }
-    }
-
-    function copyGlobalClipboard() {
-      const txt = document.getElementById('g-clipboard').value;
-      if (!txt) return alert("Le dossier est vide.");
-      navigator.clipboard.writeText(txt).then(() => {
-        alert("Tout le dossier a été copié !");
-      });
-    }
   </script>
 </body>
 </html>
