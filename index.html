@@ -147,25 +147,35 @@ body {
       }
 
       function renderFilters() {
-        const cats = new Set();
-        allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
-        const sortedCats = ['all', ...Array.from(cats).sort()];
-        const labels = { all: 'Tous', gynecologie: 'Gynécologie', obstetrique: 'Obstétrique', explorations: 'Explorations', scores: 'Scores', depistage: 'Dépistage', calcul: 'Calcul', oncologie: 'Oncologie', diagnostic: 'Diagnostic', infection: 'Infection', therapeutique: 'Thérapeutique', urgence: 'Urgence', contraception: 'Contraception', imagerie: 'Imagerie', genetique: 'Génétique' };
-        
-        filtersContainer.innerHTML = sortedCats.map(c => 
-          `<button class="filter-btn ${c==='all'?'active':''}" data-cat="${c}">${labels[c] || c.charAt(0).toUpperCase() + c.slice(1)}</button>`
-        ).join('');
+  const cats = new Set();
+  // Récupérer toutes les catégories uniques
+  allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
+  
+  // Trier par ordre alphabétique
+  const sortedCats = Array.from(cats).sort();
+  
+  // Créer le bouton "Tous" par défaut
+  let html = `<button class="filter-btn active" data-cat="all">Tous</button>`;
+  
+  // Ajouter les autres boutons dynamiquement
+  html += sortedCats.map(c => 
+    `<button class="filter-btn" data-cat="${c}">${c}</button>`
+  ).join('');
 
-        filtersContainer.addEventListener('click', e => {
-          const btn = e.target.closest('.filter-btn');
-          if (!btn) return;
-          filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          activeCategory = btn.dataset.cat;
-          renderTools();
-        });
-      }
+  filtersContainer.innerHTML = html;
 
+  // Gestion du clic sur les filtres
+  filtersContainer.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    
+    filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    activeCategory = btn.dataset.cat; // 'all' ou le nom exact de la catégorie
+    renderTools();
+  });
+}
       function renderTools() {
         const filtered = allTools.filter(t => {
           const matchCat = activeCategory === 'all' || t.categorie.includes(activeCategory);
