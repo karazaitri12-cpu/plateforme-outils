@@ -36,9 +36,25 @@
     /* Search & Filters */
     .search-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 24px 0; }
     .search-box { position: relative; margin-bottom: 16px; }
-    .search-box input { width: 100%; padding: 12px 16px 12px 44px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; transition: all 0.2s; }
+    
+    /* CORRECTION : On augmente le padding à droite (44px) pour ne pas que le texte passe sous la croix */
+    .search-box input { width: 100%; padding: 12px 44px 12px 44px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; transition: all 0.2s; }
     .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); }
+    
     .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; pointer-events: none; }
+    
+    /* NOUVEAU : Style de la petite croix d'effacement */
+    .clear-icon { 
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%); 
+      color: var(--text-muted); background: var(--border);
+      width: 20px; height: 20px; border-radius: 50%;
+      display: none; /* Masqué par défaut */
+      align-items: center; justify-content: center;
+      font-size: 10px; font-weight: bold; cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .clear-icon:hover { background: var(--text-muted); color: white; }
+
     .filters { display: flex; gap: 10px; flex-wrap: wrap; }
     .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; color: var(--text); }
     .filter-btn:hover { background: #EBF8FF; border-color: var(--primary); }
@@ -61,26 +77,12 @@
     /* Footer */
     .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
 
-/* =========================================
-   ASTUCE PRO : MASQUER L'ASCENSEUR VERTICAL
-   ========================================= */
-
-/* Pour Chrome, Safari et Edge */
-::-webkit-scrollbar {
-    width: 0px;  /* Cache la barre mais garde l'espace de scroll */
-    background: transparent; /* Rend le fond invisible */
-}
-
-/* Pour Firefox */
-html {
-    scrollbar-width: none; 
-}
-
-/* Pour IE/Edge anciens */
-body {
-    -ms-overflow-style: none;
-    overflow-y: auto; /* IMPORTANT : Garde le scroll actif ! */
-}
+    /* =========================================
+       ASTUCE PRO : MASQUER L'ASCENSEUR VERTICAL
+       ========================================= */
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+    html { scrollbar-width: none; }
+    body { -ms-overflow-style: none; overflow-y: auto; }
     
     @media (max-width: 600px) {
       .tools-grid { grid-template-columns: 1fr; }
@@ -111,6 +113,8 @@ body {
       <div class="search-box">
         <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Rechercher un outil (ex: Bishop, IMC, sein...)" autocomplete="off">
+        <!-- NOUVEAU : La croix de suppression -->
+        <span class="clear-icon" id="clearSearch" title="Effacer la recherche">✖</span>
       </div>
       <div class="filters" id="filtersContainer"></div>
     </section>
@@ -131,6 +135,8 @@ body {
       const grid = document.getElementById('toolsGrid');
       const filtersContainer = document.getElementById('filtersContainer');
       const searchInput = document.getElementById('searchInput');
+      const clearSearchBtn = document.getElementById('clearSearch'); // Ciblage de la croix
+      
       let allTools = [];
       let activeCategory = 'all';
       let searchTerm = '';
@@ -147,42 +153,29 @@ body {
       }
 
       function renderFilters() {
-  const cats = new Set();
-  
-  // 1. On aspire automatiquement toutes les catégories existantes dans le JSON
-  allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
-  
-  // 2. On trie les catégories par ordre alphabétique
-  const sortedCats = Array.from(cats).sort((a, b) => a.localeCompare(b, 'fr'));
-  
-  // 3. Création du bouton "Tous" (actif par défaut)
-  let html = `<button class="filter-btn active" data-cat="all">Tous</button>`;
-  
-  // 4. Création des boutons pour chaque catégorie trouvée
-  html += sortedCats.map(c => 
-    `<button class="filter-btn" data-cat="${c}">${c}</button>`
-  ).join('');
+        const cats = new Set();
+        allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
+        const sortedCats = Array.from(cats).sort((a, b) => a.localeCompare(b, 'fr'));
+        
+        let html = `<button class="filter-btn active" data-cat="all">Tous</button>`;
+        html += sortedCats.map(c => `<button class="filter-btn" data-cat="${c}">${c}</button>`).join('');
+        filtersContainer.innerHTML = html;
 
-  filtersContainer.innerHTML = html;
-
-  // 5. Gestion du clic sur les filtres
-  filtersContainer.addEventListener('click', e => {
-    const btn = e.target.closest('.filter-btn');
-    if (!btn) return;
-    
-    filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    activeCategory = btn.dataset.cat;
-    renderTools();
-  });
-}
+        filtersContainer.addEventListener('click', e => {
+          const btn = e.target.closest('.filter-btn');
+          if (!btn) return;
+          filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeCategory = btn.dataset.cat;
+          renderTools();
+        });
+      }
      
       function renderTools() {
         const filtered = allTools.filter(t => {
           const matchCat = activeCategory === 'all' || t.categorie.includes(activeCategory);
           const term = searchTerm.toLowerCase();
-          const matchSearch = !term || t.titre.toLowerCase().includes(term) || t.description.toLowerCase().includes(term) || t.categorie.some(c => c.includes(term));
+          const matchSearch = !term || t.titre.toLowerCase().includes(term) || t.description.toLowerCase().includes(term) || t.categorie.some(c => c.toLowerCase().includes(term));
           return matchCat && matchSearch;
         });
 
@@ -202,10 +195,29 @@ body {
         `).join('');
       }
 
+      // Écouteur de frappe dans la barre de recherche
       searchInput.addEventListener('input', e => {
         searchTerm = e.target.value.trim();
+        
+        // Afficher ou masquer la croix en fonction du texte
+        if (e.target.value.length > 0) {
+          clearSearchBtn.style.display = 'flex';
+        } else {
+          clearSearchBtn.style.display = 'none';
+        }
+        
         renderTools();
       });
+
+      // Écouteur du clic sur la croix
+      clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';        // Vide le champ
+        searchTerm = '';               // Vide la variable de recherche
+        clearSearchBtn.style.display = 'none'; // Masque la croix
+        searchInput.focus();           // Remet le curseur dans le champ (pratique !)
+        renderTools();                 // Rafraîchit l'affichage
+      });
+
     })();
   </script>
 </body>
