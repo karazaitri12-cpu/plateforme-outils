@@ -148,23 +148,24 @@ body {
 
       function renderFilters() {
   const cats = new Set();
-  // Récupérer toutes les catégories uniques
+  
+  // 1. On aspire automatiquement toutes les catégories existantes dans le JSON
   allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
   
-  // Trier par ordre alphabétique
-  const sortedCats = Array.from(cats).sort();
+  // 2. On trie les catégories par ordre alphabétique
+  const sortedCats = Array.from(cats).sort((a, b) => a.localeCompare(b, 'fr'));
   
-  // Créer le bouton "Tous" par défaut
+  // 3. Création du bouton "Tous" (actif par défaut)
   let html = `<button class="filter-btn active" data-cat="all">Tous</button>`;
   
-  // Ajouter les autres boutons dynamiquement
+  // 4. Création des boutons pour chaque catégorie trouvée
   html += sortedCats.map(c => 
     `<button class="filter-btn" data-cat="${c}">${c}</button>`
   ).join('');
 
   filtersContainer.innerHTML = html;
 
-  // Gestion du clic sur les filtres
+  // 5. Gestion du clic sur les filtres
   filtersContainer.addEventListener('click', e => {
     const btn = e.target.closest('.filter-btn');
     if (!btn) return;
@@ -172,10 +173,11 @@ body {
     filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     
-    activeCategory = btn.dataset.cat; // 'all' ou le nom exact de la catégorie
+    activeCategory = btn.dataset.cat;
     renderTools();
   });
 }
+     
       function renderTools() {
         const filtered = allTools.filter(t => {
           const matchCat = activeCategory === 'all' || t.categorie.includes(activeCategory);
