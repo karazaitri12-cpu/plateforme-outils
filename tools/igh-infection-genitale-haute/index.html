@@ -1,535 +1,399 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithme IGH</title>
+<div id="igh-calculator">
     <style>
-    
-        body {
+        /* --- AFFICHAGE ÉCRAN --- */
+        #igh-calculator {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
-
-        .container {
-            border-radius: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 8px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             overflow: hidden;
+            color: #212529;
+            line-height: 1.5;
+            border: 1px solid #e9ecef;
         }
 
- 
-        .header {
-            background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
+        #igh-calculator * { box-sizing: border-box; }
 
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
+        /* En-tête */
+        #igh-calculator .header {
+            background: #1e3c72; color: white; padding: 25px; text-align: center; border-bottom: 4px solid #2a5298; position: relative;
         }
+        #igh-calculator .header h1 { font-size: 24px; margin: 0 0 5px 0; font-weight: 600; }
+        #igh-calculator .header p { font-size: 14px; margin: 0; opacity: 0.9; }
+        
+        #igh-calculator .print-date { display: none; } /* Masqué sur écran */
 
-        .header p {
-            opacity: 0.9;
-            font-size: 14px;
+        #igh-calculator .content { padding: 25px; }
+
+        /* Identité Patiente : Écran */
+        #igh-calculator .patient-row {
+            display: flex; flex-wrap: wrap; gap: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 15px; margin-bottom: 25px;
         }
+        #igh-calculator .input-wrap { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 140px; }
+        #igh-calculator .input-wrap label { font-size: 13px; font-weight: 600; color: #495057; }
+        #igh-calculator .input-wrap input { padding: 8px 10px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; font-family: inherit; }
+        #igh-calculator .input-wrap input:focus { outline: none; border-color: #2a5298; box-shadow: 0 0 0 2px rgba(42,82,152,0.2); }
+        
+        /* Éléments réservés à l'impression */
+        #igh-calculator .print-only-text { display: none; }
+        #igh-calculator .signature-block { display: none; }
 
-        .content {
-            padding: 30px;
-        }
+        /* Boîtes d'info */
+        #igh-calculator .reminder-box { background: #fff8e1; border-left: 4px solid #ffc107; padding: 12px 15px; margin-bottom: 20px; border-radius: 4px;}
+        #igh-calculator .reminder-box p { margin: 0; font-size: 13px; color: #664d03; font-weight: 500; }
 
-        .diagnostic-box {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
+        #igh-calculator .diagnostic-box { background: #f8f9fa; border-left: 4px solid #2a5298; padding: 15px; margin-bottom: 25px; border-radius: 4px;}
+        #igh-calculator .diagnostic-box h3 { color: #1e3c72; font-size: 15px; margin: 0 0 8px 0; text-transform: uppercase; }
+        #igh-calculator .diagnostic-box ul { list-style: none; padding-left: 0; margin: 0; }
+        #igh-calculator .diagnostic-box li { padding: 3px 0 3px 15px; position: relative; font-size: 14px; font-weight: 500; }
+        #igh-calculator .diagnostic-box li::before { content: "•"; position: absolute; left: 0; color: #2a5298; font-weight: bold; }
 
-        .diagnostic-box h3 {
-            color: #1565c0;
-            font-size: 18px;
-            margin-bottom: 12px;
-        }
+        #igh-calculator h2 { color: #212529; font-size: 18px; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #f8f9fa; }
 
-        .diagnostic-box ul {
-            list-style: none;
-            padding-left: 0;
-            color: #1565c0;
-        }
+        /* Critères */
+        #igh-calculator .criteria-list { display: flex; flex-direction: column; margin-bottom: 20px; border-top: 1px solid #e9ecef; border-bottom: 1px solid #e9ecef; }
+        #igh-calculator .criterion-item { background: #ffffff; border: none; border-bottom: 1px solid #e9ecef; padding: 12px 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; margin: 0; user-select: none; }
+        #igh-calculator .criterion-item:last-child { border-bottom: none; }
+        #igh-calculator .criterion-item input[type="checkbox"] { display: none; }
+        #igh-calculator .custom-checkbox { width: 18px; height: 18px; border: 2px solid #adb5bd; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+        #igh-calculator .criterion-item input[type="checkbox"]:checked + .custom-checkbox { background: #2a5298; border-color: #2a5298; color: white; }
+        #igh-calculator .criterion-item input[type="checkbox"]:checked + .custom-checkbox::after { content: "\2713"; }
+        #igh-calculator .criterion-item:has(input[type="checkbox"]:checked) { background: #f4f7fc; }
+        #igh-calculator .criterion-text { font-size: 14px; font-weight: 500; color: #212529; }
 
-        .diagnostic-box li {
-            padding: 6px 0;
-            padding-left: 25px;
-            position: relative;
-            font-size: 16px !important;
-            font-weight: 500 !important;
-        }
+        #igh-calculator .patient-context { background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; padding: 10px; margin-bottom: 20px; }
+        #igh-calculator .patient-context .criterion-item { background: transparent; border: none; padding: 0; }
+        #igh-calculator .patient-context .criterion-item input[type="checkbox"]:checked + .custom-checkbox { background: #dc3545; border-color: #dc3545; }
+        #igh-calculator .patient-context .criterion-text { color: #721c24; font-weight: 600; }
 
-        /* CORRECTION ICI : Utilisation du code Unicode CSS pour le check */
-        .diagnostic-box li:before {
-            content: "\2713"; 
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
+        /* Boutons */
+        #igh-calculator .evaluate-btn { background: #2a5298; color: white; border: none; border-radius: 4px; padding: 12px; cursor: pointer; font-size: 15px; font-weight: 600; width: 100%; text-transform: uppercase; }
+        #igh-calculator .action-buttons { display: flex; gap: 12px; margin-top: 20px; }
+        #igh-calculator .secondary-btn { background: #e9ecef; color: #495057; border: 1px solid #ced4da; border-radius: 4px; padding: 10px 15px; cursor: pointer; font-size: 14px; flex: 1; display: none; font-weight: 600; text-align: center; }
+        #igh-calculator .secondary-btn.show { display: block; }
+        #igh-calculator .print-btn { background: #198754; color: white; border-color: #198754; }
 
-        .question-box {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-left: 4px solid #fc4a1a;
-        }
+        /* Résultats */
+        #igh-calculator .result-box { border-radius: 6px; padding: 20px; margin-top: 20px; display: none; background: #ffffff; }
+        #igh-calculator .result-box.show { display: block; animation: ighSlideIn 0.3s ease; }
+        #igh-calculator .result-box.severe { border: 1px solid #f5c6cb; border-top: 5px solid #dc3545; background-color: #fffafb; }
+        #igh-calculator .result-box.mild { border: 1px solid #c3e6cb; border-top: 5px solid #198754; background-color: #f9fffb; }
+        @keyframes ighSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #igh-calculator .result-box h3 { font-size: 18px; margin: 0 0 15px 0; text-transform: uppercase; }
+        #igh-calculator .result-box.severe h3 { color: #dc3545; }
+        #igh-calculator .result-box.mild h3 { color: #198754; }
+        #igh-calculator .result-section { background: #ffffff; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; margin: 12px 0; }
+        #igh-calculator .result-section h4 { font-size: 14px; margin: 0 0 8px 0; color: #495057; border-bottom: 1px solid #e9ecef; padding-bottom: 5px; text-transform: uppercase; }
+        #igh-calculator .result-box ul { list-style: none; padding-left: 0; margin: 0; }
+        #igh-calculator .result-box li { padding: 4px 0 4px 15px; position: relative; font-size: 13px; font-weight: 500; color: #212529; }
+        #igh-calculator .result-box li::before { content: "▸"; position: absolute; left: 0; font-size: 12px; color: #6c757d; }
+        #igh-calculator .alert-text { color: #dc3545; font-weight: bold; background: #f8d7da; padding: 2px 6px; border-radius: 3px; font-size: 12px; display: inline-block; margin-bottom: 5px; }
 
-        .question-box h2 {
-            color: #333;
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
+        #igh-calculator .disclaimer { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ced4da; font-size: 11px; color: #6c757d; text-align: justify; line-height: 1.4; }
 
-        .criteria-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .criterion-item {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 15px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .criterion-item:hover {
-            border-color: #fc4a1a;
-            background: #fff5f0;
-        }
-
-        .criterion-item.checked {
-            background: #fc4a1a;
-            color: white;
-            border-color: #fc4a1a;
-        }
-
-        .checkbox {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #ccc;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-
-        .criterion-item.checked .checkbox {
-            background: white;
-            color: #fc4a1a;
-            border-color: white;
-        }
-
-        .criterion-text {
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .evaluate-btn {
-            background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 15px 40px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .evaluate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(252, 74, 26, 0.3);
-        }
-
-        .evaluate-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .result-box {
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 25px;
-            color: white;
-            display: none;
-        }
-
-        .result-box.show {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        .result-box.severe {
-            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
-        }
-
-        .result-box.mild {
-            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+        /* --- IMPRESSION (Compression A5) --- */
+        @media print {
+            body * { visibility: hidden; }
+            #igh-calculator, #igh-calculator * { visibility: visible; }
+            #igh-calculator {
+                position: absolute; left: 0; top: 0; width: 100%; max-width: 100%;
+                box-shadow: none; border: none; font-size: 8.5pt; line-height: 1.2;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+            
+            /* Header ultra plat */
+            #igh-calculator .header { background: none; color: #000; padding: 0 0 5px 0; border-bottom: 1px solid #000; text-align: left; display: flex; justify-content: space-between; align-items: flex-end;}
+            #igh-calculator .header h1 { color: #000; font-size: 13pt; margin: 0; }
+            #igh-calculator .header p { display: none; }
+            #igh-calculator .print-date { display: block; font-size: 9pt; font-weight: bold; }
 
-        .result-box h3 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+            #igh-calculator .content { padding: 5px 0 0 0; }
+            
+            /* Identité : Remplacement des champs par du texte pour gain de place */
+            #igh-calculator .patient-row { background: none; border: none; padding: 0; margin-bottom: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border-bottom: 1px solid #ccc; padding-bottom: 8px; }
+            #igh-calculator .input-wrap { flex-direction: row; gap: 5px; align-items: baseline;}
+            #igh-calculator .input-wrap input { display: none; } /* Cache l'input */
+            #igh-calculator .print-only-text { display: inline; font-weight: bold; font-size: 9pt; color: #000; } /* Affiche le texte calculé */
 
-        .result-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-
-        .result-section h4 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .result-box ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .result-box li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-            font-size: 16px !important;
-            font-weight: 500 !important;
-            line-height: 1.6 !important;
-        }
-
-        /* CORRECTION ICI : Utilisation du code Unicode CSS pour la flèche */
-        .result-box li:before {
-            content: "\25B8";
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .warning-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .warning-box h4 {
-            color: #856404;
-            font-size: 18px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .warning-box p {
-            color: #856404;
-            margin: 8px 0;
-            font-size: 16px !important;
-            font-weight: 500 !important;
-            line-height: 1.6 !important;
-        }
-
-        .reset-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 30px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .reset-btn:hover {
-            background: #5a6268;
-            transform: scale(1.05);
-        }
-
-        .icon {
-            font-size: 24px;
-        }
-
-        .info-badge {
-            display: inline-block;
-            background: #2196f3;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 10px;
+            /* Masquage des consignes inutiles */
+            #igh-calculator .reminder-box, #igh-calculator .evaluate-btn, #igh-calculator .action-buttons, .info-hint { display: none !important; }
+            
+            /* Critères diagnostiques mini */
+            #igh-calculator .diagnostic-box { border: 1px solid #ccc; border-left: 3px solid #000; padding: 5px; margin-bottom: 10px; }
+            #igh-calculator .diagnostic-box h3 { font-size: 9pt; margin-bottom: 3px; }
+            #igh-calculator .diagnostic-box li { font-size: 8pt; padding: 1px 0 1px 10px; }
+            
+            /* Titres */
+            #igh-calculator h2 { font-size: 10pt; margin: 8px 0 4px 0; padding: 0; border: none; text-decoration: underline; }
+            
+            /* Critères sur 2 colonnes pour écraser la hauteur */
+            #igh-calculator .criteria-list { border: none; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 10px; }
+            #igh-calculator .criterion-item { padding: 0; border: none; gap: 5px; }
+            #igh-calculator .criterion-text { font-size: 8.5pt; color: #000; }
+            #igh-calculator .custom-checkbox { width: 10px; height: 10px; border: 1px solid #000; border-radius: 0; }
+            #igh-calculator .patient-context { background: none; border: none; padding: 0; margin-bottom: 10px; }
+            
+            /* Bloc Résultat condensé */
+            #igh-calculator .result-box { margin-top: 5px; padding: 8px; border: 1.5px solid #000 !important; }
+            #igh-calculator .result-box h3 { font-size: 11pt; margin-bottom: 5px; text-align: center; }
+            #igh-calculator .result-section { border: none; padding: 0; margin: 4px 0; }
+            #igh-calculator .result-section h4 { font-size: 9pt; margin-bottom: 2px; color: #000; text-decoration: underline; border: none;}
+            #igh-calculator .result-box li { font-size: 8.5pt; color: #000; padding: 1px 0 1px 10px; margin-bottom: 1px;}
+            #igh-calculator .alert-text { background: none; color: #000; border: 1px solid #000; padding: 0 3px; }
+            
+            /* Disclaimer et Signature */
+            #igh-calculator .disclaimer { margin-top: 15px; padding-top: 5px; font-size: 6.5pt; color: #333; border-top: 1px solid #000; }
+            #igh-calculator .signature-block { display: block; text-align: right; margin-top: 30px; font-weight: bold; font-size: 11pt; padding-right: 30px; }
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🏥 Algorithme IGH</h1>
-            <p>Infections Génitales Hautes - Aide à la Décision Thérapeutique</p>
+
+    <div class="header">
+        <div>
+            <h1>Protocole IGH</h1>
+            <p>Aide à la Décision Thérapeutique</p>
+        </div>
+        <div class="print-date">Évalué le : <span id="igh-print-date-val"></span></div>
+    </div>
+
+    <div class="content">
+        <!-- IDENTITÉ PATIENTE -->
+        <div class="patient-row">
+            <div class="input-wrap">
+                <label for="igh-nom">Nom :</label>
+                <input type="text" id="igh-nom">
+                <span class="print-only-text" id="print-nom"></span>
+            </div>
+            <div class="input-wrap">
+                <label for="igh-prenom">Prénom :</label>
+                <input type="text" id="igh-prenom">
+                <span class="print-only-text" id="print-prenom"></span>
+            </div>
+            <div class="input-wrap">
+                <label for="igh-ddn">Né(e) le :</label>
+                <input type="date" id="igh-ddn">
+                <span class="print-only-text" id="print-ddn"></span>
+            </div>
+            <div class="input-wrap">
+                <label for="igh-ddr">DDR :</label>
+                <input type="date" id="igh-ddr">
+                <span class="print-only-text" id="print-ddr"></span>
+            </div>
         </div>
 
-        <div class="content">
-            <div class="diagnostic-box">
-                <h3>🩺 Critères diagnostiques d'IGH</h3>
-                <ul>
-                    <li>Douleur pelvienne spontanée</li>
-                    <li>Douleur à la mobilisation utérine au TV</li>
-                    <li>± Leucorrhées / métrorragies / dyspareunie</li>
-                </ul>
-            </div>
-
-            <div class="question-box">
-                <h2>⚠️ Évaluation des critères de gravité</h2>
-                <p style="margin-bottom: 15px; color: #666; font-size: 15px; font-weight: 500;">
-                    Cochez <strong>uniquement</strong> les critères présents chez la patiente :
-                </p>
-                <p style="margin-bottom: 20px; color: #fc4a1a; font-size: 14px; font-weight: 600; background: #fff5f0; padding: 12px; border-radius: 8px; border-left: 3px solid #fc4a1a;">
-                    💡 Vous pouvez ne cocher AUCUN critère si la patiente ne présente pas de signe de gravité (forme peu sévère)
-                </p>
-                
-                <div class="criteria-list">
-                    <div class="criterion-item">
-                        <div class="checkbox"></div>
-                        <div class="criterion-text">🌡️ Fièvre > 38,5°C</div>
-                    </div>
-                    
-                    <div class="criterion-item">
-                        <div class="checkbox"></div>
-                        <div class="criterion-text">🤚 Défense abdominale / signes péritonéaux</div>
-                    </div>
-                    
-                    <div class="criterion-item">
-                        <div class="checkbox"></div>
-                        <div class="criterion-text">📍 Masse annexielle palpable</div>
-                    </div>
-                    
-                    <div class="criterion-item">
-                        <div class="checkbox"></div>
-                        <div class="criterion-text">🦠 Immunodépression (VIH, corticoïdes, etc.)</div>
-                    </div>
-                    
-                    <div class="criterion-item">
-                        <div class="checkbox"></div>
-                        <div class="criterion-text">🤰 Grossesse en cours</div>
-                    </div>
-                    
-                    <div class="criterion-item">
-                        <div class="checkbox"></div>
-                        <div class="criterion-text">❌ Échec traitement ambulatoire / mauvaise observance</div>
-                    </div>
-                </div>
-
-                <button class="evaluate-btn" id="evaluateBtn">
-                    🔍 Déterminer la prise en charge
-                </button>
-            </div>
-
-            <div class="result-box" id="resultBox">
-                <h3 id="resultTitle"></h3>
-                <div id="resultContent"></div>
-            </div>
-
-            <button class="reset-btn" id="resetBtn">🔄 Nouvelle évaluation</button>
+        <div class="reminder-box">
+            <p><strong>Rappel :</strong> Éliminer systématiquement une urgence chirurgicale (GEU, Appendicite, Torsion) avant de conclure à une IGH.</p>
         </div>
+
+        <div class="diagnostic-box">
+            <h3>Critères diagnostiques d'IGH</h3>
+            <ul>
+                <li>Douleur pelvienne spontanée + Douleur à la mobilisation utérine</li>
+                <li>± Leucorrhées / Métrorragies / Dyspareunie</li>
+            </ul>
+        </div>
+
+        <div class="question-box">
+            <h2>1. Critères de gravité</h2>
+            <p class="info-hint" style="margin-bottom: 12px; color: #6c757d; font-size: 13px; font-style: italic;">Ne rien cocher si absence de signes de gravité.</p>
+            
+            <div class="criteria-list">
+                <label class="criterion-item"><input type="checkbox" class="igh-chk"><span class="custom-checkbox"></span><span class="criterion-text">Fièvre > 38,5°C</span></label>
+                <label class="criterion-item"><input type="checkbox" class="igh-chk"><span class="custom-checkbox"></span><span class="criterion-text">Défense abdominale / signes péritonéaux</span></label>
+                <label class="criterion-item"><input type="checkbox" class="igh-chk"><span class="custom-checkbox"></span><span class="criterion-text">Masse annexielle palpable (abcès)</span></label>
+                <label class="criterion-item"><input type="checkbox" class="igh-chk"><span class="custom-checkbox"></span><span class="criterion-text">Immunodépression sévère</span></label>
+                <label class="criterion-item"><input type="checkbox" class="igh-chk"><span class="custom-checkbox"></span><span class="criterion-text">Grossesse en cours</span></label>
+                <label class="criterion-item"><input type="checkbox" class="igh-chk"><span class="custom-checkbox"></span><span class="criterion-text">Échec traitement ambulatoire (72h)</span></label>
+            </div>
+
+            <h2>2. Terrain</h2>
+            <div class="patient-context">
+                <label class="criterion-item">
+                    <input type="checkbox" id="igh-allergy-chk">
+                    <span class="custom-checkbox"></span>
+                    <span class="criterion-text">Allergie aux Pénicillines / Bêta-lactamines</span>
+                </label>
+            </div>
+
+            <button class="evaluate-btn" id="igh-evaluate-btn">Générer la prise en charge</button>
+        </div>
+
+        <div class="result-box" id="igh-result-box">
+            <h3 id="igh-result-title"></h3>
+            <div id="igh-result-content"></div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="secondary-btn" id="igh-reset-btn">Nouvelle évaluation</button>
+            <button class="secondary-btn print-btn" id="igh-print-btn">Imprimer / Sauvegarder PDF</button>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Avis de non-responsabilité :</strong> Cet outil est une aide à la décision clinique (HAS, CNGOF). Il ne remplace pas le jugement clinique. Chaque décision doit être adaptée à la patiente. En cas de doute, consultation d'urgence recommandée.
+        </div>
+        
+        <!-- Ajout de la signature TOUT EN BAS -->
+        <div class="signature-block">Le médecin :</div>
     </div>
 
     <script>
-        // Attendre que le DOM soit chargé
         document.addEventListener('DOMContentLoaded', function() {
-            // Ajouter les événements de clic sur les critères
-            const criteriaItems = document.querySelectorAll('.criterion-item');
-            criteriaItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    toggleCriterion(this);
-                });
+            // Date du jour pour l'entête imprimé
+            const today = new Date();
+            document.getElementById('igh-print-date-val').textContent = today.toLocaleDateString('fr-FR');
+
+            document.getElementById('igh-evaluate-btn').addEventListener('click', evaluateIGH);
+            document.getElementById('igh-reset-btn').addEventListener('click', resetIGH);
+            
+            // Calculs et formatages avant l'impression
+            document.getElementById('igh-print-btn').addEventListener('click', () => {
+                preparePrintData();
+                window.print();
             });
-
-            // Ajouter l'événement sur le bouton d'évaluation
-            const evaluateBtn = document.getElementById('evaluateBtn');
-            if (evaluateBtn) {
-                evaluateBtn.addEventListener('click', evaluate);
-            }
-
-            // Ajouter l'événement sur le bouton reset
-            const resetBtn = document.getElementById('resetBtn');
-            if (resetBtn) {
-                resetBtn.addEventListener('click', reset);
-            }
+            window.addEventListener('beforeprint', preparePrintData);
         });
 
-        function toggleCriterion(element) {
-            element.classList.toggle('checked');
-            const checkbox = element.querySelector('.checkbox');
-            if (element.classList.contains('checked')) {
-                // CORRECTION ICI : Utilisation du code Unicode JS
-                checkbox.textContent = '\u2713'; 
+        // Formater date (AAAA-MM-JJ vers JJ/MM/AAAA)
+        function formatDate(dateStr) {
+            if (!dateStr) return "";
+            const parts = dateStr.split('-');
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        // Préparation des données pour l'impression propre
+        function preparePrintData() {
+            // Noms
+            document.getElementById('print-nom').textContent = document.getElementById('igh-nom').value.toUpperCase() || "Non renseigné";
+            document.getElementById('print-prenom').textContent = document.getElementById('igh-prenom').value || "Non renseigné";
+
+            // Date de naissance et Âge
+            const ddnInput = document.getElementById('igh-ddn').value;
+            if (ddnInput) {
+                const birthDate = new Date(ddnInput);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
+                document.getElementById('print-ddn').textContent = `${formatDate(ddnInput)} (${age} ans)`;
             } else {
-                checkbox.textContent = '';
+                document.getElementById('print-ddn').textContent = "Non renseignée";
+            }
+
+            // DDR et Jour du Cycle
+            const ddrInput = document.getElementById('igh-ddr').value;
+            if (ddrInput) {
+                const ddrDate = new Date(ddrInput);
+                const today = new Date();
+                ddrDate.setHours(0,0,0,0);
+                today.setHours(0,0,0,0);
+                let cycleText = "";
+                if (today >= ddrDate) {
+                    const diffTime = Math.abs(today - ddrDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                    cycleText = ` (J${diffDays + 1})`; 
+                }
+                document.getElementById('print-ddr').textContent = `${formatDate(ddrInput)}${cycleText}`;
+            } else {
+                document.getElementById('print-ddr').textContent = "Non renseignée";
             }
         }
 
-        function evaluate() {
-            console.log('Evaluate function called');
-            const checkedCriteria = document.querySelectorAll('.criterion-item.checked').length;
-            console.log('Checked criteria:', checkedCriteria);
+        function evaluateIGH() {
+            const checkedCriteria = document.querySelectorAll('#igh-calculator .igh-chk:checked').length;
+            const isAllergic = document.getElementById('igh-allergy-chk').checked;
             
-            const resultBox = document.getElementById('resultBox');
-            const resultTitle = document.getElementById('resultTitle');
-            const resultContent = document.getElementById('resultContent');
+            const resultBox = document.getElementById('igh-result-box');
+            const resultTitle = document.getElementById('igh-result-title');
+            const resultContent = document.getElementById('igh-result-content');
+            
+            document.getElementById('igh-reset-btn').classList.add('show');
+            document.getElementById('igh-print-btn').classList.add('show');
 
             resultBox.classList.remove('severe', 'mild');
             resultBox.classList.add('show');
 
+            let antibioAmbulatoire = isAllergic 
+                ? `<li><span class="alert-text">Allergie Bêta-lactamines</span></li>
+                   <li><strong>Lévofloxacine 500 mg/j</strong> per os (14j)</li>
+                   <li><strong>Métronidazole 500 mg x2/j</strong> per os (14j)</li>`
+                : `<li><strong>Ceftriaxone 1g</strong> IM (Dose unique J1)</li>
+                   <li><strong>Doxycycline 100 mg x2/j</strong> per os (14j)</li>
+                   <li><strong>Métronidazole 500 mg x2/j</strong> per os (14j)</li>`;
+
+            let antibioHospit = isAllergic
+                ? `<li><span class="alert-text">Allergie Bêta-lactamines</span></li>
+                   <li><strong>Clindamycine 900 mg x3/j</strong> IV</li>
+                   <li><strong>Gentamicine 5 à 7 mg/kg/j</strong> IV</li>
+                   <li>Relais per os après 24-48h d'apyrexie (14j total)</li>`
+                : `<li><strong>Ceftriaxone 1 à 2g /24h</strong> IV</li>
+                   <li><strong>Doxycycline 200 mg/j</strong> IV ou per os</li>
+                   <li><strong>Métronidazole 500 mg x3/j</strong> IV</li>
+                   <li>Relais per os après 24-48h d'apyrexie (14j total)</li>`;
+
             if (checkedCriteria > 0) {
-                // Forme grave - Hospitalisation
                 resultBox.classList.add('severe');
-                resultTitle.innerHTML = '🚨 HOSPITALISATION NÉCESSAIRE';
+                resultTitle.innerHTML = 'HOSPITALISATION REQUISE';
                 resultContent.innerHTML = `
-                    <p style="margin-bottom: 15px; font-size: 17px; font-weight: 600;">
-                        Présence de critère(s) de gravité : ${checkedCriteria} critère(s) identifié(s)
+                    <p style="margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #dc3545;">
+                        Motif : Présence de ${checkedCriteria} critère(s) de gravité.
                     </p>
-
                     <div class="result-section">
-                        <h4>🔬 Examens complémentaires</h4>
+                        <h4>Bilan d'entrée</h4>
                         <ul>
-                            <li>Prélèvements endocervicaux : PCR Chlamydia trachomatis et Neisseria gonorrhoeae</li>
-                            <li>Hémocultures si fièvre > 38,5°C</li>
-                            <li>Échographie pelvienne ± TDM abdomino-pelvien</li>
-                            <li>NFS, CRP, β-hCG</li>
+                            <li>Prélèv. endocervicaux (PCR Chlam/Gono), NFS, CRP, β-hCG</li>
+                            <li>Hémocultures (si T° > 38,5°C) + Écho pelvienne en urgence</li>
                         </ul>
                     </div>
-
                     <div class="result-section">
-                        <h4>💉 Antibiothérapie INTRAVEINEUSE</h4>
-                        <ul>
-                            <li><strong>Ceftriaxone 1-2g IV/24h</strong></li>
-                            <li><strong>Doxycycline 200mg/j IV</strong> (ou per os si toléré)</li>
-                            <li><strong>Métronidazole 500mg x3/j IV</strong></li>
-                        </ul>
+                        <h4>Antibiothérapie Probabiliste</h4>
+                        <ul>${antibioHospit}</ul>
                     </div>
-
                     <div class="result-section">
-                        <h4>📋 Durée et surveillance</h4>
+                        <h4>Conduite à tenir</h4>
                         <ul>
-                            <li>Traitement parentéral jusqu'à amélioration clinique (24-48h d'apyrexie)</li>
-                            <li>Relais per os : Doxycycline + Métronidazole pour 14 jours au total</li>
-                            <li>Surveillance : clinique, température, CRP</li>
-                            <li>Discuter drainage si abcès tubo-ovarien</li>
+                            <li>Antalgiques / Retrait DIU non systématique</li>
                         </ul>
                     </div>
                 `;
             } else {
-                // Forme peu sévère - Ambulatoire
                 resultBox.classList.add('mild');
-                resultTitle.innerHTML = '✅ TRAITEMENT AMBULATOIRE POSSIBLE';
+                resultTitle.innerHTML = 'TRAITEMENT AMBULATOIRE';
                 resultContent.innerHTML = `
-                    <p style="margin-bottom: 15px; font-size: 17px; font-weight: 600;">
-                        Absence de critères de gravité - Forme peu sévère
+                    <p style="margin-bottom: 5px; font-size: 13px; font-weight: 600; color: #198754;">
+                        Motif : Forme clinique non compliquée.
                     </p>
-
                     <div class="result-section">
-                        <h4>🔬 Examens complémentaires</h4>
+                        <h4>Bilan initial</h4>
                         <ul>
-                            <li>Prélèvements endocervicaux : PCR Chlamydia trachomatis et Neisseria gonorrhoeae</li>
-                            <li>β-hCG (éliminer grossesse)</li>
-                            <li>NFS, CRP (selon contexte)</li>
+                            <li>Prélèvements endocervicaux (PCR Chlam/Gono), β-hCG</li>
                         </ul>
                     </div>
-
                     <div class="result-section">
-                        <h4>💊 Schéma thérapeutique</h4>
-                        <ul>
-                            <li><strong>J1 : Ceftriaxone 1g IM</strong> (dose unique)</li>
-                            <li><strong>Doxycycline 100mg x2/j per os</strong> pendant 14 jours</li>
-                            <li><strong>Métronidazole 500mg x2/j per os</strong> pendant 14 jours</li>
-                        </ul>
+                        <h4>Ordonnance Antibiothérapie</h4>
+                        <ul>${antibioAmbulatoire}</ul>
                     </div>
-
-                    <div class="warning-box">
-                        <h4>⚠️ Réévaluation OBLIGATOIRE</h4>
-                        <p><strong>Consultation à 72 heures (J3) impérative</strong></p>
-                        <p>Critères d'amélioration attendus :</p>
-                        <ul style="list-style: none; margin-left: 0; margin-top: 10px; padding-left: 0;">
-                            <li style="color: #856404; font-size: 16px; font-weight: 500; padding: 6px 0; padding-left: 25px; position: relative;">
-                                <span style="position: absolute; left: 0; font-weight: bold;">•</span>
-                                Diminution des douleurs pelviennes
-                            </li>
-                            <li style="color: #856404; font-size: 16px; font-weight: 500; padding: 6px 0; padding-left: 25px; position: relative;">
-                                <span style="position: absolute; left: 0; font-weight: bold;">•</span>
-                                Apyrexie
-                            </li>
-                            <li style="color: #856404; font-size: 16px; font-weight: 500; padding: 6px 0; padding-left: 25px; position: relative;">
-                                <span style="position: absolute; left: 0; font-weight: bold;">•</span>
-                                Amélioration clinique au TV
-                            </li>
-                        </ul>
-                        <p style="margin-top: 12px; font-weight: 600;">
-                            ❌ Si absence d'amélioration → HOSPITALISATION
-                        </p>
-                    </div>
-
                     <div class="result-section">
-                        <h4>👥 Prise en charge du partenaire</h4>
+                        <h4>Conseils & Suivi</h4>
                         <ul>
-                            <li>Dépistage et traitement systématique du/des partenaire(s)</li>
-                            <li>Abstinence sexuelle jusqu'à guérison complète</li>
+                            <li>Arrêt de travail (2 à 5 j) + Traitement systématique du partenaire.</li>
+                            <li><strong style="color:#dc3545;">CONTRÔLE OBLIGATOIRE À J3 (72h)</strong> : Hospitalisation si échec.</li>
                         </ul>
                     </div>
                 `;
             }
 
-            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            setTimeout(() => { resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
         }
 
-        function reset() {
-            document.querySelectorAll('.criterion-item').forEach(item => {
-                item.classList.remove('checked');
-                item.querySelector('.checkbox').textContent = '';
-            });
-            
-            const resultBox = document.getElementById('resultBox');
-            resultBox.classList.remove('show', 'severe', 'mild');
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function resetIGH() {
+            document.getElementById('igh-nom').value = '';
+            document.getElementById('igh-prenom').value = '';
+            document.getElementById('igh-ddn').value = '';
+            document.getElementById('igh-ddr').value = '';
+            document.querySelectorAll('#igh-calculator input[type="checkbox"]').forEach(chk => chk.checked = false);
+            document.getElementById('igh-result-box').classList.remove('show', 'severe', 'mild');
+            document.querySelectorAll('#igh-calculator .secondary-btn').forEach(btn => btn.classList.remove('show'));
+            document.getElementById('igh-calculator').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     </script>
-</body>
-</html>
+</div>
