@@ -6,7 +6,10 @@
   <title>Plateforme d'outils médicaux | Dr. Kara Zaitri</title>
   <meta name="description" content="Outils professionnels d'aide à la décision en gynécologie-obstétrique." />
   
+  <!-- === LIENS PWA (Mode Hors-Ligne & Installation App) === -->
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#2B6CB0">
+  <link rel="apple-touch-icon" href="/icon-192.png">
 
   <style>
     /* === VARIABLES CSS (Light & Dark Mode) === */
@@ -57,14 +60,15 @@
     .clear-icon:hover { background: var(--text-muted); color: var(--card); }
     
     .filters { display: flex; gap: 10px; flex-wrap: wrap; }
-    .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; color: var(--text); }
+    /* CORRECTION : font-weight: normal; pour retirer le gras des catégories */
+    .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: normal; transition: all 0.2s; color: var(--text); }
     .filter-btn:hover { background: #EBF8FF; border-color: var(--primary); color: var(--primary); }
-    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 600; }
     body.dark-mode .filter-btn:hover { background: rgba(43,108,176,0.2); }
     
     /* Bouton Favoris */
     .filter-btn.fav-btn { background: rgba(214, 158, 46, 0.1); border-color: #D69E2E; color: #D69E2E; }
-    .filter-btn.fav-btn.active { background: #D69E2E; color: white; border-color: #D69E2E; }
+    .filter-btn.fav-btn.active { background: #D69E2E; color: white; border-color: #D69E2E; font-weight: 600; }
     
     /* === GRID OUTILS === */
     .section-title { font-size: 1.05rem; font-weight: 600; color: var(--primary); margin: 28px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
@@ -293,6 +297,20 @@
       renderTools();
     });
 
+    /* ==========================================
+       PWA : ENREGISTREMENT DU SERVICE WORKER
+       ========================================== */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('✅ PWA : ServiceWorker enregistré avec succès !', registration.scope);
+          })
+          .catch((err) => {
+            console.error('❌ PWA : Échec de l\'enregistrement du ServiceWorker :', err);
+          });
+      });
+    }
   </script>
 </body>
 </html>
