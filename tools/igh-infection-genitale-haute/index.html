@@ -102,7 +102,7 @@
             box-shadow: 0 0 0 2px rgba(42,82,152,0.2);
         }
 
-        /* Sélecteurs de date personnalisés (Remplace input date natif) */
+        /* Sélecteurs de date personnalisés */
         #igh-calculator .date-group {
             display: flex;
             gap: 6px;
@@ -476,7 +476,7 @@
 
     <div class="header">
         <div style="flex: 1;">
-            <h1>🩺 Protocole IGH — Prise en charge thérapeutique</h1>
+            <h1> Protocole IGH — Prise en charge thérapeutique</h1>
             <p>Outil d'aide à la décision clinique — Usage médical professionnel</p>
             <div class="header-badges">
                 <span class="header-badge">Gynécologie</span>
@@ -624,25 +624,37 @@
                 }
 
                 function getDays(y, m) { return new Date(y, m, 0).getDate(); }
-                function updateDays() {
+                
+                // Fonction pour peupler les jours
+                function populateDays(targetVal) {
                     dSel.innerHTML = '<option value="">JJ</option>';
-                    if (ySel.value && mSel.value) {
-                        const max = getDays(ySel.value, mSel.value);
-                        for (let d = 1; d <= max; d++) {
-                            const opt = document.createElement('option');
-                            opt.value = String(d).padStart(2, '0');
-                            opt.textContent = opt.value;
-                            dSel.appendChild(opt);
-                        }
+                    // Si une valeur spécifique est demandée (ex: lors du reset), on la garde
+                    // Sinon on génère tous les jours de 1 à 31 par défaut
+                    const maxDays = (ySel.value && mSel.value) ? getDays(ySel.value, mSel.value) : 31;
+                    
+                    for (let d = 1; d <= maxDays; d++) {
+                        const opt = document.createElement('option');
+                        opt.value = String(d).padStart(2, '0');
+                        opt.textContent = opt.value;
+                        dSel.appendChild(opt);
+                    }
+                    
+                    // Restaurer la valeur si elle existe encore dans la liste
+                    if (targetVal && dSel.querySelector(`option[value="${targetVal}"]`)) {
+                        dSel.value = targetVal;
                     }
                 }
+
                 function sync() {
                     hidden.value = (ySel.value && mSel.value && dSel.value) 
                         ? `${ySel.value}-${mSel.value}-${dSel.value}` : '';
                 }
 
-                mSel.addEventListener('change', () => { updateDays(); sync(); });
-                ySel.addEventListener('change', () => { updateDays(); sync(); });
+                // Initialisation : peupler 31 jours par défaut pour que le champ soit accessible
+                populateDays();
+
+                mSel.addEventListener('change', () => { populateDays(dSel.value); sync(); });
+                ySel.addEventListener('change', () => { populateDays(dSel.value); sync(); });
                 dSel.addEventListener('change', sync);
             });
         }
@@ -780,6 +792,34 @@
             document.getElementById('igh-ddn').value = '';
             document.getElementById('igh-ddr').value = '';
             document.querySelectorAll('.date-group select').forEach(sel => sel.selectedIndex = 0);
+            // Réinitialiser les listes de jours à 31 pour le prochain usage
+            const ddnContainer = document.getElementById('igh-picker-ddn');
+            const ddrContainer = document.getElementById('igh-picker-ddr');
+            const ddnDaySel = ddnContainer.querySelector('.d-day');
+            const ddrDaySel = ddrContainer.querySelector('.d-day');
+            
+            // Remettre les jours à 31 si besoin (via un petit trigger)
+            // La fonction populateDays s'en charge implicitement lors des changements, 
+            // mais ici on peut juste réinsérer les options si elles ont été coupées à 28
+            if(ddnDaySel.options.length < 31) {
+                ddnDaySel.innerHTML = '<option value="">JJ</option>';
+                for(let i=1; i<=31; i++){
+                    let opt = document.createElement('option');
+                    opt.value = String(i).padStart(2, '0');
+                    opt.textContent = opt.value;
+                    ddnDaySel.appendChild(opt);
+                }
+            }
+            if(ddrDaySel.options.length < 31) {
+                ddrDaySel.innerHTML = '<option value="">JJ</option>';
+                for(let i=1; i<=31; i++){
+                    let opt = document.createElement('option');
+                    opt.value = String(i).padStart(2, '0');
+                    opt.textContent = opt.value;
+                    ddrDaySel.appendChild(opt);
+                }
+            }
+
             document.querySelectorAll('#igh-calculator input[type="checkbox"]').forEach(chk => chk.checked = false);
             document.getElementById('igh-result-box').classList.remove('show', 'severe', 'mild');
             document.querySelectorAll('#igh-calculator .secondary-btn').forEach(btn => btn.classList.remove('show'));
