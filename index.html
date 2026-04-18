@@ -41,7 +41,7 @@
     .brand-text p { font-size: 0.8rem; color: var(--text-muted); }
     
     .header-actions { display: flex; gap: 10px; align-items: center; }
-    .icon-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+    .icon-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; text-decoration: none; }
     .icon-btn:hover { background: var(--border); }
     
     /* === DISCLAIMER === */
@@ -55,7 +55,6 @@
     .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); background: var(--card); }
     .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
     
-    /* Petite croix d'effacement */
     .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); background: var(--border); width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; transition: background 0.2s, color 0.2s; }
     .clear-icon:hover { background: var(--text-muted); color: var(--card); }
     
@@ -65,7 +64,6 @@
     .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 600; }
     body.dark-mode .filter-btn:hover { background: rgba(43,108,176,0.2); }
     
-    /* Bouton Favoris */
     .filter-btn.fav-btn { background: rgba(214, 158, 46, 0.1); border-color: #D69E2E; color: #D69E2E; }
     .filter-btn.fav-btn.active { background: #D69E2E; color: white; border-color: #D69E2E; font-weight: 600; }
     
@@ -117,8 +115,8 @@
       </a>
       
       <div class="header-actions">
-        <!-- BOUTON D'INSTALLATION INTELLIGENT -->
-        <a id="installBtn" href="/tools/guide-pwa.html" class="icon-btn" title="Installer l'App" style="text-decoration:none; color:var(--primary); border-color:var(--primary); background:rgba(43,108,176,0.1);">
+        <!-- BOUTON SIMPLE QUI ENVOIE VERS LE GUIDE -->
+        <a href="/tools/guide-pwa.html" class="icon-btn" title="Comment installer l'App ?">
           📱 Installer l'App
         </a>
         
@@ -140,7 +138,9 @@
         <input type="text" id="searchInput" placeholder="Rechercher un outil (ex: Bishop, IMC, sein...)" autocomplete="off">
         <span class="clear-icon" id="clearSearch" title="Effacer">✖</span>
       </div>
-      <div class="filters" id="filtersContainer"></div>
+      <div class="filters" id="filtersContainer">
+        <!-- Rempli par JS -->
+      </div>
     </section>
 
     <h3 class="section-title">Outils disponibles</h3>
@@ -148,19 +148,6 @@
       <p style="color:var(--text-muted);">Chargement des outils...</p>
     </div>
   </main>
-
-  <!-- MODAL QR CODE (Uniquement sur Desktop) -->
-  <div id="qrModal" style="display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; backdrop-filter: blur(5px);">
-    <div style="background:var(--card); color:var(--text); padding:30px; border-radius:20px; max-width:380px; width:90%; text-align:center; position:relative; border: 1px solid var(--border);">
-        <span id="closeQr" style="position:absolute; right:20px; top:15px; font-size:30px; cursor:pointer; opacity:0.6;">&times;</span>
-        <h3 style="color:var(--primary); margin-bottom:15px;">Installation Mobile</h3>
-        <p style="font-size:0.9rem; margin-bottom:20px;">Scannez pour installer l'application sur votre smartphone :</p>
-        <div style="background:white; padding:15px; border-radius:12px; display:inline-block; margin-bottom:15px;">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://outils.dr-karazaitri-ma.net" alt="QR Code">
-        </div>
-        <p><a href="/tools/guide-pwa.html" style="color:var(--primary); font-size:0.85rem; text-decoration:none; font-weight:bold;">Ou consulter le mode d'emploi &rarr;</a></p>
-    </div>
-  </div>
 
   <footer class="footer">
     <p><strong>Mention légale :</strong> Outils destinés aux professionnels de santé. Ne se substituent pas au jugement clinique.</p>
@@ -172,68 +159,30 @@
     const filtersContainer = document.getElementById('filtersContainer');
     const searchInput = document.getElementById('searchInput');
     const clearSearchBtn = document.getElementById('clearSearch');
-    const installBtn = document.getElementById('installBtn');
     
     let allTools = [];
     let activeCategory = 'all';
     let searchTerm = '';
-    let deferredPrompt;
+    
     let favorites = JSON.parse(localStorage.getItem('drkz_favorites')) || [];
 
-    // --- INITIALISATION ---
+    // Initialisation
     (async function init() {
-      // Thème
       if (localStorage.getItem('drkz_theme') === 'dark') {
         document.body.classList.add('dark-mode');
         document.getElementById('themeToggle').innerText = '☀️';
       }
-      // Masquer bouton si déjà installé
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        if(installBtn) installBtn.style.display = 'none';
-      }
-      // Chargement outils
+
       try {
         const res = await fetch('/tools.json');
         allTools = await res.json();
         renderFilters();
         renderTools();
       } catch (err) {
-        grid.innerHTML = '<p>Erreur chargement.</p>';
+        grid.innerHTML = '<p>Erreur chargement JSON.</p>';
       }
     })();
 
-    // --- GESTION DU BOUTON INSTALLATION ---
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      if(installBtn) installBtn.style.borderColor = "var(--accent)";
-    });
-
-    if(installBtn) {
-      installBtn.addEventListener('click', (e) => {
-        // 1. Desktop -> QR Code
-        if (window.innerWidth > 768) {
-          e.preventDefault();
-          document.getElementById('qrModal').style.display = 'flex';
-        } 
-        // 2. Android -> Prompt officiel
-        else if (deferredPrompt) {
-          e.preventDefault();
-          deferredPrompt.prompt();
-          deferredPrompt = null;
-        }
-        // 3. iOS -> Alerte claire
-        else if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-          e.preventDefault();
-          alert("Pour installer sur iPhone :\n\n1. Appuyez sur le bouton 'Partager' (le carré avec une flèche) en bas de Safari.\n2. Faites défiler et choisissez 'Sur l'écran d'accueil'.");
-        }
-        // 4. Par défaut -> Va vers le guide
-      });
-    }
-
-    document.getElementById('closeQr').onclick = () => document.getElementById('qrModal').style.display = 'none';
-
-    // --- LOGIQUE SITE (Filtres, Recherche, Thème) ---
     function toggleTheme() {
       const isDark = document.body.classList.toggle('dark-mode');
       document.getElementById('themeToggle').innerText = isDark ? '☀️' : '🌙';
@@ -252,17 +201,19 @@
       const cats = new Set();
       allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
       const sortedCats = Array.from(cats).sort((a, b) => a.localeCompare(b, 'fr'));
+      
       let html = `<button class="filter-btn active" data-cat="all">Tous</button><button class="filter-btn fav-btn" data-cat="favorites">⭐ Favoris</button>`;
       html += sortedCats.map(c => `<button class="filter-btn" data-cat="${c}">${c}</button>`).join('');
       filtersContainer.innerHTML = html;
-      filtersContainer.onclick = (e) => {
+
+      filtersContainer.addEventListener('click', e => {
         const btn = e.target.closest('.filter-btn');
         if (!btn) return;
         filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         activeCategory = btn.dataset.cat;
         renderTools();
-      };
+      });
     }
 
     function renderTools() {
@@ -272,24 +223,34 @@
         const matchSearch = !term || t.titre.toLowerCase().includes(term) || t.description.toLowerCase().includes(term);
         return matchCat && matchSearch;
       });
+
       grid.innerHTML = filtered.map(t => {
         const isFav = favorites.includes(t.id);
-        return `<a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
-          <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">${isFav ? '★' : '☆'}</button>
+        const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
+        return `
+        <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
+          ${badgeHtml}
+          <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">
+            ${isFav ? '★' : '☆'}
+          </button>
           <div class="tool-icon">${t.icone || '🛠️'}</div>
-          <div class="tool-content"><h3>${t.titre}</h3><p>${t.description}</p></div>
+          <div class="tool-content">
+            <h3>${t.titre}</h3>
+            <p>${t.description}</p>
+          </div>
         </a>`}).join('');
     }
 
-    searchInput.oninput = (e) => {
+    searchInput.addEventListener('input', e => {
       searchTerm = e.target.value.trim();
       clearSearchBtn.style.display = searchTerm.length > 0 ? 'flex' : 'none';
       renderTools();
-    };
+    });
 
-    clearSearchBtn.onclick = () => { searchInput.value = ''; searchTerm = ''; clearSearchBtn.style.display = 'none'; renderTools(); };
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = ''; searchTerm = ''; clearSearchBtn.style.display = 'none'; renderTools();
+    });
 
-    // --- SERVICE WORKER ---
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); });
     }
