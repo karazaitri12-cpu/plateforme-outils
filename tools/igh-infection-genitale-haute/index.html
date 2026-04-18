@@ -87,7 +87,7 @@
             color: #495057;
             white-space: nowrap;
         }
-        #igh-calculator .input-wrap input {
+        #igh-calculator .input-wrap input[type="text"] {
             padding: 8px 10px;
             border: 1px solid #ced4da;
             border-radius: 4px;
@@ -96,7 +96,31 @@
             width: 100%;
             min-width: 0;
         }
-        #igh-calculator .input-wrap input:focus {
+        #igh-calculator .input-wrap input[type="text"]:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 2px rgba(42,82,152,0.2);
+        }
+
+        /* Sélecteurs de date personnalisés (Remplace input date natif) */
+        #igh-calculator .date-group {
+            display: flex;
+            gap: 6px;
+        }
+        #igh-calculator .date-group select {
+            flex: 1;
+            padding: 8px 4px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            background-color: #ffffff;
+            cursor: pointer;
+            text-align: center;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        #igh-calculator .date-group select:focus {
             outline: none;
             border-color: #2a5298;
             box-shadow: 0 0 0 2px rgba(42,82,152,0.2);
@@ -185,10 +209,7 @@
             margin: 0;
             user-select: none;
         }
-        /* Dernier item sur la grille : pas de bordure basse si seul sur sa ligne */
-        #igh-calculator .criterion-item:last-child {
-            border-bottom: none;
-        }
+        #igh-calculator .criterion-item:last-child { border-bottom: none; }
         #igh-calculator .criterion-item input[type="checkbox"] { display: none; }
         #igh-calculator .custom-checkbox {
             width: 18px;
@@ -379,106 +400,37 @@
         }
 
         /* ===== RESPONSIVE MOBILE ===== */
-
-        /* Tablette / Petits écrans (<= 600px) */
         @media screen and (max-width: 600px) {
-            #igh-calculator .header {
-                padding: 18px 16px;
+            #igh-calculator .header { padding: 18px 16px; }
+            #igh-calculator .header h1 { font-size: 15px; gap: 7px; }
+            #igh-calculator .header p { font-size: 12px; margin-bottom: 12px; }
+            #igh-calculator .header-badge { font-size: 9px; padding: 3px 8px; }
+            #igh-calculator .content { padding: 14px; }
+            #igh-calculator .patient-row { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; margin-bottom: 16px; }
+            #igh-calculator .input-wrap label { font-size: 11px; }
+            #igh-calculator .input-wrap input[type="text"], #igh-calculator .date-group select {
+                font-size: 13px; padding: 7px 6px;
             }
-            #igh-calculator .header h1 {
-                font-size: 15px;
-                gap: 7px;
-            }
-            #igh-calculator .header p {
-                font-size: 12px;
-                margin-bottom: 12px;
-            }
-            #igh-calculator .header-badge {
-                font-size: 9px;
-                padding: 3px 8px;
-            }
-            #igh-calculator .content {
-                padding: 14px;
-            }
-            #igh-calculator .patient-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-                padding: 12px;
-                margin-bottom: 16px;
-            }
-            /* Sur très petits écrans, les champs date prennent toute la largeur */
-            #igh-calculator .input-wrap:nth-child(3),
-            #igh-calculator .input-wrap:nth-child(4) {
-                grid-column: span 1;
-            }
-            #igh-calculator .input-wrap label {
-                font-size: 11px;
-            }
-            #igh-calculator .input-wrap input {
-                font-size: 13px;
-                padding: 7px 8px;
-            }
-            #igh-calculator .reminder-box {
-                padding: 10px 12px;
-            }
-            #igh-calculator .reminder-box p {
-                font-size: 12px;
-            }
-            #igh-calculator .diagnostic-box {
-                padding: 12px;
-            }
-            #igh-calculator .diagnostic-box h3 {
-                font-size: 12px;
-            }
-            #igh-calculator .diagnostic-box li {
-                font-size: 12px;
-            }
-            #igh-calculator h2 {
-                font-size: 14px;
-                margin-bottom: 10px;
-            }
-            /* Critères : 1 colonne sur mobile */
-            #igh-calculator .criteria-list {
-                grid-template-columns: 1fr;
-            }
-            #igh-calculator .criterion-item {
-                border-right: none;
-                padding: 10px 8px;
-            }
-            #igh-calculator .criterion-text {
-                font-size: 13px;
-            }
-            #igh-calculator .evaluate-btn {
-                font-size: 13px;
-                padding: 13px;
-            }
-            #igh-calculator .action-buttons {
-                flex-direction: column;
-            }
-            #igh-calculator .secondary-btn {
-                min-width: unset;
-                width: 100%;
-                padding: 11px;
-            }
-            #igh-calculator .result-box {
-                padding: 14px;
-            }
-            #igh-calculator .result-section {
-                padding: 11px;
-            }
-            #igh-calculator .result-box li {
-                font-size: 12px;
-            }
+            #igh-calculator .reminder-box { padding: 10px 12px; }
+            #igh-calculator .reminder-box p { font-size: 12px; }
+            #igh-calculator .diagnostic-box { padding: 12px; }
+            #igh-calculator .diagnostic-box h3 { font-size: 12px; }
+            #igh-calculator .diagnostic-box li { font-size: 12px; }
+            #igh-calculator h2 { font-size: 14px; margin-bottom: 10px; }
+            #igh-calculator .criteria-list { grid-template-columns: 1fr; }
+            #igh-calculator .criterion-item { border-right: none; padding: 10px 8px; }
+            #igh-calculator .criterion-text { font-size: 13px; }
+            #igh-calculator .evaluate-btn { font-size: 13px; padding: 13px; }
+            #igh-calculator .action-buttons { flex-direction: column; }
+            #igh-calculator .secondary-btn { min-width: unset; width: 100%; padding: 11px; }
+            #igh-calculator .result-box { padding: 14px; }
+            #igh-calculator .result-section { padding: 11px; }
+            #igh-calculator .result-box li { font-size: 12px; }
         }
 
-        /* Très petits écrans (<= 380px) */
         @media screen and (max-width: 380px) {
-            #igh-calculator .patient-row {
-                grid-template-columns: 1fr;
-            }
-            #igh-calculator .header h1 {
-                font-size: 14px;
-            }
+            #igh-calculator .patient-row { grid-template-columns: 1fr; }
+            #igh-calculator .header h1 { font-size: 14px; }
         }
 
         /* --- IMPRESSION (Compression A5) --- */
@@ -489,43 +441,34 @@
                 position: absolute; left: 0; top: 0; width: 100%; max-width: 100%;
                 box-shadow: none; border: none; font-size: 8.5pt; line-height: 1.2;
             }
-
             #igh-calculator .header { background: none; color: #000; padding: 0 0 5px 0; border-bottom: 1px solid #000; text-align: left; display: flex; justify-content: space-between; align-items: flex-end;}
             #igh-calculator .header h1 { color: #000; font-size: 13pt; margin: 0; }
             #igh-calculator .header p { display: none; }
             #igh-calculator .header-badges { display: none; }
             #igh-calculator .print-date { display: block; font-size: 9pt; font-weight: bold; margin-bottom: 2px;}
-
             #igh-calculator .content { padding: 5px 0 0 0; }
-
             #igh-calculator .patient-row { background: none; box-shadow: none; border: none; padding: 0; margin-bottom: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border-bottom: 1px solid #ccc; padding-bottom: 8px; }
             #igh-calculator .input-wrap { flex-direction: row; gap: 5px; align-items: baseline;}
-            #igh-calculator .input-wrap input { display: none; }
+            #igh-calculator .input-wrap input, #igh-calculator .date-group { display: none; }
             #igh-calculator .print-only-text { display: inline; font-weight: bold; font-size: 9pt; color: #000; }
-
             #igh-calculator .reminder-box, #igh-calculator .evaluate-btn, #igh-calculator .action-buttons, .info-hint { display: none !important; }
-
             #igh-calculator .diagnostic-box { border: 1px solid #ccc; border-left: 3px solid #000; padding: 5px; margin-bottom: 10px; }
             #igh-calculator .diagnostic-box h3 { font-size: 9pt; margin-bottom: 3px; color: #000;}
             #igh-calculator .diagnostic-box li { font-size: 8pt; padding: 1px 0 1px 10px; }
             #igh-calculator .diagnostic-box li::before { color: #000; }
-
             #igh-calculator h2 { font-size: 10pt; margin: 8px 0 4px 0; padding: 0; border: none; text-decoration: underline; }
-
             #igh-calculator .criteria-list { border: none; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 10px; }
             #igh-calculator .criterion-item { padding: 0; border: none; gap: 5px; }
             #igh-calculator .criterion-text { font-size: 8.5pt; color: #000; }
             #igh-calculator .custom-checkbox { width: 10px; height: 10px; border: 1px solid #000; border-radius: 0; }
             #igh-calculator .patient-context { background: none; border: none; padding: 0; margin-bottom: 10px; }
             #igh-calculator .patient-context .criterion-text { color: #000; }
-
             #igh-calculator .result-box { margin-top: 5px; padding: 8px; border: 1.5px solid #000 !important; }
             #igh-calculator .result-box h3 { font-size: 11pt; margin-bottom: 5px; text-align: center; }
             #igh-calculator .result-section { border: none; padding: 0; margin: 4px 0; }
             #igh-calculator .result-section h4 { font-size: 9pt; margin-bottom: 2px; color: #000; text-decoration: underline; border: none;}
             #igh-calculator .result-box li { font-size: 8.5pt; color: #000; padding: 1px 0 1px 10px; margin-bottom: 1px;}
             #igh-calculator .alert-text { background: none; color: #000; border: 1px solid #000; padding: 0 3px; }
-
             #igh-calculator .disclaimer { margin-top: 15px; padding-top: 5px; font-size: 6.5pt; color: #333; border-top: 1px solid #000; }
             #igh-calculator .signature-block { display: block; text-align: right; margin-top: 30px; font-weight: bold; font-size: 11pt; padding-right: 30px; }
         }
@@ -558,13 +501,23 @@
                 <span class="print-only-text" id="print-prenom"></span>
             </div>
             <div class="input-wrap">
-                <label for="igh-ddn">Né(e) le :</label>
-                <input type="date" id="igh-ddn">
+                <label>Né(e) le :</label>
+                <div class="date-group" id="igh-picker-ddn">
+                    <select class="d-day"><option value="">JJ</option></select>
+                    <select class="d-month"><option value="">MM</option></select>
+                    <select class="d-year"><option value="">AAAA</option></select>
+                    <input type="hidden" id="igh-ddn">
+                </div>
                 <span class="print-only-text" id="print-ddn"></span>
             </div>
             <div class="input-wrap">
-                <label for="igh-ddr">DDR :</label>
-                <input type="date" id="igh-ddr">
+                <label>DDR :</label>
+                <div class="date-group" id="igh-picker-ddr">
+                    <select class="d-day"><option value="">JJ</option></select>
+                    <select class="d-month"><option value="">MM</option></select>
+                    <select class="d-year"><option value="">AAAA</option></select>
+                    <input type="hidden" id="igh-ddr">
+                </div>
                 <span class="print-only-text" id="print-ddr"></span>
             </div>
         </div>
@@ -627,6 +580,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date();
             document.getElementById('igh-print-date-val').textContent = today.toLocaleDateString('fr-FR');
+            
+            // Initialisation des sélecteurs de date
+            initDatePickers();
 
             document.getElementById('igh-evaluate-btn').addEventListener('click', evaluateIGH);
             document.getElementById('igh-reset-btn').addEventListener('click', resetIGH);
@@ -637,6 +593,59 @@
             });
             window.addEventListener('beforeprint', preparePrintData);
         });
+
+        function initDatePickers() {
+            const currentYear = new Date().getFullYear();
+            const pickers = [
+                { id: 'igh-picker-ddn', hiddenId: 'igh-ddn', start: 1930, end: currentYear },
+                { id: 'igh-picker-ddr', hiddenId: 'igh-ddr', start: currentYear - 1, end: currentYear + 1 }
+            ];
+
+            pickers.forEach(cfg => {
+                const container = document.getElementById(cfg.id);
+                const dSel = container.querySelector('.d-day');
+                const mSel = container.querySelector('.d-month');
+                const ySel = container.querySelector('.d-year');
+                const hidden = document.getElementById(cfg.hiddenId);
+
+                // Mois
+                for (let m = 1; m <= 12; m++) {
+                    const opt = document.createElement('option');
+                    opt.value = String(m).padStart(2, '0');
+                    opt.textContent = opt.value;
+                    mSel.appendChild(opt);
+                }
+                // Années
+                for (let y = cfg.end; y >= cfg.start; y--) {
+                    const opt = document.createElement('option');
+                    opt.value = y;
+                    opt.textContent = y;
+                    ySel.appendChild(opt);
+                }
+
+                function getDays(y, m) { return new Date(y, m, 0).getDate(); }
+                function updateDays() {
+                    dSel.innerHTML = '<option value="">JJ</option>';
+                    if (ySel.value && mSel.value) {
+                        const max = getDays(ySel.value, mSel.value);
+                        for (let d = 1; d <= max; d++) {
+                            const opt = document.createElement('option');
+                            opt.value = String(d).padStart(2, '0');
+                            opt.textContent = opt.value;
+                            dSel.appendChild(opt);
+                        }
+                    }
+                }
+                function sync() {
+                    hidden.value = (ySel.value && mSel.value && dSel.value) 
+                        ? `${ySel.value}-${mSel.value}-${dSel.value}` : '';
+                }
+
+                mSel.addEventListener('change', () => { updateDays(); sync(); });
+                ySel.addEventListener('change', () => { updateDays(); sync(); });
+                dSel.addEventListener('change', sync);
+            });
+        }
 
         function formatDate(dateStr) {
             if (!dateStr) return "";
@@ -770,6 +779,7 @@
             document.getElementById('igh-prenom').value = '';
             document.getElementById('igh-ddn').value = '';
             document.getElementById('igh-ddr').value = '';
+            document.querySelectorAll('.date-group select').forEach(sel => sel.selectedIndex = 0);
             document.querySelectorAll('#igh-calculator input[type="checkbox"]').forEach(chk => chk.checked = false);
             document.getElementById('igh-result-box').classList.remove('show', 'severe', 'mild');
             document.querySelectorAll('#igh-calculator .secondary-btn').forEach(btn => btn.classList.remove('show'));
