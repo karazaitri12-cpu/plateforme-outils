@@ -6,23 +6,24 @@
     <title>Installation - Outils Dr KARA-ZAITRI</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; color: #2c3e50; line-height: 1.6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; color: #2c3e50; line-height: 1.5; }
 
         /* En-tête */
-        .header { background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; padding: 2.5rem 1rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .header { background: linear-gradient(135deg, #0056b3 0%, #004494 100%); color: white; padding: 1rem 1rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header h1 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+        .header p { margin: 0; font-size: 0.95rem; }
 
-        .container { max-width: 850px; margin: 0 auto; padding: 2rem 1rem; }
+        .container { max-width: 850px; margin: 0 auto; padding: 1rem 1rem; }
 
         /* Sections d'instructions */
-        .platform-section { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 5px solid #0056b3; }
-        .platform-header { display: flex; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #f0f0f0; }
+        .platform-section { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 5px solid #0056b3; }
+        .platform-header { display: flex; align-items: center; margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 2px solid #f0f0f0; }
         .platform-icon { width: 50px; height: 50px; background: #0056b3; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; margin-right: 1rem; }
         
         .steps { list-style: none; }
-        .step { display: flex; margin-bottom: 1.2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; }
+        .step { display: flex; margin-bottom: 0.8rem; padding: 0.8rem; background: #f8f9fa; border-radius: 8px; }
         .step-number { background: #0056b3; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 1rem; flex-shrink: 0; }
-        .url-box { background: #e3f2fd; color: #0056b3; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: bold; }
+        .url-box { background: #e3f2fd; color: #0056b3; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 0.95rem; }
 
         /* Alertes */
         .alert { background: #fff3cd; border-left: 5px solid #ffc107; padding: 1.5rem; border-radius: 8px; margin: 2rem 0; }
@@ -33,30 +34,70 @@
         .benefit-item { background: #e8f5e9; padding: 1rem; border-radius: 8px; border-left: 4px solid #2e7d32; font-size: 0.9rem; }
 
         /* FAQ */
-        .faq-section { margin-top: 3rem; }
-        .faq-item { margin-bottom: 1.5rem; }
-        .faq-question { font-weight: bold; color: #0056b3; margin-bottom: 5px; }
+        .faq-section { margin-top: 2rem; }
+        .faq-item { margin-bottom: 0.8rem; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+        .faq-question {
+            font-weight: 600;
+            color: #0056b3;
+            padding: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9fbfd;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .faq-question:hover {
+            background: #f0f6ff;
+            border-bottom-color: #0056b3;
+        }
+        .faq-toggle {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #0056b3;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 1rem;
+        }
+        .faq-item.open .faq-toggle {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            display: none;
+            padding: 1rem;
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border-top: 2px solid #f0f0f0;
+        }
+        .faq-item.open .faq-answer {
+            display: block;
+        }
 
         .footer { background: #2c3e50; color: white; text-align: center; padding: 2.5rem 1rem; margin-top: 3rem; }
-        .btn-back { display: inline-block; background: white; color: #0056b3; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 20px; }
+        .btn-back { display: inline-block; background: white; color: #0056b3; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 500; margin-bottom: 20px; }
 
-        @media (max-width: 600px) { .benefits-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 400px) { .benefits-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
     <header class="header">
         <div class="container">
-            <a href="/" class="btn-back">⬅ Retour à la plateforme</a>
-            <h1>🏥 Guide d'Installation (100% Hors-Ligne)</h1>
+            <a href="https://outils.dr-karazaitri-ma.net/" class="btn-back">⬅ Retour à la plateforme</a>
+            <h1>🏥 Guide d'Installation (100 % Hors-Ligne)</h1>
             <p>Accédez à vos outils médicaux même sans réseau (Mode Avion)</p>
         </div>
     </header>
-
     <div class="container">
-        
+
         <p style="margin-bottom: 2rem; text-align: center; font-size: 1.1rem;">
-            Cette plateforme a été conçue pour être installée comme une application native. <strong>Aucun téléchargement sur les "Stores" n'est nécessaire.</strong>
+           Cette plateforme a été conçue pour être installée sur votre smartphone, pour une utilisation en consultation et au bloc opératoire sans dépendance réseau (sans wifi, ni 4G).<br> <strong>Aucun téléchargement sur les "Stores" n'est nécessaire.</strong><br>
         </p>
 
         <!-- ANDROID -->
@@ -126,8 +167,9 @@
         <!-- ETAPE CRUCIALE -->
         <div class="alert">
             <h4>⚡ ÉTAPE FINALE : Mise en mémoire (Crucial)</h4>
-            <p>Pour que tout fonctionne au bloc opératoire sans réseau :</p>
-            <p style="margin-top:10px;">Ouvrez l'application une première fois avec internet. Prenez 2 minutes pour <strong>cliquer sur chaque outil de la liste</strong> (ouvrez-les, puis revenez à l'accueil). Votre téléphone les sauvegarde alors définitivement pour un usage 100% hors-ligne.</p>
+            <p>Pour que tout fonctionne sans réseau :</p>
+            <p style="margin-top:10px;">Ouvrez l'application une première fois avec internet.<br> Prenez 2 minutes pour <strong>cliquer sur chaque outil de la liste</strong> (que vous utilisez) (ouvrez-les, puis revenez à l'accueil). 
+Un outil cliqué = un outil sauvegardé. <br>Votre téléphone les sauvegarde alors définitivement pour un usage 100 % hors-ligne.</p>
         </div>
 
         <!-- AVANTAGES -->
@@ -148,12 +190,39 @@
         <div class="faq-section">
             <h2 style="margin-bottom:1.5rem; text-align:center;">❓ Foire Aux Questions</h2>
             <div class="faq-item">
-                <div class="faq-question">🔄 Comment se font les mises à jour ?</div>
-                <div class="faq-answer">C'est automatique. À chaque ouverture avec internet, l'appli vérifie les nouvelles recommandations et les télécharge silencieusement.</div>
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>🔄 Comment se font les mises à jour ?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">Les mises à jour sont entièrement automatiques. À chaque ouverture de l'application avec une connexion internet active, le système vérifie les nouvelles versions des outils et les recommandations médicales, puis télécharge silencieusement les modifications.</div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">🔒 Mes données cliniques sont-elles envoyées sur un serveur ?</div>
-                <div class="faq-answer">Absolument pas. Tout est traité localement dans la puce de votre téléphone. Rien ne transite par internet.</div>
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Mes données cliniques sont-elles envoyées sur un serveur ?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">Non. Aucune donnée clinique ou paramètre ne transite par internet. Tous les calculs s'effectuent localement sur votre appareil. Seules les mises à jour de code sont téléchargées depuis nos serveurs ; aucun suivi utilisateur.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Puis-je utiliser l'application sans internet après installation ?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">Oui, à condition que le pré-chargement (étape critique) ait été effectué. Ensuite, tous les outils fonctionnent intégralement sans connexion réseau.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Puis-je désinstaller l'application ?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">Oui. Sur Android, appuyez et maintenez l'icône, puis sélectionnez "Supprimer". Sur iPhone, balayez l'icône vers la gauche ou appuyez longuement et choisissez "Supprimer l'app". Les données en cache seront effacées.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Quelle version minimale de l'OS est requise ?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">Android 6.0 et versions ultérieures. iOS 12 et versions ultérieures. Si vous utilisez une version antérieure, mettez à jour votre système d'exploitation.</div>
             </div>
         </div>
 
@@ -175,6 +244,12 @@
     </footer>
 
     <script>
+        // Fonction pour ouvrir/fermer les FAQ
+        function toggleFaq(element) {
+            const faqItem = element.closest('.faq-item');
+            faqItem.classList.toggle('open');
+        }
+
         // Gestion du thème sombre si activé sur l'accueil
         if (localStorage.getItem('drkz_theme') === 'dark') {
             document.body.style.backgroundColor = '#1A202C';
