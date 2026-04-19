@@ -2,523 +2,456 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hémorragie Génitale - Outil Diagnostique</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#8b1a1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Hémorragie Génitale — Outil Diagnostique v2</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --rouge: #8b1a1a; --rouge-vif: #b91c1c; --rouge-pale: #fef2f2; --rouge-bord: #fca5a5;
+            --bleu: #1e3a5f; --bleu-pale: #eff6ff;
+            --vert: #14532d; --vert-pale: #f0fdf4; --vert-bord: #86efac;
+            --orange: #9a3412; --orange-pale: #fff7ed; --orange-bord: #fdba74;
+            --ambre: #78350f; --ambre-pale: #fffbeb; --ambre-bord: #fcd34d;
+            --gris-100: #f8f9fa; --gris-200: #e9ecef; --gris-400: #adb5bd;
+            --gris-600: #6c757d; --gris-800: #343a40; --noir: #212529; --blanc: #ffffff;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; --radius: 6px;
         }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        h1 {
-            color: #dc2626;
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .btn-reset {
-            background: #f3f4f6;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .btn-reset:hover {
-            background: #e5e7eb;
-        }
-
-        .progress-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .progress-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            position: relative;
-        }
-
-        .step-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            background: #e5e7eb;
-            color: #6b7280;
-            margin-bottom: 10px;
-        }
-
-        .step-circle.active {
-            background: #dc2626;
-            color: white;
-        }
-
-        .step-label {
-            font-size: 14px;
-            color: #374151;
-            font-weight: 600;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .step-line {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            right: -50%;
-            height: 4px;
-            background: #e5e7eb;
-            z-index: -1;
-        }
-
-        .step-line.active {
-            background: #dc2626;
-        }
-
-        .step-content {
-            display: none;
-        }
-
-        .step-content.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h2 {
-            color: #dc2626;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .info-box {
-            background: #fef2f2;
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border-left: 4px solid #dc2626;
-        }
-
-        .info-box.blue {
-            background: #eff6ff;
-            border-left-color: #3b82f6;
-        }
-
-        .info-box.green {
-            background: #f0fdf4;
-            border-left-color: #16a34a;
-        }
-
-        .info-box.yellow {
-            background: #fefce8;
-            border-left-color: #eab308;
-        }
-
-        .choice-btn {
-            width: 100%;
-            background: white;
-            border: 2px solid #dc2626;
-            color: #dc2626;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 12px;
-        }
-
-        .choice-btn:hover {
-            background: #dc2626;
-            color: white;
-        }
-
-        .diagnostic-box {
-            background: #dcfce7;
-            border: 2px solid #16a34a;
-            padding: 24px;
-            border-radius: 12px;
-            margin-top: 20px;
-        }
-
-        .diagnostic-box h3 {
-            color: #16a34a;
-            font-size: 20px;
-            margin-bottom: 16px;
-        }
-
-        .exam-list {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 16px;
-        }
-
-        .exam-item {
-            padding: 12px;
-            border-bottom: 1px solid #e5e7eb;
-            color: #374151;
-        }
-
-        .exam-item:last-child {
-            border-bottom: none;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #6b7280;
-            font-size: 14px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-family: var(--font); font-size: 15px; color: var(--noir); background: #f1f3f5; -webkit-text-size-adjust: 100%; }
+        body { min-height: 100vh; min-height: -webkit-fill-available; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+        .tool-wrap { max-width: 720px; margin: 0 auto; }
+        .tool-header { background: var(--rouge); padding: 22px 24px 18px; position: relative; overflow: hidden; }
+        .tool-header::after { content: ''; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05); pointer-events: none; }
+        .tool-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+        .tool-header h1 { font-size: clamp(15px, 3vw, 20px); font-weight: 700; color: var(--blanc); line-height: 1.25; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+        .tool-header-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+        .tool-header-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+        .tool-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.2); padding: 3px 9px; border-radius: 3px; white-space: nowrap; }
+        .header-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: flex-start; }
+        .btn-hdr { border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 600; font-family: var(--font); white-space: nowrap; touch-action: manipulation; transition: background 0.2s; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.12); }
+        .btn-hdr:hover, .btn-hdr:active { background: rgba(255,255,255,0.25); }
+        .btn-retour { background: rgba(255,255,255,0.22); display: none; }
+        .btn-retour.visible { display: inline-block; }
+        .tool-progress { background: var(--blanc); border-bottom: 1px solid var(--gris-200); padding: 12px 24px; display: flex; align-items: center; }
+        .prog-step { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .prog-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; background: var(--gris-200); color: var(--gris-600); transition: all 0.3s; }
+        .prog-circle.active { background: var(--rouge-vif); color: var(--blanc); }
+        .prog-label { font-size: 11px; font-weight: 600; color: var(--gris-600); text-transform: uppercase; letter-spacing: 0.04em; }
+        .prog-label.active { color: var(--rouge-vif); }
+        .prog-line { flex: 1; height: 2px; background: var(--gris-200); margin: 0 8px; transition: background 0.3s; }
+        .prog-line.active { background: var(--rouge-vif); }
+        .tool-body { padding: 20px; }
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .sec-title { font-size: 15px; font-weight: 700; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 2px solid var(--rouge-pale); color: var(--rouge); display: flex; align-items: center; gap: 8px; }
+        .ibox { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 13px; border-left: 4px solid; }
+        .ibox p, .ibox li { font-size: 13px; line-height: 1.5; }
+        .ibox strong { font-weight: 700; }
+        .ibox h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .ibox ul { list-style: none; padding: 0; margin: 0; }
+        .ibox ul li { padding: 4px 0 4px 16px; position: relative; color: #374151; }
+        .ibox ul li::before { content: "\2022"; position: absolute; left: 0; font-weight: bold; }
+        .ibox.red   { background: var(--rouge-pale); border-left-color: var(--rouge-vif); }
+        .ibox.blue  { background: var(--bleu-pale);  border-left-color: var(--bleu); }
+        .ibox.blue h3 { color: var(--bleu); }
+        .ibox.blue ul li::before { color: var(--bleu); }
+        .ibox.yellow{ background: var(--ambre-pale); border-left-color: #d97706; }
+        .ibox.yellow h3 { color: var(--ambre); }
+        .ibox.neutral { background: var(--gris-100); border-left-color: var(--gris-400); }
+        .choice-btn { width: 100%; background: var(--blanc); border: 2px solid var(--rouge-vif); color: var(--rouge); padding: 12px 15px; border-radius: var(--radius); font-size: 14px; font-weight: 600; font-family: var(--font); cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; margin-bottom: 9px; transition: all 0.2s; touch-action: manipulation; line-height: 1.3; }
+        .choice-btn::before { content: "\25B6"; font-size: 10px; color: var(--rouge-vif); flex-shrink: 0; }
+        .choice-btn:hover, .choice-btn:active { background: var(--rouge-vif); color: var(--blanc); }
+        .choice-btn:hover::before, .choice-btn:active::before { color: var(--blanc); }
+        .result-box { border-radius: var(--radius); padding: 15px; margin-top: 14px; border: 1px solid; border-top-width: 4px; }
+        .result-box.green { background: var(--vert-pale); border-color: var(--vert-bord); border-top-color: var(--vert); }
+        .result-box.green .rb-title { color: var(--vert); }
+        .result-box.red { background: var(--rouge-pale); border-color: var(--rouge-bord); border-top-color: var(--rouge-vif); }
+        .result-box.red .rb-title { color: var(--rouge-vif); }
+        .result-box.orange { background: var(--orange-pale); border-color: var(--orange-bord); border-top-color: #ea580c; }
+        .result-box.orange .rb-title { color: var(--orange); }
+        .rb-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+        .exam-list { background: var(--blanc); border: 1px solid var(--gris-200); border-radius: var(--radius); margin: 10px 0; overflow: hidden; }
+        .exam-item { padding: 10px 13px; border-bottom: 1px solid var(--gris-200); font-size: 13px; line-height: 1.45; color: var(--gris-800); }
+        .exam-item:last-child { border-bottom: none; }
+        .exam-item strong { color: var(--noir); font-weight: 700; display: block; margin-bottom: 2px; }
+        .exam-item p { color: var(--gris-600); font-size: 12px; margin-top: 2px; }
+        .exam-item ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
+        .exam-item ul li { font-size: 12px; color: var(--gris-600); padding: 2px 0 2px 13px; position: relative; }
+        .exam-item ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--gris-400); }
+        .alert-urg { background: #fee2e2; border: 1px solid #fca5a5; border-radius: var(--radius); padding: 13px; margin-bottom: 12px; }
+        .alert-urg .urg-title { font-weight: 700; color: var(--rouge-vif); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 7px; }
+        .alert-urg ul { list-style: none; padding: 0; margin: 0; }
+        .alert-urg ul li { font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px; position: relative; font-weight: 500; }
+        .alert-urg ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--rouge-vif); }
+        .note-ambre { background: var(--ambre-pale); border: 1px solid var(--ambre-bord); border-radius: var(--radius); padding: 11px 13px; margin-top: 11px; }
+        .note-ambre .na-title { font-size: 11px; font-weight: 700; color: var(--ambre); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+        .note-ambre p { font-size: 12px; color: var(--ambre); line-height: 1.4; }
+        .renvoi { font-size: 12px; font-weight: 700; color: var(--rouge-vif); margin-top: 12px; padding: 9px 13px; background: var(--rouge-pale); border-radius: var(--radius); border-left: 3px solid var(--rouge-vif); }
+        .tool-footer { background: var(--blanc); border-top: 1px dashed var(--gris-200); padding: 13px 20px; text-align: center; }
+        .tool-footer p { font-size: 11px; color: var(--gris-600); line-height: 1.5; }
+        .tool-footer strong { color: var(--gris-800); }
+        .subsection-label { font-size: 12px; font-weight: 700; color: var(--gris-600); text-transform: uppercase; letter-spacing: 0.05em; margin: 14px 0 8px 0; padding-left: 3px; }
+        @media (max-width: 480px) {
+            .tool-header { padding: 15px 15px 13px; }
+            .tool-header h1 { font-size: 14px; }
+            .tool-progress { padding: 10px 15px; }
+            .prog-label { display: none; }
+            .tool-body { padding: 13px; }
+            .choice-btn { font-size: 13px; padding: 11px 13px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🩸 Hémorragie Génitale</h1>
-            <button class="btn-reset" onclick="resetTool()">🔄 Réinitialiser</button>
-        </div>
+<div class="tool-wrap">
 
-        <div class="progress-bar" id="progressBar"></div>
-
-        <!-- STEP 1: Contexte -->
-        <div class="step-content active" id="step1">
-            <h2>Contexte de l'hémorragie</h2>
-            <div class="info-box">
-                <p style="margin-bottom: 16px; color: #4b5563; font-weight: bold;">Dans quel contexte survient l'hémorragie ?</p>
+    <div class="tool-header">
+        <div class="tool-header-top">
+            <div>
+                <h1>&#129656; Hémorragie Génitale</h1>
+                <p class="tool-header-sub">Outil d'aide à la décision clinique — Usage médical professionnel</p>
             </div>
-            
-            <button class="choice-btn" onclick="setContext('activite')">
-                Période d'activité génitale
-            </button>
-            
-            <button class="choice-btn" onclick="setContext('grossesse')">
-                Grossesse connue ou suspectée
-            </button>
-            
-            <button class="choice-btn" onclick="setContext('postmenopause')">
-                Post-ménopause (sans THS)
-            </button>
-        </div>
-
-        <!-- STEP 2: Période d'activité -->
-        <div class="step-content" id="step2-activite">
-            <h2>Période d'Activité Génitale</h2>
-            
-            <div class="info-box yellow">
-                <p style="font-weight: bold; margin-bottom: 12px;">⚠️ Première étape : Éliminer une grossesse</p>
-                <p style="color: #4b5563;">Dosage des β-HCG plasmatiques systématique</p>
-            </div>
-
-            <div class="info-box blue">
-                <h3 style="font-weight: bold; margin-bottom: 12px;">Examen clinique complet</h3>
-                <div style="padding-left: 0;">
-                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
-                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
-                        Toucher vaginal : utérus, annexes
-                    </p>
-                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
-                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
-                        Speculum : col, vagin, cervicite ?
-                    </p>
-                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
-                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
-                        Frottis ± colposcopie si lésions cervicales
-                    </p>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <p style="font-weight: bold; margin-bottom: 12px;">Résultat β-HCG :</p>
-                <button class="choice-btn" onclick="showResult('negative')">β-HCG négatif</button>
-                <button class="choice-btn" onclick="showResult('positive')">β-HCG positif</button>
-            </div>
-
-            <div id="result-negative" style="display: none;">
-                <div class="diagnostic-box">
-                    <h3>Diagnostic à évoquer selon l'examen clinique</h3>
-                    
-                    <div class="exam-list">
-                        <div class="exam-item"><strong>Si examen clinique normal :</strong> Échographie pelvienne + Hystéroscopie</div>
-                        <div class="exam-item"><strong>Causes utérines :</strong> Polype, myome sous-muqueux, adénomyose, hyperplasie endomètre, cancer endomètre</div>
-                        <div class="exam-item"><strong>Causes cervicales :</strong> Cancer du col (biopsies), cervicite (prélèvements)</div>
-                        <div class="exam-item"><strong>Causes ovariennes :</strong> Tumeur ovarienne (échographie)</div>
-                        <div class="exam-item"><strong>Causes vaginales :</strong> Cancer vagin, vaginite</div>
-                    </div>
-
-                    <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin-top: 16px;">
-                        <p style="font-weight: bold; color: #92400e; margin-bottom: 8px;">⚠️ Suspicion de salpingite ?</p>
-                        <p style="color: #92400e; font-size: 14px;">Douleurs pelviennes + fièvre + glaire louche → Cœlioscopie diagnostique</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="result-positive" style="display: none;">
-                <div class="diagnostic-box">
-                    <h3>β-HCG Positif → Hémorragies du 1er trimestre</h3>
-                    <div class="exam-list">
-                        <div class="exam-item"><strong>Échographie pelvienne endovaginale</strong> en urgence</div>
-                        <div class="exam-item">• Grossesse intra-utérine évolutive (± hématome)</div>
-                        <div class="exam-item">• Fausse couche spontanée</div>
-                        <div class="exam-item">• Grossesse extra-utérine (GEU)</div>
-                        <div class="exam-item">• Môle hydatiforme</div>
-                    </div>
-                    <p style="margin-top: 16px; color: #dc2626; font-weight: bold;">→ Voir outil spécifique "Hémorragie 1er trimestre"</p>
-                </div>
+            <div class="header-actions">
+                <button class="btn-hdr btn-retour" id="btn-retour" onclick="goBack()">&#8592; Retour</button>
+                <button class="btn-hdr" onclick="resetTool()">&#8635; Reset</button>
             </div>
         </div>
-
-        <!-- STEP 2: Grossesse -->
-        <div class="step-content" id="step2-grossesse">
-            <h2>Hémorragie et Grossesse</h2>
-            
-            <div class="info-box yellow">
-                <p style="font-weight: bold; margin-bottom: 12px;">⚠️ Préciser le terme de la grossesse</p>
-            </div>
-
-            <button class="choice-btn" onclick="showGrossesseResult('t1')">
-                1er Trimestre (< 14 SA)
-            </button>
-            
-            <button class="choice-btn" onclick="showGrossesseResult('t3')">
-                3ème Trimestre (≥ 28 SA)
-            </button>
-
-            <div id="grossesse-t1" style="display: none;">
-                <div class="diagnostic-box">
-                    <h3>Hémorragie du 1er Trimestre</h3>
-                    <div class="exam-list">
-                        <div class="exam-item"><strong>Échographie endovaginale</strong> + dosage β-HCG</div>
-                        <div class="exam-item">• <strong>Grossesse évolutive intra-utérine</strong> (± hématome décollement)</div>
-                        <div class="exam-item">• <strong>Fausse couche spontanée</strong> (œuf mort, embryon sans BDC)</div>
-                        <div class="exam-item">• <strong>Grossesse extra-utérine</strong> (masse latéro-utérine, épanchement Douglas)</div>
-                        <div class="exam-item">• <strong>Môle hydatiforme</strong> (aspect vésiculaire + β-HCG très élevés)</div>
-                    </div>
-                    <p style="margin-top: 16px; color: #dc2626; font-weight: bold;">→ Voir outil détaillé "Hémorragie 1er trimestre"</p>
-                </div>
-            </div>
-
-            <div id="grossesse-t3" style="display: none;">
-                <div class="diagnostic-box" style="background: #fef2f2; border-color: #dc2626;">
-                    <h3 style="color: #dc2626;">🚨 Hémorragie du 3ème Trimestre - URGENCE</h3>
-                    
-                    <div style="background: #fee2e2; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
-                        <p style="font-weight: bold; color: #991b1b; margin-bottom: 8px;">Conduite immédiate :</p>
-                        <div style="padding-left: 20px; color: #991b1b;">
-                            <p>• Hospitalisation d'urgence</p>
-                            <p>• Voies d'abord veineuses + groupe sanguin</p>
-                            <p>• PAS de TV avant échographie (éliminer placenta praevia)</p>
-                            <p>• Transfert immédiat en salle de travail</p>
-                            <p>• Enregistrement du RCF + échographie</p>
-                        </div>
-                    </div>
-
-                    <div class="exam-list">
-                        <div class="exam-item">
-                            <strong>Placenta Praevia</strong>
-                            <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Hémorragie indolore, utérus souple, diagnostic échographique</p>
-                        </div>
-                        <div class="exam-item">
-                            <strong>Hématome Rétro-Placentaire (HRP)</strong>
-                            <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Douleurs abdominales, contracture utérine, HTA, signes CIVD, souffrance fœtale</p>
-                        </div>
-                        <div class="exam-item">
-                            <strong>Rupture Utérine</strong>
-                            <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Surtout si utérus cicatriciel, douleur intense, signes de choc</p>
-                        </div>
-                        <div class="exam-item">
-                            <strong>Rupture vaisseau chorial</strong>
-                            <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Signes de souffrance fœtale aiguë</p>
-                        </div>
-                    </div>
-                    <p style="margin-top: 16px; color: #dc2626; font-weight: bold;">→ Voir outil détaillé "Hémorragie 3ème trimestre"</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- STEP 2: Post-ménopause -->
-        <div class="step-content" id="step2-postmenopause">
-            <h2>Hémorragie Post-Ménopausique</h2>
-            
-            <div class="info-box yellow">
-                <p style="font-weight: bold; margin-bottom: 12px;">⚠️ Métrorragies post-ménopausiques = Cancer jusqu'à preuve du contraire</p>
-                <p style="color: #4b5563;">En l'absence de THS</p>
-            </div>
-
-            <div class="info-box blue">
-                <h3 style="font-weight: bold; margin-bottom: 12px;">Examen clinique</h3>
-                <div style="padding-left: 0;">
-                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
-                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
-                        Inspection vulvaire : cancer de la vulve ?
-                    </p>
-                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
-                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
-                        Speculum : cancer du col, du vagin, vaginite atrophique ?
-                    </p>
-                    <p style="padding: 8px 0; padding-left: 24px; position: relative; color: #4b5563;">
-                        <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold; font-size: 20px;">•</span>
-                        Toucher vaginal : masse utérine, masse annexielle ?
-                    </p>
-                </div>
-            </div>
-
-            <div class="diagnostic-box">
-                <h3>Si examen clinique négatif</h3>
-                
-                <div class="exam-list">
-                    <div class="exam-item">
-                        <strong>1. Hystéroscopie +++</strong>
-                        <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Examen de référence : visualisation directe + biopsies dirigées</p>
-                        <ul style="margin-left: 20px; margin-top: 8px; color: #6b7280; font-size: 14px;">
-                            <li>Cancer de l'endomètre</li>
-                            <li>Polype endomètre</li>
-                            <li>Hyperplasie endomètre</li>
-                            <li>Atrophie endomètre</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="exam-item">
-                        <strong>2. Échographie pelvienne</strong>
-                        <p style="font-size: 14px; color: #6b7280; margin-top: 4px;">Évaluation de l'épaisseur endomètre (> 5 mm suspect) + masse ovarienne</p>
-                        <ul style="margin-left: 20px; margin-top: 8px; color: #6b7280; font-size: 14px;">
-                            <li>Tumeur de l'ovaire (marqueurs CA125, CA19.9)</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin-top: 16px;">
-                    <p style="font-weight: bold; color: #92400e; margin-bottom: 8px;">Facteurs de risque cancer endomètre</p>
-                    <p style="color: #92400e; font-size: 14px;">Obésité, ménopause tardive, œstrogénothérapie isolée, hyperplasie atypique, diabète, HTA</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>Algorithme basé sur les recommandations du CNGOF et de la FIGO</p>
-            <p style="margin-top: 8px;">⚕️ Outil d'aide à la décision - Ne remplace pas l'évaluation clinique</p>
+        <div class="tool-header-badges">
+            <span class="tool-badge">Gynécologie</span>
+            <span class="tool-badge">Obstétrique</span>
+            <span class="tool-badge">CNGOF / FIGO</span>
         </div>
     </div>
 
-    <script>
-        let currentStep = 1;
-        let selectedContext = '';
+    <div class="tool-progress" id="progressBar"></div>
 
-        function updateProgressBar() {
-            const progressBar = document.getElementById('progressBar');
-            const labels = ['Contexte', 'Évaluation'];
-            progressBar.innerHTML = '';
+    <div class="tool-body">
 
-            for (let i = 1; i <= 2; i++) {
-                const stepDiv = document.createElement('div');
-                stepDiv.className = 'progress-step';
+        <!-- ÉTAPE 1 : Contexte -->
+        <div class="step-content active" id="step1">
+            <h2 class="sec-title">&#9654; Contexte de l'hémorragie</h2>
+            <div class="ibox yellow">
+                <p><strong>Dans quel contexte survient l'hémorragie ?</strong><br>
+                Sélectionner la situation clinique correspondante.</p>
+            </div>
+            <button class="choice-btn" onclick="goTo('activite')">Période d'activité génitale</button>
+            <button class="choice-btn" onclick="goTo('grossesse')">Grossesse connue ou suspectée</button>
+            <button class="choice-btn" onclick="goTo('postmenopause')">Post-ménopause (sans THS)</button>
+        </div>
 
-                const circle = document.createElement('div');
-                circle.className = 'step-circle' + (currentStep >= i ? ' active' : '');
-                circle.textContent = i;
-                
-                const label = document.createElement('div');
-                label.className = 'step-label';
-                label.textContent = labels[i - 1];
-                
-                stepDiv.appendChild(circle);
-                stepDiv.appendChild(label);
+        <!-- BRANCHE : Activité génitale -->
+        <div class="step-content" id="step-activite">
+            <h2 class="sec-title">&#9654; Période d'Activité Génitale</h2>
+            <div class="ibox yellow">
+                <p><strong>&#9888; Première étape : Éliminer une grossesse</strong></p>
+                <p style="margin-top:6px;color:#78350f;">Dosage des &#946;-HCG plasmatiques systématique</p>
+            </div>
+            <div class="ibox blue">
+                <h3>Examen clinique complet</h3>
+                <ul>
+                    <li>Toucher vaginal : utérus, annexes</li>
+                    <li>Speculum : col, vagin, cervicite ?</li>
+                    <li>Frottis &#177; colposcopie si lésions cervicales</li>
+                </ul>
+            </div>
+            <div class="ibox neutral">
+                <p style="font-size:13px;font-weight:700;color:var(--gris-800);margin-bottom:11px;">Résultat &#946;-HCG :</p>
+                <button class="choice-btn" onclick="showPanel('pan-hcg-neg')">&#946;-HCG négatif</button>
+                <button class="choice-btn" onclick="showPanel('pan-hcg-pos')">&#946;-HCG positif</button>
+            </div>
 
-                if (i < 2) {
-                    const line = document.createElement('div');
-                    line.className = 'step-line' + (currentStep > i ? ' active' : '');
-                    stepDiv.appendChild(line);
-                }
+            <!-- Sous-panel HCG négatif : type de saignement -->
+            <div id="pan-hcg-neg" style="display:none;">
+                <p class="subsection-label">Type de saignement</p>
+                <button class="choice-btn" onclick="showPanel('pan-cyclique')">Saignement cyclique (règles abondantes / irrégulières)</button>
+                <button class="choice-btn" onclick="showPanel('pan-acyclique')">Saignement acyclique (métrorragies inter-menstruelles)</button>
+                <button class="choice-btn" onclick="showPanel('pan-contact')">Saignement provoqué (post-coïtal, post-examen)</button>
+            </div>
 
-                progressBar.appendChild(stepDiv);
-            }
+            <!-- Résultat : saignement cyclique -->
+            <div id="pan-cyclique" style="display:none;">
+                <div class="result-box green">
+                    <div class="rb-title">&#10003; Saignement cyclique — Orientation diagnostique</div>
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Bilan de première intention</strong>Échographie pelvienne + NFS, ferritinémie, bilan de coagulation</div>
+                        <div class="exam-item"><strong>Ménorragies fonctionnelles</strong>Trouble de la coagulation (Willebrand, thrombopénie), dysthyroïdie, SOPK</div>
+                        <div class="exam-item"><strong>Causes organiques utérines</strong>Fibrome sous-muqueux, polype endométrial, adénomyose</div>
+                        <div class="exam-item"><strong>Cause iatrogène</strong>DIU (cuivre), anticoagulants, tamoxifène</div>
+                    </div>
+                    <div class="note-ambre">
+                        <div class="na-title">Si saignements abondants invalidants</div>
+                        <p>Hystéroscopie diagnostique &#177; biopsies d'endomètre selon l'âge et les facteurs de risque</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Résultat : saignement acyclique -->
+            <div id="pan-acyclique" style="display:none;">
+                <div class="result-box orange">
+                    <div class="rb-title">&#9888; Saignement acyclique — Bilan organique prioritaire</div>
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Si examen clinique normal</strong>Échographie pelvienne + hystéroscopie &#177; biopsies</div>
+                        <div class="exam-item"><strong>Causes utérines</strong>Polype, myome sous-muqueux, hyperplasie de l'endomètre, cancer de l'endomètre</div>
+                        <div class="exam-item"><strong>Causes cervicales</strong>Cancer du col (biopsies), cervicite (prélèvements bactériologiques)</div>
+                        <div class="exam-item"><strong>Causes ovariennes</strong>Tumeur sécrétante, kyste fonctionnel hémorragique</div>
+                        <div class="exam-item"><strong>Causes vaginales</strong>Cancer du vagin, vaginite</div>
+                    </div>
+                    <div class="note-ambre">
+                        <div class="na-title">&#9888; Suspicion de salpingite ?</div>
+                        <p>Douleurs pelviennes + fièvre + leucorrhées purulentes &#8594; Cœlioscopie diagnostique &#177; prélèvements</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Résultat : saignement provoqué -->
+            <div id="pan-contact" style="display:none;">
+                <div class="result-box red">
+                    <div class="rb-title">&#9888; Saignement provoqué — Éliminer un cancer du col</div>
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Examen au speculum + frottis en urgence</strong></div>
+                        <div class="exam-item"><strong>Si lésion visible</strong>Biopsies cervicales immédiates — ne pas attendre le résultat du frottis</div>
+                        <div class="exam-item"><strong>Si col normal</strong>Colposcopie + recherche HPV + prélèvements IST (Chlamydia, Gonocoque)</div>
+                        <div class="exam-item"><strong>Cervicite</strong>Prélèvements bactériologiques + traitement probabiliste selon le contexte</div>
+                        <div class="exam-item"><strong>Polype sentinelle</strong>Exérèse + anatomopathologie systématique</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Résultat HCG positif -->
+            <div id="pan-hcg-pos" style="display:none;">
+                <div class="result-box red">
+                    <div class="rb-title">&#9888; &#946;-HCG positif &#8594; Hémorragie du 1er trimestre</div>
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Échographie pelvienne endovaginale en urgence</strong></div>
+                        <div class="exam-item">Grossesse intra-utérine évolutive (&#177; hématome)</div>
+                        <div class="exam-item">Fausse couche spontanée</div>
+                        <div class="exam-item">Grossesse extra-utérine (GEU) — urgence chirurgicale potentielle</div>
+                        <div class="exam-item">Môle hydatiforme</div>
+                    </div>
+                    <div class="renvoi">&#8594; Voir outil spécifique "Hémorragie 1er trimestre"</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRANCHE : Grossesse -->
+        <div class="step-content" id="step-grossesse">
+            <h2 class="sec-title">&#9654; Hémorragie et Grossesse</h2>
+            <div class="ibox yellow">
+                <p><strong>&#9888; Préciser le terme de la grossesse</strong><br>
+                Le terme conditionne l'orientation diagnostique et l'urgence.</p>
+            </div>
+            <button class="choice-btn" onclick="showPanel('pan-t1')">1er Trimestre (&lt; 14 SA)</button>
+            <button class="choice-btn" onclick="showPanel('pan-t2')">2ème Trimestre (14 – 28 SA)</button>
+            <button class="choice-btn" onclick="showPanel('pan-t3')">3ème Trimestre (&#8805; 28 SA)</button>
+
+            <div id="pan-t1" style="display:none;">
+                <div class="result-box green">
+                    <div class="rb-title">&#10003; Hémorragie du 1er Trimestre</div>
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Échographie endovaginale + dosage &#946;-HCG</strong></div>
+                        <div class="exam-item"><strong>Grossesse évolutive intra-utérine</strong>(&#177; hématome de décollement)</div>
+                        <div class="exam-item"><strong>Fausse couche spontanée</strong>(œuf clair, embryon sans BDC, FCS en cours)</div>
+                        <div class="exam-item"><strong>Grossesse extra-utérine</strong>(masse latéro-utérine, épanchement Douglas)</div>
+                        <div class="exam-item"><strong>Môle hydatiforme</strong>(aspect vésiculaire + &#946;-HCG très élevés)</div>
+                    </div>
+                    <div class="renvoi">&#8594; Voir outil détaillé "Hémorragie 1er trimestre"</div>
+                </div>
+            </div>
+
+            <div id="pan-t2" style="display:none;">
+                <div class="result-box orange">
+                    <div class="rb-title">&#9888; Hémorragie du 2ème Trimestre — Bilan urgent</div>
+                    <div class="ibox yellow" style="margin-top:10px;">
+                        <p><strong>Rappel :</strong> Toute hémorragie au 2ème trimestre impose une hospitalisation pour bilan et surveillance fœtale.</p>
+                    </div>
+                    <div class="exam-list">
+                        <div class="exam-item">
+                            <strong>Placenta praevia (insertion basse)</strong>
+                            <p>Hémorragie indolore, utérus souple — diagnostic échographique. Ne pas faire de TV.</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Hématome rétroplacentaire (HRP) débutant</strong>
+                            <p>Douleurs abdominales, utérus hypertonique. Risque de CIVD et souffrance fœtale.</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Béance cervicale / Menace d'avortement tardif</strong>
+                            <p>Col court (< 25 mm à l'échographie), membranes bombantes. Cerclage à discuter.</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Causes cervicales</strong>
+                            <p>Polype, cervicite, ectropion — diagnostic au speculum.</p>
+                        </div>
+                    </div>
+                    <div class="alert-urg" style="margin-top:12px;">
+                        <div class="urg-title">Conduite à tenir</div>
+                        <ul>
+                            <li>Hospitalisation + monitoring fœtal (RCF)</li>
+                            <li>Échographie pelvienne en urgence (localisation placentaire)</li>
+                            <li>NFS, groupe, RAI, bilan de coagulation</li>
+                            <li>PAS de TV si placenta praevia non écarté</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pan-t3" style="display:none;">
+                <div class="result-box red">
+                    <div class="rb-title">&#128680; Hémorragie du 3ème Trimestre — URGENCE</div>
+                    <div class="alert-urg">
+                        <div class="urg-title">Conduite immédiate</div>
+                        <ul>
+                            <li>Hospitalisation d'urgence en salle de travail</li>
+                            <li>Voies d'abord veineuses + groupe sanguin + RAI</li>
+                            <li>PAS de TV avant échographie (éliminer placenta praevia)</li>
+                            <li>Enregistrement du RCF en continu</li>
+                            <li>Bilan : NFS, TP, TCA, fibrinogène, D-dimères</li>
+                        </ul>
+                    </div>
+                    <div class="exam-list">
+                        <div class="exam-item">
+                            <strong>Placenta Praevia</strong>
+                            <p>Hémorragie indolore, utérus souple, diagnostic échographique</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Hématome Rétro-Placentaire (HRP)</strong>
+                            <p>Douleurs abdominales, contracture utérine, HTA, signes CIVD, souffrance fœtale</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Rupture Utérine</strong>
+                            <p>Surtout si utérus cicatriciel, douleur intense, signes de choc</p>
+                        </div>
+                        <div class="exam-item">
+                            <strong>Rupture vaisseau chorial (Benkiser)</strong>
+                            <p>Signes de souffrance fœtale aiguë, hémorragie d'origine fœtale</p>
+                        </div>
+                    </div>
+                    <div class="renvoi">&#8594; Voir outil détaillé "Hémorragie 3ème trimestre"</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRANCHE : Post-ménopause -->
+        <div class="step-content" id="step-postmenopause">
+            <h2 class="sec-title">&#9654; Hémorragie Post-Ménopausique</h2>
+            <div class="ibox red">
+                <p><strong>&#9888; Métrorragies post-ménopausiques = Cancer jusqu'à preuve du contraire</strong><br>
+                En l'absence de THS — bilan histologique obligatoire.</p>
+            </div>
+            <div class="ibox blue">
+                <h3>Examen clinique systématique</h3>
+                <ul>
+                    <li>Inspection vulvaire : cancer de la vulve, lichen ?</li>
+                    <li>Speculum : cancer du col, du vagin, vaginite atrophique ?</li>
+                    <li>Toucher vaginal : masse utérine, masse annexielle ?</li>
+                </ul>
+            </div>
+            <div class="result-box green" style="margin-top:0;">
+                <div class="rb-title">&#10003; Si examen clinique négatif</div>
+                <div class="exam-list">
+                    <div class="exam-item">
+                        <strong>1. Hystéroscopie +++ (examen de référence)</strong>
+                        <p>Visualisation directe + biopsies dirigées</p>
+                        <ul>
+                            <li>Cancer de l'endomètre</li>
+                            <li>Polype endométrial</li>
+                            <li>Hyperplasie de l'endomètre (simple / atypique)</li>
+                            <li>Atrophie endométriale</li>
+                        </ul>
+                    </div>
+                    <div class="exam-item">
+                        <strong>2. Échographie pelvienne</strong>
+                        <p>Épaisseur endomètre (seuil suspect : > 4–5 mm) + masse ovarienne</p>
+                        <ul>
+                            <li>Tumeur de l'ovaire &#8594; marqueurs CA125, CA19-9, ACE</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="note-ambre">
+                    <div class="na-title">Facteurs de risque — Cancer endomètre</div>
+                    <p>Obésité, ménopause tardive, nulliparité, œstrogénothérapie isolée, hyperplasie atypique, diabète, HTA, syndrome de Lynch, tamoxifène</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tool-footer">
+        <p><strong>Références :</strong> CNGOF, FIGO, HAS — Algorithme d'aide à la décision clinique</p>
+        <p style="margin-top:4px;">Ce contenu ne remplace pas l'évaluation clinique individuelle. En cas de doute, avis spécialisé recommandé.</p>
+    </div>
+</div>
+
+<script>
+(function() {
+    let history = ['step1'];
+    const allPanels = ['pan-hcg-neg','pan-hcg-pos','pan-cyclique','pan-acyclique','pan-contact','pan-t1','pan-t2','pan-t3'];
+    const steps = ['step1','step-activite','step-grossesse','step-postmenopause'];
+
+    function updateProgress() {
+        const bar = document.getElementById('progressBar');
+        const labels = ['Contexte','Évaluation'];
+        const cur = history.length;
+        bar.innerHTML = '';
+        for (let i = 1; i <= 2; i++) {
+            const s = document.createElement('div'); s.className = 'prog-step';
+            const c = document.createElement('div'); c.className = 'prog-circle' + (cur >= i ? ' active' : ''); c.textContent = i;
+            const l = document.createElement('div'); l.className = 'prog-label' + (cur >= i ? ' active' : ''); l.textContent = labels[i-1];
+            s.appendChild(c); s.appendChild(l);
+            if (i < 2) { const ln = document.createElement('div'); ln.className = 'prog-line' + (cur > i ? ' active' : ''); s.appendChild(ln); }
+            bar.appendChild(s);
         }
+        const btn = document.getElementById('btn-retour');
+        if (btn) btn.classList.toggle('visible', history.length > 1);
+    }
 
-        function setContext(context) {
-            selectedContext = context;
-            document.querySelectorAll('.step-content').forEach(el => {
-                el.classList.remove('active');
-            });
+    window.goTo = function(branch) {
+        steps.forEach(id => document.getElementById(id).classList.remove('active'));
+        allPanels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+        const target = 'step-' + branch;
+        document.getElementById(target).classList.add('active');
+        history.push(target);
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
-            currentStep = 2;
-            document.getElementById('step2-' + context).classList.add('active');
-            updateProgressBar();
+    window.showPanel = function(panelId) {
+        // Masquer tous les panels du même niveau
+        allPanels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+        document.getElementById(panelId).style.display = 'block';
+        history.push(panelId);
+        updateProgress();
+        setTimeout(() => { document.getElementById(panelId).scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+    };
+
+    window.goBack = function() {
+        if (history.length <= 1) return;
+        const leaving = history.pop();
+        // Si c'était un panel, le masquer
+        if (allPanels.includes(leaving)) {
+            document.getElementById(leaving).style.display = 'none';
+        } else {
+            // C'était une étape, revenir à la précédente
+            steps.forEach(id => document.getElementById(id).classList.remove('active'));
+            allPanels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+            document.getElementById(history[history.length - 1]).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+        updateProgress();
+    };
 
-        function showResult(type) {
-            document.getElementById('result-negative').style.display = 'none';
-            document.getElementById('result-positive').style.display = 'none';
-            
-            if (type === 'negative') {
-                document.getElementById('result-negative').style.display = 'block';
-            } else {
-                document.getElementById('result-positive').style.display = 'block';
-            }
-        }
+    window.resetTool = function() {
+        history = ['step1'];
+        steps.forEach(id => document.getElementById(id).classList.remove('active'));
+        allPanels.forEach(id => { document.getElementById(id).style.display = 'none'; });
+        document.getElementById('step1').classList.add('active');
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
-        function showGrossesseResult(trimestre) {
-            document.getElementById('grossesse-t1').style.display = 'none';
-            document.getElementById('grossesse-t3').style.display = 'none';
-            
-            if (trimestre === 't1') {
-                document.getElementById('grossesse-t1').style.display = 'block';
-            } else {
-                document.getElementById('grossesse-t3').style.display = 'block';
-            }
-        }
-
-        function resetTool() {
-            currentStep = 1;
-            selectedContext = '';
-            document.querySelectorAll('.step-content').forEach(el => {
-                el.classList.remove('active');
-            });
-            document.getElementById('step1').classList.add('active');
-            
-            document.getElementById('result-negative').style.display = 'none';
-            document.getElementById('result-positive').style.display = 'none';
-            document.getElementById('grossesse-t1').style.display = 'none';
-            document.getElementById('grossesse-t3').style.display = 'none';
-            
-            updateProgressBar();
-        }
-
-        updateProgressBar();
-    </script>
+    updateProgress();
+})();
+</script>
 </body>
 </html>
