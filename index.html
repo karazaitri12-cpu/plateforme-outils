@@ -153,8 +153,7 @@
     <p><strong>Mention légale :</strong> Outils destinés aux professionnels de santé. Ne se substituent pas au jugement clinique.</p>
     <p style="margin-top:6px;">© 2026 DR KARA-ZAITRI M.A</p>
   </footer>
-
-  <script>
+<script>
     const grid = document.getElementById('toolsGrid');
     const filtersContainer = document.getElementById('filtersContainer');
     const searchInput = document.getElementById('searchInput');
@@ -217,58 +216,17 @@
     }
 
     function renderTools() {
-      // Fonction utilitaire pour normaliser le texte (enlève les accents)
       const normalizeText = (str) => 
         str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
       let filtered = allTools.filter(t => {
         let matchCat = activeCategory === 'all' || (activeCategory === 'favorites' ? favorites.includes(t.id) : t.categorie.includes(activeCategory));
-        
-        // Normalisation du terme de recherche
         const term = normalizeText(searchTerm);
-        
-        // Normalisation des champs de l'outil pour la comparaison
         const titleNorm = normalizeText(t.titre);
         const descNorm = normalizeText(t.description);
 
-        const matchSearch = !term || titleNorm.includes(term) || descNorm.includes(term);
-        
-        return matchCat && matchSearch;
+        return matchCat && (!term || titleNorm.includes(term) || descNorm.includes(term));
       });
-
-      grid.innerHTML = filtered.map(t => {
-        const isFav = favorites.includes(t.id);
-        const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
-        return `
-        <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
-          ${badgeHtml}
-          <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">
-            ${isFav ? '★' : '☆'}
-          </button>
-          <div class="tool-icon">${t.icone || '🛠️'}</div>
-          <div class="tool-content">
-            <h3>${t.titre}</h3>
-            <p>${t.description}</p>
-          </div>
-        </a>`}).join('');
-    }
-
-      grid.innerHTML = filtered.map(t => {
-        const isFav = favorites.includes(t.id);
-        const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
-        return `
-        <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
-          ${badgeHtml}
-          <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">
-            ${isFav ? '★' : '☆'}
-          </button>
-          <div class="tool-icon">${t.icone || '🛠️'}</div>
-          <div class="tool-content">
-            <h3>${t.titre}</h3>
-            <p>${t.description}</p>
-          </div>
-        </a>`}).join('');
-    }
 
       grid.innerHTML = filtered.map(t => {
         const isFav = favorites.includes(t.id);
@@ -301,5 +259,6 @@
       window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); });
     }
   </script>
+  
 </body>
 </html>
