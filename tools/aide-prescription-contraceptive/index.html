@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ── Variables & Reset isolé dans le conteneur ── */
+/* ── Variables & Reset isolé ── */
 .contra-app-wrap {
     --blue-deep:   #0d2d4a;
     --blue-mid:    #1a4b72;
@@ -33,6 +33,15 @@
 
 .contra-app-wrap *, .contra-app-wrap *::before, .contra-app-wrap *::after {
     box-sizing: border-box !important;
+}
+
+/* Reset doux ciblé pour éviter les conflits Elementor */
+.contra-app-wrap p, 
+.contra-app-wrap h1, 
+.contra-app-wrap h2, 
+.contra-app-wrap h3, 
+.contra-app-wrap ul, 
+.contra-app-wrap li {
     margin: 0 !important;
     padding: 0 !important;
 }
@@ -43,7 +52,6 @@
     padding: 24px 28px !important;
     display: flex !important;
     align-items: center !important;
-    gap: 18px !important;
     border-bottom: 3px solid var(--blue-mid) !important;
 }
 .contra-app-header-logo {
@@ -58,6 +66,10 @@
     justify-content: center !important;
     font-size: 24px !important; 
     color: #ffffff !important;
+    margin-right: 18px !important;
+}
+.contra-app-header-text {
+    flex: 1 !important;
 }
 .contra-app-h1 {
     font-size: 20px !important;
@@ -75,7 +87,7 @@
     font-weight: 500 !important;
 }
 .contra-app-header-badge {
-    margin-left: auto !important;
+    margin-left: 18px !important;
     background: rgba(200,120,42,.18) !important;
     border: 1px solid rgba(200,120,42,.5) !important;
     color: #f0c07a !important;
@@ -95,11 +107,19 @@
 .contra-app-two-col {
     display: flex !important;
     flex-wrap: wrap !important;
-    gap: 24px !important;
-    align-items: flex-start !important;
 }
-.contra-app-col-form { flex: 1.2 !important; min-width: 320px !important; }
-.contra-app-col-result { flex: 1.5 !important; min-width: 320px !important; position: sticky !important; top: 20px !important; }
+.contra-app-col-form { 
+    flex: 1.2 !important; 
+    min-width: 320px !important; 
+    margin-right: 24px !important; 
+    margin-bottom: 24px !important; 
+}
+.contra-app-col-result { 
+    flex: 1.5 !important; 
+    min-width: 320px !important; 
+    position: sticky !important; 
+    top: 20px !important; 
+}
 
 /* ── PANNEAUX ── */
 .contra-app-panel {
@@ -120,7 +140,6 @@
     border-bottom: 1px solid var(--border) !important;
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
 }
 .contra-app-panel-head::before {
     content: '' !important;
@@ -130,6 +149,7 @@
     border-radius: 50% !important;
     background: var(--accent) !important;
     flex-shrink: 0 !important;
+    margin-right: 8px !important;
 }
 .contra-app-panel-body { padding: 20px 22px !important; }
 
@@ -166,12 +186,11 @@
     box-shadow: 0 0 0 3px rgba(42,111,168,.15) !important;
 }
 
-/* Unicode & custom cases à cocher */
-.contra-app-radio-set { display: flex !important; flex-direction: column !important; gap: 6px !important; }
+/* Custom cases à cocher */
+.contra-app-radio-set { display: flex !important; flex-direction: column !important; }
 .contra-app-radio-row {
     display: flex !important;
     align-items: center !important;
-    gap: 12px !important;
     cursor: pointer !important;
     padding: 8px 12px !important;
     border-radius: 4px !important;
@@ -181,8 +200,9 @@
     background: #f8fafc !important;
     border: 1px solid #e2e8f0 !important;
     transition: background .15s, border .15s !important;
-    margin: 0 !important;
+    margin: 0 0 6px 0 !important;
 }
+.contra-app-radio-row:last-child { margin-bottom: 0 !important; }
 .contra-app-radio-row:hover { background: #eef2f6 !important; }
 .contra-app-radio-row.contra-app-checked {
     background: #e6f0f9 !important;
@@ -201,6 +221,7 @@
     flex-shrink: 0 !important;
     background: #fff !important;
     font-size: 13px !important;
+    margin-right: 12px !important;
 }
 .contra-app-radio-row input[type="radio"]:checked + .contra-app-custom-radio {
     background: var(--blue-mid) !important;
@@ -231,6 +252,7 @@
 .contra-app-btn:hover { background: var(--blue-deep) !important; }
 
 /* ── RESULTATS & METHODES ── */
+.contra-app-result-container { padding-bottom: 10px !important; }
 .contra-app-empty {
     padding: 40px 20px !important;
     text-align: center !important;
@@ -245,8 +267,12 @@
     border-bottom: 1px solid var(--border) !important;
     background: #fafbfc !important;
 }
-.contra-app-method-header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; margin-bottom: 6px !important; }
-
+.contra-app-method-header-top { 
+    display: flex !important; 
+    justify-content: space-between !important; 
+    align-items: flex-start !important; 
+    margin-bottom: 6px !important; 
+}
 .contra-app-method-cat {
     font-size: 11px !important;
     font-weight: 700 !important;
@@ -286,13 +312,24 @@
     border-radius: 4px !important;
     cursor: pointer !important;
     transition: all 0.2s !important;
+    margin-left: 10px !important;
 }
 .contra-app-btn-reset:hover { background: var(--blue-light) !important; color: white !important; border-color: var(--blue-light) !important; }
+
+/* Section Corps du Résultat */
+.contra-app-method-body { padding: 20px 22px 20px !important; }
+.contra-app-method-desc {
+    font-size: 14.5px !important;
+    color: var(--text-sec) !important;
+    margin-bottom: 24px !important;
+    line-height: 1.5 !important;
+}
 
 /* ── 4 CARTES CLINIQUES ── */
 .contra-app-clinical-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
+    grid-gap: 12px !important;
     gap: 12px !important;
     margin-bottom: 24px !important;
 }
@@ -312,33 +349,39 @@
 }
 .contra-app-cbox-val { font-size: 14px !important; color: #0f172a !important; font-weight: 500 !important; line-height: 1.4 !important; }
 
-/* Unicode pour les listes */
-.contra-app-ul { list-style: none !important; padding-left: 0 !important; margin: 0 0 20px 0 !important; }
+/* Marges utilitaires garanties */
+.contra-app-mt-2 { margin-top: 2px !important; }
+.contra-app-mt-24 { margin-top: 24px !important; }
+.contra-app-mb-0 { margin-bottom: 0 !important; }
+.contra-app-mb-12 { margin-bottom: 12px !important; }
+
+/* Listes */
+.contra-app-ul { list-style: none !important; padding: 0 !important; margin: 0 0 20px 0 !important; }
 .contra-app-li {
-    position: relative !important;
-    padding: 4px 0 4px 22px !important;
+    display: flex !important;
+    align-items: flex-start !important;
     font-size: 14.5px !important;
     line-height: 1.5 !important;
-    margin-bottom: 6px !important;
-    color: var(--text-main) !important;
+    margin-bottom: 8px !important;
 }
-.contra-app-li::before {
-    content: "\2022" !important;
-    position: absolute !important;
-    left: 4px !important;
-    font-weight: bold !important;
-    font-size: 1.5em !important;
-    top: -2px !important;
+.contra-app-dot { 
+    width: 8px !important; 
+    height: 8px !important; 
+    border-radius: 50% !important; 
+    flex-shrink: 0 !important; 
+    margin-top: 6px !important; 
+    margin-right: 10px !important; 
 }
-.contra-app-ok-item::before { color: var(--green-ok) !important; }
-.contra-app-warn-item::before { color: var(--accent) !important; }
+.contra-app-dot-ok { background: var(--green-ok) !important; }
+.contra-app-dot-warn { background: var(--accent) !important; }
 
 /* ── OMS ── */
 .contra-app-oms-row {
-    display: flex !important; align-items: center !important; gap: 12px !important;
+    display: flex !important; align-items: center !important; 
     padding: 10px 14px !important; background: #fff !important; border: 1px solid var(--border) !important;
     border-radius: 4px !important; margin-bottom: 20px !important; font-size: 14px !important;
 }
+.contra-app-oms-pips-container { flex-shrink: 0 !important; margin-right: 12px !important; display: flex; align-items: center;}
 .contra-app-oms-pip { width: 14px !important; height: 14px !important; border-radius: 2px !important; border: 1px solid rgba(0,0,0,.15) !important; display: inline-block !important; margin-right: 2px !important; }
 .contra-app-pip-1 { background: #2a9d5a !important; } .contra-app-pip-2 { background: #88c840 !important; }
 .contra-app-pip-3 { background: #e8a320 !important; } .contra-app-pip-4 { background: #d43030 !important; }
@@ -351,7 +394,7 @@
     border-top: 1px solid var(--border) !important;
     background: #f8fafc !important;
 }
-.contra-app-alt-chips { display: flex !important; flex-direction: column !important; gap: 8px !important; }
+.contra-app-alt-chips { display: flex !important; flex-direction: column !important; }
 .contra-app-alt-chip {
     display: block !important;
     background: #ffffff !important;
@@ -364,14 +407,22 @@
     box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
     cursor: pointer !important;
     transition: all 0.2s ease !important;
+    margin-bottom: 8px !important;
 }
+.contra-app-alt-chip:last-child { margin-bottom: 0 !important; }
 .contra-app-alt-chip:hover { background: #eef2f6 !important; border-color: var(--blue-light) !important; color: var(--blue-deep) !important; padding-left: 20px !important; }
 
 /* ── ALERTES ── */
 .contra-app-alert {
-    padding: 12px 16px !important; border-radius: 4px !important; font-size: 14px !important; line-height: 1.5 !important; margin-bottom: 16px !important;
-    display: flex !important; gap: 12px !important; align-items: flex-start !important; margin: 20px 22px 0 !important;
+    padding: 12px 16px !important; 
+    border-radius: 4px !important; 
+    font-size: 14px !important; 
+    line-height: 1.5 !important; 
+    display: flex !important; 
+    align-items: flex-start !important; 
+    margin: 20px 22px 16px !important; /* Haut Droit/Gauche Bas */
 }
+.contra-app-alert-icon { margin-right: 12px !important; flex-shrink: 0 !important; }
 .contra-app-alert-warn { background: #fff8e1 !important; border: 1px solid #ffe082 !important; border-left: 4px solid #f57f17 !important; color: #7a5000 !important; }
 .contra-app-alert-danger { background: #fdecea !important; border: 1px solid #f0b4b4 !important; border-left: 4px solid var(--red-ci) !important; color: var(--red-ci) !important; font-weight: 500 !important; }
 
@@ -385,11 +436,18 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 ::-webkit-scrollbar { display: none !important; }
 
 /* Responsive Grid Mobile stricte */
-@media (max-width: 768px) {
+@media (max-width: 820px) {
     .contra-app-two-col { flex-direction: column !important; }
-    .contra-app-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
-    .contra-app-header-badge { margin-left: 0 !important; }
+    .contra-app-col-form { margin-right: 0 !important; width: 100% !important; }
+    .contra-app-header { flex-direction: column !important; align-items: flex-start !important; }
+    .contra-app-header-logo { margin-bottom: 12px !important; }
+    .contra-app-header-badge { margin-left: 0 !important; margin-top: 12px !important; }
     .contra-app-clinical-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Sécurité pour vieux navigateurs qui ne gèrent pas grid */
+@supports not (display: grid) {
+    .contra-app-cbox { margin-bottom: 12px !important; }
 }
 </style>
 
@@ -398,7 +456,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
   <!-- En-tête -->
   <div class="contra-app-header">
     <div class="contra-app-header-logo">&#x2695;</div>
-    <div>
+    <div class="contra-app-header-text">
       <div class="contra-app-h1">Aide à la prescription contraceptive</div>
       <div class="contra-app-subtitle">Outil clinique &middot; Usage professionnel exclusif</div>
     </div>
@@ -567,7 +625,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
       <div class="contra-app-col-result">
         <div class="contra-app-panel">
           <div class="contra-app-panel-head">Analyse clinique & Suggestion de méthode</div>
-          <div id="contra-app-resultContainer" style="padding-bottom:10px;">
+          <div id="contra-app-resultContainer" class="contra-app-result-container">
             <div class="contra-app-empty">
               <span>&#x2295;</span>
               Renseignez les critères cliniques puis cliquez sur<br>
@@ -779,9 +837,9 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
         pips += `<span class="contra-app-oms-pip ${pipClass}"></span>`;
     }
 
-    return `<div class="contra-app-cbox-title" style="margin-top:2px;">Classification OMS (Anamnèse)</div>
+    return `<div class="contra-app-cbox-title contra-app-mt-2">Classification OMS (Anamnèse)</div>
             <div class="contra-app-oms-row">
-              <div style="flex-shrink:0;">${pips}</div>
+              <div class="contra-app-oms-pips-container">${pips}</div>
               <div><strong>${map[c.antecedent].label} :</strong> ${labels[cat]}</div>
             </div>`;
   }
@@ -791,16 +849,16 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     let html = '';
 
     if (currentCrit.ist === "oui" && b.id !== "preservatif") {
-      html += `<div class="contra-app-alert contra-app-alert-warn"><span>&#x26A0;</span><div><strong>Risque IST signalé :</strong> Préservatif indispensable en double protection. La méthode ci-dessous concerne uniquement la contraception.</div></div>`;
+      html += `<div class="contra-app-alert contra-app-alert-warn"><span class="contra-app-alert-icon">&#x26A0;</span><div><strong>Risque IST signalé :</strong> Préservatif indispensable en double protection. La méthode ci-dessous concerne uniquement la contraception.</div></div>`;
     }
     if (currentCrit.thromboHer === "oui") {
-      html += `<div class="contra-app-alert contra-app-alert-warn"><span>&#x26A0;</span><div><strong>Thrombophilie héréditaire :</strong> Toute contraception contenant des œstrogènes est formellement contre-indiquée.</div></div>`;
+      html += `<div class="contra-app-alert contra-app-alert-warn"><span class="contra-app-alert-icon">&#x26A0;</span><div><strong>Thrombophilie héréditaire :</strong> Toute contraception contenant des œstrogènes est formellement contre-indiquée.</div></div>`;
     }
     if (currentCrit.traitement === "inducteurs") {
-      html += `<div class="contra-app-alert contra-app-alert-warn"><span>&#x26A0;</span><div><strong>Inducteurs enzymatiques :</strong> Chute sévère de l'efficacité des pilules/implants. Priorité aux méthodes intra-utérines (stérilets).</div></div>`;
+      html += `<div class="contra-app-alert contra-app-alert-warn"><span class="contra-app-alert-icon">&#x26A0;</span><div><strong>Inducteurs enzymatiques :</strong> Chute sévère de l'efficacité des pilules/implants. Priorité aux méthodes intra-utérines (stérilets).</div></div>`;
     }
     if (currentCrit.traitement === "bariatrique") {
-      html += `<div class="contra-app-alert contra-app-alert-warn"><span>&#x26A0;</span><div><strong>Chirurgie Bariatrique :</strong> Malabsorption digestive. Pilules orales fortement déconseillées. Privilégier les voies locales.</div></div>`;
+      html += `<div class="contra-app-alert contra-app-alert-warn"><span class="contra-app-alert-icon">&#x26A0;</span><div><strong>Chirurgie Bariatrique :</strong> Malabsorption digestive. Pilules orales fortement déconseillées. Privilégier les voies locales.</div></div>`;
     }
 
     let bCls = b.classe === 'non-hormonal' ? 'contra-app-badge-nhorm' : b.classe === 'barriere' ? 'contra-app-badge-barr' : 'contra-app-badge-horm';
@@ -817,8 +875,8 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
         <span class="contra-app-badge ${bCls}">${b.classeLabel}</span>
       </div>
       
-      <div style="padding: 20px 22px 0;">
-        <p style="font-size:14.5px; color:var(--text-sec); margin-bottom:24px;">${b.description}</p>
+      <div class="contra-app-method-body">
+        <p class="contra-app-method-desc">${b.description}</p>
         
         <div class="contra-app-clinical-grid">
           <div class="contra-app-cbox">
@@ -841,11 +899,11 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 
         ${drawOms(b, currentCrit)}
         
-        <div class="contra-app-cbox-title" style="margin-top:24px;">Avantages cliniques</div>
-        <ul class="contra-app-ul">${b.avantages.map(a => `<li class="contra-app-li contra-app-ok-item">${a}</li>`).join('')}</ul>
+        <div class="contra-app-cbox-title contra-app-mt-24">Avantages cliniques</div>
+        <ul class="contra-app-ul">${b.avantages.map(a => `<li class="contra-app-li"><div class="contra-app-dot contra-app-dot-ok"></div><span>${a}</span></li>`).join('')}</ul>
         
         <div class="contra-app-cbox-title">Points de vigilance</div>
-        <ul class="contra-app-ul" style="margin-bottom:0;">${b.inconvenients.map(i => `<li class="contra-app-li contra-app-warn-item">${i}</li>`).join('')}</ul>
+        <ul class="contra-app-ul contra-app-mb-0">${b.inconvenients.map(i => `<li class="contra-app-li"><div class="contra-app-dot contra-app-dot-warn"></div><span>${i}</span></li>`).join('')}</ul>
       </div>`;
 
     const alts = lastResults.map(x => x.m).filter(m => m.id !== b.id).slice(0, 4);
@@ -853,7 +911,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     if (alts.length > 0) {
       html += `
         <div class="contra-app-alt-section">
-          <div class="contra-app-cbox-title" style="margin-bottom:12px;">Alternatives compatibles avec le profil clinique</div>
+          <div class="contra-app-cbox-title contra-app-mb-12">Alternatives compatibles avec le profil clinique</div>
           <div class="contra-app-alt-chips">
             ${alts.map(alt => `<div class="contra-app-alt-chip" data-id="${alt.id}">${alt.nom}</div>`).join('')}
           </div>
@@ -870,7 +928,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     const container = document.getElementById('contra-app-resultContainer');
 
     if (lastResults.length === 0) {
-      container.innerHTML = `<div class="contra-app-alert contra-app-alert-danger" style="margin:20px 22px;"><span>&#x26D4;</span><div><strong>Contre-indications multiples ou majeures.</strong><br>Aucune méthode standard proposée. Évaluation spécialisée recommandée.</div></div>`;
+      container.innerHTML = `<div class="contra-app-alert contra-app-alert-danger"><span class="contra-app-alert-icon">&#x26D4;</span><div><strong>Contre-indications multiples ou majeures.</strong><br>Aucune méthode standard proposée. Évaluation spécialisée recommandée.</div></div>`;
       return;
     }
 
@@ -897,7 +955,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
         const selectedMethod = lastResults.find(x => x.m.id === methodId).m;
         renderMethod(selectedMethod, true);
         
-        if(window.innerWidth <= 768) {
+        if(window.innerWidth <= 820) {
             document.querySelector('.contra-app-col-result').scrollIntoView({behavior: 'smooth', block: 'start'});
         }
       }
