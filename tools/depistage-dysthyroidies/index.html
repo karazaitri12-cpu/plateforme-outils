@@ -1,27 +1,370 @@
-<div id="thyro-ghr-final-scope" style="all: initial; font-family: 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif;">
-    <div class="ghr-container">
+<!-- Balise Viewport pour garantir l'adaptation mobile hors-WordPress -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<div id="thyro-app-final-scope" style="all: initial; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; display: block; width: 100%;">
+    
+    <style>
+        /* =========== RESET DOUX & VARIABLES =========== */
+        #thyro-app-final-scope { 
+            display: block !important; 
+            width: 100% !important; 
+            margin: 20px auto !important; 
+            color: #212121 !important; 
+            line-height: 1.6 !important; 
+            font-size: 14px !important; 
+            box-sizing: border-box !important; 
+            text-align: left !important;
+        }
+        
+        #thyro-app-final-scope *, 
+        #thyro-app-final-scope *::before, 
+        #thyro-app-final-scope *::after { 
+            box-sizing: border-box !important; 
+        }
+
+        /* Reset ciblé pour éviter de casser le logiciel métier */
+        #thyro-app-final-scope p, 
+        #thyro-app-final-scope h1, 
+        #thyro-app-final-scope h2, 
+        #thyro-app-final-scope h3, 
+        #thyro-app-final-scope h4, 
+        #thyro-app-final-scope ul, 
+        #thyro-app-final-scope li {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* =========== CONTENEUR PRINCIPAL =========== */
+        .thyro-app-container { 
+            max-width: 650px !important; 
+            margin: 0 auto !important; 
+            background: #fff !important; 
+            border-radius: 15px !important; 
+            box-shadow: 0 12px 45px rgba(0,0,0,0.15) !important; 
+            overflow: hidden !important; 
+            border: 1px solid #e0e0e0 !important; 
+        }
+
+        /* =========== HEADER =========== */
+        .thyro-app-header { 
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%) !important; 
+            color: #fff !important; 
+            padding: 20px !important; 
+            text-align: center !important; 
+        }
+        .thyro-app-header h4 { 
+            font-size: 23px !important; 
+            font-weight: 600 !important; 
+            color: white !important; 
+            text-align: center !important; 
+            margin-bottom: 10px !important; 
+        }
+        .thyro-app-header p { 
+            font-size: 13px !important; 
+            font-weight: 400 !important; 
+            text-align: center !important; 
+            color: white !important; 
+            opacity: 0.9 !important; 
+        }
+
+        /* =========== BREADCRUMB =========== */
+        .thyro-app-breadcrumb { 
+            background: #f9f9f9 !important; 
+            padding: 12px 25px !important; 
+            font-size: 12px !important; 
+            color: #555 !important; 
+            border-bottom: 1px solid #eee !important; 
+            min-height: 20px !important; 
+        }
+
+        /* =========== CONTENU PRINCIPAL =========== */
+        .thyro-app-main { 
+            padding: 35px 25px !important; 
+            min-height: 400px !important; 
+        }
+
+        /* =========== TITRE ÉTAPE =========== */
+        .thyro-app-step-title { 
+            font-size: 21px !important; 
+            font-weight: 700 !important; 
+            color: #1b5e20 !important; 
+            margin-bottom: 22px !important; 
+            padding-bottom: 10px !important; 
+            border-bottom: 2px solid #f0f0f0 !important; 
+        }
+
+        /* =========== BOÎTES D'INFO =========== */
+        .thyro-app-info-blue { 
+            background: #e8f5e9 !important; 
+            border-left: 5px solid #4caf50 !important; 
+            padding: 20px !important; 
+            margin-bottom: 25px !important; 
+            border-radius: 6px !important; 
+        }
+
+        /* =========== LISTES UNICODE BLINDÉES =========== */
+        .thyro-app-list { 
+            list-style: none !important; 
+            padding-left: 0 !important; 
+            margin: 12px 0 !important; 
+        }
+        .thyro-app-list li { 
+            position: relative !important;
+            padding-left: 18px !important;
+            margin-bottom: 10px !important; 
+            font-size: 14.5px !important; 
+            line-height: 1.5 !important;
+        }
+        .thyro-app-list li::before {
+            content: "\2022" !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: -1px !important;
+            color: inherit !important;
+            font-weight: bold !important;
+            font-size: 1.3em !important;
+        }
+
+        /* =========== BOÎTES RECOMMANDATIONS =========== */
+        .thyro-app-reco-box { 
+            padding: 25px !important; 
+            border-radius: 8px !important; 
+            margin-top: 15px !important; 
+            animation: thyroAppFadeIn 0.4s !important; 
+            font-size: 16px !important; 
+            border: 1px solid transparent !important; 
+        }
+        .thyro-app-reco-box.thyro-app-success { background: #f1f8e9 !important; border-left: 6px solid #4caf50 !important; border-top: 1px solid #c5e1a5 !important; }
+        .thyro-app-reco-box.thyro-app-warning { background: #fff8e1 !important; border-left: 6px solid #ff9800 !important; border-top: 1px solid #ffecb3 !important; }
+        .thyro-app-reco-box.thyro-app-danger { background: #ffebee !important; border-left: 6px solid #f44336 !important; border-top: 1px solid #ffcdd2 !important; }
+
+        /* =========== BOUTONS OPTIONS =========== */
+        .thyro-app-btn { 
+            display: block !important; 
+            width: 100% !important; 
+            padding: 18px 25px !important; 
+            margin-bottom: 12px !important; 
+            background: #fff !important; 
+            border: 2px solid #e0e0e0 !important; 
+            border-radius: 12px !important; 
+            text-align: left !important; 
+            cursor: pointer !important; 
+            font-size: 16px !important; 
+            transition: all 0.25s ease !important; 
+            position: relative !important; 
+            color: #333 !important; 
+            font-weight: 500 !important; 
+            font-family: inherit !important; 
+        }
+        .thyro-app-btn:hover { 
+            border-color: #856404 !important; 
+            background: #fffdf5 !important; 
+            transform: translateX(5px) !important; 
+            color: #1b5e20 !important; 
+        }
+        .thyro-app-btn:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
+        .thyro-app-btn::after { 
+            content: "\203A" !important; 
+            position: absolute !important; 
+            right: 25px !important; 
+            color: #856404 !important; 
+            font-size: 28px !important; 
+            font-weight: bold !important; 
+            top: 50% !important; 
+            transform: translateY(-50%) !important; 
+        }
+
+        /* =========== CALCULATEURS (Remplacement de Gap par Marges) =========== */
+        .thyro-app-calc-container { 
+            margin-top: 25px !important; 
+            background: #f9fdf9 !important; 
+            border: 1px solid #e0e0e0 !important; 
+            padding: 15px !important; 
+            border-radius: 10px !important; 
+        }
+        .thyro-app-calc-row { 
+            display: flex !important; 
+            align-items: center !important; 
+            margin-top: 8px !important; 
+            flex-wrap: wrap !important; 
+        }
+        .thyro-app-calc-row > * {
+            margin-right: 10px !important;
+            margin-bottom: 5px !important;
+        }
+        .thyro-app-calc-row > *:last-child { margin-right: 0 !important; }
+        
+        .thyro-app-calc-input { 
+            width: 100px !important; 
+            padding: 8px !important; 
+            border: 2px solid #e0e0e0 !important; 
+            border-radius: 6px !important; 
+            text-align: center !important; 
+            font-size: 14px !important; 
+            font-family: inherit !important; 
+            background: #fff !important;
+            color: #333 !important;
+        }
+        .thyro-app-calc-input:focus { outline: none !important; border-color: #856404 !important; }
+        .thyro-app-calc-result { 
+            font-weight: 700 !important; 
+            color: #856404 !important; 
+            font-size: 18px !important; 
+            background: #fff8e1 !important; 
+            padding: 4px 10px !important; 
+            border-radius: 4px !important; 
+        }
+
+        /* =========== RAPPORT CLINIQUE =========== */
+        .thyro-app-report-box { 
+            width: 100% !important; 
+            height: 200px !important; 
+            padding: 12px !important; 
+            background: #f8f9fa !important; 
+            border: 1px solid #ddd !important; 
+            border-radius: 8px !important; 
+            font-family: 'Courier New', Courier, monospace !important; 
+            font-size: 12px !important; 
+            resize: vertical !important; 
+            margin-bottom: 15px !important; 
+            color: #333 !important; 
+            white-space: pre-wrap !important; 
+            overflow-y: auto !important; 
+        }
+
+        /* =========== BOUTON COPIER =========== */
+        .thyro-app-copy-btn { 
+            margin-top: 10px !important; 
+            background: #fffdf5 !important; 
+            border: 2px solid #856404 !important; 
+            color: #856404 !important; 
+            padding: 12px 20px !important; 
+            border-radius: 10px !important; 
+            cursor: pointer !important; 
+            font-size: 15px !important; 
+            font-weight: 600 !important; 
+            display: flex !important; 
+            align-items: center !important; 
+            transition: all 0.2s ease !important; 
+            width: 100% !important; 
+            justify-content: center !important; 
+            font-family: inherit !important; 
+        }
+        .thyro-app-copy-btn:hover { background: #856404 !important; color: #fff !important; box-shadow: 0 4px 12px rgba(133, 100, 4, 0.3) !important; }
+        .thyro-app-copy-btn:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
+
+        /* =========== CHAMPS INPUT TSH =========== */
+        .thyro-app-input { 
+            width: 100% !important; 
+            padding: 18px !important; 
+            border: 2px solid #e0e0e0 !important; 
+            border-radius: 10px !important; 
+            font-size: 20px !important; 
+            margin-bottom: 22px !important; 
+            transition: border-color 0.3s ease !important; 
+            font-family: inherit !important; 
+            background: #fff !important;
+            color: #000 !important;
+        }
+        .thyro-app-input:focus { outline: none !important; border-color: #856404 !important; }
+        .thyro-app-input.thyro-app-error { border-color: #f44336 !important; animation: thyroAppShake 0.3s !important; }
+
+        /* =========== BOUTON SUBMIT =========== */
+        .thyro-app-submit { 
+            background: linear-gradient(135deg, #856404 0%, #6d5203 100%) !important; 
+            color: white !important; 
+            border: none !important; 
+            padding: 18px !important; 
+            width: 100% !important; 
+            border-radius: 10px !important; 
+            font-weight: 600 !important; 
+            cursor: pointer !important; 
+            font-size: 17px !important; 
+            box-shadow: 0 4px 15px rgba(133, 100, 4, 0.2) !important; 
+            transition: all 0.3s ease !important; 
+            font-family: inherit !important; 
+            text-align: center !important;
+        }
+        .thyro-app-submit:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 20px rgba(133, 100, 4, 0.3) !important; }
+        .thyro-app-submit:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
+        .thyro-app-submit:disabled { opacity: 0.7 !important; cursor: wait !important; }
+
+        /* =========== FOOTER =========== */
+        .thyro-app-footer { 
+            padding: 25px !important; 
+            background: #fcfcfc !important; 
+            border-top: 1px solid #eee !important; 
+        }
+        .thyro-app-legal-box { 
+            font-size: 11px !important; 
+            color: #555 !important; 
+            text-align: justify !important; 
+            line-height: 1.5 !important; 
+            border: 1px dashed #ccc !important; 
+            padding: 12px !important; 
+            border-radius: 8px !important; 
+        }
+
+        /* =========== BOUTONS NAV =========== */
+        .thyro-app-back-btn, .thyro-app-restart-btn { 
+            background: none !important; 
+            border: none !important; 
+            color: #856404 !important; 
+            text-decoration: underline !important; 
+            cursor: pointer !important; 
+            font-size: 14px !important; 
+            font-weight: 600 !important; 
+            transition: color 0.2s ease !important; 
+            font-family: inherit !important; 
+            padding: 0 !important; 
+        }
+        .thyro-app-back-btn { color: #666 !important; }
+        .thyro-app-back-btn:hover { color: #333 !important; }
+        .thyro-app-restart-btn:hover { color: #6d5203 !important; }
+
+        /* =========== ANIMATIONS =========== */
+        @keyframes thyroAppFadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes thyroAppShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        /* =========== RESPONSIVE =========== */
+        @media screen and (max-width: 600px) {
+            .thyro-app-main { padding: 20px 15px !important; }
+            .thyro-app-btn { font-size: 14px !important; padding: 15px 20px !important; }
+            .thyro-app-calc-row { flex-direction: column !important; align-items: flex-start !important; }
+            .thyro-app-calc-row > * { margin-bottom: 8px !important; }
+            .thyro-app-step-title { font-size: 18px !important; }
+            .thyro-app-report-box { height: 150px !important; }
+        }
+
+        /* =========== MASQUER SCROLLBAR =========== */
+        #thyro-app-final-scope { scrollbar-width: none !important; }
+        #thyro-app-final-scope ::-webkit-scrollbar { display: none !important; }
+        #thyro-app-final-scope { -ms-overflow-style: none !important; }
+    </style>
+
+    <div class="thyro-app-container">
         <!-- HEADER -->
-        <div class="ghr-header">
-            <h4 style="font-size:23px; margin-top:20px; font-weight: 600; color: white; text-align: center; margin-bottom: 10px;">Dépistage des Dysthyroïdies</h4>
-            <p style="font-size:13px; margin-top:5px; font-weight: 400; text-align: center; color: white; opacity: 0.9;margin-bottom:12px;">Conçu par Dr KARA-ZAITRI M.A - Conforme ATA 2017 & Pratiques Francophones</p>
+        <div class="thyro-app-header">
+            <h4>Dépistage des Dysthyroïdies</h4>
+            <p>Conçu par Dr KARA-ZAITRI M.A - Conforme ATA 2017 & Pratiques Francophones</p>
         </div>
 
         <!-- FIL D'ARIANE -->
-        <div id="ghr-breadcrumb" class="ghr-breadcrumb">Début</div>
+        <div id="thyro-app-breadcrumb" class="thyro-app-breadcrumb">Début</div>
 
         <!-- CONTENU DYNAMIQUE -->
-        <div id="ghr-content" class="ghr-main">
+        <div id="thyro-app-content" class="thyro-app-main">
             <p style="text-align:center; color:#888; padding:40px 0;">Chargement de l'outil sécurisé...</p>
         </div>
 
         <!-- FOOTER -->
-        <div class="ghr-footer">
+        <div class="thyro-app-footer">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <button type="button" id="ghr-back" class="ghr-back-btn" style="display:none;">← Retour</button>
-                <button type="button" id="ghr-restart" class="ghr-restart-btn">⟲ Recommencer</button>
+                <button type="button" id="thyro-app-back" class="thyro-app-back-btn" style="display:none;">← Retour</button>
+                <button type="button" id="thyro-app-restart" class="thyro-app-restart-btn">⟲ Recommencer</button>
             </div>
             
-            <div class="ghr-legal-box">
+            <div class="thyro-app-legal-box">
                 <p><strong>Note importante :</strong> Cet outil est destiné aux professionnels de santé. Aide à la décision basée sur l'ATA 2017 et les pratiques francophones (SFE/HAS). Ne se substitue pas au jugement clinique. Utiliser les normes labo trimestre-spécifiques si disponibles. La supplémentation iodée (200 µg/j via complément prénatal type Gestarelle G3, Oligobs Grossesse, Gynefam, etc.) est recommandée dès le désir de grossesse.</p>
                 <p style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px; font-weight: 600;">
                     Sources : ATA 2017 ; Consensus SFE/HAS.
@@ -29,104 +372,6 @@
             </div>
         </div>
     </div>
-
-    <style>
-        /* =========== RESET & VARIABLES =========== */
-        #thyro-ghr-final-scope { display: block !important; width: 100% !important; margin: 20px 0 !important; color: #212121 !important; line-height: 1.6 !important; font-size: 14px !important; box-sizing: border-box !important; }
-        #thyro-ghr-final-scope * { box-sizing: border-box !important; }
-
-        /* =========== CONTENEUR PRINCIPAL =========== */
-        .ghr-container { max-width: 650px !important; margin: 0 auto !important; background: #fff !important; border-radius: 15px !important; box-shadow: 0 12px 45px rgba(0,0,0,0.15) !important; overflow: hidden !important; border: 1px solid #e0e0e0 !important; }
-
-        /* =========== HEADER =========== */
-        .ghr-header { background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%) !important; color: #fff !important; padding: 6px !important; text-align: center !important; }
-        .ghr-header h4 { font-size: 23px !important; margin-top: 20px !important; font-weight: 600 !important; color: white !important; text-align: center !important; margin-bottom: 10px !important; }
-        .ghr-header p { font-size: 13px !important; margin-top: 5px !important; font-weight: 400 !important; text-align: center !important; color: white !important; opacity: 0.9 !important; margin-bottom: 12px !important; }
-
-        /* =========== BREADCRUMB =========== */
-        .ghr-breadcrumb { background: #f9f9f9 !important; padding: 12px 25px !important; font-size: 12px !important; color: #555 !important; border-bottom: 1px solid #eee !important; min-height: 20px !important; }
-
-        /* =========== CONTENU PRINCIPAL =========== */
-        .ghr-main { padding: 35px 25px !important; min-height: 400px !important; }
-
-        /* =========== TITRE ÉTAPE =========== */
-        .ghr-step-title { font-size: 21px !important; font-weight: 700 !important; color: #1b5e20 !important; margin-bottom: 22px !important; padding-bottom: 10px !important; border-bottom: 2px solid #f0f0f0 !important; }
-
-        /* =========== BOÎTES D'INFO =========== */
-        .ghr-info-blue { background: #e8f5e9 !important; border-left: 5px solid #4caf50 !important; padding: 20px !important; margin-bottom: 25px !important; border-radius: 6px !important; }
-        .ghr-info-blue ul { padding-left: 20px !important; margin: 12px 0 !important; }
-        .ghr-info-blue li { margin-bottom: 10px !important; font-size: 14.5px !important; }
-
-        /* =========== BOÎTES RECOMMANDATIONS =========== */
-        .ghr-reco-box { padding: 25px !important; border-radius: 8px !important; margin-top: 15px !important; animation: fadeIn 0.4s !important; font-size: 16px !important; border: 1px solid transparent !important; }
-        .ghr-reco-box.success { background: #f1f8e9 !important; border-left: 6px solid #4caf50 !important; border-top: 1px solid #c5e1a5 !important; }
-        .ghr-reco-box.warning { background: #fff8e1 !important; border-left: 6px solid #ff9800 !important; border-top: 1px solid #ffecb3 !important; }
-        .ghr-reco-box.danger { background: #ffebee !important; border-left: 6px solid #f44336 !important; border-top: 1px solid #ffcdd2 !important; }
-        .ghr-reco-box ul { padding-left: 20px !important; margin: 12px 0 !important; }
-        .ghr-reco-box li { margin-bottom: 10px !important; font-size: 15px !important; }
-
-        /* =========== BOUTONS OPTIONS =========== */
-        .ghr-btn { display: block !important; width: 100% !important; padding: 18px 25px !important; margin-bottom: 12px !important; background: #fff !important; border: 2px solid #e0e0e0 !important; border-radius: 12px !important; text-align: left !important; cursor: pointer !important; font-size: 16px !important; transition: all 0.25s ease !important; box-sizing: border-box !important; position: relative !important; color: #333 !important; font-weight: 500 !important; font-family: inherit !important; }
-        .ghr-btn:hover { border-color: #856404 !important; background: #fffdf5 !important; transform: translateX(5px) !important; color: #1b5e20 !important; }
-        .ghr-btn:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
-        .ghr-btn::after { content: "\203A" !important; position: absolute !important; right: 25px !important; color: #856404 !important; font-size: 28px !important; font-weight: bold !important; top: 50% !important; transform: translateY(-50%) !important; }
-
-        /* =========== CALCULATEURS =========== */
-        .ghr-calc-container { margin-top: 25px !important; background: #f9fdf9 !important; border: 1px solid #e0e0e0 !important; padding: 15px !important; border-radius: 10px !important; }
-        .ghr-calc-row { display: flex !important; align-items: center !important; gap: 10px !important; margin-top: 8px !important; flex-wrap: wrap !important; }
-        .ghr-calc-input { width: 100px !important; padding: 8px !important; border: 2px solid #e0e0e0 !important; border-radius: 6px !important; text-align: center !important; font-size: 14px !important; font-family: inherit !important; }
-        .ghr-calc-input:focus { outline: none !important; border-color: #856404 !important; }
-        .ghr-calc-result { font-weight: 700 !important; color: #856404 !important; font-size: 18px !important; background: #fff8e1 !important; padding: 4px 10px !important; border-radius: 4px !important; }
-
-        /* =========== RAPPORT CLINIQUE =========== */
-        .ghr-report-box { width: 100% !important; height: 200px !important; padding: 12px !important; background: #f8f9fa !important; border: 1px solid #ddd !important; border-radius: 8px !important; font-family: 'Courier New', Courier, monospace !important; font-size: 12px !important; resize: vertical !important; margin-bottom: 15px !important; box-sizing: border-box !important; color: #333 !important; white-space: pre-wrap !important; overflow-y: auto !important; }
-
-        /* =========== BOUTON COPIER =========== */
-        .ghr-copy-btn { margin-top: 10px !important; background: #fffdf5 !important; border: 2px solid #856404 !important; color: #856404 !important; padding: 12px 20px !important; border-radius: 10px !important; cursor: pointer !important; font-size: 15px !important; font-weight: 600 !important; display: flex !important; align-items: center !important; gap: 10px !important; transition: all 0.2s ease !important; width: 100% !important; justify-content: center !important; font-family: inherit !important; }
-        .ghr-copy-btn:hover { background: #856404 !important; color: #fff !important; box-shadow: 0 4px 12px rgba(133, 100, 4, 0.3) !important; }
-        .ghr-copy-btn:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
-
-        /* =========== CHAMPS INPUT =========== */
-        .ghr-input { width: 100% !important; padding: 18px !important; border: 2px solid #e0e0e0 !important; border-radius: 10px !important; font-size: 20px !important; margin-bottom: 22px !important; box-sizing: border-box !important; transition: border-color 0.3s ease !important; font-family: inherit !important; }
-        .ghr-input:focus { outline: none !important; border-color: #856404 !important; }
-        .ghr-input.error { border-color: #f44336 !important; animation: shake 0.3s !important; }
-
-        /* =========== BOUTON SUBMIT =========== */
-        .ghr-submit { background: linear-gradient(135deg, #856404 0%, #6d5203 100%) !important; color: white !important; border: none !important; padding: 18px !important; width: 100% !important; border-radius: 10px !important; font-weight: 600 !important; cursor: pointer !important; font-size: 17px !important; box-shadow: 0 4px 15px rgba(133, 100, 4, 0.2) !important; transition: all 0.3s ease !important; font-family: inherit !important; }
-        .ghr-submit:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 20px rgba(133, 100, 4, 0.3) !important; }
-        .ghr-submit:focus { outline: 3px solid #856404 !important; outline-offset: 2px !important; }
-        .ghr-submit:disabled { opacity: 0.7 !important; cursor: wait !important; }
-
-        /* =========== FOOTER =========== */
-        .ghr-footer { padding: 25px !important; background: #fcfcfc !important; border-top: 1px solid #eee !important; }
-        .ghr-legal-box { font-size: 11px !important; color: #555 !important; text-align: justify !important; line-height: 1.5 !important; border: 1px dashed #ccc !important; padding: 12px !important; border-radius: 8px !important; }
-        .ghr-legal-box p { margin: 0 !important; }
-
-        /* =========== BOUTONS NAV =========== */
-        .ghr-back-btn, .ghr-restart-btn { background: none !important; border: none !important; color: #856404 !important; text-decoration: underline !important; cursor: pointer !important; font-size: 14px !important; font-weight: 600 !important; transition: color 0.2s ease !important; font-family: inherit !important; padding: 0 !important; }
-        .ghr-back-btn { color: #666 !important; }
-        .ghr-back-btn:hover { color: #333 !important; }
-        .ghr-restart-btn:hover { color: #6d5203 !important; }
-
-        /* =========== ANIMATIONS =========== */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-        /* =========== RESPONSIVE =========== */
-        @media screen and (max-width: 600px) {
-            .ghr-main { padding: 20px 15px !important; }
-            .ghr-btn { font-size: 14px !important; padding: 15px 20px !important; }
-            .ghr-calc-row { flex-direction: column !important; align-items: flex-start !important; }
-            .ghr-step-title { font-size: 18px !important; }
-            #thyro-ghr-final-scope .ghr-report-box { height: 150px !important; }
-        }
-
-        /* =========== MASQUER SCROLLBAR (Style App Native) =========== */
-        #thyro-ghr-final-scope { scrollbar-width: none !important; }
-        #thyro-ghr-final-scope ::-webkit-scrollbar { display: none !important; }
-        #thyro-ghr-final-scope { -ms-overflow-style: none !important; }
-    </style>
 
     <script type="text/javascript">
 (function() {
@@ -136,19 +381,19 @@
        ERREUR GLOBALE HANDLER
        ======================================== */
     window.addEventListener('error', function(e) {
-        console.error('Erreur GHR:', e);
-        const screen = document.getElementById('ghr-content');
+        console.error('Erreur ThyroApp:', e);
+        const screen = document.getElementById('thyro-app-content');
         if(screen) {
-            screen.innerHTML = '<div class="ghr-reco-box danger"><strong>Une erreur s\'est produite.</strong><br><br>Veuillez recharger la page.<br><br><button class="ghr-submit" onclick="location.reload()">🔄 Recharger</button></div>';
+            screen.innerHTML = '<div class="thyro-app-reco-box thyro-app-danger"><strong>Une erreur s\'est produite.</strong><br><br>Veuillez recharger la page.<br><br><button class="thyro-app-submit" onclick="location.reload()">🔄 Recharger</button></div>';
         }
     });
 
     /* ========================================
-       CALCULATEURS (Utilitaires)
+       CALCULATEURS (Globalisés et préfixés)
        ======================================== */
-    window.updateDose = function(el) {
+    window.thyroAppUpdateDose = function(el) {
         const val = parseFloat(el.value);
-        const res = el.parentElement.querySelector('.ghr-calc-result');
+        const res = el.parentElement.querySelector('.thyro-app-calc-result');
         if(!isNaN(val) && val >= 0) {
             res.innerText = Math.round(val * 1.3);
         } else {
@@ -156,9 +401,9 @@
         }
     };
 
-    window.calcWeightDose = function(el) {
+    window.thyroAppCalcWeightDose = function(el) {
         const weight = parseFloat(el.value);
-        const res = el.parentElement.querySelector('.ghr-weight-result');
+        const res = el.parentElement.querySelector('.thyro-app-weight-result');
         if(!isNaN(weight) && weight > 0) {
             const dose = Math.round(weight * 1.6);
             res.innerText = dose;
@@ -168,11 +413,11 @@
     };
 
     function getCalcHTML() {
-        return '<div class="ghr-calc-container"><p style="margin:0; font-size:13px; color:#666;">Optionnel : Calcul d\'ajustement (+30%)</p><div class="ghr-calc-row"><input type="number" class="ghr-calc-input" placeholder="Dose" min="0" step="5" oninput="updateDose(this)" aria-label="Dose actuelle"><span>µg + 30 % ≈ </span><span class="ghr-calc-result" aria-live="polite">---</span> <span>µg</span></div></div>';
+        return '<div class="thyro-app-calc-container"><p style="margin:0; font-size:13px; color:#666;">Optionnel : Calcul d\'ajustement (+30%)</p><div class="thyro-app-calc-row"><input type="number" class="thyro-app-calc-input" placeholder="Dose" min="0" step="5" oninput="window.thyroAppUpdateDose(this)" aria-label="Dose actuelle"><span>µg + 30 % ≈ </span><span class="thyro-app-calc-result" aria-live="polite">---</span> <span>µg</span></div></div>';
     }
 
     function getInitDoseHTML() {
-        return '<div class="ghr-calc-container" style="background-color: #ffebee !important; border-color: #ffcdd2 !important;"><p style="margin:0; font-size:13px; color:#d32f2f;"><strong>Aide à la prescription (Hypothyroïdie avérée)</strong></p><p style="margin:5px 0 8px 0; font-size:12px; color:#555;">Dose théorique de substitution complète (1,6 µg/kg/j) :</p><div class="ghr-calc-row"><input type="number" class="ghr-calc-input" placeholder="Poids kg" min="30" step="1" oninput="calcWeightDose(this)"><span>kg × 1,6 ≈ </span><span class="ghr-weight-result" style="font-weight:bold; color:#d32f2f;">---</span> <span>µg/jour</span></div><p style="font-size:11px; color:#666; margin-top:5px;">À adapter selon la réponse clinique et biologique.</p></div>';
+        return '<div class="thyro-app-calc-container" style="background-color: #ffebee !important; border-color: #ffcdd2 !important;"><p style="margin:0; font-size:13px; color:#d32f2f;"><strong>Aide à la prescription (Hypothyroïdie avérée)</strong></p><p style="margin:5px 0 8px 0; font-size:12px; color:#555;">Dose théorique de substitution complète (1,6 µg/kg/j) :</p><div class="thyro-app-calc-row"><input type="number" class="thyro-app-calc-input" placeholder="Poids kg" min="30" step="1" oninput="window.thyroAppCalcWeightDose(this)"><span>kg × 1,6 ≈ </span><span class="thyro-app-weight-result" style="font-weight:bold; color:#d32f2f;">---</span> <span>µg/jour</span></div><p style="font-size:11px; color:#666; margin-top:5px;">À adapter selon la réponse clinique et biologique.</p></div>';
     }
 
     /* ========================================
@@ -199,7 +444,7 @@
             q: "Objectif Préconceptionnel",
             isFinal: true,
             reco: "Objectif TSH cible : 0,5 – 2,5 mUI/L.\n\nRecommandations\n\n• Adapter le traitement pour obtenir une TSH entre 0,5 et 2,5 mUI/L ;\n• Augmenter la dose de lévothyroxine de 30 % dès le diagnostic de grossesse ;\n• Consulter immédiatement pour dosage TSH dès le retard de règles ;\n• Maintenir une supplémentation iodée systématique (200 µg/j).",
-            content: '<div class="ghr-reco-box success"><p><strong>TSH cible : 0,5 – 2,5 mUI/L</strong></p><p style="margin-top: 15px;"><strong>Consignes :</strong></p><ul class="ghr-list"><li>Adapter le traitement pour obtenir une TSH entre 0,5 et 2,5 mUI/L.</li><li>Augmenter la dose de lévothyroxine de 30 % dès le diagnostic de grossesse.</li><li>Consulter immédiatement pour dosage TSH dès le retard de règles.</li><li>Maintenir une supplémentation iodée systématique (200 µg/j via complément prénatal : Gestarelle G3, Oligobs, Gynefam, etc.).</li></ul></div>'
+            content: '<div class="thyro-app-reco-box thyro-app-success"><p><strong>TSH cible : 0,5 – 2,5 mUI/L</strong></p><p style="margin-top: 15px;"><strong>Consignes :</strong></p><ul class="thyro-app-list"><li>Adapter le traitement pour obtenir une TSH entre 0,5 et 2,5 mUI/L.</li><li>Augmenter la dose de lévothyroxine de 30 % dès le diagnostic de grossesse.</li><li>Consulter immédiatement pour dosage TSH dès le retard de règles.</li><li>Maintenir une supplémentation iodée systématique (200 µg/j via complément prénatal : Gestarelle G3, Oligobs, Gynefam, etc.).</li></ul></div>'
         },
         "grossesse_history": {
             q: "La patiente a-t-elle des antécédents de dysthyroïdie ?",
@@ -230,31 +475,31 @@
             q: "Objectifs - 1er Trimestre (≤ 15 SA)",
             isFinal: true,
             reco: "Objectif TSH T1 : 0,1 – 2,5 mUI/L\n\nConduite à tenir :\n• Si TSH non contrôlée récemment : faire dosage immédiat.\n• Augmenter la dose de Lévothyroxine de 20-30 % dès la confirmation de grossesse.\n• Maintenir supplémentation iodée (200 µg/j).",
-            content: '<div class="ghr-reco-box danger"><p><strong>🎯 Objectif TSH T1 : 0,1 – 2,5 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffcdd2; margin:10px 0;"><strong>Actions requises :</strong><ul class="ghr-list"><li>Augmenter la dose de Lévothyroxine de <strong>20 à 30 %</strong> immédiatement.</li><li>Contrôler la TSH toutes les 4 semaines.</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
+            content: '<div class="thyro-app-reco-box thyro-app-danger"><p><strong>🎯 Objectif TSH T1 : 0,1 – 2,5 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffcdd2; margin:10px 0;"><strong>Actions requises :</strong><ul class="thyro-app-list"><li>Augmenter la dose de Lévothyroxine de <strong>20 à 30 %</strong> immédiatement.</li><li>Contrôler la TSH toutes les 4 semaines.</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
         },
         "hypo_traitee_t2": {
             q: "Objectifs - 2ème Trimestre (16-28 SA)",
             isFinal: true,
             reco: "Objectif TSH T2 : 0,2 – 3,0 mUI/L\n\nConduite à tenir :\n• Adapter la posologie pour rester dans la cible.\n• Contrôle TSH mensuel.\n• Maintenir supplémentation iodée (200 µg/j).",
-            content: '<div class="ghr-reco-box warning"><p><strong>🎯 Objectif TSH T2 : 0,2 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="ghr-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel (toutes les 4 semaines).</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
+            content: '<div class="thyro-app-reco-box thyro-app-warning"><p><strong>🎯 Objectif TSH T2 : 0,2 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="thyro-app-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel (toutes les 4 semaines).</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
         },
         "hypo_traitee_t3": {
             q: "Objectifs - 3ème Trimestre (≥ 29 SA)",
             isFinal: true,
             reco: "Objectif TSH T3 : 0,3 – 3,0 mUI/L\n\nConduite à tenir :\n• Adapter la posologie pour rester dans la cible.\n• Contrôle TSH mensuel jusqu'à l'accouchement.\n• Prévoir le retour à la dose pré-conceptionnelle après l'accouchement.",
-            content: '<div class="ghr-reco-box warning"><p><strong>🎯 Objectif TSH T3 : 0,3 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="ghr-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel jusqu\'à l\'accouchement.</li><li><strong>Anticipation Post-partum :</strong> Retour à la dose pré-conceptionnelle juste après l\'accouchement.</li></ul></div>'
+            content: '<div class="thyro-app-reco-box thyro-app-warning"><p><strong>🎯 Objectif TSH T3 : 0,3 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="thyro-app-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel jusqu\'à l\'accouchement.</li><li><strong>Anticipation Post-partum :</strong> Retour à la dose pré-conceptionnelle juste après l\'accouchement.</li></ul></div>'
         },
         "hyper_traitee": {
             q: "Conclusion",
             isFinal: true,
             reco: "Suivi spécialisé par un(e) endocrinologue impératif.",
-            content: '<div class="ghr-reco-box danger"><strong>⚠️ Suivi spécialisé par un(e) endocrinologue impératif.</strong><br><br>La prise en charge de l\'hyperthyroïdie pendant la grossesse nécessite un suivi spécialisé étroit.</div>'
+            content: '<div class="thyro-app-reco-box thyro-app-danger"><strong>⚠️ Suivi spécialisé par un(e) endocrinologue impératif.</strong><br><br>La prise en charge de l\'hyperthyroïdie pendant la grossesse nécessite un suivi spécialisé étroit.</div>'
         },
         "postpartum": {
             q: "Surveillance Post-partum",
             isFinal: true,
             reco: "Dosage TSH recommandé :\n• Entre 6 et 12 semaines post-partum ;\n• À 6 mois du post-partum.",
-            content: '<div class="ghr-info-blue"><strong>Groupes à haut risque de thyroïdite post-partum (TPP) :</strong><ul class="ghr-list"><li>Anticorps anti-TPO positifs</li><li>Diabète de type 1</li><li>Antécédent personnel de TPP</li><li>Basedow en rémission</li><li>Hépatite C</li></ul></div><div class="ghr-reco-box success"><p><strong>Calendrier TSH recommandé :</strong></p><ul class="ghr-list"><li>Entre 6 et 12 semaines post-accouchement</li><li>À 6 mois du post-partum</li></ul></div>'
+            content: '<div class="thyro-app-info-blue"><strong>Groupes à haut risque de thyroïdite post-partum (TPP) :</strong><ul class="thyro-app-list"><li>Anticorps anti-TPO positifs</li><li>Diabète de type 1</li><li>Antécédent personnel de TPP</li><li>Basedow en rémission</li><li>Hépatite C</li></ul></div><div class="thyro-app-reco-box thyro-app-success"><p><strong>Calendrier TSH recommandé :</strong></p><ul class="thyro-app-list"><li>Entre 6 et 12 semaines post-accouchement</li><li>À 6 mois du post-partum</li></ul></div>'
         },
         "grossesse_tri": {
             q: "À quel trimestre est la grossesse ?",
@@ -265,7 +510,7 @@
         },
         "risques": {
             q: "La patiente présente-t-elle un ou plusieurs facteurs de risque ?",
-            content: '<div class="ghr-info-blue"><strong>Facteurs de risque à dépister :</strong><ul class="ghr-list"><li>Âge > 35 ans, IMC ≥ 40 kg/m²</li><li>Antécédent personnel de dysthyroïdie</li><li>Antécédent familial de dysthyroïdie</li><li>Antécédents obstétricaux : accouchement prématuré, fausses couches, infertilité</li><li>Goitre</li><li>Anticorps antithyroïdiens positifs (essentiellement les anti-TPO)</li><li>Symptômes évoquant une hypothyroïdie</li><li>Diabète de type 1 ou autre pathologie auto-immune</li><li>Exposition à des radiations (radiothérapie cervicale)</li><li>Traitement actuel ou antérieur : antithyroïdiens, amiodarone, lithium</li><li>Chirurgie thyroïdienne antérieure (thyroïdectomie partielle ou totale)</li><li>Zone géographique de carence en iode</li></ul></div>',
+            content: '<div class="thyro-app-info-blue"><strong>Facteurs de risque à dépister :</strong><ul class="thyro-app-list"><li>Âge > 35 ans, IMC ≥ 40 kg/m²</li><li>Antécédent personnel de dysthyroïdie</li><li>Antécédent familial de dysthyroïdie</li><li>Antécédents obstétricaux : accouchement prématuré, fausses couches, infertilité</li><li>Goitre</li><li>Anticorps antithyroïdiens positifs (essentiellement les anti-TPO)</li><li>Symptômes évoquant une hypothyroïdie</li><li>Diabète de type 1 ou autre pathologie auto-immune</li><li>Exposition à des radiations (radiothérapie cervicale)</li><li>Traitement actuel ou antérieur : antithyroïdiens, amiodarone, lithium</li><li>Chirurgie thyroïdienne antérieure (thyroïdectomie partielle ou totale)</li><li>Zone géographique de carence en iode</li></ul></div>',
             options: [
                 { t: "Oui, au moins un facteur", n: "input_tsh" },
                 { t: "Non, aucun facteur", n: "no_dep" }
@@ -275,7 +520,7 @@
             q: "Conclusion",
             isFinal: true,
             reco: "Dépistage non recommandé.\n\n• Pas d'indication à doser la TSH en l'absence de risque ;\n• Assurer la supplémentation iodée systématique (200 µg/j via complément prénatal).",
-            content: '<div class="ghr-reco-box success"><strong>Dépistage non recommandé</strong> (pas d\'indication à doser la TSH).<br><br><strong>Note :</strong> Assurer la supplémentation iodée systématique (200 µg/j via complément prénatal : Gestarelle G3, Oligobs Grossesse, Gynefam, etc.) dès le désir de grossesse.</div>'
+            content: '<div class="thyro-app-reco-box thyro-app-success"><strong>Dépistage non recommandé</strong> (pas d\'indication à doser la TSH).<br><br><strong>Note :</strong> Assurer la supplémentation iodée systématique (200 µg/j via complément prénatal : Gestarelle G3, Oligobs Grossesse, Gynefam, etc.) dès le désir de grossesse.</div>'
         },
         "input_tsh": { q: "Dosage de la TSH.", isInput: true }
     };
@@ -313,33 +558,33 @@
     function render(key) {
         currentStepKey = key;
         const step = data[key];
-        const screen = document.getElementById('ghr-content');
-        const bread = document.getElementById('ghr-breadcrumb');
-        const backBtn = document.getElementById('ghr-back');
+        const screen = document.getElementById('thyro-app-content');
+        const bread = document.getElementById('thyro-app-breadcrumb');
+        const backBtn = document.getElementById('thyro-app-back');
 
         if (!screen || !bread || !step) return;
 
         backBtn.style.display = history.length > 0 ? "block" : "none";
         bread.innerText = qaLog.map(h => h.ans).join(" › ") || "Début";
 
-        let html = '<div class="ghr-step-title">' + step.q + '</div>';
+        let html = '<div class="thyro-app-step-title">' + step.q + '</div>';
         if(step.content) html += step.content;
 
         if(step.options) {
             step.options.forEach((o, idx) => {
                 const escapedText = o.t.replace(/'/g, "\\'");
-                html += '<button class="ghr-btn" data-next="' + o.n + '" data-ans="' + escapedText + '" data-tri="' + (o.tri || 0) + '" tabindex="' + (idx + 1) + '" aria-label="' + o.t + '">' + o.t + '</button>';
+                html += '<button class="thyro-app-btn" data-next="' + o.n + '" data-ans="' + escapedText + '" data-tri="' + (o.tri || 0) + '" tabindex="' + (idx + 1) + '" aria-label="' + o.t + '">' + o.t + '</button>';
             });
         } else if(step.isInput) {
             const threshold = tri === 1 ? 2.5 : 3.0;
             html += '<div style="font-size:12px; color:#e65100; background:#fff3e0; padding:10px; border-radius:6px; margin-bottom:15px; border-left:3px solid #ff9800;"><strong>⚠️ Attention à la Biotine (Vit B8) :</strong><br>Les compléments "Cheveux/Ongles" faussent le dosage (fausse baisse TSH). Arrêt impératif 48h avant le prélèvement.</div>';
-            html += '<p style="margin-bottom:10px; background: #fff8e1; padding: 12px; border-radius: 6px; border-left: 4px solid #856404;"><strong>Seuil d\'alerte (Consensus) :</strong> ' + threshold + ' mUI/L<br><small>Norme ATA : ~4,0 mUI/L. Utiliser les normes labo trimestre-spécifiques en priorité si disponibles.</small></p><input type="number" id="val-tsh" class="ghr-input" placeholder="Valeur TSH (mUI/L)" min="0" step="0.01" aria-label="Entrez la valeur de TSH" autofocus><button class="ghr-submit" id="btn-analyze">📊 Analyser la TSH</button>';
+            html += '<p style="margin-bottom:10px; background: #fff8e1; padding: 12px; border-radius: 6px; border-left: 4px solid #856404;"><strong>Seuil d\'alerte (Consensus) :</strong> ' + threshold + ' mUI/L<br><small>Norme ATA : ~4,0 mUI/L. Utiliser les normes labo trimestre-spécifiques en priorité si disponibles.</small></p><input type="number" id="thyro-app-val-tsh" class="thyro-app-input" placeholder="Valeur TSH (mUI/L)" min="0" step="0.01" aria-label="Entrez la valeur de TSH" autofocus><button class="thyro-app-submit" id="thyro-app-btn-analyze">📊 Analyser la TSH</button>';
         }
 
         if(step.isFinal) {
             const reportTxt = getReportText();
-            html += '<div style="margin-top:25px;"><label style="font-size:12px; font-weight:600; color:#555; margin-bottom:5px; display:block;">Aperçu du rapport (Consultation) :</label><textarea class="ghr-report-box" readonly onclick="this.select()">' + reportTxt + '</textarea></div>';
-            html += '<button class="ghr-copy-btn" id="btn-copy">📋 Copier le rapport clinique</button>';
+            html += '<div style="margin-top:25px;"><label style="font-size:12px; font-weight:600; color:#555; margin-bottom:5px; display:block;">Aperçu du rapport (Consultation) :</label><textarea class="thyro-app-report-box" readonly onclick="this.select()">' + reportTxt + '</textarea></div>';
+            html += '<button class="thyro-app-copy-btn" id="thyro-app-btn-copy">📋 Copier le rapport clinique</button>';
         }
 
         screen.innerHTML = html;
@@ -347,58 +592,58 @@
     }
 
     /* ========================================
-       EVENT LISTENERS (Blindage Elementor)
+       EVENT LISTENERS
        ======================================== */
     function attachEventListeners() {
         // Boutons options
-        document.querySelectorAll('#thyro-ghr-final-scope .ghr-btn[data-next]').forEach(btn => {
+        document.querySelectorAll('#thyro-app-final-scope .thyro-app-btn[data-next]').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const next = this.getAttribute('data-next');
                 const ans = this.getAttribute('data-ans');
                 const t = parseInt(this.getAttribute('data-tri')) || 0;
-                if(next) window.nextStep(next, ans, t);
+                if(next) window.thyroAppNextStep(next, ans, t);
             });
         });
 
         // Bouton analyse TSH
-        const analyzeBtn = document.getElementById('btn-analyze');
-        if(analyzeBtn) analyzeBtn.addEventListener('click', function(e) { e.preventDefault(); window.handleTsh(); });
+        const analyzeBtn = document.getElementById('thyro-app-btn-analyze');
+        if(analyzeBtn) analyzeBtn.addEventListener('click', function(e) { e.preventDefault(); window.thyroAppHandleTsh(); });
 
         // Bouton copier
-        const copyBtn = document.getElementById('btn-copy');
-        if(copyBtn) copyBtn.addEventListener('click', function(e) { e.preventDefault(); window.copyFinal(); });
+        const copyBtn = document.getElementById('thyro-app-btn-copy');
+        if(copyBtn) copyBtn.addEventListener('click', function(e) { e.preventDefault(); window.thyroAppCopyFinal(); });
 
         // Bouton retour
-        const backBtn = document.getElementById('ghr-back');
+        const backBtn = document.getElementById('thyro-app-back');
         if(backBtn) backBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if(history.length > 0) { const prev = history.pop(); tri = prev.tri; qaLog = prev.qaLog.slice(); render(prev.key); }
         });
 
         // Bouton redémarrer
-        const restartBtn = document.getElementById('ghr-restart');
+        const restartBtn = document.getElementById('thyro-app-restart');
         if(restartBtn) restartBtn.addEventListener('click', function(e) { e.preventDefault(); history = []; qaLog = []; tri = 1; render("start"); });
     }
 
     /* ========================================
        NAVIGATION
        ======================================== */
-    window.nextStep = function(next, ans, t) {
+    window.thyroAppNextStep = function(next, ans, t) {
         history.push({key: currentStepKey, tri: tri, qaLog: qaLog.slice()});
         qaLog.push({q: data[currentStepKey].q, ans: ans});
         if(t > 0) tri = t;
         render(next);
     };
 
-    window.handleTsh = function() {
-        const input = document.getElementById('val-tsh');
-        const btn = document.getElementById('btn-analyze');
+    window.thyroAppHandleTsh = function() {
+        const input = document.getElementById('thyro-app-val-tsh');
+        const btn = document.getElementById('thyro-app-btn-analyze');
         const v = parseFloat(input.value);
 
         if(isNaN(v) || v <= 0) {
-            input.classList.add('error');
-            setTimeout(() => input.classList.remove('error'), 300);
+            input.classList.add('thyro-app-error');
+            setTimeout(() => input.classList.remove('thyro-app-error'), 300);
             alert("⚠️ Veuillez saisir une valeur TSH positive valide.");
             input.focus();
             return;
@@ -418,20 +663,20 @@
             qaLog.push({q: "Dosage TSH", ans: v + " mUI/L"});
 
             if(isKnownTpoPos) {
-                window.finalAta(v, true, true);
+                window.thyroAppFinalAta(v, true, true);
             } else {
                 if(v <= threshold) {
                     renderFinal("Conclusion", "TSH Normale (TSH = " + v + " mUI/L)\n\nRecommandations\n\n• Fonction thyroïdienne normale ;\n• Pas de surveillance ni de traitement spécifique ;\n• Maintenir la supplémentation iodée systématique (200 µg/j via complément prénatal).");
                 } else {
-                    const screen = document.getElementById('ghr-content');
+                    const screen = document.getElementById('thyro-app-content');
                     if(screen) {
-                        screen.innerHTML = '<div class="ghr-step-title">Statut Anticorps anti-TPO ?</div><p style="margin-bottom: 15px; color: #666;">La TSH est élevée (' + v + ' mUI/L). Le statut des anticorps anti-TPO orientera la prise en charge.</p><button class="ghr-btn" data-tpo="pos">Anticorps anti-TPO Positifs</button><button class="ghr-btn" data-tpo="neg">Anticorps anti-TPO Négatifs ou Inconnus</button>';
+                        screen.innerHTML = '<div class="thyro-app-step-title">Statut Anticorps anti-TPO ?</div><p style="margin-bottom: 15px; color: #666;">La TSH est élevée (' + v + ' mUI/L). Le statut des anticorps anti-TPO orientera la prise en charge.</p><button class="thyro-app-btn" data-tpo="pos">Anticorps anti-TPO Positifs</button><button class="thyro-app-btn" data-tpo="neg">Anticorps anti-TPO Négatifs ou Inconnus</button>';
 
                         const tpoPosBtn = screen.querySelector('[data-tpo="pos"]');
                         const tpoNegBtn = screen.querySelector('[data-tpo="neg"]');
 
-                        if(tpoPosBtn) tpoPosBtn.addEventListener('click', function(e) { e.preventDefault(); window.finalAta(v, true, false); });
-                        if(tpoNegBtn) tpoNegBtn.addEventListener('click', function(e) { e.preventDefault(); window.finalAta(v, false, false); });
+                        if(tpoPosBtn) tpoPosBtn.addEventListener('click', function(e) { e.preventDefault(); window.thyroAppFinalAta(v, true, false); });
+                        if(tpoNegBtn) tpoNegBtn.addEventListener('click', function(e) { e.preventDefault(); window.thyroAppFinalAta(v, false, false); });
                     }
                 }
             }
@@ -441,7 +686,7 @@
         }, 300);
     };
 
-    window.finalAta = function(tsh, isPos, isKnownPrior) {
+    window.thyroAppFinalAta = function(tsh, isPos, isKnownPrior) {
         if(!isKnownPrior) {
             history.push({key: "tpo_ask", tri: tri, qaLog: qaLog.slice()});
             qaLog.push({q: "Anticorps anti-TPO", ans: isPos ? "Positifs" : "Négatifs/Inconnus"});
@@ -473,12 +718,12 @@
     };
 
     function renderFinal(title, reco, showInitCalc) {
-        let boxClass = "success";
-        if (reco.includes("AVÉRÉE") || reco.includes("IMPÉRATIF")) { boxClass = "danger"; }
-        else if (reco.includes("fruste confirmée")) { boxClass = "danger"; }
-        else if (reco.includes("infraclinique") || reco.includes("Surveillance requise")) { boxClass = "warning"; }
+        let boxClass = "thyro-app-success";
+        if (reco.includes("AVÉRÉE") || reco.includes("IMPÉRATIF")) { boxClass = "thyro-app-danger"; }
+        else if (reco.includes("fruste confirmée")) { boxClass = "thyro-app-danger"; }
+        else if (reco.includes("infraclinique") || reco.includes("Surveillance requise")) { boxClass = "thyro-app-warning"; }
 
-        let finalHTML = '<div class="ghr-reco-box ' + boxClass + '">' + reco.replace(/\n/g, '<br>') + '</div>';
+        let finalHTML = '<div class="thyro-app-reco-box ' + boxClass + '">' + reco.replace(/\n/g, '<br>') + '</div>';
 
         if(reco.includes("Lévothyroxine") || reco.includes("traitement") || reco.includes("adapter")) {
             finalHTML += '<div style="margin-top:15px; font-size:13px; background:#e3f2fd; color:#0277bd; padding:10px; border-radius:6px; border-left:4px solid #0288d1;"><strong>💊 Conseil Prise :</strong> Le Fer et le Calcium bloquent l\'absorption du Lévothyrox.<br>→ Espacer les prises d\'au moins <strong>4 heures</strong> (ex: Lévothyrox le matin à jeun, Fer le midi).</div>';
@@ -491,27 +736,22 @@
         render("final_node");
     }
 
-window.copyFinal = function() {
+    window.thyroAppCopyFinal = function() {
         const text = getReportText();
 
-        // 1. Essayer l'API moderne (Nécessite HTTPS)
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(text).then(
                 function() { alert("✅ Rapport copié dans le presse-papiers !"); },
                 function() { fallbackCopyTextToClipboard(text); }
             );
         } else {
-            // 2. Si non sécurisé (HTTP) ou bloqué par WordPress, utiliser la méthode de secours
             fallbackCopyTextToClipboard(text);
         }
     };
 
-    // Fonction de secours universelle
     function fallbackCopyTextToClipboard(text) {
         var textArea = document.createElement("textarea");
         textArea.value = text;
-        
-        // Rendre le textarea invisible
         textArea.style.position = "fixed";
         textArea.style.top = "0";
         textArea.style.left = "0";
@@ -531,7 +771,6 @@ window.copyFinal = function() {
         } catch (err) {
             alert("⚠️ Erreur de copie. Veuillez sélectionner le texte manuellement.");
         }
-
         document.body.removeChild(textArea);
     };
 
