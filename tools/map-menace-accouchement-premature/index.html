@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#14532d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>MAP — Menace d'Accouchement Prématuré</title>
+    <style>
+        :root {
+            --vert: #14532d; --vert-vif: #16a34a; --vert-pale: #f0fdf4; --vert-bord: #86efac;
+            --rouge: #8b1a1a; --rouge-vif: #b91c1c; --rouge-pale: #fef2f2; --rouge-bord: #fca5a5;
+            --bleu: #1e3a5f; --bleu-pale: #eff6ff; --bleu-bord: #bfdbfe;
+            --orange: #9a3412; --orange-pale: #fff7ed; --orange-bord: #fdba74;
+            --violet: #4c1d95; --violet-pale: #f5f3ff; --violet-bord: #c4b5fd;
+            --ambre: #78350f; --ambre-pale: #fffbeb; --ambre-bord: #fcd34d;
+            --gris-100: #f8f9fa; --gris-200: #e9ecef; --gris-400: #adb5bd;
+            --gris-600: #6c757d; --gris-800: #343a40; --noir: #212529; --blanc: #ffffff;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; --radius: 6px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-family: var(--font); font-size: 15px; color: var(--noir); background: #f1f3f5; -webkit-text-size-adjust: 100%; }
+        body { min-height: 100vh; min-height: -webkit-fill-available; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+        .tool-wrap { max-width: 720px; margin: 0 auto; }
+        .tool-header { background: var(--vert); padding: 22px 24px 18px; position: relative; overflow: hidden; }
+        .tool-header::after { content: ''; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05); pointer-events: none; }
+        .tool-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+        .tool-header h1 { font-size: clamp(15px, 3vw, 19px); font-weight: 700; color: var(--blanc); line-height: 1.25; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+        .tool-header-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+        .tool-header-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+        .tool-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.2); padding: 3px 9px; border-radius: 3px; white-space: nowrap; }
+        .header-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: flex-start; }
+        .btn-hdr { border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 600; font-family: var(--font); white-space: nowrap; touch-action: manipulation; transition: background 0.2s; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.12); }
+        .btn-hdr:hover { background: rgba(255,255,255,0.25); }
+        .btn-retour { background: rgba(255,255,255,0.22); display: none; }
+        .btn-retour.visible { display: inline-block; }
+        .tool-progress { background: var(--blanc); border-bottom: 1px solid var(--gris-200); padding: 12px 24px; display: flex; align-items: center; }
+        .prog-step { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .prog-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; background: var(--gris-200); color: var(--gris-600); transition: all 0.3s; }
+        .prog-circle.active { background: var(--vert-vif); color: var(--blanc); }
+        .prog-label { font-size: 11px; font-weight: 600; color: var(--gris-600); text-transform: uppercase; letter-spacing: 0.04em; }
+        .prog-label.active { color: var(--vert-vif); }
+        .prog-line { flex: 1; height: 2px; background: var(--gris-200); margin: 0 8px; transition: background 0.3s; }
+        .prog-line.active { background: var(--vert-vif); }
+        .tool-body { padding: 20px; }
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .sec-title { font-size: 15px; font-weight: 700; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 2px solid var(--vert-pale); color: var(--vert); display: flex; align-items: center; gap: 8px; }
+        .ibox { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 13px; border-left: 4px solid; }
+        .ibox p, .ibox li { font-size: 13px; line-height: 1.5; }
+        .ibox strong { font-weight: 700; }
+        .ibox h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .ibox ul { list-style: none; padding: 0; margin: 0; }
+        .ibox ul li { padding: 4px 0 4px 16px; position: relative; }
+        .ibox ul li::before { content: "\2022"; position: absolute; left: 0; font-weight: bold; }
+        .ibox.green { background: var(--vert-pale); border-left-color: var(--vert); }
+        .ibox.green h3 { color: var(--vert); } .ibox.green ul li { color: #14532d; } .ibox.green ul li::before { color: var(--vert-vif); }
+        .ibox.red   { background: var(--rouge-pale); border-left-color: var(--rouge-vif); }
+        .ibox.red ul li { color: #7f1d1d; } .ibox.red ul li::before { color: var(--rouge-vif); }
+        .ibox.blue  { background: var(--bleu-pale);  border-left-color: var(--bleu); }
+        .ibox.blue h3 { color: var(--bleu); } .ibox.blue ul li { color: var(--bleu); } .ibox.blue ul li::before { color: var(--bleu); }
+        .ibox.yellow{ background: var(--ambre-pale); border-left-color: #d97706; }
+        .ibox.yellow ul li { color: #78350f; } .ibox.yellow ul li::before { color: #d97706; }
+        .ibox.violet { background: var(--violet-pale); border-left-color: var(--violet); }
+        .ibox.violet h3 { color: var(--violet); } .ibox.violet ul li { color: var(--violet); } .ibox.violet ul li::before { color: var(--violet); }
+        .ibox.orange { background: var(--orange-pale); border-left-color: #ea580c; }
+        .ibox.orange h3 { color: var(--orange); }
+        .choice-btn { width: 100%; background: var(--blanc); border: 2px solid var(--vert-vif); color: var(--vert); padding: 12px 15px; border-radius: var(--radius); font-size: 14px; font-weight: 600; font-family: var(--font); cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; margin-bottom: 9px; transition: all 0.2s; touch-action: manipulation; line-height: 1.3; }
+        .choice-btn::before { content: "\25B6"; font-size: 10px; color: var(--vert-vif); flex-shrink: 0; }
+        .choice-btn:hover, .choice-btn:active { background: var(--vert-vif); color: var(--blanc); }
+        .choice-btn:hover::before, .choice-btn:active::before { color: var(--blanc); }
+        .result-box { border-radius: var(--radius); padding: 15px; margin-top: 14px; border: 1px solid; border-top-width: 4px; }
+        .result-box.green { background: var(--vert-pale); border-color: var(--vert-bord); border-top-color: var(--vert); }
+        .result-box.green .rb-title { color: var(--vert); }
+        .result-box.red { background: var(--rouge-pale); border-color: var(--rouge-bord); border-top-color: var(--rouge-vif); }
+        .result-box.red .rb-title { color: var(--rouge-vif); }
+        .result-box.orange { background: var(--orange-pale); border-color: var(--orange-bord); border-top-color: #ea580c; }
+        .result-box.orange .rb-title { color: var(--orange); }
+        .result-box.blue { background: var(--bleu-pale); border-color: var(--bleu-bord); border-top-color: var(--bleu); }
+        .result-box.blue .rb-title { color: var(--bleu); }
+        .result-box.violet { background: var(--violet-pale); border-color: var(--violet-bord); border-top-color: var(--violet); }
+        .result-box.violet .rb-title { color: var(--violet); }
+        .rb-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+        .exam-list { background: var(--blanc); border: 1px solid var(--gris-200); border-radius: var(--radius); margin: 10px 0; overflow: hidden; }
+        .exam-item { padding: 10px 13px; border-bottom: 1px solid var(--gris-200); font-size: 13px; line-height: 1.45; color: var(--gris-800); }
+        .exam-item:last-child { border-bottom: none; }
+        .exam-item strong { color: var(--noir); font-weight: 700; display: block; margin-bottom: 2px; }
+        .exam-item p { color: var(--gris-600); font-size: 12px; margin-top: 2px; }
+        .exam-item ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
+        .exam-item ul li { font-size: 12px; color: var(--gris-600); padding: 2px 0 2px 13px; position: relative; }
+        .exam-item ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--gris-400); }
+        .alert-urg { background: #fee2e2; border: 1px solid #fca5a5; border-radius: var(--radius); padding: 13px; margin-bottom: 12px; }
+        .alert-urg .urg-title { font-weight: 700; color: var(--rouge-vif); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 7px; }
+        .alert-urg ul { list-style: none; padding: 0; margin: 0; }
+        .alert-urg ul li { font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px; position: relative; font-weight: 500; }
+        .alert-urg ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--rouge-vif); }
+        .note-ambre { background: var(--ambre-pale); border: 1px solid var(--ambre-bord); border-radius: var(--radius); padding: 11px 13px; margin-top: 11px; }
+        .note-ambre .na-title { font-size: 11px; font-weight: 700; color: var(--ambre); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+        .note-ambre p { font-size: 12px; color: var(--ambre); line-height: 1.4; }
+        /* SCORE COL */
+        .score-table { width: 100%; border-collapse: collapse; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--gris-200); margin: 10px 0; font-size: 12px; }
+        .score-table th { background: var(--vert); color: var(--blanc); padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; }
+        .score-table td { padding: 8px 10px; border-bottom: 1px solid var(--gris-200); vertical-align: middle; }
+        .score-table tr:last-child td { border-bottom: none; }
+        .score-table tr:nth-child(even) td { background: var(--gris-100); }
+        .badge-risque { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; white-space: nowrap; display: inline-block; }
+        .badge-risque.faible  { background: #dcfce7; color: var(--vert); }
+        .badge-risque.modere  { background: var(--ambre-pale); color: var(--ambre); border: 1px solid var(--ambre-bord); }
+        .badge-risque.eleve   { background: var(--rouge-pale); color: var(--rouge-vif); border: 1px solid var(--rouge-bord); }
+        /* TOCOLYSE TABS */
+        .drug-card { background: var(--blanc); border: 1px solid var(--gris-200); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+        .drug-header { padding: 10px 13px; background: var(--vert-pale); border-bottom: 1px solid var(--vert-bord); font-size: 13px; font-weight: 700; color: var(--vert); display: flex; justify-content: space-between; align-items: center; }
+        .drug-body { padding: 10px 13px; font-size: 12px; color: var(--gris-800); line-height: 1.5; }
+        .drug-body ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
+        .drug-body ul li { padding: 2px 0 2px 13px; position: relative; }
+        .drug-body ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--vert-vif); }
+        .line-tag { font-size: 10px; background: var(--vert); color: var(--blanc); padding: 1px 6px; border-radius: 3px; }
+        .tool-footer { background: var(--blanc); border-top: 1px dashed var(--gris-200); padding: 13px 20px; text-align: center; }
+        .tool-footer p { font-size: 11px; color: var(--gris-600); line-height: 1.5; }
+        .tool-footer strong { color: var(--gris-800); }
+    
+      /* =========================================
+   PRO : Masque l'ascenseur (style App native)
+A placer en fin de css dans chaque outil
+   ========================================= */
+html { scrollbar-width: none; }               /* Firefox */
+body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
+::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
+      
+      @media (max-width: 480px) {
+            .tool-header { padding: 15px 15px 13px; }
+            .tool-header h1 { font-size: 13px; }
+            .tool-progress { padding: 10px 15px; }
+            .prog-label { display: none; }
+            .tool-body { padding: 13px; }
+            .choice-btn { font-size: 13px; padding: 11px 13px; }
+        }
+    </style>
+</head>
+<body>
+<div class="tool-wrap">
+
+    <div class="tool-header">
+        <div class="tool-header-top">
+            <div>
+                <h1>&#9679; MAP — Menace d'Accouchement Prématuré</h1>
+                <p class="tool-header-sub">Outil de prise en charge — Usage médical professionnel</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-hdr btn-retour" id="btn-retour" onclick="goBack()">&#8592; Retour</button>
+                <button class="btn-hdr" onclick="resetTool()">&#8635; Reset</button>
+            </div>
+        </div>
+        <div class="tool-header-badges">
+            <span class="tool-badge">Obstétrique</span>
+            <span class="tool-badge">CNGOF 2016</span>
+            <span class="tool-badge">HAS / CFEF</span>
+        </div>
+    </div>
+
+    <div class="tool-progress" id="progressBar"></div>
+
+    <div class="tool-body">
+
+        <!-- ÉTAPE 1 : Évaluation initiale -->
+        <div class="step-content active" id="step1">
+            <h2 class="sec-title">&#9654; Évaluation initiale de la MAP</h2>
+
+            <div class="ibox green">
+                <p><strong>Définition :</strong> Contractions utérines régulières (&#8805; 2 CU/10 min) associées à des modifications cervicales, entre 22 SA et 36 SA + 6 jours.</p>
+            </div>
+
+            <div class="ibox blue">
+                <h3>Bilan de 1ère intention (systématique)</h3>
+                <ul>
+                    <li>Interrogatoire : terme exact, ATCD obstétricaux, facteurs de risque, rupture des membranes ?</li>
+                    <li>Monitoring : tocographie externe, RCF</li>
+                    <li>Examen au speculum : état des membranes, col, leucorrhées</li>
+                    <li>Échographie cervicale endovaginale : longueur du col (LC)</li>
+                    <li>Fibronectine fœtale (FFN) si LC 15–30 mm (valeur prédictive négative élevée)</li>
+                    <li>Prélèvements vaginaux bas (PVB) + ECBU</li>
+                    <li>NFS, CRP, ionogramme, groupe/RAI</li>
+                </ul>
+            </div>
+
+            <div class="ibox yellow">
+                <p><strong>&#9888; Éliminer avant tout :</strong> Rupture prématurée des membranes (RPM), chorioamniotite (fièvre + tachycardie + leucocytose), placenta praevia hémorragique, décollement placentaire.</p>
+            </div>
+
+            <button class="choice-btn" onclick="goTo('col-long')">Col long &#8805; 25 mm — Risque faible</button>
+            <button class="choice-btn" onclick="goTo('col-court')">Col court 15 – 25 mm — Risque modéré</button>
+            <button class="choice-btn" onclick="goTo('col-tres-court')">Col très court &lt; 15 mm ou dilaté — Risque élevé</button>
+            <button class="choice-btn" onclick="goTo('rpm')">Rupture Prématurée des Membranes (RPM)</button>
+        </div>
+
+        <!-- BRANCHE : Col long - risque faible -->
+        <div class="step-content" id="step-col-long">
+            <h2 class="sec-title">&#9654; MAP à Risque Faible — Col &#8805; 25 mm</h2>
+
+            <div class="result-box green">
+                <div class="rb-title">&#10003; Prise en charge ambulatoire possible</div>
+                <div class="exam-list">
+                    <div class="exam-item"><strong>Si FFN négative (+ col &#8805; 25 mm)</strong>Valeur prédictive négative &gt; 95% pour accouchement dans les 7 jours. Sortie autorisée.</div>
+                    <div class="exam-item"><strong>Traitement tocolytique</strong>Non recommandé en première intention si risque faible</div>
+                    <div class="exam-item"><strong>Surveillance ambulatoire</strong>Contrôle échographique cervical à 1 semaine + RCF ambulatoire</div>
+                    <div class="exam-item"><strong>Repos relatif</strong>Arrêt de travail + éviction des facteurs déclenchants</div>
+                </div>
+                <div class="note-ambre">
+                    <div class="na-title">Signes de retour en urgence</div>
+                    <p>Recrudescence des CU, perte de liquide, métrorragies, fièvre, diminution des MAF &#8594; Retour immédiat aux urgences</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRANCHE : Col court -->
+        <div class="step-content" id="step-col-court">
+            <h2 class="sec-title">&#9654; MAP à Risque Modéré — Col 15–25 mm</h2>
+
+            <div class="ibox yellow">
+                <p><strong>Hospitalisation recommandée</strong> pour surveillance et évaluation complémentaire.</p>
+            </div>
+
+            <div class="result-box orange">
+                <div class="rb-title">&#9888; Prise en charge hospitalière</div>
+                <div class="exam-list">
+                    <div class="exam-item">
+                        <strong>Corticothérapie de maturation pulmonaire</strong>
+                        <p>Si terme &lt; 34 SA — Bétaméthasone 12 mg IM x2 (à 24h d'intervalle)</p>
+                        <p>Cure unique recommandée. Pas de cure de sauvetage systématique.</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Sulfate de Magnésium — Neuroprotection fœtale</strong>
+                        <p>Si terme &lt; 32 SA, accouchement imminent — 4g IV sur 20 min puis 1g/h</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Tocolyse</strong>
+                        <p>Indiquée pour permettre la corticothérapie et/ou le transfert in utero — Durée max 48h</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Transfert in utero</strong>
+                        <p>Vers maternité de niveau adapté au terme (Niveau III si &lt; 32 SA)</p>
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size:12px;font-weight:700;color:var(--gris-600);text-transform:uppercase;letter-spacing:0.05em;margin:14px 0 8px;">Tocolytiques disponibles</p>
+
+            <div class="drug-card">
+                <div class="drug-header">Atosiban (Tractocile&#174;) <span class="line-tag">1ère ligne</span></div>
+                <div class="drug-body">
+                    Antagoniste de l'ocytocine — Meilleure tolérance maternelle<br>
+                    <ul>
+                        <li>Bolus : 6,75 mg IV sur 1 min</li>
+                        <li>Entretien : 18 mg/h sur 3h puis 6 mg/h max 45h</li>
+                        <li>CI : terme &lt; 24 SA, souffrance fœtale, RCIU sévère, RPM &gt; 30 SA</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="drug-card">
+                <div class="drug-header">Nifédipine (Adalate&#174;) <span class="line-tag">Alternative</span></div>
+                <div class="drug-body">
+                    Inhibiteur calcique — Efficacité comparable, coût moindre<br>
+                    <ul>
+                        <li>Dose initiale : 10–20 mg per os toutes les 4–6h</li>
+                        <li>CI : hypotension, insuffisance cardiaque, association aux bêtamimétiques</li>
+                        <li>Surveillance : PA, FC</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="drug-card">
+                <div class="drug-header">Salbutamol (Salbumol&#174;) <span class="line-tag">À éviter si possible</span></div>
+                <div class="drug-body">
+                    Bêtamimétique — Effets secondaires cardiovasculaires maternels significatifs<br>
+                    <ul>
+                        <li>Réservé aux situations sans autre alternative</li>
+                        <li>CI : cardiopathie, diabète non équilibré, hyperthyroïdie</li>
+                        <li>Surveillance stricte : glycémie, kaliémie, FC maternelle</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRANCHE : Col très court -->
+        <div class="step-content" id="step-col-tres-court">
+            <h2 class="sec-title">&#128680; MAP à Haut Risque — Col &lt; 15 mm / Dilaté</h2>
+
+            <div class="alert-urg">
+                <div class="urg-title">Mesures immédiates</div>
+                <ul>
+                    <li>Hospitalisation en urgence — Maternité de niveau adapté au terme</li>
+                    <li>Repos strict au lit</li>
+                    <li>Monitoring continu RCF + tocométrie</li>
+                    <li>Voie veineuse + prélèvements biologiques complets</li>
+                    <li>Transfert in utero si terme &lt; 32 SA vers niveau III</li>
+                </ul>
+            </div>
+
+            <div class="result-box red">
+                <div class="rb-title">&#128680; Protocol de neuroprotection et maturation</div>
+                <div class="exam-list">
+                    <div class="exam-item">
+                        <strong>1. Sulfate de Magnésium — OBLIGATOIRE si &lt; 32 SA</strong>
+                        <p>4g IV sur 20 min + 1g/h jusqu'à l'accouchement ou 24h</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>2. Corticothérapie — si &lt; 34 SA</strong>
+                        <p>Bétaméthasone 12 mg IM x2 à 24h d'intervalle — Priorité absolue</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>3. Tocolyse — 48h pour permettre la maturation</strong>
+                        <p>Atosiban en 1ère intention — Arrêt si col &#8805; 4 cm ou accouchement inévitable</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>4. Antibioprophylaxie</strong>
+                        <p>Si RPM associée ou prélèvements positifs — Voir protocole RPM</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>5. Cerclage d'urgence</strong>
+                        <p>À discuter si col &lt; 25 mm entre 16 et 24 SA, membranes intactes, ATCD de fausse couche tardive</p>
+                    </div>
+                </div>
+            </div>
+
+            <table class="score-table">
+                <tr><th>Terme</th><th>Niveau maternité</th><th>Actions prioritaires</th></tr>
+                <tr><td>&lt; 28 SA</td><td><span class="badge-risque eleve">Niveau III obligatoire</span></td><td>MgSO4 + Corticoïdes + Transfert urgent</td></tr>
+                <tr><td>28 – 31 SA</td><td><span class="badge-risque eleve">Niveau III</span></td><td>MgSO4 + Corticoïdes + Tocolyse</td></tr>
+                <tr><td>32 – 33 SA</td><td><span class="badge-risque modere">Niveau II ou III</span></td><td>Corticoïdes + Tocolyse &#177; MgSO4</td></tr>
+                <tr><td>34 – 36 SA</td><td><span class="badge-risque faible">Niveau II</span></td><td>Surveillance — Tocolyse non systématique</td></tr>
+            </table>
+        </div>
+
+        <!-- BRANCHE : RPM -->
+        <div class="step-content" id="step-rpm">
+            <h2 class="sec-title">&#9888; Rupture Prématurée des Membranes</h2>
+
+            <div class="ibox red">
+                <p><strong>Définition :</strong> Rupture des membranes avant le début du travail, avant 37 SA.<br>
+                <strong>Risque majeur :</strong> Chorioamniotite (10–30%) + procidence du cordon + prématurité.</p>
+            </div>
+
+            <div class="ibox blue">
+                <h3>Confirmation diagnostique</h3>
+                <ul>
+                    <li>Speculum : écoulement de liquide amniotique (test à la toux)</li>
+                    <li>Test AmniSure&#174; ou IGFBP-1 (Actim PROM&#174;) si doute</li>
+                    <li>pH vaginal (liquide amniotique : pH &#8805; 7)</li>
+                    <li>Pas de TV au doigt sauf accouchement imminent</li>
+                    <li>Échographie : index de liquide amniotique (ILA)</li>
+                </ul>
+            </div>
+
+            <div class="result-box violet">
+                <div class="rb-title">&#10003; Prise en charge de la RPM</div>
+                <div class="exam-list">
+                    <div class="exam-item">
+                        <strong>Surveillance infection (bihebdomadaire)</strong>
+                        <p>T°, CRP, NFS, leucocytose, CU, aspect du liquide (louche = infection)</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Antibioprophylaxie systématique</strong>
+                        <ul>
+                            <li>Amoxicilline 1g x3/j per os pendant 7 jours</li>
+                            <li>Si allergie : Erythromycine 250 mg x4/j per os 10 jours</li>
+                            <li>Pas d'Amoxicilline-Acide clavulanique (risque d'entérocolite néonatale)</li>
+                        </ul>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Corticothérapie — si &lt; 34 SA</strong>
+                        <p>Bétaméthasone 12 mg IM x2 — À administrer en urgence</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Tocolyse dans la RPM</strong>
+                        <p>Non recommandée en routine — Uniquement pour permettre le transfert ou la corticothérapie, sur courte durée</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Indication d'extraction</strong>
+                        <ul>
+                            <li>Chorioamniotite : extraction immédiate quel que soit le terme</li>
+                            <li>&#8805; 34 SA : déclenchement du travail recommandé</li>
+                            <li>34 – 37 SA : attitude expectative sous surveillance vs déclenchement selon contexte</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-ambre">
+                <div class="na-title">Signes de chorioamniotite — Extraction immédiate</div>
+                <p>Fièvre maternelle &gt; 38°C + tachycardie fœtale + utérus douloureux + liquide malodorant ou purulent + CRP &gt; 20 mg/L avec ascension rapide</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tool-footer">
+        <p><strong>Références :</strong> CNGOF 2016, HAS, CFEF — Recommandations pour la pratique clinique</p>
+        <p style="margin-top:4px;">Ce contenu ne remplace pas l'évaluation clinique individuelle. En cas de doute, avis spécialisé recommandé.</p>
+    </div>
+</div>
+
+<script>
+(function() {
+    let navHistory = ['step1'];
+    const allSteps = ['step1','step-col-long','step-col-court','step-col-tres-court','step-rpm'];
+
+    function updateUI() {
+        const bar = document.getElementById('progressBar');
+        const labels = ['Évaluation','Prise en charge'];
+        const cur = navHistory.length;
+        bar.innerHTML = '';
+        for (let i = 1; i <= 2; i++) {
+            const s = document.createElement('div'); s.className = 'prog-step';
+            const c = document.createElement('div'); c.className = 'prog-circle' + (cur >= i ? ' active' : ''); c.textContent = i;
+            const l = document.createElement('div'); l.className = 'prog-label' + (cur >= i ? ' active' : ''); l.textContent = labels[i-1];
+            s.appendChild(c); s.appendChild(l);
+            if (i < 2) { const ln = document.createElement('div'); ln.className = 'prog-line' + (cur > i ? ' active' : ''); s.appendChild(ln); }
+            bar.appendChild(s);
+        }
+        const btn = document.getElementById('btn-retour');
+        if (btn) btn.classList.toggle('visible', navHistory.length > 1);
+    }
+
+    window.goTo = function(branch) {
+        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById('step-' + branch).classList.add('active');
+        navHistory.push('step-' + branch);
+        updateUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.goBack = function() {
+        if (navHistory.length <= 1) return;
+        navHistory.pop();
+        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById(navHistory[navHistory.length - 1]).classList.add('active');
+        updateUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetTool = function() {
+        navHistory = ['step1'];
+        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById('step1').classList.add('active');
+        updateUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    updateUI();
+})();
+</script>
+</body>
+</html>
