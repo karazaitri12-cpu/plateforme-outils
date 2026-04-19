@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#8b1a1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Hémorragie du Post-Partum — Protocole de Prise en Charge</title>
+    <style>
+        :root {
+            --rouge: #8b1a1a; --rouge-vif: #b91c1c; --rouge-pale: #fef2f2; --rouge-bord: #fca5a5;
+            --bleu: #1e3a5f; --bleu-pale: #eff6ff;
+            --vert: #14532d; --vert-pale: #f0fdf4; --vert-bord: #86efac;
+            --orange: #9a3412; --orange-pale: #fff7ed; --orange-bord: #fdba74;
+            --violet: #4c1d95; --violet-pale: #f5f3ff; --violet-bord: #c4b5fd;
+            --ambre: #78350f; --ambre-pale: #fffbeb; --ambre-bord: #fcd34d;
+            --gris-100: #f8f9fa; --gris-200: #e9ecef; --gris-400: #adb5bd;
+            --gris-600: #6c757d; --gris-800: #343a40; --noir: #212529; --blanc: #ffffff;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; --radius: 6px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-family: var(--font); font-size: 15px; color: var(--noir); background: #f1f3f5; -webkit-text-size-adjust: 100%; }
+        body { min-height: 100vh; min-height: -webkit-fill-available; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+        .tool-wrap { max-width: 720px; margin: 0 auto; }
+        .tool-header { background: var(--rouge); padding: 22px 24px 18px; position: relative; overflow: hidden; }
+        .tool-header::after { content: ''; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05); pointer-events: none; }
+        .tool-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+        .tool-header h1 { font-size: clamp(15px, 3vw, 19px); font-weight: 700; color: var(--blanc); line-height: 1.25; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+        .tool-header-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+        .tool-header-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+        .tool-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.2); padding: 3px 9px; border-radius: 3px; white-space: nowrap; }
+        .header-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: flex-start; }
+        .btn-hdr { border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 600; font-family: var(--font); white-space: nowrap; touch-action: manipulation; transition: background 0.2s; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.12); }
+        .btn-hdr:hover, .btn-hdr:active { background: rgba(255,255,255,0.25); }
+        .btn-retour { background: rgba(255,255,255,0.22); display: none; }
+        .btn-retour.visible { display: inline-block; }
+        .tool-progress { background: var(--blanc); border-bottom: 1px solid var(--gris-200); padding: 12px 24px; display: flex; align-items: center; }
+        .prog-step { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .prog-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; background: var(--gris-200); color: var(--gris-600); transition: all 0.3s; }
+        .prog-circle.active { background: var(--rouge-vif); color: var(--blanc); }
+        .prog-label { font-size: 11px; font-weight: 600; color: var(--gris-600); text-transform: uppercase; letter-spacing: 0.04em; }
+        .prog-label.active { color: var(--rouge-vif); }
+        .prog-line { flex: 1; height: 2px; background: var(--gris-200); margin: 0 8px; transition: background 0.3s; }
+        .prog-line.active { background: var(--rouge-vif); }
+        .tool-body { padding: 20px; }
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .sec-title { font-size: 15px; font-weight: 700; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 2px solid var(--rouge-pale); color: var(--rouge); display: flex; align-items: center; gap: 8px; }
+        .ibox { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 13px; border-left: 4px solid; }
+        .ibox p, .ibox li { font-size: 13px; line-height: 1.5; }
+        .ibox strong { font-weight: 700; }
+        .ibox h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .ibox ul { list-style: none; padding: 0; margin: 0; }
+        .ibox ul li { padding: 4px 0 4px 16px; position: relative; }
+        .ibox ul li::before { content: "\2022"; position: absolute; left: 0; font-weight: bold; }
+        .ibox.red   { background: var(--rouge-pale); border-left-color: var(--rouge-vif); }
+        .ibox.red ul li { color: #7f1d1d; } .ibox.red ul li::before { color: var(--rouge-vif); }
+        .ibox.blue  { background: var(--bleu-pale);  border-left-color: var(--bleu); }
+        .ibox.blue h3 { color: var(--bleu); } .ibox.blue ul li { color: #1e3a5f; } .ibox.blue ul li::before { color: var(--bleu); }
+        .ibox.yellow{ background: var(--ambre-pale); border-left-color: #d97706; }
+        .ibox.yellow ul li { color: #78350f; } .ibox.yellow ul li::before { color: #d97706; }
+        .ibox.violet { background: var(--violet-pale); border-left-color: var(--violet); }
+        .ibox.violet h3 { color: var(--violet); } .ibox.violet ul li { color: var(--violet); } .ibox.violet ul li::before { color: var(--violet); }
+        .ibox.green { background: var(--vert-pale); border-left-color: var(--vert); }
+        .ibox.green h3 { color: var(--vert); } .ibox.green ul li::before { color: var(--vert); }
+        .ibox.neutral { background: var(--gris-100); border-left-color: var(--gris-400); }
+        .choice-btn { width: 100%; background: var(--blanc); border: 2px solid var(--rouge-vif); color: var(--rouge); padding: 12px 15px; border-radius: var(--radius); font-size: 14px; font-weight: 600; font-family: var(--font); cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; margin-bottom: 9px; transition: all 0.2s; touch-action: manipulation; line-height: 1.3; }
+        .choice-btn::before { content: "\25B6"; font-size: 10px; color: var(--rouge-vif); flex-shrink: 0; }
+        .choice-btn:hover, .choice-btn:active { background: var(--rouge-vif); color: var(--blanc); }
+        .choice-btn:hover::before, .choice-btn:active::before { color: var(--blanc); }
+        /* LIGNES THÉRAPEUTIQUES */
+        .ligne { border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; border: 1px solid; }
+        .ligne-header { padding: 10px 14px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; touch-action: manipulation; }
+        .ligne-header::after { content: "\25BC"; font-size: 9px; margin-left: auto; transition: transform 0.2s; }
+        .ligne.open .ligne-header::after { transform: rotate(180deg); }
+        .ligne-body { display: none; padding: 12px 14px; font-size: 13px; line-height: 1.5; border-top: 1px solid; }
+        .ligne.open .ligne-body { display: block; }
+        .ligne-body ul { list-style: none; padding: 0; margin: 0; }
+        .ligne-body ul li { padding: 4px 0 4px 14px; position: relative; }
+        .ligne-body ul li::before { content: "\25B8"; position: absolute; left: 0; font-size: 10px; top: 7px; }
+        .ligne.l1 { border-color: #86efac; } .ligne.l1 .ligne-header { background: var(--vert-pale); color: var(--vert); } .ligne.l1 .ligne-body { background: #f8fffe; border-color: #86efac; } .ligne.l1 .ligne-body ul li::before { color: var(--vert); }
+        .ligne.l2 { border-color: #fdba74; } .ligne.l2 .ligne-header { background: var(--orange-pale); color: var(--orange); } .ligne.l2 .ligne-body { background: #fffcfa; border-color: #fdba74; } .ligne.l2 .ligne-body ul li::before { color: #ea580c; }
+        .ligne.l3 { border-color: #fca5a5; } .ligne.l3 .ligne-header { background: var(--rouge-pale); color: var(--rouge-vif); } .ligne.l3 .ligne-body { background: #fffafa; border-color: #fca5a5; } .ligne.l3 .ligne-body ul li::before { color: var(--rouge-vif); }
+        .ligne.l4 { border-color: var(--violet-bord); } .ligne.l4 .ligne-header { background: var(--violet-pale); color: var(--violet); } .ligne.l4 .ligne-body { background: #fdfcff; border-color: var(--violet-bord); } .ligne.l4 .ligne-body ul li::before { color: var(--violet); }
+        .timer-badge { background: var(--rouge-vif); color: var(--blanc); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 3px; white-space: nowrap; }
+        /* ALERT & NOTES */
+        .alert-urg { background: #fee2e2; border: 1px solid #fca5a5; border-radius: var(--radius); padding: 13px; margin-bottom: 12px; }
+        .alert-urg .urg-title { font-weight: 700; color: var(--rouge-vif); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 7px; }
+        .alert-urg ul { list-style: none; padding: 0; margin: 0; }
+        .alert-urg ul li { font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px; position: relative; font-weight: 500; }
+        .alert-urg ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--rouge-vif); }
+        .note-ambre { background: var(--ambre-pale); border: 1px solid var(--ambre-bord); border-radius: var(--radius); padding: 11px 13px; margin-top: 11px; }
+        .note-ambre .na-title { font-size: 11px; font-weight: 700; color: var(--ambre); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+        .note-ambre p { font-size: 12px; color: var(--ambre); line-height: 1.4; }
+        .exam-list { background: var(--blanc); border: 1px solid var(--gris-200); border-radius: var(--radius); margin: 10px 0; overflow: hidden; }
+        .exam-item { padding: 10px 13px; border-bottom: 1px solid var(--gris-200); font-size: 13px; line-height: 1.45; color: var(--gris-800); }
+        .exam-item:last-child { border-bottom: none; }
+        .exam-item strong { color: var(--noir); font-weight: 700; display: block; margin-bottom: 2px; }
+        .exam-item p { color: var(--gris-600); font-size: 12px; margin-top: 2px; }
+        .tool-footer { background: var(--blanc); border-top: 1px dashed var(--gris-200); padding: 13px 20px; text-align: center; }
+        .tool-footer p { font-size: 11px; color: var(--gris-600); line-height: 1.5; }
+        .tool-footer strong { color: var(--gris-800); }
+        .causes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+        .cause-card { background: var(--blanc); border: 1px solid var(--gris-200); border-radius: var(--radius); padding: 10px 12px; }
+        .cause-card .cause-lettre { font-size: 22px; font-weight: 900; color: var(--rouge-vif); line-height: 1; margin-bottom: 3px; }
+        .cause-card .cause-titre { font-size: 12px; font-weight: 700; color: var(--noir); margin-bottom: 4px; }
+        .cause-card .cause-desc { font-size: 11px; color: var(--gris-600); line-height: 1.4; }
+     
+      
+      /* =========================================
+   PRO : Masque l'ascenseur (style App native)
+   A placer en fin de css dans chaque outil
+   ========================================= */
+html { scrollbar-width: none; }               /* Firefox */
+body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
+::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
+     
+      @media (max-width: 480px) {
+            .tool-header { padding: 15px 15px 13px; }
+            .tool-header h1 { font-size: 13px; }
+            .tool-progress { padding: 10px 15px; }
+            .prog-label { display: none; }
+            .tool-body { padding: 13px; }
+            .choice-btn { font-size: 13px; padding: 11px 13px; }
+            .causes-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="tool-wrap">
+
+    <div class="tool-header">
+        <div class="tool-header-top">
+            <div>
+                <h1>&#128680; Hémorragie du Post-Partum</h1>
+                <p class="tool-header-sub">Protocole de prise en charge — Usage médical professionnel</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-hdr btn-retour" id="btn-retour" onclick="goBack()">&#8592; Retour</button>
+                <button class="btn-hdr" onclick="resetTool()">&#8635; Reset</button>
+            </div>
+        </div>
+        <div class="tool-header-badges">
+            <span class="tool-badge">Obstétrique</span>
+            <span class="tool-badge">Urgence</span>
+            <span class="tool-badge">CNGOF 2014 / CNSF</span>
+        </div>
+    </div>
+
+    <div class="tool-progress" id="progressBar"></div>
+
+    <div class="tool-body">
+
+        <!-- ÉTAPE 1 : Définition et contexte -->
+        <div class="step-content active" id="step1">
+            <h2 class="sec-title">&#9654; Type d'hémorragie du post-partum</h2>
+
+            <div class="ibox red">
+                <p><strong>Définition — HPP primaire :</strong> Perte sanguine &#8805; 500 mL dans les 24h suivant l'accouchement.<br>
+                <strong>HPP sévère :</strong> Perte &#8805; 1000 mL ou retentissement hémodynamique.</p>
+            </div>
+
+            <div class="ibox yellow">
+                <h3>Les 4 causes — Règle des 4T</h3>
+                <div class="causes-grid">
+                    <div class="cause-card"><div class="cause-lettre">T</div><div class="cause-titre">Tonus (70%)</div><div class="cause-desc">Atonie utérine — cause la plus fréquente</div></div>
+                    <div class="cause-card"><div class="cause-lettre">T</div><div class="cause-titre">Tissu (20%)</div><div class="cause-desc">Rétention placentaire, cotylédon aberrant</div></div>
+                    <div class="cause-card"><div class="cause-lettre">T</div><div class="cause-titre">Trauma (9%)</div><div class="cause-desc">Déchirure cervico-vaginale, rupture utérine</div></div>
+                    <div class="cause-card"><div class="cause-lettre">T</div><div class="cause-titre">Thrombine (1%)</div><div class="cause-desc">Coagulopathie, CIVD, anticoagulants</div></div>
+                </div>
+            </div>
+
+            <button class="choice-btn" onclick="goTo('hpp-precoce')">HPP Précoce (0 – 24h) — Primaire</button>
+            <button class="choice-btn" onclick="goTo('hpp-tardive')">HPP Tardive (24h – 6 semaines) — Secondaire</button>
+        </div>
+
+        <!-- BRANCHE : HPP Précoce -->
+        <div class="step-content" id="step-hpp-precoce">
+            <h2 class="sec-title">&#128680; HPP Précoce — Protocole Séquentiel</h2>
+
+            <div class="alert-urg">
+                <div class="urg-title">Actions immédiates simultanées</div>
+                <ul>
+                    <li>Appel de l'équipe (sage-femme, obstétricien, anesthésiste, bloc)</li>
+                    <li>Voies d'abord veineuses (2 VVP, gros calibre)</li>
+                    <li>Remplissage vasculaire — Cristalloïdes en 1ère intention</li>
+                    <li>Prélèvements : NFS, TP, TCA, fibrinogène, groupe ABO/Rh, RAI</li>
+                    <li>Sondage vésical + Monitorage continu (PA, FC, SpO2)</li>
+                    <li>Réchauffement de la patiente</li>
+                </ul>
+            </div>
+
+            <p style="font-size:12px;font-weight:700;color:var(--gris-600);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Lignes thérapeutiques séquentielles</p>
+
+            <div class="ligne l1" onclick="toggleLigne(this)">
+                <div class="ligne-header"><span class="timer-badge">0 – 15 min</span> 1ère ligne — Utérotoniques</div>
+                <div class="ligne-body">
+                    <ul>
+                        <li><strong>Ocytocine (Syntocinon&#174;) 5 à 10 UI IV lente</strong> — Systématique en 1ère intention</li>
+                        <li>Entretien : 20 UI dans 500 mL de sérum phy sur 2h</li>
+                        <li><strong>Révision utérine systématique</strong> (délivrance incomplète ?)</li>
+                        <li><strong>Massage utérin</strong> + expression du caillot</li>
+                        <li>Vérification filière génitale (déchirures, épisiotomie)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="ligne l2" onclick="toggleLigne(this)">
+                <div class="ligne-header"><span class="timer-badge">15 – 30 min</span> 2ème ligne — Sulprostone</div>
+                <div class="ligne-body">
+                    <ul>
+                        <li><strong>Sulprostone (Nalador&#174;) 500 &#956;g</strong> dans 500 mL NaCl 0,9% en IV continue</li>
+                        <li>Débit initial : 1,7 mL/min — max 8,3 mL/min</li>
+                        <li>Contre-indications : cardiopathie, HTA sévère, asthme, épilepsie</li>
+                        <li>Monitoring cardiaque continu obligatoire</li>
+                        <li><strong>Acide tranexamique (Exacyl&#174;) 1g IV</strong> — À injecter dans les 3h suivant l'accouchement</li>
+                        <li>Correction coagulopathie : PFC si fibrinogène &lt; 2 g/L</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="ligne l3" onclick="toggleLigne(this)">
+                <div class="ligne-header"><span class="timer-badge">30 – 60 min</span> 3ème ligne — Gestes chirurgicaux</div>
+                <div class="ligne-body">
+                    <ul>
+                        <li><strong>Tamponnement intra-utérin</strong> par ballon (Bakri&#174;) — Tentative conservatrice</li>
+                        <li><strong>Embolisation artérielle utérine</strong> si hémodynamique stable et radiologue disponible</li>
+                        <li><strong>Ligature des artères utérines</strong> (technique de O'Leary)</li>
+                        <li><strong>Suture de compression utérine</strong> (B-Lynch, Hayman)</li>
+                        <li><strong>Ligature des artères hypogastriques</strong> si échec des ligatures utérines</li>
+                        <li>Décision multidisciplinaire : obstétricien + anesthésiste + radiologue</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="ligne l4" onclick="toggleLigne(this)">
+                <div class="ligne-header"><span class="timer-badge">&gt; 60 min</span> 4ème ligne — Hystérectomie d'hémostase</div>
+                <div class="ligne-body">
+                    <ul>
+                        <li><strong>Hystérectomie totale ou subtotale</strong> — En dernier recours</li>
+                        <li>Ne pas différer si hémorragie incoercible avec instabilité hémodynamique</li>
+                        <li>Transfusion massive : CGR + PFC (ratio 1:1) + Plaquettes si &lt; 50 G/L</li>
+                        <li>Fibrinogène concentré si &lt; 1,5 g/L</li>
+                        <li>Facteur VIIa recombinant (Novoseven&#174;) en cas d'échec des thérapeutiques conventionnelles</li>
+                        <li>Transfert en réanimation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="note-ambre" style="margin-top:4px;">
+                <div class="na-title">Seuils transfusionnels</div>
+                <p>Hb &lt; 7 g/dL &#8594; CGR / Plaquettes &lt; 50 G/L &#8594; Transfusion plaquettaire / Fibrinogène &lt; 2 g/L &#8594; PFC ou concentré fibrinogène / TP &lt; 40% &#8594; PFC</p>
+            </div>
+        </div>
+
+        <!-- BRANCHE : HPP Tardive -->
+        <div class="step-content" id="step-hpp-tardive">
+            <h2 class="sec-title">&#9888; HPP Tardive (Secondaire)</h2>
+
+            <div class="ibox yellow">
+                <p><strong>Définition :</strong> Hémorragie survenant entre 24h et 6 semaines après l'accouchement.<br>
+                Fréquence : 1–2% des accouchements.</p>
+            </div>
+
+            <div class="ibox blue">
+                <h3>Causes principales</h3>
+                <ul>
+                    <li><strong>Rétention placentaire</strong> (cotylédon ou membrane) — cause la plus fréquente</li>
+                    <li><strong>Endométrite du post-partum</strong> — fièvre + saignements + douleurs utérines</li>
+                    <li><strong>Subinvolution utérine</strong></li>
+                    <li><strong>Pseudoanévrisme artériel</strong> (après césarienne)</li>
+                    <li><strong>Trouble de la coagulation</strong> (von Willebrand, thrombopénie)</li>
+                </ul>
+            </div>
+
+            <div class="exam-list">
+                <div class="exam-item"><strong>Bilan de 1ère intention</strong>NFS, CRP, bilan de coagulation, groupe/RAI, BHCG (si doute môle)</div>
+                <div class="exam-item"><strong>Échographie pelvienne</strong>Rétention trophoblastique, image endo-cavitaire, vascularisation Doppler</div>
+                <div class="exam-item"><strong>Prélèvements bactériologiques</strong>Hémocultures si fièvre + prélèvements endocervicaux</div>
+            </div>
+
+            <div class="ibox green">
+                <h3>Prise en charge selon la cause</h3>
+                <ul>
+                    <li><strong>Rétention :</strong> Révision utérine chirurgicale + antibioprophylaxie</li>
+                    <li><strong>Endométrite :</strong> Antibiothérapie IV (Augmentin&#174; + Métronidazole &#177; Gentamicine) &#177; révision utérine</li>
+                    <li><strong>Pseudoanévrisme :</strong> Embolisation artérielle en urgence</li>
+                    <li><strong>Coagulopathie :</strong> Traitement étiologique + soutien transfusionnel</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tool-footer">
+        <p><strong>Références :</strong> CNGOF 2014, CNSF, HAS — Protocole d'aide à la décision</p>
+        <p style="margin-top:4px;">Ce contenu ne remplace pas le protocole institutionnel de votre établissement. Avis de non-responsabilité médico-légal.</p>
+    </div>
+</div>
+
+<script>
+(function() {
+    let navHistory = ['step1'];
+    const allSteps = ['step1','step-hpp-precoce','step-hpp-tardive'];
+
+    function updateUI() {
+        const bar = document.getElementById('progressBar');
+        const labels = ['Type','Protocole'];
+        const cur = navHistory.length;
+        bar.innerHTML = '';
+        for (let i = 1; i <= 2; i++) {
+            const s = document.createElement('div'); s.className = 'prog-step';
+            const c = document.createElement('div'); c.className = 'prog-circle' + (cur >= i ? ' active' : ''); c.textContent = i;
+            const l = document.createElement('div'); l.className = 'prog-label' + (cur >= i ? ' active' : ''); l.textContent = labels[i-1];
+            s.appendChild(c); s.appendChild(l);
+            if (i < 2) { const ln = document.createElement('div'); ln.className = 'prog-line' + (cur > i ? ' active' : ''); s.appendChild(ln); }
+            bar.appendChild(s);
+        }
+        const btn = document.getElementById('btn-retour');
+        if (btn) btn.classList.toggle('visible', navHistory.length > 1);
+    }
+
+    window.goTo = function(branch) {
+        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById('step-' + branch).classList.add('active');
+        navHistory.push('step-' + branch);
+        updateUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.goBack = function() {
+        if (navHistory.length <= 1) return;
+        navHistory.pop();
+        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById(navHistory[navHistory.length - 1]).classList.add('active');
+        updateUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetTool = function() {
+        navHistory = ['step1'];
+        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById('step1').classList.add('active');
+        updateUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.toggleLigne = function(el) {
+        el.classList.toggle('open');
+    };
+
+    updateUI();
+})();
+</script>
+</body>
+</html>
