@@ -198,11 +198,14 @@
 
     function renderFilters() {
       const cats = new Set();
+      // On récupère les catégories dans l'ordre naturel du JSON
       allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
-      const sortedCats = Array.from(cats).sort((a, b) => a.localeCompare(b, 'fr'));
+      
+      // On retire le .sort() pour respecter l'ordre d'insertion
+      const orderedCats = Array.from(cats);
       
       let html = `<button class="filter-btn active" data-cat="all">Tous</button><button class="filter-btn fav-btn" data-cat="favorites">⭐ Favoris</button>`;
-      html += sortedCats.map(c => `<button class="filter-btn" data-cat="${c}">${c}</button>`).join('');
+      html += orderedCats.map(c => `<button class="filter-btn" data-cat="${c}">${c}</button>`).join('');
       filtersContainer.innerHTML = html;
 
       filtersContainer.addEventListener('click', e => {
