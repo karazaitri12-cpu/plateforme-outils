@@ -270,6 +270,23 @@
         </a>`}).join('');
     }
 
+      grid.innerHTML = filtered.map(t => {
+        const isFav = favorites.includes(t.id);
+        const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
+        return `
+        <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
+          ${badgeHtml}
+          <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">
+            ${isFav ? '★' : '☆'}
+          </button>
+          <div class="tool-icon">${t.icone || '🛠️'}</div>
+          <div class="tool-content">
+            <h3>${t.titre}</h3>
+            <p>${t.description}</p>
+          </div>
+        </a>`}).join('');
+    }
+
     searchInput.addEventListener('input', e => {
       searchTerm = e.target.value.trim();
       clearSearchBtn.style.display = searchTerm.length > 0 ? 'flex' : 'none';
