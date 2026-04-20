@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dépistage Cancer du Col – Algorithme HAS/INCa/CNGOF</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR COMPLET
+   Isolation totale, aucune dépendance extérieure
+   ============================================================ */
+#col-depistage-tool,
+#col-depistage-tool *,
+#col-depistage-tool *::before,
+#col-depistage-tool *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+#col-depistage-tool {
+  --c-accent:       #1a4e8c;
+  --c-accent-dark:  #123566;
+  --c-accent-light: #e8f0fb;
+  --c-blanc:        #ffffff;
+  --c-fond:         #f4f6f9;
+  --c-bordure:      #cdd4e0;
+  --c-texte:        #1a1f2e;
+  --c-texte-sec:    #4a5568;
+  --c-vert:         #145c35;
+  --c-vert-bg:      #e6f4ec;
+  --c-vert-bord:    #9ecfb5;
+  --c-orange:       #8a4d0a;
+  --c-orange-bg:    #fef4e4;
+  --c-orange-bord:  #f0c07a;
+  --c-rouge:        #8b1a1a;
+  --c-rouge-bg:     #fdf2f2;
+  --c-rouge-bord:   #e8a0a0;
+  --c-gris-bg:      #f0f2f5;
+  --c-radius:       6px;
+
+  background: var(--c-fond);
+  color: var(--c-texte);
+  font-size: 24px;
+  line-height: 1.6;
+  padding: 0;
+  max-width: 660px;
+  margin: 0 auto;
+  border: 1px solid var(--c-bordure);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+/* ---- EN-TÊTE ---- */
+#col-depistage-tool .cdp-header {
+  background: var(--c-accent);
+  color: #fff;
+  padding: 18px 22px 14px;
+}
+#col-depistage-tool .cdp-header-label {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 4px;
+}
+#col-depistage-tool .cdp-header h1 {
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+  color: #fff;
+}
+#col-depistage-tool .cdp-header p {
+  font-size: 16px;
+  opacity: 0.80;
+  color: #fff;
+}
+
+/* ---- BARRE DE PROGRESSION ---- */
+#col-depistage-tool .cdp-progress {
+  background: var(--c-accent-dark);
+  padding: 8px 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#col-depistage-tool .cdp-progress-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+  overflow: hidden;
+}
+#col-depistage-tool .cdp-progress-bar {
+  height: 100%;
+  background: #fff;
+  border-radius: 2px;
+  transition: width 0.35s ease;
+  width: 0%;
+}
+#col-depistage-tool .cdp-progress-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+}
+
+/* ---- CORPS ---- */
+#col-depistage-tool .cdp-body {
+  padding: 22px;
+  background: var(--c-blanc);
+}
+
+/* ---- ÉTAPES ---- */
+#col-depistage-tool .cdp-step {
+  display: none;
+  animation: cdpFade 0.25s ease;
+}
+#col-depistage-tool .cdp-step.active {
+  display: block;
+}
+@keyframes cdpFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#col-depistage-tool .cdp-question {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--c-accent);
+  border-left: 3px solid var(--c-accent);
+  padding-left: 10px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+#col-depistage-tool .cdp-question-sub {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--c-texte-sec);
+  margin-bottom: 16px;
+  padding-left: 13px;
+}
+
+/* ---- BOUTONS DE CHOIX ---- */
+#col-depistage-tool .cdp-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 14px;
+}
+#col-depistage-tool .cdp-btn {
+  display: block;
+  width: 100%;
+  padding: 13px 15px;
+  background: var(--c-fond);
+  border: 1px solid var(--c-bordure);
+  border-radius: var(--c-radius);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-texte);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  line-height: 1.4;
+}
+#col-depistage-tool .cdp-btn:hover {
+  background: var(--c-accent-light);
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+#col-depistage-tool .cdp-btn-sub {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--c-texte-sec);
+  margin-top: 2px;
+}
+#col-depistage-tool .cdp-btn:hover .cdp-btn-sub {
+  color: var(--c-accent);
+  opacity: 0.75;
+}
+
+/* ---- BOUTON RETOUR ---- */
+#col-depistage-tool .cdp-back {
+  background: none;
+  border: none;
+  color: var(--c-texte-sec);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 4px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+#col-depistage-tool .cdp-back::before { content: "\2190"; }
+#col-depistage-tool .cdp-back:hover { color: var(--c-accent); }
+
+/* ---- ALERTE INFO ---- */
+#col-depistage-tool .cdp-info {
+  background: var(--c-accent-light);
+  border: 1px solid #b3c9ec;
+  border-radius: var(--c-radius);
+  padding: 10px 13px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-accent-dark);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+#col-depistage-tool .cdp-info::before {
+  content: "\2139\0020";
+  font-weight: 700;
+}
+
+/* ---- RÉSULTATS ---- */
+#col-depistage-tool .cdp-result {
+  border-radius: var(--c-radius);
+  border: 1px solid var(--c-bordure);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+#col-depistage-tool .cdp-result-header {
+  padding: 11px 15px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+#col-depistage-tool .cdp-result-header::before { font-size: 16px; font-weight: 400; }
+#col-depistage-tool .cdp-result-body {
+  padding: 14px 15px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.65;
+}
+#col-depistage-tool .cdp-result-body strong { font-weight: 700; }
+
+/* Couleurs résultats */
+#col-depistage-tool .res-vert .cdp-result-header  { background: var(--c-vert-bg); color: var(--c-vert); border-bottom: 1px solid var(--c-vert-bord); }
+#col-depistage-tool .res-vert .cdp-result-header::before { content: "\2713"; }
+#col-depistage-tool .res-vert { border-color: var(--c-vert-bord); }
+
+#col-depistage-tool .res-orange .cdp-result-header { background: var(--c-orange-bg); color: var(--c-orange); border-bottom: 1px solid var(--c-orange-bord); }
+#col-depistage-tool .res-orange .cdp-result-header::before { content: "\26A0"; }
+#col-depistage-tool .res-orange { border-color: var(--c-orange-bord); }
+
+#col-depistage-tool .res-rouge .cdp-result-header  { background: var(--c-rouge-bg); color: var(--c-rouge); border-bottom: 1px solid var(--c-rouge-bord); }
+#col-depistage-tool .res-rouge .cdp-result-header::before { content: "\25CF"; }
+#col-depistage-tool .res-rouge { border-color: var(--c-rouge-bord); }
+
+#col-depistage-tool .res-gris .cdp-result-header   { background: var(--c-gris-bg); color: var(--c-texte-sec); border-bottom: 1px solid var(--c-bordure); }
+#col-depistage-tool .res-gris .cdp-result-header::before { content: "\2014"; }
+#col-depistage-tool .res-gris { border-color: var(--c-bordure); }
+
+/* ---- LISTE RÉSULTATS ---- */
+#col-depistage-tool .cdp-list {
+  margin: 8px 0 4px 0;
+  padding-left: 0;
+  list-style: none;
+}
+#col-depistage-tool .cdp-list li {
+  padding: 3px 0 3px 16px;
+  position: relative;
+  font-size: 15px;
+}
+#col-depistage-tool .cdp-list li::before {
+  content: "\2192";
+  position: absolute;
+  left: 0;
+  color: var(--c-accent);
+  font-size: 16px;
+}
+
+/* ---- BADGE RAPPEL VACCIN ---- */
+#col-depistage-tool .cdp-vaccin-note {
+  background: #f5f0fb;
+  border: 1px solid #c9b8e8;
+  border-radius: var(--c-radius);
+  padding: 9px 13px;
+  font-size: 14px;
+  color: #5b3fa0;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+#col-depistage-tool .cdp-vaccin-note::before {
+  content: "\26A1\0020";
+  font-weight: 700;
+}
+
+/* ---- BOUTON NOUVELLE PATIENTE ---- */
+#col-depistage-tool .cdp-restart {
+  width: 100%;
+  padding: 12px;
+  background: var(--c-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--c-radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.18s;
+  margin-top: 4px;
+}
+#col-depistage-tool .cdp-restart:hover { background: var(--c-accent-dark); }
+
+/* ---- RÉCAPITULATIF DOSSIER (DANS LE WIDGET) ---- */
+#col-depistage-tool .cdp-recap-section {
+  display: none;
+  border-top: 2px solid var(--c-bordure);
+  margin-top: 0;
+  background: var(--c-blanc);
+}
+#col-depistage-tool .cdp-recap-section.visible {
+  display: block;
+  animation: cdpFade 0.3s ease;
+}
+#col-depistage-tool .cdp-recap-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2c3e50;
+  color: #fff;
+  padding: 11px 22px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+#col-depistage-tool .cdp-recap-title::before {
+  content: "\1F4CB";
+  font-size: 15px;
+  font-style: normal;
+}
+#col-depistage-tool .cdp-recap-content {
+  padding: 18px 22px 0;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--c-texte);
+}
+#col-depistage-tool .cdp-recap-row {
+  display: flex;
+  gap: 6px;
+  padding: 2px 0;
+  flex-wrap: wrap;
+}
+#col-depistage-tool .cdp-recap-lbl {
+  font-weight: 700;
+  color: var(--c-accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+#col-depistage-tool .cdp-recap-val {
+  color: var(--c-texte);
+}
+#col-depistage-tool .cdp-recap-sep {
+  border: none;
+  border-top: 1px dashed var(--c-bordure);
+  margin: 10px 0;
+}
+#col-depistage-tool .cdp-recap-parcours-titre {
+  font-weight: 700;
+  color: var(--c-texte);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+#col-depistage-tool .cdp-recap-parcours-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 2px 0 2px 10px;
+  font-size: 14px;
+}
+#col-depistage-tool .cdp-recap-parcours-item::before {
+  content: "\2192";
+  color: var(--c-accent);
+  flex-shrink: 0;
+  font-size: 13px;
+}
+#col-depistage-tool .cdp-recap-conclusion {
+  margin-top: 10px;
+  background: var(--c-fond);
+  border: 1px solid var(--c-bordure);
+  border-radius: var(--c-radius);
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+#col-depistage-tool .cdp-recap-conclusion-titre {
+  font-weight: 700;
+  color: var(--c-accent);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+  display: block;
+}
+#col-depistage-tool .cdp-recap-cat {
+  font-weight: 700;
+  color: var(--c-texte);
+}
+#col-depistage-tool .cdp-recap-actions {
+  padding: 14px 22px 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+#col-depistage-tool .cdp-copy-btn {
+  padding: 10px 18px;
+  background: #2c3e50;
+  color: #fff;
+  border: none;
+  border-radius: var(--c-radius);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+#col-depistage-tool .cdp-copy-btn::before {
+  content: "\2398";
+  font-size: 15px;
+}
+#col-depistage-tool .cdp-copy-btn:hover { background: #1a252f; }
+#col-depistage-tool .cdp-copy-btn.copied { background: var(--c-vert); }
+#col-depistage-tool .cdp-copy-btn.copied::before { content: "\2713"; }
+#col-depistage-tool .cdp-copy-note {
+  font-size: 12px;
+  color: var(--c-texte-sec);
+  font-style: italic;
+}
+
+/* ---- PIED ---- */
+#col-depistage-tool .cdp-footer {
+  background: var(--c-fond);
+  border-top: 1px solid var(--c-bordure);
+  padding: 10px 22px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--c-texte-sec);
+  line-height: 1.5;
+}
+
+  /* Anti-scrollbar — style App native */
+html { scrollbar-width: none; }
+body { -ms-overflow-style: none; overflow-y: auto; }
+::-webkit-scrollbar { display: none; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 480px) {
+  #col-depistage-tool .cdp-body { padding: 16px; }
+  #col-depistage-tool .cdp-header { padding: 14px 16px 12px; }
+  #col-depistage-tool .cdp-progress { padding: 7px 16px; }
+  #col-depistage-tool .cdp-footer { padding: 9px 16px; }
+  #col-depistage-tool .cdp-question { font-size: 18px; }
+  #col-depistage-tool .cdp-header h1 { line-height: 1.15; }
+  #col-depistage-tool .cdp-recap-content { padding: 14px 16px 0; }
+  #col-depistage-tool .cdp-recap-actions { padding: 12px 16px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div id="col-depistage-tool">
+
+  <!-- EN-TÊTE -->
+  <div class="cdp-header">
+    <div class="cdp-header-label">Outil d'aide à la décision — PNDO 2020</div>
+    <h1>Dépistage du cancer du col de l'utérus</h1>
+    <p>Algorithme HAS / INCa / CNGOF &mdash; Conçu par Dr KARA-ZAITRI M.A</p>
+  </div>
+
+  <!-- BARRE DE PROGRESSION -->
+  <div class="cdp-progress">
+    <div class="cdp-progress-bar-wrap">
+      <div class="cdp-progress-bar" id="cdp-prog-bar"></div>
+    </div>
+    <div class="cdp-progress-label" id="cdp-prog-label">Étape 1</div>
+  </div>
+
+  <!-- CORPS -->
+  <div class="cdp-body">
+
+    <!-- ÉTAPE 1 — ÂGE -->
+    <div class="cdp-step active" id="cdp-s1">
+      <div class="cdp-question">Âge de la patiente ?</div>
+      <div class="cdp-question-sub">Le dépistage organisé concerne toutes les femmes de 25 à 65 ans, vaccinées ou non.</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('s2a')">25 à 29 ans<span class="cdp-btn-sub">Dépistage par frottis cervico-vaginal (FCV)</span></button>
+        <button class="cdp-btn" onclick="cdpGo('s2b')">30 à 65 ans<span class="cdp-btn-sub">Dépistage par test HPV de biologie moléculaire</span></button>
+        <button class="cdp-btn" onclick="cdpGo('r-moins25')">Moins de 25 ans<span class="cdp-btn-sub">Hors du programme de dépistage organisé</span></button>
+        <button class="cdp-btn" onclick="cdpGo('s-65')">Plus de 65 ans<span class="cdp-btn-sub">Vérifier les conditions d'arrêt du dépistage</span></button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 2A — STATUT FROTTIS -->
+    <div class="cdp-step" id="cdp-s2a">
+      <div class="cdp-question">Quel est le statut de ce frottis ?</div>
+      <div class="cdp-question-sub">25–29 ans — Dépistage par cytologie (FCV)</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('s2a-premier')">Premier frottis (à 25 ans)<span class="cdp-btn-sub">Initiation du dépistage</span></button>
+        <button class="cdp-btn" onclick="cdpGo('s2a-second')">Deuxième frottis (à 26 ans)<span class="cdp-btn-sub">Frottis de confirmation à 1 an</span></button>
+        <button class="cdp-btn" onclick="cdpGo('s2a-suivi')">Frottis de suivi (après 2 frottis normaux)<span class="cdp-btn-sub">Patiente déjà dans le circuit</span></button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s1')">Retour</button>
+    </div>
+
+    <!-- PREMIER FROTTIS 25 ans -->
+    <div class="cdp-step" id="cdp-s2a-premier">
+      <div class="cdp-question">Résultat du premier frottis (25 ans) ?</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-1er-normal')">Normal</button>
+        <button class="cdp-btn" onclick="cdpGo('s-ascus-1er')">ASC-US (anomalie de signification indéterminée)</button>
+        <button class="cdp-btn" onclick="cdpGo('r-cyto-haute')">Anomalie &gt; ASC-US (LSIL, HSIL, ASC-H, AGC…)</button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s2a')">Retour</button>
+    </div>
+
+    <!-- DEUXIÈME FROTTIS 26 ans -->
+    <div class="cdp-step" id="cdp-s2a-second">
+      <div class="cdp-question">Résultat du deuxième frottis (26 ans) ?</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-2e-normal')">Normal</button>
+        <button class="cdp-btn" onclick="cdpGo('s-ascus-2e')">ASC-US</button>
+        <button class="cdp-btn" onclick="cdpGo('r-cyto-haute')">Anomalie &gt; ASC-US (LSIL, HSIL, ASC-H, AGC…)</button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s2a')">Retour</button>
+    </div>
+
+    <!-- FROTTIS DE SUIVI -->
+    <div class="cdp-step" id="cdp-s2a-suivi">
+      <div class="cdp-question">Résultat du frottis de suivi ?</div>
+      <div class="cdp-question-sub">Patiente avec deux frottis normaux antérieurs</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-suivi-normal')">Normal</button>
+        <button class="cdp-btn" onclick="cdpGo('s-ascus-suivi')">ASC-US</button>
+        <button class="cdp-btn" onclick="cdpGo('r-cyto-haute')">Anomalie &gt; ASC-US</button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s2a')">Retour</button>
+    </div>
+
+    <!-- HPV RÉFLEXE — ASC-US (1er) -->
+    <div class="cdp-step" id="cdp-s-ascus-1er">
+      <div class="cdp-question">Résultat du test HPV réflexe ?</div>
+      <div class="cdp-info">Sur un ASC-US, le laboratoire effectue automatiquement un test HPV HR (haut risque oncogène) sur le même prélèvement.</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-ascus-hpvneg-1er')">HPV HR Négatif</button>
+        <button class="cdp-btn" onclick="cdpGo('r-cyto-haute')">HPV HR Positif</button>
+        <button class="cdp-btn" onclick="cdpGo('r-ascus-nohpv')">Test HPV non réalisé</button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s2a-premier')">Retour</button>
+    </div>
+
+    <!-- HPV RÉFLEXE — ASC-US (2e) -->
+    <div class="cdp-step" id="cdp-s-ascus-2e">
+      <div class="cdp-question">Résultat du test HPV réflexe ?</div>
+      <div class="cdp-info">Sur un ASC-US, le laboratoire effectue automatiquement un test HPV HR sur le même prélèvement.</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-ascus-hpvneg-2e')">HPV HR Négatif</button>
+        <button class="cdp-btn" onclick="cdpGo('r-cyto-haute')">HPV HR Positif</button>
+        <button class="cdp-btn" onclick="cdpGo('r-ascus-nohpv')">Test HPV non réalisé</button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s2a-second')">Retour</button>
+    </div>
+
+    <!-- HPV RÉFLEXE — ASC-US (suivi) -->
+    <div class="cdp-step" id="cdp-s-ascus-suivi">
+      <div class="cdp-question">Résultat du test HPV réflexe ?</div>
+      <div class="cdp-info">Sur un ASC-US, le laboratoire effectue automatiquement un test HPV HR sur le même prélèvement.</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-ascus-hpvneg-suivi')">HPV HR Négatif</button>
+        <button class="cdp-btn" onclick="cdpGo('r-cyto-haute')">HPV HR Positif</button>
+        <button class="cdp-btn" onclick="cdpGo('r-ascus-nohpv')">Test HPV non réalisé</button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s2a-suivi')">Retour</button>
+    </div>
+
+    <!-- ÉTAPE 2B — TEST HPV (30–65 ans) -->
+    <div class="cdp-step" id="cdp-s2b">
+      <div class="cdp-question">Résultat du test HPV ?</div>
+      <div class="cdp-question-sub">30–65 ans — Test HPV de biologie moléculaire (dépistage primaire)</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-hpv-neg')">HPV Négatif</button>
+        <button class="cdp-btn" onclick="cdpGo('s-hpv-pos-genotype')">HPV Positif</button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s1')">Retour</button>
+    </div>
+
+    <!-- GÉNOTYPE HPV -->
+    <div class="cdp-step" id="cdp-s-hpv-pos-genotype">
+      <div class="cdp-question">Préciser le génotype HPV détecté :</div>
+      <div class="cdp-info">Le génotype conditionne directement la conduite à tenir selon les recommandations HAS/INCa 2020.</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-hpv1618-direct')">HPV 16 ou HPV 18<span class="cdp-btn-sub">Génotypes à très haut risque oncogène</span></button>
+        <button class="cdp-btn" onclick="cdpGo('s-autres-hpv-cyto')">Autre HPV HR (31, 33, 45, 52, 58…)<span class="cdp-btn-sub">Haut risque oncogène, triage cytologique nécessaire</span></button>
+        <button class="cdp-btn" onclick="cdpGo('r-genotype-inconnu')">Génotypage non précisé / résultat global HPV HR+<span class="cdp-btn-sub">Information génotypique indisponible</span></button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s2b')">Retour</button>
+    </div>
+
+    <!-- CYTOLOGIE RÉFLEXE — Autres HPV HR -->
+    <div class="cdp-step" id="cdp-s-autres-hpv-cyto">
+      <div class="cdp-question">Résultat de la cytologie réflexe de triage ?</div>
+      <div class="cdp-info">Autre HPV HR (hors 16/18) : une cytologie de triage est réalisée sur le même prélèvement avant toute décision colposcopique.</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-hpvhr-cyto-norm')">Cytologie normale (NILM)</button>
+        <button class="cdp-btn" onclick="cdpGo('r-hpvhr-cyto-anorm')">Cytologie anormale (ASC-US ou supérieur)</button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s-hpv-pos-genotype')">Retour</button>
+    </div>
+
+    <!-- ÉTAPE > 65 ANS -->
+    <div class="cdp-step" id="cdp-s-65">
+      <div class="cdp-question">Situation des deux derniers tests du dépistage organisé ?</div>
+      <div class="cdp-question-sub">Au-delà de 65 ans, l'arrêt du dépistage n'est légitime que sous condition.</div>
+      <div class="cdp-choices">
+        <button class="cdp-btn" onclick="cdpGo('r-65-stop')">Les deux derniers tests du PNDO sont négatifs<span class="cdp-btn-sub">Résultats documentés dans le cadre du dépistage organisé</span></button>
+        <button class="cdp-btn" onclick="cdpGo('r-65-poursuivre')">Dépistage incomplet, lacunaire ou dernier résultat positif / anormal<span class="cdp-btn-sub">Condition d'arrêt non remplie</span></button>
+      </div>
+      <button class="cdp-back" onclick="cdpGo('s1')">Retour</button>
+    </div>
+
+    <!-- ═══ RÉSULTATS ═══ -->
+
+    <div class="cdp-step" id="cdp-r-1er-normal">
+      <div class="cdp-result res-vert">
+        <div class="cdp-result-header">Premier frottis normal</div>
+        <div class="cdp-result-body">Premier frottis à 25 ans revenu normal.<br><br><strong>CAT :</strong> Réaliser un deuxième frottis à <strong>26 ans</strong> (contrôle à 1 an). Ce 2e frottis est obligatoire avant d'entrer dans le schéma triennal.<ul class="cdp-list"><li>Si le 2e frottis est normal : test HPV à 30 ans pour transition vers le schéma 30–65 ans</li><li>Pas de passage direct au rythme 3 ans sans le 2e frottis</li></ul></div>
+      </div>
+      <div class="cdp-vaccin-note">Rappel : le dépistage est maintenu quelle que soit la situation vaccinale contre le HPV.</div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-2e-normal">
+      <div class="cdp-result res-vert">
+        <div class="cdp-result-header">Deuxième frottis normal</div>
+        <div class="cdp-result-body">Deux frottis consécutifs normaux à 25 et 26 ans.<br><br><strong>CAT :</strong><ul class="cdp-list"><li>Prochain frottis dans <strong>3 ans</strong> (à 29 ans)</li><li>À 30 ans : transition vers le dépistage par <strong>test HPV</strong> (schéma 30–65 ans)</li></ul></div>
+      </div>
+      <div class="cdp-vaccin-note">Rappel : le dépistage est maintenu quelle que soit la situation vaccinale contre le HPV.</div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-suivi-normal">
+      <div class="cdp-result res-vert">
+        <div class="cdp-result-header">Frottis de suivi normal</div>
+        <div class="cdp-result-body"><ul class="cdp-list"><li>Si la patiente a moins de 29 ans : prochain frottis dans <strong>3 ans</strong></li><li>Si la patiente approche de 30 ans : anticiper la transition vers le <strong>test HPV</strong> à 30 ans</li></ul></div>
+      </div>
+      <div class="cdp-vaccin-note">Rappel : le dépistage est maintenu quelle que soit la situation vaccinale contre le HPV.</div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-cyto-haute">
+      <div class="cdp-result res-rouge">
+        <div class="cdp-result-header">Colposcopie requise</div>
+        <div class="cdp-result-body">Toute anomalie cytologique <strong>supérieure à ASC-US</strong> (LSIL, HSIL, ASC-H, AGC…) impose une colposcopie d'emblée, sans attendre un test HPV.<br><br><strong>CAT :</strong> Adresser en colposcopie.</div>
+      </div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-ascus-hpvneg-1er">
+      <div class="cdp-result res-vert">
+        <div class="cdp-result-header">ASC-US — HPV HR Négatif</div>
+        <div class="cdp-result-body">L'ASC-US sans HPV HR est rassurant : risque de lésion très faible.<br><br><strong>CAT :</strong> Réaliser le 2e frottis à <strong>26 ans</strong> selon le schéma normal, sans accélération ni colposcopie.</div>
+      </div>
+      <div class="cdp-vaccin-note">Rappel : le dépistage est maintenu quelle que soit la situation vaccinale contre le HPV.</div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-ascus-hpvneg-2e">
+      <div class="cdp-result res-vert">
+        <div class="cdp-result-header">ASC-US — HPV HR Négatif</div>
+        <div class="cdp-result-body">L'ASC-US sans HPV HR est rassurant.<br><br><strong>CAT :</strong> Retour au dépistage standard. Prochain frottis dans <strong>3 ans</strong>, puis test HPV à 30 ans.</div>
+      </div>
+      <div class="cdp-vaccin-note">Rappel : le dépistage est maintenu quelle que soit la situation vaccinale contre le HPV.</div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-ascus-hpvneg-suivi">
+      <div class="cdp-result res-vert">
+        <div class="cdp-result-header">ASC-US — HPV HR Négatif</div>
+        <div class="cdp-result-body">L'ASC-US sans HPV HR est rassurant.<br><br><strong>CAT :</strong> Retour au dépistage standard. Prochain frottis dans <strong>3 ans</strong> (ou test HPV si proche de 30 ans).</div>
+      </div>
+      <div class="cdp-vaccin-note">Rappel : le dépistage est maintenu quelle que soit la situation vaccinale contre le HPV.</div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-ascus-nohpv">
+      <div class="cdp-result res-orange">
+        <div class="cdp-result-header">ASC-US — Test HPV non réalisé</div>
+        <div class="cdp-result-body">Sans triage HPV, la CAT ne peut pas être optimisée.<br><br><strong>CAT :</strong> Contrôle cytologique dans <strong>12 mois</strong>.<ul class="cdp-list"><li>Si normal : retour rythme habituel</li><li>Si anomalie persistante : colposcopie</li><li>Demander a posteriori le HPV réflexe si prélèvement encore disponible</li></ul></div>
+      </div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-hpv-neg">
+      <div class="cdp-result res-vert">
+        <div class="cdp-result-header">Test HPV Négatif</div>
+        <div class="cdp-result-body">Aucun HPV à haut risque oncogène détecté.<br><br><strong>CAT :</strong> Prochain test HPV dans <strong>5 ans</strong>.<ul class="cdp-list"><li>Délai de 5 ans applicable dès le premier test HPV à 30 ans</li></ul></div>
+      </div>
+      <div class="cdp-vaccin-note">Rappel : le dépistage est maintenu quelle que soit la situation vaccinale contre le HPV.</div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-hpv1618-direct">
+      <div class="cdp-result res-rouge">
+        <div class="cdp-result-header">HPV 16 ou HPV 18 — Colposcopie directe</div>
+        <div class="cdp-result-body">Génotypes HPV 16 et HPV 18 : très haut risque oncogène.<br><br><strong>CAT :</strong> Colposcopie directe, <strong>quelle que soit la cytologie réflexe</strong>. Le triage cytologique n'est pas nécessaire.</div>
+      </div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-genotype-inconnu">
+      <div class="cdp-result res-orange">
+        <div class="cdp-result-header">HPV HR Positif — Génotype non précisé</div>
+        <div class="cdp-result-body">Sans précision génotypique, la CAT ne peut pas être optimisée.<br><br><strong>CAT recommandée :</strong><ul class="cdp-list"><li>Solliciter le laboratoire pour un génotypage si prélèvement disponible</li><li>En l'absence d'information : conduite prudente, avis spécialisé</li></ul></div>
+      </div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-hpvhr-cyto-norm">
+      <div class="cdp-result res-orange">
+        <div class="cdp-result-header">Autre HPV HR — Cytologie Normale</div>
+        <div class="cdp-result-body">HPV haut risque (hors 16/18) avec cytologie normale.<br><br><strong>CAT :</strong> Refaire un test HPV dans <strong>1 an</strong>.<ul class="cdp-list"><li>HPV négatif à 1 an : retour rythme 5 ans</li><li>HPV positif à 1 an : colposcopie</li></ul>Ne pas réaliser de colposcopie d'emblée.</div>
+      </div>
+      <div class="cdp-vaccin-note">Rappel : le dépistage est maintenu quelle que soit la situation vaccinale contre le HPV.</div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-hpvhr-cyto-anorm">
+      <div class="cdp-result res-rouge">
+        <div class="cdp-result-header">Autre HPV HR — Cytologie Anormale</div>
+        <div class="cdp-result-body">HPV haut risque (hors 16/18) avec anomalie cytologique (ASC-US ou supérieur).<br><br><strong>CAT :</strong> Adresser en <strong>colposcopie</strong>.</div>
+      </div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-moins25">
+      <div class="cdp-result res-gris">
+        <div class="cdp-result-header">Moins de 25 ans — Hors dépistage organisé</div>
+        <div class="cdp-result-body">Le dépistage organisé ne s'applique pas avant 25 ans (risque de sur-traitement de lésions à régression spontanée).<br><br><strong>CAT :</strong> Pas de frottis systématique.<ul class="cdp-list"><li>Symptômes (saignements, leucorrhées) : consultation gynécologique justifiée</li><li>Immunodépression sévère (VIH) : avis spécialisé recommandé</li><li>Encourager la vaccination HPV si non réalisée (rattrapage jusqu'à 19 ans)</li></ul></div>
+      </div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-65-stop">
+      <div class="cdp-result res-vert">
+        <div class="cdp-result-header">Arrêt du dépistage justifié</div>
+        <div class="cdp-result-body">Les deux derniers tests du PNDO sont négatifs et documentés.<br><br><strong>CAT :</strong> Arrêt du dépistage organisé.<ul class="cdp-list"><li>Antécédents de lésion cervicale traitée : surveillance post-traitement pouvant dépasser 65 ans — avis spécialisé</li></ul></div>
+      </div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+    <div class="cdp-step" id="cdp-r-65-poursuivre">
+      <div class="cdp-result res-orange">
+        <div class="cdp-result-header">Poursuite du dépistage nécessaire</div>
+        <div class="cdp-result-body">Condition d'arrêt non remplie.<br><br><strong>CAT :</strong> Poursuivre par test HPV jusqu'à obtenir deux tests négatifs consécutifs dans le cadre du PNDO.<ul class="cdp-list"><li>Dernier résultat anormal ou suivi incomplet : avis gynécologique spécialisé recommandé</li></ul></div>
+      </div>
+      <button class="cdp-restart" onclick="cdpReset()">Nouvelle patiente</button>
+    </div>
+
+  </div><!-- fin cdp-body -->
+
+  <!-- ═══ RÉCAPITULATIF DOSSIER (DANS LE WIDGET) ═══ -->
+  <div class="cdp-recap-section" id="cdp-recap-section">
+    <div class="cdp-recap-title">Récapitulatif &mdash; Dossier patiente</div>
+    <div class="cdp-recap-content" id="cdp-recap-content">
+      <!-- Généré dynamiquement par JS -->
+    </div>
+    <div class="cdp-recap-actions">
+      <button class="cdp-copy-btn" id="cdp-copy-btn" onclick="cdpCopy()">Copier le contenu</button>
+      <span class="cdp-copy-note">Prêt à coller dans le dossier médical</span>
+    </div>
+  </div>
+
+  <!-- PIED DE PAGE -->
+  <div class="cdp-footer">
+    <strong>Références :</strong> HAS / INCa — Programme National de Dépistage Organisé du Cancer du Col de l'Utérus (PNDO, 2020) &bull; CNGOF &bull; Arrêté du 4 mai 2018.<br>
+    Outil d'aide à la décision à usage professionnel — Ne se substitue pas au jugement clinique individuel.
+  </div>
+
+
+</div><!-- fin #col-depistage-tool -->
+
+<script>
+(function() {
+
+  var parcours = [];
+
+  var labels = {
+    's2a':             'Tranche d\u2019\u00e2ge : 25\u201329\u00a0ans (d\u00e9pistage par FCV)',
+    's2b':             'Tranche d\u2019\u00e2ge : 30\u201365\u00a0ans (d\u00e9pistage par test HPV)',
+    'r-moins25':       'Tranche d\u2019\u00e2ge : moins de 25\u00a0ans (hors d\u00e9pistage organis\u00e9)',
+    's-65':            'Tranche d\u2019\u00e2ge : plus de 65\u00a0ans',
+    's2a-premier':     'Statut du frottis : premier frottis (25\u00a0ans)',
+    's2a-second':      'Statut du frottis : deuxi\u00e8me frottis (26\u00a0ans)',
+    's2a-suivi':       'Statut du frottis : frottis de suivi (apr\u00e8s 2 frottis normaux)',
+    'r-1er-normal':        'R\u00e9sultat cytologie : normal',
+    'r-2e-normal':         'R\u00e9sultat cytologie : normal',
+    'r-suivi-normal':      'R\u00e9sultat cytologie : normal',
+    'r-cyto-haute':        'R\u00e9sultat cytologie : anomalie > ASC-US (LSIL / HSIL / ASC-H / AGC)',
+    's-ascus-1er':         'R\u00e9sultat cytologie : ASC-US',
+    's-ascus-2e':          'R\u00e9sultat cytologie : ASC-US',
+    's-ascus-suivi':       'R\u00e9sultat cytologie : ASC-US',
+    'r-ascus-hpvneg-1er':  'Test HPV r\u00e9flexe : n\u00e9gatif',
+    'r-ascus-hpvneg-2e':   'Test HPV r\u00e9flexe : n\u00e9gatif',
+    'r-ascus-hpvneg-suivi':'Test HPV r\u00e9flexe : n\u00e9gatif',
+    'r-ascus-nohpv':       'Test HPV r\u00e9flexe : non r\u00e9alis\u00e9',
+    'r-hpv-neg':           'R\u00e9sultat test HPV : n\u00e9gatif',
+    's-hpv-pos-genotype':  'R\u00e9sultat test HPV : positif',
+    'r-hpv1618-direct':    'G\u00e9notype HPV : HPV\u00a016 ou HPV\u00a018',
+    's-autres-hpv-cyto':   'G\u00e9notype HPV : autre HPV HR (hors 16/18)',
+    'r-genotype-inconnu':  'G\u00e9notype HPV : non pr\u00e9cis\u00e9 / r\u00e9sultat global HPV HR+',
+    'r-hpvhr-cyto-norm':   'Cytologie r\u00e9flexe : normale (NILM)',
+    'r-hpvhr-cyto-anorm':  'Cytologie r\u00e9flexe : anormale (ASC-US ou sup\u00e9rieur)',
+    'r-65-stop':           'Statut PNDO : deux derniers tests n\u00e9gatifs',
+    'r-65-poursuivre':     'Statut PNDO : d\u00e9pistage incomplet ou r\u00e9sultat anormal'
+  };
+
+  var conclusions = {
+    'r-1er-normal':         { titre: 'D\u00e9pistage normal', cat: 'Deuxi\u00e8me frottis \u00e0 26\u00a0ans obligatoire avant tout passage au rythme triennal.' },
+    'r-2e-normal':          { titre: 'Deux frottis normaux cons\u00e9cutifs', cat: 'Prochain frottis dans 3\u00a0ans (\u00e0 29\u00a0ans), puis test HPV \u00e0 30\u00a0ans (transition sch\u00e9ma 30\u201365\u00a0ans).' },
+    'r-suivi-normal':       { titre: 'Frottis de suivi normal', cat: 'Prochain frottis dans 3\u00a0ans. Anticiper la transition vers le test HPV \u00e0 30\u00a0ans.' },
+    'r-cyto-haute':         { titre: 'Anomalie cytologique significative', cat: 'Colposcopie requise d\u2019embl\u00e9e, sans attendre un test HPV.' },
+    'r-ascus-hpvneg-1er':   { titre: 'ASC-US sans HPV HR d\u00e9tect\u00e9', cat: 'R\u00e9aliser le 2e frottis \u00e0 26\u00a0ans selon le sch\u00e9ma habituel.' },
+    'r-ascus-hpvneg-2e':    { titre: 'ASC-US sans HPV HR d\u00e9tect\u00e9', cat: 'Retour au d\u00e9pistage standard. Prochain frottis dans 3\u00a0ans, puis test HPV \u00e0 30\u00a0ans.' },
+    'r-ascus-hpvneg-suivi': { titre: 'ASC-US sans HPV HR d\u00e9tect\u00e9', cat: 'Retour au d\u00e9pistage standard. Prochain frottis dans 3\u00a0ans (ou test HPV si proche de 30\u00a0ans).' },
+    'r-ascus-nohpv':        { titre: 'ASC-US sans test HPV r\u00e9flexe', cat: 'Contr\u00f4le cytologique dans 12\u00a0mois. Demander le HPV r\u00e9flexe a posteriori si pr\u00e9l\u00e8vement disponible.' },
+    'r-hpv-neg':            { titre: 'Test HPV n\u00e9gatif', cat: 'Prochain test HPV dans 5\u00a0ans.' },
+    'r-hpv1618-direct':     { titre: 'HPV 16 ou HPV 18 positif', cat: 'Colposcopie directe, quelle que soit la cytologie r\u00e9flexe.' },
+    'r-genotype-inconnu':   { titre: 'HPV HR positif, g\u00e9notype non pr\u00e9cis\u00e9', cat: 'Solliciter le laboratoire pour g\u00e9notypage. Conduite prudente : avis sp\u00e9cialis\u00e9.' },
+    'r-hpvhr-cyto-norm':    { titre: 'Autre HPV HR positif, cytologie normale', cat: 'Refaire un test HPV dans 1\u00a0an. HPV n\u00e9gatif \u2192 5\u00a0ans. HPV positif \u2192 colposcopie.' },
+    'r-hpvhr-cyto-anorm':   { titre: 'Autre HPV HR positif, cytologie anormale', cat: 'Colposcopie requise.' },
+    'r-moins25':            { titre: 'Moins de 25\u00a0ans \u2014 hors d\u00e9pistage organis\u00e9', cat: 'Pas de frottis syst\u00e9matique. Consultation sp\u00e9cialis\u00e9e si sympt\u00f4mes ou immunod\u00e9pression.' },
+    'r-65-stop':            { titre: 'Plus de 65\u00a0ans \u2014 conditions d\u2019arr\u00eat remplies', cat: 'Arr\u00eat du d\u00e9pistage organis\u00e9. Deux derniers tests PNDO n\u00e9gatifs document\u00e9s.' },
+    'r-65-poursuivre':      { titre: 'Plus de 65\u00a0ans \u2014 d\u00e9pistage \u00e0 poursuivre', cat: 'Poursuivre par test HPV jusqu\u2019\u00e0 2\u00a0tests n\u00e9gatifs cons\u00e9cutifs dans le cadre du PNDO.' }
+  };
+
+  var stepsFinal = Object.keys(conclusions);
+
+  var stepProgress = {
+    's1':                 { step: 1, total: 5 },
+    's2a':                { step: 2, total: 5 },
+    's2a-premier':        { step: 3, total: 5 },
+    's2a-second':         { step: 3, total: 5 },
+    's2a-suivi':          { step: 3, total: 5 },
+    's-ascus-1er':        { step: 4, total: 5 },
+    's-ascus-2e':         { step: 4, total: 5 },
+    's-ascus-suivi':      { step: 4, total: 5 },
+    's2b':                { step: 2, total: 4 },
+    's-hpv-pos-genotype': { step: 3, total: 4 },
+    's-autres-hpv-cyto':  { step: 4, total: 4 },
+    's-65':               { step: 2, total: 3 }
+  };
+
+  window.cdpGo = function(id) {
+    var tool = document.getElementById('col-depistage-tool');
+    var steps = tool.querySelectorAll('.cdp-step');
+    for (var i = 0; i < steps.length; i++) steps[i].classList.remove('active');
+    var target = document.getElementById('cdp-' + id);
+    if (target) target.classList.add('active');
+    if (labels[id]) parcours.push(id);
+    updateProgress(id);
+    if (stepsFinal.indexOf(id) >= 0) buildRecap(id);
+    tool.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  window.cdpReset = function() {
+    parcours = [];
+    var recap = document.getElementById('cdp-recap-section');
+    if (recap) recap.classList.remove('visible');
+    var btn = document.getElementById('cdp-copy-btn');
+    if (btn) { btn.classList.remove('copied'); btn.textContent = 'Copier le contenu'; }
+    cdpGo('s1');
+  };
+
+  function updateProgress(id) {
+    var bar = document.getElementById('cdp-prog-bar');
+    var lbl = document.getElementById('cdp-prog-label');
+    if (!bar || !lbl) return;
+    if (stepsFinal.indexOf(id) >= 0) { bar.style.width = '100%'; lbl.textContent = 'R\u00e9sultat'; return; }
+    var prog = stepProgress[id];
+    if (prog) {
+      bar.style.width = Math.round((prog.step / prog.total) * 100) + '%';
+      lbl.textContent = '\xC9tape\u00A0' + prog.step + '\u00A0/\u00A0' + prog.total;
+    } else if (id === 's1') { bar.style.width = '0%'; lbl.textContent = '\xC9tape\u00A01'; }
+  }
+
+  // Texte brut copié — construit manuellement pour garantir les sauts de ligne
+  var lastCopyText = '';
+
+  function buildRecap(resultId) {
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' });
+    var timeStr = now.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+    var concl = conclusions[resultId];
+
+    // ── HTML affiché ──────────────────────────────────────────
+    var html = '';
+    html += '<div class="cdp-recap-row"><span class="cdp-recap-lbl">Date\u00a0:</span><span class="cdp-recap-val">' + dateStr + ' \u00e0 ' + timeStr + '</span></div>';
+    html += '<div class="cdp-recap-row"><span class="cdp-recap-lbl">Outil\u00a0:</span><span class="cdp-recap-val">D\u00e9pistage cancer du col \u2014 HAS/INCa/CNGOF (PNDO\u00a02020)</span></div>';
+    html += '<hr class="cdp-recap-sep">';
+    html += '<div class="cdp-recap-parcours-titre">Parcours clinique\u00a0:</div>';
+    for (var i = 0; i < parcours.length; i++) {
+      if (labels[parcours[i]]) html += '<div class="cdp-recap-parcours-item">' + labels[parcours[i]] + '</div>';
+    }
+    if (labels[resultId] && parcours[parcours.length - 1] !== resultId) {
+      html += '<div class="cdp-recap-parcours-item">' + labels[resultId] + '</div>';
+    }
+    html += '<hr class="cdp-recap-sep">';
+    if (concl) {
+      html += '<div class="cdp-recap-conclusion">';
+      html += '<span class="cdp-recap-conclusion-titre">Conclusion</span>';
+      html += '<div>' + concl.titre + '</div>';
+      html += '<div style="margin-top:6px"><span class="cdp-recap-cat">CAT\u00a0:</span> ' + concl.cat + '</div>';
+      html += '</div>';
+    }
+    document.getElementById('cdp-recap-content').innerHTML = html;
+    document.getElementById('cdp-recap-section').classList.add('visible');
+
+    // ── Texte brut pour copie — construit ligne par ligne ─────
+    var lines = [];
+    lines.push('=== D\u00c9PISTAGE CANCER DU COL ===');
+    lines.push('Algorithme HAS / INCa / CNGOF (PNDO 2020)');
+    lines.push('');
+    lines.push('Date    : ' + dateStr + ' \u00e0 ' + timeStr);
+    lines.push('');
+    lines.push('--- Parcours clinique ---');
+    for (var j = 0; j < parcours.length; j++) {
+      if (labels[parcours[j]]) lines.push('  \u2192 ' + labels[parcours[j]]);
+    }
+    if (labels[resultId] && parcours[parcours.length - 1] !== resultId) {
+      lines.push('  \u2192 ' + labels[resultId]);
+    }
+    lines.push('');
+    if (concl) {
+      lines.push('--- Conclusion ---');
+      lines.push(concl.titre);
+      lines.push('');
+      lines.push('CAT : ' + concl.cat);
+    }
+    lines.push('');
+    lines.push('(Outil d\'aide \u00e0 la d\u00e9cision \u2014 ne se substitue pas au jugement clinique)');
+    lastCopyText = lines.join('\n');
+
+    setTimeout(function() {
+      var recap = document.getElementById('cdp-recap-section');
+      if (recap) recap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 380);
+  }
+
+  window.cdpCopy = function() {
+    if (!lastCopyText) return;
+
+    function confirmCopy() {
+      var btn = document.getElementById('cdp-copy-btn');
+      if (!btn) return;
+      btn.classList.add('copied');
+      btn.textContent = 'Copi\u00e9 !';
+      setTimeout(function() { btn.classList.remove('copied'); btn.textContent = 'Copier le contenu'; }, 2500);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lastCopyText).then(confirmCopy);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = lastCopyText;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); confirmCopy(); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+  };
+
+  updateProgress('s1');
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imagerie gynécologique : algorithme</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+    --purple: #7c3aed;
+    --bg-soft: #f1f5f9;
+    --text-main: #0f172a;
+    --card-radius: 12px;
+  }
+
+  * { box-sizing: border-box; }
+  
+
+
+  .clinical-tool {
+    max-width: 650px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  }
+
+  .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--bg-soft); padding-bottom: 20px; }
+  .header h2 { margin: 0 0 10px 0; color: var(--text-main); font-size: 22px; }
+  .subtitle { color: #64748b; font-size: 14px; margin: 0; font-weight: 500; }
+
+  /* --- CARTES --- */
+  .step-card {
+    display: none;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid var(--primary);
+    border-radius: var(--card-radius);
+    padding: 20px;
+    margin-top: 15px;
+    animation: slideDown 0.4s ease-out;
+  }
+  
+  .step-card.result {
+    border-left-color: var(--text-main);
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+  }
+
+  .step-title { font-weight: 700; display: block; margin-bottom: 15px; color: #334155; }
+  
+  /* --- BOUTONS --- */
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  button {
+    flex: 1;
+    min-width: 130px;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    background: #e2e8f0;
+    color: #475569;
+  }
+
+  button:hover { transform: translateY(-1px); filter: brightness(95%); }
+  
+  button.primary { background: var(--primary); color: white; }
+  button.danger { background: var(--danger); color: white; }
+  button.success { background: var(--success); color: white; }
+  button.warning { background: var(--warning); color: white; }
+  button.purple { background: var(--purple); color: white; }
+  
+  button.outline { background: transparent; border: 1px solid #cbd5e1; color: #64748b; margin-top: 20px; width: 100%; }
+
+  button.selected { ring: 2px solid rgba(0,0,0,0.2); opacity: 1; transform: scale(1.02); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .actions.has-selection button:not(.selected) { opacity: 0.5; cursor: not-allowed; }
+
+  /* --- LISTES ET FLÈCHES CORRIGÉES --- */
+  .prescription { list-style: none; padding: 0; margin: 0; }
+  
+  .prescription li { 
+    padding: 10px 0; 
+    border-bottom: 1px solid #e2e8f0; 
+    display: flex; /* Flexbox pour alignement parfait */
+    align-items: flex-start; 
+  }
+  
+  .prescription li:last-child { border-bottom: none; }
+  
+  /* La flèche est gérée en HTML ici, pas en CSS "content" pour éviter le bug Elementor */
+  .arrow-icon {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 18px;
+    margin-right: 12px;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+
+  .li-content { flex-grow: 1; }
+
+  /* --- INFO & TAGS --- */
+  .info-text { 
+    font-size: 13px; 
+    color: #64748b; 
+    margin-top: 4px; 
+    display: block; 
+    font-weight: normal; 
+    font-style: italic;
+  }
+
+  .tag { 
+    display: inline-block; 
+    padding: 3px 8px; 
+    border-radius: 4px; 
+    font-size: 10px; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    margin-left: 5px; 
+    vertical-align: middle;
+  }
+  
+  .tag.red { background: #fee2e2; color: #991b1b; }
+  .tag.blue { background: #dbeafe; color: #1e40af; }
+  .tag.purple { background: #f3e8ff; color: #6b21a8; }
+  
+  /* --- SECTION AIDE --- */
+  #help-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff7ed;
+    border-left: 4px solid #f97316;
+    border-radius: 12px;
+    animation: slideDown 0.3s ease-out;
+  }
+  
+  #help-section h3 { margin-top: 0; color: #9a3412; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+  #help-section ul { margin: 8px 0; padding-left: 20px; font-size: 13px; color: #334155; line-height: 1.5; }
+  #help-section strong { color: #c2410c; }
+  
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="clinical-tool">
+  <div class="header">
+    <h2>🧠 Imagerie gynécologique : algorithme</h2>
+    <p class="subtitle">Outil d'aide à la décision • Mise à jour Imagerie + CI</p>
+  </div>
+
+  <!-- DEPART -->
+  <div id="step-start" class="step-card" style="display:block; border-left-color: #64748b;">
+    <span class="step-title">Situation clinique dominante :</span>
+    <div class="actions">
+      <button class="danger" onclick="nextStep('step-start', 'u1', this)">Douleur aiguë</button>
+      <button class="warning" onclick="nextStep('step-start', 'm1', this)">Masse annexielle</button>
+      <button class="primary" onclick="nextStep('step-start', 'o1', this)">Oncologie</button>
+    </div>
+  </div>
+
+  <!-- 1. BRANCHE URGENCES -->
+  <div id="u1" class="step-card">
+    <span class="step-title">Résultat β‑hCG :</span>
+    <div class="actions">
+      <button class="danger" onclick="nextStep('u1', 'u2', this)">Positif (+)</button>
+      <button class="success" onclick="nextStep('u1', 'u3', this)">Négatif (-)</button>
+    </div>
+  </div>
+
+  <div id="u2" class="step-card result">
+    <span class="step-title">Conduite à tenir (β‑hCG +) :</span>
+    <ul class="prescription">
+      <li><span class="arrow-icon">➜</span><div class="li-content">Échographie pelvienne urgente</div></li>
+      <li><span class="arrow-icon">➜</span><div class="li-content">Suspicion GEU <span class="tag red">Alerte</span></div></li>
+      <li><span class="arrow-icon">➜</span><div class="li-content"><strong>Scanner (TDM)</strong> si urgence vitale (hémopéritoine)
+        <span class="info-text">⚠️ CI relative : Grossesse. Si patiente stable mais diagnostic douteux, <strong>préférer l'IRM</strong> (non irradiante).</span>
+      </div></li>
+    </ul>
+  </div>
+
+  <div id="u3" class="step-card result">
+    <span class="step-title">Conduite à tenir (β‑hCG -) :</span>
+    <ul class="prescription">
+      <li><span class="arrow-icon">➜</span><div class="li-content">Échographie pelvienne (1ère intention)</div></li>
+      <li><span class="arrow-icon">➜</span><div class="li-content"><strong>Scanner Abdo-Pelvien</strong> <span class="tag blue">Si doute</span>
+        <span class="info-text">Indiqué pour éliminer une pathologie digestive (appendicite, diverticulite).</span>
+      </div></li>
+    </ul>
+  </div>
+
+  <!-- 2. BRANCHE MASSE ANNEXIELLE -->
+  <div id="m1" class="step-card">
+    <span class="step-title">Caractérisation échographique :</span>
+    <div class="actions">
+      <button class="success" onclick="nextStep('m1', 'm2', this)">Kyste simple / bénin</button>
+      <button class="warning" onclick="nextStep('m1', 'm3', this)">Complexe / Dermoïde / Endo</button>
+      <button class="danger" onclick="nextStep('m1', 'm4', this)">Aspect malin (IOTA +)</button>
+    </div>
+  </div>
+
+  <div id="m2" class="step-card result">
+    <span class="step-title">Surveillance :</span>
+    <ul class="prescription">
+      <li><span class="arrow-icon">➜</span><div class="li-content">Pas d'imagerie en coupe nécessaire</div></li>
+      <li><span class="arrow-icon">➜</span><div class="li-content">Contrôle échographique à 3 mois</div></li>
+    </ul>
+  </div>
+
+  <div id="m3" class="step-card result">
+    <span class="step-title">Imagerie de caractérisation :</span>
+    <ul class="prescription">
+      <li><span class="arrow-icon">➜</span><div class="li-content"><strong>IRM Pelvienne</strong> (Gold Standard) <span class="tag purple">Recommandé</span>
+        <span class="info-text">Indispensable pour cartographie Endométriose ou caractérisation fine.</span>
+      </div></li>
+      <li><span class="arrow-icon">➜</span><div class="li-content"><strong>Scanner (TDM)</strong> <span class="tag blue">Alternative</span>
+        <span class="info-text">Excellent pour confirmer un <strong>Dermoïde</strong> (graisse/dents) si IRM inaccessible.</span>
+      </div></li>
+      <li><span class="arrow-icon">➜</span><div class="li-content">Marqueurs : CA125, HE4 + CA19-9 (Dermoïde)</div></li>
+    </ul>
+  </div>
+
+  <div id="m4" class="step-card result">
+    <span class="step-title">Bilan extension (Oncologie) :</span>
+    <ul class="prescription">
+      <li><span class="arrow-icon">➜</span><div class="li-content"><strong>IRM pelvienne</strong> (Staging local)
+        <span class="info-text">Évaluation de l'envahissement myométrial/cervical.</span>
+      </div></li>
+      <li><span class="arrow-icon">➜</span><div class="li-content"><strong>Scanner TAP</strong> (Bilan d'extension)
+        <span class="info-text">Recherche de métastases à distance.</span>
+      </div></li>
+    </ul>
+  </div>
+
+  <!-- 3. BRANCHE ONCOLOGIE -->
+  <div id="o1" class="step-card result">
+    <span class="step-title">Bilan Oncologique complet :</span>
+    <ul class="prescription">
+      <li><span class="arrow-icon">➜</span><div class="li-content"><strong>IRM pelvienne</strong> (Indispensable)
+        <span class="info-text">Staging FIGO précis.</span>
+      </div></li>
+      <li><span class="arrow-icon">➜</span><div class="li-content"><strong>Scanner TAP</strong> (Systématique)
+        <span class="info-text">⚠️ Prévoir hydratation si fonction rénale limite.</span>
+      </div></li>
+    </ul>
+  </div>
+
+  <button class="outline" onclick="resetTool()">↺ Recommencer l'évaluation</button>
+  
+  <button class="outline" onclick="toggleHelp()" style="margin-top: 10px; background: #fff7ed; color: #c2410c; border-color: #fdba74;">
+    ⚠️ Voir Contre-indications & Précautions
+  </button>
+  
+  <div id="help-section" style="display: none;">
+    <h3>⚠️ Check-list Sécurité Imagerie</h3>
+    
+    <div style="margin-bottom: 15px;">
+      <strong>☢️ Scanner (TDM avec injection)</strong>
+      <ul>
+        <li><strong>Grossesse :</strong> CI Formelle sauf urgence vitale immédiate (balance bénéfice/risque).</li>
+        <li><strong>Fonction Rénale :</strong> Prudence si DFG < 45, CI relative si < 30. Hydratation requise.</li>
+        <li><strong>Diabète :</strong> Arrêt Metformine le jour même et 48h après (risque acidose lactique).</li>
+        <li><strong>Allergie :</strong> Prémédication corticoïdes/anti-H1 possible pour allergie légère.</li>
+      </ul>
+    </div>
+    
+    <div>
+      <strong>🧲 IRM (Résonance Magnétique)</strong>
+      <ul>
+        <li><strong>Dispositifs implantés :</strong> Vérifier compatibilité (Pacemaker, valve mécanique, neurostimulateur). La plupart des récents sont "MRI-Conditional".</li>
+        <li><strong>Corps étrangers :</strong> Éclats métalliques intra-oculaires (soudeurs) = CI absolue.</li>
+        <li><strong>Claustrophobie :</strong> Prévoir sédation légère ou IRM à champ ouvert.</li>
+        <li><strong>Gadolinium :</strong> CI si insuffisance rénale sévère (risque fibrose systémique).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  function nextStep(currentId, nextId, btnElement) {
+    const currentContainer = document.getElementById(currentId);
+    
+    // UI Feedback
+    currentContainer.querySelector('.actions').classList.add('has-selection');
+    currentContainer.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+    btnElement.classList.add('selected');
+
+    // Reset paths
+    let allCards = Array.from(document.querySelectorAll('.step-card'));
+    let currentIndex = allCards.findIndex(el => el.id === currentId);
+    
+    for(let i = currentIndex + 1; i < allCards.length; i++) {
+      allCards[i].style.display = 'none';
+      allCards[i].querySelector('.actions')?.classList.remove('has-selection');
+      allCards[i].querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+    }
+
+    // Show next
+    const nextStep = document.getElementById(nextId);
+    if(nextStep) {
+      nextStep.style.display = 'block';
+      setTimeout(() => {
+        nextStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+  }
+
+  function resetTool() {
+    const cards = document.querySelectorAll('.step-card');
+    cards.forEach(card => {
+      if(card.id !== 'step-start') card.style.display = 'none';
+    });
+    document.querySelectorAll('.actions').forEach(el => el.classList.remove('has-selection'));
+    document.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+    document.querySelector('.clinical-tool').scrollIntoView({ behavior: 'smooth' });
+  }
+  
+  function toggleHelp() {
+    const helpSection = document.getElementById('help-section');
+    if(helpSection.style.display === 'none') {
+      helpSection.style.display = 'block';
+      helpSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      helpSection.style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>

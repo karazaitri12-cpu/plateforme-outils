@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score de Manchester &#8211; Risque BRCA</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR
+   IMPORTANT : ce bloc <style> doit rester dans <head>.
+   Si on le met dans #mch-root, all:initial le traite comme
+   un noeud texte et tout le CSS s'affiche brut.
+   ============================================================ */
+#mch-root, #mch-root * {
+  all: initial;
+  box-sizing: border-box;
+}
+#mch-root {
+  display: block;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #1a2636;
+  background: #f4f6f9;
+  border-radius: 6px;
+  overflow: hidden;
+}
+#mch-root *, #mch-root *::before, #mch-root *::after {
+  box-sizing: border-box;
+}
+
+/* ---- En-tete ---- */
+#mch-root .mch-header {
+  display: block;
+  background: linear-gradient(135deg, #1a3a5c 0%, #2a5f8f 100%);
+  padding: 26px 28px 20px;
+}
+#mch-root .mch-header-title {
+  display: block;
+  font-size: 1.35em;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 5px 0;
+  letter-spacing: 0.01em;
+}
+#mch-root .mch-header-sub {
+  display: block;
+  font-size: 0.87em;
+  color: rgba(255,255,255,0.78);
+  margin: 0;
+}
+
+/* ---- Corps ---- */
+#mch-root .mch-body {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  #mch-root .mch-body { grid-template-columns: 1fr; }
+}
+
+/* ---- Colonne formulaire ---- */
+#mch-root .mch-form-col {
+  display: block;
+  padding: 22px;
+  background: #fff;
+  border-right: 1px solid #dde3ea;
+}
+
+/* ---- Info box ---- */
+#mch-root .mch-info-box {
+  display: block;
+  background: #eef4fb;
+  border-left: 4px solid #2a5f8f;
+  border-radius: 4px;
+  padding: 13px 15px;
+  margin-bottom: 20px;
+}
+#mch-root .mch-info-box-title {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #1a3a5c;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 7px;
+}
+#mch-root .mch-info-box p {
+  display: block;
+  font-size: 0.86em;
+  color: #2c4a6e;
+  margin: 0 0 4px 0;
+}
+#mch-root .mch-info-box ul {
+  display: block;
+  margin: 4px 0 0 0;
+  padding: 0 0 0 16px;
+  list-style: disc;
+}
+#mch-root .mch-info-box li {
+  display: list-item;
+  font-size: 0.85em;
+  color: #2c4a6e;
+  margin-bottom: 2px;
+}
+
+/* ---- Titre section ---- */
+#mch-root .mch-section-title {
+  display: block;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: #2a5f8f;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 2px solid #2a5f8f;
+  padding-bottom: 5px;
+  margin: 20px 0 12px 0;
+}
+
+/* ---- Form group ---- */
+#mch-root .mch-form-group {
+  display: block;
+  margin-bottom: 14px;
+}
+#mch-root .mch-form-label {
+  display: block;
+  font-size: 0.88em;
+  font-weight: 600;
+  color: #1a2636;
+  margin-bottom: 7px;
+}
+
+/* ---- Radio items ---- */
+#mch-root .mch-radio-group { display: block; }
+#mch-root .mch-radio-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border: 1.5px solid #dde3ea;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  background: #fff;
+  transition: border-color 0.15s, background 0.15s;
+}
+#mch-root .mch-radio-item:hover {
+  border-color: #2a5f8f;
+  background: #f0f6fc;
+}
+#mch-root .mch-radio-item.mch-active {
+  border-color: #2a5f8f;
+  background: #e8f1fb;
+}
+#mch-root .mch-radio-item.mch-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+  background: #f4f6f9;
+}
+#mch-root .mch-radio-item input[type="radio"] {
+  all: revert;
+  width: 15px;
+  height: 15px;
+  accent-color: #2a5f8f;
+  flex-shrink: 0;
+  cursor: pointer;
+  margin: 0;
+}
+#mch-root .mch-radio-item label {
+  display: block;
+  font-size: 0.86em;
+  color: #1a2636;
+  cursor: pointer;
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ---- Badge indication directe ---- */
+#mch-root .mch-badge-direct {
+  display: inline-block;
+  font-size: 0.72em;
+  font-weight: 700;
+  background: #c0392b;
+  color: #fff;
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: 5px;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* ---- Checkbox items ---- */
+#mch-root .mch-checkbox-group { display: block; }
+#mch-root .mch-checkbox-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 11px;
+  border: 1.5px solid #dde3ea;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+#mch-root .mch-checkbox-item:hover {
+  border-color: #2a5f8f;
+  background: #f0f6fc;
+}
+#mch-root .mch-checkbox-item.mch-active {
+  border-color: #2a5f8f;
+  background: #e8f1fb;
+}
+#mch-root .mch-checkbox-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+#mch-root .mch-checkbox-content input[type="checkbox"] {
+  all: revert;
+  width: 15px;
+  height: 15px;
+  accent-color: #2a5f8f;
+  flex-shrink: 0;
+  cursor: pointer;
+  margin: 0;
+}
+#mch-root .mch-checkbox-content label {
+  display: block;
+  font-size: 0.86em;
+  color: #1a2636;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+/* ---- Compteurs ---- */
+#mch-root .mch-counter-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+#mch-root .mch-counter-btn {
+  all: initial;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid #2a5f8f;
+  border-radius: 50%;
+  background: #fff;
+  color: #2a5f8f;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  user-select: none;
+  transition: background 0.15s, color 0.15s;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+#mch-root .mch-counter-btn:hover {
+  background: #2a5f8f;
+  color: #fff;
+}
+#mch-root .mch-counter-btn:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+#mch-root .mch-counter-display {
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+  font-size: 0.92em;
+  font-weight: 700;
+  color: #1a2636;
+}
+
+/* ---- Champ age ---- */
+#mch-root .mch-age-input {
+  all: initial;
+  display: block;
+  width: 100%;
+  padding: 9px 11px;
+  border: 1.5px solid #dde3ea;
+  border-radius: 5px;
+  font-size: 0.9em;
+  color: #1a2636;
+  background: #fff;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+#mch-root .mch-age-input:focus { border-color: #2a5f8f; outline: none; }
+#mch-root .mch-age-input:disabled { background: #f4f6f9; color: #999; cursor: not-allowed; }
+
+#mch-root .mch-age-help {
+  display: none;
+  font-size: 0.8em;
+  color: #c0392b;
+  font-weight: 600;
+  margin-top: 5px;
+}
+#mch-root .mch-age-help.mch-visible { display: block; }
+
+/* ---- Notice histologie ---- */
+#mch-root .mch-histo-notice {
+  display: none;
+  font-size: 0.8em;
+  color: #7a5c00;
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+}
+#mch-root .mch-histo-notice.mch-visible { display: block; }
+
+/* ============================================================
+   COLONNE RESULTATS
+   ============================================================ */
+#mch-root .mch-result-col {
+  display: block;
+  background: #1a3a5c;
+  padding: 20px 18px;
+  position: sticky;
+  top: 0;
+  align-self: start;
+}
+@media (max-width: 820px) {
+  #mch-root .mch-result-col { position: static; }
+}
+#mch-root .mch-result-title {
+  display: block;
+  font-size: 0.74em;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+#mch-root .mch-score-block {
+  display: block;
+  background: rgba(255,255,255,0.07);
+  border-radius: 5px;
+  padding: 9px 11px;
+  margin-bottom: 7px;
+}
+#mch-root .mch-score-label {
+  display: block;
+  font-size: 0.74em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 2px;
+}
+#mch-root .mch-score-value {
+  display: block;
+  font-size: 1.55em;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+#mch-root .mch-risk-badge {
+  display: block;
+  padding: 9px 11px;
+  border-radius: 5px;
+  font-size: 0.86em;
+  font-weight: 700;
+  text-align: center;
+  margin: 12px 0 11px;
+  line-height: 1.3;
+}
+#mch-root .mch-risk-low    { background: rgba(39,174,96,0.22);  color: #a0f0bc; border: 1px solid rgba(39,174,96,0.35); }
+#mch-root .mch-risk-medium { background: rgba(230,126,34,0.22); color: #ffd09a; border: 1px solid rgba(230,126,34,0.35); }
+#mch-root .mch-risk-high   { background: rgba(192,57,43,0.30);  color: #ffb8b0; border: 1px solid rgba(192,57,43,0.45); }
+#mch-root .mch-risk-direct { background: rgba(108,52,153,0.30); color: #dbb8f8; border: 1px solid rgba(108,52,153,0.45); }
+
+#mch-root .mch-reco-box {
+  display: block;
+  background: rgba(255,255,255,0.06);
+  border-radius: 5px;
+  padding: 11px 13px;
+}
+#mch-root .mch-reco-title {
+  display: block;
+  font-size: 0.74em;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+#mch-root .mch-reco-list {
+  display: block;
+  margin: 0;
+  padding: 0 0 0 15px;
+  list-style: disc;
+}
+#mch-root .mch-reco-list li {
+  display: list-item;
+  font-size: 0.83em;
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+#mch-root .mch-reco-list strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+#mch-root .mch-reset-btn {
+  all: initial;
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 8px 0;
+  background: rgba(255,255,255,0.09);
+  border: 1.5px solid rgba(255,255,255,0.22);
+  border-radius: 5px;
+  color: rgba(255,255,255,0.8);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 0.83em;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.15s;
+}
+#mch-root .mch-reset-btn:hover {
+  background: rgba(255,255,255,0.17);
+  color: #fff;
+}
+
+/* ---- Pied de page ---- */
+#mch-root .mch-footer {
+  display: block;
+  background: #fff;
+  border-top: 1px solid #dde3ea;
+  padding: 11px 22px;
+  font-size: 0.74em;
+  color: #7a8899;
+  line-height: 1.45;
+}
+#mch-root .mch-footer strong { font-weight: 700; color: #4a5a6a; }
+</style>
+</head>
+<body>
+
+<div id="mch-root">
+
+  <!-- EN-TETE -->
+  <div class="mch-header">
+    <span class="mch-header-title">Score de Manchester &#8211; Risque BRCA1/BRCA2</span>
+    <span class="mch-header-sub">Calculateur clinique &bull; Crit&#232;res NHS / Evans et al. &bull; Ajustement histologique inclus</span>
+  </div>
+
+  <!-- CORPS -->
+  <div class="mch-body">
+
+    <!-- ===== FORMULAIRE ===== -->
+    <div class="mch-form-col">
+
+      <div class="mch-info-box">
+        <span class="mch-info-box-title">&#192; propos du score</span>
+        <p>Le score de Manchester estime la probabilit&#233; d&#8217;une mutation constitutionnelle <strong>BRCA1/BRCA2</strong>.</p>
+        <p><strong>Seuil NHS :</strong> test indiqu&#233; si score ajust&#233; &#8805;&#160;15, <em>ou</em> score par g&#232;ne &#8805;&#160;10.</p>
+        <p><strong>Indications directes (sans calcul) :</strong> sein &lt;&#160;36&#160;ans, TNBC &lt;&#160;50&#160;ans, ovaire, sein homme, sein bilat&#233;ral.</p>
+      </div>
+
+      <!-- ANTECEDENTS PERSONNELS -->
+      <span class="mch-section-title">Ant&#233;c&#233;dents personnels</span>
+
+      <div class="mch-form-group">
+        <span class="mch-form-label">Cancer du sein personnel (s&#233;lection unique) :</span>
+        <div class="mch-radio-group">
+          <div class="mch-radio-item mch-active">
+            <input type="radio" name="mch-breast" id="mch-b-none" value="0" checked />
+            <label for="mch-b-none">Pas de cancer du sein</label>
+          </div>
+          <div class="mch-radio-item">
+            <input type="radio" name="mch-breast" id="mch-b-u30" value="6" />
+            <label for="mch-b-u30">Avant 30&#160;ans <em>(6&#160;pts)</em> <span class="mch-badge-direct">Indication directe</span></label>
+          </div>
+          <div class="mch-radio-item">
+            <input type="radio" name="mch-breast" id="mch-b-3035" value="4" />
+            <label for="mch-b-3035">30&#160;&#8211;&#160;35&#160;ans <em>(4&#160;pts)</em> <span class="mch-badge-direct">Indication directe</span></label>
+          </div>
+          <div class="mch-radio-item">
+            <input type="radio" name="mch-breast" id="mch-b-3639" value="4" />
+            <label for="mch-b-3639">36&#160;&#8211;&#160;39&#160;ans <em>(4&#160;pts)</em></label>
+          </div>
+          <div class="mch-radio-item">
+            <input type="radio" name="mch-breast" id="mch-b-4049" value="3" />
+            <label for="mch-b-4049">40&#160;&#8211;&#160;49&#160;ans <em>(3&#160;pts)</em></label>
+          </div>
+          <div class="mch-radio-item">
+            <input type="radio" name="mch-breast" id="mch-b-5059" value="2" />
+            <label for="mch-b-5059">50&#160;&#8211;&#160;59&#160;ans <em>(2&#160;pts)</em></label>
+          </div>
+          <div class="mch-radio-item">
+            <input type="radio" name="mch-breast" id="mch-b-o60" value="1" />
+            <label for="mch-b-o60">60&#160;ans et plus <em>(1&#160;pt)</em></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Age au diagnostic -->
+      <div class="mch-form-group">
+        <span class="mch-form-label">&#194;ge au diagnostic du cancer du sein :</span>
+        <input type="number" id="mch-diag-age" class="mch-age-input"
+               placeholder="Ex. : 45" min="18" max="100" disabled />
+        <div class="mch-age-help" id="mch-age-help">
+          &#9888; &#194;ge requis pour &#233;valuer le crit&#232;re TNBC &lt;&#160;50&#160;ans.
+        </div>
+      </div>
+
+      <!-- Autres cancers personnels -->
+      <div class="mch-form-group">
+        <span class="mch-form-label">Autres cancers personnels :</span>
+        <div class="mch-checkbox-group">
+          <div class="mch-checkbox-item">
+            <div class="mch-checkbox-content">
+              <input type="checkbox" id="mch-bilateral" data-points="4" class="mch-personal-cb" />
+              <label for="mch-bilateral">Cancer du sein bilat&#233;ral <em>(4&#160;pts)</em> <span class="mch-badge-direct">Indication directe</span></label>
+            </div>
+          </div>
+          <div class="mch-checkbox-item">
+            <div class="mch-checkbox-content">
+              <input type="checkbox" id="mch-ovarian" data-points="5" class="mch-personal-cb" />
+              <label for="mch-ovarian">Cancer de l&#8217;ovaire <em>(5&#160;pts)</em> <span class="mch-badge-direct">Indication directe</span></label>
+            </div>
+          </div>
+          <div class="mch-checkbox-item">
+            <div class="mch-checkbox-content">
+              <input type="checkbox" id="mch-male-breast" data-points="8" class="mch-personal-cb" />
+              <label for="mch-male-breast">Cancer du sein chez l&#8217;homme <em>(8&#160;pts)</em> <span class="mch-badge-direct">Indication directe</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTOLOGIE TUMORALE -->
+      <span class="mch-section-title">Histologie tumorale</span>
+      <div class="mch-histo-notice mch-visible" id="mch-histo-notice">
+        &#8505; S&#233;lectionnez d&#8217;abord un cancer du sein pour activer les options histologiques.
+      </div>
+      <div class="mch-form-group">
+        <span class="mch-form-label">Ph&#233;notype tumoral (si cancer du sein) :</span>
+        <div class="mch-radio-group">
+          <div class="mch-radio-item mch-disabled" id="mch-ti-tnbc">
+            <input type="radio" name="mch-tumor" id="mch-tumor-tnbc" value="brca1" disabled />
+            <label for="mch-tumor-tnbc">Triple n&#233;gatif &#8211; TNBC <em>(+5 BRCA1, &#8722;2 BRCA2)</em> <span class="mch-badge-direct">Ind. directe si &lt;&#160;50&#160;ans</span></label>
+          </div>
+          <div class="mch-radio-item mch-disabled" id="mch-ti-her2">
+            <input type="radio" name="mch-tumor" id="mch-tumor-her2" value="brca2" disabled />
+            <label for="mch-tumor-her2">HER2+ <em>(+3 BRCA2, &#8722;2 BRCA1)</em></label>
+          </div>
+          <div class="mch-radio-item mch-disabled" id="mch-ti-re">
+            <input type="radio" name="mch-tumor" id="mch-tumor-re" value="none" disabled />
+            <label for="mch-tumor-re">RE+ / HER2&#8722; <em>(pas d&#8217;ajustement)</em></label>
+          </div>
+          <div class="mch-radio-item mch-active" id="mch-ti-unknown">
+            <input type="radio" name="mch-tumor" id="mch-tumor-unknown" value="none" checked />
+            <label for="mch-tumor-unknown">Pas de cancer du sein / type inconnu</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORIGINE ETHNIQUE -->
+      <span class="mch-section-title">Origine ethnique</span>
+      <div class="mch-form-group">
+        <div class="mch-radio-group">
+          <div class="mch-radio-item mch-active">
+            <input type="radio" name="mch-ethnicity" id="mch-eth-non" value="0" checked />
+            <label for="mch-eth-non">Non ashk&#233;naze</label>
+          </div>
+          <div class="mch-radio-item">
+            <input type="radio" name="mch-ethnicity" id="mch-eth-ash" value="5" />
+            <label for="mch-eth-ash">Origine ashk&#233;naze <em>(+5&#160;pts)</em></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANTECEDENTS FAMILIAUX -->
+      <span class="mch-section-title">Ant&#233;c&#233;dents familiaux (1<sup>er</sup> / 2<sup>e</sup> degr&#233;)</span>
+      <div class="mch-form-group">
+        <span class="mch-form-label">Nombre d&#8217;apparent&#233;s atteints :</span>
+        <div class="mch-checkbox-group">
+
+          <div class="mch-checkbox-item">
+            <div class="mch-checkbox-content">
+              <label>Cancer du sein &lt;&#160;40&#160;ans <em>(4&#160;pts / cas)</em></label>
+            </div>
+            <div class="mch-counter-controls">
+              <button class="mch-counter-btn" id="mch-btn-dec-fbu40" onclick="mchDecrement('fbu40')" disabled>&#8722;</button>
+              <span class="mch-counter-display" id="mch-cnt-fbu40">0</span>
+              <button class="mch-counter-btn" onclick="mchIncrement('fbu40')">+</button>
+            </div>
+          </div>
+
+          <div class="mch-checkbox-item">
+            <div class="mch-checkbox-content">
+              <label>Cancer du sein &#8805;&#160;40&#160;ans <em>(2&#160;pts / cas)</em></label>
+            </div>
+            <div class="mch-counter-controls">
+              <button class="mch-counter-btn" id="mch-btn-dec-fbo40" onclick="mchDecrement('fbo40')" disabled>&#8722;</button>
+              <span class="mch-counter-display" id="mch-cnt-fbo40">0</span>
+              <button class="mch-counter-btn" onclick="mchIncrement('fbo40')">+</button>
+            </div>
+          </div>
+
+          <div class="mch-checkbox-item">
+            <div class="mch-checkbox-content">
+              <label>Cancer de l&#8217;ovaire <em>(5&#160;pts / cas)</em></label>
+            </div>
+            <div class="mch-counter-controls">
+              <button class="mch-counter-btn" id="mch-btn-dec-fov" onclick="mchDecrement('fov')" disabled>&#8722;</button>
+              <span class="mch-counter-display" id="mch-cnt-fov">0</span>
+              <button class="mch-counter-btn" onclick="mchIncrement('fov')">+</button>
+            </div>
+          </div>
+
+          <div class="mch-checkbox-item">
+            <div class="mch-checkbox-content">
+              <label>Cancer du sein chez un homme <em>(8&#160;pts / cas)</em></label>
+            </div>
+            <div class="mch-counter-controls">
+              <button class="mch-counter-btn" id="mch-btn-dec-fmb" onclick="mchDecrement('fmb')" disabled>&#8722;</button>
+              <span class="mch-counter-display" id="mch-cnt-fmb">0</span>
+              <button class="mch-counter-btn" onclick="mchIncrement('fmb')">+</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /mch-form-col -->
+
+    <!-- ===== RESULTATS ===== -->
+    <div class="mch-result-col">
+      <span class="mch-result-title">R&#233;sultats</span>
+
+      <div class="mch-score-block">
+        <span class="mch-score-label">Score brut total</span>
+        <span class="mch-score-value" id="mch-total">0</span>
+      </div>
+      <div class="mch-score-block">
+        <span class="mch-score-label">Score ajust&#233; BRCA1</span>
+        <span class="mch-score-value" id="mch-brca1">0</span>
+      </div>
+      <div class="mch-score-block">
+        <span class="mch-score-label">Score ajust&#233; BRCA2</span>
+        <span class="mch-score-value" id="mch-brca2">0</span>
+      </div>
+
+      <div class="mch-risk-badge mch-risk-low" id="mch-risk-badge">Risque &lt;&#160;10&#160;%</div>
+
+      <div class="mch-reco-box">
+        <span class="mch-reco-title">Conduite &#224; tenir</span>
+        <ul class="mch-reco-list" id="mch-reco-list">
+          <li>Surveillance mammaire standard selon l&#8217;&#226;ge</li>
+          <li>Test g&#233;n&#233;tique non indiqu&#233; actuellement</li>
+          <li>R&#233;&#233;valuer si nouveaux ant&#233;c&#233;dents familiaux</li>
+        </ul>
+      </div>
+
+      <button class="mch-reset-btn" onclick="mchReset()">&#8635; R&#233;initialiser</button>
+    </div><!-- /mch-result-col -->
+
+  </div><!-- /mch-body -->
+
+  <!-- PIED DE PAGE -->
+  <div class="mch-footer">
+    <strong>Avertissement m&#233;dico-l&#233;gal :</strong> Outil destin&#233; &#224; un usage professionnel m&#233;dical. Ne se substitue pas au jugement clinique ni &#224; une consultation en oncog&#233;n&#233;tique. R&#233;f. : Evans DG et&#160;al., <em>J&#160;Med Genet</em> 2004 ; NHS England Genetics Commissioning.
+  </div>
+
+</div><!-- /mch-root -->
+
+<script>
+(function () {
+  'use strict';
+
+  var counters = { fbu40: 0, fbo40: 0, fov: 0, fmb: 0 };
+  var pts      = { fbu40: 4, fbo40: 2, fov: 5, fmb: 8 };
+
+  function $id(id) { return document.getElementById(id); }
+
+  function checkedVal(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : null;
+  }
+
+  function refreshCounter(id) {
+    var span = $id('mch-cnt-' + id);
+    var btn  = $id('mch-btn-dec-' + id);
+    if (span) span.textContent = counters[id];
+    if (btn)  btn.disabled = (counters[id] === 0);
+  }
+
+  window.mchIncrement = function (id) {
+    counters[id]++;
+    refreshCounter(id);
+    mchCalculate();
+  };
+
+  window.mchDecrement = function (id) {
+    if (counters[id] > 0) {
+      counters[id]--;
+      refreshCounter(id);
+      mchCalculate();
+    }
+  };
+
+  function refreshStyles() {
+    document.querySelectorAll('#mch-root .mch-radio-item').forEach(function (item) {
+      var r = item.querySelector('input[type="radio"]');
+      if (r) item.classList.toggle('mch-active', r.checked);
+    });
+    document.querySelectorAll('#mch-root .mch-checkbox-item').forEach(function (item) {
+      var c = item.querySelector('input[type="checkbox"]');
+      if (c) item.classList.toggle('mch-active', c.checked);
+    });
+  }
+
+  function mchCalculate() {
+    var breastSel = document.querySelector('input[name="mch-breast"]:checked');
+    var breastId  = breastSel ? breastSel.id : 'mch-b-none';
+    var breastPts = breastSel ? parseInt(breastSel.value, 10) : 0;
+    var hasCancer = (breastId !== 'mch-b-none');
+
+    var tumorVal  = checkedVal('mch-tumor');
+    var isTNBC    = (tumorVal === 'brca1');
+    var isHER2    = (tumorVal === 'brca2');
+
+    var ageRaw  = $id('mch-diag-age').value.trim();
+    var diagAge = (ageRaw !== '') ? parseInt(ageRaw, 10) : null;
+
+    var isBilateral  = $id('mch-bilateral').checked;
+    var isOvarian    = $id('mch-ovarian').checked;
+    var isMaleBreast = $id('mch-male-breast').checked;
+    var isAshkenazi  = $id('mch-eth-ash').checked;
+
+    /* Histologie : activer / desactiver */
+    ['mch-ti-tnbc', 'mch-ti-her2', 'mch-ti-re'].forEach(function (tid) {
+      var wrap  = $id(tid);
+      var radio = wrap ? wrap.querySelector('input[type="radio"]') : null;
+      if (!wrap) return;
+      if (hasCancer) {
+        wrap.classList.remove('mch-disabled');
+        if (radio) radio.disabled = false;
+      } else {
+        wrap.classList.add('mch-disabled');
+        if (radio) radio.disabled = true;
+      }
+    });
+
+    if (!hasCancer) {
+      $id('mch-tumor-unknown').checked = true;
+      tumorVal = 'none'; isTNBC = false; isHER2 = false;
+    }
+
+    $id('mch-histo-notice').classList.toggle('mch-visible', !hasCancer);
+
+    /* Champ age */
+    var ageInput = $id('mch-diag-age');
+    var ageHelp  = $id('mch-age-help');
+    if (!hasCancer) {
+      ageInput.disabled = true;
+      ageInput.value    = '';
+      ageHelp.classList.remove('mch-visible');
+    } else {
+      ageInput.disabled = false;
+      ageHelp.classList.toggle('mch-visible', isTNBC && !ageRaw);
+    }
+
+    /* Score brut */
+    var total = breastPts;
+    document.querySelectorAll('.mch-personal-cb').forEach(function (cb) {
+      if (cb.checked) total += parseInt(cb.getAttribute('data-points') || '0', 10);
+    });
+    Object.keys(counters).forEach(function (id) {
+      total += counters[id] * (pts[id] || 0);
+    });
+    if (isAshkenazi) total += 5;
+
+    /* Scores ajustes */
+    var brca1 = total, brca2 = total;
+    if (isTNBC)      { brca1 = total + 5; brca2 = Math.max(0, total - 2); }
+    else if (isHER2) { brca2 = total + 3; brca1 = Math.max(0, total - 2); }
+
+    /* Affichage SYSTEMATIQUE des scores */
+    $id('mch-total').textContent = total;
+    $id('mch-brca1').textContent = brca1;
+    $id('mch-brca2').textContent = brca2;
+
+    var badge = $id('mch-risk-badge');
+    var list  = $id('mch-reco-list');
+    badge.className = 'mch-risk-badge';
+
+    /* 1. Sein < 36 ans */
+    var directU36 = (breastId === 'mch-b-u30' || breastId === 'mch-b-3035')
+                    || (hasCancer && diagAge !== null && diagAge < 36);
+    if (directU36) {
+      badge.classList.add('mch-risk-direct');
+      badge.textContent = 'Indication directe \u2013 Sein < 36\u00a0ans';
+      list.innerHTML =
+        '<li><strong>\u2713 Test BRCA1/BRCA2 indiqu\u00e9 d\u2019embl\u00e9e</strong></li>' +
+        '<li>Cancer du sein diagnostiqu\u00e9 avant 36\u00a0ans</li>' +
+        '<li>Orienter en consultation d\u2019oncog\u00e9n\u00e9tique</li>';
+      return;
+    }
+
+    /* 2. TNBC < 50 ans */
+    if (isTNBC) {
+      if (!diagAge) {
+        badge.classList.add('mch-risk-medium');
+        badge.textContent = 'TNBC \u2013 \u00c2ge manquant';
+        list.innerHTML =
+          '<li><strong>\u26a0 \u00c2ge au diagnostic requis</strong></li>' +
+          '<li>Le crit\u00e8re TNBC\u00a0< 50\u00a0ans ne peut \u00eatre \u00e9valu\u00e9 sans cet \u00e2ge</li>';
+        return;
+      }
+      if (diagAge < 50) {
+        badge.classList.add('mch-risk-direct');
+        badge.textContent = 'Indication directe \u2013 TNBC\u00a0< 50\u00a0ans';
+        list.innerHTML =
+          '<li><strong>\u2713 Test BRCA1/BRCA2 indiqu\u00e9 d\u2019embl\u00e9e</strong></li>' +
+          '<li>Triple n\u00e9gatif diagnostiqu\u00e9 \u00e0\u00a0' + diagAge + '\u00a0ans (< 50\u00a0ans)</li>' +
+          '<li>Orienter en consultation d\u2019oncog\u00e9n\u00e9tique</li>';
+        return;
+      }
+    }
+
+    /* 3. Cancer de l'ovaire */
+    if (isOvarian) {
+      badge.classList.add('mch-risk-direct');
+      badge.textContent = 'Indication directe \u2013 Cancer de l\u2019ovaire';
+      list.innerHTML =
+        '<li><strong>\u2713 Test BRCA1/BRCA2 indiqu\u00e9 d\u2019embl\u00e9e</strong></li>' +
+        '<li>Cancer de l\u2019ovaire \u00e0 tout \u00e2ge</li>' +
+        '<li>Orienter en consultation d\u2019oncog\u00e9n\u00e9tique</li>';
+      return;
+    }
+
+    /* 4. Sein chez l'homme */
+    if (isMaleBreast) {
+      badge.classList.add('mch-risk-direct');
+      badge.textContent = 'Indication directe \u2013 Sein homme';
+      list.innerHTML =
+        '<li><strong>\u2713 Test BRCA1/BRCA2 indiqu\u00e9 d\u2019embl\u00e9e</strong></li>' +
+        '<li>Cancer du sein chez un homme</li>' +
+        '<li>Orienter en consultation d\u2019oncog\u00e9n\u00e9tique</li>';
+      return;
+    }
+
+    /* 5. Sein bilateral */
+    if (isBilateral) {
+      badge.classList.add('mch-risk-direct');
+      badge.textContent = 'Indication directe \u2013 Sein bilat\u00e9ral';
+      list.innerHTML =
+        '<li><strong>\u2713 Test BRCA1/BRCA2 indiqu\u00e9 d\u2019embl\u00e9e</strong></li>' +
+        '<li>Cancer du sein bilat\u00e9ral</li>' +
+        '<li>Orienter en consultation d\u2019oncog\u00e9n\u00e9tique</li>';
+      return;
+    }
+
+    /* Seuil NHS */
+    if (total >= 15 || brca1 >= 10 || brca2 >= 10) {
+      badge.classList.add('mch-risk-high');
+      badge.textContent = 'Risque \u2265\u00a010\u00a0% \u2192 Test indiqu\u00e9';
+      list.innerHTML =
+        '<li><strong>\u2713 Test g\u00e9n\u00e9tique BRCA1/BRCA2 recommand\u00e9</strong></li>' +
+        '<li>Probabilit\u00e9 estim\u00e9e \u2265\u00a010\u00a0% de mutation</li>' +
+        '<li>Orienter en consultation d\u2019oncog\u00e9n\u00e9tique</li>';
+      return;
+    }
+
+    /* Ashkenaze isolee */
+    if (isAshkenazi && total <= 7) {
+      badge.classList.add('mch-risk-medium');
+      badge.textContent = 'Test cibl\u00e9 \u00e0 discuter (Ashk\u00e9naze)';
+      list.innerHTML =
+        '<li>Origine ashk\u00e9naze sans autre ant\u00e9c\u00e9dent significatif</li>' +
+        '<li>Test cibl\u00e9 discuter (185delAG, 5382insC, 6174delT)</li>' +
+        '<li>Conseil g\u00e9n\u00e9tique recommand\u00e9</li>';
+      return;
+    }
+
+    /* Score intermediaire */
+    if (total >= 8) {
+      badge.classList.add('mch-risk-medium');
+      badge.textContent = 'Risque interm\u00e9diaire (score\u00a0' + total + ')';
+      list.innerHTML =
+        '<li>Score insuffisant pour le seuil NHS (< 15 et < 10 par g\u00e8ne)</li>' +
+        '<li>R\u00e9\u00e9valuer si nouveaux ant\u00e9c\u00e9dents familiaux</li>' +
+        '<li>Discuter en r\u00e9union pluridisciplinaire si doute clinique</li>';
+      return;
+    }
+
+    /* Risque faible */
+    badge.classList.add('mch-risk-low');
+    badge.textContent = 'Risque < 10\u00a0%';
+    list.innerHTML =
+      '<li>Surveillance mammaire standard selon l\u2019\u00e2ge</li>' +
+      '<li>Test g\u00e9n\u00e9tique non indiqu\u00e9 actuellement</li>' +
+      '<li>R\u00e9\u00e9valuer si nouveaux ant\u00e9c\u00e9dents familiaux</li>';
+  }
+
+  window.mchReset = function () {
+    $id('mch-b-none').checked        = true;
+    $id('mch-tumor-unknown').checked = true;
+    $id('mch-eth-non').checked       = true;
+    $id('mch-diag-age').value        = '';
+    document.querySelectorAll('.mch-personal-cb').forEach(function (cb) { cb.checked = false; });
+    Object.keys(counters).forEach(function (id) {
+      counters[id] = 0;
+      refreshCounter(id);
+    });
+    refreshStyles();
+    mchCalculate();
+  };
+
+  document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelectorAll('#mch-root input[type="radio"], #mch-root input[type="checkbox"]')
+      .forEach(function (el) {
+        el.addEventListener('change', function () { refreshStyles(); mchCalculate(); });
+      });
+
+    $id('mch-diag-age').addEventListener('input', mchCalculate);
+
+    document.querySelectorAll('#mch-root .mch-radio-item').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        if (e.target.tagName === 'INPUT') return;
+        var r = item.querySelector('input[type="radio"]');
+        if (r && !r.disabled) { r.checked = true; refreshStyles(); mchCalculate(); }
+      });
+    });
+
+    document.querySelectorAll('#mch-root .mch-checkbox-item').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+        var c = item.querySelector('input[type="checkbox"]');
+        if (c) { c.checked = !c.checked; refreshStyles(); mchCalculate(); }
+      });
+    });
+
+    Object.keys(counters).forEach(refreshCounter);
+    refreshStyles();
+    mchCalculate();
+  });
+
+}());
+</script>
+
+</body>
+</html>

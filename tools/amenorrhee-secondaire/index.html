@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aménorrhée Secondaire — Outil Diagnostique v2</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — isolation totale
+   ============================================================ */
+#ams2-root {
+  all: initial;
+  display: block;
+  box-sizing: border-box;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1e2d3d;
+  background: #f4f7fa;
+  border-radius: 4px;
+  padding: 0;
+}
+
+/* Reset ciblé — uniquement sous #ams2-root */
+#ams2-root *, #ams2-root *::before, #ams2-root *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   VARIABLES
+   ============================================================ */
+#ams2-root {
+  --ams2-blue-dark:  #1a3560;
+  --ams2-blue:       #2563a8;
+  --ams2-blue-light: #dbeafe;
+  --ams2-teal:       #0f766e;
+  --ams2-teal-light: #ccfbf1;
+  --ams2-amber:      #92400e;
+  --ams2-amber-light:#fef3c7;
+  --ams2-red:        #991b1b;
+  --ams2-red-light:  #fee2e2;
+  --ams2-slate:      #64748b;
+  --ams2-border:     #cbd5e1;
+  --ams2-bg:         #f4f7fa;
+  --ams2-white:      #ffffff;
+  --ams2-text:       #1e2d3d;
+  --ams2-text-muted: #475569;
+  --ams2-radius:     6px;
+  --ams2-shadow:     0 1px 4px rgba(26,53,96,0.08);
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+#ams2-root .ams2-wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 28px 24px 40px;
+}
+
+/* ============================================================
+   EN-TÊTE
+   ============================================================ */
+#ams2-root .ams2-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--ams2-blue-dark);
+  flex-wrap: wrap;
+}
+
+#ams2-root .ams2-header-left {}
+
+#ams2-root .ams2-tag {
+  display: inline-block;
+  background: var(--ams2-blue-dark);
+  color: var(--ams2-white);
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+#ams2-root .ams2-title {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ams2-blue-dark);
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+#ams2-root .ams2-subtitle {
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--ams2-slate);
+  letter-spacing: 0.03em;
+}
+
+#ams2-root .ams2-btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ams2-slate);
+  background: var(--ams2-white);
+  border: 1px solid var(--ams2-border);
+  border-radius: var(--ams2-radius);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+#ams2-root .ams2-btn-reset:hover {
+  background: var(--ams2-bg);
+  border-color: var(--ams2-blue);
+  color: var(--ams2-blue);
+}
+
+/* ============================================================
+   BARRE DE PROGRESSION
+   ============================================================ */
+#ams2-root .ams2-progress {
+  display: flex;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+#ams2-root .ams2-step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  cursor: default;
+}
+
+#ams2-root .ams2-step-item.clickable {
+  cursor: pointer;
+}
+
+#ams2-root .ams2-step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--ams2-border);
+  background: var(--ams2-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ams2-slate);
+  margin-bottom: 6px;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+  position: relative;
+  z-index: 1;
+}
+
+#ams2-root .ams2-step-item.done .ams2-step-circle {
+  background: var(--ams2-teal);
+  border-color: var(--ams2-teal);
+  color: var(--ams2-white);
+}
+
+#ams2-root .ams2-step-item.done .ams2-step-circle::after {
+  content: '\2713';
+  font-size: 14px;
+}
+/* Masquer le numéro quand coché */
+#ams2-root .ams2-step-item.done .ams2-step-num { display: none; }
+
+#ams2-root .ams2-step-item.active .ams2-step-circle {
+  background: var(--ams2-blue-dark);
+  border-color: var(--ams2-blue-dark);
+  color: var(--ams2-white);
+}
+
+#ams2-root .ams2-step-label {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ams2-slate);
+  text-align: center;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+#ams2-root .ams2-step-item.active .ams2-step-label { color: var(--ams2-blue-dark); }
+#ams2-root .ams2-step-item.done .ams2-step-label { color: var(--ams2-teal); }
+
+#ams2-root .ams2-step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--ams2-border);
+  margin-bottom: 22px;
+  transition: background 0.3s;
+}
+#ams2-root .ams2-step-line.done { background: var(--ams2-teal); }
+
+/* ============================================================
+   PANNEAUX D'ÉTAPES
+   ============================================================ */
+#ams2-root .ams2-panel {
+  display: none;
+  animation: ams2FadeIn 0.3s ease;
+}
+#ams2-root .ams2-panel.active { display: block; }
+
+@keyframes ams2FadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#ams2-root .ams2-panel-title {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ams2-blue-dark);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ams2-border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#ams2-root .ams2-panel-title svg {
+  flex-shrink: 0;
+  color: var(--ams2-blue);
+}
+
+/* ============================================================
+   BOÎTES INFO
+   ============================================================ */
+#ams2-root .ams2-infobox {
+  background: var(--ams2-white);
+  border: 1px solid var(--ams2-border);
+  border-left: 4px solid var(--ams2-blue);
+  border-radius: var(--ams2-radius);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--ams2-shadow);
+}
+#ams2-root .ams2-infobox.amber {
+  border-left-color: #d97706;
+  background: var(--ams2-amber-light);
+}
+#ams2-root .ams2-infobox.red {
+  border-left-color: var(--ams2-red);
+  background: var(--ams2-red-light);
+}
+#ams2-root .ams2-infobox.teal {
+  border-left-color: var(--ams2-teal);
+  background: var(--ams2-teal-light);
+}
+
+#ams2-root .ams2-infobox-title {
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ams2-blue-dark);
+  margin-bottom: 10px;
+}
+
+#ams2-root .ams2-infobox.amber .ams2-infobox-title { color: var(--ams2-amber); }
+#ams2-root .ams2-infobox.red .ams2-infobox-title { color: var(--ams2-red); }
+#ams2-root .ams2-infobox.teal .ams2-infobox-title { color: var(--ams2-teal); }
+
+#ams2-root .ams2-infobox p,
+#ams2-root .ams2-infobox li {
+  font-family: system-ui, sans-serif;
+  font-size: 13.5px;
+  color: var(--ams2-text-muted);
+  line-height: 1.65;
+}
+
+#ams2-root .ams2-infobox ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 6px;
+}
+
+#ams2-root .ams2-infobox ul li::before {
+  content: '\2014\00a0';
+  color: var(--ams2-blue);
+  font-weight: 700;
+}
+
+/* ============================================================
+   FORMULAIRE
+   ============================================================ */
+#ams2-root .ams2-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 560px) {
+  #ams2-root .ams2-form-grid { grid-template-columns: 1fr; }
+}
+
+#ams2-root .ams2-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#ams2-root .ams2-field label {
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ams2-blue-dark);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#ams2-root .ams2-field .ams2-unit {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ams2-slate);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-left: 4px;
+}
+
+#ams2-root .ams2-field input[type="number"],
+#ams2-root .ams2-field select {
+  all: unset;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--ams2-text);
+  background: var(--ams2-white);
+  border: 1.5px solid var(--ams2-border);
+  border-radius: var(--ams2-radius);
+  padding: 9px 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+
+#ams2-root .ams2-field input[type="number"]:focus,
+#ams2-root .ams2-field select:focus {
+  border-color: var(--ams2-blue);
+  box-shadow: 0 0 0 3px rgba(37,99,168,0.12);
+  outline: none;
+}
+
+#ams2-root .ams2-field input.ams2-error,
+#ams2-root .ams2-field select.ams2-error {
+  border-color: var(--ams2-red);
+  background: var(--ams2-red-light);
+}
+
+#ams2-root .ams2-field .ams2-hint {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  color: var(--ams2-slate);
+  font-style: italic;
+}
+#ams2-root .ams2-field .ams2-hint.ams2-error-msg {
+  color: var(--ams2-red);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ============================================================
+   ERREUR GLOBALE INLINE
+   ============================================================ */
+#ams2-root .ams2-error-banner {
+  display: none;
+  background: var(--ams2-red-light);
+  border: 1px solid var(--ams2-red);
+  border-radius: var(--ams2-radius);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ams2-red);
+  font-weight: 600;
+}
+#ams2-root .ams2-error-banner.visible { display: block; }
+
+/* ============================================================
+   BOUTONS
+   ============================================================ */
+#ams2-root .ams2-btn-primary {
+  display: block;
+  width: 100%;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ams2-white);
+  background: var(--ams2-blue-dark);
+  border: none;
+  border-radius: var(--ams2-radius);
+  padding: 13px 20px;
+  cursor: pointer;
+  text-align: center;
+  letter-spacing: 0.04em;
+  transition: background 0.2s;
+  margin-top: 20px;
+}
+#ams2-root .ams2-btn-primary:hover { background: var(--ams2-blue); }
+#ams2-root .ams2-btn-primary:disabled { background: var(--ams2-border); cursor: not-allowed; }
+
+#ams2-root .ams2-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ams2-slate);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 14px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+#ams2-root .ams2-btn-back:hover { color: var(--ams2-blue); }
+
+/* ============================================================
+   RÉSULTATS DIAGNOSTIQUES
+   ============================================================ */
+#ams2-root .ams2-diag-box {
+  background: var(--ams2-white);
+  border: 1px solid var(--ams2-border);
+  border-radius: var(--ams2-radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: var(--ams2-shadow);
+}
+
+#ams2-root .ams2-diag-header {
+  background: var(--ams2-blue-dark);
+  color: var(--ams2-white);
+  padding: 14px 20px;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#ams2-root .ams2-diag-header.teal { background: var(--ams2-teal); }
+#ams2-root .ams2-diag-header.amber { background: #b45309; }
+
+#ams2-root .ams2-diag-badge {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(255,255,255,0.18);
+  border-radius: 3px;
+  padding: 2px 8px;
+  margin-left: auto;
+}
+
+#ams2-root .ams2-diag-body {
+  padding: 16px 20px;
+}
+
+#ams2-root .ams2-diag-values {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ams2-border);
+}
+
+#ams2-root .ams2-diag-val {
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--ams2-text-muted);
+}
+#ams2-root .ams2-diag-val strong {
+  display: block;
+  font-size: 15px;
+  color: var(--ams2-text);
+  font-weight: 700;
+}
+
+#ams2-root .ams2-diag-section-title {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ams2-blue-dark);
+  margin-bottom: 8px;
+  margin-top: 14px;
+}
+
+#ams2-root .ams2-diag-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#ams2-root .ams2-diag-list li {
+  font-family: system-ui, sans-serif;
+  font-size: 13.5px;
+  color: var(--ams2-text-muted);
+  padding: 5px 0;
+  border-bottom: 1px solid #f1f5f9;
+  line-height: 1.5;
+}
+#ams2-root .ams2-diag-list li:last-child { border-bottom: none; }
+
+#ams2-root .ams2-diag-list li::before {
+  content: '\25B8\00a0';
+  color: var(--ams2-blue);
+  font-size: 11px;
+}
+
+#ams2-root .ams2-pec-box {
+  background: var(--ams2-amber-light);
+  border: 1px solid #fcd34d;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-top: 14px;
+}
+
+#ams2-root .ams2-pec-title {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ams2-amber);
+  margin-bottom: 8px;
+}
+
+#ams2-root .ams2-pec-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#ams2-root .ams2-pec-list li {
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ams2-amber);
+  padding: 3px 0;
+  line-height: 1.5;
+}
+#ams2-root .ams2-pec-list li::before {
+  content: '\2192\00a0';
+  font-weight: 700;
+}
+
+#ams2-root .ams2-ref-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--ams2-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-style: italic;
+}
+#ams2-root .ams2-ref-link::before {
+  content: '\2192\00a0';
+}
+
+/* ============================================================
+   PIED DE PAGE
+   ============================================================ */
+#ams2-root .ams2-footer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ams2-border);
+}
+
+#ams2-root .ams2-footer-legal {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  color: var(--ams2-slate);
+  line-height: 1.6;
+  text-align: center;
+}
+
+#ams2-root .ams2-footer-refs {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  color: var(--ams2-slate);
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* ============================================================
+   RESPONSIVE MOBILE
+   ============================================================ */
+@media (max-width: 480px) {
+  #ams2-root .ams2-wrap { padding: 16px 12px 28px; }
+  #ams2-root .ams2-title { font-size: 18px; }
+  #ams2-root .ams2-header { flex-direction: column; }
+  #ams2-root .ams2-btn-reset { width: 100%; justify-content: center; }
+  #ams2-root .ams2-step-label { display: none; }
+  #ams2-root .ams2-diag-values { flex-direction: column; gap: 8px; }
+}
+
+/* ============================================================
+   SÉPARATEUR DE SECTION FORMULAIRE
+   ============================================================ */
+#ams2-root .ams2-form-section {
+  margin-top: 20px;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ams2-border);
+}
+#ams2-root .ams2-form-section-title {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ams2-slate);
+}
+
+/* ============================================================
+   CHECKBOX CUSHING
+   ============================================================ */
+#ams2-root .ams2-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+#ams2-root .ams2-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ams2-text-muted);
+  line-height: 1.5;
+  padding: 10px 14px;
+  background: var(--ams2-white);
+  border: 1.5px solid var(--ams2-border);
+  border-radius: var(--ams2-radius);
+  transition: border-color 0.2s, background 0.2s;
+}
+#ams2-root .ams2-checkbox-label:hover {
+  border-color: var(--ams2-blue);
+  background: var(--ams2-blue-light);
+}
+#ams2-root .ams2-checkbox-label input[type="checkbox"] {
+  all: unset;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 2px solid var(--ams2-border);
+  border-radius: 3px;
+  background: var(--ams2-white);
+  cursor: pointer;
+  position: relative;
+  margin-top: 1px;
+  transition: background 0.15s, border-color 0.15s;
+}
+#ams2-root .ams2-checkbox-label input[type="checkbox"]:checked {
+  background: var(--ams2-blue-dark);
+  border-color: var(--ams2-blue-dark);
+}
+#ams2-root .ams2-checkbox-label input[type="checkbox"]:checked::after {
+  content: '\2713';
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+}
+#ams2-root .ams2-checkbox-label.checked {
+  border-color: var(--ams2-blue-dark);
+  background: var(--ams2-blue-light);
+}
+
+/* ============================================================
+   BARRE D'ACTIONS RÉSULTATS (Imprimer / Copier)
+   ============================================================ */
+#ams2-root .ams2-actions-bar {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+#ams2-root .ams2-btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 10px 16px;
+  border-radius: var(--ams2-radius);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  border: 1.5px solid var(--ams2-border);
+}
+#ams2-root .ams2-btn-action.print {
+  background: var(--ams2-white);
+  color: var(--ams2-blue-dark);
+  border-color: var(--ams2-blue-dark);
+}
+#ams2-root .ams2-btn-action.print:hover {
+  background: var(--ams2-blue-light);
+}
+#ams2-root .ams2-btn-action.copy {
+  background: var(--ams2-white);
+  color: var(--ams2-teal);
+  border-color: var(--ams2-teal);
+}
+#ams2-root .ams2-btn-action.copy:hover {
+  background: var(--ams2-teal-light);
+}
+#ams2-root .ams2-copy-toast {
+  display: none;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--ams2-teal);
+  font-weight: 600;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 0;
+}
+#ams2-root .ams2-copy-toast.visible {
+  display: inline-flex;
+}
+
+/* ============================================================
+   IMPRESSION
+   ============================================================ */
+@media print {
+  body * { visibility: hidden !important; }
+  #ams2-print-zone, #ams2-print-zone * { visibility: visible !important; }
+  #ams2-print-zone {
+    position: absolute !important;
+    left: 0 !important; top: 0 !important;
+    width: 100% !important;
+    font-family: Georgia, serif !important;
+    font-size: 12pt !important;
+    color: #000 !important;
+  }
+  .ams2-actions-bar, .ams2-btn-back, .ams2-btn-primary { display: none !important; }
+  .ams2-diag-header { background: #1a3560 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<div id="ams2-root" role="main" aria-label="Outil diagnostique — Aménorrhée Secondaire">
+  <div class="ams2-wrap">
+
+    <!-- EN-TÊTE -->
+    <div class="ams2-header">
+      <div class="ams2-header-left">
+        <div class="ams2-tag">Gynécologie — Endocrinologie</div>
+        <div class="ams2-title">Aménorrhée Secondaire</div>
+        <div class="ams2-subtitle">Algorithme diagnostique étiologique — CNGOF / Endocrine Society</div>
+      </div>
+      <button class="ams2-btn-reset" id="ams2-btn-reset" aria-label="Réinitialiser l'outil">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Réinitialiser
+      </button>
+    </div>
+
+    <!-- BARRE DE PROGRESSION -->
+    <div class="ams2-progress" id="ams2-progress" role="navigation" aria-label="Étapes de l'algorithme"></div>
+
+    <!-- ==================== ÉTAPE 1 — CLINIQUE ==================== -->
+    <div class="ams2-panel active" id="ams2-panel-1" role="region" aria-label="Étape 1 : Évaluation clinique">
+
+      <div class="ams2-panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Étape 1 — Évaluation clinique initiale
+      </div>
+
+      <div class="ams2-infobox red">
+        <div class="ams2-infobox-title">Priorité absolue — Éliminer une grossesse</div>
+        <p>Dosage du <strong>&beta;-HCG plasmatique</strong> systématique avant tout bilan étiologique, quel que soit le contexte.</p>
+      </div>
+
+      <div class="ams2-infobox">
+        <div class="ams2-infobox-title">Interrogatoire — Points clés</div>
+        <ul>
+          <li>ATCD d'IVG ou curetage utérin (risque de synéchies — syndrome d'Asherman)</li>
+          <li>Médicaments hyperprolactinémiants : neuroleptiques, antidépresseurs, métoclopramide, méthyldopa</li>
+          <li>État psycho-affectif : stress chronique, trouble du comportement alimentaire (anorexie)</li>
+          <li>Sport intensif, perte de poids récente (&gt; 10 % du poids corporel)</li>
+          <li>Contexte post-partum récent (syndrome de Sheehan)</li>
+          <li>Anosmie associée (syndrome de Kallmann)</li>
+        </ul>
+      </div>
+
+      <div class="ams2-infobox" style="border-left-color: #0369a1; background: var(--ams2-blue-light);">
+        <div class="ams2-infobox-title">Examen clinique</div>
+        <ul>
+          <li><strong>Poids et IMC</strong> : maigreur (&lt; 18,5 kg/m²), obésité (&gt; 30)</li>
+          <li><strong>Galactorrhée</strong> (spontanée ou provoquée) — évocatrice d'hyperprolactinémie</li>
+          <li><strong>Hirsutisme</strong> : score de Ferriman-Gallwey &gt; 8</li>
+          <li><strong>Signes de dysthyroïdie</strong> : goitre, tachycardie, exophtalmie, peau sèche</li>
+          <li>Acné, séborrhée, virilisation (alopécie androgénique, clitoromégalie)</li>
+          <li>Signes d'hypo-œstrogénie : sécheresse vaginale, bouffées de chaleur</li>
+        </ul>
+      </div>
+
+      <button class="ams2-btn-primary" id="ams2-btn-step1">
+        Passer aux dosages hormonaux
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px; margin-left:6px"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <!-- ==================== ÉTAPE 2 — BIOLOGIE ==================== -->
+    <div class="ams2-panel" id="ams2-panel-2" role="region" aria-label="Étape 2 : Dosages hormonaux">
+
+      <div class="ams2-panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v6l-2 4v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8l-2-4V2"/><path d="M6 2h12"/><path d="M6 12h12"/></svg>
+        Étape 2 — Bilan hormonal de base
+      </div>
+
+      <div class="ams2-infobox">
+        <div class="ams2-infobox-title">Prélèvement</div>
+        <p>FSH, LH, prolactine, TSH : à prélever <strong>entre J3 et J5 du cycle</strong> si cycles présents, ou à tout moment en cas d'aménorrhée franche. Matin, à jeun de préférence, hors stress aigu.</p>
+      </div>
+
+      <!-- Erreur globale inline -->
+      <div class="ams2-error-banner" id="ams2-error-banner" role="alert">
+        Veuillez compléter tous les champs obligatoires avant de continuer.
+      </div>
+
+      <div class="ams2-form-grid">
+        <div class="ams2-field">
+          <label for="ams2-fsh">FSH <span class="ams2-unit">UI/L</span></label>
+          <input type="number" id="ams2-fsh" step="0.1" min="0" placeholder="ex : 6,5" aria-describedby="ams2-fsh-hint">
+          <span class="ams2-hint" id="ams2-fsh-hint">Normale J3 : 3 – 10 UI/L</span>
+        </div>
+        <div class="ams2-field">
+          <label for="ams2-lh">LH <span class="ams2-unit">UI/L</span></label>
+          <input type="number" id="ams2-lh" step="0.1" min="0" placeholder="ex : 5,2" aria-describedby="ams2-lh-hint">
+          <span class="ams2-hint" id="ams2-lh-hint">Normale J3 : 2 – 10 UI/L</span>
+        </div>
+        <div class="ams2-field">
+          <label for="ams2-prl">Prolactine <span class="ams2-unit">ng/mL</span></label>
+          <input type="number" id="ams2-prl" step="0.1" min="0" placeholder="ex : 18,0" aria-describedby="ams2-prl-hint">
+          <span class="ams2-hint" id="ams2-prl-hint">Normale : &lt; 25 ng/mL</span>
+        </div>
+        <div class="ams2-field">
+          <label for="ams2-tsh">TSH <span class="ams2-unit">mUI/L</span></label>
+          <input type="number" id="ams2-tsh" step="0.01" min="0" placeholder="ex : 2,10" aria-describedby="ams2-tsh-hint">
+          <span class="ams2-hint" id="ams2-tsh-hint">Normale : 0,4 – 4,0 mUI/L</span>
+        </div>
+        <div class="ams2-field" style="grid-column: 1 / -1;">
+          <label for="ams2-hirsutisme">Hyperandrogénie clinique (hirsutisme, acné sévère, virilisation)</label>
+          <select id="ams2-hirsutisme" aria-describedby="ams2-hirsu-hint">
+            <option value="">— Sélectionner —</option>
+            <option value="non">Non</option>
+            <option value="oui">Oui</option>
+          </select>
+          <span class="ams2-hint" id="ams2-hirsu-hint">Score de Ferriman-Gallwey &gt; 8 ou hyperandrogénie clinique évidente</span>
+        </div>
+      </div>
+
+      <!-- Section optionnelle : marqueurs complémentaires -->
+      <div class="ams2-form-section">
+        <div class="ams2-form-section-title">Marqueurs complémentaires — optionnels mais orientants</div>
+      </div>
+
+      <div class="ams2-form-grid">
+        <div class="ams2-field" style="grid-column: 1 / -1;">
+          <label for="ams2-ohp">17-OH Progestérone basale <span class="ams2-unit">ng/mL</span></label>
+          <input type="number" id="ams2-ohp" step="0.1" min="0" placeholder="ex : 1,2  (laisser vide si non dosée)" aria-describedby="ams2-ohp-hint">
+          <span class="ams2-hint" id="ams2-ohp-hint">Normale phase folliculaire : &lt; 2 ng/mL — Seuil HCS forme tardive : &gt; 2 ng/mL (test Synacthène si 2–10) — Seuil classique : &gt; 10 ng/mL</span>
+        </div>
+      </div>
+
+      <!-- Checkbox Cushing -->
+      <div class="ams2-form-section" style="margin-top:14px;">
+        <div class="ams2-form-section-title">Signes cliniques évocateurs</div>
+      </div>
+      <div class="ams2-checkbox-group">
+        <label class="ams2-checkbox-label" id="ams2-cushing-label" for="ams2-cushing">
+          <input type="checkbox" id="ams2-cushing">
+          <span>
+            <strong>Signes d'hypercorticisme (Syndrome de Cushing)</strong><br>
+            <span style="font-size:12px;color:var(--ams2-slate);">Obésité facio-tronculaire, vergetures pourpres, fragilité cutanée, amyotrophie proximale, HTA, diabète, faciès lunaire, bosse de bison</span>
+          </span>
+        </label>
+      </div>
+
+      <button class="ams2-btn-primary" id="ams2-btn-analyze">
+        Analyser et orienter le diagnostic
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px; margin-left:6px"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <button class="ams2-btn-back" id="ams2-btn-back1">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+        Retour à l'étape 1
+      </button>
+    </div>
+
+    <!-- ==================== ÉTAPE 3 — RÉSULTATS ==================== -->
+    <div class="ams2-panel" id="ams2-panel-3" role="region" aria-label="Étape 3 : Diagnostic étiologique">
+
+      <div class="ams2-panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Étape 3 — Orientation étiologique
+      </div>
+
+      <div id="ams2-results" aria-live="polite" aria-atomic="true"></div>
+
+      <!-- Barre d'actions export -->
+      <div class="ams2-actions-bar" id="ams2-actions-bar" style="display:none;">
+        <button class="ams2-btn-action print" id="ams2-btn-print">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimer les résultats
+        </button>
+        <button class="ams2-btn-action copy" id="ams2-btn-copy">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copier pour le dossier
+        </button>
+        <span class="ams2-copy-toast" id="ams2-copy-toast">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Copié dans le presse-papier
+        </span>
+      </div>
+
+      <!-- Zone cachée pour impression propre -->
+      <div id="ams2-print-zone" style="display:none;"></div>
+
+      <button class="ams2-btn-back" id="ams2-btn-back2" style="margin-top:8px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+        Modifier les valeurs (retour étape 2)
+      </button>
+    </div>
+
+    <!-- PIED DE PAGE -->
+    <div class="ams2-footer">
+      <div class="ams2-footer-refs">
+        Références : CNGOF — Endocrine Society 2017 — ESHRE PCOS Guidelines 2023 — HAS
+      </div>
+      <div class="ams2-footer-legal">
+        Outil d'aide à la décision clinique. Ne se substitue pas au jugement médical ni à l'examen du patient.<br>
+        Dr. Kara-Zaitri M.A. — Gynécologie-Obstétrique, Tlemcen
+      </div>
+    </div>
+
+  </div><!-- /.ams2-wrap -->
+</div><!-- /#ams2-root -->
+
+<script>
+(function () {
+  'use strict';
+
+  // ── ÉTAT ────────────────────────────────────────────────
+  var state = {
+    step: 1,
+    maxReached: 1
+  };
+
+  var STEPS = [
+    { label: 'Clinique' },
+    { label: 'Biologie' },
+    { label: 'Diagnostic' }
+  ];
+
+  // ── NAVIGATION ──────────────────────────────────────────
+  function goToStep(n) {
+    if (n < 1 || n > 3) return;
+    // Autoriser retour arrière seulement si étape déjà atteinte
+    if (n < state.step && n > state.maxReached) return;
+    // Avancer uniquement d'une étape à la fois (sauf si déjà atteinte)
+    if (n > state.step && n > state.maxReached + 1) return;
+
+    state.step = n;
+    if (n > state.maxReached) state.maxReached = n;
+
+    document.querySelectorAll('#ams2-root .ams2-panel').forEach(function(p) {
+      p.classList.remove('active');
+    });
+    var panel = document.getElementById('ams2-panel-' + n);
+    if (panel) panel.classList.add('active');
+
+    renderProgress();
+    // Scroll doux vers le haut de l'outil
+    var root = document.getElementById('ams2-root');
+    if (root) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── BARRE DE PROGRESSION ─────────────────────────────────
+  function renderProgress() {
+    var bar = document.getElementById('ams2-progress');
+    if (!bar) return;
+    var html = '';
+    for (var i = 0; i < STEPS.length; i++) {
+      var n = i + 1;
+      var isDone   = state.maxReached > n;
+      var isActive = state.step === n;
+      var canClick = state.maxReached >= n && !isActive;
+
+      var stateClass = isDone ? ' done' : (isActive ? ' active' : '');
+      var clickable  = canClick ? ' clickable tabindex="0" role="button" aria-label="Aller à l\'étape ' + n + ' \u2014 ' + STEPS[i].label + '" data-ams2-step="' + n + '"' : '';
+
+      html += '<div class="ams2-step-item' + stateClass + '"' + clickable + '>';
+      html += '<div class="ams2-step-circle">';
+      if (isDone) {
+        // Le \2713 est injecté via CSS ::after — on n'affiche rien ici
+        html += '<span class="ams2-step-num" aria-hidden="true">' + n + '</span>';
+      } else {
+        html += '<span class="ams2-step-num">' + n + '</span>';
+      }
+      html += '</div>';
+      html += '<div class="ams2-step-label">' + STEPS[i].label + '</div>';
+      html += '</div>';
+
+      if (n < STEPS.length) {
+        var lineClass = isDone ? ' done' : '';
+        html += '<div class="ams2-step-line' + lineClass + '" aria-hidden="true"></div>';
+      }
+    }
+    bar.innerHTML = html;
+  }
+
+  // ── VALIDATION ──────────────────────────────────────────
+  function getVal(id) {
+    var el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
+  function clearErrors() {
+    ['ams2-fsh','ams2-lh','ams2-prl','ams2-tsh','ams2-hirsutisme'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('ams2-error');
+    });
+    var banner = document.getElementById('ams2-error-banner');
+    if (banner) banner.classList.remove('visible');
+  }
+
+  function validate() {
+    clearErrors();
+    var fields = ['ams2-fsh','ams2-lh','ams2-prl','ams2-tsh','ams2-hirsutisme'];
+    var hasError = false;
+    fields.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var val = el.value.trim();
+      if (!val) {
+        el.classList.add('ams2-error');
+        hasError = true;
+      }
+    });
+    if (hasError) {
+      var banner = document.getElementById('ams2-error-banner');
+      if (banner) banner.classList.add('visible');
+    }
+    return !hasError;
+  }
+
+  // ── ANALYSE CLINIQUE ────────────────────────────────────
+  function analyze() {
+    if (!validate()) return;
+
+    var fsh    = parseFloat(getVal('ams2-fsh'));
+    var lh     = parseFloat(getVal('ams2-lh'));
+    var prl    = parseFloat(getVal('ams2-prl'));
+    var tsh    = parseFloat(getVal('ams2-tsh'));
+    var hirs   = getVal('ams2-hirsutisme').toLowerCase(); // normalize casse (Elementor-safe)
+    var ohpEl  = document.getElementById('ams2-ohp');
+    var ohp    = ohpEl && ohpEl.value.trim() !== '' ? parseFloat(ohpEl.value) : NaN;
+    var cush   = document.getElementById('ams2-cushing');
+    var cushing = cush ? cush.checked : false;
+
+    var html = '';
+    var diagnosesMade = [];
+
+    // ─────────────────────────────────────────────────────
+    // 1. DYSTHYROÏDIE — priorité haute car cause fréquente
+    //    d'hyperprolactinémie secondaire et d'aménorrhée
+    // ─────────────────────────────────────────────────────
+    if (!isNaN(tsh) && (tsh < 0.4 || tsh > 4.0)) {
+      var thyroLabel = tsh > 4.0 ? 'Hypothyroïdie' : 'Hyperthyroïdie';
+      var thyroDir   = tsh > 4.0 ? 'TSH élevée (\u2191\u2191)' : 'TSH basse (\u2193\u2193)';
+      var thyroNote  = tsh > 4.0
+        ? "L'hypothyroïdie entraîne une hyperprolactinémie secondaire (TRH \u2191 \u2192 PRL \u2191). Corriger l'hypothyroïdie normalise souvent la prolactine et restaure les cycles."
+        : "L'hyperthyroïdie peut provoquer une aménorrhée par dysrégulation gonadotrope.";
+      html += diagBox(
+        thyroLabel + ' — Cause endocrinienne',
+        'Cause identifiée',
+        '',
+        [{ label: 'TSH', val: tsh + ' mUI/L', info: thyroDir }],
+        thyroNote,
+        [
+          'T4 libre, T3 libre',
+          'Ac anti-TPO, Ac anti-TG (thyroïdite de Hashimoto)',
+          'Échographie thyroïdienne',
+          tsh > 4.0 ? 'Lévothyroxine : correction de l\'hypothyroïdie' : 'Avis endocrinologique pour prise en charge hyperthyroïdie'
+        ],
+        tsh > 4.0
+          ? ['Lévothyroxine — réévaluation à 3 mois', 'Contrôle TSH + prolactine après normalisation thyroïdienne']
+          : ['Antithyroïdiens de synthèse ou radioiode selon bilan', 'Réévaluation cycles à distance']
+      );
+      diagnosesMade.push('thyroide');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 2. INSUFFISANCE OVARIENNE PRÉMATURÉE / MÉNOPAUSE
+    // ─────────────────────────────────────────────────────
+    if (!isNaN(fsh) && !isNaN(lh) && fsh > 20 && lh > 20) {
+      html += diagBox(
+        'Insuffisance ovarienne — Hypergonadisme hypogonadotrope',
+        'Priorité diagnostique',
+        'teal',
+        [
+          { label: 'FSH', val: fsh + ' UI/L', info: '\u2191\u2191' },
+          { label: 'LH', val: lh + ' UI/L', info: '\u2191\u2191' }
+        ],
+        'FSH > 20 UI/L confirmée sur 2 prélèvements à 4 semaines d\'intervalle. Selon l\'âge : insuffisance ovarienne prématurée (< 40 ans) ou ménopause (\u2265 40 ans).',
+        [
+          'Œstradiol (attendu < 20 pg/mL)',
+          'AMH (effondré)',
+          'Caryotype si âge < 30 ans (syndrome de Turner 45,X)',
+          'Auto-immunité : Ac anti-ovaires, bilan thyroïdien, surrénales',
+          'Échographie pelvienne : volume ovarien, follicules'
+        ],
+        [
+          'THS (œstrogènes + progestatifs) jusqu\u2019\u00e0 l\u2019\u00e2ge de la m\u00e9nopause naturelle (51 ans)',
+          'Don d\u2019ovocytes si d\u00e9sir de grossesse',
+          'Pr\u00e9vention ost\u00e9oporose et risque cardio-vasculaire',
+          'Soutien psychologique'
+        ]
+      );
+      diagnosesMade.push('iop');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 3. HYPERPROLACTINÉMIE
+    //    Ne pas afficher si TSH anormale déjà traité
+    //    (l'hypothyroïdie explique la PRL élevée)
+    // ─────────────────────────────────────────────────────
+    if (!isNaN(prl) && prl > 25 && !diagnosesMade.includes('thyroide')) {
+      var prolType = '';
+      if (prl > 200) {
+        prolType = 'Macroprolactinome probable (> 10 mm) — Prolactine > 200 ng/mL';
+      } else if (prl >= 50) {
+        prolType = 'Microprolactinome probable (< 10 mm) — Prolactine 50 – 200 ng/mL';
+      } else {
+        prolType = 'Hyperprolact\u00e9n\u00e9mie mod\u00e9r\u00e9e (25 – 50 ng/mL) — Rechercher cause m\u00e9dicamenteuse avant imagerie';
+      }
+      html += diagBox(
+        'Hyperprolactin\u00e9mie',
+        'Bilan compl\u00e9mentaire requis',
+        '',
+        [{ label: 'Prolactine', val: prl + ' ng/mL', info: '\u2191 (N < 25)' }],
+        prolType,
+        [
+          'IRM hypophysaire avec injection de gadolinium (syst\u00e9matique)',
+          'Vérification des médicaments hyperprolactinémiants (à éliminer d\'abord)',
+          'Bilan ophtalmologique si macroadénome (champ visuel)',
+          'Macroprolactinémie (PEG precipitation) si PRL légèrement élevée sans symptôme'
+        ],
+        [
+          'Agonistes dopaminergiques : Cabergoline 0,25 mg 2x/semaine (1re intention)',
+          'Surveillance IRM à 3 mois puis annuelle',
+          'Neurochirurgie si résistance ou macroadénome expansif',
+          'Arrêt médicament incriminé si cause iatrogène'
+        ]
+      );
+      diagnosesMade.push('prl');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 3b. SYNDROME DE CUSHING (hypercorticisme)
+    //     Coché cliniquement + FSH/LH basses compatibles
+    // ─────────────────────────────────────────────────────
+    if (cushing) {
+      html += diagBox(
+        'Hypercorticisme — Syndrome de Cushing',
+        'Orientation prioritaire',
+        '',
+        [{ label: 'Signes cliniques', val: 'Présents', info: 'Coch\u00e9' }],
+        'L\'hypercorticisme entraîne une suppression de l\'axe gonadotrope (inhibition de la GnRH) responsable d\'une aménorrhée par hypogonadisme hypogonadotrope fonctionnel. À éliminer avant tout diagnostic de SOPK ou d\'aménorrhée hypothalamique.',
+        [
+          'Cortisolurie des 24h (2 mesures) — seuil > 3× la normale',
+          'Test de freinage minute à la dexaméthasone (1 mg à minuit) : cortisol 8h < 1,8 µg/dL = normal',
+          'Cortisol salivaire nocturne (23h-minuit) × 2',
+          'Si freinage positif : IRM hypophysaire (maladie de Cushing) + TDM surrénalien',
+          'ACTH plasmatique : élevée = origine centrale, effondrée = adénome surrénalien',
+          'Avis endocrinologique spécialisé systématique'
+        ],
+        [
+          'Traitement étiologique : chirurgie (adénome hypophysaire, surrénalien) ou radiothérapie',
+          'Médicaments freinateurs : métyrapone, kétoconazole, mitotane (en attente chirurgie)',
+          'Restauration des cycles après traitement du Cushing dans la majorité des cas'
+        ]
+      );
+      diagnosesMade.push('cushing');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 3c. HCS À RÉVÉLATION TARDIVE (17-OHP élevée)
+    //     Seuil > 2 ng/mL en phase folliculaire basale
+    //     Diagnostic différentiel majeur du SOPK
+    // ─────────────────────────────────────────────────────
+    if (!isNaN(ohp) && ohp >= 2) {
+      var hcsNote, hcsNiveau;
+      if (ohp > 10) {
+        hcsNiveau = 'Forme classique probable';
+        hcsNote = '17-OHP très élevée (' + ohp + ' ng/mL). Évocatrice d\'une hyperplasie congénitale des surrénales forme classique (déficit en 21-hydroxylase). Confirmation par génotypage CYP21A2.';
+      } else {
+        hcsNiveau = 'Forme tardive (NCAH) — Test Synacthène requis';
+        hcsNote = '17-OHP basale entre 2 et 10 ng/mL (' + ohp + ' ng/mL). Suspicion de forme non classique (tardive) d\'HCS. Le test au Synacthène® 250 µg est indispensable : 17-OHP stimulée > 10 ng/mL confirme le diagnostic. Mimétisme clinique avec le SOPK.';
+      }
+      html += diagBox(
+        'Hyperplasie Cong\u00e9nitale des Surr\u00e9nales — Forme Tardive (HCS-FT)',
+        hcsNiveau,
+        'amber',
+        [{ label: '17-OHP basale', val: ohp + ' ng/mL', info: ohp > 10 ? '\u2191\u2191\u2191' : '\u2191 (> 2)' }],
+        hcsNote,
+        [
+          'Test au Synacthène\u00ae 250 \u00b5g IV : 17-OHP à T0 et T60 min (seuil diagnostic > 10 ng/mL)',
+          'G\u00e9notypage CYP21A2 (si test Synacth\u00e8ne positif)',
+          'Bilan androg\u00e8nes : testost\u00e9rone totale, SDHA, \u039445-androst\u00e8nedione',
+          'Cortisol basal et apr\u00e8s Synacth\u00e8ne',
+          'Enqu\u00eate familiale (parents, fr\u00e8res et s\u0153urs)',
+          '\u00c9chographie surr\u00e9nalienne si suspi\u00e7ion de l\u00e9sion'
+        ],
+        [
+          'Hydrocortisone \u00e0 faible dose (si symptomatique ou d\u00e9sir de grossesse) : 10-20 mg/j',
+          'Fludrocortisone si d\u00e9ficit en min\u00e9ralocortico\u00efde associ\u00e9',
+          'Antiandrog\u00e8nes si hirsutisme g\u00eanant (acide acétique de cyprotérone, spironolactone)',
+          'Suivi endocrinologique sp\u00e9cialis\u00e9 \u00e0 vie',
+          'Conseil g\u00e9n\u00e9tique si projet de grossesse'
+        ]
+      );
+      diagnosesMade.push('hcs');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 4. SOPK — critères de Rotterdam
+    //    Rapport LH/FSH > 1,5 + FSH dans la zone normale
+    //    + (hirsutisme OU LH/FSH élevé)
+    //    Ne pas afficher si HCS déjà confirmée (17-OHP > 10)
+    // ─────────────────────────────────────────────────────
+    if (!isNaN(fsh) && !isNaN(lh) && fsh >= 2 && fsh <= 12 && lh > 0) {
+      var ratio = lh / fsh;
+      // Seuil LH/FSH > 1 avec au moins un critère clinique, ou > 2 seul
+      var sopkSuspicion = (ratio > 2) || (ratio > 1 && hirs === 'oui');
+      // Ne pas afficher si HCS classique confirmée (17-OHP > 10)
+      var hcsClassique = !isNaN(ohp) && ohp > 10;
+      if (sopkSuspicion && !diagnosesMade.includes('iop') && !hcsClassique) {
+        // Note sur 17-OHP si non dosée ou intermédiaire
+        var ohpNote17 = isNaN(ohp)
+          ? '17-OHP basale non disponible — \u00e0 doser imp\u00e9rativement pour exclure une HCS forme tardive'
+          : (ohp < 2 ? '17-OHP basale normale (' + ohp + ' ng/mL) — HCS peu probable' : '17-OHP interm\u00e9diaire (' + ohp + ' ng/mL) — Test Synacth\u00e8ne requis pour exclure HCS');
+        html += diagBox(
+          'SOPK \u2014 Syndrome des Ovaires Polykystiques',
+          'Crit\u00e8res de Rotterdam (2/3)',
+          '',
+          [
+            { label: 'LH/FSH', val: ratio.toFixed(2), info: ratio > 2 ? '\u2191\u2191' : '\u2191' },
+            { label: 'FSH', val: fsh + ' UI/L', info: 'normale' },
+            { label: 'LH', val: lh + ' UI/L', info: '\u2191' }
+          ],
+          'Diagnostic par crit\u00e8res de Rotterdam : 2 crit\u00e8res sur 3 requis \u2014 (1) oligo/anovulation, (2) hyperandrog\u00e9nie clinique ou biologique, (3) ovaires polykystiques \u00e0 l\u2019\u00e9chographie. Diagnostic d\u2019exclusion : \u00e9liminer HCS, hyperprolactin\u00e9mie, dysthyro\u00efdie (d\u00e9j\u00e0 v\u00e9rifi\u00e9s).',
+          [
+            ohpNote17,
+            '\u00c9chographie pelvienne : \u2265 12 follicules 2\u20139 mm ou volume ovarien > 10 cm\u00b3',
+            'Bilan androg\u00e8nes : testost\u00e9rone totale, SDHA, \u03944-androst\u00e8nedione',
+            'AMH (souvent \u00e9lev\u00e9e, > 5 ng/mL)',
+            'Bilan m\u00e9tabolique : glyc\u00e9mie \u00e0 jeun, insuline, HOMA-IR, bilan lipidique',
+            hirs === 'oui' ? 'Score de Ferriman-Gallwey complet' : 'Rechercher hyperandrog\u00e9nie biologique m\u00eame en l\u2019absence de signe clinique'
+          ],
+          [
+            'Mesures hygi\u00e9no-di\u00e9t\u00e9tiques \u2014 perte de poids si IMC > 25 (restaure l\u2019ovulation dans 50 % des cas)',
+            'Metformine 500 mg \u2013 1500 mg/j si r\u00e9sistance \u00e0 l\u2019insuline',
+            'Contraception \u0153stroprogestative ou progestatif s\u00e9quentiel (si pas de d\u00e9sir de grossesse)',
+            hirs === 'oui' ? 'Antiandrog\u00e8nes : ac\u00e9tate de cyprotérone, spironolactone (hirsutisme s\u00e9v\u00e8re)' : '',
+            'Induction de l\u2019ovulation si d\u00e9sir de grossesse : citrate de clomif\u00e8ne, gonadotrophines',
+            'Voir outil d\u00e9taill\u00e9 : SOPK \u2014 Crit\u00e8res de Rotterdam'
+          ].filter(Boolean)
+        );
+        diagnosesMade.push('sopk');
+      }
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 5. HYPOGONADISME HYPOGONADOTROPE
+    //    FSH basse + LH basse + prolactine normale + TSH normale
+    // ─────────────────────────────────────────────────────
+    var fshBasse = !isNaN(fsh) && fsh < 5;
+    var lhBasse  = !isNaN(lh) && lh < 5;
+    var prlNorm  = !isNaN(prl) && prl <= 25;
+    var tshNorm  = !isNaN(tsh) && tsh >= 0.4 && tsh <= 4.0;
+
+    if (fshBasse && lhBasse && prlNorm && tshNorm
+        && !diagnosesMade.includes('iop')
+        && !diagnosesMade.includes('sopk')) {
+      html += diagBox(
+        'Hypogonadisme Hypogonadotrope',
+        'Origine centrale',
+        '',
+        [
+          { label: 'FSH', val: fsh + ' UI/L', info: '\u2193' },
+          { label: 'LH', val: lh + ' UI/L', info: '\u2193' },
+          { label: 'PRL', val: prl + ' ng/mL', info: 'normale' }
+        ],
+        'FSH et LH basses (insuffisance de la commande hypothalamo-hypophysaire). Causes fonctionnelles dans 90 % des cas (aménorrhée hypothalamique). Éliminer une cause organique.',
+        [
+          'IRM cérébrale avec coupes hypophysaires (tumeur, infiltrat)',
+          'Test à la LHRH (réponse FSH/LH)',
+          'Bilan nutritionnel : albumine, bilan martial, vitamines',
+          'Évaluation psychiatrique si suspicion TCA',
+          'Anosmie associée \u2192 syndrome de Kallmann (génétique)',
+          'ATCD accouchement hémorragique + déficits antéhypophysaires multiples \u2192 syndrome de Sheehan'
+        ],
+        [
+          'Causes fonctionnelles (stress, anorexie, sport) : corriger les facteurs causaux en priorité',
+          '\u0152stro-progestatifs si pas de désir de grossesse',
+          'Induction de l\u2019ovulation par gonadotrophines (FSH/hMG) ou pompe à GnRH si désir de grossesse',
+          'IRM si cause organique suspectée ou si aucun facteur fonctionnel retrouvé',
+          'Traitement substitutif si panhypopituitarisme (corticoïdes, hormones thyroïdiennes, GH)'
+        ]
+      );
+      diagnosesMade.push('hypo-hypo');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 6. CAUSE UTÉRINE — en dernier (bilan hormonal normal)
+    //    Uniquement si aucun autre diagnostic retenu
+    // ─────────────────────────────────────────────────────
+    var bilNorm = !isNaN(fsh) && fsh >= 3 && fsh <= 10
+               && !isNaN(lh) && lh >= 2 && lh <= 10
+               && !isNaN(prl) && prl <= 25
+               && !isNaN(tsh) && tsh >= 0.4 && tsh <= 4.0
+               && hirs === 'non';
+
+    if (bilNorm && diagnosesMade.length === 0) {
+      html += diagBox(
+        'Cause Utérine — à explorer en priorité',
+        'Bilan hormonal normal',
+        'amber',
+        [],
+        'Bilan hormonal entièrement normal. En l\'absence de toute anomalie endocrinienne, une cause utérine (synéchies, sténose cervicale) doit être recherchée systématiquement, notamment en cas d\'ATCD de curetage ou d\'endométrite.',
+        [
+          'Test aux progestatifs : Médrogestone 10 mg/j × 10 j',
+          '\u2192 Si hémorragie de privation : imprégnation œstrogénique présente (synéchie probable)',
+          '\u2192 Si pas de saignement : hystéroscopie diagnostique',
+          'Hystéroscopie diagnostique +++ (gold standard)',
+          'Échographie 3D ou hystérosonographie',
+          'Bilan infectieux : prélèvement endocervical, sérologie tuberculose (IDR, IGRA)'
+        ],
+        [
+          'Hystéroscopie opératoire : section des synéchies (syndrome d\u2019Asherman)',
+          '\u0152strogènes à forte dose 3 mois post-opératoire',
+          'Pose de dispositif intra-utérin transitoire ou sonde de Foley (prévention re-synéchies)',
+          'Traitement antituberculeux si tuberculose génitale confirmée'
+        ]
+      );
+      diagnosesMade.push('uterin');
+    }
+
+    // ─────────────────────────────────────────────────────
+    // 7. Aucune orientation — valeurs ambiguës
+    // ─────────────────────────────────────────────────────
+    if (diagnosesMade.length === 0) {
+      html = '<div class="ams2-infobox amber">'
+           + '<div class="ams2-infobox-title">Orientation non déterminée</div>'
+           + '<p>Les valeurs saisies ne permettent pas d\'orienter vers une étiologie typique. '
+           + 'Veuillez vérifier la saisie ou compléter le bilan par : '
+           + '<strong>œstradiol, SDHEA, testostérone totale, \u03944-androstènedione, AMH, échographie utéro-ovarienne.</strong></p>'
+           + '</div>';
+    }
+
+    document.getElementById('ams2-results').innerHTML = html;
+    // Afficher la barre d'actions export
+    var actBar = document.getElementById('ams2-actions-bar');
+    if (actBar) actBar.style.display = 'flex';
+    // Préparer la zone d'impression
+    var printZone = document.getElementById('ams2-print-zone');
+    if (printZone) printZone.innerHTML = buildPrintContent(fsh, lh, prl, tsh, ohp, hirs, cushing, html);
+    // Forcer maxReached avant d'appeler goToStep — sinon la garde bloque
+    state.maxReached = 3;
+    goToStep(3);
+  }
+
+  // ── CONSTRUCTION CONTENU IMPRESSION ─────────────────────
+  function buildPrintContent(fsh, lh, prl, tsh, ohp, hirs, cushing, diagHtml) {
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+    var vals = [
+      'FSH : ' + (isNaN(fsh) ? 'nd' : fsh + ' UI/L'),
+      'LH : '  + (isNaN(lh)  ? 'nd' : lh  + ' UI/L'),
+      'Prolactine : ' + (isNaN(prl) ? 'nd' : prl + ' ng/mL'),
+      'TSH : ' + (isNaN(tsh) ? 'nd' : tsh + ' mUI/L'),
+      !isNaN(ohp) ? '17-OHP : ' + ohp + ' ng/mL' : null,
+      hirs === 'oui' ? 'Hyperandrog\u00e9nie clinique : Oui' : 'Hyperandrog\u00e9nie clinique : Non',
+      cushing ? 'Signes de Cushing : Oui' : null
+    ].filter(Boolean);
+    return '<div style="font-family:Georgia,serif;padding:20px;">'
+      + '<h2 style="color:#1a3560;border-bottom:2px solid #1a3560;padding-bottom:8px;">Am\u00e9norrh\u00e9e Secondaire \u2014 Orientation diagnostique</h2>'
+      + '<p style="font-size:12px;color:#64748b;">Dr. Kara-Zaitri M.A. \u2014 Gyn\u00e9cologie-Obst\u00e9trique, Tlemcen \u2014 ' + dateStr + '</p>'
+      + '<h3 style="color:#1a3560;margin-top:16px;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;">Valeurs saisies</h3>'
+      + '<p style="font-size:13px;line-height:1.8;">' + vals.join(' \u2014 ') + '</p>'
+      + '<h3 style="color:#1a3560;margin-top:16px;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;">R\u00e9sultats</h3>'
+      + diagHtml
+      + '<p style="font-size:10px;color:#94a3b8;margin-top:20px;border-top:1px solid #e2e8f0;padding-top:10px;">'
+      + 'Outil d\u2019aide \u00e0 la d\u00e9cision clinique. Ne se substitue pas au jugement m\u00e9dical. R\u00e9f. : CNGOF, Endocrine Society 2017, ESHRE PCOS 2023.</p>'
+      + '</div>';
+  }
+
+  // ── IMPRIMER ─────────────────────────────────────────────
+  function printResults() {
+    var pz = document.getElementById('ams2-print-zone');
+    if (!pz) return;
+    pz.style.display = 'block';
+    window.print();
+    pz.style.display = 'none';
+  }
+
+  // ── COPIER POUR LE DOSSIER ───────────────────────────────
+  function copyResults() {
+    var results = document.getElementById('ams2-results');
+    if (!results) return;
+
+    // Construire texte brut lisible
+    var lines = [];
+    var date = new Date().toLocaleDateString('fr-FR');
+    lines.push('=== AM\u00c9NORR H\u00c9E SECONDAIRE \u2014 Orientation diagnostique ===');
+    lines.push('Dr. Kara-Zaitri M.A. \u2014 ' + date);
+    lines.push('');
+
+    var boxes = results.querySelectorAll('.ams2-diag-box');
+    boxes.forEach(function(box) {
+      var header = box.querySelector('.ams2-diag-header');
+      if (header) lines.push('\u25ba ' + header.textContent.replace(/\s+/g,' ').trim());
+      var items = box.querySelectorAll('.ams2-diag-list li, .ams2-pec-list li');
+      items.forEach(function(li) { lines.push('  \u2022 ' + li.textContent.replace(/\s+/g,' ').trim()); });
+      lines.push('');
+    });
+    lines.push('--- Outil d\u2019aide \u00e0 la d\u00e9cision. Ne remplace pas l\u2019examen clinique. ---');
+
+    var text = lines.join('\n');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        showCopyToast();
+      }).catch(function() {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try { document.execCommand('copy'); showCopyToast(); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  function showCopyToast() {
+    var toast = document.getElementById('ams2-copy-toast');
+    if (!toast) return;
+    toast.classList.add('visible');
+    setTimeout(function() { toast.classList.remove('visible'); }, 3000);
+  }
+
+  // ── CONSTRUCTEUR DE BOÎTE DIAGNOSTIC ────────────────────
+  function diagBox(titre, badge, theme, valeurs, note, examens, traitements) {
+    var headerClass = 'ams2-diag-header' + (theme ? ' ' + theme : '');
+
+    var valsHtml = '';
+    if (valeurs.length) {
+      valsHtml = '<div class="ams2-diag-values">';
+      valeurs.forEach(function(v) {
+        valsHtml += '<div class="ams2-diag-val"><span>' + v.label + '</span><strong>' + v.val + '</strong><em style="font-size:11px;color:var(--ams2-slate)">' + (v.info || '') + '</em></div>';
+      });
+      valsHtml += '</div>';
+    }
+
+    var examHtml = '';
+    if (examens.length) {
+      examHtml = '<div class="ams2-diag-section-title">Bilan compl\u00e9mentaire recommand\u00e9</div><ul class="ams2-diag-list">';
+      examens.forEach(function(e) { examHtml += '<li>' + e + '</li>'; });
+      examHtml += '</ul>';
+    }
+
+    var traHtml = '';
+    if (traitements.length) {
+      traHtml = '<div class="ams2-pec-box"><div class="ams2-pec-title">Prise en charge</div><ul class="ams2-pec-list">';
+      traitements.forEach(function(t) { traHtml += '<li>' + t + '</li>'; });
+      traHtml += '</ul></div>';
+    }
+
+    return '<div class="ams2-diag-box">'
+      + '<div class="' + headerClass + '">'
+      + titre
+      + (badge ? '<span class="ams2-diag-badge">' + badge + '</span>' : '')
+      + '</div>'
+      + '<div class="ams2-diag-body">'
+      + valsHtml
+      + (note ? '<p style="font-family:system-ui,sans-serif;font-size:13.5px;color:var(--ams2-text-muted);margin-bottom:4px;">' + note + '</p>' : '')
+      + examHtml
+      + traHtml
+      + '</div>'
+      + '</div>';
+  }
+
+  // ── RESET ────────────────────────────────────────────────
+  function reset() {
+    ['ams2-fsh','ams2-lh','ams2-prl','ams2-tsh','ams2-ohp'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.value = ''; el.classList.remove('ams2-error'); }
+    });
+    var sel = document.getElementById('ams2-hirsutisme');
+    if (sel) { sel.value = ''; sel.classList.remove('ams2-error'); }
+    var cush = document.getElementById('ams2-cushing');
+    if (cush) cush.checked = false;
+    var cl = document.getElementById('ams2-cushing-label');
+    if (cl) cl.classList.remove('checked');
+    var results = document.getElementById('ams2-results');
+    if (results) results.innerHTML = '';
+    var banner = document.getElementById('ams2-error-banner');
+    if (banner) banner.classList.remove('visible');
+    var actBar = document.getElementById('ams2-actions-bar');
+    if (actBar) actBar.style.display = 'none';
+    var toast = document.getElementById('ams2-copy-toast');
+    if (toast) toast.classList.remove('visible');
+    var pz = document.getElementById('ams2-print-zone');
+    if (pz) { pz.innerHTML = ''; pz.style.display = 'none'; }
+    state.step = 1;
+    state.maxReached = 1;
+    goToStep(1);
+  }
+
+  // ── INIT & LIAISONS D'ÉVÉNEMENTS ────────────────────────
+  function bindEvents() {
+    var btnStep1  = document.getElementById('ams2-btn-step1');
+    var btnAnalyze= document.getElementById('ams2-btn-analyze');
+    var btnBack1  = document.getElementById('ams2-btn-back1');
+    var btnBack2  = document.getElementById('ams2-btn-back2');
+    var btnReset  = document.getElementById('ams2-btn-reset');
+    var btnPrint  = document.getElementById('ams2-btn-print');
+    var btnCopy   = document.getElementById('ams2-btn-copy');
+    var bar       = document.getElementById('ams2-progress');
+    var cushLabel = document.getElementById('ams2-cushing-label');
+    var cushCb    = document.getElementById('ams2-cushing');
+
+    if (btnStep1)   btnStep1.addEventListener('click',   function(){ goToStep(2); });
+    if (btnAnalyze) btnAnalyze.addEventListener('click', function(){ analyze(); });
+    if (btnBack1)   btnBack1.addEventListener('click',   function(){ goToStep(1); });
+    if (btnBack2)   btnBack2.addEventListener('click',   function(){ goToStep(2); });
+    if (btnReset)   btnReset.addEventListener('click',   function(){ reset(); });
+    if (btnPrint)   btnPrint.addEventListener('click',   function(){ printResults(); });
+    if (btnCopy)    btnCopy.addEventListener('click',    function(){ copyResults(); });
+
+    // Feedback visuel sur le label checkbox
+    if (cushCb && cushLabel) {
+      cushCb.addEventListener('change', function() {
+        if (this.checked) { cushLabel.classList.add('checked'); }
+        else { cushLabel.classList.remove('checked'); }
+      });
+    }
+
+    // Délégation sur la barre de progression (éléments générés dynamiquement)
+    if (bar) {
+      bar.addEventListener('click', function(e) {
+        var el = e.target.closest('[data-ams2-step]');
+        if (el) goToStep(parseInt(el.getAttribute('data-ams2-step'), 10));
+      });
+      bar.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          var el = e.target.closest('[data-ams2-step]');
+          if (el) goToStep(parseInt(el.getAttribute('data-ams2-step'), 10));
+        }
+      });
+    }
+  }
+
+  renderProgress();
+  bindEvents();
+
+  // Exposition publique (compatibilité si jamais utilisé par d'autres scripts)
+  window.AMS2 = { goToStep: goToStep, analyze: analyze, reset: reset };
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur d'ovulation — Dr KARA-ZAITRI M.A</title>
+    <style>
+        /* ============================================================
+           BLINDAGE ELEMENTOR
+           ============================================================ */
+        .ovul-wrap {
+            all: initial;
+            display: block;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            color: #2D3748;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #F7FAFC;
+        }
+
+        .ovul-wrap *, .ovul-wrap *::before, .ovul-wrap *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Variables */
+        .ovul-wrap {
+            --ovul-primary: #4A6FA5;
+    --ovul-primary-dark: #2C4A7C;
+    --ovul-fertility: #FFEF9D;      /* Jaune clair */
+    --ovul-ovulation: #FFD700;      /* Or/Jaune doré */
+    --ovul-period: #FF0000;         /* Rouge */
+    --ovul-today: #A0CDFC;          /* Bleu clair */
+            --ovul-bg: #F7FAFC;
+            --ovul-card: #FFFFFF;
+            --ovul-border: #CBD5E0;
+            --ovul-text: #2D3748;
+            --ovul-text-light: #718096;
+            --ovul-radius: 10px;
+            --ovul-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        /* Container */
+        .ovul-wrap .ovul-container {
+            background: var(--ovul-card);
+            border-radius: var(--ovul-radius);
+            box-shadow: var(--ovul-shadow);
+            overflow: hidden;
+            border: 1px solid var(--ovul-border);
+        }
+
+        /* Header */
+        .ovul-wrap .ovul-header {
+            background: linear-gradient(135deg, var(--ovul-primary) 0%, var(--ovul-primary-dark) 100%);
+            color: white;
+            padding: 20px 28px;
+            text-align: center;
+        }
+
+        .ovul-wrap .ovul-header h1 {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .ovul-wrap .ovul-header p {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            opacity: 0.95;
+        }
+
+        /* Disclaimer (compact - à la fin) */
+        .ovul-wrap .ovul-legal {
+    width: 100% !important;       /* Force la pleine largeur */
+    max-width: 100% !important;   /* Supprime toute limite de largeur */
+    margin: 20px 0 0 0 !important;
+    padding: 12px 16px;
+    background: #FFFBEB;
+    border-left: 4px solid #D69E2E;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #744210;
+    line-height: 1.6;
+    text-align: left;
+    white-space: normal;          /* Autorise le retour à la ligne naturel */
+    word-wrap: break-word;        /* Coupe les mots trop longs si nécessaire */
+}
+
+/* Empêche les balises internes de créer des sauts de ligne */
+.ovul-wrap .ovul-legal p,
+.ovul-wrap .ovul-legal strong,
+.ovul-wrap .ovul-legal span {
+    display: inline !important;   /* Force l'affichage en ligne */
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+
+/* La source peut rester en bloc pour être sous le texte principal */
+.ovul-wrap .ovul-legal p.ovul-source {
+    display: block !important;
+    margin-top: 8px !important;
+}
+        
+          .ovul-wrap .ovul-legal strong {
+            color: #975A16;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* Formulaire */
+        .ovul-wrap .ovul-form {
+            padding: 20px 28px 24px;
+        }
+
+        /* Inputs côte à côte */
+        .ovul-wrap .ovul-inputs-row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .ovul-wrap .ovul-inputs-row > div {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .ovul-wrap .ovul-input-group { margin-bottom: 0 !important; }
+        .ovul-wrap .ovul-input-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--ovul-text);
+            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+            margin-bottom: 6px;
+        }
+
+        .ovul-wrap .ovul-input-group input[type="date"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--ovul-border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            color: var(--ovul-text);
+        }
+
+        .ovul-wrap .ovul-input-group input[type="date"]:focus {
+            outline: none;
+            border-color: var(--ovul-primary);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.15);
+        }
+
+        /* Slider */
+        .ovul-wrap .ovul-slider-container {
+            margin: 0 !important;
+            padding: 10px 16px 14px !important;
+            background: #F8FAFC;
+            border-radius: 8px;
+            border-left: 4px solid var(--ovul-primary);
+        }
+
+        .ovul-wrap .ovul-slider-label {
+            font-weight: 600;
+            color: var(--ovul-text);
+            margin-bottom: 8px;
+            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+        }
+
+        .ovul-wrap .ovul-slider-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ovul-wrap .ovul-slider {
+            flex: 1;
+            accent-color: var(--ovul-primary);
+            cursor: pointer;
+            height: 6px;
+        }
+
+        .ovul-wrap .ovul-slider-val {
+            font-weight: 700;
+            color: var(--ovul-primary);
+            font-size: 1.1em;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .ovul-wrap .ovul-slider-hint {
+            font-size: 0.85em;
+            color: var(--ovul-text-light);
+            margin-top: 6px;
+        }
+
+        /* Bouton */
+        .ovul-wrap .ovul-btn {
+            width: 100%;
+            max-width: 320px;
+            margin: 20px auto 0;
+            display: block;
+            background: linear-gradient(135deg, var(--ovul-primary) 0%, var(--ovul-primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: clamp(0.95rem, 3vw, 1rem);
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(74, 111, 165, 0.25);
+        }
+
+        .ovul-wrap .ovul-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 165, 0.35);
+        }
+
+        /* Calendrier */
+        .ovul-wrap .ovul-calendar-container {
+            padding: 20px 28px 24px;
+        }
+
+        .ovul-wrap .ovul-calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .ovul-wrap .ovul-calendar-nav .ovul-month {
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+            font-weight: 700;
+            color: var(--ovul-text);
+        }
+
+        .ovul-wrap .ovul-nav-btn {
+            background: var(--ovul-primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .ovul-wrap .ovul-nav-btn:hover {
+            background: var(--ovul-primary-dark);
+        }
+
+        .ovul-wrap .ovul-calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-bottom: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .ovul-wrap .ovul-day-name {
+            font-weight: 700;
+            color: var(--ovul-text-light);
+            text-align: center;
+            font-size: 0.85em;
+            padding: 4px 0;
+        }
+
+        .ovul-wrap .ovul-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #EDF2F7;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            color: var(--ovul-text);
+            max-width: 60px;
+            margin: 0 auto;
+            width: 60%;
+        }
+
+     .ovul-wrap .ovul-day.period {
+    background: var(--ovul-period);
+    color: white;
+}
+
+       .ovul-wrap .ovul-day.fertility {
+    background: var(--ovul-fertility); /* Jaune clair */
+    color: #000;
+    font-weight: 600;
+}
+
+    .ovul-wrap .ovul-day.ovulation {
+    background: var(--ovul-ovulation); /* Or/Jaune doré */
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
+}
+
+        .ovul-wrap .ovul-day.next-period {
+            border: 3px solid var(--ovul-period);
+            background: white;
+        }
+
+  .ovul-wrap .ovul-day.today {
+    border: 3px solid var(--ovul-today);
+}
+
+        /* Légende */
+        .ovul-wrap .ovul-legend {
+            padding: 16px 20px;
+            background: #F8FAFC;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .ovul-wrap .ovul-legend h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .ovul-wrap .ovul-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .ovul-wrap .ovul-legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .ovul-wrap .ovul-legend-color.period { background: var(--ovul-period); }
+        .ovul-wrap .ovul-legend-color.fertility { background: var(--ovul-fertility); }
+        .ovul-wrap .ovul-legend-color.ovulation { background: var(--ovul-ovulation); }
+        .ovul-wrap .ovul-legend-color.today { border: 3px solid var(--ovul-today); background: transparent; }
+        .ovul-wrap .ovul-legend-color.next-period { border: 3px solid var(--ovul-period); background: transparent; }
+
+        /* Toast */
+        .ovul-wrap .ovul-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #2D3748;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 99999;
+            pointer-events: none;
+        }
+
+        .ovul-wrap .ovul-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Anti-scrollbar */
+        html { scrollbar-width: none !important; }
+        ::-webkit-scrollbar { display: none !important; }
+
+        /* Responsive */
+        @media (max-width: 650px) {
+            .ovul-wrap .ovul-inputs-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+            .ovul-wrap .ovul-inputs-row > div {
+                min-width: 100%;
+            }
+            .ovul-wrap .ovul-calendar-grid {
+                gap: 4px;
+                max-width: 100%;
+            }
+            .ovul-wrap .ovul-day {
+                font-size: 0.9rem;
+                max-width: none;
+            }
+            .ovul-wrap .ovul-legal {
+                margin: 12px;
+                padding: 8px 12px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ovul-wrap { padding: 12px; }
+            .ovul-wrap .ovul-container { border-radius: 8px; }
+            .ovul-wrap .ovul-header { padding: 16px 20px; }
+            .ovul-wrap .ovul-form { padding: 16px 20px 20px; }
+            .ovul-wrap .ovul-calendar-container { padding: 16px 20px 20px; }
+            .ovul-wrap .ovul-btn { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ovul-wrap">
+        <div class="ovul-container">
+            <!-- Header -->
+            <div class="ovul-header">
+                <h1>🔍 Calculateur d'ovulation</h1>
+                <p>Estimation basée sur la méthode du calendrier (phase lutéale 14 jours)</p>
+            </div>
+
+            <!-- Formulaire -->
+            <div class="ovul-form">
+                <div class="ovul-inputs-row">
+                    <div class="ovul-input-group">
+                        <label for="ovul-cycle-start">1er jour de vos dernières règles *</label>
+                        <input type="date" id="ovul-cycle-start" required>
+                    </div>
+                    
+                    <div class="ovul-slider-container">
+                        <div class="ovul-slider-label">Durée moyenne de vos cycles (en jours) :</div>
+                        <div class="ovul-slider-wrapper">
+                            <input type="range" id="ovul-cycle-duration" min="21" max="40" value="28" class="ovul-slider">
+                            <span class="ovul-slider-val" id="ovul-cycle-val">28 j</span>
+                        </div>
+                        <div class="ovul-slider-hint">Cycle normal : 21–35 jours. Ajustez selon votre moyenne.</div>
+                    </div>
+                </div>
+
+                <button onclick="ovulCalculate()" class="ovul-btn" id="ovul-calculate-btn">
+                    📊 Calculer ma période fertile
+                </button>
+            </div>
+
+            <!-- Calendrier -->
+            <div class="ovul-calendar-container">
+                <div class="ovul-calendar-nav">
+                    <button class="ovul-nav-btn" id="ovul-prev-month">&lt;</button>
+                    <div class="ovul-month" id="ovul-month-display">—</div>
+                    <button class="ovul-nav-btn" id="ovul-next-month">&gt;</button>
+                </div>
+                <div class="ovul-calendar-grid" id="ovul-calendar-grid">
+                    <div class="ovul-day-name">L</div>
+                    <div class="ovul-day-name">M</div>
+                    <div class="ovul-day-name">M</div>
+                    <div class="ovul-day-name">J</div>
+                    <div class="ovul-day-name">V</div>
+                    <div class="ovul-day-name">S</div>
+                    <div class="ovul-day-name">D</div>
+                </div>
+
+                <!-- Légende -->
+                <div class="ovul-legend">
+                    <h3>Légende</h3>
+                    <div class="ovul-legend-item">
+                        <div class="ovul-legend-color period"></div>
+                        <span>1er jour des règles (J1)</span>
+                    </div>
+                    <div class="ovul-legend-item">
+                        <div class="ovul-legend-color fertility"></div>
+                        <span>Période fertile (ovulation ± 2 jours)</span>
+                    </div>
+                    <div class="ovul-legend-item">
+                        <div class="ovul-legend-color ovulation"></div>
+                        <span>Estimation d'ovulation (J14)</span>
+                    </div>
+                    <div class="ovul-legend-item">
+                        <div class="ovul-legend-color next-period"></div>
+                        <span>Prochaines règles prévues</span>
+                    </div>
+                    <div class="ovul-legend-item">
+                        <div class="ovul-legend-color today"></div>
+                        <span>Aujourd'hui</span>
+                    </div>
+                    <div class="ovul-legend-item" id="ovul-today-fertile-legend" style="display: none;">
+                        <div class="ovul-legend-color today" style="border-color: var(--ovul-primary-dark);"></div>
+                        <span>Aujourd'hui : période fertile estimée</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disclaimer (À LA FIN) -->
+    <div class="ovul-legal">
+    <strong>⚠️ Avertissement médico-légal</strong><br>
+    Cet outil fournit une <strong>estimation théorique</strong> de la période fertile basée sur la régularité des cycles. L'ovulation réelle peut varier selon le stress, la maladie, les médicaments ou les changements hormonaux. Cet outil ne remplace pas un suivi médical, une échographie de monitoring ovulatoire, ou un test d'ovulation urinaire.
+    
+    <p class="ovul-source"><strong>Source :</strong> Méthode du calendrier — Recommandations HAS / CNGOF</p>
+</div>
+        </div>
+
+        <!-- Toast -->
+        <div class="ovul-toast" id="ovul-toast"></div>
+    </div>
+
+    <script>
+   (function() {
+    'use strict';
+
+    function ovulToast(msg) {
+        var toast = document.getElementById('ovul-toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 2500);
+    }
+
+    function ovulIsSameDay(d1, d2) {
+        return d1 && d2 &&
+            d1.getDate() === d2.getDate() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getFullYear() === d2.getFullYear();
+    }
+
+    function ovulCalculate() {
+        var startInput = document.getElementById('ovul-cycle-start');
+        var durationInput = document.getElementById('ovul-cycle-duration');
+        
+        var startDate = new Date(startInput.value);
+        var cycleDuration = parseInt(durationInput.value, 10);
+
+        if (isNaN(startDate.getTime())) {
+            ovulToast('Veuillez sélectionner une date valide.');
+            startInput.focus();
+            return;
+        }
+
+        // CALCUL CORRIGÉ : Ovulation = J14 pour cycle 28 jours
+        // Méthode : startDate + (cycleDuration - 14) - 1
+        // Le "-1" compense le fait que le J1 compte comme jour 1 en JS
+        var ovulation = new Date(startDate);
+        ovulation.setDate(startDate.getDate() + cycleDuration - 14 - 1);
+
+        var fertilityStart = new Date(ovulation);
+        fertilityStart.setDate(ovulation.getDate() - 2);
+
+        var fertilityEnd = new Date(ovulation);
+        fertilityEnd.setDate(ovulation.getDate() + 2);
+
+        var nextPeriod = new Date(startDate);
+        nextPeriod.setDate(startDate.getDate() + cycleDuration - 1);
+
+        window.ovulData = {
+            start: startDate,
+            ovulation: ovulation,
+            fertilityStart: fertilityStart,
+            fertilityEnd: fertilityEnd,
+            nextPeriod: nextPeriod
+        };
+
+        window.ovulCurrentMonth = new Date(ovulation.getFullYear(), ovulation.getMonth(), 1);
+        ovulRenderCalendar();
+        ovulToast('✅ Calcul effectué. Ovulation estimée au J' + (cycleDuration - 14));
+    }
+
+    function ovulNavigateMonth(delta) {
+        if (!window.ovulCurrentMonth) return;
+        window.ovulCurrentMonth.setMonth(window.ovulCurrentMonth.getMonth() + delta);
+        ovulRenderCalendar();
+    }
+
+    function ovulRenderCalendar() {
+        var grid = document.getElementById('ovul-calendar-grid');
+        var monthDisplay = document.getElementById('ovul-month-display');
+        var todayFertileLegend = document.getElementById('ovul-today-fertile-legend');
+        var data = window.ovulData;
+        var today = new Date();
+
+        if (!window.ovulCurrentMonth) {
+            window.ovulCurrentMonth = new Date();
+        }
+
+        var year = window.ovulCurrentMonth.getFullYear();
+        var month = window.ovulCurrentMonth.getMonth();
+        var monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+        
+        monthDisplay.textContent = monthNames[month] + ' ' + year;
+
+        while (grid.children.length > 7) {
+            grid.removeChild(grid.lastChild);
+        }
+
+        var firstDay = new Date(year, month, 1);
+        var lastDay = new Date(year, month + 1, 0);
+        var startOffset = (firstDay.getDay() + 6) % 7;
+
+        for (var i = 0; i < startOffset; i++) {
+            var emptyDay = document.createElement('div');
+            emptyDay.className = 'ovul-day';
+            emptyDay.style.visibility = 'hidden';
+            grid.appendChild(emptyDay);
+        }
+
+        var isTodayFertile = false;
+
+        for (var day = 1; day <= lastDay.getDate(); day++) {
+            var date = new Date(year, month, day);
+            var dayEl = document.createElement('div');
+            dayEl.className = 'ovul-day';
+            dayEl.textContent = day;
+
+            if (data && data.start && ovulIsSameDay(date, data.start)) {
+                dayEl.classList.add('period');
+            }
+            if (data && data.ovulation && ovulIsSameDay(date, data.ovulation)) {
+                dayEl.classList.add('ovulation');
+            }
+            if (data && data.fertilityStart && data.fertilityEnd && 
+                date >= data.fertilityStart && date <= data.fertilityEnd) {
+                dayEl.classList.add('fertility');
+            }
+            if (data && data.nextPeriod && ovulIsSameDay(date, data.nextPeriod)) {
+                dayEl.classList.add('next-period');
+            }
+            if (ovulIsSameDay(date, today)) {
+                dayEl.classList.add('today');
+                if (data && data.fertilityStart && data.fertilityEnd && 
+                    date >= data.fertilityStart && date <= data.fertilityEnd) {
+                    isTodayFertile = true;
+                }
+            }
+
+            grid.appendChild(dayEl);
+        }
+
+        todayFertileLegend.style.display = isTodayFertile ? 'flex' : 'none';
+    }
+
+    // Event listeners
+    document.getElementById('ovul-calculate-btn').addEventListener('click', ovulCalculate);
+    document.getElementById('ovul-prev-month').addEventListener('click', function() { ovulNavigateMonth(-1); });
+    document.getElementById('ovul-next-month').addEventListener('click', function() { ovulNavigateMonth(1); });
+    
+    var slider = document.getElementById('ovul-cycle-duration');
+    var sliderVal = document.getElementById('ovul-cycle-val');
+    slider.addEventListener('input', function() {
+        sliderVal.textContent = this.value + ' j';
+    });
+
+    ovulRenderCalendar();
+})();    </script>
+</body>
+</html>

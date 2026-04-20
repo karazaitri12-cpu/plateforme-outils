@@ -5,7 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plateforme d'outils médicaux | Dr. Kara Zaitri</title>
   <meta name="description" content="Outils professionnels d'aide à la décision en gynécologie-obstétrique." />
+  
+  <!-- === LIENS PWA (Mode Hors-Ligne & Installation App) === -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#2B6CB0">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+
   <style>
+    /* === VARIABLES CSS (Light & Dark Mode) === */
     :root {
       --primary: #2B6CB0; --primary-dark: #2C5282;
       --accent: #2F855A; --warning: #B7791F;
@@ -14,92 +21,110 @@
       --border: #E2E8F0; --radius: 8px;
       --shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
+
+    body.dark-mode {
+      --bg: #1A202C; --card: #2D3748;
+      --text: #F7FAFC; --text-muted: #A0AEC0;
+      --border: #4A5568; --shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
     
-    /* Header */
-    .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 0; }
+    /* === HEADER & ACTIONS === */
+    .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 0; transition: background 0.3s; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
-    .brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+    .brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; box-shadow: var(--shadow); }
     .brand-text h1 { font-size: 1.05rem; font-weight: 600; color: var(--primary); }
     .brand-text p { font-size: 0.8rem; color: var(--text-muted); }
     
-    /* Disclaimer */
-    .disclaimer { background: #FFFBEB; border-left: 3px solid var(--warning); padding: 10px 14px; font-size: 0.85rem; color: #975A16; margin: 16px 0; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .icon-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; text-decoration: none; }
+    .icon-btn:hover { background: var(--border); }
     
-    /* Hero */
-    .hero { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 20px 0; text-align: center; }
-    .hero h2 { font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
-    .hero p { color: var(--text-muted); font-size: 0.95rem; }
-    
-    /* Search & Filters */
-    .search-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 24px 0; }
+    /* === DISCLAIMER === */
+    .disclaimer { background: rgba(214, 158, 46, 0.1); border-left: 3px solid var(--warning); padding: 10px 14px; font-size: 0.85rem; color: #975A16; margin: 16px 0; }
+    body.dark-mode .disclaimer { color: #F6AD55; }
+
+    /* === RECHERCHE & FILTRES === */
+    .search-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 24px 0; transition: background 0.3s; }
     .search-box { position: relative; margin-bottom: 16px; }
-    .search-box input { width: 100%; padding: 12px 16px 12px 44px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; transition: all 0.2s; }
-    .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); }
-    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; pointer-events: none; }
-    .filters { display: flex; gap: 10px; flex-wrap: wrap; }
-    .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; color: var(--text); }
-    .filter-btn:hover { background: #EBF8FF; border-color: var(--primary); }
-    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .search-box input { width: 100%; padding: 12px 44px 12px 44px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; background: var(--bg); color: var(--text); transition: all 0.2s; }
+    .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); background: var(--card); }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
     
-    /* Grid */
+    .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); background: var(--border); width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .clear-icon:hover { background: var(--text-muted); color: var(--card); }
+    
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: normal; transition: all 0.2s; color: var(--text); }
+    .filter-btn:hover { background: #EBF8FF; border-color: var(--primary); color: var(--primary); }
+    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 600; }
+    body.dark-mode .filter-btn:hover { background: rgba(43,108,176,0.2); }
+    
+    .filter-btn.fav-btn { background: rgba(214, 158, 46, 0.1); border-color: #D69E2E; color: #D69E2E; }
+    .filter-btn.fav-btn.active { background: #D69E2E; color: white; border-color: #D69E2E; font-weight: 600; }
+    
+    /* === GRID OUTILS === */
     .section-title { font-size: 1.05rem; font-weight: 600; color: var(--primary); margin: 28px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
     .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-bottom: 32px; }
+    
     .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; transition: all 0.2s; text-decoration: none; color: inherit; display: flex; gap: 12px; position: relative; }
     .tool-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px); }
     .tool-card.disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+    
+    .star-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--border); transition: 0.2s; z-index: 2; padding: 0; line-height: 1; }
+    .star-btn:hover { transform: scale(1.1); }
+    .star-btn.is-fav { color: #D69E2E; }
+
+    .tool-badge { position: absolute; top: -8px; right: 40px; background: #E53E3E; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; border: 1px solid var(--card); z-index: 2; box-shadow: var(--shadow); }
+    .tool-badge.maj { background: var(--primary); }
+
     .tool-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; flex-shrink: 0; }
-    .tool-card.disabled .tool-icon { background: linear-gradient(135deg, #718096, #4A5568); }
-    .tool-content { flex: 1; min-width: 0; }
+    .tool-content { flex: 1; min-width: 0; padding-right: 15px; }
     .tool-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin: 0 0 4px; line-height: 1.3; }
     .tool-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
-    .tool-tag { position: absolute; top: 12px; right: 12px; padding: 3px 8px; background: #EBF8FF; color: var(--primary); border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
-    .tool-tag.new { background: #F0FFF4; color: var(--accent); }
     
-    /* Footer */
-    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
+    /* === FOOTER === */
+    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; transition: background 0.3s; }
 
-/* =========================================
-   ASTUCE PRO : MASQUER L'ASCENSEUR VERTICAL
-   ========================================= */
-
-/* Pour Chrome, Safari et Edge */
-::-webkit-scrollbar {
-    width: 0px;  /* Cache la barre mais garde l'espace de scroll */
-    background: transparent; /* Rend le fond invisible */
-}
-
-/* Pour Firefox */
-html {
-    scrollbar-width: none; 
-}
-
-/* Pour IE/Edge anciens */
-body {
-    -ms-overflow-style: none;
-    overflow-y: auto; /* IMPORTANT : Garde le scroll actif ! */
-}
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+    html { scrollbar-width: none; }
+    body { -ms-overflow-style: none; overflow-y: auto; }
     
     @media (max-width: 600px) {
       .tools-grid { grid-template-columns: 1fr; }
       .header-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .header-actions { width: 100%; justify-content: flex-end; }
     }
   </style>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </head>
 <body>
 
+  <!-- HEADER -->
   <header class="header">
     <div class="container header-inner">
       <a href="/" class="brand">
         <div class="brand-icon">🩺</div>
         <div class="brand-text">
           <h1>Plateforme d'outils médicaux</h1>
-          <p>Dr. Kara Zaitri — Gynécologie-Obstétrique</p>
+          <p>DR KARA-ZAITRI M.A - Gynécologie-Obstétrique</p>
         </div>
       </a>
+      
+      <div class="header-actions">
+        <!-- BOUTON SIMPLE QUI ENVOIE VERS LE GUIDE -->
+        <a href="/tools/guide-pwa.html" class="icon-btn" title="Comment installer l'App ?">
+          📱 Installer l'App
+        </a>
+        
+        <button class="icon-btn" id="themeToggle" title="Mode Sombre" onclick="toggleTheme()">
+          🌙
+        </button>
+      </div>
     </div>
   </header>
 
@@ -108,17 +133,15 @@ body {
       <strong>Outils d'information médicale.</strong> Basés sur les recommandations HAS/INCa/CNGOF. Ne remplacent pas une consultation.
     </div>
 
-    <section class="hero">
-      <h2>Aide à la décision clinique</h2>
-      <p>Outils professionnels conformes aux recommandations françaises</p>
-    </section>
-
     <section class="search-section">
       <div class="search-box">
         <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Rechercher un outil (ex: Bishop, IMC, sein...)" autocomplete="off">
+        <span class="clear-icon" id="clearSearch" title="Effacer">✖</span>
       </div>
-      <div class="filters" id="filtersContainer"></div>
+      <div class="filters" id="filtersContainer">
+        <!-- Rempli par JS -->
+      </div>
     </section>
 
     <h3 class="section-title">Outils disponibles</h3>
@@ -129,78 +152,117 @@ body {
 
   <footer class="footer">
     <p><strong>Mention légale :</strong> Outils destinés aux professionnels de santé. Ne se substituent pas au jugement clinique.</p>
-    <p style="margin-top:6px;">© 2026 Dr. Kara Zaitri — Hébergé sur Vercel + Cloudflare</p>
+    <p style="margin-top:6px;">© 2026 DR KARA-ZAITRI M.A</p>
   </footer>
+<script>
+    const grid = document.getElementById('toolsGrid');
+    const filtersContainer = document.getElementById('filtersContainer');
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearch');
+    
+    let allTools = [];
+    let activeCategory = 'all';
+    let searchTerm = '';
+    
+    let favorites = JSON.parse(localStorage.getItem('drkz_favorites')) || [];
 
-  <script>
-    (async function() {
-      const grid = document.getElementById('toolsGrid');
-      const filtersContainer = document.getElementById('filtersContainer');
-      const searchInput = document.getElementById('searchInput');
-      let allTools = [];
-      let activeCategory = 'all';
-      let searchTerm = '';
+    // Initialisation
+    (async function init() {
+      if (localStorage.getItem('drkz_theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('themeToggle').innerText = '☀️';
+      }
 
       try {
         const res = await fetch('/tools.json');
-        if (!res.ok) throw new Error('Erreur chargement JSON');
         allTools = await res.json();
         renderFilters();
         renderTools();
       } catch (err) {
-        grid.innerHTML = '<p style="color:#C53030;">⚠️ Impossible de charger la liste des outils. Vérifiez que tools.json est présent à la racine.</p>';
-        console.error(err);
+        grid.innerHTML = '<p>Erreur chargement JSON.</p>';
       }
+    })();
 
-      function renderFilters() {
-        const cats = new Set();
-        allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
-        const sortedCats = ['all', ...Array.from(cats).sort()];
-        const labels = { all: 'Tous', gynecologie: 'Gynécologie', obstetrique: 'Obstétrique', explorations: 'Explorations', scores: 'Scores', depistage: 'Dépistage', calcul: 'Calcul', oncologie: 'Oncologie', diagnostic: 'Diagnostic', infection: 'Infection', therapeutique: 'Thérapeutique', urgence: 'Urgence', contraception: 'Contraception', imagerie: 'Imagerie', genetique: 'Génétique' };
-        
-        filtersContainer.innerHTML = sortedCats.map(c => 
-          `<button class="filter-btn ${c==='all'?'active':''}" data-cat="${c}">${labels[c] || c.charAt(0).toUpperCase() + c.slice(1)}</button>`
-        ).join('');
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      document.getElementById('themeToggle').innerText = isDark ? '☀️' : '🌙';
+      localStorage.setItem('drkz_theme', isDark ? 'dark' : 'light');
+    }
 
-        filtersContainer.addEventListener('click', e => {
-          const btn = e.target.closest('.filter-btn');
-          if (!btn) return;
-          filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          activeCategory = btn.dataset.cat;
-          renderTools();
-        });
-      }
+    function toggleFav(e, id) {
+      e.preventDefault(); 
+      const index = favorites.indexOf(id);
+      if (index === -1) favorites.push(id); else favorites.splice(index, 1);
+      localStorage.setItem('drkz_favorites', JSON.stringify(favorites));
+      renderTools();
+    }
 
-      function renderTools() {
-        const filtered = allTools.filter(t => {
-          const matchCat = activeCategory === 'all' || t.categorie.includes(activeCategory);
-          const term = searchTerm.toLowerCase();
-          const matchSearch = !term || t.titre.toLowerCase().includes(term) || t.description.toLowerCase().includes(term) || t.categorie.some(c => c.includes(term));
-          return matchCat && matchSearch;
-        });
+    function renderFilters() {
+      const cats = new Set();
+      // On récupère les catégories dans l'ordre naturel du JSON
+      allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
+      
+      // On retire le .sort() pour respecter l'ordre d'insertion
+      const orderedCats = Array.from(cats);
+      
+      let html = `<button class="filter-btn active" data-cat="all">Tous</button><button class="filter-btn fav-btn" data-cat="favorites">⭐ Favoris</button>`;
+      html += orderedCats.map(c => `<button class="filter-btn" data-cat="${c}">${c}</button>`).join('');
+      filtersContainer.innerHTML = html;
 
-        if (filtered.length === 0) {
-          grid.innerHTML = '<p style="color:var(--text-muted);">Aucun outil ne correspond à votre recherche.</p>';
-          return;
-        }
-
-        grid.innerHTML = filtered.map(t => `
-          <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
-            <div class="tool-icon">${t.icone || '🛠️'}</div>
-            <div class="tool-content">
-              <h3>${t.titre}</h3>
-              <p>${t.description}</p>
-            </div>
-          </a>
-        `).join('');
-      }
-
-      searchInput.addEventListener('input', e => {
-        searchTerm = e.target.value.trim();
+      filtersContainer.addEventListener('click', e => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.dataset.cat;
         renderTools();
       });
-    })();
+    }
+
+    function renderTools() {
+      const normalizeText = (str) => 
+        str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+      let filtered = allTools.filter(t => {
+        let matchCat = activeCategory === 'all' || (activeCategory === 'favorites' ? favorites.includes(t.id) : t.categorie.includes(activeCategory));
+        const term = normalizeText(searchTerm);
+        const titleNorm = normalizeText(t.titre);
+        const descNorm = normalizeText(t.description);
+
+        return matchCat && (!term || titleNorm.includes(term) || descNorm.includes(term));
+      });
+
+      grid.innerHTML = filtered.map(t => {
+        const isFav = favorites.includes(t.id);
+        const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
+        return `
+        <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
+          ${badgeHtml}
+          <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">
+            ${isFav ? '★' : '☆'}
+          </button>
+          <div class="tool-icon">${t.icone || '🛠️'}</div>
+          <div class="tool-content">
+            <h3>${t.titre}</h3>
+            <p>${t.description}</p>
+          </div>
+        </a>`}).join('');
+    }
+
+    searchInput.addEventListener('input', e => {
+      searchTerm = e.target.value.trim();
+      clearSearchBtn.style.display = searchTerm.length > 0 ? 'flex' : 'none';
+      renderTools();
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = ''; searchTerm = ''; clearSearchBtn.style.display = 'none'; renderTools();
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); });
+    }
   </script>
+  
 </body>
 </html>

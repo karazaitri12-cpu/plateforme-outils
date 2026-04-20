@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTA Gravidique - Outil Diagnostique</title>
+    <style>
+   
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h1 {
+            color: #ea580c;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .btn-reset {
+            background: #f3f4f6;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-reset:hover {
+            background: #e5e7eb;
+        }
+
+        h2 {
+            color: #ea580c;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #fff7ed;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ea580c;
+        }
+
+        .info-box.red {
+            background: #fef2f2;
+            border-left-color: #dc2626;
+        }
+
+        .info-box.blue {
+            background: #eff6ff;
+            border-left-color: #3b82f6;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: #ea580c;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            background: #c2410c;
+        }
+
+        .severity-box {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid;
+        }
+
+        .severity-box.mild {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .severity-box.moderate {
+            background: #fed7aa;
+            border-color: #f97316;
+        }
+
+        .severity-box.severe {
+            background: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .severity-box.emergency {
+            background: #fecaca;
+            border-color: #991b1b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
+
+        .treatment-section {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .monitoring-box {
+            background: #eff6ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .complication-alert {
+            background: #fee2e2;
+            border: 2px solid #dc2626;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+/* =========================================
+   PRO : Masque l'ascenseur (style App native)
+A placer en fin de css dans chaque outil
+   ========================================= */
+html { scrollbar-width: none; }               /* Firefox */
+body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
+::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
+
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📈 HTA Gravidique & Pré-éclampsie</h1>
+            <button class="btn-reset" onclick="resetTool()">🔄 Réinitialiser</button>
+        </div>
+
+        <div class="info-box red">
+            <p style="font-weight: bold; margin-bottom: 12px;">⚠️ Définition HTA Gravidique</p>
+            <p style="color: #4b5563;">PA diastolique ≥ 90 mmHg à 2 examens successifs, en position assise ou décubitus latéral gauche, après 20 semaines d'aménorrhée</p>
+        </div>
+
+        <h2>Évaluation Clinique et Biologique</h2>
+
+        <div class="input-group">
+            <label>Terme de la grossesse (SA)</label>
+            <input type="number" id="terme" placeholder="En semaines d'aménorrhée" min="20" max="42">
+        </div>
+
+        <div class="input-group">
+            <label>PA Systolique (mmHg)</label>
+            <input type="number" id="pa-systolique" placeholder="Ex: 160">
+        </div>
+
+        <div class="input-group">
+            <label>PA Diastolique (mmHg)</label>
+            <input type="number" id="pa-diastolique" placeholder="Ex: 110">
+        </div>
+
+        <div class="input-group">
+            <label>Protéinurie des 24h (g/24h)</label>
+            <input type="number" step="0.1" id="proteinurie" placeholder="Ex: 0.5">
+        </div>
+
+        <div class="input-group">
+            <label>Plaquettes (G/L)</label>
+            <input type="number" id="plaquettes" placeholder="Ex: 150">
+        </div>
+
+        <div class="input-group">
+            <label>ASAT (UI/L)</label>
+            <input type="number" id="asat" placeholder="Ex: 35">
+        </div>
+
+        <div class="input-group">
+            <label>Créatininémie (µmol/L)</label>
+            <input type="number" id="creatinine" placeholder="Ex: 70">
+        </div>
+
+        <div class="input-group">
+            <label>Signes cliniques associés</label>
+            <select id="signes" multiple size="5" style="height: auto;">
+                <option value="cephalees">Céphalées intenses / troubles visuels</option>
+                <option value="epigastre">Douleurs épigastriques / hypochondre droit</option>
+                <option value="oedemes">Œdèmes importants</option>
+                <option value="convulsions">Convulsions (ÉCLAMPSIE)</option>
+                <option value="rciu">RCIU à l'échographie</option>
+            </select>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Maintenez Ctrl (ou Cmd) pour sélectionner plusieurs options</p>
+        </div>
+
+        <button class="btn-primary" onclick="analyzeSituation()">
+            Évaluer la situation →
+        </button>
+
+        <div id="results" style="margin-top: 30px;"></div>
+
+        <div class="footer">
+            <p>Algorithme basé sur les recommandations du CNGOF 2023 et ACOG 2019</p>
+            <p style="margin-top: 8px;">⚕️ Outil d'aide à la décision - Ne remplace pas l'évaluation clinique</p>
+        </div>
+    </div>
+
+    <script>
+        function analyzeSituation() {
+            const paS = parseInt(document.getElementById('pa-systolique').value);
+            const paD = parseInt(document.getElementById('pa-diastolique').value);
+            const proteinurie = parseFloat(document.getElementById('proteinurie').value) || 0;
+            const plaquettes = parseInt(document.getElementById('plaquettes').value) || 300;
+            const asat = parseInt(document.getElementById('asat').value) || 30;
+            const creatinine = parseInt(document.getElementById('creatinine').value) || 70;
+            const terme = parseInt(document.getElementById('terme').value);
+            
+            const signesSelect = document.getElementById('signes');
+            const signes = Array.from(signesSelect.selectedOptions).map(option => option.value);
+
+            let resultsHTML = '';
+            let severity = 'mild';
+
+            // ÉCLAMPSIE
+            if (signes.includes('convulsions')) {
+                severity = 'emergency';
+                resultsHTML = `
+                    <div class="severity-box emergency">
+                        <h3 style="color: #991b1b; font-size: 24px; margin-bottom: 16px;">🚨 ÉCLAMPSIE - URGENCE VITALE</h3>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 16px 0;">
+                            <p style="font-weight: bold; color: #991b1b; font-size: 18px; margin-bottom: 12px;">Définition :</p>
+                            <p style="color: #4b5563;">• Convulsions tonico-cloniques généralisées</p>
+                            <p style="color: #4b5563;">• Sur terrain de pré-éclampsie</p>
+                            <p style="color: #4b5563;">• HTA + Protéinurie ± OMI</p>
+                        </div>
+
+                        <div class="complication-alert">
+                            <p style="font-weight: bold; color: #dc2626; font-size: 16px; margin-bottom: 12px;">🚨 PRISE EN CHARGE IMMÉDIATE :</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">1. Protection et oxygénation</p>
+                            <p style="color: #4b5563;">• Position latérale de sécurité</p>
+                            <p style="color: #4b5563;">• Oxygénothérapie 6-8 L/min</p>
+                            <p style="color: #4b5563;">• Aspiration oropharyngée si besoin</p>
+                            <p style="color: #4b5563;">• Intubation si coma ou répétition</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">2. Traitement anti-convulsivant</p>
+                            <p style="color: #dc2626; font-weight: bold;">• Sulfate de magnésium IV (traitement de référence)</p>
+                            <p style="color: #4b5563;">  - Dose de charge : 4g IV en 15 min</p>
+                            <p style="color: #4b5563;">  - Entretien : 1-2g/h en perfusion continue</p>
+                            <p style="color: #4b5563;">• Alternative : Benzodiazépines (diazépam 10mg IV lent)</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">3. Contrôle tensionnel</p>
+                            <p style="color: #dc2626; font-weight: bold;">• Nicardipine IV (si PAD ≥ 110 mmHg)</p>
+                            <p style="color: #4b5563;">  - Titration progressive : 3-6 mg/h</p>
+                            <p style="color: #4b5563;">  - Objectif : PAD 90-100 mmHg (pas de chute brutale)</p>
+                            <p style="color: #4b5563;">• Alternative : Labétalol IV</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">4. Extraction fœtale</p>
+                            <p style="color: #dc2626; font-weight: bold;">• Césarienne dès stabilisation maternelle</p>
+                            <p style="color: #4b5563;">• Voie basse possible si col favorable et patiente stable</p>
+                            <p style="color: #4b5563;">• Analgésie péridurale précoce</p>
+                        </div>
+
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 16px;">
+                            <p style="font-weight: bold; color: #991b1b; margin-bottom: 12px;">Surveillance post-critique :</p>
+                            <p style="color: #4b5563;">• Réanimation / Soins intensifs</p>
+                            <p style="color: #4b5563;">• Poursuite sulfate de magnésium 24-48h</p>
+                            <p style="color: #4b5563;">• Surveillance : conscience, TA, diurèse, ROT, réflexes</p>
+                            <p style="color: #4b5563;">• Surveillance biologique : NFS, plaquettes, bilan hépatique, rénal</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // HELLP Syndrome
+            else if (plaquettes < 100 || asat > 70 || signes.includes('epigastre')) {
+                severity = 'emergency';
+                resultsHTML += `
+                    <div class="severity-box emergency">
+                        <h3 style="color: #991b1b; font-size: 22px; margin-bottom: 16px;">⚠️ HELLP SYNDROME Suspecté</h3>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 16px 0;">
+                            <p style="font-weight: bold; color: #991b1b; margin-bottom: 12px;">Critères diagnostiques :</p>
+                            <p style="color: #4b5563;">• <strong>H</strong>emolysis (anémie hémolytique)</p>
+                            <p style="color: #4b5563;">• <strong>E</strong>levated <strong>L</strong>iver enzymes (cytolyse hépatique)</p>
+                            <p style="color: #4b5563;">• <strong>L</strong>ow <strong>P</strong>latelets (thrombopénie < 100 G/L)</p>
+                        </div>
+
+                        <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin: 12px 0;">
+                            <p style="font-weight: bold; color: #92400e; margin-bottom: 8px;">Vos valeurs :</p>
+                            <p style="color: #92400e;">• Plaquettes : ${plaquettes} G/L ${plaquettes < 100 ? '(↓↓ PATHOLOGIQUE)' : ''}</p>
+                            <p style="color: #92400e;">• ASAT : ${asat} UI/L ${asat > 70 ? '(↑↑ PATHOLOGIQUE)' : ''}</p>
+                            ${signes.includes('epigastre') ? '<p style="color: #92400e;">• Douleurs épigastriques / barre épigastrique présentes</p>' : ''}
+                        </div>
+
+                        <div class="complication-alert">
+                            <p style="font-weight: bold; color: #dc2626; margin-bottom: 12px;">🚨 Prise en charge urgente :</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px;">Bilan complémentaire immédiat :</p>
+                            <p style="color: #4b5563;">• NFS, plaquettes, frottis sanguin (schizocytes)</p>
+                            <p style="color: #4b5563;">• Haptoglobine, LDH, bilirubine</p>
+                            <p style="color: #4b5563;">• ASAT, ALAT, PAL, bilirubine</p>
+                            <p style="color: #4b5563;">• TP, TCA, fibrinogène (CIVD ?)</p>
+                            <p style="color: #4b5563;">• Échographie hépatique (hématome sous-capsulaire)</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px;">Traitement :</p>
+                            <p style="color: #dc2626; font-weight: bold;">• Extraction fœtale EN URGENCE quel que soit le terme</p>
+                            <p style="color: #4b5563;">• Corticoïdes si plaquettes < 100 G/L : dexaméthasone 10mg/12h</p>
+                            <p style="color: #4b5563;">• Transfusion plaquettes si < 50 G/L (ou < 80 si césarienne)</p>
+                            <p style="color: #4b5563;">• Sulfate de magnésium (prévention éclampsie)</p>
+                            <p style="color: #4b5563;">• Surveillance réanimation 48-72h</p>
+                        </div>
+
+                        <div style="background: white; padding: 16px; border-radius: 8px; margin-top: 12px;">
+                            <p style="font-weight: bold; color: #991b1b; margin-bottom: 8px;">Complications redoutées :</p>
+                            <p style="color: #4b5563;">• Hématome sous-capsulaire du foie (rupture = urgence chirurgicale)</p>
+                            <p style="color: #4b5563;">• CIVD</p>
+                            <p style="color: #4b5563;">• Insuffisance rénale aiguë</p>
+                            <p style="color: #4b5563;">• Œdème pulmonaire</p>
+                            <p style="color: #4b5563;">• Hématome rétro-placentaire</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Pré-éclampsie sévère
+            else if (paD >= 110 || proteinurie >= 3 || creatinine > 110 || signes.includes('cephalees') || signes.includes('rciu')) {
+                severity = 'severe';
+                resultsHTML += `
+                    <div class="severity-box severe">
+                        <h3 style="color: #dc2626; font-size: 22px; margin-bottom: 16px;">⚠️ PRÉ-ÉCLAMPSIE SÉVÈRE</h3>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 16px 0;">
+                            <p style="font-weight: bold; color: #dc2626; margin-bottom: 12px;">Critères de sévérité présents :</p>
+                            ${paD >= 110 ? `<p style="color: #4b5563;">• HTA sévère : ${paS}/${paD} mmHg (PAD ≥ 110)</p>` : ''}
+                            ${proteinurie >= 3 ? `<p style="color: #4b5563;">• Protéinurie massive : ${proteinurie} g/24h</p>` : ''}
+                            ${creatinine > 110 ? `<p style="color: #4b5563;">• Insuffisance rénale : créatinine ${creatinine} µmol/L</p>` : ''}
+                            ${signes.includes('cephalees') ? '<p style="color: #4b5563;">• Signes neurologiques : céphalées / troubles visuels</p>' : ''}
+                            ${signes.includes('rciu') ? '<p style="color: #4b5563;">• Retard de croissance intra-utérin (RCIU)</p>' : ''}
+                        </div>
+
+                        <div class="treatment-section">
+                            <p style="font-weight: bold; color: #16a34a; font-size: 18px; margin-bottom: 12px;">🏥 HOSPITALISATION OBLIGATOIRE</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">1. Traitement anti-hypertenseur</p>
+                            <p style="color: #4b5563;">• <strong>Objectif :</strong> PAD 90-100 mmHg (éviter chute brutale)</p>
+                            <p style="color: #16a34a; font-weight: bold;">• Nicardipine IV en seringue électrique : 3-6 mg/h</p>
+                            <p style="color: #4b5563;">• Alternative : Labétalol IV 20-80 mg IVL répété</p>
+                            <p style="color: #4b5563;">• Relais per os : Labétalol 200-400mg x3/j ou Nicardipine LP</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">2. Prévention éclampsie</p>
+                            <p style="color: #16a34a; font-weight: bold;">• Sulfate de magnésium si signes neurologiques</p>
+                            <p style="color: #4b5563;">  - Dose charge : 4g IV en 15 min</p>
+                            <p style="color: #4b5563;">  - Entretien : 1g/h pendant 24h</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">3. Maturation pulmonaire fœtale</p>
+                            <p style="color: #4b5563;">• Si terme < 34 SA : Bétaméthasone 12mg IM x2 à 24h d'intervalle</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">4. Extraction fœtale</p>
+                            <p style="color: #dc2626; font-weight: bold;">• Si ≥ 34 SA : Extraction dans les 24-48h</p>
+                            <p style="color: #dc2626; font-weight: bold;">• Si < 34 SA : Extraction si aggravation maternelle ou fœtale</p>
+                        </div>
+
+                        <div class="monitoring-box">
+                            <p style="font-weight: bold; color: #3b82f6; margin-bottom: 12px;">📊 Surveillance rapprochée :</p>
+                            <p style="color: #4b5563;"><strong>Maternelle :</strong></p>
+                            <p style="color: #4b5563;">• PA toutes les 15 min puis horaire</p>
+                            <p style="color: #4b5563;">• Diurèse horaire (sonde urinaire)</p>
+                            <p style="color: #4b5563;">• Biologie /48h : NFS-plaquettes, bilan hépatique, créatinine, uricémie</p>
+                            <p style="color: #4b5563;">• Protéinurie /24h</p>
+                            <p style="color: #4b5563;">• Signes fonctionnels (céphalées, troubles visuels, épigastralgie)</p>
+                            
+                            <p style="color: #4b5563; margin-top: 8px;"><strong>Fœtale :</strong></p>
+                            <p style="color: #4b5563;">• RCF quotidien (voire continu si sévère)</p>
+                            <p style="color: #4b5563;">• Doppler ombilical et utérin /48-72h</p>
+                            <p style="color: #4b5563;">• Biométrie fœtale hebdomadaire</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Pré-éclampsie modérée
+            else if (proteinurie >= 0.3 && paD >= 90) {
+                severity = 'moderate';
+                resultsHTML += `
+                    <div class="severity-box moderate">
+                        <h3 style="color: #f97316; font-size: 22px; margin-bottom: 16px;">⚠️ PRÉ-ÉCLAMPSIE</h3>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 16px 0;">
+                            <p style="font-weight: bold; color: #f97316; margin-bottom: 12px;">Diagnostic :</p>
+                            <p style="color: #4b5563;">• HTA : ${paS}/${paD} mmHg (PAD ≥ 90)</p>
+                            <p style="color: #4b5563;">• Protéinurie : ${proteinurie} g/24h (≥ 0.3 g/24h)</p>
+                            <p style="color: #4b5563;">• Terme : ${terme} SA</p>
+                        </div>
+
+                        <div class="treatment-section">
+                            <p style="font-weight: bold; color: #16a34a; font-size: 18px; margin-bottom: 12px;">🏥 Prise en charge :</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">Hospitalisation selon contexte :</p>
+                            <p style="color: #4b5563;">• Hospitalisation si : PAD > 100 mmHg, protéinurie > 1g, signes cliniques</p>
+                            <p style="color: #4b5563;">• Surveillance ambulatoire possible si forme minime et terme > 37 SA</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">Traitement anti-hypertenseur si PAD ≥ 100 mmHg :</p>
+                            <p style="color: #16a34a; font-weight: bold;">• Labétalol 200-400 mg x3/j PO</p>
+                            <p style="color: #4b5563;">• Ou Méthyldopa 250-500 mg x3/j PO</p>
+                            <p style="color: #4b5563;">• Ou Nicardipine LP 20-40 mg x2/j PO</p>
+                            <p style="color: #4b5563;">• <strong>Objectif :</strong> PAD 90-100 mmHg</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">Repos :</p>
+                            <p style="color: #4b5563;">• Décubitus latéral gauche</p>
+                            <p style="color: #4b5563;">• Arrêt de travail</p>
+                            <p style="color: #4b5563;">• Alimentation normalement salée</p>
+                        </div>
+
+                        <div class="monitoring-box">
+                            <p style="font-weight: bold; color: #3b82f6; margin-bottom: 12px;">📊 Surveillance :</p>
+                            <p style="color: #4b5563;"><strong>Maternelle :</strong></p>
+                            <p style="color: #4b5563;">• PA 2-3x/jour (automesure ou consultation)</p>
+                            <p style="color: #4b5563;">• Protéinurie /semaine</p>
+                            <p style="color: #4b5563;">• Biologie hebdomadaire : NFS-plaquettes, ASAT, ALAT, créatinine, uricémie</p>
+                            <p style="color: #4b5563;">• Signes fonctionnels d'aggravation (céphalées, épigastralgie, scotomes)</p>
+                            
+                            <p style="color: #4b5563; margin-top: 8px;"><strong>Fœtale :</strong></p>
+                            <p style="color: #4b5563;">• RCF hebdomadaire</p>
+                            <p style="color: #4b5563;">• Échographie + Doppler /2 semaines</p>
+                            <p style="color: #4b5563;">• Biométrie (dépistage RCIU)</p>
+                        </div>
+
+                        <div style="background: #fee2e2; padding: 16px; border-radius: 8px; margin-top: 12px;">
+                            <p style="font-weight: bold; color: #dc2626; margin-bottom: 8px;">⚠️ Signes d'aggravation → Hospitalisation urgente :</p>
+                            <p style="color: #dc2626;">• PAD ≥ 110 mmHg</p>
+                            <p style="color: #dc2626;">• Céphalées intenses, troubles visuels</p>
+                            <p style="color: #dc2626;">• Douleurs épigastriques / hypochondre droit</p>
+                            <p style="color: #dc2626;">• Vomissements</p>
+                            <p style="color: #dc2626;">• RCIU sévère, anomalies RCF</p>
+                            <p style="color: #dc2626;">• Plaquettes < 100 G/L, cytolyse hépatique</p>
+                        </div>
+
+                        <div style="background: #dbeafe; padding: 16px; border-radius: 8px; margin-top: 12px;">
+                            <p style="font-weight: bold; color: #1e40af; margin-bottom: 8px;">📅 Extraction fœtale :</p>
+                            <p style="color: #4b5563;">• Si ≥ 37 SA : Déclenchement du travail</p>
+                            <p style="color: #4b5563;">• Si < 37 SA : Expectative sous surveillance stricte</p>
+                            <p style="color: #4b5563;">• Analgésie péridurale recommandée (contrôle PA)</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // HTA sans protéinurie
+            else if (paD >= 90 && proteinurie < 0.3) {
+                severity = 'mild';
+                resultsHTML += `
+                    <div class="severity-box mild">
+                        <h3 style="color: #f59e0b; font-size: 22px; margin-bottom: 16px;">⚠️ HTA GRAVIDIQUE (sans protéinurie)</h3>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin: 16px 0;">
+                            <p style="font-weight: bold; color: #f59e0b; margin-bottom: 12px;">Situation actuelle :</p>
+                            <p style="color: #4b5563;">• HTA : ${paS}/${paD} mmHg</p>
+                            <p style="color: #4b5563;">• Protéinurie : ${proteinurie} g/24h (< 0.3 g/24h = normale)</p>
+                            <p style="color: #4b5563;">• Terme : ${terme} SA</p>
+                            <p style="color: #16a34a; font-weight: bold; margin-top: 8px;">→ Pas de pré-éclampsie pour le moment</p>
+                        </div>
+
+                        <div class="treatment-section">
+                            <p style="font-weight: bold; color: #16a34a; font-size: 18px; margin-bottom: 12px;">Prise en charge ambulatoire :</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">1. Mesures hygiéno-diététiques</p>
+                            <p style="color: #4b5563;">• Repos en décubitus latéral gauche</p>
+                            <p style="color: #4b5563;">• Arrêt de travail si besoin</p>
+                            <p style="color: #4b5563;">• Alimentation normalement salée (pas de régime sans sel)</p>
+                            <p style="color: #4b5563;">• Pas de restriction hydrique</p>
+                            
+                            <p style="font-weight: bold; margin-top: 12px; color: #374151;">2. Traitement anti-hypertenseur si PAD ≥ 100 mmHg :</p>
+                            <p style="color: #16a34a; font-weight: bold;">• Méthyldopa 250-500 mg x2-3/j (1ère intention)</p>
+                            <p style="color: #4b5563;">• Ou Labétalol 200 mg x2-3/j</p>
+                            <p style="color: #4b5563;">• Ou Nicardipine LP 20-40 mg x2/j</p>
+                            <p style="color: #4b5563;">• <strong>Objectif :</strong> PAD 85-95 mmHg</p>
+                        </div>
+
+                        <div class="monitoring-box">
+                            <p style="font-weight: bold; color: #3b82f6; margin-bottom: 12px;">📊 Surveillance rapprochée :</p>
+                            <p style="color: #4b5563;"><strong>Maternelle :</strong></p>
+                            <p style="color: #4b5563;">• PA en automesure 2x/jour ou consultation hebdomadaire</p>
+                            <p style="color: #4b5563;">• Protéinurie sur échantillon ou 24h hebdomadaire</p>
+                            <p style="color: #4b5563;">• Biologie /semaine : NFS, plaquettes, ASAT, ALAT, créatinine, uricémie</p>
+                            <p style="color: #4b5563;">• Surveillance signes fonctionnels (céphalées, troubles visuels, épigastralgie)</p>
+                            
+                            <p style="color: #4b5563; margin-top: 8px;"><strong>Fœtale :</strong></p>
+                            <p style="color: #4b5563;">• RCF hebdomadaire</p>
+                            <p style="color: #4b5563;">• Échographie + Doppler toutes les 2-3 semaines</p>
+                            <p style="color: #4b5563;">• Surveillance croissance fœtale</p>
+                        </div>
+
+                        <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin-top: 12px;">
+                            <p style="font-weight: bold; color: #92400e; margin-bottom: 8px;">⚠️ Risque d'évolution vers pré-éclampsie :</p>
+                            <p style="color: #92400e;">• 25-30% des HTA gravidiques évoluent vers pré-éclampsie</p>
+                            <p style="color: #92400e;">• Hospitalisation si apparition protéinurie ou signes d'aggravation</p>
+                        </div>
+
+                        <div style="background: #fee2e2; padding: 16px; border-radius: 8px; margin-top: 12px;">
+                            <p style="font-weight: bold; color: #dc2626; margin-bottom: 8px;">🚨 Hospitalisation urgente si :</p>
+                            <p style="color: #dc2626;">• PAD ≥ 110 mmHg</p>
+                            <p style="color: #dc2626;">• Apparition protéinurie (pré-éclampsie)</p>
+                            <p style="color: #dc2626;">• Céphalées, troubles visuels, épigastralgie</p>
+                            <p style="color: #dc2626;">• RCIU, anomalies RCF ou Doppler</p>
+                            <p style="color: #dc2626;">• Métrorragies</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Prévention
+            resultsHTML += `
+                <div style="background: #dbeafe; padding: 20px; border-radius: 12px; margin-top: 20px; border-left: 4px solid #3b82f6;">
+                    <h3 style="color: #1e40af; font-size: 18px; margin-bottom: 12px;">🛡️ Prévention de la pré-éclampsie</h3>
+                    
+                    <p style="font-weight: bold; color: #374151; margin-top: 12px;">Aspirine faible dose :</p>
+                    <p style="color: #4b5563;">• 75-160 mg/jour à partir de 12-16 SA</p>
+                    <p style="color: #4b5563;">• Jusqu'à l'accouchement</p>
+                    
+                    <p style="font-weight: bold; color: #374151; margin-top: 12px;">Indications (femmes à risque) :</p>
+                    <p style="color: #4b5563;">• ATCD de pré-éclampsie sévère ou précoce (< 34 SA)</p>
+                    <p style="color: #4b5563;">• ATCD de pré-éclampsie dans ≥ 2 grossesses</p>
+                    <p style="color: #4b5563;">• HTA chronique</p>
+                    <p style="color: #4b5563;">• Diabète pré-gestationnel</p>
+                    <p style="color: #4b5563;">• Maladie rénale chronique</p>
+                    <p style="color: #4b5563;">• Maladie auto-immune (lupus, SAPL)</p>
+                    <p style="color: #4b5563;">• ≥ 2 facteurs de risque modéré : nulliparité, obésité (IMC > 30), âge > 40 ans, intervalle > 10 ans, grossesse multiple, FIV</p>
+                </div>
+            `;
+
+            document.getElementById('results').innerHTML = resultsHTML;
+        }
+
+        function resetTool() {
+            document.getElementById('terme').value = '';
+            document.getElementById('pa-systolique').value = '';
+            document.getElementById('pa-diastolique').value = '';
+            document.getElementById('proteinurie').value = '';
+            document.getElementById('plaquettes').value = '';
+            document.getElementById('asat').value = '';
+            document.getElementById('creatinine').value = '';
+            document.getElementById('signes').selectedIndex = -1;
+            document.getElementById('results').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

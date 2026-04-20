@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prélèvements Génitaux chez la Femme — Outil Clinique</title>
+<style>
+/* ══════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bleu:        #1a4a6b;
+  --bleu-clair:  #2c6fa0;
+  --bleu-pale:   #e8f1f8;
+  --bleu-bord:   #c5ddf0;
+  --gris-fond:   #f5f7fa;
+  --gris-bord:   #dde3eb;
+  --gris-txt:    #5a6270;
+  --noir:        #1c2330;
+  --blanc:       #ffffff;
+  --orange:      #d46b08;
+  --orange-pale: #fff3e0;
+  --vert:        #2e6b3e;
+  --vert-pale:   #eaf4ed;
+  --rouge:       #b33232;
+  --rouge-pale:  #fdf0f0;
+  --violet:      #5a3d7a;
+  --violet-pale: #f3eef9;
+  --font-body:   'Georgia', 'Times New Roman', serif;
+  --font-ui:     'Helvetica Neue', 'Arial', sans-serif;
+  --radius:      6px;
+  --shadow:      0 2px 8px rgba(26,74,107,0.10);
+  --shadow-md:   0 4px 18px rgba(26,74,107,0.14);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-ui);
+  background: var(--gris-fond);
+  color: var(--noir);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ══════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════ */
+.pg-header {
+  background: var(--bleu);
+  color: var(--blanc);
+  padding: 22px 28px 18px;
+  border-bottom: 3px solid var(--bleu-clair);
+}
+.pg-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.pg-header-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a8c9e4;
+  margin-bottom: 6px;
+}
+.pg-header h1 {
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: normal;
+  line-height: 1.3;
+  color: #fff;
+}
+.pg-header h1 strong {
+  display: block;
+  font-size: 26px;
+  font-weight: bold;
+  color: #e8f3fc;
+}
+.pg-header-meta {
+  font-size: 11px;
+  color: #9bbdd4;
+  margin-top: 8px;
+}
+.pg-header-logo {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  font-size: 11px;
+  color: #a8c9e4;
+  text-align: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pg-header-logo span {
+  display: block;
+  font-size: 16px;
+  color: #d0e8f7;
+  margin-bottom: 2px;
+}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION ONGLETS
+══════════════════════════════════════════════ */
+.pg-nav {
+  background: var(--blanc);
+  border-bottom: 2px solid var(--bleu-bord);
+  padding: 0 20px;
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(26,74,107,0.07);
+}
+.pg-nav::-webkit-scrollbar { display: none; }
+.pg-nav-btn {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 13px 16px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gris-txt);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.18s, border-color 0.18s;
+  font-family: var(--font-ui);
+  letter-spacing: 0.01em;
+}
+.pg-nav-btn:hover { color: var(--bleu-clair); }
+.pg-nav-btn.active {
+  color: var(--bleu);
+  border-bottom-color: var(--bleu);
+}
+
+/* ══════════════════════════════════════════════
+   CONTENEUR PRINCIPAL
+══════════════════════════════════════════════ */
+.pg-main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 18px 60px;
+}
+
+/* ══════════════════════════════════════════════
+   SECTIONS / ONGLETS
+══════════════════════════════════════════════ */
+.pg-section { display: none; }
+.pg-section.active { display: block; }
+
+/* ══════════════════════════════════════════════
+   COMPOSANTS COMMUNS
+══════════════════════════════════════════════ */
+.pg-card {
+  background: var(--blanc);
+  border: 1px solid var(--gris-bord);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.pg-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bleu);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--bleu-bord);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pg-card-title .icon {
+  width: 22px; height: 22px;
+  background: var(--bleu-pale);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+
+.h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--bleu);
+  margin: 24px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px; height: 18px;
+  background: var(--bleu-clair);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bleu-clair);
+  margin: 14px 0 7px;
+}
+
+ul.pg-list {
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 10px;
+}
+ul.pg-list li {
+  padding: 4px 0 4px 20px;
+  position: relative;
+  font-size: 13.5px;
+  color: #2c3545;
+  line-height: 1.55;
+}
+ul.pg-list li::before {
+  content: '\2013';
+  position: absolute;
+  left: 6px;
+  color: var(--bleu-clair);
+  font-weight: bold;
+}
+ul.pg-list.check li::before { content: '\2713'; color: var(--vert); }
+ul.pg-list.warn li::before  { content: '\26A0'; color: var(--orange); }
+ul.pg-list.cross li::before { content: '\2717'; color: var(--rouge); }
+ul.pg-list.dot  li::before  { content: '\25CF'; color: var(--bleu); font-size: 8px; top: 8px; }
+
+p.pg-p {
+  font-size: 13.5px;
+  color: #2c3545;
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+
+/* ALERTES */
+.alerte {
+  border-left: 4px solid;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 11px 14px;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.alerte.info    { background: var(--bleu-pale);   border-color: var(--bleu-clair); color: #1a3d5a; }
+.alerte.warn    { background: var(--orange-pale);  border-color: var(--orange);     color: #7a3d00; }
+.alerte.danger  { background: var(--rouge-pale);   border-color: var(--rouge);      color: #7a1a1a; }
+.alerte.success { background: var(--vert-pale);    border-color: var(--vert);       color: #1e4a2a; }
+.alerte.violet  { background: var(--violet-pale);  border-color: var(--violet);     color: #3d2a54; }
+.alerte strong  { display: block; margin-bottom: 4px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* TABLEAUX */
+.pg-table-wrap { overflow-x: auto; margin: 14px 0; }
+table.pg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+table.pg-table th {
+  background: var(--bleu);
+  color: var(--blanc);
+  padding: 9px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+table.pg-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--gris-bord);
+  vertical-align: top;
+  color: #2c3545;
+}
+table.pg-table tr:nth-child(even) td { background: var(--gris-fond); }
+table.pg-table tr:hover td { background: var(--bleu-pale); }
+
+/* GRILLE 2 COL */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+   
+   /* =========================================
+   PRO : Masque l'ascenseur (style App native)
+A placer en fin de css dans chaque outil
+   ========================================= */
+html { scrollbar-width: none; }               /* Firefox */
+body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
+::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
+   
+   @media(max-width:640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* BADGE */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.badge-bleu   { background: var(--bleu-pale);   color: var(--bleu); }
+.badge-vert   { background: var(--vert-pale);   color: var(--vert); }
+.badge-orange { background: var(--orange-pale); color: var(--orange); }
+.badge-rouge  { background: var(--rouge-pale);  color: var(--rouge); }
+.badge-violet { background: var(--violet-pale); color: var(--violet); }
+
+/* ÉTAPES NUMÉROTÉES */
+.steps { counter-reset: step; margin: 10px 0; }
+.step-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+.step-num {
+  counter-increment: step;
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  background: var(--bleu);
+  color: var(--blanc);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.step-body { font-size: 13.5px; color: #2c3545; line-height: 1.55; }
+.step-body strong { color: var(--bleu); }
+
+/* ══════════════════════════════════════════════
+   OUTIL INTERACTIF — AIDE AU CHOIX
+══════════════════════════════════════════════ */
+.outil-header {
+  background: linear-gradient(135deg, var(--bleu) 0%, var(--bleu-clair) 100%);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  margin-bottom: 18px;
+}
+.outil-header h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.outil-header p { font-size: 12.5px; color: #b8d8f0; }
+
+.outil-form-group { margin-bottom: 14px; }
+.outil-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bleu);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+}
+.outil-select, .outil-check-group {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--gris-bord);
+  border-radius: var(--radius);
+  font-size: 13.5px;
+  color: var(--noir);
+  background: var(--blanc);
+  font-family: var(--font-ui);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a4a6b' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.2s;
+}
+.outil-select:focus { outline: none; border-color: var(--bleu-clair); }
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+@media(max-width:500px) { .checkbox-grid { grid-template-columns: 1fr; } }
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gris-fond);
+  border: 1.5px solid var(--gris-bord);
+  border-radius: 5px;
+  padding: 7px 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-size: 13px;
+  color: #2c3545;
+  user-select: none;
+}
+.checkbox-item:hover { background: var(--bleu-pale); border-color: var(--bleu-clair); }
+.checkbox-item input[type=checkbox] { accent-color: var(--bleu); width: 15px; height: 15px; cursor: pointer; }
+.checkbox-item.selected { background: var(--bleu-pale); border-color: var(--bleu-clair); }
+
+.btn-outil {
+  width: 100%;
+  padding: 12px;
+  background: var(--bleu);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  letter-spacing: 0.03em;
+  transition: background 0.18s;
+  margin-top: 4px;
+}
+.btn-outil:hover { background: var(--bleu-clair); }
+.btn-reset {
+  width: 100%;
+  padding: 8px;
+  background: transparent;
+  color: var(--gris-txt);
+  border: 1.5px solid var(--gris-bord);
+  border-radius: var(--radius);
+  font-size: 12.5px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  margin-top: 6px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-reset:hover { border-color: var(--bleu-clair); color: var(--bleu); }
+
+.result-box {
+  display: none;
+  background: var(--blanc);
+  border: 2px solid var(--bleu-bord);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-top: 16px;
+}
+.result-box.show { display: block; }
+.result-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bleu);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--bleu-bord);
+}
+.result-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.result-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--bleu-clair);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+/* PRÉLÈVEMENTS CARDS */
+.prelevement-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 14px 0;
+}
+.prelevement-card {
+  background: var(--blanc);
+  border: 1.5px solid var(--gris-bord);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.18s, transform 0.18s;
+  cursor: pointer;
+}
+.prelevement-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.prelevement-card-head {
+  padding: 12px 14px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--blanc);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prelevement-card-body {
+  padding: 13px 14px;
+}
+.prelevement-card-body .tag {
+  display: inline-block;
+  padding: 2px 7px;
+  background: var(--bleu-pale);
+  color: var(--bleu);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 2px;
+}
+.prelevement-card-body p {
+  font-size: 12.5px;
+  color: var(--gris-txt);
+  margin-top: 7px;
+  line-height: 1.5;
+}
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,20,40,0.55);
+  z-index: 500;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 30px 14px;
+  overflow-y: auto;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--blanc);
+  border-radius: 8px;
+  max-width: 640px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(10,20,40,0.25);
+  overflow: hidden;
+  animation: modalIn 0.22s ease;
+}
+@keyframes modalIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+.modal-head {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--gris-bord);
+}
+.modal-head h3 { font-size: 16px; font-weight: 700; color: var(--bleu); }
+.modal-close {
+  width: 28px; height: 28px;
+  border: none;
+  background: var(--gris-fond);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--gris-txt);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: var(--rouge-pale); color: var(--rouge); }
+.modal-body { padding: 18px 20px; max-height: 70vh; overflow-y: auto; }
+
+/* PROGRESS / CHECKLIST */
+.checklist { margin: 10px 0; }
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.12s;
+  margin-bottom: 2px;
+}
+.checklist-item:hover { background: var(--bleu-pale); }
+.checklist-item input[type=checkbox] { accent-color: var(--bleu); width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+.checklist-item label { font-size: 13.5px; color: #2c3545; cursor: pointer; line-height: 1.5; }
+.checklist-item.done label { text-decoration: line-through; color: var(--gris-txt); }
+
+.progress-bar-wrap {
+  background: var(--gris-bord);
+  border-radius: 10px;
+  height: 8px;
+  margin: 10px 0 4px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  border-radius: 10px;
+  background: var(--bleu-clair);
+  transition: width 0.3s ease;
+}
+.progress-label { font-size: 11.5px; color: var(--gris-txt); text-align: right; }
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+.pg-footer {
+  background: var(--blanc);
+  border-top: 1px solid var(--gris-bord);
+  padding: 14px 22px;
+  margin-top: 30px;
+  font-size: 11.5px;
+  color: var(--gris-txt);
+  line-height: 1.55;
+}
+.pg-footer strong { color: var(--bleu); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="pg-header">
+  <div class="pg-header-top">
+    <div>
+      <div class="pg-header-badge">Explorations en Gynécologie</div>
+      <h1>
+        <strong>Prélèvements Génitaux chez la Femme</strong>
+        Outil clinique interactif — Indications, Techniques &amp; Résultats
+      </h1>
+      <div class="pg-header-meta">D'après les recommandations CNGOF · HAS · SPILF · 2024 — Destiné aux professionnels de santé</div>
+    </div>
+    <div class="pg-header-logo">
+      <span>🔬</span>
+      Microbiologie<br>Cytologie<br>Histologie
+    </div>
+  </div>
+</header>
+
+<!-- NAVIGATION -->
+<nav class="pg-nav">
+  <button class="pg-nav-btn active" onclick="showSection('indications')">Indications</button>
+  <button class="pg-nav-btn" onclick="showSection('conditions')">Conditions</button>
+  <button class="pg-nav-btn" onclick="showSection('techniques')">Techniques</button>
+  <button class="pg-nav-btn" onclick="showSection('micro')">Microbiologie</button>
+  <button class="pg-nav-btn" onclick="showSection('cytohisto')">Cytologie / Histologie</button>
+  <button class="pg-nav-btn" onclick="showSection('resultats')">Résultats &amp; Interprétation</button>
+  <button class="pg-nav-btn" onclick="showSection('outil')">🔍 Aide au choix</button>
+  <button class="pg-nav-btn" onclick="showSection('checklist')">✔ Check-list</button>
+</nav>
+
+<!-- MAIN -->
+<main class="pg-main">
+
+<!-- ════════════════════════════════════
+     SECTION 1 — INDICATIONS
+════════════════════════════════════ -->
+<section id="s-indications" class="pg-section active">
+
+  <div class="alerte info">
+    <strong>Introduction</strong>
+    Les infections génitales représentent l'un des motifs de consultation les plus fréquents en gynécologie. L'examen microbiologique doit être guidé par un examen clinique soigneux et adapté aux recommandations actuelles.
+  </div>
+
+  <div class="h2">Classification des infections génitales</div>
+
+  <div class="grid-2">
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">🔽</span> Infections basses</div>
+      <ul class="pg-list dot">
+        <li>Vulvo-vaginites</li>
+        <li>Bartholinites</li>
+        <li>Cervicites (exo- et endocervicites)</li>
+        <li>Urétrites</li>
+      </ul>
+    </div>
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">🔼</span> Infections hautes (IGH)</div>
+      <ul class="pg-list dot">
+        <li>Endométrites</li>
+        <li>Salpingites</li>
+        <li>Abcès tubo-ovariens</li>
+        <li>Pelvipéritonites</li>
+      </ul>
+      <div class="alerte danger" style="margin-top:8px">
+        <strong>Urgence diagnostique</strong>
+        Les IGH peuvent mettre en jeu la fertilité et le pronostic vital.
+      </div>
+    </div>
+  </div>
+
+  <div class="h2">Signes cliniques évocateurs par entité</div>
+
+  <div class="pg-table-wrap">
+    <table class="pg-table">
+      <thead>
+        <tr>
+          <th>Entité</th>
+          <th>Signes fonctionnels principaux</th>
+          <th>Signes cliniques</th>
+          <th>Particularités</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Vulvo-vaginite</strong></td>
+          <td>Leucorrhées anormales, prurit vulvaire, brûlures, dyspareunie, dysurie</td>
+          <td>Érythème vulvo-vaginal, dépôts blanchâtres ou gris</td>
+          <td>pH vaginal souvent élevé dans la vaginose</td>
+        </tr>
+        <tr>
+          <td><strong>Cervicite</strong></td>
+          <td>Leucorrhées purulentes, métrorragies, saignements post-coïtaux</td>
+          <td>Col inflammatoire, friable, endocol purulent</td>
+          <td>Asymptomatique dans ~50 % des cas !</td>
+        </tr>
+        <tr>
+          <td><strong>IGH (salpingite…)</strong></td>
+          <td>Douleurs pelviennes spontanées/provoquées, fièvre &gt; 38°C</td>
+          <td>Défense hypogastrique, douleur à la mobilisation utérine</td>
+          <td>Leucorrhées purulentes, métrorragies possibles</td>
+        </tr>
+        <tr>
+          <td><strong>Ulcérations génitales</strong></td>
+          <td>Lésions douloureuses (herpès, chancre mou) ou indolores (syphilis)</td>
+          <td>Ulcération unique ou multiple, adénopathies inguinales</td>
+          <td>Rechercher co-infection IST systématiquement</td>
+        </tr>
+        <tr>
+          <td><strong>Bartholinite</strong></td>
+          <td>Douleur vulvaire unilatérale, tuméfaction</td>
+          <td>Gonflement de la grande lèvre, fluctuation</td>
+          <td>Germes souvent plurimicrobiens ; évoquer gonocoque</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="h2">Autres indications de prélèvements</div>
+  <div class="pg-card">
+    <div class="pg-card-title"><span class="icon">📋</span> Indications non infectieuses</div>
+    <div class="grid-2">
+      <ul class="pg-list check">
+        <li>Frottis cervico-vaginal (FCV) de dépistage (cancer du col)</li>
+        <li>Test HPV (dépistage 25–65 ans)</li>
+        <li>Biopsie du col (colposcopie dirigée)</li>
+        <li>Prélèvement endométrial (suspicion cancer, hyperplasie)</li>
+      </ul>
+      <ul class="pg-list check">
+        <li>Frottis de maturité (index maturationnel, ménopause)</li>
+        <li>Frottis vulvaire (lésions intraépithéliales vulvaires)</li>
+        <li>Dépistage SGB (streptocoque B) en fin de grossesse (35–37 SA)</li>
+        <li>Bilan infertilité (culture endocervicale Chlamydia…)</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 2 — CONDITIONS
+════════════════════════════════════ -->
+<section id="s-conditions" class="pg-section">
+
+  <div class="h2">Prérequis avant tout prélèvement</div>
+
+  <div class="alerte warn">
+    <strong>Conditions impératives</strong>
+    Le respect des conditions de prélèvement conditionne la qualité et l'interprétabilité des résultats microbiologiques.
+  </div>
+
+  <div class="grid-2">
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">🚫</span> Arrêts obligatoires avant prélèvement</div>
+      <div class="pg-table-wrap">
+        <table class="pg-table">
+          <thead><tr><th>Substance</th><th>Délai minimum</th></tr></thead>
+          <tbody>
+            <tr><td>Antibiotiques systémiques</td><td><strong>7 à 10 jours</strong></td></tr>
+            <tr><td>Antifongiques locaux</td><td><strong>7 jours</strong></td></tr>
+            <tr><td>Toilette vaginale</td><td><strong>48 heures</strong></td></tr>
+            <tr><td>Rapports sexuels</td><td><strong>24 à 48 heures</strong></td></tr>
+            <tr><td>Ovules, crèmes vaginales</td><td><strong>48 heures</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alerte info" style="margin-top:8px">En dehors des règles (sauf urgence diagnostique).</div>
+    </div>
+
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">📝</span> Fiche de renseignements (obligatoire)</div>
+      <div class="h3">Données démographiques</div>
+      <ul class="pg-list">
+        <li>Nom, prénom, âge, date de prélèvement</li>
+        <li>Médecin prescripteur</li>
+      </ul>
+      <div class="h3">Contexte clinique essentiel</div>
+      <ul class="pg-list">
+        <li>Symptômes précis et durée d'évolution</li>
+        <li>Date des dernières règles</li>
+        <li>Statut hormonal / contraception en cours</li>
+        <li>Grossesse (terme si applicable)</li>
+        <li>Antécédents d'IST</li>
+        <li>Notion de partenaire(s) à risque</li>
+        <li>Statut VIH si connu</li>
+        <li>Immunodépression (corticoïdes, chimiothérapie…)</li>
+        <li>Traitements en cours ou récents</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="h2">Matériel indispensable</div>
+  <div class="pg-card">
+    <div class="pg-card-title"><span class="icon">🧰</span> Équipement standard du cabinet</div>
+    <div class="grid-2">
+      <div>
+        <div class="h3">Prélèvements microbiologiques</div>
+        <ul class="pg-list dot">
+          <li>Écouvillons floqués (type ESwab™) — 2 minimum</li>
+          <li>Milieux de transport universels</li>
+          <li>Kits PCR multiplex IST (Chlamydia, Gonocoque, Trichomonas, Mycoplasmes…)</li>
+          <li>Bandelettes pH (4 – 5,5)</li>
+          <li>Lames pour état frais (examen direct)</li>
+          <li>Spéculums stériles non lubrifiés (eau tiède si besoin)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="h3">Prélèvements cytologiques / histologiques</div>
+        <ul class="pg-list dot">
+          <li>Spatule d'Ayre / brosse endocervicale / Cytobrush</li>
+          <li>Milieu liquide ThinPrep® ou SurePath® (cytologie en base liquide)</li>
+          <li>Lames et fixateur (cytologie conventionnelle)</li>
+          <li>Pinces à biopsie (punch) de type Tischler / Kevorkan</li>
+          <li>Formol à 4 % (fixateur histologique)</li>
+          <li>Curette de Novak / pipelle de Cornier (endomètre)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 3 — TECHNIQUES
+════════════════════════════════════ -->
+<section id="s-techniques" class="pg-section">
+
+  <div class="prelevement-cards">
+    <!-- Vaginal -->
+    <div class="prelevement-card" onclick="openModal('m-vaginal')">
+      <div class="prelevement-card-head" style="background:var(--bleu)">
+        🔬 Prélèvement vaginal
+      </div>
+      <div class="prelevement-card-body">
+        <span class="tag">Microbiologie</span>
+        <span class="tag">État frais</span>
+        <span class="tag">PCR</span>
+        <p>Parois vaginales + cul-de-sac postérieur. pH + Whiff test. Examen direct immédiat possible.</p>
+      </div>
+    </div>
+    <!-- Endocervical -->
+    <div class="prelevement-card" onclick="openModal('m-endo')">
+      <div class="prelevement-card-head" style="background:#1f6e9e">
+        🔬 Prélèvement endocervical
+      </div>
+      <div class="prelevement-card-body">
+        <span class="tag">IST</span>
+        <span class="tag">Chlamydia</span>
+        <span class="tag">Gonocoque</span>
+        <p>Après nettoyage de l'exocol. Brosse endocervicale ou écouvillon fin. Incontournable si suspicion IST.</p>
+      </div>
+    </div>
+    <!-- Exocol / FCV -->
+    <div class="prelevement-card" onclick="openModal('m-fcv')">
+      <div class="prelevement-card-head" style="background:#2d7a5a">
+        🩺 Frottis cervico-vaginal (FCV)</div>
+      <div class="prelevement-card-body">
+        <span class="tag">Cytologie</span>
+        <span class="tag">Dépistage</span>
+        <span class="tag">HPV</span>
+        <p>Dépistage cancer du col. Spatule + brosse ou prélèvement combiné sur milieu liquide. De 25 à 65 ans.</p>
+      </div>
+    </div>
+    <!-- Endométre -->
+    <div class="prelevement-card" onclick="openModal('m-endometre')">
+      <div class="prelevement-card-head" style="background:#7a3a6e">
+        🔬 Prélèvement endométrial</div>
+      <div class="prelevement-card-body">
+        <span class="tag">Histologie</span>
+        <span class="tag">Cytologie</span>
+        <span class="tag">Endométrite</span>
+        <p>Pipelle de Cornier ou curette. Indiqué : suspicion cancer, endométrite, anomalie échographique.</p>
+      </div>
+    </div>
+    <!-- Vulvaire -->
+    <div class="prelevement-card" onclick="openModal('m-vulve')">
+      <div class="prelevement-card-head" style="background:#c07800">
+        🔬 Prélèvement vulvaire</div>
+      <div class="prelevement-card-body">
+        <span class="tag">Herpès</span>
+        <span class="tag">Ulcération</span>
+        <span class="tag">Biopsie</span>
+        <p>Grattage/écouvillonnage de lésion. PCR HSV sur ulcération. Biopsie si VIN ou lésion chronique.</p>
+      </div>
+    </div>
+    <!-- Urétral -->
+    <div class="prelevement-card" onclick="openModal('m-uretral')">
+      <div class="prelevement-card-head" style="background:#3a5a8a">
+        🔬 Prélèvement urétral</div>
+      <div class="prelevement-card-body">
+        <span class="tag">Gonocoque</span>
+        <span class="tag">Urétrite</span>
+        <span class="tag">Chlamydia</span>
+        <p>Complète le prélèvement endocervical. À réaliser à distance d'une miction (> 2 h).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECHNIQUE PAS-À-PAS — Vaginal global -->
+  <div class="h2">Technique générale d'un prélèvement vaginal</div>
+  <div class="pg-card">
+    <div class="steps">
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Positionnement :</strong> Patiente en position gynécologique. Éclairage optimal. Spéculum stérile non lubrifié (eau tiède si nécessaire).</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Inspection :</strong> Visualiser le col, les parois vaginales, la nature et la couleur des leucorrhées. Vérifier la mobilité cervicale.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>1er écouvillon :</strong> Prélèvement des parois vaginales latérales et du cul-de-sac postérieur par rotation douce. Destiné à l'examen direct ± culture.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>2e écouvillon :</strong> Prélèvement identique pour PCR multiplex (IST) ou culture bactériologique standard.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>pH vaginal :</strong> Bandelette appliquée sur la paroi vaginale. Normal : 3,8 – 4,5. Élevé (&gt; 4,5) = évocateur de vaginose ou trichomonase.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Test aux amines (Whiff test) :</strong> 1 goutte de KOH 10 % sur le prélèvement. Odeur de poisson = évocatrice de vaginose bactérienne.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Examen direct :</strong> Si possible immédiatement en cabinet (état frais au microscope : Trichomonas, clue cells, levures).</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Transport :</strong> Milieu de transport universel. Acheminement au laboratoire sous 2 h (ou selon milieu spécifique). Identifier clairement les flacons.</div></div>
+    </div>
+  </div>
+
+  <div class="alerte warn">
+    <strong>Attention — Prélèvement endocervical</strong>
+    Le prélèvement endocervical est distinct du prélèvement vaginal. Il nécessite d'essuyer d'abord le mucus exocervical avant d'introduire la brosse dans l'endocol (rotation de 360°). Il est indispensable pour le dépistage de <em>Chlamydia trachomatis</em> et de <em>Neisseria gonorrhoeae</em>.
+  </div>
+
+  <div class="h2">Tableau récapitulatif des techniques par site</div>
+  <div class="pg-table-wrap">
+    <table class="pg-table">
+      <thead>
+        <tr>
+          <th>Site</th>
+          <th>Matériel recommandé</th>
+          <th>Technique</th>
+          <th>Analyse demandée</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Vagin (parois)</td><td>Écouvillon floqué × 2</td><td>Rotation douce + cul-de-sac postérieur</td><td>Culture, état frais, PCR IST, pH</td></tr>
+        <tr><td>Endocol</td><td>Écouvillon fin / brosse endocervicale</td><td>Nettoyage exocol → introduction 1–2 cm → rotation 360°</td><td>PCR Chlamydia/Gonocoque, culture</td></tr>
+        <tr><td>Exocol (FCV)</td><td>Spatule d'Ayre + cytobrush</td><td>Zone de jonction jonction squamo-cylindrique</td><td>Cytologie cervicale (Bethesda)</td></tr>
+        <tr><td>Endomètre</td><td>Pipelle de Cornier</td><td>Franchissement du col + aspiration</td><td>Histologie, culture (endométrite)</td></tr>
+        <tr><td>Vulve (lésion)</td><td>Écouvillon + anse de Vidal</td><td>Grattage du fond de l'ulcération</td><td>PCR HSV1/2, culture, frottis</td></tr>
+        <tr><td>Urètre</td><td>Écouvillon fin dédié</td><td>Introduction 1–2 cm, rotation</td><td>PCR Chlamydia/Gonocoque</td></tr>
+        <tr><td>Cul-de-sac de Douglas</td><td>Culdocentèse / cœlioscopie</td><td>Prélèvement per-cœlioscopique</td><td>Culture aérobie + anaérobie (IGH)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 4 — MICROBIOLOGIE
+════════════════════════════════════ -->
+<section id="s-micro" class="pg-section">
+
+  <div class="h2">Types d'examens microbiologiques</div>
+
+  <div class="grid-2">
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">🔭</span> Examen direct (état frais)</div>
+      <p class="pg-p">Réalisable au cabinet ou au laboratoire. Observation entre lame et lamelle du prélèvement vaginal frais, non coloré.</p>
+      <div class="h3">Ce que l'on recherche :</div>
+      <ul class="pg-list dot">
+        <li><strong>Trichomonas vaginalis</strong> : protozoaire flagellé mobile</li>
+        <li><strong>Clue cells</strong> (cellules indicatrices) : cellules épithéliales recouvertes de Gardnerella → vaginose</li>
+        <li><strong>Levures / pseudofilaments</strong> : Candida spp.</li>
+        <li><strong>Polynucléaires</strong> : orientation vers cervicite ou vaginite bactérienne</li>
+        <li><strong>Diplo-cocci intra-cellulaires</strong> : suggestifs de gonocoque (à confirmer par culture)</li>
+      </ul>
+      <div class="alerte info">L'état frais est un examen rapide d'orientation, non suffisant seul pour poser un diagnostic définitif.</div>
+    </div>
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">🧫</span> Culture bactériologique</div>
+      <p class="pg-p">Gold standard pour l'identification du germe et l'antibiogramme. Résultats en 24–72 h selon le germe.</p>
+      <div class="h3">Milieux utilisés :</div>
+      <ul class="pg-list dot">
+        <li>Gélose chocolat (Neisseria, Haemophilus)</li>
+        <li>Gélose au sang (germes aérobies standards)</li>
+        <li>Milieu sélectif de Thayer-Martin (gonocoque)</li>
+        <li>Milieu de Sabouraud (levures)</li>
+        <li>Milieu anaérobie (si IGH, abcès)</li>
+      </ul>
+      <div class="h3">Délai d'acheminement :</div>
+      <ul class="pg-list warn">
+        <li>Gonocoque : extrêmement fragile — culture sous 2 h ou écouvillon en milieu de transport spécifique</li>
+        <li>Culture standard : milieu de transport universel, 24 h maximum</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pg-card">
+    <div class="pg-card-title"><span class="icon">🧬</span> PCR multiplex — Examens moléculaires</div>
+    <p class="pg-p">Technique de référence pour la détection des IST. Haute sensibilité et spécificité. Disponible sur écouvillon vaginal, endocervical ou urinaire (1er jet).</p>
+    <div class="pg-table-wrap">
+      <table class="pg-table">
+        <thead>
+          <tr><th>Germe</th><th>Méthode recommandée</th><th>Type de prélèvement</th><th>Commentaire</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><em>Chlamydia trachomatis</em></td><td>PCR</td><td>Endocol, vagin, 1er jet urine</td><td>À faire systématiquement &lt; 25 ans et si IST suspectée</td></tr>
+          <tr><td><em>Neisseria gonorrhoeae</em></td><td>PCR + culture</td><td>Endocol, urètre, gorge, rectum</td><td>Culture obligatoire pour antibiogramme</td></tr>
+          <tr><td><em>Trichomonas vaginalis</em></td><td>PCR ou état frais</td><td>Vaginal</td><td>PCR plus sensible que l'état frais</td></tr>
+          <tr><td><em>Mycoplasma genitalium</em></td><td>PCR</td><td>Endocol, vaginal</td><td>Résistances aux macrolides à dépister si disponible</td></tr>
+          <tr><td>HSV 1 et 2</td><td>PCR</td><td>Fond d'ulcération</td><td>Supérieur à la culture pour les lésions vieillissantes</td></tr>
+          <tr><td>HPV (dépistage)</td><td>Test HPV HR</td><td>Exocol + endocol (LBC)</td><td>Co-test FCV + HPV ou test HPV seul selon âge</td></tr>
+          <tr><td>Streptocoque B (SGB)</td><td>Culture / PCR</td><td>Vagino-rectal (35–37 SA)</td><td>Prélèvement combiné vagino-rectal en fin de grossesse</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="h2">Critères de Amsel — Vaginose bactérienne</div>
+  <div class="alerte violet">
+    <strong>Diagnostic positif si ≥ 3 critères sur 4</strong>
+    Le diagnostic de vaginose bactérienne repose sur les critères d'Amsel (clinique + laboratoire). Aucun critère seul n'est suffisant.
+  </div>
+  <div class="pg-table-wrap">
+    <table class="pg-table">
+      <thead><tr><th>#</th><th>Critère d'Amsel</th><th>Positif si</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Leucorrhées grisâtres, homogènes, peu abondantes</td><td>Aspect caractéristique à l'examen</td></tr>
+        <tr><td>2</td><td>pH vaginal</td><td>&gt; 4,5</td></tr>
+        <tr><td>3</td><td>Test aux amines (Whiff test)</td><td>Odeur de poisson au KOH 10 %</td></tr>
+        <tr><td>4</td><td>Clue cells à l'état frais</td><td>≥ 20 % des cellules épithéliales recouvertes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="h2">Germes et syndromes — Correspondances cliniques</div>
+  <div class="pg-table-wrap">
+    <table class="pg-table">
+      <thead>
+        <tr><th>Syndrome</th><th>Germes principaux</th><th>Orientation diagnostique</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Vaginite candidosique</td><td><em>Candida albicans</em> (85–90 %)</td><td>Leucorrhées blanches caillebottées, prurit intense, pH normal</td></tr>
+        <tr><td>Vaginose bactérienne</td><td><em>Gardnerella vaginalis</em>, anaérobies</td><td>Leucorrhées grisâtres, odeur de poisson, pH &gt; 4,5, clue cells</td></tr>
+        <tr><td>Trichomonase</td><td><em>Trichomonas vaginalis</em></td><td>Leucorrhées jaune-verdâtres, mousseuses, pH élevé, prurit</td></tr>
+        <tr><td>Cervicite/urétrite</td><td><em>Chlamydia</em>, <em>Gonocoque</em></td><td>Souvent asymptomatique, endocol purulent</td></tr>
+        <tr><td>Herpès génital</td><td>HSV-2 (++) / HSV-1</td><td>Ulcérations douloureuses, vésicules, adénopathies</td></tr>
+        <tr><td>Syphilis primaire</td><td><em>Treponema pallidum</em></td><td>Chancre indolore, adénopathies inguinales indolores</td></tr>
+        <tr><td>IGH (salpingite)</td><td><em>Chlamydia</em>, <em>Gonocoque</em>, anaérobies, BV flora</td><td>Douleurs pelviennes, fièvre, défense</td></tr>
+        <tr><td>Vaginite à <em>Mycoplasma</em></td><td><em>M. hominis</em>, <em>M. genitalium</em></td><td>Cervicite, urétrite, souvent coinfection avec Chlamydia</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 5 — CYTOLOGIE / HISTOLOGIE
+════════════════════════════════════ -->
+<section id="s-cytohisto" class="pg-section">
+
+  <div class="h2">Frottis cervico-vaginal (FCV)</div>
+
+  <div class="pg-card">
+    <div class="pg-card-title"><span class="icon">🩺</span> Principes du dépistage organisé (France)</div>
+    <div class="pg-table-wrap">
+      <table class="pg-table">
+        <thead><tr><th>Âge</th><th>Examen recommandé</th><th>Rythme</th><th>Commentaire</th></tr></thead>
+        <tbody>
+          <tr><td>25–29 ans</td><td>FCV cytologie seule</td><td>J0, J12 mois, puis J36 mois</td><td>2 FCV à 1 an d'intervalle, puis tous les 3 ans</td></tr>
+          <tr><td>30–65 ans</td><td>Test HPV HR (co-test possible)</td><td>Tous les 5 ans</td><td>Si HPV(–) : 5 ans. Si HPV(+) : cytologie réflexe</td></tr>
+          <tr><td>&gt; 65 ans</td><td>Arrêt si 3 derniers normaux</td><td>—</td><td>Sauf antécédent de CIN2+ traité (suivi 20 ans)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pg-card">
+    <div class="pg-card-title"><span class="icon">🔬</span> Technique — Cytologie en base liquide (CBL) recommandée</div>
+    <div class="steps">
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Mise en place du spéculum :</strong> Non lubrifié. Visualisation de la totalité de la zone de jonction (ZJ).</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Nettoyage de l'exocol :</strong> Essuyer délicatement le mucus sans gratter.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Prélèvement de l'exocol :</strong> Spatule d'Ayre ou brosse combinée centrée sur l'orifice cervical externe. Rotation à 360°.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Prélèvement de l'endocol :</strong> Cytobrush ou partie centrale de la brosse combinée dans le canal endocervical.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Rinçage dans le flacon CBL :</strong> Agiter et rincer la brosse dans le milieu liquide. NB : en cytologie conventionnelle, étaler immédiatement sur lame et fixer.</div></div>
+      <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Conservation et envoi :</strong> Flacon CBL à température ambiante. Acheminement sous 48 h. Fiche de renseignements jointe.</div></div>
+    </div>
+    <div class="alerte warn">
+      <strong>Prélèvement non satisfaisant si</strong>
+      Moins de 8 000 cellules malpighiennes (CBL), absence de cellules endocervicales, artefacts de séchage (cytologie conventionnelle), col non visualisé.
+    </div>
+  </div>
+
+  <div class="h2">Classification de Bethesda 2014 — Résultats cytologiques</div>
+  <div class="pg-table-wrap">
+    <table class="pg-table">
+      <thead>
+        <tr><th>Catégorie Bethesda</th><th>Signification</th><th>Conduite à tenir habituelle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="badge badge-vert">NILM</span></td><td>Négatif pour lésion intraépithéliale ou malignité</td><td>Rythme de dépistage habituel</td></tr>
+        <tr><td><span class="badge badge-orange">ASC-US</span></td><td>Cellules malpighiennes atypiques de signification indéterminée</td><td>Test HPV réflexe → si (+) colposcopie</td></tr>
+        <tr><td><span class="badge badge-orange">ASC-H</span></td><td>Cellules atypiques ne permettant pas d'exclure HSIL</td><td>Colposcopie immédiate</td></tr>
+        <tr><td><span class="badge badge-orange">LSIL</span></td><td>Lésion intraépithéliale de bas grade (CIN 1)</td><td>Colposcopie</td></tr>
+        <tr><td><span class="badge badge-rouge">HSIL</span></td><td>Lésion intraépithéliale de haut grade (CIN 2–3)</td><td>Colposcopie + biopsie dirigée</td></tr>
+        <tr><td><span class="badge badge-rouge">AGC</span></td><td>Cellules glandulaires atypiques</td><td>Colposcopie + curetage endocervical</td></tr>
+        <tr><td><span class="badge badge-rouge">Carcinome</span></td><td>Carcinome malpighien ou adénocarcinome</td><td>Bilan d'extension + prise en charge oncologique</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="h2">Biopsies — Prélèvements histologiques</div>
+  <div class="pg-table-wrap">
+    <table class="pg-table">
+      <thead>
+        <tr><th>Type</th><th>Indication principale</th><th>Technique</th><th>Anesthésie</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Biopsie du col</strong></td><td>Lésion colposcopique, FCV HSIL</td><td>Pince de Tischler sur zone lugol-négative</td><td>Non (rarement)</td></tr>
+        <tr><td><strong>Biopsie de l'endomètre</strong></td><td>Saignements anormaux, suspicion cancer, hyperplasie</td><td>Pipelle de Cornier (sans dilatation)</td><td>Non (douleur modérée)</td></tr>
+        <tr><td><strong>Biopsie du vagin</strong></td><td>VAIN, lésions chroniques vaginales</td><td>Pince à biopsie sous colposcopie</td><td>Locale</td></tr>
+        <tr><td><strong>Biopsie de la vulve</strong></td><td>VIN, ulcération chronique, lésion suspecte</td><td>Punch biopsy (4–6 mm) ou biopsie à l'emporte-pièce</td><td>Locale (Xylocaïne® 1 %)</td></tr>
+        <tr><td><strong>Bistournage polype col</strong></td><td>Polype endocervical visible</td><td>Rotation à la pince</td><td>Non</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pg-card">
+    <div class="pg-card-title"><span class="icon">📊</span> Frottis de maturité (index maturationnel)</div>
+    <p class="pg-p">Prélèvement du tiers supérieur de la paroi vaginale latérale. Réalisé à distance de toute infection. Utile pour évaluer l'imprégnation estrogénique (ménopause, atrophie).</p>
+    <div class="grid-2">
+      <div>
+        <div class="h3">Index maturationnel (IM)</div>
+        <ul class="pg-list dot">
+          <li>% cellules superficielles / intermédiaires / profondes</li>
+          <li>Forte estrogénisation : IM déplacé à droite (superficielles dominantes)</li>
+          <li>Atrophie : IM déplacé à gauche (cellules profondes dominantes)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="h3">Valeur de l'index caryo-pycnotique (ICP)</div>
+        <ul class="pg-list dot">
+          <li>ICP normal (femme en activité) : 20–35 %</li>
+          <li>ICP &gt; 40 % : hyperestrogénisme relatif</li>
+          <li>ICP &lt; 10 % : atrophie</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 6 — RÉSULTATS & INTERPRÉTATION
+════════════════════════════════════ -->
+<section id="s-resultats" class="pg-section">
+
+  <div class="h2">Interprétation des résultats — Arbre décisionnel simplifié</div>
+
+  <div class="alerte info">
+    <strong>Principe général</strong>
+    L'interprétation d'un résultat microbiologique doit toujours être corrélée au contexte clinique. Un germe isolé en culture ne signifie pas nécessairement une infection si la patiente est asymptomatique.
+  </div>
+
+  <div class="pg-table-wrap">
+    <table class="pg-table">
+      <thead>
+        <tr><th>Résultat</th><th>Signification clinique</th><th>Traitement habituel</th><th>Partenaire</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><em>Candida albicans</em> isolé</td>
+          <td>Vulvo-vaginite candidosique</td>
+          <td>Azolé local (éconazole, clotrimazole) ou systémique (fluconazole 150 mg)</td>
+          <td>Non nécessaire sauf récidives</td>
+        </tr>
+        <tr>
+          <td>Critères d'Amsel (≥ 3/4)</td>
+          <td>Vaginose bactérienne</td>
+          <td>Métronidazole 500 mg × 2/j × 7 j PO ou gel vaginal</td>
+          <td>Non (non IST)</td>
+        </tr>
+        <tr>
+          <td><em>Trichomonas</em> à l'état frais ou PCR</td>
+          <td>Trichomonase</td>
+          <td>Métronidazole 2 g dose unique (les 2 partenaires)</td>
+          <td>Oui — traitement simultané obligatoire</td>
+        </tr>
+        <tr>
+          <td><em>Chlamydia trachomatis</em> PCR (+)</td>
+          <td>Infection à Chlamydia</td>
+          <td>Doxycycline 100 mg × 2/j × 7 j (ou azithromycine 1 g dose unique)</td>
+          <td>Oui — dépistage et traitement obligatoires</td>
+        </tr>
+        <tr>
+          <td><em>Neisseria gonorrhoeae</em> PCR/culture (+)</td>
+          <td>Gonococcie</td>
+          <td>Ceftriaxone 500 mg IM dose unique + azithromycine (selon protocole)</td>
+          <td>Oui — obligatoire</td>
+        </tr>
+        <tr>
+          <td>HSV 1 ou 2 PCR (+)</td>
+          <td>Herpès génital (primo ou récurrence)</td>
+          <td>Aciclovir 400 mg × 3/j × 7–10 j (primo) ou 5 j (récurrence)</td>
+          <td>Information + dépistage sérologique</td>
+        </tr>
+        <tr>
+          <td>SGB positif (fin grossesse)</td>
+          <td>Portage Streptocoque B</td>
+          <td>Prophylaxie antibiotique en per-partum (pénicilline G)</td>
+          <td>Non applicable</td>
+        </tr>
+        <tr>
+          <td>Culture négative — symptômes persistants</td>
+          <td>Vaginite non infectieuse ? Atrophie ? Allergie ?</td>
+          <td>Réévaluation clinique, bilan complémentaire</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="h2">Conduite à tenir selon le résultat du test HPV</div>
+  <div class="pg-table-wrap">
+    <table class="pg-table">
+      <thead><tr><th>Test HPV</th><th>Cytologie associée</th><th>Conduite</th></tr></thead>
+      <tbody>
+        <tr><td>HPV (–)</td><td>—</td><td>Contrôle dans 5 ans (dépistage normal)</td></tr>
+        <tr><td>HPV (+) non 16/18</td><td>NILM</td><td>Contrôle co-test à 1 an</td></tr>
+        <tr><td>HPV (+) non 16/18</td><td>ASC-US ou LSIL</td><td>Colposcopie</td></tr>
+        <tr><td>HPV 16 ou 18 (+)</td><td>Tout résultat cytologique</td><td>Colposcopie directe (risque élevé)</td></tr>
+        <tr><td>HPV (+) non 16/18</td><td>ASC-H / HSIL / AGC</td><td>Colposcopie + biopsie dirigée</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alerte danger">
+    <strong>Signalement obligatoire</strong>
+    Les infections à gonocoque et à Chlamydia sont des IST à déclaration non obligatoire en France mais leur notification volontaire au réseau Rénago/RésIST est recommandée. La syphilis et le VIH sont des maladies à déclaration obligatoire (DO).
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 7 — OUTIL D'AIDE AU CHOIX
+════════════════════════════════════ -->
+<section id="s-outil" class="pg-section">
+
+  <div class="outil-header">
+    <h2>🔍 Aide au choix du prélèvement</h2>
+    <p>Sélectionnez la situation clinique pour obtenir les prélèvements recommandés.</p>
+  </div>
+
+  <div class="pg-card">
+    <div class="outil-form-group">
+      <label class="outil-label">1. Symptôme(s) principal(aux)</label>
+      <div class="checkbox-grid" id="symptomes">
+        <label class="checkbox-item"><input type="checkbox" value="leucorrhees"> Leucorrhées anormales</label>
+        <label class="checkbox-item"><input type="checkbox" value="prurit"> Prurit vulvo-vaginal</label>
+        <label class="checkbox-item"><input type="checkbox" value="douleur"> Douleurs pelviennes</label>
+        <label class="checkbox-item"><input type="checkbox" value="ulceration"> Ulcération génitale</label>
+        <label class="checkbox-item"><input type="checkbox" value="saignement"> Saignements anormaux</label>
+        <label class="checkbox-item"><input type="checkbox" value="asympto"> Asymptomatique (dépistage)</label>
+        <label class="checkbox-item"><input type="checkbox" value="grossesse"> Grossesse (35–37 SA)</label>
+        <label class="checkbox-item"><input type="checkbox" value="infertilite"> Bilan infertilité</label>
+      </div>
+    </div>
+
+    <div class="outil-form-group">
+      <label class="outil-label">2. Contexte particulier</label>
+      <select class="outil-select" id="contexte">
+        <option value="">— Aucun —</option>
+        <option value="ist">Partenaire IST connu / Rapport à risque</option>
+        <option value="vihimm">VIH ou immunodépression</option>
+        <option value="recidive">Récidive (≥ 3 épisodes/an)</option>
+        <option value="enceinte">Femme enceinte</option>
+        <option value="postpart">Post-partum / Post-abortum</option>
+        <option value="ménopause">Ménopause / Atrophie vaginale</option>
+      </select>
+    </div>
+
+    <div class="outil-form-group">
+      <label class="outil-label">3. Examen clinique</label>
+      <select class="outil-select" id="clinique">
+        <option value="">— Non précisé —</option>
+        <option value="colpur">Endocol purulent</option>
+        <option value="colnorm">Col normal</option>
+        <option value="ulcvulve">Ulcération vulvaire</option>
+        <option value="massepelv">Masse pelvienne / Défense</option>
+        <option value="polype">Polype du col visible</option>
+      </select>
+    </div>
+
+    <button class="btn-outil" onclick="genererRecommandation()">Générer les recommandations</button>
+    <button class="btn-reset" onclick="resetOutil()">Réinitialiser</button>
+
+    <div class="result-box" id="result-box">
+      <div class="result-title">🔬 Prélèvements recommandés</div>
+      <div id="result-content"></div>
+      <div class="alerte warn" style="margin-top:14px">
+        <strong>Rappel médico-légal</strong>
+        Ces recommandations sont indicatives et ne remplacent pas le jugement clinique. Adapter en fonction du contexte individuel de la patiente.
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 8 — CHECK-LIST
+════════════════════════════════════ -->
+<section id="s-checklist" class="pg-section">
+
+  <div class="outil-header">
+    <h2>✔ Check-list de prélèvement gynécologique</h2>
+    <p>Cochez chaque étape pour garantir la qualité du prélèvement.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">1</span> Avant le prélèvement</div>
+      <div class="checklist" id="cl-avant">
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Vérifier l'arrêt des antibiotiques (≥ 7–10 jours)</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Vérifier l'arrêt des antifongiques locaux (≥ 7 jours)</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Pas de toilette vaginale dans les 48 h</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Pas de rapport sexuel dans les 24–48 h</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>En dehors des règles (sauf urgence)</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Fiche de renseignements complétée</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Matériel de prélèvement vérifié (milieux non périmés)</label></label>
+      </div>
+    </div>
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">2</span> Pendant le prélèvement</div>
+      <div class="checklist" id="cl-pendant">
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Position gynécologique, éclairage optimal</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Spéculum stérile, non lubrifié</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Inspection complète du col et des parois vaginales</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Prélèvement vaginal (× 2 écouvillons minimum)</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Mesure du pH vaginal</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Test aux amines si vaginose suspectée</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Prélèvement endocervical si IST suspectée</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>FCV si indiqué (dépistage ou pathologie)</label></label>
+      </div>
+    </div>
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">3</span> Après le prélèvement</div>
+      <div class="checklist" id="cl-apres">
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Identification correcte de tous les flacons / lames</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Acheminement rapide (gonocoque : &lt; 2 h)</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Examen direct réalisé si disponible</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Fiche de renseignements jointe au prélèvement</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Traçabilité dans le dossier médical</label></label>
+      </div>
+    </div>
+    <div class="pg-card">
+      <div class="pg-card-title"><span class="icon">4</span> Résultats &amp; suivi</div>
+      <div class="checklist" id="cl-suivi">
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Résultats corrélés au contexte clinique</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Traitement adapté instauré si positif</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Partenaire convoqué/informé si IST</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Contrôle post-thérapeutique planifié si nécessaire</label></label>
+        <label class="checklist-item"><input type="checkbox" onchange="updateCheck(this)"><label>Déclaration obligatoire si applicable (syphilis, VIH)</label></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="pg-card" style="margin-top:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="font-size:13.5px;font-weight:700;color:var(--bleu)">Progression globale</div>
+      <div class="progress-label" id="progress-pct">0 / 25 étapes</div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+  </div>
+</section>
+
+</main>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <h3 id="modal-title">Titre</h3>
+      <button class="modal-close" onclick="closeModalDirect()">&#215;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="pg-footer">
+  <strong>Avertissement médico-légal :</strong> Ce document est destiné aux professionnels de santé à titre éducatif. Il ne constitue pas un protocole officiel ni une recommandation de service. Les décisions cliniques doivent être individualisées et s'appuyer sur les recommandations actualisées des sociétés savantes (CNGOF, HAS, SPILF). — <strong>Sources :</strong> CNGOF 2024 · HAS 2020–2024 · SPILF · ESCMID · Vidal.
+</footer>
+
+<script>
+/* ══════════════════════════
+   NAVIGATION
+══════════════════════════ */
+function showSection(id) {
+  document.querySelectorAll('.pg-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.pg-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+  const btns = document.querySelectorAll('.pg-nav-btn');
+  const labels = ['indications','conditions','techniques','micro','cytohisto','resultats','outil','checklist'];
+  const idx = labels.indexOf(id);
+  if (idx >= 0) btns[idx].classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ══════════════════════════
+   MODALS
+══════════════════════════ */
+const modalData = {
+  'm-vaginal': {
+    title: '🔬 Prélèvement vaginal — Technique détaillée',
+    body: `
+      <div class="alerte info"><strong>Indications principales</strong>Leucorrhées, prurit, suspicion vaginose, candidose, trichomonase, dépistage SGB.</div>
+      <div class="h3" style="margin-top:12px">Matériel nécessaire</div>
+      <ul class="pg-list dot">
+        <li>2 écouvillons floqués (ESwab™ ou équivalent)</li>
+        <li>Milieu de transport universel</li>
+        <li>Bandelette pH (4–5,5)</li>
+        <li>Lame + fixateur (si état frais)</li>
+        <li>KOH 10 % (Whiff test)</li>
+        <li>Spéculum stérile non lubrifié</li>
+      </ul>
+      <div class="h3">Technique</div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Spéculum en place, inspection visuelle du col et des parois.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Écouvillon 1 : rotation sur parois latérales + cul-de-sac postérieur → état frais / culture.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Écouvillon 2 : même geste → PCR multiplex IST ou culture bactériologique.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Mesure pH vaginal (bandelette sur paroi) ; normal 3,8–4,5.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Whiff test : 1 goutte KOH 10 % → odeur de poisson = vaginose probable.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Transport en milieu universel, acheminement &lt; 24 h.</div></div>
+      </div>
+      <div class="alerte warn"><strong>Interprétation du pH</strong>&lt; 4,5 = normal ou candidose · &gt; 4,5 = vaginose, trichomonase, IGH</div>
+    `
+  },
+  'm-endo': {
+    title: '🔬 Prélèvement endocervical — Technique détaillée',
+    body: `
+      <div class="alerte info"><strong>Indications principales</strong>Suspicion Chlamydia, gonococcie, cervicite, bilan IST, endocervicite.</div>
+      <div class="h3" style="margin-top:12px">Technique en 5 étapes</div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Spéculum en place</strong>, éclairage optimal, col bien visualisé.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Essuyer le mucus exocervical</strong> avec une compresse stérile sèche avant tout prélèvement.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Introduction de la brosse endocervicale</strong> ou de l'écouvillon fin dans le canal endocervical sur 1–2 cm.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Rotation à 360°</strong> pendant 10–15 secondes pour maximiser le prélèvement cellulaire.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body"><strong>Rinçage ou étalement</strong> selon le type d'analyse demandée (PCR : flacon dédié ; culture : gélose chocolat ou milieu de transport).</div></div>
+      </div>
+      <div class="alerte danger"><strong>Attention — Gonocoque</strong>Acheminement &lt; 2 h si culture demandée. Utiliser milieu de transport de Stuart si délai impossible. PCR préférable en routine.</div>
+    `
+  },
+  'm-fcv': {
+    title: '🩺 Frottis cervico-vaginal (FCV) — Technique CBL',
+    body: `
+      <div class="alerte info"><strong>Indication</strong>Dépistage organisé du cancer du col. 25–65 ans. Cytologie seule (25–29 ans) ou test HPV (30–65 ans).</div>
+      <div class="h3" style="margin-top:12px">Conditions impératives</div>
+      <ul class="pg-list cross">
+        <li>Pas de rapport sexuel dans les 48 h</li>
+        <li>Pas de toilette vaginale dans les 48 h</li>
+        <li>Pas de traitement local dans les 7 jours</li>
+        <li>Hors des règles (idéalement phase folliculaire)</li>
+        <li>Pas d'examen colposcopique le même jour avant le FCV</li>
+      </ul>
+      <div class="h3">Technique CBL (base liquide — recommandée)</div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Spéculum en place, visualisation de la ZJ (zone de jonction).</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Essuyer le mucus sans gratter.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Brosse combinée centrée sur l'OE, rotation à 360° (5 tours dans le sens horaire).</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Rincer la brosse dans le flacon ThinPrep® ou SurePath®. Agiter vigoureusement.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Fermer le flacon, identifier (nom, DDN, date, médecin), conserver à température ambiante, envoyer sous 48 h.</div></div>
+      </div>
+      <div class="alerte warn"><strong>Prélèvement non satisfaisant</strong>ZJ non visualisée, col non visible, traitement récent, hémorragie. Mentionner sur la fiche de demande.</div>
+    `
+  },
+  'm-endometre': {
+    title: '🔬 Prélèvement endométrial — Pipelle de Cornier',
+    body: `
+      <div class="alerte info"><strong>Indications principales</strong>Saignements utérins anormaux, suspicion cancer de l'endomètre, hyperplasie, endométrite, bilan pré-ménopausique.</div>
+      <div class="h3" style="margin-top:12px">Contre-indications</div>
+      <ul class="pg-list cross">
+        <li>Grossesse évolutive</li>
+        <li>Infection cervico-vaginale active (traiter avant)</li>
+        <li>Sténose cervicale serrée (recourir à l'hystéroscopie)</li>
+        <li>Troubles de l'hémostase non corrigés</li>
+      </ul>
+      <div class="h3">Technique</div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num"></div><div class="step-body">AINS 1 h avant (ibuprofène 400 mg) pour réduire la douleur.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Position gynécologique. Spéculum. Désinfection exocol.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Introduire la pipelle de Cornier dans la cavité utérine jusqu'au fond (résistance légère).</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Créer la dépression (tirer le piston) et effectuer des mouvements de va-et-vient.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Placer le matériel dans le flacon de formol à 4 %. Identifier et envoyer pour examen histologique.</div></div>
+      </div>
+      <div class="alerte warn"><strong>Limite</strong>La pipelle n'explore que ~50 % de la cavité. En cas de négativité avec forte suspicion clinique, recourir à l'hystéroscopie diagnostique.</div>
+    `
+  },
+  'm-vulve': {
+    title: '🔬 Prélèvement vulvaire — Ulcérations et lésions',
+    body: `
+      <div class="alerte info"><strong>Indications</strong>Ulcération génitale, vésicules, lésion chronique, prurit vulvaire rebelle, VIN suspecté.</div>
+      <div class="pg-table-wrap" style="margin-top:12px">
+        <table class="pg-table">
+          <thead><tr><th>Type de lésion</th><th>Prélèvement</th><th>Analyse</th></tr></thead>
+          <tbody>
+            <tr><td>Ulcération douloureuse (vésicules)</td><td>Écouvillonnage fond d'ulcère</td><td>PCR HSV 1/2</td></tr>
+            <tr><td>Ulcère indolore (syphilis probable)</td><td>Écouvillonnage + sérologie</td><td>PCR <em>T. pallidum</em> + TPHA/VDRL</td></tr>
+            <tr><td>Lésion blanche / rouge chronique</td><td>Biopsie punch (4–6 mm)</td><td>Histologie (VIN, lichen)</td></tr>
+            <tr><td>Adénopathies inguinales</td><td>Ponction + sérologie</td><td>Culture + PCR (<em>Haemophilus ducreyi</em>, LGV)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alerte warn"><strong>Biopsie vulvaire</strong>Sous anesthésie locale (Xylocaïne® 1 %). Proscrire le bistouri froid sur lésion vaginale fine. Fixation en formol 4 %. Toute lésion chronique rebelle > 6 semaines doit être biopsiée.</div>
+    `
+  },
+  'm-uretral': {
+    title: '🔬 Prélèvement urétral',
+    body: `
+      <div class="alerte info"><strong>Indications</strong>Urétrite, dysurie, complément au prélèvement endocervical dans le bilan IST.</div>
+      <div class="h3" style="margin-top:12px">Conditions</div>
+      <ul class="pg-list dot">
+        <li>À jeun de miction depuis au moins 2 heures</li>
+        <li>Nettoyage du méat urinaire</li>
+        <li>Écouvillon fin dédié (urétral)</li>
+      </ul>
+      <div class="h3">Technique</div>
+      <div class="steps">
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Introduction douce de l'écouvillon dans le méat urétral sur 1–2 cm.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Rotation à 360°, retrait lent. Placer en milieu de transport.</div></div>
+        <div class="step-item"><div class="step-num"></div><div class="step-body">Alternative si écouvillon non disponible : 1er jet d'urine (5–10 mL) pour PCR multiplex IST.</div></div>
+      </div>
+      <div class="alerte warn">Le 1er jet urinaire est souvent préféré à l'écouvillon urétral chez la femme pour le confort et la sensibilité PCR équivalente.</div>
+    `
+  }
+};
+
+function openModal(id) {
+  const data = modalData[id];
+  if (!data) return;
+  document.getElementById('modal-title').textContent = data.title;
+  document.getElementById('modal-body').innerHTML = data.body;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ══════════════════════════
+   OUTIL D'AIDE AU CHOIX
+══════════════════════════ */
+function genererRecommandation() {
+  const symptomes = [...document.querySelectorAll('#symptomes input:checked')].map(x => x.value);
+  const contexte = document.getElementById('contexte').value;
+  const clinique = document.getElementById('clinique').value;
+
+  if (symptomes.length === 0 && !contexte && !clinique) {
+    alert('Veuillez sélectionner au moins un critère.');
+    return;
+  }
+
+  const recs = [];
+  const notes = [];
+
+  // Logique de recommandation
+  if (symptomes.includes('leucorrhees') || symptomes.includes('prurit')) {
+    recs.push({ type: 'vaginal', label: 'Prélèvement vaginal (× 2 écouvillons)', detail: 'Culture + état frais + PCR multiplex IST · Mesure du pH + Whiff test' });
+  }
+  if (symptomes.includes('douleur')) {
+    recs.push({ type: 'endo', label: 'Prélèvement endocervical', detail: 'PCR Chlamydia / Gonocoque · NFS-CRP si fièvre · Cœlioscopie si IGH confirmée' });
+    recs.push({ type: 'bio', label: 'Bilan biologique', detail: 'NFS, CRP, VS, bHCG de grossesse' });
+    notes.push('⚠ Douleurs pelviennes : toujours éliminer une IGH (salpingite). Cœlioscopie si doute.');
+  }
+  if (symptomes.includes('ulceration')) {
+    recs.push({ type: 'vulve', label: 'Prélèvement d\'ulcération vulvaire', detail: 'PCR HSV 1/2 · PCR Treponema pallidum · Sérologie syphilis (TPHA/VDRL)' });
+    notes.push('⚠ Toujours éliminer une co-infection IST (VIH, syphilis, Chlamydia) lors de toute ulcération génitale.');
+  }
+  if (symptomes.includes('saignement')) {
+    recs.push({ type: 'fcv', label: 'FCV + Test HPV', detail: 'Si non à jour du dépistage. Colposcopie si col suspect.' });
+    recs.push({ type: 'endo', label: 'Prélèvement endométrial (pipelle)', detail: 'Si > 40 ans ou facteur de risque cancer endomètre · Échographie endométriale préalable.' });
+  }
+  if (symptomes.includes('asympto')) {
+    recs.push({ type: 'fcv', label: 'FCV / Test HPV selon âge', detail: '25–29 ans : cytologie · 30–65 ans : test HPV HR tous les 5 ans' });
+    if (contexte === 'ist') recs.push({ type: 'endo', label: 'PCR Chlamydia + Gonocoque (endocervical ou vaginal)', detail: 'Dépistage systématique si partenaire IST ou rapport à risque' });
+  }
+  if (symptomes.includes('grossesse')) {
+    recs.push({ type: 'vaginal', label: 'Prélèvement vagino-rectal SGB', detail: 'Entre 35 et 37 SA. Culture sur milieu de Todd-Hewitt. Résultat avant l\'accouchement.' });
+    if (contexte === 'ist') recs.push({ type: 'endo', label: 'PCR Chlamydia / Gonocoque / Trichomonas', detail: 'Recommandé si facteur de risque IST en grossesse' });
+  }
+  if (symptomes.includes('infertilite')) {
+    recs.push({ type: 'endo', label: 'PCR Chlamydia + Mycoplasma genitalium', detail: 'Bilan systématique du bilan infertilité' });
+    recs.push({ type: 'fcv', label: 'FCV si non à jour', detail: 'Avant toute stimulation ovarienne' });
+  }
+  if (clinique === 'colpur') {
+    recs.push({ type: 'endo', label: 'Prélèvement endocervical (prioritaire)', detail: 'PCR + culture Chlamydia / Gonocoque · Bilan IST complet' });
+    notes.push('Endocol purulent = cervicite jusqu\'à preuve du contraire. Traiter sans attendre les résultats si contexte IST évident.');
+  }
+  if (clinique === 'ulcvulve') {
+    if (!recs.find(r => r.type === 'vulve'))
+      recs.push({ type: 'vulve', label: 'Prélèvement d\'ulcération vulvaire', detail: 'PCR HSV + sérologie syphilis' });
+  }
+  if (clinique === 'massepelv') {
+    recs.push({ type: 'bio', label: 'Bilan biologique + imagerie urgente', detail: 'NFS-CRP · Echographie pelvienne ± TDM si abcès suspecté · Cœlioscopie diagnostique' });
+  }
+  if (clinique === 'polype') {
+    recs.push({ type: 'histo', label: 'Bistournage + examen anatomopathologique', detail: 'Exérèse du polype, analyse histologique systématique' });
+  }
+  if (contexte === 'recidive') {
+    notes.push('Récidive (≥ 3 épisodes/an) : rechercher facteur favorisant (immunodépression, diabète, partenaire non traité, résistance antifongique). Antifongigramme recommandé.');
+  }
+  if (contexte === 'vihimm') {
+    notes.push('Immunodépression : bilan IST complet incluant sérologies VIH, hépatites B/C, syphilis. Fréquence de dépistage augmentée.');
+  }
+
+  // Dédoublonner
+  const uniqueRecs = recs.filter((r, i, a) => a.findIndex(x => x.label === r.label) === i);
+
+  if (uniqueRecs.length === 0) {
+    document.getElementById('result-content').innerHTML = '<p class="pg-p">Aucun prélèvement spécifique identifié avec les critères sélectionnés. Consulter les onglets « Techniques » et « Indications ».</p>';
+  } else {
+    let html = '';
+    uniqueRecs.forEach(r => {
+      html += `<div class="result-item">
+        <div class="result-dot"></div>
+        <div><strong style="color:var(--bleu);font-size:13.5px">${r.label}</strong><br>
+        <span style="font-size:12.5px;color:var(--gris-txt)">${r.detail}</span></div>
+      </div>`;
+    });
+    if (notes.length > 0) {
+      html += '<div style="margin-top:12px;font-weight:700;font-size:12px;color:var(--orange);text-transform:uppercase;letter-spacing:.06em">Points d\'attention</div>';
+      notes.forEach(n => {
+        html += `<div class="alerte warn" style="margin-top:6px;margin-bottom:0">${n}</div>`;
+      });
+    }
+    document.getElementById('result-content').innerHTML = html;
+  }
+
+  document.getElementById('result-box').classList.add('show');
+  document.getElementById('result-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetOutil() {
+  document.querySelectorAll('#symptomes input').forEach(x => x.checked = false);
+  document.querySelectorAll('#symptomes .checkbox-item').forEach(x => x.classList.remove('selected'));
+  document.getElementById('contexte').value = '';
+  document.getElementById('clinique').value = '';
+  document.getElementById('result-box').classList.remove('show');
+}
+
+document.querySelectorAll('#symptomes .checkbox-item').forEach(item => {
+  item.addEventListener('change', function() {
+    this.classList.toggle('selected', this.querySelector('input').checked);
+  });
+});
+
+/* ══════════════════════════
+   CHECK-LIST PROGRESS
+══════════════════════════ */
+function updateCheck(checkbox) {
+  const item = checkbox.closest('.checklist-item');
+  item.classList.toggle('done', checkbox.checked);
+  const total = document.querySelectorAll('.checklist input[type=checkbox]').length;
+  const done = document.querySelectorAll('.checklist input[type=checkbox]:checked').length;
+  const pct = Math.round(done / total * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = done + ' / ' + total + ' étapes';
+  document.getElementById('progress-bar').style.background = pct === 100 ? 'var(--vert)' : 'var(--bleu-clair)';
+}
+</script>
+</body>
+</html>

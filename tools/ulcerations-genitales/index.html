@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithme — Ulcérations Génitales</title>
+    <style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — Isolation totale par #ulc-app
+   Unicode CSS pour pseudo-éléments (jamais d'entités HTML)
+   Aucune dépendance externe — IIFE JavaScript
+   ============================================================ */
+
+#ulc-app {
+    all: initial;
+    display: block;
+    font-family: 'Segoe UI', Helvetica Neue, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1a2236;
+    background: #f5f6f8;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+#ulc-app *,
+#ulc-app *::before,
+#ulc-app *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- WRAPPER --- */
+#ulc-app .ulc-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #dde1e9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* --- EN-TÊTE --- */
+#ulc-app .ulc-header {
+    background: #1a3a5c;
+    color: #ffffff;
+    padding: 24px 28px 20px;
+    border-bottom: 3px solid #2a6496;
+}
+
+#ulc-app .ulc-header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+#ulc-app .ulc-header-icon {
+    font-size: 26px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+#ulc-app .ulc-header h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    margin: 0 0 4px 0;
+    line-height: 1.3;
+}
+
+#ulc-app .ulc-header p {
+    font-size: 12px;
+    color: #a8c4de;
+    margin: 0;
+}
+
+#ulc-app .ulc-header-meta {
+    margin-top: 14px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 12px;
+}
+
+#ulc-app .ulc-meta-tag {
+    font-size: 11px;
+    color: #7aadcc;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 2px;
+    padding: 2px 8px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* --- PROGRESSION --- */
+#ulc-app .ulc-progress-wrap {
+    background: #eef0f4;
+    border-bottom: 1px solid #dde1e9;
+    padding: 0 28px;
+}
+
+#ulc-app .ulc-progress-track {
+    height: 3px;
+    background: #dde1e9;
+    border-radius: 2px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+#ulc-app .ulc-progress-fill {
+    height: 100%;
+    background: #2a6496;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+#ulc-app .ulc-progress-label {
+    font-size: 11px;
+    color: #7a8599;
+    padding-bottom: 8px;
+    text-align: right;
+}
+
+/* --- CONTENU --- */
+#ulc-app .ulc-content {
+    padding: 28px;
+}
+
+/* --- ÉTAPES --- */
+#ulc-app .ulc-step {
+    display: none;
+    animation: ulcFadeIn 0.3s ease-out;
+}
+
+#ulc-app .ulc-step.active {
+    display: block;
+}
+
+@keyframes ulcFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- BOÎTE QUESTION --- */
+#ulc-app .ulc-qbox {
+    background: #f8f9fb;
+    border: 1px solid #dde1e9;
+    border-left: 4px solid #2a6496;
+    border-radius: 3px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+}
+
+#ulc-app .ulc-qbox-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2a6496;
+    background: #daeaf7;
+    border-radius: 2px;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#ulc-app .ulc-qbox-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a2236;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+#ulc-app .ulc-qbox-sub {
+    font-size: 13px;
+    color: #5a6880;
+    margin-bottom: 16px;
+}
+
+/* --- BOUTONS OPTIONS --- */
+#ulc-app .ulc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#ulc-app .ulc-opt {
+    background: #ffffff;
+    border: 1px solid #dde1e9;
+    border-radius: 3px;
+    padding: 13px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a2236;
+    text-align: left;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.4;
+}
+
+#ulc-app .ulc-opt:hover {
+    border-color: #2a6496;
+    background: #f0f6fb;
+}
+
+#ulc-app .ulc-opt.selected {
+    border-color: #2a6496;
+    border-width: 2px;
+    background: #eaf3fb;
+}
+
+#ulc-app .ulc-opt-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+#ulc-app .ulc-opt-dot.blue   { background: #2a6496; }
+#ulc-app .ulc-opt-dot.red    { background: #c0392b; }
+#ulc-app .ulc-opt-dot.orange { background: #e67e22; }
+#ulc-app .ulc-opt-dot.green  { background: #27ae60; }
+#ulc-app .ulc-opt-dot.purple { background: #8e44ad; }
+#ulc-app .ulc-opt-dot.grey   { background: #7a8599; }
+
+#ulc-app .ulc-opt-content {}
+#ulc-app .ulc-opt-title { font-weight: 700; font-size: 14px; color: #1a2236; }
+#ulc-app .ulc-opt-desc  { font-size: 12px; color: #5a6880; font-weight: 400; margin-top: 2px; }
+
+/* --- BOUTON RETOUR --- */
+#ulc-app .ulc-btn-back {
+    background: #7f8c9a;
+    border: none;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 9px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    margin-top: 10px;
+    transition: filter 0.15s;
+}
+
+#ulc-app .ulc-btn-back:hover { filter: brightness(1.1); }
+
+/* --- BILAN SYSTÉMATIQUE (toujours visible) --- */
+#ulc-app .ulc-systematic {
+    border-left: 4px solid #e6a817;
+    background: #fef9ec;
+    border-radius: 0 3px 3px 0;
+    padding: 14px 18px;
+    margin-top: 24px;
+}
+
+#ulc-app .ulc-systematic-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #7a4f00;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+}
+
+#ulc-app .ulc-systematic ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#ulc-app .ulc-systematic ul li {
+    display: flex;
+    align-items: flex-start;
+    font-size: 13px;
+    color: #5a4010;
+    margin-bottom: 5px;
+}
+
+#ulc-app .ulc-systematic ul li::before {
+    content: "–";
+    font-weight: 700;
+    color: #e6a817;
+    margin-right: 9px;
+    flex-shrink: 0;
+    line-height: 1.5;
+}
+
+/* --- RÉSULTAT --- */
+#ulc-app .ulc-result {
+    border: 2px solid #2a6496;
+    border-radius: 3px;
+    padding: 22px 24px;
+    margin-top: 24px;
+    background: #fff;
+    animation: ulcFadeIn 0.35s ease-out;
+}
+
+#ulc-app .ulc-result.herpes   { border-color: #c0392b; }
+#ulc-app .ulc-result.syphilis { border-color: #2a6496; }
+#ulc-app .ulc-result.chancre  { border-color: #e67e22; }
+#ulc-app .ulc-result.lgv      { border-color: #8e44ad; }
+#ulc-app .ulc-result.behcet   { border-color: #27ae60; }
+#ulc-app .ulc-result.autre    { border-color: #7a8599; }
+
+#ulc-app .ulc-result-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a2236;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #eef0f4;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    line-height: 1.3;
+}
+
+#ulc-app .ulc-badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 2px 8px;
+    color: #fff;
+}
+
+#ulc-app .badge-ist    { background: #c0392b; }
+#ulc-app .badge-nonist { background: #27ae60; }
+#ulc-app .badge-viral  { background: #8e44ad; }
+#ulc-app .badge-diff   { background: #7a8599; }
+
+/* --- SECTIONS RÉSULTAT --- */
+#ulc-app .ulc-rsec {
+    margin-bottom: 18px;
+}
+
+#ulc-app .ulc-rsec-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1a3a5c;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #eef0f4;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+#ulc-app .ulc-rsec ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#ulc-app .ulc-rsec ul li {
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #2c3e50;
+    margin-bottom: 7px;
+    line-height: 1.5;
+}
+
+#ulc-app .ulc-rsec ul li::before {
+    content: "✓";
+    color: #27ae60;
+    font-weight: 700;
+    font-size: 13px;
+    margin-right: 9px;
+    flex-shrink: 0;
+    line-height: 1.6;
+}
+
+/* --- ALERTE RÉSULTAT --- */
+#ulc-app .ulc-ralert {
+    border-left: 4px solid #c0392b;
+    background: #fdf2f2;
+    border-radius: 0 3px 3px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 13px;
+    color: #7b1d1d;
+}
+
+#ulc-app .ulc-ralert-title {
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+#ulc-app .ulc-ralert ul {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0 0;
+}
+
+#ulc-app .ulc-ralert ul li {
+    display: flex;
+    align-items: flex-start;
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: #7b1d1d;
+}
+
+#ulc-app .ulc-ralert ul li::before {
+    content: "–";
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+    line-height: 1.5;
+}
+
+/* --- BOUTON RESET --- */
+#ulc-app .ulc-btn-reset {
+    background: #2c3e50;
+    color: #ffffff;
+    border: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 24px;
+    width: 100%;
+    letter-spacing: 0.03em;
+    transition: filter 0.15s;
+}
+
+#ulc-app .ulc-btn-reset:hover { filter: brightness(1.15); }
+
+/* --- PIED DE PAGE --- */
+#ulc-app .ulc-footer {
+    background: #f0f2f5;
+    border-top: 1px solid #dde1e9;
+    padding: 12px 28px;
+    font-size: 11px;
+    color: #8a96a8;
+    line-height: 1.5;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 580px) {
+    #ulc-app .ulc-content { padding: 18px 16px; }
+    #ulc-app .ulc-header  { padding: 18px 16px 14px; }
+    #ulc-app .ulc-footer  { padding: 10px 16px; }
+    #ulc-app .ulc-progress-wrap { padding: 0 16px; }
+    #ulc-app .ulc-result  { padding: 16px 14px; }
+}
+    </style>
+</head>
+<body>
+
+<div id="ulc-app">
+  <div class="ulc-wrapper">
+
+    <!-- EN-TÊTE -->
+    <div class="ulc-header">
+      <div class="ulc-header-top">
+        <div class="ulc-header-icon">🔍</div>
+        <div>
+          <h1>Algorithme Diagnostique — Ulcérations Génitales</h1>
+          <p>Outil d'aide à la décision clinique — Usage médical professionnel</p>
+        </div>
+      </div>
+      <div class="ulc-header-meta">
+        <span class="ulc-meta-tag">Gynécologie</span>
+        <span class="ulc-meta-tag">Infectiologie — IST</span>
+        <span class="ulc-meta-tag">Référentiels HAS / SPILF / BASHH 2024</span>
+      </div>
+    </div>
+
+    <!-- PROGRESSION -->
+    <div class="ulc-progress-wrap">
+      <div class="ulc-progress-track">
+        <div class="ulc-progress-fill" id="ulcProgressFill"></div>
+      </div>
+      <div class="ulc-progress-label" id="ulcProgressLabel">Étape 1 / 2</div>
+    </div>
+
+    <!-- CONTENU -->
+    <div class="ulc-content">
+
+      <!-- ÉTAPE 1 : Nombre d'ulcérations -->
+      <div class="ulc-step active" id="ulcStep1">
+        <div class="ulc-qbox">
+          <div class="ulc-qbox-label">Étape 1 — Morphologie</div>
+          <div class="ulc-qbox-title">Nombre et aspect des ulcérations</div>
+          <div class="ulc-qbox-sub">Observer l'aspect macroscopique avant tout autre paramètre.</div>
+          <div class="ulc-options">
+
+            <button class="ulc-opt" onclick="ulcStep1('multiple', this)">
+              <div class="ulc-opt-dot red"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Ulcérations multiples</div>
+                <div class="ulc-opt-desc">Plusieurs lésions, parfois confluentes — évoquer herpès en premier</div>
+              </div>
+            </button>
+
+            <button class="ulc-opt" onclick="ulcStep1('unique', this)">
+              <div class="ulc-opt-dot blue"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Ulcération unique</div>
+                <div class="ulc-opt-desc">Lésion isolée — large éventail étiologique</div>
+              </div>
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 2A : Multiples -->
+      <div class="ulc-step" id="ulcStep2A">
+        <div class="ulc-qbox">
+          <div class="ulc-qbox-label">Étape 2 — Caractères cliniques</div>
+          <div class="ulc-qbox-title">Ulcérations multiples — Douleur ?</div>
+          <div class="ulc-qbox-sub">La douleur est le paramètre discriminant principal dans ce contexte.</div>
+          <div class="ulc-options">
+
+            <button class="ulc-opt" onclick="ulcResult('herpes', this)">
+              <div class="ulc-opt-dot red"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Douloureuses</div>
+                <div class="ulc-opt-desc">Brûlures, prurit, dysurie, parfois état pseudo-grippal</div>
+              </div>
+            </button>
+
+            <button class="ulc-opt" onclick="ulcResult('autre-multiple', this)">
+              <div class="ulc-opt-dot grey"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Non douloureuses</div>
+                <div class="ulc-opt-desc">Élargir le bilan : syphilis secondaire, LGV, aphtose, Behçet</div>
+              </div>
+            </button>
+
+          </div>
+        </div>
+        <button class="ulc-btn-back" onclick="ulcBack(1)">← Retour</button>
+      </div>
+
+      <!-- ÉTAPE 2B : Unique -->
+      <div class="ulc-step" id="ulcStep2B">
+        <div class="ulc-qbox">
+          <div class="ulc-qbox-label">Étape 2 — Caractères cliniques</div>
+          <div class="ulc-qbox-title">Ulcération unique — Caractères sémiologiques</div>
+          <div class="ulc-qbox-sub">Associer douleur, consistance des bords et adénopathies inguinales.</div>
+          <div class="ulc-options">
+
+            <button class="ulc-opt" onclick="ulcResult('syphilis', this)">
+              <div class="ulc-opt-dot blue"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Indolore, bords indurés + adénopathie inguinale indolore</div>
+                <div class="ulc-opt-desc">Chancre syphilitique typique — Treponema pallidum</div>
+              </div>
+            </button>
+
+            <button class="ulc-opt" onclick="ulcResult('syphilis-atypique', this)">
+              <div class="ulc-opt-dot blue"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Indolore, bords indurés, sans adénopathie évidente</div>
+                <div class="ulc-opt-desc">Chancre syphilitique atypique — toujours suspecter T. pallidum</div>
+              </div>
+            </button>
+
+            <button class="ulc-opt" onclick="ulcResult('chancre-mou', this)">
+              <div class="ulc-opt-dot orange"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Très douloureuse, bords décollés + adénopathie suppurée</div>
+                <div class="ulc-opt-desc">Chancre mou — Haemophilus ducreyi</div>
+              </div>
+            </button>
+
+            <button class="ulc-opt" onclick="ulcResult('lgv', this)">
+              <div class="ulc-opt-dot purple"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Petite ulcération fugace + volumineuse adénopathie inguinale</div>
+                <div class="ulc-opt-desc">Lymphogranulomatose vénérienne (LGV) — CT sérovars L1-L3</div>
+              </div>
+            </button>
+
+            <button class="ulc-opt" onclick="ulcResult('herpes-unique', this)">
+              <div class="ulc-opt-dot red"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Douloureuse, contexte de récurrence herpétique</div>
+                <div class="ulc-opt-desc">Herpès génital — récurrence possible en lésion unique</div>
+              </div>
+            </button>
+
+            <button class="ulc-opt" onclick="ulcResult('autre-unique', this)">
+              <div class="ulc-opt-dot grey"></div>
+              <div class="ulc-opt-content">
+                <div class="ulc-opt-title">Présentation atypique ou ne correspond pas aux options ci-dessus</div>
+                <div class="ulc-opt-desc">Traumatisme, aphtose génitale, maladie de Behçet, lichen</div>
+              </div>
+            </button>
+
+          </div>
+        </div>
+        <button class="ulc-btn-back" onclick="ulcBack(1)">← Retour</button>
+      </div>
+
+      <!-- ZONE RÉSULTAT -->
+      <div id="ulcResultZone" style="display:none;"></div>
+
+      <!-- BILAN SYSTÉMATIQUE — toujours affiché -->
+      <div class="ulc-systematic">
+        <div class="ulc-systematic-title">⚠️ Bilan systématique dans tous les cas</div>
+        <ul>
+          <li>PCR HSV 1/2 sur lésion (examen de référence)</li>
+          <li>Sérologie syphilis : TPHA-VDRL (contrôle à 6 semaines si négative et suspicion clinique)</li>
+          <li>Sérologie VIH (accord du patient)</li>
+          <li>PCR Chlamydia trachomatis et Neisseria gonorrhoeae</li>
+          <li>Sérologie hépatites B et C</li>
+        </ul>
+      </div>
+
+      <!-- BOUTON RESET -->
+      <button class="ulc-btn-reset" onclick="ulcReset()">🔄 Nouveau diagnostic</button>
+
+    </div><!-- /ulc-content -->
+
+    <!-- PIED DE PAGE -->
+    <div class="ulc-footer">
+      <strong>Outil d'aide à la décision — Usage médical réservé.</strong> Cet algorithme ne se substitue pas au jugement clinique. Il ne constitue pas une prescription ni un avis médical individuel. Toute décision thérapeutique reste de la responsabilité du praticien. Références : HAS, SPILF, BASHH 2024.
+    </div>
+
+  </div><!-- /ulc-wrapper -->
+</div><!-- /ulc-app -->
+
+<script>
+(function () {
+    'use strict';
+
+    /* ---- Données cliniques ---- */
+    var FICHES = {
+
+        'herpes': {
+            cls: 'herpes',
+            titre: 'Herpès génital — Primo-infection ou poussée <span class="ulc-badge badge-viral">Viral</span>',
+            html: function () {
+                return rsec('Présentation clinique', [
+                    'Ulcérations multiples douloureuses, à base érythémateuse, parfois vésiculeuses en début d\'évolution',
+                    'Brûlures intenses, prurit, dysurie (si péri-urétral)',
+                    'Primo-infection : syndrome pseudo-grippal, adénopathies inguinales bilatérales',
+                    'Récurrences : prodromes (picotements) 24–48 h avant les lésions',
+                    'HSV-2 dans 70–80 % des cas génitaux ; HSV-1 en augmentation'
+                ]) +
+                rsec('Examens complémentaires', [
+                    '<strong>PCR HSV 1/2 sur lésion</strong> — examen de référence (sensibilité > 95 %)',
+                    'Sérologie HSV IgG/IgM : utile si lésion absente lors de la consultation',
+                    'Bilan IST complet systématique (cf. encadré ci-dessous)'
+                ]) +
+                rsec('Traitement', [
+                    '<strong>Primo-infection :</strong> Valaciclovir 1 000 mg x2/j per os pendant 10 jours',
+                    '<strong>Récurrence :</strong> Valaciclovir 500 mg x2/j per os pendant 5 jours',
+                    'ou Aciclovir 200 mg x5/j pendant 5 jours (alternative)',
+                    'Traitement suppressif si récurrences fréquentes (≥ 6/an) : Valaciclovir 500 mg/j en continu',
+                    'Pas de traitement du partenaire asymptomatique, mais information sur le risque de transmission'
+                ]) +
+                ralrt('Points importants', [
+                    'Excrétion virale asymptomatique possible — risque de transmission même sans lésion visible',
+                    'Préservatif recommandé même en période asymptomatique',
+                    'Déclaration non obligatoire mais bilan IST complet conseillé',
+                    'Grossesse : avis spécialisé — risque d\'herpès néonatal à l\'accouchement'
+                ]);
+            }
+        },
+
+        'herpes-unique': {
+            cls: 'herpes',
+            titre: 'Herpès génital — Récurrence (lésion unique) <span class="ulc-badge badge-viral">Viral</span>',
+            html: function () {
+                return rsec('Présentation clinique', [
+                    'Lésion unique possible lors des récurrences herpétiques',
+                    'Prodromes caractéristiques : picotements, brûlures locales 24–48 h avant',
+                    'Évolution rapide : vésicule → ulcération → croûte en 7–10 jours',
+                    'Contexte évocateur : antécédent d\'herpès génital connu'
+                ]) +
+                rsec('Examens complémentaires', [
+                    'PCR HSV 1/2 sur lésion — confirmer si premier épisode ou doute',
+                    'Bilan IST complet si non réalisé récemment'
+                ]) +
+                rsec('Traitement', [
+                    '<strong>Récurrence :</strong> Valaciclovir 500 mg x2/j pendant 5 jours',
+                    'Débuter le traitement dès les prodromes pour efficacité optimale',
+                    'Traitement suppressif si récurrences fréquentes (≥ 6/an) : Valaciclovir 500 mg/j continu'
+                ]) +
+                ralrt('À ne pas manquer', [
+                    'Éliminer une syphilis primaire par sérologie même si présentation évocatrice d\'herpès',
+                    'PCR HSV indispensable si diagnostic incertain'
+                ]);
+            }
+        },
+
+        'syphilis': {
+            cls: 'syphilis',
+            titre: 'Syphilis primaire — Chancre typique <span class="ulc-badge badge-ist">IST</span>',
+            html: function () {
+                return rsec('Présentation clinique', [
+                    'Ulcération unique, indolore, à base indurée (chancre syphilitique)',
+                    'Bords réguliers, propres, fond propre',
+                    'Adénopathie inguinale satellite indolore — quasi constante',
+                    'Apparaît 10 à 90 jours après le contage (délai moyen : 3 semaines)',
+                    'Guérison spontanée en 3 à 6 semaines — ne pas faussement rassurer'
+                ]) +
+                rsec('Examens complémentaires', [
+                    '<strong>Sérologie syphilis TPHA-VDRL</strong> — peut être négative en tout début de chancre (fenêtre sérologique)',
+                    'Contrôle sérologique à 6 semaines si cliniquement évocateur et sérologie initiale négative',
+                    'PCR Treponema pallidum sur lésion si disponible (non systématique en pratique courante)',
+                    'Bilan IST complet : VIH, hépatites B et C, CT/NG'
+                ]) +
+                rsec('Traitement', [
+                    '<strong>Benzathine benzylpénicilline G 2,4 millions UI IM — dose unique</strong>',
+                    'Allergie pénicilline documentée : Doxycycline 100 mg x2/j per os pendant 14 jours',
+                    'Traitement simultané du ou des partenaires des 3 derniers mois',
+                    'Contrôle sérologique à 3, 6 et 12 mois après traitement'
+                ]) +
+                ralrt('Mesures obligatoires', [
+                    'Traitement et notification du ou des partenaires',
+                    'Abstinence ou préservatifs jusqu\'à guérison confirmée',
+                    'Dépistage VIH systématique (co-infection fréquente)',
+                    'Déclaration anonyme obligatoire (syphilis précoce)'
+                ]);
+            }
+        },
+
+        'syphilis-atypique': {
+            cls: 'syphilis',
+            titre: 'Syphilis primaire — Présentation atypique <span class="ulc-badge badge-ist">IST</span>',
+            html: function () {
+                return rsec('Présentation clinique', [
+                    'Chancre sans adénopathie évidente — présentation possible',
+                    'Localisation atypique : col utérin, vagin, périnée (adénopathie non palpable)',
+                    'Chancre multiple possible (rôle co-infection VIH)',
+                    'Toujours suspecter la syphilis devant toute ulcération génitale inexpliquée'
+                ]) +
+                rsec('Examens complémentaires', [
+                    '<strong>Sérologie syphilis TPHA-VDRL systématique</strong> — même si présentation atypique',
+                    'Contrôle sérologique à 6 semaines si négative et suspicion maintenue',
+                    'PCR T. pallidum sur lésion si disponible',
+                    'Bilan IST complet'
+                ]) +
+                rsec('Traitement', [
+                    '<strong>Benzathine benzylpénicilline G 2,4 millions UI IM — dose unique</strong>',
+                    'Allergie pénicilline documentée : Doxycycline 100 mg x2/j per os pendant 14 jours',
+                    'Traitement simultané du ou des partenaires des 3 derniers mois',
+                    'Contrôle sérologique à 3, 6 et 12 mois'
+                ]) +
+                ralrt('Mesures obligatoires', [
+                    'Ne pas attendre la sérologie pour traiter si probabilité clinique élevée',
+                    'Traitement et notification des partenaires',
+                    'Déclaration anonyme obligatoire'
+                ]);
+            }
+        },
+
+        'chancre-mou': {
+            cls: 'chancre',
+            titre: 'Chancre mou <span class="ulc-badge badge-ist">IST</span>',
+            html: function () {
+                return rsec('Présentation clinique', [
+                    'Ulcération unique ou multiple, très douloureuse',
+                    'Bords décollés, irréguliers, fond nécrotique purulent',
+                    'Adénopathie inguinale unilatérale douloureuse, parfois suppurée (bubon)',
+                    'Incubation courte : 3 à 7 jours',
+                    'Rare en Europe — évoquer en cas de voyage en zone d\'endémie (Afrique, Asie)'
+                ]) +
+                rsec('Examens complémentaires', [
+                    'Culture d\'Haemophilus ducreyi sur milieu spécifique (disponibilité limitée)',
+                    'PCR H. ducreyi si disponible — meilleure sensibilité',
+                    '<strong>Éliminer impérativement une syphilis associée (co-infection possible)</strong>',
+                    'PCR HSV pour écarter un herpès génital',
+                    'Bilan IST complet'
+                ]) +
+                rsec('Traitement', [
+                    '<strong>Azithromycine 1 g per os — dose unique</strong> (recommandation SPILF 2024)',
+                    'ou Ceftriaxone 250 mg IM — dose unique',
+                    'ou Ciprofloxacine 500 mg x2/j pendant 3 jours (si pas d\'alternative)',
+                    'Traitement simultané du ou des partenaires des 10 derniers jours',
+                    'Aspiration du bubon si fluctuant — incision déconseillée'
+                ]) +
+                ralrt('Points importants', [
+                    'Co-infection syphilis et/ou VIH fréquente — bilan IST complet indispensable',
+                    'Contrôle clinique à J7 pour vérifier la réponse au traitement',
+                    'Traitement et notification des partenaires obligatoires'
+                ]);
+            }
+        },
+
+        'lgv': {
+            cls: 'lgv',
+            titre: 'Lymphogranulomatose vénérienne (LGV) <span class="ulc-badge badge-ist">IST</span>',
+            html: function () {
+                return rsec('Présentation clinique', [
+                    'Petite ulcération génitale fugace, souvent passée inaperçue',
+                    'Phase secondaire : volumineuse adénopathie inguinale douloureuse (bubon)',
+                    'Bubon unilatéral, inflammatoire, pouvant se fistuliser',
+                    'Chlamydia trachomatis sérovars L1, L2 ou L3',
+                    'Épidémies récurrentes en Europe chez HSH (hommes ayant des rapports avec des hommes)',
+                    'Forme anorectale possible : rectite, écoulement, douleurs anales'
+                ]) +
+                rsec('Examens complémentaires', [
+                    '<strong>PCR Chlamydia trachomatis sur lésion ou écoulement</strong> — identifier les sérovars L si possible',
+                    'Sérologie Chlamydia (IgG élevés évocateurs mais non spécifiques)',
+                    'Sérologie syphilis, VIH, hépatites B et C',
+                    'Bilan IST complet'
+                ]) +
+                rsec('Traitement', [
+                    '<strong>Doxycycline 100 mg x2/j per os pendant 21 jours</strong>',
+                    'Allergie ou intolérance : Azithromycine 1 g / semaine pendant 3 semaines (efficacité moindre)',
+                    'Traitement simultané du ou des partenaires des 60 derniers jours',
+                    'Ponction-aspiration du bubon si très fluctuant (incision déconseillée)'
+                ]) +
+                ralrt('Mesures obligatoires', [
+                    'Traitement et notification des partenaires',
+                    'Déclaration non obligatoire mais signalement épidémiologique recommandé',
+                    'Contrôle clinique et PCR de contrôle à 4 semaines',
+                    'Dépistage VIH systématique'
+                ]);
+            }
+        },
+
+        'autre-multiple': {
+            cls: 'autre',
+            titre: 'Ulcérations multiples non douloureuses — Diagnostic différentiel <span class="ulc-badge badge-diff">Bilan</span>',
+            html: function () {
+                return rsec('Étiologies à considérer', [
+                    '<strong>Syphilis secondaire :</strong> roséole syphilitique + plaques muqueuses — sérologie TPHA-VDRL',
+                    '<strong>LGV :</strong> ulcérations associées à une adénopathie inguinale volumineuse',
+                    '<strong>Aphtose génitale bipolaire :</strong> aphtose buccale associée, rechercher maladie de Behçet',
+                    '<strong>Maladie de Behçet :</strong> aphtose récurrente oro-génitale + uvéite + critères internationaux',
+                    '<strong>Lichen érosif :</strong> lésions blanchâtres, squameuses — biopsie cutanée'
+                ]) +
+                rsec('Démarche diagnostique', [
+                    'Bilan IST complet systématique (cf. encadré ci-dessous)',
+                    'Sérologie syphilis TPHA-VDRL en premier',
+                    'PCR CT/NG et sérovars LGV',
+                    'Bilan auto-immun si Behçet suspecté : HLA-B51, bilan inflammatoire',
+                    'Biopsie cutanée si lésion chronique ou atypique — avis dermatologique'
+                ]) +
+                ralrt('À ne pas manquer', [
+                    'La syphilis secondaire peut se présenter sans lésion douloureuse — sérologie systématique',
+                    'Avis dermatologique recommandé si présentation atypique ou résistance au traitement',
+                    'Traitement empirique à éviter sans diagnostic établi'
+                ]);
+            }
+        },
+
+        'autre-unique': {
+            cls: 'autre',
+            titre: 'Ulcération unique atypique — Diagnostic différentiel <span class="ulc-badge badge-diff">Bilan</span>',
+            html: function () {
+                return rsec('Étiologies à considérer', [
+                    '<strong>Traumatisme / érosion mécanique :</strong> contexte évocateur, guérison spontanée rapide',
+                    '<strong>Aphtose génitale isolée :</strong> ulcération bien limitée, très douloureuse, fond jaunâtre',
+                    '<strong>Maladie de Behçet :</strong> aphtose oro-génitale récurrente + critères internationaux',
+                    '<strong>Lichen érosif :</strong> plages érosives, bords blancs — biopsie cutanée',
+                    '<strong>Carcinome épidermoïde :</strong> ulcération chronique indolore — biopsie indispensable'
+                ]) +
+                rsec('Démarche diagnostique', [
+                    'Bilan IST complet systématique avant tout (cf. encadré ci-dessous)',
+                    'Biopsie cutanée si lésion persistante (> 4 semaines) ou atypique',
+                    'Bilan auto-immun si Behçet suspecté : HLA-B51, CRP, VS',
+                    'Avis dermatologique et/ou gynécologique spécialisé'
+                ]) +
+                ralrt('À ne pas manquer', [
+                    'Toute ulcération génitale persistante sans diagnostic établi nécessite une biopsie',
+                    'Le carcinome épidermoïde vulvaire peut mimer une ulcération bénigne',
+                    'Ne pas traiter empiriquement sans bilan minimal réalisé'
+                ]);
+            }
+        }
+    };
+
+    /* ---- Helpers HTML ---- */
+    function rsec(titre, items) {
+        var lis = items.map(function (it) {
+            return '<li>' + it + '</li>';
+        }).join('');
+        return '<div class="ulc-rsec"><div class="ulc-rsec-title">' + titre + '</div><ul>' + lis + '</ul></div>';
+    }
+
+    function ralrt(titre, items) {
+        var lis = items.map(function (it) {
+            return '<li>' + it + '</li>';
+        }).join('');
+        return '<div class="ulc-ralert"><div class="ulc-ralert-title">' + titre + '</div><ul>' + lis + '</ul></div>';
+    }
+
+    /* ---- Navigation ---- */
+    function setProgress(etape, total) {
+        var fill  = document.getElementById('ulcProgressFill');
+        var label = document.getElementById('ulcProgressLabel');
+        if (fill)  fill.style.width = Math.round((etape / total) * 100) + '%';
+        if (label) label.textContent = 'Étape ' + etape + ' / ' + total;
+    }
+
+    function hideAllSteps() {
+        document.querySelectorAll('#ulc-app .ulc-step').forEach(function (s) {
+            s.classList.remove('active');
+            s.style.display = 'none';
+        });
+    }
+
+    function showStep(id) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.style.display = 'block';
+            el.classList.add('active');
+        }
+    }
+
+    function clearSelected(stepId) {
+        var step = document.getElementById(stepId);
+        if (step) {
+            step.querySelectorAll('.ulc-opt').forEach(function (b) {
+                b.classList.remove('selected');
+            });
+        }
+    }
+
+    /* ---- Actions publiques ---- */
+    window.ulcStep1 = function (type, btn) {
+        clearSelected('ulcStep1');
+        btn.classList.add('selected');
+
+        hideAllSteps();
+        document.getElementById('ulcResultZone').style.display = 'none';
+        document.getElementById('ulcResultZone').innerHTML = '';
+
+        if (type === 'multiple') {
+            showStep('ulcStep2A');
+        } else {
+            showStep('ulcStep2B');
+        }
+        setProgress(2, 2);
+
+        setTimeout(function () {
+            var s = document.getElementById(type === 'multiple' ? 'ulcStep2A' : 'ulcStep2B');
+            if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+    };
+
+    window.ulcResult = function (id, btn) {
+        var step = btn.closest('.ulc-step');
+        if (step) {
+            step.querySelectorAll('.ulc-opt').forEach(function (b) { b.classList.remove('selected'); });
+        }
+        btn.classList.add('selected');
+
+        var fiche = FICHES[id];
+        if (!fiche) return;
+
+        var zone = document.getElementById('ulcResultZone');
+        zone.innerHTML =
+            '<div class="ulc-result ' + fiche.cls + '">' +
+            '<div class="ulc-result-title">' + fiche.titre + '</div>' +
+            fiche.html() +
+            '</div>';
+        zone.style.display = 'block';
+
+        setTimeout(function () {
+            zone.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+    };
+
+    window.ulcBack = function (etape) {
+        hideAllSteps();
+        document.getElementById('ulcResultZone').style.display = 'none';
+        document.getElementById('ulcResultZone').innerHTML = '';
+        if (etape === 1) {
+            showStep('ulcStep1');
+            setProgress(1, 2);
+        }
+        var app = document.getElementById('ulc-app');
+        if (app) app.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    window.ulcReset = function () {
+        hideAllSteps();
+        showStep('ulcStep1');
+        document.getElementById('ulcResultZone').style.display = 'none';
+        document.getElementById('ulcResultZone').innerHTML = '';
+        setProgress(0, 2);
+        var app = document.getElementById('ulc-app');
+        if (app) app.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    /* Init */
+    showStep('ulcStep1');
+    setProgress(1, 2);
+
+})();
+</script>
+
+</body>
+</html>

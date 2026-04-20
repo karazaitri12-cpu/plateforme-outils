@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courbe Ménothermique avec Détection d'Ovulation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+       
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #chartContainer {
+            width: 100%;
+            max-width: 900px; /* Largeur max sur PC */
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #f7f7f7;
+            color: #333;
+            white-space: nowrap;
+        }
+        td input[type="number"] {
+            width: 75px; /* Augmenté pour PC */
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            text-align: center;
+        }
+        td span {
+             display: inline-block;
+             min-width: 80px;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            align-items: center;
+        }
+        .controls > div {
+            flex: 1 1 auto;
+        }
+        .controls label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .controls input[type="date"] {
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* --- MODIFICATION ICI --- */
+        button {
+            padding: 8px 12px; /* Padding horizontal légèrement réduit */
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-start; /* Aligne vers la gauche */
+        }
+        /* --- FIN MODIFICATION --- */
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        button i { /* Règle ajoutée précédemment */
+            margin-right: 5px;
+        }
+        .button-clear {
+            background-color: #dc3545;
+        }
+        .button-clear:hover {
+            background-color: #c82333;
+        }
+        .info-box {
+            background-color: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+        .action-cell {
+            text-align: center;
+            white-space: nowrap;
+        }
+        .delete-btn, .add-btn {
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 1.1em;
+        }
+        .delete-btn { color: #dc3545; }
+        .delete-btn:hover { color: #c82333; }
+        .add-btn { color: #28a745; }
+        .add-btn:hover { color: #218838; }
+        .date-simulate-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Styles responsives */
+        @media (max-width: 768px) {
+             h1 { font-size: 20px; }
+             .controls { flex-direction: column; align-items: stretch; }
+             .date-simulate-container { flex-direction: column; align-items: flex-start; width: 100%; }
+             .controls > div { width: 100%; margin-bottom: 10px; }
+             button { width: 100%; box-sizing: border-box; justify-content: center; /* Recentrer sur mobile si pleine largeur */ }
+             div[style="overflow-x: auto;"] { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+             table { font-size: 12px; width: auto; min-width: 100%; }
+             th, td { padding: 8px; }
+             td input[type="number"] { width: 50px; font-size: 12px; }
+             #chartContainer { min-width: 700px; width: auto; overflow-x: auto; padding: 10px; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 18px; }
+            th, td { padding: 6px; }
+            .info-box { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Courbe ménothermique avec détection d'ovulation</h1>
+
+    <div class="controls">
+        <div class="date-simulate-container">
+            <div>
+                <label for="cycleStartDate">Date du 1er jour du cycle:</label>
+                <input type="date" id="cycleStartDate" onchange="updateDates()">
+            </div>
+            <label>
+                <input type="checkbox" id="simulateCheckbox" onchange="handleSimulateCheckbox()"> Simuler une courbe
+            </label>
+        </div>
+        <button onclick="addDay()" title="Ajouter une ligne pour le jour suivant"><i class="fas fa-calendar-plus"></i> Ajouter un jour</button>
+        <button class="button-clear" onclick="clearCurve()" title="Effacer toutes les données et la courbe"><i class="fas fa-eraser"></i> Effacer</button>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table id="temperatureTable">
+            <thead>
+                <tr>
+                    <th>Jour</th>
+                    <th>Temp (°C)</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="temperatureTableBody">
+                </tbody>
+        </table>
+    </div>
+
+    <div id="chartContainer">
+        <canvas id="temperatureChart"></canvas>
+    </div>
+
+    <div id="ovulationInfo" class="info-box">Entrez vos températures pour détecter l'ovulation.</div>
+    <div id="temperatureStats" class="info-box">Statistiques apparaîtront ici.</div>
+
+    <div class="controls" style="margin-top: 20px;">
+        <button onclick="exportData()" title="Télécharger les données au format JSON"><i class="fas fa-file-export"></i> Exporter Données</button>
+        <button onclick="importData()" title="Charger des données depuis un fichier JSON"><i class="fas fa-file-import"></i> Importer Données</button>
+        <button onclick="exportPDF()" title="Exporter le graphique en PDF"><i class="fas fa-file-pdf"></i> Exporter PDF</button>
+    </div>
+    
+    <div>
+        ► Une fois un point placé sur la courbe, il faut "Exporter les données" pour sauvegarder la courbe dans un fichier. <br>
+        ► Le lendemain, il faut "Importer les données" pour compléter la courbe, puis l'"exporter" de nouveau juqu'à la fin du cycle.<br>
+      ►  Une fois la courbe remplie totalement ou partiellement, vous pouvez l'exporter en PDF pour l'imprimer...
+        
+    </div>
+    <input type="file" id="importFile" style="display: none;" accept=".json" onchange="handleFileSelect(event)">
+
+<script>
+    // TOUT LE CODE JAVASCRIPT PRÉCÉDENT VA ICI
+    // (Les fonctions addDay, deleteRow, updateChart, etc.)
+
+    let dayCount = 0;
+    let chart;
+    let temperatures = [];
+    let dates = [];
+
+    document.addEventListener('DOMContentLoaded', (event) => { });
+
+    function addDay() {
+        const tableBody = document.getElementById('temperatureTableBody');
+        const currentRowCount = tableBody.rows.length;
+        const newDayNumber = currentRowCount + 1;
+        const row = tableBody.insertRow();
+        const dayCell = row.insertCell();
+        const tempCell = row.insertCell();
+        const dateCell = row.insertCell();
+        const actionCell = row.insertCell();
+        actionCell.className = 'action-cell';
+        dayCell.textContent = newDayNumber;
+        const tempInput = document.createElement('input');
+        tempInput.type = 'number';
+        tempInput.id = `temp${newDayNumber}`;
+        tempInput.step = '0.1';
+        tempInput.min = '35';
+        tempInput.max = '38';
+        tempInput.placeholder = "0.0";
+        tempInput.oninput = () => {
+            updateTemperaturesArray();
+            updateChart();
+        };
+        tempCell.appendChild(tempInput);
+        const dateSpan = document.createElement('span');
+        dateSpan.id = `date${newDayNumber}`;
+        dateCell.appendChild(dateSpan);
+        const deleteIcon = document.createElement('i');
+        deleteIcon.className = 'fas fa-trash delete-btn';
+        deleteIcon.title = "Supprimer cette ligne";
+        deleteIcon.onclick = () => deleteRow(row);
+        actionCell.appendChild(deleteIcon);
+        const addIcon = document.createElement('i');
+        addIcon.className = 'fas fa-plus add-btn';
+        addIcon.title = "Insérer une ligne après celle-ci";
+        addIcon.onclick = () => addRowAfter(row);
+        actionCell.appendChild(addIcon);
+        updateTemperaturesArray();
+        updateDates();
+    }
+
+    function addRowAfter(referenceRow) {
+        const tableBody = document.getElementById('temperatureTableBody');
+        const refIndex = referenceRow.rowIndex - 1;
+        const newRow = tableBody.insertRow(refIndex + 1);
+        const dayCell = newRow.insertCell();
+        const tempCell = newRow.insertCell();
+        const dateCell = newRow.insertCell();
+        const actionCell = newRow.insertCell();
+        actionCell.className = 'action-cell';
+        const tempInput = document.createElement('input');
+        tempInput.type = 'number';
+        tempInput.step = '0.1';
+        tempInput.min = '35';
+        tempInput.max = '38';
+        tempInput.placeholder = "0.0";
+        tempInput.oninput = () => {
+            updateTemperaturesArray();
+            updateChart();
+        };
+        tempCell.appendChild(tempInput);
+        const dateSpan = document.createElement('span');
+        dateCell.appendChild(dateSpan);
+        const deleteIcon = document.createElement('i');
+        deleteIcon.className = 'fas fa-trash delete-btn';
+        deleteIcon.title = "Supprimer cette ligne";
+        deleteIcon.onclick = () => deleteRow(newRow);
+        actionCell.appendChild(deleteIcon);
+        const addIcon = document.createElement('i');
+        addIcon.className = 'fas fa-plus add-btn';
+        addIcon.title = "Insérer une ligne après celle-ci";
+        addIcon.onclick = () => addRowAfter(newRow);
+        actionCell.appendChild(addIcon);
+        updateRowNumbers();
+        updateTemperaturesArray();
+        updateDates();
+        updateChart();
+    }
+
+    function deleteRow(rowToDelete) {
+        const tableBody = document.getElementById('temperatureTableBody');
+        tableBody.removeChild(rowToDelete);
+        updateRowNumbers();
+        updateTemperaturesArray();
+        updateDates();
+        updateChart();
+    }
+
+    function updateRowNumbers() {
+        const rows = document.getElementById('temperatureTableBody').rows;
+        dayCount = rows.length;
+        for (let i = 0; i < dayCount; i++) {
+            const row = rows[i];
+            const dayNumber = i + 1;
+            row.cells[0].textContent = dayNumber;
+            row.cells[1].querySelector('input').id = `temp${dayNumber}`;
+            row.cells[2].querySelector('span').id = `date${dayNumber}`;
+        }
+    }
+
+    function updateTemperaturesArray() {
+        temperatures = [];
+        const rows = document.getElementById('temperatureTableBody').rows;
+        for (let i = 0; i < rows.length; i++) {
+            const input = rows[i].cells[1].querySelector('input');
+            const value = parseFloat(input.value);
+            temperatures.push(isNaN(value) ? NaN : value);
+        }
+    }
+
+    function updateDates() {
+        const startDateInput = document.getElementById('cycleStartDate');
+        if (!startDateInput.value) return;
+        const startDate = new Date(startDateInput.value);
+        if (isNaN(startDate.getTime())) return;
+        dates = [];
+        const rows = document.getElementById('temperatureTableBody').rows;
+        for (let i = 0; i < rows.length; i++) {
+            const dateSpan = rows[i].cells[2].querySelector('span');
+            const currentDate = new Date(startDate);
+            currentDate.setDate(startDate.getDate() + i);
+            const formattedDate = formatDate(currentDate);
+            dateSpan.textContent = formattedDate;
+            dates.push(formattedDate);
+        }
+        if (chart) {
+            updateChart();
+        }
+    }
+
+    function formatDate(date) {
+        if (!date || isNaN(date.getTime())) { return ""; }
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    function average(tempsArray) {
+        const validTemps = tempsArray.filter(temp => !isNaN(temp));
+        if (validTemps.length === 0) return NaN;
+        const sum = validTemps.reduce((acc, val) => acc + val, 0);
+        return sum / validTemps.length;
+    }
+
+    function detectOvulation(tempsArray) {
+        const ovulationInfo = document.getElementById('ovulationInfo');
+        ovulationInfo.textContent = '';
+        const validTemps = tempsArray.map(t => isNaN(t) ? null : t);
+        const requiredDays = 9;
+        if (validTemps.filter(t => t !== null).length < requiredDays) {
+             ovulationInfo.textContent = 'Pas assez de données valides pour une détection fiable.';
+             return null;
+        }
+        for (let i = 6; i < validTemps.length - 2; i++) {
+            const lastSix = validTemps.slice(i - 6, i).filter(t => t !== null);
+            if (lastSix.length < 6) continue;
+            const coverLine = Math.max(...lastSix) + 0.05;
+            if (validTemps[i] !== null && validTemps[i] > coverLine &&
+                validTemps[i+1] !== null && validTemps[i+1] > coverLine &&
+                validTemps[i+2] !== null && validTemps[i+2] > coverLine)
+            {
+                const ovulationDayIndex = i - 1;
+                 ovulationInfo.textContent = `Ovulation probable détectée le jour ${ovulationDayIndex + 1}.`;
+                 return ovulationDayIndex;
+            }
+        }
+        ovulationInfo.textContent = 'Aucune ovulation détectée selon la méthode 3/6.';
+        return null;
+    }
+
+    function displayStats(tempsArray) {
+        const statsDiv = document.getElementById('temperatureStats');
+        const validTemps = tempsArray.filter(temp => !isNaN(temp));
+        if (validTemps.length === 0) {
+            statsDiv.textContent = 'Aucune température valide entrée.';
+            return;
+        }
+        const min = Math.min(...validTemps);
+        const max = Math.max(...validTemps);
+        const avg = average(validTemps);
+        statsDiv.innerHTML = `Minimum : ${min.toFixed(1)}°C<br>Maximum : ${max.toFixed(1)}°C<br>Moyenne : ${isNaN(avg) ? 'N/A' : avg.toFixed(1)+'°C'}`;
+    }
+
+    function getRandomTemperature(min, max, day, ovulationDay = 14) {
+        let baseTempLow = 36.3, variationLow = 0.3, baseTempHigh = 36.9, variationHigh = 0.4;
+        let dipDayBefore = ovulationDay - 1, dipValue = baseTempLow - 0.1;
+        let temp;
+        if (day < dipDayBefore) { temp = baseTempLow + (Math.random() * variationLow - variationLow / 2); }
+        else if (day === dipDayBefore) { temp = dipValue + (Math.random() * 0.1 - 0.05); }
+        else { temp = baseTempHigh + (Math.random() * variationHigh - variationHigh / 2); }
+        return Math.max(min, Math.min(max, temp));
+    }
+
+    function simulateCurve() {
+        clearCurve();
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 27);
+        document.getElementById('cycleStartDate').valueAsDate = startDate;
+        for (let i = 1; i <= 28; i++) {
+            addDay();
+            let tempInput = document.getElementById(`temp${i}`);
+            if (tempInput) {
+                 let temperature = getRandomTemperature(35.5, 37.8, i);
+                 tempInput.value = temperature.toFixed(1);
+            }
+        }
+        updateTemperaturesArray();
+        updateDates();
+        updateChart();
+    }
+
+    function clearCurve() {
+        dayCount = 0; temperatures = []; dates = [];
+        if (chart) { chart.destroy(); chart = null; }
+        document.getElementById('temperatureTableBody').innerHTML = '';
+        document.getElementById('ovulationInfo').textContent = 'Entrez vos températures pour détecter l\'ovulation.';
+        document.getElementById('temperatureStats').textContent = 'Statistiques apparaîtront ici.';
+        document.getElementById('cycleStartDate').value = '';
+        document.getElementById('simulateCheckbox').checked = false;
+    }
+
+    function handleSimulateCheckbox() {
+        const checkbox = document.getElementById('simulateCheckbox');
+        if (checkbox.checked) { simulateCurve(); } else { clearCurve(); }
+    }
+
+    
+    function updateChart() {
+    if (chart) {
+        chart.destroy(); // Détruire l'ancien graphique
+    }
+
+    // Pas de calcul dynamique ici, on revient aux valeurs fixes
+    const avgTemp = average(temperatures);
+    const ovulationDayIndex = detectOvulation(temperatures); // Renvoie l'index (base 0)
+
+    const cycleDaysLabels = Array.from({length: temperatures.length}, (_, i) => `${i + 1}`);
+    const monthDaysLabels = dates; // Utiliser l'array 'dates' mis à jour
+
+    const mobileBreakpoint = 768; // Seuil ajusté (tablette/mobile)
+    const isMobile = window.innerWidth <= mobileBreakpoint;
+    const lineThickness = isMobile ? 3 : 2; // Épaisseur mobile: 3, PC: 2
+
+    let ctx = document.getElementById('temperatureChart').getContext('2d');
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: cycleDaysLabels,
+            datasets: [{
+                label: 'Température (°C)',
+                data: temperatures, // Utiliser l'array JS
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: lineThickness, // Utilisation de l'épaisseur calculée
+                tension: 0.1, // Légère courbure
+                fill: false,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                spanGaps: true // Relier les points même s'il y a des NaN entre eux
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true, // Important pour éviter la distorsion
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    // --- MODIFICATION ICI ---
+                    min: 35.8, // Nouvelle valeur minimale fixe
+                    max: 37.8, // Nouvelle valeur maximale fixe
+                    // --- FIN MODIFICATION ---
+                    ticks: {
+                         stepSize: 0.1 // Garder les graduations fines
+                    },
+                    title: {
+                        display: true,
+                        text: 'Température (°C)'
+                    }
+                },
+                x: { // Axe principal: Jour du cycle
+                    title: {
+                        display: true,
+                        text: 'Jour du cycle'
+                    },
+                    ticks: {
+                         align: 'center'
+                    }
+                },
+                x2: { // Axe secondaire: Dates
+                     position: 'top', // Afficher en haut
+                     title: {
+                         display: true,
+                         text: 'Date'
+                     },
+                     labels: cycleDaysLabels, // Doit avoir le même nombre de labels que x
+                     grid: {
+                        drawOnChartArea: false, // Pas de lignes de grille pour cet axe
+                     },
+                     ticks: {
+                         // Fonction pour afficher la date correspondante
+                         callback: function(value, index, ticks) {
+                             // 'value' est l'index du tick sur l'axe x principal
+                             return monthDaysLabels[index] || ''; // Afficher la date de l'array 'dates'
+                         },
+                         maxRotation: 45,
+                         minRotation: 45,
+                         autoSkip: isMobile,
+                         maxTicksLimit: isMobile ? 7 : 15 // Limiter le nb de dates affichées
+                     }
+                 }
+            },
+            plugins: { // Configuration plugins inchangée
+                tooltip: { callbacks: { title: function(t) { const i = t[0].dataIndex; return `Jour ${cycleDaysLabels[i]} (${monthDaysLabels[i] || ''})`; }, label: function(t) { let l = t.dataset.label || ''; if (l) { l += ': '; } if (t.parsed.y !== null && !isNaN(t.parsed.y)) { l += t.parsed.y.toFixed(1) + ' °C'; } else { l += 'N/A'; } return l; } } },
+                annotation: { annotations: {
+                    avgLine: !isNaN(avgTemp) ? { type: 'line', yMin: avgTemp, yMax: avgTemp, borderColor: 'rgba(255, 0, 0, 0.5)', borderWidth: 1, borderDash: [6, 6], label: { content: `Moy: ${avgTemp.toFixed(1)}`, enabled: true, position: 'end', backgroundColor: 'rgba(255, 0, 0, 0.5)', color: 'white', font: { size: 10 }, xPadding: 3, yPadding: 3, cornerRadius: 3 } } : undefined,
+                    ovulationPoint: ovulationDayIndex !== null ? { type: 'point', xValue: ovulationDayIndex, yValue: temperatures[ovulationDayIndex], backgroundColor: 'rgba(255, 99, 132, 0.8)', radius: isMobile ? 6 : 5, label: { content: 'Ovulation', enabled: true, position: 'top', font: { size: 10, weight: 'bold' } } } : undefined,
+                    verticalLine: ovulationDayIndex !== null && (ovulationDayIndex + 14) < temperatures.length ? { type: 'line', xMin: ovulationDayIndex + 14, xMax: ovulationDayIndex + 14, borderColor: 'rgba(255, 165, 0, 0.6)', borderWidth: 1, borderDash: [4, 4], label: { content: 'J+14', enabled: true, position: 'top', backgroundColor: 'rgba(255, 165, 0, 0.6)', color: 'white', font: { size: 10 }, xPadding: 3, yPadding: 3, cornerRadius: 3 } } : undefined
+                } }
+            }
+        }
+    });
+
+    displayStats(temperatures); // Mettre à jour les statistiques
+}
+    
+
+    function exportPDF() {
+        if (!chart) { alert("Veuillez générer une courbe avant d'exporter en PDF."); return; }
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        const title = "Courbe Ménothermique";
+        const startDate = document.getElementById('cycleStartDate').value;
+        const dateText = startDate ? `Cycle débuté le: ${formatDate(new Date(startDate))}` : "Date de début non définie";
+        doc.setFontSize(16); doc.text(title, doc.internal.pageSize.getWidth() / 2, 15, { align: 'center' });
+        doc.setFontSize(10); doc.text(dateText, 14, 22);
+        const ovulationText = document.getElementById('ovulationInfo').textContent;
+        const statsText = document.getElementById('temperatureStats').textContent.replace(/<br>/g, '\n');
+        doc.text(ovulationText, 14, 28); doc.text(statsText, 14, 34);
+        const canvas = document.getElementById('temperatureChart');
+        try {
+            const imageData = canvas.toDataURL("image/png");
+            const imgProps = doc.getImageProperties(imageData);
+            const pdfWidth = doc.internal.pageSize.getWidth() - 28; const pdfHeight = doc.internal.pageSize.getHeight() - 60;
+            const ratio = Math.min(pdfWidth / imgProps.width, pdfHeight / imgProps.height);
+            const imgWidth = imgProps.width * ratio; const imgHeight = imgProps.height * ratio;
+            const x = (doc.internal.pageSize.getWidth() - imgWidth) / 2; const y = 45;
+            doc.addImage(imageData, 'PNG', x, y, imgWidth, imgHeight);
+        } catch (e) { console.error("Erreur conversion canvas:", e); alert("Erreur génération image."); return; }
+        doc.save("courbe_menothermique.pdf");
+    }
+
+    function exportData() {
+        if (temperatures.length === 0) { alert("Aucune donnée à exporter."); return; }
+        const data = { cycleStartDate: document.getElementById('cycleStartDate').value, temperatures: temperatures, dates: dates };
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        const exportFileDefaultName = 'donnees_courbe_menothermique.json';
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri); linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.style.display = 'none'; document.body.appendChild(linkElement);
+        linkElement.click(); document.body.removeChild(linkElement);
+    }
+
+    function importData() { document.getElementById('importFile').click(); }
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                try {
+                    const data = JSON.parse(content);
+                    if (data && Array.isArray(data.temperatures) && data.cycleStartDate) { loadImportedData(data); }
+                    else { alert("Le format du fichier JSON est invalide ou incomplet."); }
+                } catch (error) { console.error("Erreur analyse JSON:", error); alert("Fichier JSON invalide."); }
+                finally { event.target.value = null; }
+            };
+            reader.onerror = function(e) { console.error("Erreur lecture fichier:", e); alert("Erreur lecture fichier."); event.target.value = null; };
+            reader.readAsText(file);
+        }
+    }
+
+    function loadImportedData(data) {
+        clearCurve();
+        document.getElementById('cycleStartDate').value = data.cycleStartDate;
+        data.temperatures.forEach((temp, index) => {
+            addDay();
+            const tempInput = document.getElementById(`temp${index + 1}`);
+            if (tempInput && temp !== null && !isNaN(temp)) { tempInput.value = parseFloat(temp).toFixed(1); }
+        });
+        updateTemperaturesArray();
+        updateDates();
+        updateChart();
+        alert("Données importées avec succès !");
+    }
+</script>
+</body>
+</html>

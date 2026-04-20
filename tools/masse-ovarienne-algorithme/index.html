@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithme Masse Ovarienne</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+       
+        h1 {
+            font-size: 2.3rem; /* Restauré */
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .subtitle { font-size: 1.5rem; color: #64748b; font-weight: 500; } /* Restauré */
+
+        .main-card {
+            max-width: 1200px; /* Élargi un peu pour contenir le gros texte */
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .start-node {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.5rem; /* Restauré */
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
+        }
+
+        .first-step {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.5rem; /* Restauré */
+            font-weight: 600;
+            margin-bottom: 40px;
+            box-shadow: 0 6px 15px rgba(17, 153, 142, 0.25);
+        }
+
+        /* --- GRID CORRIGÉE --- */
+        .pathways {
+            display: grid;
+            /* Largeur min ajustée pour éviter le décalage */
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 25px;
+            margin-top: 30px;
+            align-items: stretch; /* Important pour que les cartes aient la même hauteur */
+        }
+
+        .pathway {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pathway:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+
+        .pathway.benign { border-color: #2ecc71; background: #f0fff4; }
+        .pathway.complex { border-color: #f39c12; background: #fffaf0; }
+        .pathway.malign { border-color: #e74c3c; background: #fff5f5; }
+
+        .pathway-header {
+            font-size: 1.6rem; /* Restauré */
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+            display: flex; align-items: center; gap: 8px;
+            flex-wrap: wrap; /* Au cas où le titre est long */
+        }
+
+        .benign .pathway-header { color: #2ecc71; border-color: #2ecc71; }
+        .complex .pathway-header { color: #f39c12; border-color: #f39c12; }
+        .malign .pathway-header { color: #e74c3c; border-color: #e74c3c; }
+
+        /* --- ICONES --- */
+        .arrow-icon {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 24px; /* Grossi pour aller avec le texte */
+            margin-right: 10px;
+            line-height: 1.2;
+            flex-shrink: 0;
+        }
+
+        .check-icon {
+            background: #3498db;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .sub-options { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            margin-top: 15px; 
+            flex-grow: 1; 
+        }
+
+        .sub-option {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .complex .sub-option { border-left-color: #f39c12; }
+
+        .sub-option-title { 
+            font-weight: 600; 
+            margin-bottom: 6px; 
+            color: #2c3e50; 
+            font-size: 1.5rem; /* Restauré */
+        }
+
+        .sub-option-action {
+            color: #57606f;
+            font-size: 1.4rem; /* Restauré */
+            font-weight: 400;
+            display: flex;
+            align-items: flex-start;
+            line-height: 1.4;
+        }
+
+        .action-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: auto; 
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .action-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem; /* Ajusté pour cohérence */
+        }
+
+        .action-details { 
+            color: #57606f; 
+            line-height: 1.6; 
+            font-size: 1.4rem; /* Restauré */
+            font-weight: 500; 
+        }
+
+        .legend {
+            margin-top: 40px;
+            padding: 20px;
+            background: #fff3cd;
+            font-size: 1.5rem; /* Restauré */
+            font-weight: 400;
+            border-left: 5px solid #ffc107;
+            border-radius: 8px;
+            text-align: center;
+            color: #856404;
+        }
+
+        /* Petits badges pour O-RADS */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: white;
+            font-weight: bold;
+            margin-left: auto;
+            vertical-align: middle;
+        }
+        .bg-green { background: #2ecc71; }
+        .bg-orange { background: #f39c12; }
+        .bg-red { background: #e74c3c; }
+
+        @media (max-width: 768px) {
+            .pathways { grid-template-columns: 1fr; }
+            .main-card { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 Algorithme : masse ovarienne</h1>
+            <p class="subtitle">Prise en charge diagnostique et thérapeutique</p>
+        </header>
+
+        <div class="main-card">
+            <div class="start-node">
+                DÉCOUVERTE D'UNE MASSE OVARIENNE<br>
+                <small style="opacity: 0.9; font-size: 1.3rem; font-weight: normal;">(Clinique ou Imagerie fortuite)</small>
+            </div>
+
+            <div class="first-step">
+                ÉCHOGRAPHIE ENDOVAGINALE + DOPPLER<br>
+                <small style="opacity: 0.9; font-size: 1.3rem; font-weight: normal;">Classification <strong>O-RADS</strong> recommandée</small>
+            </div>
+
+            <div class="pathways">
+                <!-- BÉNIGNE -->
+                <div class="pathway benign">
+                    <div class="pathway-header">
+                        ✅ Masse BÉNIGNE
+                        <span class="badge bg-green">O-RADS 2</span>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">
+                            <span class="check-icon">✓</span> Conduite à tenir
+                        </div>
+                        <div class="action-details">
+                            • Abstention thérapeutique<br>
+                            • Surveillance écho simple<br>
+                            • Chirurgie si symptomatique
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INDÉTERMINÉE (ENRICHI) -->
+                <div class="pathway complex">
+                    <div class="pathway-header">
+                        ⚠️ Masse INDÉTERMINÉE
+                        <span class="badge bg-orange">O-RADS 3</span>
+                    </div>
+                    
+                    <div class="sub-options">
+                        <div class="sub-option">
+                            <div class="sub-option-title">📏 Taille &lt; 7 cm</div>
+                            <div class="sub-option-action">
+                                <span class="arrow-icon">➜</span> Avis spécialisé / Echo 3 mois
+                            </div>
+                        </div>
+                        
+                        <!-- Enrichissement Endométriome -->
+                        <div class="sub-option">
+                            <div class="sub-option-title">🩸 Aspect Endométriome</div>
+                            <div class="sub-option-action">
+                                <span class="arrow-icon">➜</span> IRM pour cartographie
+                            </div>
+                        </div>
+
+                        <div class="sub-option">
+                            <div class="sub-option-title">🔍 Suspicion Dermoïde</div>
+                            <div class="sub-option-action">
+                                <span class="arrow-icon">➜</span> Scanner ou IRM
+                            </div>
+                        </div>
+
+                        <div class="sub-option">
+                            <div class="sub-option-title">📏 Taille ≥ 7 cm / Solide</div>
+                            <div class="sub-option-action">
+                                <span class="arrow-icon">➜</span> IRM pelvienne exigée
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MALIGNE (ENRICHI) -->
+                <div class="pathway malign">
+                    <div class="pathway-header">
+                        🔴 SUSPICION MALIGNITÉ
+                        <span class="badge bg-red">O-RADS 4-5</span>
+                    </div>
+                    <div class="action-box">
+                        <div class="action-title">
+                            <span class="check-icon">✓</span> Bilan Pré-Opératoire
+                        </div>
+                        <div class="action-details">
+                            <strong>1. Scanner TAP</strong> (Extension)<br>
+                            <strong>2. Score RMI</strong> (Echo x Ménopause x CA125)<br>
+                            <strong>3. Marqueurs :</strong> CA 125 + HE4<br>
+                            <span style="font-size:1.1rem; color:#e74c3c;">(± ACE, CA19.9, AFP si jeune)</span><br>
+                            <strong>4. RCP Oncologique</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legend">
+                💡 <strong>Point clé :</strong> Toute masse complexe ou kyste > 3cm chez la femme ménopausée nécessite un dosage CA 125.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

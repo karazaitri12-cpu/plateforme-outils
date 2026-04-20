@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification TNM du Cancer du Sein</title>
+    <style>
+        /* Reset & Scope pour Elementor */
+        .tnm-wrap *, .tnm-wrap *::before, .tnm-wrap *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        .tnm-wrap {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #F7FAFC;
+            color: #2D3748;
+            line-height: 1.6;
+            padding: 24px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tnm-container {
+            background: #ffffff;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #E2E8F0;
+        }
+        
+        .tnm-wrap h1 {
+            line-height: 1.3;
+            font-weight: 700;
+            text-align: center;
+            color: #1e3c72;
+            font-size: 22px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #E2E8F0;
+        }
+        
+        .tnm-wrap h2 {
+            color: #2B6CB0;
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 10px;
+            font-size: 18px;
+            margin: 24px 0 16px 0;
+        }
+        
+        .tnm-form-group {
+            margin-bottom: 20px;
+        }
+        
+        .tnm-wrap label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2D3748;
+            font-size: 14px;
+        }
+        
+        .tnm-wrap select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #CBD5E0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            background: #ffffff;
+            color: #2D3748;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23718096'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            cursor: pointer;
+        }
+        
+        .tnm-wrap select:focus {
+            outline: none;
+            border-color: #2B6CB0;
+            box-shadow: 0 0 0 3px rgba(43,108,176,0.15);
+        }
+        
+        .tnm-wrap button {
+            background-color: #2B6CB0;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+        
+        .tnm-wrap button:hover {
+            background-color: #2C5282;
+        }
+        
+        #tnm-resultat {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2F855A;
+            text-align: center;
+            padding: 18px;
+            background-color: #C6F6D5;
+            border-radius: 8px;
+            margin-top: 24px;
+            border: 1px solid #9AE6B4;
+        }
+        
+        /* Disclaimer */
+        .tnm-disclaimer {
+            background: #FFFBEB;
+            border-left: 4px solid #D69E2E;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #744210;
+            margin-top: 24px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* Anti-scrollbar — style App native */
+        html { scrollbar-width: none !important; }
+        body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+        ::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tnm-wrap { padding: 16px; }
+            .tnm-container { padding: 20px; }
+            .tnm-wrap h1 { font-size: 20px; }
+            .tnm-wrap select { font-size: 14px; padding: 10px 12px; }
+            #tnm-resultat { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="tnm-wrap">
+        <div class="tnm-container">
+            <h1>Classification TNM du Cancer du Sein</h1>
+            
+            <div class="tnm-form-group">
+                <label for="taille">Taille de la tumeur (T) :</label>
+                <select id="taille">
+                    <option value="Tx">Tx — Impossible d'évaluer la taille</option>
+                    <option value="T0">T0 — Pas de tumeur détectée</option>
+                    <option value="T1a">T1a — ≤ 0,5 cm</option>
+                    <option value="T1b">T1b — &gt; 0,5 cm et ≤ 1 cm</option>
+                    <option value="T1c">T1c — &gt; 1 cm et ≤ 2 cm</option>
+                    <option value="T2">T2 — &gt; 2 cm et ≤ 5 cm</option>
+                    <option value="T3">T3 — &gt; 5 cm</option>
+                    <option value="T4a">T4a — Extension à la paroi thoracique</option>
+                    <option value="T4b">T4b — Extension à la peau (ulcération, œdème)</option>
+                    <option value="T4c">T4c — Extension à la peau ET à la paroi</option>
+                    <option value="T4d">T4d — Tumeur inflammatoire</option>
+                </select>
+            </div>
+
+            <div class="tnm-form-group">
+                <label for="ganglions">État des ganglions lymphatiques (N) :</label>
+                <select id="ganglions">
+                    <option value="Nx">Nx — Non évaluable</option>
+                    <option value="N0">N0 — Aucun ganglion régional atteint</option>
+                    <option value="N1">N1 — Ganglions axillaires suspects mobiles</option>
+                    <option value="N2">N2 — Ganglions axillaires fixés entre eux ou à d'autres structures</option>
+                    <option value="N3">N3 — Ganglions sous-claviculaires ou mammaires internes avec adénopathies axillaires</option>
+                </select>
+            </div>
+
+            <div class="tnm-form-group">
+                <label for="metastases">Métastases à distance (M) :</label>
+                <select id="metastases">
+                    <option value="Mx">Mx — Renseignements insuffisants</option>
+                    <option value="M0">M0 — Aucune métastase détectée</option>
+                    <option value="M1">M1 — Métastases à distance présentes</option>
+                </select>
+            </div>
+
+            <div class="tnm-form-group">
+                <label for="pev">Poussée évolutive (PEV) :</label>
+                <select id="pev">
+                    <option value="Pev0">PEV0 — Absence de signe inflammatoire</option>
+                    <option value="Pev1">PEV1 — Doublement du volume tumoral en &lt; 6 mois</option>
+                    <option value="Pev2">PEV2 — Inflammation affectant &lt; 1/3 de la peau du sein</option>
+                    <option value="Pev3">PEV3 — Inflammation étendue à tout le sein</option>
+                </select>
+            </div>
+
+            <button onclick="classifierTNM()">Classer TNM</button>
+
+            <h2>Résultat :</h2>
+            <p id="tnm-resultat">Sélectionnez les paramètres puis cliquez sur "Classer TNM"</p>
+            
+            <div class="tnm-disclaimer">
+                <strong>⚠️ Outil d'aide à la décision :</strong> Cette classification est indicative. La stadification définitive relève de la concertation pluridisciplinaire (RCP) et intègre les données histologiques, moléculaires et d'imagerie complémentaires.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function classifierTNM() {
+            const t = document.getElementById('taille').value;
+            const n = document.getElementById('ganglions').value;
+            const m = document.getElementById('metastases').value;
+            const pev = document.getElementById('pev').value.split('Pev')[1];
+
+            const resultat = `${t} ${n} ${m} PEV${pev}`;
+            document.getElementById('tnm-resultat').textContent = resultat;
+        }
+    </script>
+</body>
+</html>
