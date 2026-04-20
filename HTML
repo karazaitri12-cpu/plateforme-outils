@@ -1,0 +1,991 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Suivi de grossesse – Dr KARA-ZAITRI M.A.</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — isolation totale sous #sgf-root
+   ============================================================ */
+#sgf-root {
+  all: initial;
+  display: block;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #334155;
+  background: transparent;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+#sgf-root *, #sgf-root *::before, #sgf-root *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Variables de couleur --- */
+#sgf-root {
+  --pink:     #d81b60;
+  --pink-dk:  #ad144d;
+  --pink-lt:  #fce4ec;
+  --pink-bd:  #f8bbd0;
+  
+  --blue:     #1e3a8a;
+  --blue-md:  #2563eb;
+  --blue-lt:  #eff6ff;
+  --blue-bd:  #bfdbfe;
+  
+  --teal:     #0f766e;
+  --gray:     #64748b;
+  --gray-lt:  #f8fafc;
+  --border:   #e2e8f0;
+  --white:    #ffffff;
+  
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 15px rgba(0,0,0,0.05);
+  --radius:   12px;
+}
+
+/* --- Layout --- */
+.sgf-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background: var(--gray-lt);
+  border-radius: var(--radius);
+}
+
+/* --- En-tête --- */
+.sgf-header {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-md) 100%);
+  border-radius: var(--radius);
+  padding: 30px;
+  color: #fff;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+.sgf-header h1 {
+  all: unset;
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.sgf-header .sgf-sub {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* --- Panneau saisie --- */
+.sgf-input-panel {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sgf-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+/* --- Date selects --- */
+.sgf-date-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.sgf-date-select {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--blue);
+  background: var(--white);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+}
+.sgf-date-select:hover { border-color: var(--blue-bd); }
+.sgf-date-select:focus { border-color: var(--pink); box-shadow: 0 0 0 3px var(--pink-lt); }
+
+.sgf-btn {
+  background: var(--pink);
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(216, 27, 96, 0.2);
+}
+.sgf-btn:hover { background: var(--pink-dk); transform: translateY(-1px); box-shadow: 0 6px 12px rgba(216, 27, 96, 0.3); }
+.sgf-btn:active { transform: scale(0.98); }
+
+/* --- Résumé (Dashboard SA/SG/DPA) --- */
+.sgf-resume {
+  display: none;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+  animation: sgfFadeIn 0.4s ease;
+}
+.sgf-resume-item { 
+  background: var(--white);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.sgf-resume-item::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--pink);
+}
+.sgf-resume-item:nth-child(2)::before { background: var(--blue-md); }
+.sgf-resume-item:nth-child(3)::before { background: var(--teal); }
+
+.sgf-resume-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gray);
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.sgf-resume-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--pink);
+  line-height: 1.2;
+}
+.sgf-resume-item:nth-child(2) .sgf-resume-val { color: var(--blue-md); }
+.sgf-resume-item:nth-child(3) .sgf-resume-val { color: var(--teal); font-size: 1.1rem; padding-top:4px;}
+
+/* --- Barre de progression --- */
+.sgf-progress-wrap {
+  display: none;
+  background: var(--white);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.sgf-progress-bg {
+  background: var(--gray-lt);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+.sgf-progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--pink-dk), var(--pink));
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sgf-progress-txt {
+  font-size: 0.85rem;
+  color: var(--gray);
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 500;
+}
+.sgf-progress-txt strong { color: var(--pink); font-weight: 700; }
+
+/* --- Navigation semaines --- */
+.sgf-nav {
+  display: none;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.sgf-nav button {
+  background: var(--white);
+  color: var(--gray);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+.sgf-nav button:hover:not(:disabled) { 
+  background: var(--blue-lt); 
+  border-color: var(--blue-bd); 
+  color: var(--blue);
+}
+.sgf-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
+.sgf-nav .btn-today {
+  background: var(--pink-lt);
+  color: var(--pink-dk);
+  border-color: var(--pink-bd);
+}
+.sgf-nav .btn-today:hover:not(:disabled) { background: #f8bbd0; }
+
+/* --- Grille résultats --- */
+.sgf-grid {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+  align-items: start;
+}
+.sgf-grid.active { display: grid; }
+
+/* --- Cartes Fœtus / Médical --- */
+.sgf-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  animation: sgfFadeIn 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.sgf-card-head {
+  padding: 16px 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.sgf-card-head span { font-size: 1.1rem; }
+.sgf-card-head-pink {
+  background: var(--pink-lt);
+  color: var(--pink-dk);
+  border-bottom: 1px solid var(--pink-bd);
+}
+.sgf-card-head-blue {
+  background: var(--blue-lt);
+  color: var(--blue);
+  border-bottom: 1px solid var(--blue-bd);
+}
+.sgf-card-body {
+  padding: 24px 20px;
+  flex: 1;
+}
+
+/* --- Badges --- */
+.sgf-week-badge {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.sgf-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.sgf-badge-pink { background: var(--pink); color: #fff; }
+.sgf-badge-gray { background: var(--gray-lt); color: var(--gray); border: 1px solid var(--border); }
+
+/* --- Blocs fœtus/maman --- */
+.sgf-dev-section { margin-bottom: 20px; }
+.sgf-dev-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sgf-dev-title.pink { color: var(--pink-dk); }
+.sgf-dev-title.teal { color: var(--teal); }
+.sgf-dev-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #475569;
+}
+
+/* --- Bloc médical --- */
+.sgf-med-section-title {
+  font-size: 0.8rem;
+  color: var(--gray);
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed var(--border);
+}
+.sgf-med-bloc { margin-bottom: 20px; }
+.sgf-med-bloc:last-child { margin-bottom: 0; }
+.sgf-med-bloc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sgf-med-bloc-title::before {
+  content: "";
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--blue-md);
+  border-radius: 50%;
+}
+.sgf-med-list {
+  list-style: none;
+  padding-left: 14px;
+}
+.sgf-med-list li {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  position: relative;
+}
+.sgf-med-list li::before {
+  content: "•";
+  position: absolute;
+  left: -14px;
+  color: var(--blue-bd);
+  font-weight: bold;
+}
+.sgf-med-list li strong { color: var(--blue-md); font-weight: 600; }
+
+/* --- Info grid bas de carte fœtus --- */
+.sgf-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 2px dashed var(--border);
+}
+.sgf-info-grid-item span { color: var(--gray); display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.sgf-info-grid-item strong { color: var(--pink-dk); font-size: 1rem; font-weight: 700;}
+
+/* --- Mise en garde --- */
+.sgf-disclaimer {
+  padding: 16px 20px;
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #78350f;
+  line-height: 1.6;
+  display: none;
+  box-shadow: var(--shadow-sm);
+}
+.sgf-disclaimer strong { color: #b45309; }
+
+/* --- Animation --- */
+@keyframes sgfFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .sgf-wrap { padding: 12px; }
+  .sgf-grid.active { grid-template-columns: 1fr; }
+  .sgf-resume { grid-template-columns: 1fr; gap: 10px; }
+  .sgf-resume-item { padding: 16px; }
+  .sgf-date-row { flex-direction: column; width: 100%; gap: 8px;}
+  .sgf-date-select { width: 100%; text-align: center; }
+  .sgf-btn { width: 100%; }
+}
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+</head>
+<body>
+<div id="sgf-root">
+<div class="sgf-wrap">
+
+  <!-- EN-TÊTE -->
+  <div class="sgf-header">
+    <h1>Suivi de Grossesse &mdash; Semaine par Semaine</h1>
+    <div class="sgf-sub">Dr KARA-ZAITRI M.A. &mdash; Gynécologie-Obstétrique &mdash; Tlemcen</div>
+  </div>
+
+  <!-- SAISIE -->
+  <div class="sgf-input-panel">
+    <label class="sgf-label" for="sgf-day">Saisissez la date des dernières règles (DDR)</label>
+    <div class="sgf-date-row">
+      <select id="sgf-day" class="sgf-date-select" aria-label="Jour"></select>
+      <select id="sgf-month" class="sgf-date-select" aria-label="Mois"></select>
+      <select id="sgf-year" class="sgf-date-select" aria-label="Année"></select>
+    </div>
+    <button class="sgf-btn" onclick="sgfCalculer()">Calculer mon suivi</button>
+  </div>
+
+  <!-- RÉSUMÉ SA/DPA -->
+  <div class="sgf-resume" id="sgf-resume">
+    <div class="sgf-resume-item">
+      <span class="sgf-resume-label">Vous êtes à</span>
+      <span class="sgf-resume-val" id="sgf-res-sa">--</span>
+    </div>
+    <div class="sgf-resume-item">
+      <span class="sgf-resume-label">Semaine de grossesse</span>
+      <span class="sgf-resume-val" id="sgf-res-sg">--</span>
+    </div>
+    <div class="sgf-resume-item">
+      <span class="sgf-resume-label">Terme théorique</span>
+      <span class="sgf-resume-val" id="sgf-res-dpa">--</span>
+    </div>
+  </div>
+
+  <!-- BARRE DE PROGRESSION -->
+  <div class="sgf-progress-wrap" id="sgf-progress-wrap">
+    <div class="sgf-progress-bg">
+      <div class="sgf-progress-fill" id="sgf-progress-fill"></div>
+    </div>
+    <div class="sgf-progress-txt" id="sgf-progress-txt"></div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="sgf-nav" id="sgf-nav">
+    <button id="sgf-btn-prev" onclick="sgfChanger(-1)">&#8592; Précédente</button>
+    <button class="btn-today" onclick="sgfRevenir()">Aujourd'hui</button>
+    <button id="sgf-btn-next" onclick="sgfChanger(1)">Suivante &#8594;</button>
+  </div>
+
+  <!-- GRILLE RÉSULTATS -->
+  <div class="sgf-grid" id="sgf-grid">
+    <!-- Carte fœtus/maman -->
+    <div class="sgf-card" id="sgf-card-foetus">
+      <div class="sgf-card-head sgf-card-head-pink">
+        <span>👶</span> Évolution Mère & Enfant
+      </div>
+      <div class="sgf-card-body" id="sgf-body-foetus"></div>
+    </div>
+    <!-- Carte médicale -->
+    <div class="sgf-card" id="sgf-card-med">
+      <div class="sgf-card-head sgf-card-head-blue">
+        <span>🩺</span> Parcours Médical
+      </div>
+      <div class="sgf-card-body" id="sgf-body-med"></div>
+    </div>
+  </div>
+
+  <!-- MISE EN GARDE -->
+  <div class="sgf-disclaimer" id="sgf-disclaimer">
+    <strong>Avertissement médico-légal</strong> &mdash;
+    Cet outil est destiné à l'usage professionnel médical. Il constitue une aide à la décision et ne saurait se substituer au jugement clinique, aux recommandations actualisées des sociétés savantes, ni à l'examen individuel de la patiente. Les données sont conformes aux recommandations HAS 2023 et CNGOF 2022 au moment de la rédaction.
+  </div>
+
+</div><!-- /sgf-wrap -->
+</div><!-- /sgf-root -->
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   DONNÉES FŒTUS / MAMAN — par SG (semaine de grossesse)
+   ============================================================ */
+const FOETUS = {
+  1:  { foetus: "Fécondation en cours de préparation. L'ovocyte mature attend la fécondation.", mama: "Règles en cours. L'endomètre se régénère en préparation d'un éventuel cycle fertile." },
+  2:  { foetus: "Ovulation probable autour du 14e jour. L'ovocyte est libéré et peut être fécondé pendant 12 à 24 heures.", mama: "Période fertile. Glaire cervicale filante et abondante. Légère douleur pelvienne latérale possible (mittelschmerz)." },
+  3:  { foetus: "Fécondation et premières divisions cellulaires (segmentation). Le blastocyste migre vers l'utérus. Début de la différenciation cellulaire.", mama: "Aucun signe extérieur. Début de production d'hCG. Légère sensibilité pelvienne possible." },
+  4:  { foetus: "Implantation dans l'endomètre vers J21-J22. Début de la formation du disque embryonnaire. Deux feuillets : épiblaste et hypoblaste.", mama: "Retard de règles. Fatigue inhabituelle. Seins tendus ou douloureux. Légers saignements d'implantation possibles. Envies fréquentes d'uriner débutantes." },
+  5:  { foetus: "Le cœur commence à battre (environ 22 jours post-fécondation). Formation du tube neural. Bourgeons des membres apparaissent. L'embryon mesure ~2 mm.", mama: "Nausées matinales (pouvant survenir à tout moment de la journée). Hypersensibilité aux odeurs. Fatigue intense. Possible hyperptyalisme." },
+  6:  { foetus: "Le cœur bat à 100-160 bpm. Les yeux et les oreilles internes commencent à se former. Le système nerveux central se développe rapidement. Taille ~4-6 mm.", mama: "Nausées et vomissements souvent à leur pic. Maux de tête. Sautes d'humeur. Aversion alimentaire. Seins très sensibles avec vascularisation visible (réseau veineux de Haller)." },
+  7:  { foetus: "Le visage prend forme : narines, lèvres, langue. Les membres s'allongent ; on distingue les mains et pieds en palette. L'estomac et l'œsophage sont en place. Taille ~10 mm.", mama: "Pollakiurie marquée (utérus qui grossit appuie sur la vessie). Constipation débutante. Hypersensibilité émotionnelle. Scialigorrhée possible." },
+  8:  { foetus: "Les doigts et orteils se séparent. Tous les organes majeurs sont en place mais immatures. L'embryon devient officiellement fœtus. Taille ~16 mm. Mouvements spontanés visibles à l'échographie.", mama: "Vêtements pouvant être serrés à la taille. Mamelons s'assombrissent (aréoles). Troubles digestifs : ballonnements, brûlures d'estomac. Prise de poids minime ou nulle." },
+  9:  { foetus: "Réflexes débutants : réflexe de retrait. Tous les organes internes fonctionnent minimalement. La colonne vertébrale est visible. Taille ~23 mm. Poids ~2 g.", mama: "Augmentation du volume sanguin (+50% en fin de grossesse). Cœur qui travaille davantage. Possible tachycardie physiologique. Fringales ou dégoûts alimentaires marqués." },
+  10: { foetus: "Os et cartilage se forment. Organes sexuels externes en différenciation. Ongles débutants. Le fœtus peut avaler du liquide amniotique. Taille ~31 mm. Poids ~4 g.", mama: "Symptômes souvent à leur maximum ce trimestre. Volume utérin dépasse le pelvis. Possible vertige orthostatique." },
+  11: { foetus: "Le fœtus est très actif : il bouge, s'étire, se retourne. Le visage est plus humain. Les paupières sont soudées (jusqu'à 26-28 SA). Taille ~41 mm. Poids ~7 g.", mama: "Cheveux et ongles poussent plus vite sous l'effet des estrogènes. Ligaments en laxité progressive (relaxine). Tensions ligamentaires pelviennes et lombaires débutantes." },
+  12: { foetus: "Tous les systèmes organiques sont formés et fonctionnels. La clarté nucale est mesurable jusqu'à cette semaine. Taille ~53 mm. Poids ~14 g.", mama: "Nausées commencent à régresser. L'utérus sort du pelvis, palpable en sus-pubien. Le risque de fausse couche diminue significativement après cette semaine." },
+  13: { foetus: "Croissance accélérée. Ossification progressive. Formation des empreintes digitales. La thyroïde fœtale commence à fonctionner. Taille ~65 mm. Poids ~23 g.", mama: "Le 2e trimestre commence : retour de l'énergie, disparition des nausées pour la majorité. L'appétit augmente. Le ventre s'arrondit visiblement." },
+  14: { foetus: "Traits du visage s'affinent. Apparition du lanugo (fin duvet protecteur). Le fœtus peut sucer son pouce. Taille ~80 mm. Poids ~43 g.", mama: "Énergie en hausse, libido parfois retrouvée. Rondeur abdominale visible. Possibles douleurs du ligament rond (douleurs latérales basses)." },
+  15: { foetus: "Le bébé entend les sons et réagit aux voix. Les yeux bougent sous les paupières closes. Taille ~100 mm. Poids ~70 g.", mama: "Premiers frémissements utérins possibles chez les multipares. Douleurs dorsales et pelviennes débutantes liées à l'adaptation posturale. Possible rhinite de grossesse." },
+  16: { foetus: "Le bébé développe sa musculature. Le système nerveux autonome mûrit. Taille ~116 mm. Poids ~100 g.", mama: "Chez les multipares, les premiers mouvements fœtaux (battements d'ailes) peuvent être perçus. Varice vulvaire ou des membres inférieurs possible." },
+  17: { foetus: "Squelette s'ossifie davantage. Le sexe est souvent distinguable à l'échographie. Début de constitution de la graisse sous-cutanée. Taille ~130 mm. Poids ~140 g.", mama: "Douleurs dorsales et pelviennes s'installent. Ballonnements, reflux, retour de quelques envies sucrées. La peau peut commencer à s'étirer." },
+  18: { foetus: "Le bébé bâille, suce son pouce, avale. Myélinisation du système nerveux débute. Taille ~142 mm. Poids ~190 g.", mama: "Chez les primipares, premiers mouvements fœtaux ressentis (sensations de bulles). Mouvements plus distincts et réguliers chez les multipares." },
+  19: { foetus: "Développement neurologique majeur (multiplication neuronale rapide). Les poumons forment les bronchioles. Taille ~152 mm. Poids ~240 g.", mama: "La linea nigra peut apparaître. Mélasma (masque de grossesse) possible au visage. Sommeil agité, rêves plus intenses. Œdèmes discrets des chevilles en fin de journée." },
+  20: { foetus: "Mi-terme atteint. La peau est recouverte de vernix caseosa. Cheveux, sourcils et cils apparaissent. Le bébé réagit à la lumière et au son. Taille ~160 mm. Poids ~300 g.", mama: "Cheveux épais et brillants. Le nombril peut commencer à ressortir. Douleurs ligamentaires fréquentes. Varices possibles. Centre de gravité modifié." },
+  21: { foetus: "Bébé pèse ~400 g et bouge activement. Les papilles gustatives fonctionnent. Le cartilage du nez se forme. Taille ~270 mm (tête-pied).", mama: "Prise de poids plus significative (environ 500 g/semaine). Essoufflement léger possible. Mouvements bien perçus et réguliers." },
+  22: { foetus: "Le fœtus développe des cycles de sommeil et d'éveil (20-30 min). Croissance régulière en poids et en longueur. Taille ~28 cm. Poids ~430 g.", mama: "Douleurs ligamentaires et lombaires normales. Possible syndrome du canal carpien (œdème des poignets). Colostrum peut débuter." },
+  23: { foetus: "Les poumons commencent à produire du surfactant. Les oreilles sont fonctionnelles. Stade de viabilité atteint (très prématuré). Taille ~29 cm. Poids ~500 g.", mama: "Chevilles et pieds gonflent en fin de journée. Peau peut être sèche ou prurigineuse. Crampes nocturnes aux mollets. Constipation fréquente." },
+  24: { foetus: "Oreilles développées, réaction aux sons extérieurs. Sourcils et cils bien formés. Taille ~30 cm. Poids ~600 g.", mama: "Brûlures d'estomac plus fréquentes (utérus refoule l'estomac). Sommeil plus difficile. Ronflements possibles (congestion nasale physiologique)." },
+  25: { foetus: "Les poumons continuent de mûrir rapidement. Le bébé peut ouvrir les yeux. Graisses sous-cutanées se constituent. Taille ~34 cm. Poids ~660 g.", mama: "Reflux gastriques intenses. Hémorroïdes possibles. Diastasis des grands droits débutant. Le fond utérin est à la hauteur du nombril." },
+  26: { foetus: "Bébé pèse environ 900 g. La rétine devient fonctionnelle. Les testicules descendent (garçon). Taille ~36 cm.", mama: "Douleurs lombaires fréquentes et intenses. Bassin qui s'élargit. Possible syndrome de la symphyse pubienne (douleur pubienne)." },
+  27: { foetus: "Fœtus très actif, changements de positions. Le cerveau se développe avec formation des premières circonvolutions. Taille ~37 cm. Poids ~1 kg.", mama: "Essoufflement au moindre effort. Jambes lourdes. Possible syndrome des jambes sans repos. Contractions de Braxton Hicks débutantes." },
+  28: { foetus: "Dépasse 1 kg. Ouverture des paupières. Les poumons, bien que mûrissant, peuvent assurer une survie avec assistance en cas de naissance prématurée. Taille ~38 cm.", mama: "Fatigue qui revient en force. Bébé très actif, coups de pied visibles. Jambes lourdes et varices. Envies fréquentes d'uriner de nuit (nycturie)." },
+  29: { foetus: "Mouvements plus intenses et coordonnés. Réserves de fer et de calcium se constituent. Taille ~39 cm. Poids ~1,2 kg.", mama: "Insomnie due à l'inconfort et aux envies fréquentes d'uriner. Tensions pelviennes. Douleurs sciatiques possibles. Bas du dos douloureux." },
+  30: { foetus: "Cerveau se développe très rapidement, circonvolutions se forment. Yeux sensibles à la lumière. Taille ~40 cm. Poids ~1,4 kg.", mama: "Essoufflement marqué : l'utérus appuie sur le diaphragme. Besoin impérieux de repos. Œdèmes des membres inférieurs fréquents." },
+  31: { foetus: "Muscles et poumons se renforcent. Le fœtus prend de la graisse brune (thermorégulation). Taille ~41 cm. Poids ~1,6 kg.", mama: "Douleurs dorsolombaires et pelviennes s'intensifient. Sommeil de plus en plus difficile. Laxité articulaire du bassin prononcée." },
+  32: { foetus: "Le bébé se retourne souvent tête en bas (présentation céphalique). Ongles et cheveux visibles. Taille ~42 cm. Poids ~1,8 kg.", mama: "Préparation mentale à l'accouchement. Consultations de préparation à la naissance. Contractions de Braxton Hicks plus fréquentes. Possible descente de la tête fœtale dans le bassin." },
+  33: { foetus: "Présentation céphalique généralement acquise. Os durcissent sauf le crâne (sutures molles pour passage). Réflexes s'affinent. Taille ~44 cm. Poids ~2 kg.", mama: "Les coups de pied peuvent être douloureux. Contractions non douloureuses fréquentes. Prise de poids ralentit. Fond utérin à 33 cm." },
+  34: { foetus: "Poumons presque matures (surfactant suffisant). Système immunitaire se renforce. Taille ~45 cm. Poids ~2,1 kg.", mama: "Les seins peuvent produire du colostrum. Mobilité réduite. Difficultés à marcher, à se baisser. Douleur pubienne symphysaire fréquente." },
+  35: { foetus: "Environ 2,4 kg. Formation complète de la majorité des organes. Seuls les poumons et le cerveau continuent de mûrir. Taille ~46 cm.", mama: "La tête peut descendre dans le bassin, soulageant l'essoufflement mais augmentant la pression pelvienne et les envies d'uriner. Nycturie majeure." },
+  36: { foetus: "Poumons généralement matures (terme précoce). Le fœtus perd le lanugo. Taille ~47 cm. Poids ~2,6 kg. Considéré 'à terme précoce' (Early Term).", mama: "Instinct de nidification (besoin de tout préparer). Fatigue croissante. Pression pelvienne intense. Possible descente du ventre avec facilitation de la respiration." },
+  37: { foetus: "Terme atteint (grossesse à terme selon OMS). Tous les organes sont matures. Taille ~48 cm. Poids ~2,9 kg.", mama: "Contractions de Braxton Hicks plus fortes et fréquentes. Colostrum abondant possible. L'accouchement peut survenir à tout moment à partir de cette semaine." },
+  38: { foetus: "Tous les organes matures et prêts à fonctionner. Perte du lanugo et du vernix en partie. Descente dans le bassin. Poids moyen 3 kg. Taille ~49 cm.", mama: "Possible perte du bouchon muqueux (signe de modification du col). Contractions réelles peuvent débuter. Besoin de repos impérieux. Surveillance des signes de travail." },
+  39: { foetus: "Organes reproducteurs terminés. Position céphalique bien engagée généralement. Taille ~50 cm. Poids ~3,1-3,3 kg.", mama: "Forte pression pelvienne. Position confortable difficile à trouver. Signes de pré-travail : effacement et dilatation du col. Contractions irrégulières puis régulières." },
+  40: { foetus: "Bébé prêt à naître. Terme prévu. Taille moyenne 50 cm. Poids moyen 3,3 kg.", mama: "Terme prévu. Le corps est prêt pour l'accouchement. Surveiller contractions régulières (<5 min, >30 sec), perte des eaux, saignements. Consulter sans attendre si signes de travail." },
+  41: { foetus: "Grossesse prolongée – surveillance étroite. Liquide amniotique peut diminuer. Placenta peut vieillir. Bébé continue de prendre du poids.", mama: "Surveillance quotidienne (monitoring fœtal, mesure du liquide amniotique). Discuter la date d'induction avec l'équipe obstétricale. Nervosité et impatience normales." }
+};
+
+/* ============================================================
+   DONNÉES MÉDICALES — HAS 2023 / CNGOF 2022
+   Indexées par plage de SG
+   ============================================================ */
+const MEDICAL = [
+  {
+    sg: [1,2,3,4],
+    titre: "T1 — Diagnostic et bilan initial (SA 3–6)",
+    blocs: [
+      { titre: "Diagnostic de grossesse", items: [
+        "Confirmer par dosage \u03B2-hCG plasmatique qualitatif ou quantitatif",
+        "Échographie précoce si doute sur localisation ou datation (\u2265 SA 5-6)",
+        "Calculer la DDR exacte et la DPA (DDR + 280 jours = SA 40)"
+      ]},
+      { titre: "Prescriptions immédiates", items: [
+        "<strong>Acide folique 400 µg/j</strong> jusqu'à la fin de la 12e SA (5 mg/j si ATCD spina bifida, épilepsie, BMI >35, malabsorption)",
+        "Arrêt tabac, alcool, médicaments non indispensables",
+        "Vitamine D 100 000 UI en dose unique au 2e trimestre (ou 1000 UI/j)"
+      ]},
+      { titre: "Bilan biologique initial", items: [
+        "NFS, groupe sanguin ABO-Rh, RAI",
+        "Sérologie rubéole et toxoplasmose",
+        "Sérologie syphilis (TPHA/VDRL), VIH, VHB (Ag HBs), VHC",
+        "TSH si symptômes ou facteurs de risque thyroïdiens",
+        "Glycémie à jeun si IMC \u2265 25, ATCD diabète gestationnel, âge \u2265 35 ans",
+        "ECBU (dépistage bactériurie asymptomatique)",
+        "Albuminurie / protéinurie sur échantillon"
+      ]}
+    ]
+  },
+  {
+    sg: [5,6,7,8],
+    titre: "T1 — Consultation de début de grossesse (SA 7–10)",
+    blocs: [
+      { titre: "Examen clinique", items: [
+        "Tension artérielle, poids, taille, IMC",
+        "Examen des seins, col utérin (frottis si > 3 ans)",
+        "Évaluation des symptômes : nausées, vomissements, saignements",
+        "Évaluation psychosociale et dépistage de la violence"
+      ]},
+      { titre: "Prescriptions", items: [
+        "Acide folique à poursuivre jusqu'à 12 SA",
+        "<strong>Prescrire l'échographie T1</strong> (optimal 11-13 SA + 6j)",
+        "Dépistage combiné T1 trisomie 21 : PAPP-A, \u03B2-hCG libre + CN (entre 11 SA et 13 SA + 6j)",
+        "Sérologie toxoplasmose mensuelle si séronégative",
+        "Vaccination grippe si saison épidémique (toutes patientes enceintes)"
+      ]},
+      { titre: "Information et éducation", items: [
+        "Alimentation et hygiène de vie (listériose, toxoplasmose)",
+        "Activité physique adaptée (recommandée sauf contre-indication)",
+        "Déconseiller automédication (AINS interdits > SA 24)",
+        "Information sur la déclaration de grossesse (avant 14 SA)"
+      ]}
+    ]
+  },
+  {
+    sg: [9,10,11,12,13],
+    titre: "T1 — Échographie T1 et dépistage (SA 11–14)",
+    blocs: [
+      { titre: "Échographie T1 (11 SA – 13 SA + 6j) — Obligatoire", items: [
+        "Vitalité embryonnaire (activité cardiaque)",
+        "Datation précise : longueur cranio-caudale (LCC)",
+        "<strong>Mesure de la clarté nucale (CN)</strong> — seuil > 3 mm pathologique",
+        "Nombre de fœtus, chorionicité si grossesse multiple",
+        "Anatomie précoce : crâne, rachis, parois abdominales, membres",
+        "Os nasal, flux du ductus venosus (marqueurs T21 si CN augmentée)"
+      ]},
+      { titre: "Dépistage trisomie 21", items: [
+        "Dépistage combiné T1 : risque calculé (âge maternel + CN + PAPP-A + \u03B2-hCG libre)",
+        "Si risque \u2265 1/50 : proposer amniocentèse (caryotype ou CGH-array)",
+        "Si risque entre 1/51 et 1/1000 : proposer ADN fœtal libre (DPNni)",
+        "Si risque < 1/1000 : rassurant, surveillance standard"
+      ]},
+      { titre: "Actions administratives", items: [
+        "<strong>Déclaration de grossesse obligatoire avant 14 SA</strong> (CPAM + CAF)",
+        "Remise du carnet de maternité",
+        "Orientation vers la maternité adaptée au niveau de risque"
+      ]},
+      { titre: "Bilan complémentaire", items: [
+        "Contrôle NFS, bilan sérologique si manquant",
+        "Fer sérique + ferritine si anémie (Hb < 11 g/dL)",
+        "Bilan thyroïdien (TSH) si symptômes ou facteurs de risque"
+      ]}
+    ]
+  },
+  {
+    sg: [14,15,16,17],
+    titre: "T2 — Surveillance 2e trimestre précoce (SA 16–19)",
+    blocs: [
+      { titre: "Consultation mensuelle", items: [
+        "Tension artérielle, poids (prise de poids attendue ~400-500 g/semaine)",
+        "Hauteur utérine (en cm \u2248 âge gestationnel en SA \u00B1 2)",
+        "Bruits du cœur fœtaux au Doppler",
+        "Recherche d'œdèmes, de protéinurie"
+      ]},
+      { titre: "Dépistage et bilans", items: [
+        "Sérologie toxoplasmose mensuelle si séronégative",
+        "<strong>ECBU mensuel</strong> chez les patientes à risque (uropathie, diabète, bactériurie préalable)",
+        "Dépistage pré-éclampsie : TA, protéinurie, Doppler utérin si risque élevé",
+        "Albuminurie si TA > 130/80 mmHg",
+        "Contrôle NFS si anémie suspectée"
+      ]},
+      { titre: "Prescriptions", items: [
+        "<strong>Aspirine 100-150 mg/j avant 16 SA</strong> si risque pré-éclampsie élevé (ATCD pré-éclampsie, HTA chronique, néphropathie, grossesse multiple) — à initier avant SA 16",
+        "Supplémentation en fer si ferritine basse ou Hb < 10,5 g/dL",
+        "Calcium 1 g/j si apports alimentaires insuffisants (prévention pré-éclampsie)"
+      ]}
+    ]
+  },
+  {
+    sg: [18,19,20,21,22],
+    titre: "T2 — Échographie morphologique (SA 20–24)",
+    blocs: [
+      { titre: "Échographie T2 (optimal 20–22 SA) — Obligatoire", items: [
+        "<strong>Morphologie fœtale complète</strong> : crâne, cerveau, face, cœur (4 cavités, grands vaisseaux), poumons, abdomen, reins, membres, colonne",
+        "Biométrie : BIP, PC, PA, LF — courbes de référence Hadlock ou Salomon",
+        "Localisation placentaire (placenta praevia si < 20 mm du col)",
+        "Longueur cervicale transvaginale si ATCD accouchement prématuré (<25 mm = risque élevé)",
+        "Liquide amniotique (index amniotique ou grande citerne)",
+        "Sexe fœtal si demandé"
+      ]},
+      { titre: "Consultation de suivi", items: [
+        "TA, poids, HU, BCF, protéinurie",
+        "Évaluation des mouvements fœtaux actifs (ressentis par la mère)",
+        "Sérologie toxoplasmose si séronégative",
+        "Dépistage dépression périnatale (Edinburgh EPDS si non fait au T1)"
+      ]},
+      { titre: "Éducation à la naissance", items: [
+        "Information sur la préparation à la naissance (cours de préparation à proposer)",
+        "Signes d'alerte : contractions régulières < 37 SA, saignements, perte de liquide, absence de mouvements",
+        "Aménagements professionnels : congé maternité, travail de nuit"
+      ]}
+    ]
+  },
+  {
+    sg: [23,24,25,26],
+    titre: "T2 — Dépistage diabète gestationnel (SA 25–28)",
+    blocs: [
+      { titre: "Dépistage diabète gestationnel (DG) — SA 24–28", items: [
+        "<strong>HGPO 75 g — Critères IADPSG/OMS</strong> : G0 \u2265 0,92 g/L, G1h \u2265 1,80 g/L, G2h \u2265 1,53 g/L",
+        "Indications : IMC \u2265 25, âge \u2265 35 ans, ATCD DG ou macrosomie, ATCD familial diabète T2, prise de poids excessive",
+        "Si glycémie à jeun T1 \u2265 0,92 g/L : diagnostic de DG d'emblée, pas d'HGPO nécessaire",
+        "En cas de DG : régime diabétique, autocontrôle glycémique, consultation spécialisée si glycémies insuffisamment contrôlées"
+      ]},
+      { titre: "Bilan biologique 3e trimestre précoce", items: [
+        "NFS (anémie ferriprive fréquente : Hb < 10,5 g/dL = supplémentation en fer)",
+        "RAI si rhésus négatif (+ injection préventive anti-D 300 µg à 28 SA)",
+        "<strong>Injection préventive Ig anti-D à 28 SA</strong> chez les patientes Rh négatif non immunisées",
+        "Sérologie toxoplasmose mensuelle si séronégative"
+      ]},
+      { titre: "Surveillance spécifique", items: [
+        "Bilan hépatique si prurit (cholestase gravidique : acides biliaires, ALAT, ASAT)",
+        "Examen des membres inférieurs : varices, œdèmes, signe de Homans",
+        "Recherche thrombophlébite si facteurs de risque (immobilisation, obésité, ATCD thrombose)"
+      ]}
+    ]
+  },
+  {
+    sg: [27,28,29,30,31,32],
+    titre: "T3 — Surveillance 3e trimestre (SA 29–34)",
+    blocs: [
+      { titre: "Consultations mensuelles", items: [
+        "TA, poids, HU, BCF, recherche d'œdèmes et protéinurie",
+        "Évaluation mouvements actifs fœtaux (la patiente doit signaler toute diminution)",
+        "Dépistage pré-éclampsie sévère : céphalées, phosphènes, douleurs épigastriques, œdèmes brutaux \u2192 urgence",
+        "Évaluation du bien-être maternel et psychologique"
+      ]},
+      { titre: "Échographie T3 (optimal 30–32 SA) — Obligatoire", items: [
+        "<strong>Biométrie fœtale</strong> : BIP, PC, PA, LF — évaluation de la croissance (RCIU ou macrosomie)",
+        "Présentation fœtale (céphalique, siège, transverse)",
+        "Localisation et maturité placentaire",
+        "Quantité de liquide amniotique",
+        "Dopplers (ombilical, cérébral moyen) si suspicion RCIU",
+        "Score biophysique si surveillance rapprochée nécessaire"
+      ]},
+      { titre: "Vaccinations", items: [
+        "<strong>Vaccin coqueluche (dTca)</strong> recommandé entre 20 et 36 SA — stratégie cocooning si pas à jour",
+        "Rappel grippe si saison (vaccin inactivé, toutes les trimestres de grossesse)",
+        "COVID-19 : se référer aux recommandations en vigueur (schéma vaccinal adapté)"
+      ]},
+      { titre: "Prescriptions", items: [
+        "Supplémentation en fer si anémie (Hb < 10 g/dL : 80-160 mg/j de fer élémentaire)",
+        "Laxatifs osmotiques si constipation sévère (macrogol)",
+        "Corticothérapie de maturation pulmonaire si menace d'accouchement prématuré < 34 SA (bétaméthasone 12 mg \u00D7 2 / 24h IM)"
+      ]}
+    ]
+  },
+  {
+    sg: [33,34,35,36,37],
+    titre: "T3 — Préparation à l'accouchement (SA 35–39)",
+    blocs: [
+      { titre: "Bilan streptocoque B (GBS) — SA 34–38", items: [
+        "<strong>Prélèvement vagino-rectal pour culture GBS</strong> entre 34 et 38 SA",
+        "Si positif : antibioprophylaxie en travail (pénicilline G IV ou amoxicilline)",
+        "Si allergie pénicilline : antibiogramme nécessaire (clindamycine ou céfazoline selon sensibilité)",
+        "Si non réalisé avant travail : prophylaxie systématique si facteurs de risque (prématuré, fièvre, rupture prolongée)"
+      ]},
+      { titre: "Examen clinique obstétrical", items: [
+        "Score de Bishop (dilatation, effacement, consistance, position, engagement du col)",
+        "Présentation fœtale : confirmer céphalique ou planifier version par manœuvres externes (VME) si siège avant 37 SA",
+        "Cliniquement : taille du bassin, engagement de la présentation",
+        "TA, poids, œdèmes, BCF"
+      ]},
+      { titre: "Consultations spécialisées", items: [
+        "<strong>Consultation anesthésique</strong> obligatoire si péridurale prévue ou prévision de césarienne",
+        "Consultation pédiatrique si pathologie connue (RCIU, malformation, prématurité attendue)",
+        "Consultation cardiologique si cardiopathie",
+        "Bilan pré-opératoire si césarienne programmée : NFS, hémostase, groupage + RAI"
+      ]},
+      { titre: "Prescriptions finales", items: [
+        "Arrêt aspirine à 35-36 SA si prescrite pour prévention pré-éclampsie",
+        "HBPM : maintien ou arrêt selon risque thromboembolique (avis spécialisé)",
+        "Information sur les signes de travail : contractions régulières, rupture des membranes, saignements"
+      ]}
+    ]
+  },
+  {
+    sg: [38,39,40,41],
+    titre: "T3 — Terme et post-terme (SA 40–43)",
+    blocs: [
+      { titre: "Surveillance rapprochée (hebdomadaire ou bihebdomadaire)", items: [
+        "<strong>Monitoring fœtal (RCF)</strong> : rythme cardiaque fœtal basal, variabilité, accélérations, décélérations",
+        "Mesure échographique du liquide amniotique (oligoamnios = < 5 cm : urgence)",
+        "Évaluation du bien-être fœtal : mouvements actifs, profil biophysique si doute",
+        "TA, protéinurie (pré-éclampsie tardive possible)"
+      ]},
+      { titre: "Déclenchement du travail", items: [
+        "Déclenchement proposé à <strong>41 SA</strong> si terme dépassé sans travail spontané (recommandation HAS 2011, réaffirmée 2022)",
+        "Méthodes : prostaglandines (col défavorable), ocytocine IV (col favorable, Bishop \u2265 6)",
+        "Rupture artificielle des membranes si col favorable",
+        "Discuter avec la patiente les bénéfices/risques du déclenchement vs attente"
+      ]},
+      { titre: "Informations patiente", items: [
+        "Consulter immédiatement si : perte des eaux, contractions régulières toutes les 5 min, saignements, diminution des mouvements fœtaux, fièvre > 38°C",
+        "Valise de maternité prête dès 36 SA",
+        "Allaitement maternel : information et préparation anténatale"
+      ]}
+    ]
+  }
+];
+
+/* ============================================================
+   ÉTAT
+   ============================================================ */
+let sgActuelle = 0;
+let dateDDR    = null;
+let saTotale   = 0;
+let saJours    = 0;
+
+/* ============================================================
+   INIT SELECTS DATE
+   ============================================================ */
+(function initSelects(){
+  const dayS   = document.getElementById('sgf-day');
+  const monthS = document.getElementById('sgf-month');
+  const yearS  = document.getElementById('sgf-year');
+  const now    = new Date();
+  const mois   = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  
+  for(let d=1;d<=31;d++){
+    const o=document.createElement('option');
+    o.value=d; o.text=d;
+    if(d===now.getDate()) o.selected=true;
+    dayS.appendChild(o);
+  }
+  mois.forEach((m,i)=>{
+    const o=document.createElement('option');
+    o.value=i+1; o.text=m;
+    if(i===now.getMonth()) o.selected=true;
+    monthS.appendChild(o);
+  });
+  for(let y=now.getFullYear()-1;y<=now.getFullYear()+1;y++){
+    const o=document.createElement('option');
+    o.value=y; o.text=y;
+    if(y===now.getFullYear()) o.selected=true;
+    yearS.appendChild(o);
+  }
+})();
+
+/* ============================================================
+   CALCUL PRINCIPAL
+   ============================================================ */
+function sgfCalculer(){
+  const d = parseInt(document.getElementById('sgf-day').value);
+  const m = parseInt(document.getElementById('sgf-month').value);
+  const y = parseInt(document.getElementById('sgf-year').value);
+  dateDDR = new Date(y, m-1, d);
+  dateDDR.setHours(0,0,0,0);
+  const auj = new Date(); auj.setHours(0,0,0,0);
+  if(dateDDR > auj){ alert("La DDR ne peut pas être dans le futur."); return; }
+  const diffJ = Math.floor((auj - dateDDR) / 86400000);
+  saTotale = Math.floor(diffJ / 7);
+  saJours  = diffJ % 7;
+  sgActuelle = saTotale - 2;
+  if(sgActuelle < 1)  sgActuelle = 1;
+  if(sgActuelle > 41) sgActuelle = 41;
+  afficherResume();
+  afficher();
+  
+  // Afficher éléments UI
+  document.getElementById('sgf-resume').style.display = 'grid';
+  document.getElementById('sgf-nav').style.display = 'flex';
+  document.getElementById('sgf-progress-wrap').style.display = 'block';
+  document.getElementById('sgf-grid').classList.add('active');
+  document.getElementById('sgf-disclaimer').style.display = 'block';
+  majBoutons();
+}
+
+/* ============================================================
+   RÉSUMÉ / BARRE DE PROGRESSION
+   ============================================================ */
+function afficherResume(){
+  const dpa = new Date(dateDDR);
+  dpa.setDate(dpa.getDate() + 280); // NOTE: Maintenu tel quel comme demandé (règle des 280 jours = 40 SA)
+  const dpaStr = dpa.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+  
+  document.getElementById('sgf-res-sa').innerHTML  = saTotale + ' <span style="font-size:0.6em;color:#64748b;">SA</span><br><span style="font-size:0.4em;color:#64748b;">+ '+ saJours +' jours</span>';
+  document.getElementById('sgf-res-sg').innerHTML  = sgActuelle + ' <span style="font-size:0.6em;color:#64748b;">SG</span>';
+  document.getElementById('sgf-res-dpa').textContent = dpaStr;
+  
+  const pct = Math.min(Math.round((saTotale / 41) * 100), 100);
+  document.getElementById('sgf-progress-fill').style.width = pct + '%';
+  document.getElementById('sgf-progress-txt').innerHTML =
+    'Évolution de la grossesse : <strong>' + pct + '%</strong> (basé sur 41 SA)';
+}
+
+/* ============================================================
+   AFFICHAGE DES CARTES
+   ============================================================ */
+function afficher(){
+  const fData = FOETUS[sgActuelle];
+  const mData = MEDICAL.find(m => sgActuelle >= m.sg[0] && sgActuelle <= m.sg[m.sg.length-1]);
+  const dpa   = new Date(dateDDR);
+  dpa.setDate(dpa.getDate() + 280); // NOTE: Maintenu tel quel
+  const dpaStr = dpa.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+
+  const moisGrossesse = Math.min(Math.ceil(sgActuelle / 4.33), 9);
+
+  // --- Carte fœtus ---
+  const bodyFoetus = document.getElementById('sgf-body-foetus');
+  if(fData){
+    bodyFoetus.innerHTML =
+      '<div class="sgf-week-badge">' +
+        '<span class="sgf-badge sgf-badge-pink">SG ' + sgActuelle + '</span>' +
+        '<span class="sgf-badge sgf-badge-gray">SA ' + saTotale + ' + ' + saJours + 'j</span>' +
+        '<span class="sgf-badge sgf-badge-gray">Mois ' + moisGrossesse + '</span>' +
+      '</div>' +
+      '<div class="sgf-dev-section">' +
+        '<div class="sgf-dev-title pink">Développement f\u0153tal</div>' +
+        '<div class="sgf-dev-text">' + fData.foetus + '</div>' +
+      '</div>' +
+      '<div class="sgf-dev-section">' +
+        '<div class="sgf-dev-title teal">Ressenti maternel</div>' +
+        '<div class="sgf-dev-text">' + fData.mama + '</div>' +
+      '</div>' +
+      '<div class="sgf-info-grid">' +
+        '<div class="sgf-info-grid-item"><span>Aménorrhée calculée</span><strong>' + saTotale + ' SA + ' + saJours + 'j</strong></div>' +
+        '<div class="sgf-info-grid-item"><span>Accouchement prévu</span><strong>' + dpaStr + '</strong></div>' +
+      '</div>';
+  }
+
+  // --- Carte médicale ---
+  const bodyMed = document.getElementById('sgf-body-med');
+  if(mData){
+    let html = '<div class="sgf-med-section-title">' + mData.titre + '</div>';
+    mData.blocs.forEach(b => {
+      html += '<div class="sgf-med-bloc">';
+      html += '<div class="sgf-med-bloc-title">' + b.titre + '</div>';
+      html += '<ul class="sgf-med-list">';
+      b.items.forEach(item => { html += '<li>' + item + '</li>'; });
+      html += '</ul></div>';
+    });
+    bodyMed.innerHTML = html;
+  }
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function sgfChanger(dir){
+  const nouvelle = sgActuelle + dir;
+  if(nouvelle < 1 || nouvelle > 41) return;
+  sgActuelle = nouvelle;
+  saTotale = sgActuelle + 2;
+  saJours  = 0;
+  afficher();
+  majBoutons();
+  const c = document.getElementById('sgf-card-foetus');
+  if(c) {
+    const y = c.getBoundingClientRect().top + window.scrollY - 30;
+    window.scrollTo({top: y, behavior: 'smooth'});
+  }
+}
+
+function sgfRevenir(){
+  if(!dateDDR) return;
+  const auj = new Date(); auj.setHours(0,0,0,0);
+  const diffJ = Math.floor((auj - dateDDR) / 86400000);
+  saTotale = Math.floor(diffJ / 7);
+  saJours  = diffJ % 7;
+  sgActuelle = saTotale - 2;
+  if(sgActuelle < 1)  sgActuelle = 1;
+  if(sgActuelle > 41) sgActuelle = 41;
+  afficher();
+  majBoutons();
+}
+
+function majBoutons(){
+  document.getElementById('sgf-btn-prev').disabled = (sgActuelle <= 1);
+  document.getElementById('sgf-btn-next').disabled = (sgActuelle >= 41);
+}
+
+// Exposition globale
+window.sgfCalculer = sgfCalculer;
+window.sgfChanger  = sgfChanger;
+window.sgfRevenir  = sgfRevenir;
+
+})();
+</script>
+</body>
+</html>
+
+
+
+
