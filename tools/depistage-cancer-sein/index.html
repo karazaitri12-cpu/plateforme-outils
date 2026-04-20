@@ -3,284 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Dépistage du Cancer du Sein | Évaluation du Risque</title>
+    <title>Dépistage du Cancer du Sein | Dr Kara-Zaitri</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 
     <style>
+        /* DESIGN MODERNE - VERSION MONOBLOC */
         :root {
-            --cs-primary: #2B6CB0;
-            --cs-accent: #D53F8C;
-            --cs-bg: #F7FAFC;
-            --cs-text: #2D3748;
-            --cs-muted: #718096;
-            --cs-border: #E2E8F0;
-            --cs-success: #38A169;
-            --cs-warning: #D69E2E;
-            --cs-danger: #E53E3E;
+            --primary: #2B6CB0;
+            --accent: #D53F8C;
+            --bg: #F7FAFC;
+            --text: #2D3748;
+            --muted: #718096;
+            --border: #E2E8F0;
+            --success: #38A169;
+            --warning: #D69E2E;
+            --danger: #E53E3E;
         }
 
         #csein-tool {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             max-width: 800px;
             margin: 20px auto;
-            background: #fff;
-            border-radius: 12px;
-            border: 1px solid var(--cs-border);
+            background: #ffffff;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            color: var(--cs-text);
-            line-height: 1.5;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+            color: var(--text);
         }
 
-        /* En-tête */
-        .cs-header {
+        .header {
             background: linear-gradient(135deg, #fff 0%, #FEF5F9 100%);
-            padding: 25px;
-            border-bottom: 4px solid var(--cs-accent);
+            padding: 35px;
+            text-align: center;
+            border-bottom: 4px solid var(--accent);
         }
-        .cs-header-top { display: flex; align-items: center; gap: 15px; }
-        .cs-header-icon { color: var(--cs-accent); font-size: 24px; }
-        .cs-header h1 { font-size: 1.3rem; color: var(--cs-primary); margin: 0; }
-        .cs-header-sub { font-size: 0.85rem; color: var(--cs-muted); }
-        .cs-header-meta { margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap; }
-        .cs-badge { background: var(--cs-bg); border: 1px solid var(--cs-border); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
 
-        /* Disclaimer */
-        .cs-disclaimer {
+        .header h1 {
+            color: var(--primary);
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .header h1 i { color: var(--accent); }
+
+        .disclaimer {
             background: #FFFBEB;
             border-bottom: 1px solid #FBD38D;
-            padding: 15px;
-            font-size: 0.85rem;
             color: #975A16;
+            padding: 15px 25px;
+            font-size: 13px;
+            line-height: 1.4;
         }
 
-        /* Barre de progression */
-        .cs-progress-wrap { height: 6px; background: var(--cs-border); }
-        .cs-progress-bar { height: 100%; background: linear-gradient(90deg, var(--cs-primary), var(--cs-accent)); width: 0%; transition: width 0.3s; }
+        .content { padding: 40px; }
 
-        /* Étapes */
-        .cs-card { padding: 30px; display: none; }
-        .cs-card.active { display: block; }
-        .cs-section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; color: var(--cs-primary); display: flex; align-items: center; gap: 10px; }
-        .cs-step-num { background: var(--cs-accent); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+        .step { display: none; animation: fadeIn 0.5s ease; }
+        .step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Formulaire */
-        label { display: block; font-weight: 600; margin-bottom: 8px; }
-        input[type="number"], select { width: 100%; padding: 12px; border: 2px solid var(--cs-border); border-radius: 8px; margin-bottom: 10px; font-size: 1rem; }
-        .cs-age-hint { font-size: 0.85rem; color: var(--cs-muted); margin-bottom: 20px; }
+        .question {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-        .cs-options { display: flex; flex-direction: column; gap: 10px; }
-        .cs-option { border: 2px solid var(--cs-border); padding: 15px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
-        .cs-option:hover { border-color: var(--cs-primary); background: var(--cs-bg); }
+        /* Input Âge Stylisé */
+        .age-input-wrapper { position: relative; display: flex; align-items: center; }
+        .age-icon { position: absolute; left: 16px; color: var(--primary); font-size: 18px; }
+        input[type="number"].age-field {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            font-size: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        input[type="number"].age-field:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(43, 108, 176, 0.1); }
+
+        /* Options Radio Modernes */
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+        }
+        .option:hover { border-color: var(--primary); background: #F0F7FF; transform: translateX(5px); }
+        .option input { accent-color: var(--primary); width: 20px; height: 20px; }
 
         /* Boutons */
-        .cs-actions { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--cs-border); }
-        .cs-btn { padding: 12px 24px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
-        .cs-btn-primary { background: var(--cs-primary); color: #fff; }
-        .cs-btn-secondary { background: var(--cs-border); color: var(--cs-text); }
-        .cs-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .buttons { display: flex; justify-content: space-between; margin-top: 35px; }
+        .btn { padding: 12px 30px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; transition: 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #1A365D); color: white; margin-left: auto; }
+        .btn-secondary { background: #E2E8F0; color: var(--text); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* Score Eisinger */
-        .cs-family-row { display: grid; grid-template-columns: 2fr 2fr 1fr auto; gap: 10px; background: var(--cs-bg); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-        .cs-add-btn { width: 100%; padding: 10px; border: 2px dashed var(--cs-primary); background: #fff; color: var(--cs-primary); border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .cs-score-box { background: var(--cs-primary); color: #fff; padding: 15px; border-radius: 8px; margin-top: 20px; display: none; }
-        .cs-score-box.visible { display: block; }
-        .cs-btn-del { background: var(--cs-danger); color: #fff; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; }
-
-        /* Résultats */
-        .cs-result-header { display: flex; gap: 20px; align-items: center; background: var(--cs-bg); padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .cs-risk-badge { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.8rem; font-weight: 800; color: #fff; text-transform: uppercase; }
-        .cs-risk-badge.low { background: var(--cs-success); }
-        .cs-risk-badge.mod { background: var(--cs-warning); }
-        .cs-risk-badge.high { background: var(--cs-danger); }
-        .cs-reco-item { padding: 12px; border-left: 4px solid #ccc; background: #fff; margin-bottom: 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .cs-reco-item.red { border-left-color: var(--cs-danger); }
-        .cs-reco-item.orange { border-left-color: var(--cs-warning); }
-        .cs-reco-item.green { border-left-color: var(--cs-success); }
-
-        /* Modal */
-        .cs-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .cs-modal-overlay.open { display: flex; }
-        .cs-modal { background: #fff; padding: 25px; border-radius: 8px; max-width: 400px; text-align: center; }
-
-        @media (max-width: 600px) {
-            .cs-family-row { grid-template-columns: 1fr; }
-            .cs-header h1 { font-size: 1.1rem; }
+        /* Résultat de Risque */
+        .result-card {
+            background: linear-gradient(135deg, var(--bg), #FFFFFF);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 25px;
         }
+        .score-circle {
+            width: 90px; height: 90px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: bold; margin: 15px auto;
+            box-shadow: 0 10px 20px rgba(43, 108, 176, 0.2);
+        }
+
+        .recommendations { border-left: 5px solid var(--primary); padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .reco-item { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; gap: 10px; font-size: 14px; }
+        .reco-item:last-child { border-bottom: none; }
+        .reco-item i { color: var(--success); margin-top: 3px; }
+
+        @media (max-width: 600px) { .content { padding: 20px; } .header h1 { font-size: 18px; } }
     </style>
 </head>
 <body>
 
 <div id="csein-tool">
-    <div class="cs-header">
-        <div class="cs-header-top">
-            <div class="cs-header-icon"><i class="fa-solid fa-ribbon"></i></div>
-            <div>
-                <h1>Dépistage du Cancer du Sein</h1>
-                <div class="cs-header-sub">Évaluation institutionnelle du niveau de risque</div>
+    <div class="header">
+        <h1><i class="fa-solid fa-ribbon"></i> Dépistage du Cancer du Sein</h1>
+        <p>Aide à la décision clinique &middot; Dr Kara-Zaitri</p>
+    </div>
+
+    <div class="disclaimer">
+        <strong>Usage professionnel :</strong> Cet outil synthétise les recommandations INCa et HAS. Il ne remplace pas votre expertise clinique.
+    </div>
+
+    <div class="content">
+        <div class="step active" id="step1">
+            <div class="question"><i class="fa-solid fa-user"></i> Âge de la patiente</div>
+            <div class="age-input-wrapper">
+                <i class="fa-solid fa-calendar-days age-icon"></i>
+                <input type="number" id="age" class="age-field" placeholder="Ex: 52">
+            </div>
+            <p style="color: var(--muted); font-size: 13px; margin-top: 15px;">Le dépistage organisé (mammographie) concerne les femmes de 50 à 74 ans.</p>
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="nextStep(1)">Continuer <i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
-        <div class="cs-header-meta">
-            <span class="cs-badge">INCa 2023</span>
-            <span class="cs-badge">HAS 2014</span>
-            <span class="cs-badge">Score Eisinger</span>
-        </div>
-    </div>
 
-    <div class="cs-disclaimer">
-        <strong>Aide à la décision :</strong> Outil réservé aux professionnels de santé. Ne se substitue pas à l'examen clinique.
-    </div>
-
-    <div class="cs-progress-wrap">
-        <div class="cs-progress-bar" id="csProgBar"></div>
-    </div>
-
-    <div class="cs-card cs-step active" id="csStep1">
-        <div class="cs-section-title"><span class="cs-step-num">1</span>Âge de la patiente</div>
-        <label>Âge (ans)</label>
-        <input type="number" id="csAge" placeholder="ex: 52">
-        <p class="cs-age-hint">Le dépistage organisé concerne les femmes de 50 à 74 ans.</p>
-        <div class="cs-actions">
-            <span></span>
-            <button class="cs-btn cs-btn-primary" onclick="csNext(1)">Suivant &#8250;</button>
-        </div>
-    </div>
-
-    <div class="cs-card cs-step" id="csStep2">
-        <div class="cs-section-title"><span class="cs-step-num">2</span>Antécédents Personnels</div>
-        <div class="cs-options">
-            <label class="cs-option"><input type="radio" name="csPersonal" value="none" checked> Aucun antécédent particulier</label>
-            <label class="cs-option"><input type="radio" name="csPersonal" value="breast_cancer"> Cancer du sein ou CCIS</label>
-            <label class="cs-option"><input type="radio" name="csPersonal" value="atypical_hyperplasia"> Hyperplasie atypique</label>
-            <label class="cs-option"><input type="radio" name="csPersonal" value="thoracic_radiation"> Irradiation thoracique (Hodgkin)</label>
-        </div>
-        <div class="cs-actions">
-            <button class="cs-btn cs-btn-secondary" onclick="csPrev(2)">&#8249; Retour</button>
-            <button class="cs-btn cs-btn-primary" onclick="csNext(2)">Suivant &#8250;</button>
-        </div>
-    </div>
-
-    <div class="cs-card cs-step" id="csStep3">
-        <div class="cs-section-title"><span class="cs-step-num">3</span>Antécédents Familiaux</div>
-        <div id="csFamilyRows"></div>
-        <button class="cs-add-btn" onclick="csAddFamily()">+ Ajouter un apparenté atteint</button>
-        
-        <div class="cs-score-box" id="csScoreBox">
-            Score retenu : <span id="csScoreFinal" style="font-weight: 800;">0</span> (Seuil oncogénétique ≥ 3)
-        </div>
-
-        <div class="cs-actions">
-            <button class="cs-btn cs-btn-secondary" onclick="csPrev(3)">&#8249; Retour</button>
-            <button class="cs-btn cs-btn-primary" onclick="csCalculate()">Calculer le risque &#8250;</button>
-        </div>
-    </div>
-
-    <div class="cs-card cs-step" id="csResults">
-        <div class="cs-result-header">
-            <div id="csRiskBadge" class="cs-risk-badge">NB</div>
-            <div>
-                <h2 id="csResultTitle" style="margin:0; font-size: 1.1rem;">Évaluation terminée</h2>
-                <div id="csResultDesc" style="font-size: 0.9rem; color: var(--cs-muted);"></div>
+        <div class="step" id="step2">
+            <div class="question"><i class="fa-solid fa-notes-medical"></i> Antécédents Personnels</div>
+            <div class="options">
+                <label class="option"><input type="radio" name="perso" value="none" checked> Aucun antécédent particulier</label>
+                <label class="option"><input type="radio" name="perso" value="cancer"> Cancer du sein ou CCIS</label>
+                <label class="option"><input type="radio" name="perso" value="hyperplasie"> Hyperplasie atypique documentée</label>
+                <label class="option"><input type="radio" name="perso" value="radio"> Irradiation thoracique haute dose</label>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-secondary" onclick="prevStep(2)">Retour</button>
+                <button class="btn btn-primary" onclick="nextStep(2)">Suivant</button>
             </div>
         </div>
-        <div id="csRecoList"></div>
-        <div class="cs-actions">
-            <button class="cs-btn cs-btn-secondary" onclick="csRestart()">Recommencer</button>
-            <button class="cs-btn cs-btn-primary" onclick="window.print()">Imprimer</button>
-        </div>
-    </div>
-</div>
 
-<div class="cs-modal-overlay" id="csModal">
-    <div class="cs-modal">
-        <p id="csModalMsg"></p>
-        <button class="cs-btn cs-btn-primary" onclick="csCloseModal()">D'accord</button>
+        <div class="step" id="step3">
+            <div class="question"><i class="fa-solid fa-users"></i> Score d'Eisinger (Familial)</div>
+            <div id="familyList"></div>
+            <button class="btn btn-secondary" style="width:100%; border: 2px dashed var(--primary); background: #F0F7FF; color: var(--primary);" onclick="addFamily()">+ Ajouter un cas familial</button>
+            <div class="buttons">
+                <button class="btn btn-secondary" onclick="prevStep(3)">Retour</button>
+                <button class="btn btn-primary" onclick="calculate()">Finaliser l'évaluation</button>
+            </div>
+        </div>
+
+        <div class="step" id="results">
+            <div class="result-card">
+                <h2 id="resTitle" style="color: var(--primary); margin: 0;">Analyse du risque</h2>
+                <div id="resCircle" class="score-circle">--</div>
+                <div id="resLevel" style="font-weight: 700; font-size: 18px;">--</div>
+            </div>
+            <div class="recommendations">
+                <h3 style="margin-top:0; color: var(--primary); font-size: 16px;">Conduite à tenir recommandée :</h3>
+                <div id="recoList"></div>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-secondary" onclick="location.reload()">Nouvelle évaluation</button>
+                <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Imprimer</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-(function() {
-    var state = { age: null, personal: 'none', family: [] };
+    let state = { age: null, perso: 'none', family: [] };
 
-    function showStep(n) {
-        document.querySelectorAll('.cs-step').forEach(el => el.classList.remove('active'));
-        const target = (n === 'results') ? document.getElementById('csResults') : document.getElementById('csStep'+n);
-        target.classList.add('active');
-        document.getElementById('csProgBar').style.width = (n === 'results' ? 100 : (n/3)*100) + '%';
-    }
-
-    window.csNext = function(n) {
+    function nextStep(n) {
         if(n === 1) {
-            const age = parseInt(document.getElementById('csAge').value);
-            if(!age || age < 18) return csShowModal("Veuillez saisir un âge valide.");
-            state.age = age;
+            state.age = document.getElementById('age').value;
+            if(!state.age || state.age < 18) return alert("Veuillez saisir un âge valide.");
         }
-        if(n === 2) state.personal = document.querySelector('input[name="csPersonal"]:checked').value;
-        showStep(n+1);
-    };
-
-    window.csPrev = n => showStep(n-1);
-    window.csRestart = () => location.reload();
-
-    window.csAddFamily = function() {
-        const row = document.createElement('div');
-        row.className = 'cs-family-row';
-        row.innerHTML = `
-            <select class="f-rel"><option value="1">1er degré</option><option value="2">2e degré</option></select>
-            <select class="f-type"><option value="sein">Sein (F)</option><option value="ovaire">Ovaire</option><option value="homme">Sein (H)</option></select>
-            <input type="number" class="f-age" placeholder="Âge">
-            <button class="cs-btn-del" onclick="this.parentElement.remove();csUpdateScore();">&times;</button>`;
-        document.getElementById('csFamilyRows').appendChild(row);
-        row.querySelectorAll('select, input').forEach(el => el.addEventListener('change', csUpdateScore));
-        csUpdateScore();
-    };
-
-    function csUpdateScore() {
-        let score = 0;
-        document.querySelectorAll('.cs-family-row').forEach(row => {
-            const rel = row.querySelector('.f-rel').value;
-            const type = row.querySelector('.f-type').value;
-            const age = parseInt(row.querySelector('.f-age').value) || 60;
-            if(type === 'ovaire' || type === 'homme') score += (rel === '1' ? 3 : 2);
-            else score += (age < 40 ? 3 : (age < 50 ? 2 : 1)) / (rel === '2' ? 2 : 1);
-        });
-        document.getElementById('csScoreFinal').innerText = Math.round(score * 10) / 10;
-        document.getElementById('csScoreBox').classList.toggle('visible', score > 0);
-        return score;
+        if(n === 2) state.perso = document.querySelector('input[name="perso"]:checked').value;
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + (n+1)).classList.add('active');
     }
 
-    window.csCalculate = function() {
-        const eisinger = csUpdateScore();
-        const personal = state.personal;
-        let risk = 'low';
-        
-        if(eisinger >= 3 || personal === 'thoracic_radiation') risk = 'high';
-        else if(eisinger >= 1 || personal !== 'none') risk = 'mod';
+    function prevStep(n) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + (n-1)).classList.add('active');
+    }
 
-        const badge = document.getElementById('csRiskBadge');
-        badge.className = 'cs-risk-badge ' + risk;
-        badge.innerText = risk === 'high' ? 'Élevé' : (risk === 'mod' ? 'Modéré' : 'Moyen');
-        
-        const list = document.getElementById('csRecoList');
-        list.innerHTML = '';
-        const recos = risk === 'high' ? 
-            ['red|Consultation oncogénétique recommandée (Score ≥ 3).', 'red|IRM + Mammographie annuelle dès 30 ans.'] :
-            (risk === 'mod' ? ['orange|Surveillance annuelle renforcée.', 'green|Examen clinique tous les 6 mois.'] :
-            ['green|Dépistage organisé (50-74 ans) : Mammographie tous les 2 ans.']);
-        
-        recos.forEach(r => {
-            const [color, text] = r.split('|');
-            list.innerHTML += `<div class="cs-reco-item ${color}">${text}</div>`;
+    function addFamily() {
+        const div = document.createElement('div');
+        div.className = 'option';
+        div.style.marginBottom = '10px';
+        div.innerHTML = `
+            <select class="f-rel" style="flex:1; border:none; background:transparent;"><option value="1">1er degré</option><option value="2">2e degré</option></select>
+            <input type="number" class="f-age" placeholder="Âge" style="width:60px; border:1px solid #ddd; border-radius:5px; padding:5px;">
+            <i class="fa-solid fa-trash" style="color:var(--danger); cursor:pointer;" onclick="this.parentElement.remove()"></i>
+        `;
+        document.getElementById('familyList').appendChild(div);
+    }
+
+    function calculate() {
+        let score = 0;
+        document.querySelectorAll('#familyList .option').forEach(row => {
+            const rel = row.querySelector('.f-rel').value;
+            const age = row.querySelector('.f-age').value || 50;
+            score += (age < 40 ? 3 : (age < 50 ? 2 : 1)) / (rel === '2' ? 2 : 1);
         });
-        showStep('results');
-    };
 
-    window.csShowModal = msg => { document.getElementById('csModalMsg').innerText = msg; document.getElementById('csModal').classList.add('open'); };
-    window.csCloseModal = () => document.getElementById('csModal').classList.remove('open');
-})();
+        const resCircle = document.getElementById('resCircle');
+        const resLevel = document.getElementById('resLevel');
+        const recoList = document.getElementById('recoList');
+        
+        let risk = 'moyen';
+        if(score >= 3 || state.perso === 'radio') risk = 'élevé';
+        else if(score >= 1 || state.perso !== 'none') risk = 'modéré';
+
+        resCircle.innerText = Math.round(score);
+        resLevel.innerText = "Risque " + risk.toUpperCase();
+        resLevel.style.color = risk === 'élevé' ? 'var(--danger)' : (risk === 'modéré' ? 'var(--warning)' : 'var(--success)');
+        
+        recoList.innerHTML = risk === 'élevé' ? 
+            '<div class="reco-item"><i class="fa-solid fa-check"></i><b>Avis oncogénétique requis (Score ≥ 3)</b></div><div class="reco-item"><i class="fa-solid fa-check"></i>IRM + Mammographie annuelle dès 30 ans.</div>' :
+            (risk === 'modéré' ? '<div class="reco-item"><i class="fa-solid fa-check"></i>Surveillance annuelle clinique et mammographique.</div>' : 
+            '<div class="reco-item"><i class="fa-solid fa-check"></i>Dépistage organisé (50-74 ans) tous les 2 ans.</div>');
+
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('results').classList.add('active');
+    }
 </script>
 </body>
 </html>
