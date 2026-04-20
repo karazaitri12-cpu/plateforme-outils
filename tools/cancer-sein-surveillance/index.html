@@ -1,872 +1,1045 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Outil professionnel de surveillance du cancer du sein traité">
-    <title>Surveillance Cancer du Sein traité</title>
-    <style>
-        /* Reset & Scope pour Elementor */
-        .cs-surv-wrap *, .cs-surv-wrap *::before, .cs-surv-wrap *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Surveillance du Cancer du Sein Traité — Calendrier personnalisé</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — Scoped root ID + !important systématique
+   Unicode CSS pour pseudo-éléments ::before (pas d'entités HTML)
+   Zéro dépendance externe
+   ============================================================ */
 
-        .cs-surv-wrap {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #F7FAFC;
-            color: #2D3748;
-            line-height: 1.6;
-            padding: 24px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+#csurv-tool *,
+#csurv-tool *::before,
+#csurv-tool *::after {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 
-        .cs-surv-container {
-            background: #ffffff;
-            padding: 28px;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            border: 1px solid #E2E8F0;
-        }
+#csurv-tool {
+  --csv-primary:    #1a3a5c !important;
+  --csv-secondary:  #2c6e9e !important;
+  --csv-accent:     #b71c1c !important;
+  --csv-gold:       #c8a951 !important;
+  --csv-alert-bg:   #fdf6ec !important;
+  --csv-alert-bdr:  #e67e22 !important;
+  --csv-info-bg:    #eaf3fb !important;
+  --csv-info-bdr:   #2c6e9e !important;
+  --csv-success-bg: #eef7f0 !important;
+  --csv-danger-bg:  #fdf0ef !important;
+  --csv-danger-bdr: #e8b0ad !important;
+  --csv-bg:         #f4f6f9 !important;
+  --csv-card:       #ffffff !important;
+  --csv-border:     #d0d7e3 !important;
+  --csv-text:       #1c2538 !important;
+  --csv-muted:      #5a6a82 !important;
+  --csv-radius:     4px !important;
+  --csv-shadow:     0 1px 4px rgba(0,0,0,0.09) !important;
 
-        .cs-surv-wrap h1 {
-            color: #B71C1C;
-            margin-bottom: 20px;
-            font-size: 22px;
-            line-height: 1.3;
-            font-weight: 700;
-            padding-bottom: 16px;
-            border-bottom: 2px solid #E2E8F0;
-        }
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: var(--csv-text) !important;
+  background: var(--csv-bg) !important;
+  padding: 24px 16px !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+}
 
-        .cs-surv-wrap label {
-            font-weight: 600;
-            margin-top: 18px;
-            margin-bottom: 8px;
-            display: block;
-            color: #2D3748;
-            font-size: 14px;
-        }
+/* ---- EN-TÊTE ---- */
+#csurv-tool .csv-header {
+  background: var(--csv-accent) !important;
+  color: #ffffff !important;
+  padding: 20px 24px !important;
+  border-radius: var(--csv-radius) !important;
+  margin-bottom: 16px !important;
+  border-bottom: 4px solid var(--csv-gold) !important;
+}
+#csurv-tool .csv-header-top {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+}
+#csurv-tool .csv-header-icon {
+  font-size: 26px !important;
+  line-height: 1 !important;
+  opacity: 0.85 !important;
+  flex-shrink: 0 !important;
+  margin-top: 3px !important;
+}
+#csurv-tool .csv-header h1 {
+  font-family: Georgia, serif !important;
+  font-size: 17px !important;
+  font-weight: normal !important;
+  color: #ffffff !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.35 !important;
+  margin-bottom: 4px !important;
+}
+#csurv-tool .csv-header-sub {
+  font-size: 12px !important;
+  opacity: 0.75 !important;
+  font-style: italic !important;
+  color: #fde8e8 !important;
+}
+#csurv-tool .csv-header-meta {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(255,255,255,0.2) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+#csurv-tool .csv-badge {
+  font-size: 10px !important;
+  font-family: Arial, sans-serif !important;
+  background: rgba(255,255,255,0.15) !important;
+  color: #fde8e8 !important;
+  padding: 2px 8px !important;
+  border-radius: 2px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
 
-        .cs-surv-wrap select {
-            width: 100%;
-            padding: 12px 14px;
-            margin-bottom: 10px;
-            border: 1px solid #CBD5E0;
-            border-radius: 8px;
-            font-size: 15px;
-            background: #ffffff;
-            color: #2D3748;
-            -webkit-appearance: none;
-            appearance: none;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
+/* ---- DISCLAIMER ---- */
+#csurv-tool .csv-disclaimer {
+  background: var(--csv-alert-bg) !important;
+  border-left: 4px solid var(--csv-alert-bdr) !important;
+  padding: 10px 14px !important;
+  border-radius: 0 var(--csv-radius) var(--csv-radius) 0 !important;
+  margin-bottom: 20px !important;
+  font-size: 12.5px !important;
+  color: #6b4c1e !important;
+  font-family: Arial, sans-serif !important;
+  line-height: 1.5 !important;
+}
+#csurv-tool .csv-disclaimer p { margin-bottom: 4px !important; }
+#csurv-tool .csv-disclaimer p:last-child { margin-bottom: 0 !important; }
 
-        .cs-surv-wrap select:focus {
-            outline: none;
-            border-color: #B71C1C;
-            box-shadow: 0 0 0 3px rgba(183,28,28,0.15);
-        }
+/* ---- CARTE ---- */
+#csurv-tool .csv-card {
+  background: var(--csv-card) !important;
+  border: 1px solid var(--csv-border) !important;
+  border-radius: var(--csv-radius) !important;
+  box-shadow: var(--csv-shadow) !important;
+  padding: 24px !important;
+  margin-bottom: 16px !important;
+}
 
-        .cs-surv-wrap select.champ-manquant {
-            border-color: #E53E3E !important;
-            background: #FFF5F5 !important;
-        }
+/* ---- TITRE DE SECTION ---- */
+#csurv-tool .csv-section-title {
+  font-family: Arial, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  color: var(--csv-muted) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  border-bottom: 1px solid var(--csv-border) !important;
+  padding-bottom: 6px !important;
+  margin-bottom: 16px !important;
+}
 
-        .cs-surv-wrap button {
-            background: #B71C1C;
-            color: white;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            transition: background 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
+/* ---- GROUPES DE CHAMPS ---- */
+#csurv-tool .csv-field-group {
+  margin-bottom: 16px !important;
+}
+#csurv-tool label {
+  display: block !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: bold !important;
+  color: var(--csv-primary) !important;
+  margin-bottom: 5px !important;
+  letter-spacing: 0.01em !important;
+}
+#csurv-tool select {
+  display: block !important;
+  width: 100% !important;
+  padding: 9px 12px !important;
+  font-size: 14px !important;
+  font-family: Arial, sans-serif !important;
+  color: var(--csv-text) !important;
+  background: #ffffff !important;
+  border: 1.5px solid var(--csv-border) !important;
+  border-radius: var(--csv-radius) !important;
+  outline: none !important;
+  cursor: pointer !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  transition: border-color 0.2s !important;
+}
+#csurv-tool select:focus {
+  border-color: var(--csv-accent) !important;
+  box-shadow: 0 0 0 3px rgba(183,28,28,0.1) !important;
+}
+#csurv-tool select.csv-field-error {
+  border-color: var(--csv-accent) !important;
+  background: #fff8f8 !important;
+}
 
-        .cs-surv-wrap button:hover {
-            background: #9A1C1C;
-        }
+/* ---- GRILLE 2 COLONNES ---- */
+#csurv-tool .csv-grid2 {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+}
 
-        #cs-surv-printBtn {
-            background: #4A5568;
-            margin-top: 15px;
-            display: none;
-        }
+/* ---- VALIDATION MSG ---- */
+#csurv-tool .csv-val-msg {
+  display: none !important;
+  background: #fff0f0 !important;
+  border-left: 3px solid var(--csv-accent) !important;
+  padding: 9px 12px !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  color: #8b1010 !important;
+  border-radius: 0 var(--csv-radius) var(--csv-radius) 0 !important;
+  margin-top: 12px !important;
+}
+#csurv-tool .csv-val-msg::before { content: "\26A0\0020" !important; font-weight: bold !important; }
+#csurv-tool .csv-val-msg.visible { display: block !important; }
 
-        #cs-surv-printBtn:hover {
-            background: #2D3748;
-        }
+/* ---- BOUTONS ---- */
+#csurv-tool .csv-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-top: 20px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid var(--csv-border) !important;
+}
+#csurv-tool .csv-btn {
+  font-family: Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: bold !important;
+  letter-spacing: 0.05em !important;
+  padding: 10px 22px !important;
+  border-radius: var(--csv-radius) !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-transform: uppercase !important;
+  transition: opacity 0.15s, transform 0.1s !important;
+  display: inline-block !important;
+}
+#csurv-tool .csv-btn:hover { opacity: 0.88 !important; }
+#csurv-tool .csv-btn:active { transform: scale(0.98) !important; }
+#csurv-tool .csv-btn-primary {
+  background: var(--csv-accent) !important;
+  color: #fff !important;
+  flex: 1 !important;
+}
+#csurv-tool .csv-btn-print {
+  background: var(--csv-primary) !important;
+  color: #fff !important;
+}
+#csurv-tool .csv-btn-rapport {
+  background: var(--csv-gold) !important;
+  color: #fff !important;
+}
+#csurv-tool .csv-btn-reset {
+  background: transparent !important;
+  color: var(--csv-muted) !important;
+  border: 1px solid var(--csv-border) !important;
+}
+#csurv-tool .csv-btn[style*="none"] { display: none !important; }
 
-        /* Bouton rapport A5 */
-        #cs-surv-rapportBtn {
-            background: #C8A951;
-            margin-top: 10px;
-            display: none;
-        }
+/* ---- RÉSULTAT ---- */
+#csurv-tool .csv-result-wrap {
+  display: none !important;
+  margin-top: 8px !important;
+}
+#csurv-tool .csv-result-wrap.visible { display: block !important; }
 
-        #cs-surv-rapportBtn:hover {
-            background: #a08030;
-        }
+#csurv-tool .csv-result-header {
+  background: var(--csv-accent) !important;
+  color: #fff !important;
+  padding: 16px 20px !important;
+  border-radius: var(--csv-radius) var(--csv-radius) 0 0 !important;
+  border-bottom: 3px solid var(--csv-gold) !important;
+  font-family: Georgia, serif !important;
+  font-size: 15px !important;
+  font-weight: normal !important;
+}
+#csurv-tool .csv-result-body {
+  background: var(--csv-card) !important;
+  border: 1px solid var(--csv-border) !important;
+  border-top: none !important;
+  border-radius: 0 0 var(--csv-radius) var(--csv-radius) !important;
+  padding: 20px !important;
+}
 
-        #cs-surv-result {
-            margin-top: 24px;
-            padding: 20px;
-            background: #FFF5F5;
-            border-left: 4px solid #B71C1C;
-            border-radius: 8px;
-            display: none;
-        }
+/* ---- BLOCS DE RÉSULTAT ---- */
+#csurv-tool .csv-rblock {
+  margin-bottom: 16px !important;
+}
+#csurv-tool .csv-rblock-title {
+  font-family: Arial, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  color: var(--csv-accent) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  border-bottom: 1.5px solid var(--csv-border) !important;
+  padding-bottom: 5px !important;
+  margin-bottom: 8px !important;
+}
+#csurv-tool .csv-ritem {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 9px !important;
+  padding: 7px 10px !important;
+  margin-bottom: 5px !important;
+  border-radius: var(--csv-radius) !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+  border: 1px solid transparent !important;
+}
+#csurv-tool .csv-ritem.std {
+  background: var(--csv-info-bg) !important;
+  border-color: #b8d4e8 !important;
+  color: #1a3a5c !important;
+}
+#csurv-tool .csv-ritem.warn {
+  background: var(--csv-alert-bg) !important;
+  border-color: #f0d0a0 !important;
+  color: #6b4c1e !important;
+}
+#csurv-tool .csv-ritem.alert {
+  background: var(--csv-danger-bg) !important;
+  border-color: var(--csv-danger-bdr) !important;
+  color: #6b1e1a !important;
+}
+#csurv-tool .csv-ritem.inactive {
+  background: #f4f6f9 !important;
+  border-color: var(--csv-border) !important;
+  color: var(--csv-muted) !important;
+}
+#csurv-tool .csv-ritem::before {
+  content: "\2022" !important;
+  flex-shrink: 0 !important;
+  font-size: 18px !important;
+  line-height: 1.2 !important;
+  color: var(--csv-secondary) !important;
+}
+#csurv-tool .csv-ritem.warn::before  { color: var(--csv-alert-bdr) !important; }
+#csurv-tool .csv-ritem.alert::before { color: var(--csv-accent) !important; content: "\203C" !important; }
+#csurv-tool .csv-ritem.inactive::before { color: var(--csv-border) !important; }
 
-        #cs-surv-result h2 {
-            color: #B71C1C;
-            margin-bottom: 16px;
-            font-size: 18px;
-            text-align: center;
-            font-weight: 700;
-        }
+#csurv-tool .csv-sources {
+  background: #f0f2f6 !important;
+  border-radius: var(--csv-radius) !important;
+  padding: 11px 14px !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 11.5px !important;
+  color: var(--csv-muted) !important;
+  line-height: 1.6 !important;
+  margin-top: 16px !important;
+}
+#csurv-tool .csv-sources strong { color: var(--csv-text) !important; }
 
-        .cs-surv-section-title {
-            font-size: 14px;
-            margin-top: 18px;
-            margin-bottom: 10px;
-            color: #B71C1C;
-            font-weight: 700;
-            border-bottom: 2px solid #E2E8F0;
-            padding-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
+/* ---- MODAL IDENTIFICATION ---- */
+#csurv-tool .csv-modal-overlay {
+  display: none !important;
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(10,20,45,0.55) !important;
+  z-index: 99999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+}
+#csurv-tool .csv-modal-overlay.open { display: flex !important; }
+#csurv-tool .csv-modal-box {
+  background: #fff !important;
+  border-radius: var(--csv-radius) !important;
+  max-width: 520px !important;
+  width: 100% !important;
+  box-shadow: 0 16px 56px rgba(10,20,45,0.25) !important;
+  overflow: hidden !important;
+  font-family: Arial, sans-serif !important;
+}
+#csurv-tool .csv-modal-head {
+  background: var(--csv-accent) !important;
+  border-bottom: 3px solid var(--csv-gold) !important;
+  padding: 14px 18px !important;
+}
+#csurv-tool .csv-modal-head h2 {
+  font-family: Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  color: #fff !important;
+  margin-bottom: 2px !important;
+  letter-spacing: 0.02em !important;
+}
+#csurv-tool .csv-modal-head p {
+  font-size: 11px !important;
+  color: #fde8e8 !important;
+  margin: 0 !important;
+}
+#csurv-tool .csv-modal-body {
+  padding: 18px 20px 10px !important;
+}
+#csurv-tool .csv-modal-note {
+  background: #eaf3fb !important;
+  border-left: 3px solid var(--csv-secondary) !important;
+  padding: 8px 11px !important;
+  font-size: 11px !important;
+  color: #1a3a5c !important;
+  margin-bottom: 14px !important;
+  border-radius: 0 var(--csv-radius) var(--csv-radius) 0 !important;
+}
+#csurv-tool .csv-modal-section-lbl {
+  font-size: 10.5px !important;
+  font-weight: bold !important;
+  color: var(--csv-accent) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  border-bottom: 1px solid var(--csv-border) !important;
+  padding-bottom: 4px !important;
+  margin: 12px 0 10px !important;
+}
+#csurv-tool .csv-modal-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+#csurv-tool .csv-mfield {
+  margin-bottom: 2px !important;
+}
+#csurv-tool .csv-mfield label {
+  font-size: 11.5px !important;
+  font-weight: bold !important;
+  color: var(--csv-text) !important;
+  margin-bottom: 4px !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+#csurv-tool .csv-mfield input {
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 10px !important;
+  font-size: 13px !important;
+  font-family: Arial, sans-serif !important;
+  color: var(--csv-text) !important;
+  background: #fff !important;
+  border: 1.5px solid var(--csv-border) !important;
+  border-radius: var(--csv-radius) !important;
+  outline: none !important;
+  transition: border-color 0.15s !important;
+}
+#csurv-tool .csv-mfield input:focus {
+  border-color: var(--csv-accent) !important;
+  box-shadow: 0 0 0 3px rgba(183,28,28,0.1) !important;
+}
+#csurv-tool .csv-mfield input.csv-inp-error {
+  border-color: var(--csv-accent) !important;
+  background: #fff8f8 !important;
+}
+#csurv-tool .csv-mfield .csv-field-err {
+  display: none !important;
+  color: var(--csv-accent) !important;
+  font-size: 11px !important;
+  margin-top: 3px !important;
+  font-weight: bold !important;
+}
+#csurv-tool .csv-mfield .csv-field-err.visible { display: block !important; }
+#csurv-tool .csv-badge-req {
+  display: inline-block !important;
+  background: #ffeaea !important;
+  color: var(--csv-accent) !important;
+  font-size: 9px !important;
+  font-weight: bold !important;
+  border-radius: 2px !important;
+  padding: 1px 5px !important;
+  margin-left: 4px !important;
+  letter-spacing: 0.03em !important;
+  vertical-align: middle !important;
+  text-transform: uppercase !important;
+}
+#csurv-tool .csv-modal-footer {
+  padding: 0 20px 18px !important;
+  display: flex !important;
+  gap: 10px !important;
+}
+#csurv-tool .csv-modal-footer button {
+  flex: 1 !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: bold !important;
+  padding: 10px !important;
+  border-radius: var(--csv-radius) !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  transition: opacity 0.15s !important;
+}
+#csurv-tool .csv-modal-footer button:hover { opacity: 0.88 !important; }
+#csurv-tool .csv-btn-cancel {
+  background: #e8ecf0 !important;
+  color: var(--csv-muted) !important;
+}
+#csurv-tool .csv-btn-validate {
+  background: var(--csv-gold) !important;
+  color: #fff !important;
+  border-bottom: 3px solid #a08030 !important;
+}
 
-        #cs-surv-result p {
-            margin: 8px 0;
-            line-height: 1.6;
-            font-size: 14px;
-            color: #2D3748;
-        }
+/* ---- RESPONSIVE ---- */
+@media (max-width: 560px) {
+  #csurv-tool .csv-grid2 { grid-template-columns: 1fr !important; }
+  #csurv-tool .csv-modal-grid { grid-template-columns: 1fr !important; }
+  #csurv-tool .csv-actions { flex-direction: column !important; }
+  #csurv-tool .csv-btn { width: 100% !important; text-align: center !important; flex: none !important; }
+}
 
-        #cs-surv-result ul {
-            margin: 8px 0 8px 20px;
-            padding: 0;
-        }
-
-        #cs-surv-result li {
-            margin-bottom: 4px;
-            font-size: 14px;
-        }
-
-        #cs-surv-validationMsg {
-            color: #C53030;
-            font-weight: 600;
-            font-size: 13px;
-            margin-top: 10px;
-            display: none;
-            padding: 12px;
-            background: #FFF5F5;
-            border-left: 4px solid #E53E3E;
-            border-radius: 6px;
-        }
-
-        /* Disclaimer médico-légal */
-        .cs-surv-legal {
-            margin: 20px 0;
-            padding: 14px 16px;
-            background: #FFFBEB;
-            border-left: 4px solid #D69E2E;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #744210;
-            line-height: 1.6;
-        }
-
-        .cs-surv-legal strong {
-            color: #975A16;
-        }
-
-        /* =============================================
-           MODAL IDENTIFICATION PATIENTE
-           ============================================= */
-        #cs-surv-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(20, 30, 55, 0.6);
-            z-index: 99999;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-
-        #cs-surv-modal.cs-surv-modal-active {
-            display: flex;
-        }
-
-        #cs-surv-modal .cs-surv-modal-box {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 16px 56px rgba(20, 30, 55, 0.22);
-            max-width: 520px;
-            width: 100%;
-            overflow: hidden;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-        }
-
-        #cs-surv-modal .cs-surv-modal-header {
-            background: #B71C1C;
-            border-bottom: 3px solid #C8A951;
-            padding: 14px 18px;
-        }
-
-        #cs-surv-modal .cs-surv-modal-header h2 {
-            margin: 0;
-            font-size: 15px;
-            color: #fff;
-            font-weight: 700;
-            text-align: left;
-            border: none;
-            padding: 0;
-        }
-
-        #cs-surv-modal .cs-surv-modal-header p {
-            margin: 3px 0 0;
-            font-size: 11px;
-            color: #fde68a;
-        }
-
-        #cs-surv-modal .cs-surv-modal-body {
-            padding: 20px 22px 14px;
-        }
-
-        #cs-surv-modal .cs-surv-modal-note {
-            background: #f0f4fb;
-            border-left: 3px solid #2653a0;
-            padding: 8px 11px;
-            font-size: 11px;
-            color: #2a3560;
-            margin-bottom: 14px;
-            border-radius: 0 4px 4px 0;
-        }
-
-        #cs-surv-modal .cs-surv-section-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: #B71C1C;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 12px 0 8px;
-            border-bottom: 1px solid #E2E8F0;
-            padding-bottom: 4px;
-        }
-
-        #cs-surv-modal .cs-surv-modal-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        #cs-surv-modal .cs-surv-mfield {
-            margin-bottom: 6px;
-        }
-
-        #cs-surv-modal .cs-surv-mfield label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #2D3748;
-            margin-bottom: 4px;
-            margin-top: 0;
-            display: block;
-        }
-
-        #cs-surv-modal .cs-surv-mfield input {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1.5px solid #CBD5E0;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #2D3748;
-            background: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.15s;
-        }
-
-        #cs-surv-modal .cs-surv-mfield input:focus {
-            outline: none;
-            border-color: #B71C1C;
-            box-shadow: 0 0 0 3px rgba(183, 28, 28, 0.12);
-        }
-
-        #cs-surv-modal .cs-surv-input-error {
-            border-color: #E53E3E !important;
-            background: #FFF5F5 !important;
-        }
-
-        #cs-surv-modal .cs-surv-err {
-            display: none;
-            color: #C53030;
-            font-size: 11px;
-            margin-top: 3px;
-            font-weight: 600;
-        }
-
-        #cs-surv-modal .cs-surv-err.cs-surv-err-visible {
-            display: block;
-        }
-
-        #cs-surv-modal .cs-surv-badge-req {
-            display: inline-block;
-            background: #ffeaea;
-            color: #B71C1C;
-            font-size: 9px;
-            font-weight: 700;
-            border-radius: 3px;
-            padding: 1px 5px;
-            margin-left: 5px;
-            letter-spacing: 0.4px;
-            vertical-align: middle;
-        }
-
-        #cs-surv-modal .cs-surv-modal-footer {
-            padding: 0 22px 18px;
-            display: flex;
-            gap: 10px;
-        }
-
-        #cs-surv-modal .cs-surv-modal-footer button {
-            flex: 1;
-            font-size: 13px;
-            padding: 10px;
-            margin-top: 0;
-            width: auto;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            border: none;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        #cs-surv-modal .cs-surv-btn-annuler {
-            background: #E2E8F0;
-            color: #4A5568;
-        }
-
-        #cs-surv-modal .cs-surv-btn-annuler:hover {
-            background: #CBD5E0;
-        }
-
-        #cs-surv-modal .cs-surv-btn-valider {
-            background: #C8A951;
-            color: #fff;
-            border-bottom: 3px solid #a08030 !important;
-        }
-
-        #cs-surv-modal .cs-surv-btn-valider:hover {
-            background: #a08030;
-        }
-
-        /* Anti-scrollbar */
-        html { scrollbar-width: none !important; }
-        body { -ms-overflow-style: none !important; overflow-y: auto !important; }
-        ::-webkit-scrollbar { display: none !important; width: 0 !important; background: transparent !important; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .cs-surv-wrap { padding: 16px; }
-            .cs-surv-container { padding: 20px; }
-            .cs-surv-wrap h1 { font-size: 20px; }
-            .cs-surv-wrap select { font-size: 14px; padding: 10px 12px; }
-            #cs-surv-result { padding: 16px; }
-            .cs-surv-wrap button { font-size: 14px; padding: 12px 16px; }
-            #cs-surv-modal .cs-surv-modal-grid { grid-template-columns: 1fr; }
-        }
-
-        @media print {
-            .cs-surv-wrap { padding: 0; background: white; }
-            .cs-surv-container { box-shadow: none; border: none; padding: 0; }
-            #cs-surv-formSection, #cs-surv-printBtn, #cs-surv-rapportBtn { display: none !important; }
-            #cs-surv-result { display: block !important; border: none; padding: 0; background: white; }
-            #cs-surv-modal { display: none !important; }
-            @page { size: A4 portrait; margin: 15mm; }
-        }
-    </style>
+@media print {
+  #csurv-tool .csv-header,
+  #csurv-tool .csv-disclaimer,
+  #csurv-tool .csv-card,
+  #csurv-tool .csv-actions,
+  #csurv-tool .csv-modal-overlay { display: none !important; }
+  #csurv-tool .csv-result-wrap { display: block !important; }
+}
+</style>
 </head>
 <body>
 
-    <!-- ===================== MODAL IDENTIFICATION ===================== -->
-    <div id="cs-surv-modal" role="dialog" aria-modal="true" aria-labelledby="cs-surv-modal-title">
-        <div class="cs-surv-modal-box">
-            <div class="cs-surv-modal-header">
-                <h2 id="cs-surv-modal-title">Identification — Rapport A5</h2>
-                <p>Informations obligatoires à des fins de traçabilité médico-légale</p>
-            </div>
-            <div class="cs-surv-modal-body">
-                <div class="cs-surv-modal-note">
-                    Ces données figureront sur le compte rendu imprimé. Elles ne sont pas conservées ni transmises.
-                </div>
+<div id="csurv-tool">
 
-                <div class="cs-surv-section-label">Identité de la patiente</div>
-
-                <div class="cs-surv-modal-grid">
-                    <div class="cs-surv-mfield">
-                        <label for="csms-nom">Nom <span class="cs-surv-badge-req">REQUIS</span></label>
-                        <input type="text" id="csms-nom" placeholder="Nom de famille" autocomplete="family-name"/>
-                        <div class="cs-surv-err" id="csms-err-nom">Champ obligatoire.</div>
-                    </div>
-                    <div class="cs-surv-mfield">
-                        <label for="csms-prenom">Prénom <span class="cs-surv-badge-req">REQUIS</span></label>
-                        <input type="text" id="csms-prenom" placeholder="Prénom" autocomplete="given-name"/>
-                        <div class="cs-surv-err" id="csms-err-prenom">Champ obligatoire.</div>
-                    </div>
-                    <div class="cs-surv-mfield">
-                        <label for="csms-ddn">Date de naissance</label>
-                        <input type="text" id="csms-ddn" placeholder="JJ/MM/AAAA"/>
-                    </div>
-                    <div class="cs-surv-mfield">
-                        <label for="csms-ref">N&#x00B0; dossier / Réf.</label>
-                        <input type="text" id="csms-ref" placeholder="Facultatif"/>
-                    </div>
-                </div>
-
-                <div class="cs-surv-section-label">Praticien référent</div>
-                <div class="cs-surv-mfield">
-                    <label for="csms-praticien">Praticien / Établissement <span class="cs-surv-badge-req">REQUIS</span></label>
-                    <input type="text" id="csms-praticien" placeholder="Dr KARA-ZAITRI M.A – Gynécologue"/>
-                    <div class="cs-surv-err" id="csms-err-prat">Champ obligatoire.</div>
-                </div>
-            </div>
-            <div class="cs-surv-modal-footer">
-                <button type="button" class="cs-surv-btn-annuler" onclick="csSurvModalClose()">Annuler</button>
-                <button type="button" class="cs-surv-btn-valider" onclick="csSurvModalValider()">Valider et générer</button>
-            </div>
-        </div>
+  <!-- EN-TÊTE -->
+  <div class="csv-header">
+    <div class="csv-header-top">
+      <div class="csv-header-icon">&#9673;</div>
+      <div>
+        <h1>Algorithme de Surveillance &mdash; Cancer du Sein Traité</h1>
+        <div class="csv-header-sub">Outil d'aide à la décision &middot; Calendrier de surveillance post-thérapeutique personnalisé &middot; Usage médical exclusif</div>
+      </div>
     </div>
-    <!-- ===================== FIN MODAL ===================== -->
+    <div class="csv-header-meta">
+      <span class="csv-badge">HAS 2023</span>
+      <span class="csv-badge">INCa</span>
+      <span class="csv-badge">CNGOF</span>
+      <span class="csv-badge">Mise à jour 02/2026</span>
+    </div>
+  </div>
 
-    <div class="cs-surv-wrap">
-        <div class="cs-surv-container">
-            <div id="cs-surv-formSection">
-                <h1>Algorithme de surveillance – Cancer du sein traité</h1>
+  <!-- DISCLAIMER -->
+  <div class="csv-disclaimer">
+    <p><strong>Outil d'aide à la décision — Réservé aux professionnels de santé.</strong> Les recommandations générées doivent être adaptées au contexte clinique individuel de chaque patiente. La décision finale relève de la responsabilité du praticien.</p>
+    <p><strong>Source :</strong> Recommandations HAS 2023 &mdash; Mise à jour 15/02/2026</p>
+  </div>
 
-                <div class="cs-surv-legal">
-                    <p><strong>Avertissement :</strong> Cet outil est destiné à un usage professionnel. Les recommandations doivent être adaptées au contexte clinique de chaque patiente sous la responsabilité du médecin traitant.</p>
-                    <p><strong>Source :</strong> Recommandations HAS 2023 – À jour au 15/02/2026</p>
-                </div>
+  <!-- FORMULAIRE -->
+  <div class="csv-card" id="csvFormSection">
+    <div class="csv-section-title">Paramètres cliniques de la patiente</div>
 
-                <label for="cs-surv-chirurgie">Type de chirurgie</label>
-                <select id="cs-surv-chirurgie">
-                    <option value="">-- Sélectionnez --</option>
-                    <option value="tumorectomie">Tumorectomie</option>
-                    <option value="mastectomie_unilat">Mastectomie unilatérale</option>
-                    <option value="mastectomie_bilat">Mastectomie bilatérale</option>
-                </select>
+    <div class="csv-grid2">
+      <div class="csv-field-group">
+        <label for="csv-chirurgie">Type de chirurgie mammaire</label>
+        <select id="csv-chirurgie">
+          <option value="">— Sélectionner —</option>
+          <option value="tumorectomie">Tumorectomie (chirurgie conservatrice)</option>
+          <option value="mastectomie_unilat">Mastectomie unilatérale</option>
+          <option value="mastectomie_bilat">Mastectomie bilatérale</option>
+        </select>
+      </div>
 
-                <label for="cs-surv-reconstruction">Reconstruction mammaire ?</label>
-                <select id="cs-surv-reconstruction">
-                    <option value="">-- Sélectionnez --</option>
-                    <option value="aucune">Aucune</option>
-                    <option value="implant">Implant</option>
-                    <option value="lambeau">Lambeau autologue</option>
-                </select>
+      <div class="csv-field-group">
+        <label for="csv-reconstruction">Reconstruction mammaire</label>
+        <select id="csv-reconstruction">
+          <option value="">— Sélectionner —</option>
+          <option value="aucune">Aucune reconstruction</option>
+          <option value="implant">Prothèse / Implant mammaire</option>
+          <option value="lambeau">Lambeau autologue</option>
+        </select>
+      </div>
 
-                <label for="cs-surv-statut">Statut tumoral</label>
-                <select id="cs-surv-statut">
-                    <option value="">-- Sélectionnez --</option>
-                    <option value="luminal">RE/RP+ , HER2&#x2212;</option>
-                    <option value="luminal_her2">RE/RP+ , HER2+</option>
-                    <option value="her2">RE/RP&#x2212; , HER2+</option>
-                    <option value="tn">Triple négatif</option>
-                </select>
+      <div class="csv-field-group">
+        <label for="csv-statut">Statut tumoral (récepteurs)</label>
+        <select id="csv-statut">
+          <option value="">— Sélectionner —</option>
+          <option value="luminal">RE/RP+, HER2&#x2212; (Luminal A/B)</option>
+          <option value="luminal_her2">RE/RP+, HER2+ (Luminal B HER2+)</option>
+          <option value="her2">RE/RP&#x2212;, HER2+ (HER2 enrichi)</option>
+          <option value="tn">Triple négatif (RE&#x2212;/RP&#x2212;/HER2&#x2212;)</option>
+        </select>
+      </div>
 
-                <label for="cs-surv-hormono">Hormonothérapie</label>
-                <select id="cs-surv-hormono">
-                    <option value="">-- Sélectionnez --</option>
-                    <option value="aucune">Aucune</option>
-                    <option value="tamoxifene">Tamoxifène</option>
-                    <option value="ia">Inhibiteur de l'aromatase</option>
-                    <option value="menopause_induite">Ménopause induite</option>
-                </select>
-
-                <label for="cs-surv-risques">Facteurs de risque supplémentaires</label>
-                <select id="cs-surv-risques">
-                    <option value="">-- Sélectionnez --</option>
-                    <option value="aucun">Aucun</option>
-                    <option value="brca">Mutation BRCA / haut risque héréditaire</option>
-                    <option value="dense">Seins très denses</option>
-                </select>
-
-                <p id="cs-surv-validationMsg">&#x26A0; Veuillez remplir tous les champs avant de générer le calendrier.</p>
-
-                <button onclick="csSurvGenerate()" aria-label="Générer le calendrier personnalisé de surveillance">Générer le calendrier</button>
-            </div>
-
-            <div id="cs-surv-resultSection">
-                <div id="cs-surv-result"></div>
-                <button id="cs-surv-printBtn" onclick="csSurvPrint()" aria-label="Imprimer ou sauvegarder en PDF">&#x1F5A8; Imprimer / PDF</button>
-                <button id="cs-surv-rapportBtn" onclick="csSurvOpenModal()" aria-label="Générer un rapport A5 nominatif">&#x1F4C4; Rapport A5 nominatif</button>
-            </div>
-        </div>
+      <div class="csv-field-group">
+        <label for="csv-hormono">Hormonothérapie adjuvante</label>
+        <select id="csv-hormono">
+          <option value="">— Sélectionner —</option>
+          <option value="aucune">Aucune</option>
+          <option value="tamoxifene">Tamoxifène</option>
+          <option value="ia">Inhibiteur de l'aromatase (IA)</option>
+          <option value="menopause_induite">Ménopause induite + IA</option>
+        </select>
+      </div>
     </div>
 
-    <script>
-        /* ================================================
-           GÉNÉRATION DU CALENDRIER
-           ================================================ */
-        function csSurvGenerate() {
-            var champs = ['cs-surv-chirurgie', 'cs-surv-reconstruction', 'cs-surv-statut', 'cs-surv-hormono', 'cs-surv-risques'];
-            var tousRemplis = true;
-            var focusSet = false;
+    <div class="csv-field-group">
+      <label for="csv-risques">Facteurs de risque complémentaires</label>
+      <select id="csv-risques">
+        <option value="">— Sélectionner —</option>
+        <option value="aucun">Aucun facteur de risque supplémentaire</option>
+        <option value="brca">Mutation BRCA1/2 ou haut risque héréditaire confirmé</option>
+        <option value="dense">Seins très denses (ACR D — densité mammaire élevée)</option>
+      </select>
+    </div>
 
-            champs.forEach(function(id) {
-                document.getElementById(id).classList.remove('champ-manquant');
-            });
+    <div class="csv-val-msg" id="csvValMsg">Veuillez renseigner tous les champs avant de générer le calendrier de surveillance.</div>
 
-            champs.forEach(function(id) {
-                if (!document.getElementById(id).value) {
-                    document.getElementById(id).classList.add('champ-manquant');
-                    tousRemplis = false;
-                    if (!focusSet) {
-                        document.getElementById(id).focus();
-                        focusSet = true;
-                    }
-                }
-            });
+    <div class="csv-actions">
+      <button class="csv-btn csv-btn-primary" onclick="csvGenerate()">Générer le calendrier de surveillance &#8250;</button>
+    </div>
+  </div>
 
-            if (!tousRemplis) {
-                document.getElementById("cs-surv-validationMsg").style.display = "block";
-                document.getElementById("cs-surv-result").style.display = "none";
-                document.getElementById("cs-surv-printBtn").style.display = "none";
-                document.getElementById("cs-surv-rapportBtn").style.display = "none";
-                return;
-            }
+  <!-- RÉSULTATS -->
+  <div class="csv-result-wrap" id="csvResultWrap">
+    <div class="csv-result-header" id="csvResultHeader">
+      Calendrier personnalisé de surveillance
+    </div>
+    <div class="csv-result-body">
+      <div id="csvResultContent"></div>
 
-            document.getElementById("cs-surv-validationMsg").style.display = "none";
+      <div class="csv-sources">
+        <strong>Sources :</strong> HAS — Surveillance après traitement d'un cancer du sein (2023) &middot; INCa — Recommandations de pratiques cliniques &middot; ESMO Clinical Practice Guidelines (Breast Cancer, 2023).<br>
+        <span style="color: #b71c1c !important;"><strong>Limites :</strong> Cet outil ne tient pas compte des comorbidités, du stade TNM initial, ni du résultat de la biologie moléculaire (Ki67, Oncotype DX, etc.). La décision relève du praticien.</span>
+      </div>
 
-            var chir = document.getElementById("cs-surv-chirurgie").value;
-            var rec  = document.getElementById("cs-surv-reconstruction").value;
-            var stat = document.getElementById("cs-surv-statut").value;
-            var horm = document.getElementById("cs-surv-hormono").value;
-            var risk = document.getElementById("cs-surv-risques").value;
+      <div class="csv-actions">
+        <button class="csv-btn csv-btn-print" onclick="csvPrint()">&#128438; Imprimer / PDF</button>
+        <button class="csv-btn csv-btn-rapport" onclick="csvOpenModal()">&#128196; Rapport A5 nominatif</button>
+        <button class="csv-btn csv-btn-reset" onclick="csvReset()">&#8635; Nouvelle saisie</button>
+      </div>
+    </div>
+  </div>
 
-            var html = "<h2>Calendrier personnalisé de surveillance</h2>";
-            html += "<div class='cs-surv-section-title'>Examen clinique</div>";
-            html += "<p>\u2022 Tous les 6\u201312 mois pendant 5 ans, puis annuel.</p>";
+  <!-- MODAL IDENTIFICATION -->
+  <div class="csv-modal-overlay" id="csvModal">
+    <div class="csv-modal-box" role="dialog" aria-modal="true" aria-labelledby="csvModalTitle">
+      <div class="csv-modal-head">
+        <h2 id="csvModalTitle">Identification — Rapport A5 nominatif</h2>
+        <p>Informations requises pour la traçabilité médico-légale du document imprimé</p>
+      </div>
+      <div class="csv-modal-body">
+        <div class="csv-modal-note">
+          Ces données figureront uniquement sur le compte rendu imprimé. Elles ne sont pas stockées ni transmises.
+        </div>
 
-            // Mammographie
-            html += "<div class='cs-surv-section-title'>Mammographie</div>";
-            if (chir === "mastectomie_bilat") {
-                html += "<p>\u2022 Pas de mammographie de routine (absence de tissu mammaire significatif).</p>";
-                if (rec === "lambeau")
-                    html += "<p>\u2022 Surveillance du lambeau au cas par cas (échographie si besoin).</p>";
-            } else {
-                if (chir === "tumorectomie")
-                    html += "<p>\u2022 Mammographie annuelle du sein traité et du sein controlatéral.</p>";
-                if (chir === "mastectomie_unilat")
-                    html += "<p>\u2022 Mammographie annuelle du sein restant.</p>";
-                if (rec === "implant")
-                    html += "<p>\u2022 Technique Eklund recommandée en présence d'implants.</p>";
-                if (rec === "lambeau")
-                    html += "<p>\u2022 Mammographie non systématique (cas par cas selon tissu présent).</p>";
-            }
+        <div class="csv-modal-section-lbl">Identité de la patiente</div>
+        <div class="csv-modal-grid">
+          <div class="csv-mfield">
+            <label for="cvm-nom">Nom <span class="csv-badge-req">Requis</span></label>
+            <input type="text" id="cvm-nom" placeholder="Nom de famille" autocomplete="family-name">
+            <div class="csv-field-err" id="cvm-err-nom">Champ obligatoire.</div>
+          </div>
+          <div class="csv-mfield">
+            <label for="cvm-prenom">Prénom <span class="csv-badge-req">Requis</span></label>
+            <input type="text" id="cvm-prenom" placeholder="Prénom" autocomplete="given-name">
+            <div class="csv-field-err" id="cvm-err-prenom">Champ obligatoire.</div>
+          </div>
+          <div class="csv-mfield">
+            <label for="cvm-ddn">Date de naissance</label>
+            <input type="text" id="cvm-ddn" placeholder="JJ/MM/AAAA">
+          </div>
+          <div class="csv-mfield">
+            <label for="cvm-ref">N&#xB0; dossier / Référence</label>
+            <input type="text" id="cvm-ref" placeholder="Facultatif">
+          </div>
+        </div>
 
-            // IRM mammaire
-            html += "<div class='cs-surv-section-title'>IRM mammaire</div>";
-            if (chir === "mastectomie_bilat") {
-                html += "<p>\u2022 Pas d'IRM mammaire de routine (absence de tissu mammaire significatif).</p>";
-                if (risk === "brca")
-                    html += "<p>\u2022 Surveillance de la paroi thoracique à discuter au cas par cas (IRM thoracique si haut risque héréditaire).</p>";
-            } else if (risk === "brca")
-                html += "<p>\u2022 IRM annuelle recommandée en plus de la mammographie.</p>";
-            else if (risk === "dense")
-                html += "<p>\u2022 IRM possible en complément si seins très denses.</p>";
-            else
-                html += "<p>\u2022 Pas systématique sauf anomalie ou antécédent particulier.</p>";
+        <div class="csv-modal-section-lbl">Praticien référent</div>
+        <div class="csv-mfield">
+          <label for="cvm-prat">Praticien / Établissement <span class="csv-badge-req">Requis</span></label>
+          <input type="text" id="cvm-prat" placeholder="Dr KARA-ZAITRI M.A. &#8212; Gynécologue-Obstétricien">
+          <div class="csv-field-err" id="cvm-err-prat">Champ obligatoire.</div>
+        </div>
+      </div>
+      <div class="csv-modal-footer">
+        <button type="button" class="csv-btn-cancel" onclick="csvCloseModal()">Annuler</button>
+        <button type="button" class="csv-btn-validate" onclick="csvModalValider()">Valider et générer &#8250;</button>
+      </div>
+    </div>
+  </div>
 
-            // Surveillance cardiologique
-            html += "<div class='cs-surv-section-title'>Surveillance cardiologique</div>";
-            var cardioAdded = false;
-            if (stat === "her2" || stat === "luminal_her2") {
-                html += "<p>\u2022 Si trastuzumab reçu : Évaluation cardiaque (FEVG) à 6, 12 et 24 mois après la fin du traitement.</p>";
-                cardioAdded = true;
-            }
-            if (stat === "tn" || stat === "her2" || stat === "luminal_her2") {
-                html += "<p>\u2022 Si chimiothérapie par anthracyclines reçue : Échographie cardiaque annuelle pendant 2\u20133 ans.</p>";
-                cardioAdded = true;
-            }
-            if (!cardioAdded) {
-                html += "<p>\u2022 Pas de surveillance cardiologique spécifique recommandée en routine.</p>";
-            }
+</div><!-- /#csurv-tool -->
 
-            // Particularités selon le sous-type
-            html += "<div class='cs-surv-section-title'>Particularités selon le sous-type</div>";
-            if (stat === "tn")
-                html += "<p>\u2022 Surveillance clinique rapprochée (risque maximal durant les 3 premières années).</p>";
-            if (stat === "luminal" || stat === "luminal_her2")
-                html += "<p>\u2022 Surveillance prolongée (risque tardif de récidive possible jusqu'à 15 ans).</p>";
-            if (stat === "luminal_her2")
-                html += "<p>\u2022 Double surveillance requise : suivi cardiologique (HER2+) ET surveillance prolongée (hormonosensibilité).</p>";
-            if (stat === "her2")
-                html += "<p>\u2022 Risque de récidive principalement dans les 5 premières années.</p>";
+<script>
+(function() {
 
-            // Surveillance liée à l'hormonothérapie
-            html += "<div class='cs-surv-section-title'>Surveillance liée à l'hormonothérapie</div>";
-            if (horm === "tamoxifene")
-                html += "<p>\u2022 Surveillance gynécologique régulière (saignements \u2192 échographie pelvienne).</p>";
-            if (horm === "ia")
-                html += "<p>\u2022 Densitométrie osseuse (DMO) tous les 1\u20132 ans.</p>";
-            if (horm === "menopause_induite")
-                html += "<p>\u2022 Densitométrie osseuse initiale puis tous les 1\u20132 ans.</p>";
-            if (horm === "aucune")
-                html += "<p>\u2022 Pas de surveillance spécifique liée à l'hormonothérapie.</p>";
+  /* ================================================
+     UTILITAIRE : texte d'un select
+     ================================================ */
+  function selText(id) {
+    var el = document.getElementById(id);
+    return el ? el.options[el.selectedIndex].text : '';
+  }
+  function selVal(id) {
+    var el = document.getElementById(id);
+    return el ? el.value : '';
+  }
 
-            // Coordination
-            html += "<div class='cs-surv-section-title'>Coordination référent·e &amp; médecin traitant</div>" +
-                "<p>\u2022 Coordination assurée entre l'oncologue référent·e et le médecin traitant.</p>" +
-                "<p>\u2022 Transmission systématique du calendrier personnalisé de surveillance.</p>" +
-                "<p>\u2022 Réévaluation annuelle du parcours de soins.</p>";
+  /* ================================================
+     VALIDATION + GÉNÉRATION DU CALENDRIER
+     ================================================ */
+  window.csvGenerate = function() {
+    var fields = ['csv-chirurgie','csv-reconstruction','csv-statut','csv-hormono','csv-risques'];
+    var ok = true;
 
-            // Non recommandé
-            html += "<div class='cs-surv-section-title'>Non recommandé en surveillance standard</div>" +
-                "<p>\u2022 Pas de scanner, PET-scan, IRM corps entier, échographie abdominale en l'absence de symptômes.</p>" +
-                "<p>\u2022 Pas de dosage de CA15-3 ou CEA en routine.</p>";
+    fields.forEach(function(id) {
+      document.getElementById(id).classList.remove('csv-field-error');
+    });
 
-            document.getElementById("cs-surv-result").innerHTML = html;
-            document.getElementById("cs-surv-result").style.display = "block";
-            document.getElementById("cs-surv-printBtn").style.display = "block";
-            document.getElementById("cs-surv-rapportBtn").style.display = "block";
+    fields.forEach(function(id) {
+      if (!document.getElementById(id).value) {
+        document.getElementById(id).classList.add('csv-field-error');
+        ok = false;
+      }
+    });
 
-            document.getElementById("cs-surv-result").scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+    var valMsg = document.getElementById('csvValMsg');
+    if (!ok) {
+      valMsg.classList.add('visible');
+      return;
+    }
+    valMsg.classList.remove('visible');
 
-        /* ================================================
-           IMPRESSION SIMPLE (sans identité)
-           ================================================ */
-        function csSurvPrint() {
-            var printWindow = window.open('', '_blank');
+    var chir = selVal('csv-chirurgie');
+    var rec  = selVal('csv-reconstruction');
+    var stat = selVal('csv-statut');
+    var horm = selVal('csv-hormono');
+    var risk = selVal('csv-risques');
 
-            var chir = document.getElementById("cs-surv-chirurgie").options[document.getElementById("cs-surv-chirurgie").selectedIndex].text;
-            var rec  = document.getElementById("cs-surv-reconstruction").options[document.getElementById("cs-surv-reconstruction").selectedIndex].text;
-            var stat = document.getElementById("cs-surv-statut").options[document.getElementById("cs-surv-statut").selectedIndex].text;
-            var horm = document.getElementById("cs-surv-hormono").options[document.getElementById("cs-surv-hormono").selectedIndex].text;
-            var risk = document.getElementById("cs-surv-risques").options[document.getElementById("cs-surv-risques").selectedIndex].text;
+    var blocs = [];
 
-            var dateStrA4 = new Date().toLocaleDateString('fr-FR');
-            var content = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">' +
-                '<title>Calendrier de Surveillance \u2013 Cancer du Sein</title>' +
-                '<style>' +
-                '@page{size:A4 portrait;margin:12mm}' +
-                'body{font-family:Arial,sans-serif;margin:0;line-height:1.35;color:#1a2030;font-size:9px}' +
-                'h1{color:#B71C1C;text-align:center;font-size:14px;margin:0 0 4px}' +
-                '.cs-a4-header{border-bottom:3px solid #C8A951;padding-bottom:6px;margin-bottom:8px;display:flex;align-items:center;gap:10px}' +
-                '.cs-a4-logo{width:36px;height:36px;object-fit:contain;flex-shrink:0}' +
-                '.cs-a4-meta{font-size:9px;color:#5a6478;margin-top:2px}' +
-                '.cs-a4-legal{margin:0 0 7px;padding:5px 8px;background:#FFFBEB;font-size:8px;border-left:3px solid #D69E2E;line-height:1.4;color:#744210}' +
-                '.cs-a4-params{width:100%;border-collapse:collapse;margin:0 0 7px;font-size:8px}' +
-                '.cs-a4-params td,.cs-a4-params th{padding:2px 5px;border:1px solid #e0e5ef}' +
-                '.cs-a4-params th{background:#FFF5F5;font-weight:700;color:#B71C1C;text-align:left}' +
-                '.cs-a4-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}' +
-                '.cs-surv-section-title{font-size:8px;color:#B71C1C;font-weight:bold;border-bottom:1px solid #E2E8F0;padding-bottom:2px;margin-top:7px;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.2px}' +
-                'h2{font-size:11px;color:#B71C1C;text-align:center;margin:0 0 5px;display:none}' +
-                'p{margin:2px 0;font-size:8px;line-height:1.4}' +
-                '.footer-a4{margin-top:8px;font-size:7.5px;color:#888;border-top:1px dotted #ccc;padding-top:3px;display:flex;justify-content:space-between}' +
-                '</style></head><body>' +
-                '<div class="cs-a4-header">' +
-                '<img src="https://www.dr-karazaitri-ma.net/wp-content/uploads/2025/06/Logo.jpg" alt="" class="cs-a4-logo" onerror="this.style.display:none">' +
-                '<div><h1>Algorithme de Surveillance \u2013 Cancer du Sein</h1>' +
-                '<div class="cs-a4-meta">Outil de surveillance post-th\u00E9rapeutique &nbsp;&bull;&nbsp; ' + dateStrA4 + '</div></div>' +
-                '</div>' +
-                '<div class="cs-a4-legal"><strong>Avertissement :</strong> Cet outil est destin\u00E9 \u00E0 un usage professionnel. Les recommandations doivent \u00EAtre adapt\u00E9es au contexte clinique de chaque patiente. <strong>Source :</strong> Recommandations HAS 2023.</div>' +
-                '<table class="cs-a4-params"><tr><th>Chirurgie</th><th>Reconstruction</th><th>Statut tumoral</th><th>Hormonoth\u00E9rapie</th><th>Facteurs de risque</th></tr>' +
-                '<tr><td>' + chir + '</td><td>' + rec + '</td><td>' + stat + '</td><td>' + horm + '</td><td>' + risk + '</td></tr></table>' +
-                '<div class="cs-a4-grid">' +
-                document.getElementById("cs-surv-result").innerHTML +
-                '</div>' +
-                '<div class="footer-a4"><span>R\u00E9f. HAS 2023 \u2014 Ne se substitue pas \u00E0 la d\u00E9cision m\u00E9dicale individualis\u00E9e. Responsabilit\u00E9 du praticien.</span><span>' + dateStrA4 + '</span></div>' +
-                '</body></html>';
+    /* --- Examen clinique --- */
+    blocs.push({
+      title: 'Examen clinique',
+      items: [
+        { c:'std', t:'Examen clinique des seins et des aires ganglionnaires tous les 6 à 12 mois pendant 5 ans, puis annuel.' },
+        { c:'std', t:'Anamnèse orientée : signes fonctionnels, tolérance au traitement, symptômes d\'alerte.' }
+      ]
+    });
 
-            printWindow.document.write(content);
-            printWindow.document.close();
-            printWindow.onload = function () { printWindow.print(); };
-        }
+    /* --- Mammographie --- */
+    var mammoItems = [];
+    if (chir === 'mastectomie_bilat') {
+      mammoItems.push({ c:'inactive', t:'Mastectomie bilatérale : pas de mammographie de routine (absence de tissu mammaire résiduel significatif).' });
+      if (rec === 'lambeau') mammoItems.push({ c:'warn', t:'En cas de reconstruction par lambeau autologue, surveillance clinique et écho au cas par cas selon le tissu présent.' });
+    } else {
+      if (chir === 'tumorectomie') mammoItems.push({ c:'std', t:'Mammographie bilatérale annuelle du sein traité et du sein controlatéral.' });
+      if (chir === 'mastectomie_unilat') mammoItems.push({ c:'std', t:'Mammographie annuelle du sein restant (controlatéral).' });
+      if (rec === 'implant') mammoItems.push({ c:'warn', t:'En présence de prothèse mammaire : technique de Eklund (déplacement d\'implant) recommandée pour l\'exploration du tissu résiduel.' });
+      if (rec === 'lambeau') mammoItems.push({ c:'warn', t:'Reconstruction par lambeau : mammographie non systématique, à discuter au cas par cas selon l\'étendue du tissu mammaire résiduel.' });
+    }
+    blocs.push({ title: 'Mammographie', items: mammoItems });
 
-        /* ================================================
-           OUVERTURE MODAL
-           ================================================ */
-        function csSurvOpenModal() {
-            csSurvModalClearErrors();
-            document.getElementById('cs-surv-modal').classList.add('cs-surv-modal-active');
-            setTimeout(function() {
-                var el = document.getElementById('csms-nom');
-                if (el) el.focus();
-            }, 200);
-        }
-        window.csSurvOpenModal = csSurvOpenModal;
+    /* --- IRM mammaire --- */
+    var irmItems = [];
+    if (chir === 'mastectomie_bilat') {
+      irmItems.push({ c:'inactive', t:'Mastectomie bilatérale : pas d\'IRM mammaire de routine.' });
+      if (risk === 'brca') irmItems.push({ c:'warn', t:'Mutation BRCA1/2 : surveillance de la paroi thoracique à discuter au cas par cas (IRM thoracique selon l\'équipe référente).' });
+    } else if (risk === 'brca') {
+      irmItems.push({ c:'alert', t:'Mutation BRCA1/2 confirmée : IRM mammaire annuelle recommandée en complément de la mammographie (HAS 2014 — haut risque héréditaire).' });
+    } else if (risk === 'dense') {
+      irmItems.push({ c:'warn', t:'Seins très denses (ACR D) : IRM de complément à discuter selon le contexte clinique et les recommandations locales.' });
+    } else {
+      irmItems.push({ c:'inactive', t:'Pas d\'IRM mammaire systématique en l\'absence de facteur de risque élevé ou d\'anomalie clinique/mammographique.' });
+    }
+    blocs.push({ title: 'IRM mammaire', items: irmItems });
 
-        function csSurvModalClose() {
-            document.getElementById('cs-surv-modal').classList.remove('cs-surv-modal-active');
-            csSurvModalClearErrors();
-        }
-        window.csSurvModalClose = csSurvModalClose;
+    /* --- Surveillance cardiologique --- */
+    var cardioItems = [];
+    if (stat === 'her2' || stat === 'luminal_her2') {
+      cardioItems.push({ c:'warn', t:'Trastuzumab reçu : évaluation de la FEVG (échocardiographie ou scintigraphie) à 6, 12 et 24 mois après fin de traitement.' });
+    }
+    if (stat === 'tn' || stat === 'her2' || stat === 'luminal_her2') {
+      cardioItems.push({ c:'warn', t:'Chimiothérapie par anthracyclines : surveillance cardiaque annuelle pendant 2 à 3 ans (risque de cardiotoxicité retardée).' });
+    }
+    if (cardioItems.length === 0) {
+      cardioItems.push({ c:'inactive', t:'Pas de surveillance cardiologique spécifique recommandée en routine pour ce profil tumoral.' });
+    }
+    blocs.push({ title: 'Surveillance cardiologique', items: cardioItems });
 
-        function csSurvModalClearErrors() {
-            ['csms-nom', 'csms-prenom', 'csms-praticien'].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) el.classList.remove('cs-surv-input-error');
-            });
-            ['csms-err-nom', 'csms-err-prenom', 'csms-err-prat'].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) el.classList.remove('cs-surv-err-visible');
-            });
-        }
+    /* --- Spécificités selon sous-type --- */
+    var sousTypeItems = [];
+    if (stat === 'tn') {
+      sousTypeItems.push({ c:'alert', t:'Triple négatif : risque de récidive maximum durant les 3 premières années. Surveillance clinique et d\'imagerie rapprochée impérative.' });
+    }
+    if (stat === 'luminal' || stat === 'luminal_her2') {
+      sousTypeItems.push({ c:'warn', t:'Tumeur hormonosensible : risque de récidive tardive jusqu\'à 15 ans après le diagnostic. Poursuite de l\'hormonothérapie selon le profil de risque.' });
+    }
+    if (stat === 'luminal_her2') {
+      sousTypeItems.push({ c:'warn', t:'Profil Luminal B HER2+ : double surveillance requise — suivi cardiologique (HER2) ET surveillance prolongée (hormonosensibilité).' });
+    }
+    if (stat === 'her2') {
+      sousTypeItems.push({ c:'std', t:'HER2 enrichi : risque de récidive principalement concentré sur les 5 premières années.' });
+    }
+    blocs.push({ title: 'Spécificités selon le sous-type tumoral', items: sousTypeItems });
 
-        function csSurvModalValider() {
-            var nom    = document.getElementById('csms-nom').value.trim();
-            var prenom = document.getElementById('csms-prenom').value.trim();
-            var prat   = document.getElementById('csms-praticien').value.trim();
-            var valid  = true;
-            csSurvModalClearErrors();
+    /* --- Surveillance liée à l'hormonothérapie --- */
+    var hormoItems = [];
+    if (horm === 'tamoxifene') {
+      hormoItems.push({ c:'warn', t:'Tamoxifène : surveillance gynécologique régulière. En cas de métrorragies ou de spotting, échographie pelvienne avec étude de l\'endomètre (risque de cancer de l\'endomètre x2 à x3).' });
+    }
+    if (horm === 'ia') {
+      hormoItems.push({ c:'warn', t:'Inhibiteur de l\'aromatase : ostéodensitométrie (DMO) initiale puis tous les 1 à 2 ans. Supplémentation en calcium et vitamine D à évaluer.' });
+      hormoItems.push({ c:'std', t:'Surveillance des douleurs articulaires (syndrome musculo-squelettique aux IA) — adaptation thérapeutique si nécessaire.' });
+    }
+    if (horm === 'menopause_induite') {
+      hormoItems.push({ c:'warn', t:'Ménopause induite (analogue GnRH ± IA) : DMO initiale puis tous les 1 à 2 ans. Prise en charge des symptômes climatériques à discuter.' });
+    }
+    if (horm === 'aucune') {
+      hormoItems.push({ c:'inactive', t:'Pas d\'hormonothérapie : aucune surveillance spécifique liée à un traitement hormonal adjuvant.' });
+    }
+    blocs.push({ title: 'Surveillance liée à l\'hormonothérapie adjuvante', items: hormoItems });
 
-            if (!nom) {
-                document.getElementById('csms-nom').classList.add('cs-surv-input-error');
-                document.getElementById('csms-err-nom').classList.add('cs-surv-err-visible');
-                valid = false;
-            }
-            if (!prenom) {
-                document.getElementById('csms-prenom').classList.add('cs-surv-input-error');
-                document.getElementById('csms-err-prenom').classList.add('cs-surv-err-visible');
-                valid = false;
-            }
-            if (!prat) {
-                document.getElementById('csms-praticien').classList.add('cs-surv-input-error');
-                document.getElementById('csms-err-prat').classList.add('cs-surv-err-visible');
-                valid = false;
-            }
+    /* --- Coordination --- */
+    blocs.push({
+      title: 'Coordination des soins',
+      items: [
+        { c:'std', t:'Coordination structurée entre l\'oncologue référent et le médecin traitant. Transmission systématique du calendrier de surveillance personnalisé.' },
+        { c:'std', t:'Réunion de concertation pluridisciplinaire (RCP) en cas de doute diagnostique ou de récidive suspectée.' },
+        { c:'std', t:'Réévaluation annuelle du parcours de soins : bilan psychologique, qualité de vie, réinsertion socio-professionnelle.' }
+      ]
+    });
 
-            if (!valid) return;
+    /* --- Non recommandé --- */
+    blocs.push({
+      title: 'Non recommandé en surveillance standard (en l\'absence de symptômes)',
+      items: [
+        { c:'inactive', t:'Scanner thoraco-abdomino-pelvien, TEP-TDM (PET-scan), IRM corps entier ou échographie abdominale de routine.' },
+        { c:'inactive', t:'Dosage systématique des marqueurs tumoraux : CA 15-3 et ACE (CEA) non recommandés en dehors d\'un contexte de récidive documentée.' }
+      ]
+    });
 
-            var ddn = document.getElementById('csms-ddn').value.trim();
-            var ref = document.getElementById('csms-ref').value.trim();
+    /* --- RENDU HTML --- */
+    var html = '';
+    for (var i = 0; i < blocs.length; i++) {
+      html += '<div class="csv-rblock">';
+      html += '<div class="csv-rblock-title">' + blocs[i].title + '</div>';
+      for (var j = 0; j < blocs[i].items.length; j++) {
+        html += '<div class="csv-ritem ' + blocs[i].items[j].c + '">' + blocs[i].items[j].t + '</div>';
+      }
+      html += '</div>';
+    }
 
-            csSurvModalClose();
-            csSurvGenerateA5({
-                nom: nom,
-                prenom: prenom,
-                ddn: ddn,
-                ref: ref,
-                praticien: prat
-            });
-        }
-        window.csSurvModalValider = csSurvModalValider;
+    document.getElementById('csvResultContent').innerHTML = html;
+    document.getElementById('csvResultWrap').classList.add('visible');
+    document.getElementById('csvResultWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
-        // Fermeture overlay + Escape
-        document.getElementById('cs-surv-modal').addEventListener('click', function(e) {
-            if (e.target === this) csSurvModalClose();
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') csSurvModalClose();
-        });
+  /* ================================================
+     RESET
+     ================================================ */
+  window.csvReset = function() {
+    ['csv-chirurgie','csv-reconstruction','csv-statut','csv-hormono','csv-risques'].forEach(function(id) {
+      document.getElementById(id).value = '';
+      document.getElementById(id).classList.remove('csv-field-error');
+    });
+    document.getElementById('csvValMsg').classList.remove('visible');
+    document.getElementById('csvResultWrap').classList.remove('visible');
+    document.getElementById('csvFormSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
-        /* ================================================
-           GÉNÉRATION RAPPORT A5 NOMINATIF
-           ================================================ */
-        function csSurvGenerateA5(id) {
-            var chir = document.getElementById("cs-surv-chirurgie").options[document.getElementById("cs-surv-chirurgie").selectedIndex].text;
-            var rec  = document.getElementById("cs-surv-reconstruction").options[document.getElementById("cs-surv-reconstruction").selectedIndex].text;
-            var stat = document.getElementById("cs-surv-statut").options[document.getElementById("cs-surv-statut").selectedIndex].text;
-            var horm = document.getElementById("cs-surv-hormono").options[document.getElementById("cs-surv-hormono").selectedIndex].text;
-            var risk = document.getElementById("cs-surv-risques").options[document.getElementById("cs-surv-risques").selectedIndex].text;
+  /* ================================================
+     IMPRESSION A4 SIMPLE
+     ================================================ */
+  window.csvPrint = function() {
+    var chir = selText('csv-chirurgie');
+    var rec  = selText('csv-reconstruction');
+    var stat = selText('csv-statut');
+    var horm = selText('csv-hormono');
+    var risk = selText('csv-risques');
+    var dateStr = new Date().toLocaleDateString('fr-FR');
+    var contenu = document.getElementById('csvResultContent').innerHTML;
 
-            var dateStr = new Date().toLocaleDateString('fr-FR');
+    var c = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">';
+    c += '<title>Surveillance Cancer du Sein \u2013 ' + dateStr + '</title>';
+    c += '<style>';
+    c += '@page{size:A4 portrait;margin:13mm}';
+    c += 'body{font-family:Arial,sans-serif;font-size:9.5px;color:#1a2030;margin:0;line-height:1.4}';
+    c += '.hd{border-bottom:3px solid #C8A951;padding-bottom:8px;margin-bottom:10px;display:flex;align-items:center;gap:10px}';
+    c += '.logo{width:38px;height:38px;object-fit:contain;flex-shrink:0}';
+    c += 'h1{font-size:13.5px;color:#b71c1c;margin:0 0 2px;font-family:Georgia,serif;font-weight:normal}';
+    c += '.meta{font-size:9px;color:#5a6478}';
+    c += '.legal{background:#fffbeb;border-left:3px solid #d69e2e;padding:5px 8px;font-size:8.5px;color:#744210;margin-bottom:8px}';
+    c += 'table.params{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:8.5px}';
+    c += 'table.params th,table.params td{padding:3px 6px;border:1px solid #e0e5ef}';
+    c += 'table.params th{background:#fff0f0;font-weight:bold;color:#b71c1c}';
+    c += '.csv-rblock{margin-bottom:10px}';
+    c += '.csv-rblock-title{font-size:8.5px;font-weight:bold;color:#b71c1c;text-transform:uppercase;border-bottom:1px solid #dde;padding-bottom:2px;margin-bottom:4px;letter-spacing:0.04em}';
+    c += '.csv-ritem{font-size:8.5px;padding:3px 8px;margin-bottom:3px;line-height:1.45;border-left:3px solid #ccc}';
+    c += '.csv-ritem.std{border-color:#2c6e9e;background:#eaf3fb}';
+    c += '.csv-ritem.warn{border-color:#e67e22;background:#fdf6ec}';
+    c += '.csv-ritem.alert{border-color:#b71c1c;background:#fdf0ef}';
+    c += '.csv-ritem.inactive{border-color:#d0d7e3;background:#f4f6f9;color:#5a6a82}';
+    c += '.footer{margin-top:10px;font-size:8px;color:#888;border-top:1px dotted #ccc;padding-top:4px;display:flex;justify-content:space-between}';
+    c += '</style></head><body>';
 
-            var contenu = document.getElementById("cs-surv-result").innerHTML;
+    c += '<div class="hd">';
+    c += '<img src="https://www.dr-karazaitri-ma.net/wp-content/uploads/2025/06/Logo.jpg" alt="" class="logo" onerror="this.style.display=\'none\'">';
+    c += '<div><h1>Calendrier de Surveillance \u2013 Cancer du Sein Trait\u00E9</h1>';
+    c += '<div class="meta">Outil de surveillance post-th\u00E9rapeutique &nbsp;\u2022&nbsp; ' + dateStr + '</div></div></div>';
 
-            var c = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">';
-            c += '<title>Surveillance \u2013 ' + id.nom + ' ' + id.prenom + '</title>';
-            c += '<style>';
-            c += '@page{size:A5 portrait;margin:13mm 13mm 18mm 13mm}';
-            c += '@page{@bottom-right{content:"Page " counter(page) " / " counter(pages);font-family:Arial,sans-serif;font-size:8px;color:#888}}';
-            c += 'body{font-family:Arial,sans-serif;font-size:10.5px;color:#1a2030;margin:0;padding:0}';
-            c += 'h1{font-size:13px;margin:0;color:#B71C1C}';
-            c += '.meta{font-size:10px;color:#5a6478;margin-top:2px}';
-            c += '.cs-header{border-bottom:3px solid #C8A951;padding-bottom:8px;margin-bottom:10px;display:flex;align-items:flex-start;gap:10px}';
-            c += '.logo{width:38px;height:38px;object-fit:contain;flex-shrink:0}';
-            c += '.bloc-patient{background:#FFF5F5;border:1px solid #f5b8b8;border-radius:5px;padding:7px 10px;margin-bottom:8px}';
-            c += '.patient-name{font-size:14px;font-weight:700;color:#B71C1C;margin-bottom:3px}';
-            c += '.kv{display:flex;flex-wrap:wrap;gap:4px 16px;margin-bottom:3px;font-size:10px}';
-            c += 'h2{font-size:10px;color:#B71C1C;border-bottom:1px solid #E2E8F0;padding-bottom:2px;margin:8px 0 4px;text-transform:uppercase;letter-spacing:0.4px}';
-            c += '.cs-surv-section-title{font-size:10px;color:#B71C1C;font-weight:bold;border-bottom:1px solid #E2E8F0;padding-bottom:3px;margin-top:10px;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px}';
-            c += 'p{margin:4px 0;font-size:10px;line-height:1.5}';
-            c += '.choix-table{width:100%;border-collapse:collapse;margin:5px 0 8px;font-size:10px}';
-            c += '.choix-table td,.choix-table th{padding:3px 6px;border:1px solid #e0e5ef}';
-            c += '.choix-table th{background:#FFF5F5;font-weight:700;color:#B71C1C}';
-            c += '.footer-note{margin-top:14px;font-size:9px;color:#888;border-top:1px dotted #ccc;padding-top:4px}';
-            c += '.footer-bar{margin-top:10px;font-size:9px;color:#888;border-top:1px solid #eee;padding-top:3px;display:flex;justify-content:space-between}';
-            c += '</style></head><body>';
+    c += '<div class="legal"><strong>Avertissement :</strong> Outil d\'aide \u00E0 la d\u00E9cision clinique r\u00E9serv\u00E9 aux professionnels de sant\u00E9. Les recommandations doivent \u00EAtre adapt\u00E9es au contexte clinique individuel. <strong>R\u00E9f. HAS 2023.</strong></div>';
 
-            // EN-TÊTE
-            c += '<div class="cs-header">';
-            c += '<img src="https://www.dr-karazaitri-ma.net/wp-content/uploads/2025/06/Logo.jpg" alt="" class="logo" onerror="this.style.display=\'none\'">';
-            c += '<div><h1>Calendrier de Surveillance \u2013 Cancer du Sein</h1>';
-            c += '<div class="meta">Outil de surveillance post-thérapeutique &nbsp;&bull;&nbsp; ' + dateStr + '</div>';
-            c += '<div class="meta" style="color:#B71C1C;font-weight:700">' + id.praticien + '</div></div>';
-            c += '</div>';
+    c += '<table class="params"><tr><th>Chirurgie</th><th>Reconstruction</th><th>Statut tumoral</th><th>Hormonoth\u00E9rapie</th><th>Facteurs de risque</th></tr>';
+    c += '<tr><td>' + chir + '</td><td>' + rec + '</td><td>' + stat + '</td><td>' + horm + '</td><td>' + risk + '</td></tr></table>';
 
-            // IDENTITÉ PATIENTE
-            c += '<div class="bloc-patient">';
-            c += '<div class="patient-name">' + id.nom + ' ' + id.prenom + '</div>';
-            c += '<div class="kv">';
-            if (id.ddn) c += '<span><strong>DDN :</strong> ' + id.ddn + '</span>';
-            if (id.ref) c += '<span><strong>N\u00B0 dossier :</strong> ' + id.ref + '</span>';
-            c += '</div></div>';
+    c += contenu;
 
-            // PARAMÈTRES DE SURVEILLANCE
-            c += '<h2>Paramètres renseignés</h2>';
-            c += '<table class="choix-table"><tr><th>Critère</th><th>Valeur</th></tr>';
-            c += '<tr><td>Chirurgie</td><td>' + chir + '</td></tr>';
-            c += '<tr><td>Reconstruction</td><td>' + rec + '</td></tr>';
-            c += '<tr><td>Statut tumoral</td><td>' + stat + '</td></tr>';
-            c += '<tr><td>Hormonothérapie</td><td>' + horm + '</td></tr>';
-            c += '<tr><td>Facteurs de risque</td><td>' + risk + '</td></tr>';
-            c += '</table>';
+    c += '<div class="footer"><span>R\u00E9f. HAS 2023 \u2014 Ne se substitue pas \u00E0 la d\u00E9cision m\u00E9dicale individualis\u00E9e.</span><span>' + dateStr + '</span></div>';
+    c += '</body></html>';
 
-            // CONTENU DU CALENDRIER
-            c += contenu;
+    var w = window.open('', '_blank');
+    if (!w) { alert('Veuillez autoriser les pop-ups pour ce site.'); return; }
+    w.document.write(c);
+    w.document.close();
+    w.onload = function() { w.focus(); w.print(); };
+  };
 
-            // NOTE MÉDICO-LÉGALE
-            c += '<div class="footer-note">Outil d\'aide à la décision clinique \u2014 Réf. HAS 2023. Ce document ne se substitue pas à la décision médicale individualisée. Responsabilité du praticien.</div>';
+  /* ================================================
+     MODAL IDENTIFICATION
+     ================================================ */
+  window.csvOpenModal = function() {
+    csvClearErrors();
+    document.getElementById('csvModal').classList.add('open');
+    setTimeout(function() {
+      var el = document.getElementById('cvm-nom');
+      if (el) el.focus();
+    }, 200);
+  };
 
-            // PIED DE PAGE
-            c += '<div class="footer-bar">';
-            c += '<span>' + id.praticien + '</span>';
-            c += '<span>' + id.nom + ' ' + id.prenom + ' | ' + dateStr + '</span>';
-            c += '</div>';
+  window.csvCloseModal = function() {
+    document.getElementById('csvModal').classList.remove('open');
+    csvClearErrors();
+  };
 
-            c += '</body></html>';
+  function csvClearErrors() {
+    ['cvm-nom','cvm-prenom','cvm-prat'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('csv-inp-error');
+    });
+    ['cvm-err-nom','cvm-err-prenom','cvm-err-prat'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('visible');
+    });
+  }
 
-            var w = window.open('', '_blank');
-            if (!w) {
-                alert('Le navigateur a bloqué l\'ouverture du rapport. Autorisez les pop-ups pour ce site.');
-                return;
-            }
-            w.document.write(c);
-            w.document.close();
-            w.onload = function() { w.focus(); w.print(); };
-        }
+  window.csvModalValider = function() {
+    var nom    = document.getElementById('cvm-nom').value.trim();
+    var prenom = document.getElementById('cvm-prenom').value.trim();
+    var prat   = document.getElementById('cvm-prat').value.trim();
+    var valid  = true;
+    csvClearErrors();
 
-        // Init Elementor
-        if (typeof elementorFrontend !== 'undefined') {
-            elementorFrontend.hooks.addAction('frontend/element_ready/widget', function() {
-                // Rebind events if needed
-            });
-        }
-    </script>
+    if (!nom) {
+      document.getElementById('cvm-nom').classList.add('csv-inp-error');
+      document.getElementById('cvm-err-nom').classList.add('visible');
+      valid = false;
+    }
+    if (!prenom) {
+      document.getElementById('cvm-prenom').classList.add('csv-inp-error');
+      document.getElementById('cvm-err-prenom').classList.add('visible');
+      valid = false;
+    }
+    if (!prat) {
+      document.getElementById('cvm-prat').classList.add('csv-inp-error');
+      document.getElementById('cvm-err-prat').classList.add('visible');
+      valid = false;
+    }
+    if (!valid) return;
+
+    csvCloseModal();
+    csvGenerateA5({
+      nom: nom, prenom: prenom,
+      ddn: document.getElementById('cvm-ddn').value.trim(),
+      ref: document.getElementById('cvm-ref').value.trim(),
+      praticien: prat
+    });
+  };
+
+  /* Fermeture overlay + Escape */
+  document.getElementById('csvModal').addEventListener('click', function(e) {
+    if (e.target === this) csvCloseModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') csvCloseModal();
+  });
+
+  /* ================================================
+     RAPPORT A5 NOMINATIF
+     ================================================ */
+  function csvGenerateA5(id) {
+    var chir = selText('csv-chirurgie');
+    var rec  = selText('csv-reconstruction');
+    var stat = selText('csv-statut');
+    var horm = selText('csv-hormono');
+    var risk = selText('csv-risques');
+    var dateStr = new Date().toLocaleDateString('fr-FR');
+    var contenu = document.getElementById('csvResultContent').innerHTML;
+
+    var c = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">';
+    c += '<title>Surveillance \u2013 ' + id.nom + ' ' + id.prenom + '</title>';
+    c += '<style>';
+    c += '@page{size:A5 portrait;margin:12mm 12mm 16mm}';
+    c += 'body{font-family:Arial,sans-serif;font-size:10px;color:#1a2030;margin:0;line-height:1.4}';
+    c += '.hd{border-bottom:3px solid #C8A951;padding-bottom:7px;margin-bottom:9px;display:flex;align-items:flex-start;gap:10px}';
+    c += '.logo{width:36px;height:36px;object-fit:contain;flex-shrink:0}';
+    c += 'h1{font-size:13px;color:#b71c1c;margin:0 0 2px;font-family:Georgia,serif;font-weight:normal}';
+    c += '.meta{font-size:9px;color:#5a6478}';
+    c += '.bloc-pat{background:#fff0f0;border:1px solid #f5b8b8;border-radius:4px;padding:6px 10px;margin-bottom:8px}';
+    c += '.pat-name{font-size:13px;font-weight:bold;color:#b71c1c;margin-bottom:2px}';
+    c += '.kv{font-size:9px;color:#5a6478}';
+    c += 'table.params{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:9px}';
+    c += 'table.params th,table.params td{padding:2px 5px;border:1px solid #e0e5ef}';
+    c += 'table.params th{background:#fff0f0;font-weight:bold;color:#b71c1c}';
+    c += '.csv-rblock{margin-bottom:8px}';
+    c += '.csv-rblock-title{font-size:8.5px;font-weight:bold;color:#b71c1c;text-transform:uppercase;border-bottom:1px solid #dde;padding-bottom:2px;margin-bottom:3px;letter-spacing:0.04em}';
+    c += '.csv-ritem{font-size:9px;padding:2px 7px;margin-bottom:2px;line-height:1.4;border-left:3px solid #ccc}';
+    c += '.csv-ritem.std{border-color:#2c6e9e;background:#eaf3fb}';
+    c += '.csv-ritem.warn{border-color:#e67e22;background:#fdf6ec}';
+    c += '.csv-ritem.alert{border-color:#b71c1c;background:#fdf0ef}';
+    c += '.csv-ritem.inactive{border-color:#d0d7e3;background:#f4f6f9;color:#5a6a82}';
+    c += '.footer-note{margin-top:10px;font-size:8px;color:#888;border-top:1px dotted #ccc;padding-top:3px}';
+    c += '.footer-bar{margin-top:4px;font-size:8px;color:#888;display:flex;justify-content:space-between}';
+    c += '</style></head><body>';
+
+    c += '<div class="hd">';
+    c += '<img src="https://www.dr-karazaitri-ma.net/wp-content/uploads/2025/06/Logo.jpg" alt="" class="logo" onerror="this.style.display=\'none\'">';
+    c += '<div><h1>Calendrier de Surveillance \u2013 Cancer du Sein</h1>';
+    c += '<div class="meta">Surveillance post-th\u00E9rapeutique &nbsp;\u2022&nbsp; ' + dateStr + '</div>';
+    c += '<div class="meta" style="color:#b71c1c;font-weight:bold">' + id.praticien + '</div></div></div>';
+
+    c += '<div class="bloc-pat"><div class="pat-name">' + id.nom + ' ' + id.prenom + '</div><div class="kv">';
+    if (id.ddn) c += '<span><strong>DDN :</strong> ' + id.ddn + ' &nbsp;</span>';
+    if (id.ref) c += '<span><strong>N\u00B0 dossier :</strong> ' + id.ref + '</span>';
+    c += '</div></div>';
+
+    c += '<table class="params"><tr><th>Chirurgie</th><th>Reconstruction</th><th>Statut tumoral</th><th>Hormonoth\u00E9rapie</th><th>Facteurs de risque</th></tr>';
+    c += '<tr><td>' + chir + '</td><td>' + rec + '</td><td>' + stat + '</td><td>' + horm + '</td><td>' + risk + '</td></tr></table>';
+
+    c += contenu;
+
+    c += '<div class="footer-note">Outil d\'aide \u00E0 la d\u00E9cision clinique \u2014 R\u00E9f. HAS 2023. Ne se substitue pas \u00E0 la d\u00E9cision m\u00E9dicale individualis\u00E9e. Responsabilit\u00E9 du praticien.</div>';
+    c += '<div class="footer-bar"><span>' + id.praticien + '</span><span>' + id.nom + ' ' + id.prenom + ' | ' + dateStr + '</span></div>';
+    c += '</body></html>';
+
+    var w = window.open('', '_blank');
+    if (!w) { alert('Veuillez autoriser les pop-ups pour ce site.'); return; }
+    w.document.write(c);
+    w.document.close();
+    w.onload = function() { w.focus(); w.print(); };
+  }
+
+})();
+</script>
 </body>
 </html>
