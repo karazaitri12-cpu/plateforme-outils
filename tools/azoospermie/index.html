@@ -725,6 +725,40 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 ::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
 
 /* ============================================================
+   INDICATEUR DE SCROLL ONGLETS (mobile)
+   ============================================================ */
+#azo-tool .azo-tabs-wrap {
+  position: relative !important;
+}
+#azo-tool .azo-tabs-scroll-hint {
+  display: none !important;
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 36px !important;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.97)) !important;
+  pointer-events: none !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  padding-right: 6px !important;
+  z-index: 2 !important;
+}
+#azo-tool .azo-tabs-scroll-hint::after {
+  content: "\25B6" !important;
+  color: var(--azo-blue2) !important;
+  font-size: 0.70rem !important;
+  animation: azo-pulse 1.4s ease-in-out infinite !important;
+}
+@keyframes azo-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+@media (max-width: 580px) {
+  #azo-tool .azo-tabs-scroll-hint { display: flex !important; }
+}
+   
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 580px) {
@@ -756,7 +790,8 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   </div>
 
   <!-- ONGLETS (Tous visibles, scroll horizontal sur mobile) -->
-  <div class="azo-tabs" role="tablist">
+  <div class="azo-tabs-wrap">
+<div class="azo-tabs" role="tablist" id="azo-tabs-bar">
     <button class="azo-tab-btn active" onclick="azoTab(this,'algo')" role="tab">Algorithme</button>
     <button class="azo-tab-btn" onclick="azoTab(this,'definition')" role="tab">Déf. &amp; Épid.</button>
     <button class="azo-tab-btn" onclick="azoTab(this,'bilan')" role="tab">Bilan</button>
@@ -764,6 +799,10 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     <button class="azo-tab-btn" onclick="azoTab(this,'pec')" role="tab">Prise en charge</button>
     <button class="azo-tab-btn" onclick="azoTab(this,'cas')" role="tab">Cas cliniques</button>
     <button class="azo-tab-btn" onclick="azoTab(this,'refs')" role="tab">Références</button>
+</div><!-- fin azo-tabs -->
+<div class="azo-tabs-scroll-hint" id="azo-scroll-hint"></div>
+</div><!-- fin azo-tabs-wrap -->
+   
   </div>
 
   <!-- ============================================================
@@ -1722,6 +1761,21 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     for (var i = 0; i < cases.length; i++) { cases[i].style.setProperty('display','none','important'); }
     var c0 = document.getElementById('azo-cc-0');
     if (c0) { c0.style.setProperty('display','block','important'); }
+
+
+     /* Indicateur scroll onglets */
+var tabsBar = document.getElementById('azo-tabs-bar');
+var hint    = document.getElementById('azo-scroll-hint');
+if (tabsBar && hint) {
+  function azoCheckScroll() {
+    var atEnd = tabsBar.scrollLeft + tabsBar.clientWidth >= tabsBar.scrollWidth - 4;
+    hint.style.setProperty('display', atEnd ? 'none' : 'flex', 'important');
+  }
+  tabsBar.addEventListener('scroll', azoCheckScroll);
+  window.addEventListener('resize', azoCheckScroll);
+  azoCheckScroll();
+}
+     
   });
 
 })();
