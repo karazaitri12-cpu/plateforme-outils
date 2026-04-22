@@ -721,6 +721,71 @@ html { scrollbar-width: none; }               /* Firefox */
 body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 ::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
 
+/* =========================================
+   RESPONSIVE AVANCÉ
+   ========================================= */
+
+/* Masquer les onglets Cas cliniques et Références sur mobile */
+@media (max-width: 768px) {
+  .azo-tab-btn.desktop-only {
+    display: none !important;
+  }
+  
+  /* Afficher les sections mobiles en bas */
+  .azo-mobile-sections {
+    display: block !important;
+    margin-top: 20px !important;
+    border-top: 2px solid var(--azo-border) !important;
+    padding-top: 20px !important;
+  }
+}
+
+/* Desktop : cacher les sections mobiles */
+.azo-mobile-sections {
+  display: none !important;
+}
+
+/* Style pour les sections collapsibles mobiles */
+.azo-mobile-section {
+  margin-bottom: 16px !important;
+  border: 1px solid var(--azo-border) !important;
+  border-radius: var(--azo-radius) !important;
+  overflow: hidden !important;
+}
+
+.azo-mobile-header {
+  background: #eef2f8 !important;
+  padding: 12px 16px !important;
+  font-weight: 700 !important;
+  color: var(--azo-blue) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 0.85rem !important;
+}
+
+.azo-mobile-header::after {
+  content: "\25BC" !important;
+  font-size: 0.7rem !important;
+  transition: transform 0.2s !important;
+}
+
+.azo-mobile-section.open .azo-mobile-header::after {
+  transform: rotate(180deg) !important;
+}
+
+.azo-mobile-content {
+  display: none !important;
+  padding: 16px !important;
+  background: var(--azo-white) !important;
+}
+
+.azo-mobile-section.open .azo-mobile-content {
+  display: block !important;
+}
+   
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -751,15 +816,16 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   </div>
 
   <!-- ONGLETS -->
-  <div class="azo-tabs" role="tablist">
-    <button class="azo-tab-btn active" onclick="azoTab(this,'algo')"       role="tab">Algorithme</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'definition')" role="tab">Déf. &amp; Épid.</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'bilan')"      role="tab">Bilan</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'etiologies')" role="tab">Étiologies</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'pec')"        role="tab">Prise en charge</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'cas')"        role="tab">Cas cliniques</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'refs')"       role="tab">Références</button>
-  </div>
+<div class="azo-tabs" role="tablist">
+  <button class="azo-tab-btn active" onclick="azoTab(this,'algo')" role="tab">Algorithme</button>
+  <button class="azo-tab-btn" onclick="azoTab(this,'definition')" role="tab">Déf. &amp; Épid.</button>
+  <button class="azo-tab-btn" onclick="azoTab(this,'bilan')" role="tab">Bilan</button>
+  <button class="azo-tab-btn" onclick="azoTab(this,'etiologies')" role="tab">Étiologies</button>
+  <button class="azo-tab-btn" onclick="azoTab(this,'pec')" role="tab">Prise en charge</button>
+  <!-- Onglets masqués sur mobile -->
+  <button class="azo-tab-btn desktop-only" onclick="azoTab(this,'cas')" role="tab">Cas cliniques</button>
+  <button class="azo-tab-btn desktop-only" onclick="azoTab(this,'refs')" role="tab">Références</button>
+</div>
 
   <!-- ============================================================
        ONGLET 1 : ALGORITHME
@@ -1488,6 +1554,41 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     Outil d'aide à la décision à usage exclusivement professionnel. Ne se substitue pas au jugement clinique ni aux recommandations actualisées (OMS 2021, ESHRE 2023, EAU 2021, CNGOF 2020). Toute décision médicale engage la responsabilité du praticien.
   </div>
 
+<!-- SECTIONS MOBILES (Cas cliniques + Références) -->
+<div class="azo-mobile-sections">
+  
+  <!-- Cas cliniques mobile -->
+  <div class="azo-mobile-section" onclick="this.classList.toggle('open')">
+    <div class="azo-mobile-header">
+      <span>📚 Cas cliniques interactifs</span>
+    </div>
+    <div class="azo-mobile-content" onclick="event.stopPropagation()">
+      <!-- Copier ici TOUT le contenu de #azo-panel-cas -->
+      <div class="azo-cc-nav">
+        <button class="azo-cc-nav-btn active" onclick="azoCcNav(this,0)">Cas n°1</button>
+        <button class="azo-cc-nav-btn" onclick="azoCcNav(this,1)">Cas n°2</button>
+        <button class="azo-cc-nav-btn" onclick="azoCcNav(this,2)">Cas n°3</button>
+      </div>
+      <!-- ... copier tous les cas ... -->
+    </div>
+  </div>
+
+  <!-- Références mobile -->
+  <div class="azo-mobile-section" onclick="this.classList.toggle('open')">
+    <div class="azo-mobile-header">
+      <span>📖 Références &amp; Abréviations</span>
+    </div>
+    <div class="azo-mobile-content" onclick="event.stopPropagation()">
+      <!-- Copier ici TOUT le contenu de #azo-panel-refs -->
+      <div class="azo-section">
+        <div class="azo-section-title">Recommandations et guidelines</div>
+        <!-- ... copier toutes les références ... -->
+      </div>
+    </div>
+  </div>
+
+</div>
+   
 </div><!-- fin #azo-tool -->
 
 <!-- FICHE D'IMPRESSION (hors outil) -->
@@ -1720,6 +1821,16 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   });
 
 })();
+
+// Gestion des sections mobiles collapsibles
+document.querySelectorAll('.azo-mobile-section').forEach(function(section) {
+  section.addEventListener('click', function(e) {
+    if (e.target.closest('.azo-mobile-header')) {
+      this.classList.toggle('open');
+    }
+  });
+});
+   
   </script>
   <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
