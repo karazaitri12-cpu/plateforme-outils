@@ -1,1728 +1,495 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Azoospermie &#8212; Outil diagnostique interactif v2.1</title>
-<style>
-/* ============================================================
-   RESET & BLINDAGE ELEMENTOR
-   ============================================================ */
-#azo-tool *, #azo-tool *::before, #azo-tool *::after {
-  box-sizing: border-box !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-#azo-tool {
-  --azo-blue:   #1a3a5c !important;
-  --azo-blue2:  #2563a8 !important;
-  --azo-teal:   #0d7c66 !important;
-  --azo-amber:  #b45309 !important;
-  --azo-red:    #b91c1c !important;
-  --azo-bg:     #f4f6f9 !important;
-  --azo-white:  #ffffff !important;
-  --azo-border: #d1d9e6 !important;
-  --azo-text:   #1e2d3d !important;
-  --azo-muted:  #5a6b7c !important;
-  --azo-font:   'Georgia','Times New Roman',serif !important;
-  --azo-mono:   'Courier New',monospace !important;
-  --azo-radius: 4px !important;
-  font-family: var(--azo-font) !important;
-  font-size: 15px !important;
-  line-height: 1.65 !important;
-  color: var(--azo-text) !important;
-  background: var(--azo-bg) !important;
-  max-width: 880px !important;
-  margin: 0 auto !important;
-  padding: 0 !important;
-  position: relative !important;
-}
+alors je te donne mon fichier tools.json, et à toi de noter les catégories que j'ai validées, et que tu dois dorénavant prendre en compte:
+[
 
-/* ============================================================
-   EN-TÊTE
-   ============================================================ */
-#azo-tool .azo-header {
-  background: var(--azo-blue) !important;
-  color: var(--azo-white) !important;
-  padding: 20px 26px 16px !important;
-  border-bottom: 3px solid var(--azo-blue2) !important;
-}
-#azo-tool .azo-header h1 {
-  font-size: 1.22rem !important;
-  font-weight: 700 !important;
-  color: var(--azo-white) !important;
-  font-family: var(--azo-font) !important;
-  margin-bottom: 4px !important;
-}
-#azo-tool .azo-header p {
-  font-size: 0.80rem !important;
-  opacity: 0.75 !important;
-  color: var(--azo-white) !important;
-  font-family: var(--azo-font) !important;
-}
-#azo-tool .azo-badge {
-  display: inline-block !important;
-  margin-top: 8px !important;
-  background: rgba(255,255,255,0.15) !important;
-  border: 1px solid rgba(255,255,255,0.3) !important;
-  color: var(--azo-white) !important;
-  font-size: 0.69rem !important;
-  padding: 2px 8px !important;
-  border-radius: 2px !important;
-  font-family: var(--azo-mono) !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase !important;
-}
+  {
+    "id": "dysplasie-cervicale",
+    "titre": "Dysplasie cervicale",
+    "description": "Algorithme décisionnel pour la prise en charge des lésions précancéreuses du col (CIN 1-3, micro-invasif) selon recommandations INCa/HAS 2024 : histologie, p16, HPV, colposcopie.",
+    "categorie": ["Gynécologie", "Col"],
+    "url": "/tools/dysplasie-cervicale/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔬"
+  },
 
-/* ============================================================
-   ONGLETS
-   ============================================================ */
-#azo-tool .azo-tabs {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  background: var(--azo-white) !important;
-  border-bottom: 2px solid var(--azo-border) !important;
-}
-#azo-tool .azo-tab-btn {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  padding: 10px 5px !important;
-  background: none !important;
-  border: none !important;
-  border-bottom: 3px solid transparent !important;
-  cursor: pointer !important;
-  font-size: 0.70rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-muted) !important;
-  white-space: normal !important;
-  word-break: break-word !important;
-  text-align: center !important;
-  line-height: 1.3 !important;
-  margin-bottom: -2px !important;
-  transition: color 0.15s, border-color 0.15s !important;
-}
-#azo-tool .azo-tab-btn:hover { color: var(--azo-blue2) !important; }
-#azo-tool .azo-tab-btn.active {
-  color: var(--azo-blue) !important;
-  border-bottom-color: var(--azo-blue2) !important;
-  font-weight: 700 !important;
-}
+  {
+  "id": "azoospermie-diagnostic",
+  "titre": "Azoospermie — Algorithme diagnostique",
+  "description": "Algorithme interactif de prise en charge de l'azoospermie : distinction excrétoire/sécrétoire, bilan hormonal, génétique, score TESE et cas cliniques (ESHRE/OMS 2021).",
+  "categorie": ["Gynécologie", "Biologie et explorations"],
+  "url": "/tools/azoospermie/",
+  "target": "_blank",
+  "statut": "actif",
+  "icone": "🔍"
+},
+  {
+    "id": "score-bishop",
+    "titre": "Score de Bishop",
+    "description": "Évaluation de la maturation cervicale pour le déclenchement du travail (CNGOF 2017) : dilatation, effacement, consistance, position, présentation.",
+    "categorie": ["Score", "Obstétrique", "Col"],
+    "url": "/tools/score-bishop/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "📊"
+  },
 
-/* ============================================================
-   PANELS
-   /* CORRECTION 1 : on ne met PAS display:none ici en CSS —
-      c'est le JS seul qui gère display via style inline.
-      On utilise uniquement la classe .active comme signal. */
-   ============================================================ */
-#azo-tool .azo-panel {
-  padding: 22px 24px !important;
-  background: var(--azo-white) !important;
-}
+    {
+    "id": "ist-infections-sexuellement-transmissibles",
+    "titre": "Infections Sexuellement Transmissibles (IST)",
+    "description": "Répertoire clinique structuré des IST : bactériennes, virales, parasitaires, fongiques, ectoparasites — diagnostic, traitement, grossesse, prévention (HAS/CNGOF/OMS 2025).",
+    "categorie": ["Infectieux & IST", "Gynécologie"],
+    "url": "/tools/ist-infections-sexuellement-transmissibles/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🦠"
+  },
+  
+  {
+    "id": "cancer-sein-depistage",
+    "titre": "Dépistage du cancer du sein",
+    "description": "Évaluation du risque selon score d'Eisinger et recommandations (HAS/INCa).",
+    "categorie": ["Gynécologie", "Sénologie", "Cancérologie"],
+    "url": "/tools/depistage-cancer-sein/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🎗️"
+  },
 
-/* ============================================================
-   SECTIONS
-   ============================================================ */
-#azo-tool .azo-section {
-  margin-bottom: 20px !important;
-  border: 1px solid var(--azo-border) !important;
-  border-radius: var(--azo-radius) !important;
-  overflow: visible !important;
-}
-#azo-tool .azo-section-title {
-  background: #eef2f8 !important;
-  color: var(--azo-blue) !important;
-  font-weight: 700 !important;
-  font-size: 0.82rem !important;
-  padding: 9px 14px !important;
-  border-bottom: 1px solid var(--azo-border) !important;
-  letter-spacing: 0.03em !important;
-  text-transform: uppercase !important;
-  font-family: var(--azo-font) !important;
-}
-#azo-tool .azo-section-body { padding: 14px 16px !important; }
+  {
+  "id": "map-menace-accouchement-premature",
+  "titre": "MAP — Menace d'Accouchement Prématuré",
+  "description": "Prise en charge de la MAP selon longueur cervicale (≥25/15-25/<15 mm) et RPM : tocolyse (atosiban, nifédipine), corticothérapie, neuroprotection MgSO4 et antibiotiques (CNGOF 2016).",
+  "categorie": ["Obstétrique"],
+  "url": "/tools/map-menace-accouchement-premature/",
+  "target": "_blank",
+  "statut": "actif",
+  "icone": "🚦"
+},
+  
+  {
+    "id": "classification-tnm-sein",
+    "titre": "Classification TNM du cancer du sein",
+    "description": "Outil de stadification TNM et PEV pour le cancer du sein selon les recommandations UICC/AJCC.",
+    "categorie": ["Gynécologie", "Sénologie", "Cancérologie"],
+    "url": "/tools/classification-tnm-sein/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🎗️"
+  },
+  {
+    "id": "cancer-sein-decision-therapeutique",
+    "titre": "Cancer du sein : aide à la décision",
+    "description": "Algorithme thérapeutique INCa/ESO-ESMO/SOR pour le cancer du sein : néoadjuvant, adjuvant, sous-types moléculaires, BRCA, tests génomiques.",
+    "categorie": ["Gynécologie", "Sénologie", "Cancérologie"],
+    "url": "/tools/cancer-sein-decision-therapeutique/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🎗️"
+  },
+  {
+    "id": "cancer-sein-surveillance",
+    "titre": "Cancer du sein traité : surveillance",
+    "description": "Algorithme de surveillance post-traitement du cancer du sein selon recommandations HAS 2023 : mammographie, IRM, suivi cardiologique, hormonothérapie.",
+    "categorie": ["Gynécologie", "Sénologie", "Cancérologie"],
+    "url": "/tools/cancer-sein-surveillance/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🎗️"
+  },
+  {
+    "id": "classification-figo-ovaire",
+    "titre": "Classification FIGO — Ovaire",
+    "description": "Outil de stadification du cancer de l'ovaire selon la classification FIGO 2014 : stades I à IV avec exemples cliniques et pronostic.",
+    "categorie": ["Gynécologie", "Cancérologie", "Ovaire"],
+    "url": "/tools/classification-figo-ovaire/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔬"
+  },
+  
+  {
+    "id": "depistage-cancer-col",
+    "titre": "Dépistage cancer du col",
+    "description": "Recommandations dépistage cancer du col de l'utérus.",
+    "categorie": ["Gynécologie", "Cancérologie", "Col"],
+    "url": "/tools/depistage-cancer-col/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔍"
+  },
+  {
+    "id": "diagnostic-leucorrhees",
+    "titre": "Diagnostic des leucorrhées",
+    "description": "Algorithme diagnostique des leucorrhées : pH, Whiff test, examen direct (candidose, vaginose, trichomonase, cervicite).",
+    "categorie": ["Gynécologie", "Infectieux & IST"],
+    "url": "/tools/diagnostic-leucorrhees/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": ""
+  },
+  {
+    "id": "leucorrhees-aide-diagnostic-bis",
+    "titre": "Leucorrhées : Répertoire Étiologique",
+    "description": "Répertoire étiologique des leucorrhées : fiches cliniques complètes (candidose, vaginose, trichomonase, cervicite, IGH).",
+    "categorie": ["Gynécologie", "Infectieux & IST"],
+    "url": "/tools/leucorrhees-aide-diagnostic-bis/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔬"
+  },
+  {
+    "id": "prise-en-charge-cervicite",
+    "titre": "Cervicite",
+    "description": "Algorithme de prise en charge de la cervicite (Standard, Grossesse, Risque élevé) — Recommandations HAS / SPILF 2024.",
+    "categorie": ["Gynécologie", "Infectieux & IST", "Col"],
+    "url": "/tools/prise-en-charge-cervicite/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔬"
+  },
+  {
+    "id": "ulcerations-genitales",
+    "titre": "Ulcérations génitales",
+    "description": "Algorithme diagnostique des ulcérations génitales : herpès, syphilis, chancre mou, LGV, diagnostics différentiels (HAS/SPILF 2024).",
+    "categorie": ["Gynécologie", "Infectieux & IST"],
+    "url": "/tools/ulcerations-genitales/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🩹"
+  },
+  {
+    "id": "igh-infection-genitale-haute",
+    "titre": "Infection génitale haute (IGH)",
+    "description": "Algorithme de prise en charge des IGH : critères de gravité, antibiothérapie IV/ambulatoire, et réévaluation à 72h.",
+    "categorie": ["Gynécologie", "Infectieux & IST"],
+    "url": "/tools/igh-infection-genitale-haute/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🏥"
+  },
+  {
+    "id": "guide-antibiotherapie-infections",
+    "titre": "Guide Antibiothérapie (infections génitales)",
+    "description": "Recommandations antibiothérapie infections gynéco.",
+    "categorie": ["Gynécologie", "Infectieux & IST", "Thérapeutique"],
+    "url": "/tools/guide-antibiotherapie-infections/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "💊"
+  },
+  {
+    "id": "guide-antibiotiques-adultes",
+    "titre": "Guide Antibiotiques Adultes",
+    "description": "Posologies adultes, présentations officielles, surveillance et warnings pour 43 antibiotiques (références ANSM RCP 2025-2026, HAS).",
+    "categorie": ["Gynécologie", "Infectieux & IST", "Thérapeutique"],
+    "url": "/tools/guide-antibiotiques-adultes/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "💊"
+  },
+  {
+    "id": "hemorragie-genitale-diagnostic",
+    "titre": "Hémorragie génitale : Diagnostic",
+    "description": "Algorithme diagnostique des hémorragies génitales selon contexte : activité, grossesse, post-ménopause (CNGOF/FIGO).",
+    "categorie": ["Gynécologie"],
+    "url": "/tools/hemorragie-genitale-diagnostic/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🩸"
+  },
+  {
+    "id": "amenorrhee-secondaire",
+    "titre": "Aménorrhée secondaire",
+    "description": "Algorithme diagnostique de l'aménorrhée secondaire : élimination grossesse, bilan hormonal (FSH/LH/PRL/TSH), et orientation étiologique (SOPK, IOP, hyperprolactinémie, cause utérine).",
+    "categorie": ["Gynécologie", "Endocrinologie & fertilité"],
+    "url": "/tools/amenorrhee-secondaire/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔍"
+  },
+  {
+    "id": "sopk-diagnostic",
+    "titre": "Diagnostic SOPK",
+    "description": "Algorithme de diagnostic du syndrome des ovaires polykystiques selon les critères de Rotterdam : anovulation, hyperandrogénie, raphie, élimination des diagnostics différentiels.",
+    "categorie": ["Gynécologie", "Endocrinologie & fertilité", "Ovaire"],
+    "url": "/tools/sopk-diagnostic/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔍"
+  },
+  {
+    "id": "calculateur-ovulation",
+    "titre": "Calculateur d'ovulation",
+    "description": "Estimation de la période fertile et de la date d'ovulation basée sur la méthode du calendrier (phase lutéale 14 jours) — outil éducatif.",
+    "categorie": ["Gynécologie", "Endocrinologie & fertilité"],
+    "url": "/tools/calculateur-ovulation/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "📅"
+  },
+  {
+    "id": "infections-mammaires-algorithme",
+    "titre": "Infections Mammaires",
+    "description": "Algorithme de diagnostic et prise en charge des infections mammaires (allaitement et non-allaitement).",
+    "categorie": ["Gynécologie", "Sénologie", "Infectieux & IST"],
+    "url": "/tools/infections-mammaires-algorithme/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🤱"
+  },
+  {
+    "id": "contraception-thrombose",
+    "titre": "Contraception et thrombose",
+    "description": "Évaluation risque thrombotique et contraception.",
+    "categorie": ["Gynécologie", "Contraception"],
+    "url": "/tools/contraception-thrombose/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "⚠️"
+  },
+  {
+    "id": "aide-prescription-contraceptive",
+    "titre": "Aide à la prescription contraceptive",
+    "description": "Arbre décisionnel choix contraceptif.",
+    "categorie": ["Gynécologie", "Contraception"],
+    "url": "/tools/aide-prescription-contraceptive/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "💊"
+  },
+  {
+    "id": "metrorragies-post-menopausiques",
+    "titre": "Métrorragies post-ménopausiques",
+    "description": "Bilan étiologique saignements post-ménopause.",
+    "categorie": ["Gynécologie", "Biologie et explorations"],
+    "url": "/tools/metrorragies-post-menopause/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔬"
+  },
+  {
+    "id": "prescription-menopause-thm",
+    "titre": "Prescription ménopause (THM)",
+    "description": "Aide à la prescription traitement hormonal ménopause.",
+    "categorie": ["Gynécologie", "Thérapeutique"],
+    "url": "/tools/prescription-thm/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "💉"
+  },
+  {
+    "id": "betahcg-calculator",
+    "titre": "Calculette bêta-hCG",
+    "description": "Suivi personnalisé de l'évolution des β-hCG en grossesse précoce avec calcul du temps de doublement, carnet de suivi et graphique interactif.",
+    "categorie": ["Gynécologie", "Obstétrique", "Biologie et explorations"],
+    "url": "/tools/betahcg-calculator/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🧪"
+  },
+  {
+    "id": "suivi-grossesse-interactif",
+    "titre": "Suivi de grossesse",
+    "description": "Suivi semaine par semaine : développement fœtal, symptômes maternels, et protocole médical HAS/CNGOF 2023-2024.",
+    "categorie": ["Obstétrique"],
+    "url": "/tools/suivi-grossesse-interactif/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🤰"
+  },
+  {
+    "id": "hta-gravidique-preeclampsie",
+    "titre": "HTA Gravidique & Prééclampsie",
+    "description": "Diagnostic et prise en charge HTA grossesse.",
+    "categorie": ["Obstétrique"],
+    "url": "/tools/hta-gravidique-preeclampsie/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🩺"
+  },
 
-/* ============================================================
-   TABLEAUX
-   ============================================================ */
-#azo-tool .azo-table-wrap {
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  width: 100% !important;
-}
-#azo-tool .azo-table {
-  width: 100% !important;
-  border-collapse: collapse !important;
-  font-size: 0.81rem !important;
-  font-family: var(--azo-font) !important;
-}
-#azo-tool .azo-table th {
-  background: #eef2f8 !important;
-  color: var(--azo-blue) !important;
-  padding: 7px 10px !important;
-  text-align: left !important;
-  font-weight: 700 !important;
-  border: 1px solid var(--azo-border) !important;
-  font-size: 0.76rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.03em !important;
-  white-space: nowrap !important;
-}
-#azo-tool .azo-table td {
-  padding: 7px 10px !important;
-  border: 1px solid var(--azo-border) !important;
-  vertical-align: top !important;
-  color: var(--azo-text) !important;
-}
-#azo-tool .azo-table tr:nth-child(even) td { background: #f8fafc !important; }
+{
+  "id": "pre-eclampsie-hta-gravidique",
+  "titre": "Pré-éclampsie / HTA Gravidique",
+  "description": "Classification et prise en charge de l'HTA gravidique et de la pré-éclampsie : critères diagnostiques, surveillance ambulatoire/hospitalisation, traitement antihypertenseur, et gestion des formes sévères/HELLP/éclampsie (SFHTA/CNGOF 2023).",
+  "categorie": ["Obstétrique"],
+  "url": "/tools/pre-eclampsie-hta-gravidique/",
+  "target": "_blank",
+  "statut": "actif",
+  "icone": "⚡"
+},
+  
+  {
+    "id": "diabete-gestationnel",
+    "titre": "Diabète gestationnel",
+    "description": "Dépistage et prise en charge diabète grossesse.",
+    "categorie": ["Obstétrique", "Endocrinologie & fertilité"],
+    "url": "/tools/diabete-gestationnel/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🩸"
+  },
+  {
+    "id": "depistage-dysthyroidies",
+    "titre": "Dépistage des Dysthyroïdies",
+    "description": "Algorithme décisionnel pour le dépistage et la prise en charge des dysthyroïdies en préconception, grossesse et post-partum (ATA 2017 / SFE / HAS).",
+    "categorie": ["Obstétrique", "Endocrinologie & fertilité"],
+    "url": "/tools/depistage-dysthyroidies/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🦋"
+  },
+  {
+    "id": "interpretation-echographie-foetale",
+    "titre": "Interprétation de l'échographie fœtale",
+    "description": "Aide à l'interprétation de la biométrie fœtale : percentiles INTERGROWTH-21st, poids fœtal (Hadlock), courbes interactives et compte-rendu A5 imprimable.",
+    "categorie": ["Obstétrique", "Biologie et explorations"],
+    "url": "/tools/interpretation-echographie-foetale/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "📡"
+  },
+  {
+    "id": "biopsie-endometre",
+    "titre": "Biopsie d'endomètre",
+    "description": "Algorithme décisionnel pour indication de biopsie d'endomètre selon statut ménopausique, saignements, échographie et facteurs de risque.",
+    "categorie": ["Gynécologie", "Biologie et explorations"],
+    "url": "/tools/biopsie-endometre/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔬"
+  },
+  {
+    "id": "generateur-courbe-menothermique",
+    "titre": "Courbe ménothermique",
+    "description": "Aide au suivi de la température basale : détection d'ovulation (méthode 3/6), courbe interactive, export PDF/JSON et statistiques du cycle.",
+    "categorie": ["Gynécologie"],
+    "url": "/tools/generateur-courbe-menothermique/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🌡️"
+  },
+  {
+    "id": "masse-ovarienne-algorithme",
+    "titre": "Masse ovarienne : algorithme",
+    "description": "Algorithme de prise en charge des masses ovariennes selon classification O-RADS : bénigne, indéterminée ou suspecte de malignité.",
+    "categorie": ["Gynécologie", "Biologie et explorations", "Ovaire"],
+    "url": "/tools/masse-ovarienne-algorithme/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🥚"
+  },
+  {
+    "id": "imagerie-gynecologique-algorithme",
+    "titre": "Imagerie gynécologique : algorithme",
+    "description": "Algorithme de choix d'imagerie gynécologique (échographie/IRM/scanner) selon la situation : urgences, masse annexielle, oncologie.",
+    "categorie": ["Gynécologie", "Biologie et explorations"],
+    "url": "/tools/imagerie-gynecologique-algorithme/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🖼️"
+  },
+  
+  {
+    "id": "score-baumgarten-gruber-map",
+    "titre": "Score de Baumgarten & Grüber (MAP)",
+    "description": "Évaluation de la sévérité d'une menace d'accouchement prématuré (MAP) : score clinique, tocolyse, corticothérapie, et niveau de maternité (CNGOF 2016).",
+    "categorie": ["Obstétrique", "Score"],
+    "url": "/tools/score-baumgarten-gruber-map/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "📈"
+  },
+  {
+    "id": "score-manchester-sein-brca",
+    "titre": "Score de Manchester (sein) – BRCA1/BRCA2",
+    "description": "Calculateur score de Manchester pour risque BRCA1/BRCA2 : antécédents, histologie, ethnicité (seuil NHS ≥10%).",
+    "categorie": ["Gynécologie", "Sénologie", "Cancérologie", "Score"],
+    "url": "/tools/score-manchester-sein-brca/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🧬"
+  },
+  {
+    "id": "calculateur-dpni-trisomie-21",
+    "titre": "Calculateur DPNI (trisomie 21)",
+    "description": "Estimation du risque de trisomie 21 combinant âge maternel, marqueurs sériques (PAPP-A, β-hCG), clarté nucale et antécédents — outil informatif.",
+    "categorie": ["Obstétrique", "Score"],
+    "url": "/tools/calculateur-dpni-trisomie-21/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🧬"
+  },
+  {
+    "id": "rciu-retard-croissance",
+    "titre": "Retard de croissance intra-utérin (RCIU)",
+    "description": "Guide complet du RCIU : définitions, étiologies (symétrique/asymétrique), diagnostic échographique/Doppler, prise en charge et prévention par aspirine (CNGOF/ESHRE).",
+    "categorie": ["Obstétrique"],
+    "url": "/tools/rciu-retard-croissance/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "📉"
+  },
+  {
+    "id": "prelevements-genitaux-femme",
+    "titre": "Prélèvements Génitaux chez la Femme",
+    "description": "Guide complet des prélèvements gynécologiques : indications, techniques (vaginal, endocervical, FCV, endomètre), microbiologie, cytologie, et interprétation des résultats (CNGOF/HAS 2024).",
+    "categorie": ["Gynécologie", "Biologie et explorations", "Infectieux & IST"],
+    "url": "/tools/prelevements-genitaux-femme/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🔬"
+  },
+  {
+    "id": "frottis-cervico-uterin-fcu",
+    "titre": "Frottis Cervico-Utérin (FCU)",
+    "description": "Guide complet du FCU : dépistage organisé (HAS/INCa), technique de prélèvement, classification Bethesda 2014, et conduite à tenir interactive.",
+    "categorie": ["Gynécologie", "Biologie et explorations", "Col"],
+    "url": "/tools/frottis-cervico-uterin-fcu/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🩺"
+  },
+  {
+    "id": "maladie-abortive-bilan-etiologique",
+    "titre": "Maladie Abortive — Bilan Étiologique",
+    "description": "Bilan étiologique complet des fausses couches à répétition : causes génétiques, hormonales, anatomiques, immunologiques (SAPL), infectieuses, et algorithme décisionnel (CNGOF/ESHRE 2022-2023).",
+    "categorie": ["Gynécologie", "Endocrinologie & fertilité", "Biologie et explorations"],
+    "url": "/tools/maladie-abortive-bilan-etiologique/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🤰"
+  },
+  {
+    "id": "infections-maternelles-echographie",
+    "titre": "Infections maternelles : analyse échographique",
+    "description": "Corrélation signes échographiques / pathologies infectieuses fœtales (CMV, toxoplasmose, rubéole, parvovirus B19, varicelle) — tableau interactif et fiches détaillées.",
+    "categorie": ["Obstétrique", "Infectieux & IST"],
+    "url": "/tools/infections-maternelles-echographie/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🦠"
+  },
 
-/* ============================================================
-   ALGORITHME — STEPS
-   /* CORRECTION 2 : même approche — pas de display:none en CSS.
-      Le JS gère entièrement display via style inline pour
-      éviter le conflit CSS classe vs inline. */
-   ============================================================ */
-
-/* Barre de progression */
-#azo-tool .azo-progress-wrap {
-  margin-bottom: 14px !important;
-}
-#azo-tool .azo-progress-label {
-  font-size: 0.73rem !important;
-  font-family: var(--azo-mono) !important;
-  color: var(--azo-muted) !important;
-  margin-bottom: 5px !important;
-}
-#azo-tool .azo-progress-bar {
-  height: 5px !important;
-  background: #dbeafe !important;
-  border-radius: 3px !important;
-  overflow: hidden !important;
-}
-#azo-tool .azo-progress-fill {
-  height: 100% !important;
-  background: var(--azo-blue2) !important;
-  border-radius: 3px !important;
-  transition: width 0.3s ease !important;
-}
-
-/* Breadcrumb */
-#azo-tool .azo-breadcrumb {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 4px !important;
-  margin-bottom: 14px !important;
-  font-size: 0.73rem !important;
-  font-family: var(--azo-mono) !important;
-  color: var(--azo-muted) !important;
-  align-items: center !important;
-}
-
-#azo-tool .azo-question {
-  background: #eef2f8 !important;
-  border-left: 4px solid var(--azo-blue2) !important;
-  padding: 12px 14px !important;
-  margin-bottom: 14px !important;
-  font-size: 0.91rem !important;
-  font-weight: 700 !important;
-  color: var(--azo-blue) !important;
-  border-radius: 0 var(--azo-radius) var(--azo-radius) 0 !important;
-  font-family: var(--azo-font) !important;
-}
-#azo-tool .azo-choices {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 8px !important;
-}
-#azo-tool .azo-choice-btn {
-  background: var(--azo-white) !important;
-  border: 1px solid var(--azo-border) !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 10px 14px !important;
-  text-align: left !important;
-  cursor: pointer !important;
-  font-size: 0.83rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-text) !important;
-  transition: background 0.15s, border-color 0.15s !important;
-  line-height: 1.45 !important;
-}
-#azo-tool .azo-choice-btn:hover {
-  background: #eef2f8 !important;
-  border-color: var(--azo-blue2) !important;
-  color: var(--azo-blue) !important;
-}
-#azo-tool .azo-choice-btn::before {
-  content: "\25B6\0020" !important;
-  color: var(--azo-blue2) !important;
-  font-size: 0.62rem !important;
-}
-
-/* Résultats */
-#azo-tool .azo-result-box {
-  border-radius: var(--azo-radius) !important;
-  padding: 16px 18px !important;
-  margin-bottom: 12px !important;
-}
-#azo-tool .azo-result-excretoire {
-  background: #e8f4ee !important;
-  border-left: 4px solid var(--azo-teal) !important;
-}
-#azo-tool .azo-result-secretoire {
-  background: #fef3e2 !important;
-  border-left: 4px solid var(--azo-amber) !important;
-}
-#azo-tool .azo-result-title {
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-  margin-bottom: 8px !important;
-  font-family: var(--azo-font) !important;
-}
-#azo-tool .azo-result-excretoire .azo-result-title { color: var(--azo-teal) !important; }
-#azo-tool .azo-result-secretoire .azo-result-title { color: var(--azo-amber) !important; }
-#azo-tool .azo-result-content {
-  font-size: 0.82rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-text) !important;
-}
-#azo-tool .azo-result-content ul { padding-left: 18px !important; margin-top: 6px !important; }
-#azo-tool .azo-result-content li { margin-bottom: 3px !important; line-height: 1.5 !important; }
-
-/* Boutons action */
-#azo-tool .azo-btn-row {
-  display: flex !important;
-  gap: 8px !important;
-  flex-wrap: wrap !important;
-  margin-top: 14px !important;
-}
-#azo-tool .azo-reset-btn {
-  background: var(--azo-blue) !important;
-  color: var(--azo-white) !important;
-  border: none !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 8px 16px !important;
-  cursor: pointer !important;
-  font-size: 0.80rem !important;
-  font-family: var(--azo-font) !important;
-  transition: background 0.15s !important;
-}
-#azo-tool .azo-reset-btn:hover { background: var(--azo-blue2) !important; }
-#azo-tool .azo-print-btn {
-  background: var(--azo-white) !important;
-  color: var(--azo-blue) !important;
-  border: 1px solid var(--azo-blue) !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 8px 16px !important;
-  cursor: pointer !important;
-  font-size: 0.80rem !important;
-  font-family: var(--azo-font) !important;
-  transition: background 0.15s !important;
-}
-#azo-tool .azo-print-btn:hover { background: #eef2f8 !important; }
-
-/* ============================================================
-   GRILLE DIAGNOSTIQUE RAPIDE
-   ============================================================ */
-#azo-tool .azo-diag-grid {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
-  margin-bottom: 4px !important;
-}
-#azo-tool .azo-diag-card {
-  border: 1px solid var(--azo-border) !important;
-  border-radius: var(--azo-radius) !important;
-  overflow: hidden !important;
-}
-#azo-tool .azo-diag-card-header {
-  padding: 7px 12px !important;
-  font-size: 0.76rem !important;
-  font-weight: 700 !important;
-  font-family: var(--azo-font) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-}
-#azo-tool .azo-diag-card-header.excr {
-  background: #d1fae5 !important;
-  color: var(--azo-teal) !important;
-  border-bottom: 1px solid #a7f3d0 !important;
-}
-#azo-tool .azo-diag-card-header.secr {
-  background: #fef3c7 !important;
-  color: var(--azo-amber) !important;
-  border-bottom: 1px solid #fde68a !important;
-}
-#azo-tool .azo-diag-card-body { padding: 10px 12px !important; }
-#azo-tool .azo-diag-row {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: baseline !important;
-  padding: 3px 0 !important;
-  border-bottom: 1px dotted #e2e8f0 !important;
-  font-size: 0.79rem !important;
-  font-family: var(--azo-font) !important;
-}
-#azo-tool .azo-diag-row:last-child { border-bottom: none !important; }
-#azo-tool .azo-diag-label { color: var(--azo-muted) !important; }
-#azo-tool .azo-diag-val {
-  font-weight: 700 !important;
-  font-size: 0.76rem !important;
-  font-family: var(--azo-mono) !important;
-}
-#azo-tool .azo-diag-val.up { color: var(--azo-red) !important; }
-#azo-tool .azo-diag-val.down { color: var(--azo-teal) !important; }
-#azo-tool .azo-diag-val.norm { color: var(--azo-blue2) !important; }
-#azo-tool .azo-diag-val.absent { color: var(--azo-amber) !important; }
-
-/* ============================================================
-   CALCULATEUR TESE
-   ============================================================ */
-#azo-tool .azo-calc-form {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 12px !important;
-  margin-bottom: 14px !important;
-}
-#azo-tool .azo-field label {
-  display: block !important;
-  font-size: 0.76rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-muted) !important;
-  margin-bottom: 4px !important;
-  font-weight: 700 !important;
-}
-#azo-tool .azo-field select,
-#azo-tool .azo-field input[type="number"] {
-  width: 100% !important;
-  border: 1px solid var(--azo-border) !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 7px 10px !important;
-  font-size: 0.82rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-text) !important;
-  background: var(--azo-white) !important;
-  appearance: auto !important;
-  -webkit-appearance: auto !important;
-}
-#azo-tool .azo-calc-btn {
-  grid-column: 1 / -1 !important;
-  background: var(--azo-blue) !important;
-  color: var(--azo-white) !important;
-  border: none !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 9px 20px !important;
-  cursor: pointer !important;
-  font-size: 0.83rem !important;
-  font-family: var(--azo-font) !important;
-  transition: background 0.15s !important;
-  width: 100% !important;
-}
-#azo-tool .azo-calc-btn:hover { background: var(--azo-blue2) !important; }
-#azo-tool .azo-calc-result {
-  border-radius: var(--azo-radius) !important;
-  padding: 14px 16px !important;
-  margin-top: 4px !important;
-}
-#azo-tool .azo-calc-result.good {
-  background: #e8f4ee !important;
-  border-left: 4px solid var(--azo-teal) !important;
-}
-#azo-tool .azo-calc-result.moderate {
-  background: #fef3e2 !important;
-  border-left: 4px solid var(--azo-amber) !important;
-}
-#azo-tool .azo-calc-result.poor {
-  background: #fee2e2 !important;
-  border-left: 4px solid var(--azo-red) !important;
-}
-#azo-tool .azo-calc-result-pct {
-  font-size: 2rem !important;
-  font-weight: 700 !important;
-  font-family: var(--azo-mono) !important;
-  line-height: 1 !important;
-  margin-bottom: 6px !important;
-}
-#azo-tool .azo-calc-result.good .azo-calc-result-pct { color: var(--azo-teal) !important; }
-#azo-tool .azo-calc-result.moderate .azo-calc-result-pct { color: var(--azo-amber) !important; }
-#azo-tool .azo-calc-result.poor .azo-calc-result-pct { color: var(--azo-red) !important; }
-#azo-tool .azo-calc-result-label {
-  font-size: 0.80rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-text) !important;
-  line-height: 1.5 !important;
-}
-
-/* ============================================================
-   CAS CLINIQUES
-   ============================================================ */
-#azo-tool .azo-cc-nav {
-  display: flex !important;
-  gap: 6px !important;
-  margin-bottom: 16px !important;
-  flex-wrap: wrap !important;
-}
-#azo-tool .azo-cc-nav-btn {
-  background: var(--azo-white) !important;
-  border: 1px solid var(--azo-border) !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 6px 14px !important;
-  cursor: pointer !important;
-  font-size: 0.78rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-muted) !important;
-  transition: all 0.15s !important;
-}
-#azo-tool .azo-cc-nav-btn.active {
-  background: var(--azo-blue) !important;
-  color: var(--azo-white) !important;
-  border-color: var(--azo-blue) !important;
-}
-#azo-tool .azo-cc-vignette {
-  background: #f8fafc !important;
-  border: 1px solid var(--azo-border) !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 14px 16px !important;
-  margin-bottom: 14px !important;
-  font-size: 0.83rem !important;
-  font-family: var(--azo-font) !important;
-  line-height: 1.6 !important;
-}
-#azo-tool .azo-cc-vignette strong { color: var(--azo-blue) !important; }
-#azo-tool .azo-cc-q {
-  font-weight: 700 !important;
-  font-size: 0.83rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-blue) !important;
-  margin-bottom: 10px !important;
-}
-#azo-tool .azo-cc-options {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 7px !important;
-  margin-bottom: 14px !important;
-}
-#azo-tool .azo-cc-opt {
-  background: var(--azo-white) !important;
-  border: 1px solid var(--azo-border) !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 9px 13px !important;
-  cursor: pointer !important;
-  font-size: 0.81rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-text) !important;
-  text-align: left !important;
-  transition: all 0.15s !important;
-}
-#azo-tool .azo-cc-opt:hover { background: #eef2f8 !important; border-color: var(--azo-blue2) !important; }
-#azo-tool .azo-cc-opt.correct {
-  background: #e8f4ee !important;
-  border-color: var(--azo-teal) !important;
-  color: var(--azo-teal) !important;
-  font-weight: 700 !important;
-}
-#azo-tool .azo-cc-opt.wrong {
-  background: #fee2e2 !important;
-  border-color: var(--azo-red) !important;
-  color: var(--azo-red) !important;
-}
-/* CORRECTION 3 : Unicode CSS via \2713 — correct pour pseudo-éléments */
-#azo-tool .azo-cc-opt.correct::before { content: "\2713\0020" !important; }
-#azo-tool .azo-cc-opt.wrong::before { content: "\2717\0020" !important; }
-#azo-tool .azo-cc-explanation {
-  background: #f0f9ff !important;
-  border: 1px solid #bae6fd !important;
-  border-left: 4px solid var(--azo-blue2) !important;
-  border-radius: 0 var(--azo-radius) var(--azo-radius) 0 !important;
-  padding: 12px 14px !important;
-  font-size: 0.81rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-text) !important;
-  line-height: 1.6 !important;
-}
-#azo-tool .azo-cc-explanation ul { padding-left: 18px !important; margin-top: 6px !important; }
-#azo-tool .azo-cc-explanation li { margin-bottom: 3px !important; }
-#azo-tool .azo-cc-next {
-  background: var(--azo-blue) !important;
-  color: var(--azo-white) !important;
-  border: none !important;
-  border-radius: var(--azo-radius) !important;
-  padding: 8px 16px !important;
-  cursor: pointer !important;
-  font-size: 0.80rem !important;
-  font-family: var(--azo-font) !important;
-  margin-top: 10px !important;
-}
-
-/* ============================================================
-   TOOLTIPS
-   ============================================================ */
-#azo-tool .azo-tip {
-  position: relative !important;
-  display: inline !important;
-  cursor: help !important;
-  border-bottom: 1px dotted var(--azo-blue2) !important;
-  color: var(--azo-blue2) !important;
-  font-style: normal !important;
-}
-#azo-tool .azo-tip-content {
-  display: none !important;
-  position: absolute !important;
-  bottom: calc(100% + 6px) !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  background: var(--azo-blue) !important;
-  color: var(--azo-white) !important;
-  font-size: 0.74rem !important;
-  font-family: var(--azo-font) !important;
-  line-height: 1.45 !important;
-  padding: 7px 11px !important;
-  border-radius: var(--azo-radius) !important;
-  white-space: normal !important;
-  width: 220px !important;
-  z-index: 9999 !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25) !important;
-  pointer-events: none !important;
-}
-#azo-tool .azo-tip-content::after {
-  content: "" !important;
-  position: absolute !important;
-  top: 100% !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  border: 5px solid transparent !important;
-  border-top-color: var(--azo-blue) !important;
-}
-#azo-tool .azo-tip:hover .azo-tip-content,
-#azo-tool .azo-tip:focus .azo-tip-content { display: block !important; }
-
-/* ============================================================
-   UTILITAIRES TEXTE
-   ============================================================ */
-#azo-tool .azo-pill {
-  display: inline-block !important;
-  padding: 2px 8px !important;
-  border-radius: 2px !important;
-  font-size: 0.72rem !important;
-  font-weight: 700 !important;
-  font-family: var(--azo-mono) !important;
-  letter-spacing: 0.04em !important;
-  text-transform: uppercase !important;
-}
-#azo-tool .azo-pill-blue  { background: #dbeafe !important; color: var(--azo-blue2) !important; }
-#azo-tool .azo-pill-teal  { background: #d1fae5 !important; color: var(--azo-teal) !important; }
-#azo-tool .azo-pill-amber { background: #fef3c7 !important; color: var(--azo-amber) !important; }
-#azo-tool .azo-pill-red   { background: #fee2e2 !important; color: var(--azo-red) !important; }
-
-#azo-tool .azo-text-sm {
-  font-size: 0.82rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-text) !important;
-  line-height: 1.6 !important;
-}
-#azo-tool .azo-text-sm p  { margin-bottom: 8px !important; }
-#azo-tool .azo-text-sm ul { padding-left: 18px !important; margin: 6px 0 10px !important; }
-#azo-tool .azo-text-sm li { margin-bottom: 3px !important; }
-#azo-tool .azo-text-sm strong { color: var(--azo-blue) !important; }
-
-#azo-tool .azo-note {
-  background: #f1f5f9 !important;
-  border: 1px solid var(--azo-border) !important;
-  border-left: 3px solid var(--azo-blue2) !important;
-  padding: 8px 12px !important;
-  font-size: 0.79rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-muted) !important;
-  border-radius: 0 var(--azo-radius) var(--azo-radius) 0 !important;
-  margin: 10px 0 !important;
-}
-/* CORRECTION 4 : \24D8 = ⓘ — unicode CSS correct dans pseudo-élément */
-#azo-tool .azo-note::before { content: "\24D8\0020" !important; color: var(--azo-blue2) !important; font-weight: 700 !important; }
-
-/* ============================================================
-   RÉFÉRENCES
-   ============================================================ */
-#azo-tool .azo-ref-list { list-style: none !important; }
-#azo-tool .azo-ref-list li {
-  padding: 10px 14px !important;
-  border-bottom: 1px solid var(--azo-border) !important;
-  font-size: 0.80rem !important;
-  font-family: var(--azo-font) !important;
-  color: var(--azo-text) !important;
-  line-height: 1.5 !important;
-}
-#azo-tool .azo-ref-list li:last-child { border-bottom: none !important; }
-#azo-tool .azo-ref-year {
-  display: inline-block !important;
-  background: #eef2f8 !important;
-  color: var(--azo-blue) !important;
-  font-size: 0.70rem !important;
-  font-family: var(--azo-mono) !important;
-  padding: 1px 6px !important;
-  border-radius: 2px !important;
-  margin-right: 6px !important;
-  font-weight: 700 !important;
-}
-#azo-tool .azo-ref-title { font-weight: 700 !important; color: var(--azo-blue) !important; }
-#azo-tool .azo-ref-source { color: var(--azo-muted) !important; font-size: 0.77rem !important; }
-
-/* ============================================================
-   FICHE IMPRESSION
-   ============================================================ */
-#azo-print-sheet {
-  display: none;
-}
-@media print {
-  #azo-print-sheet {
-    display: block !important;
-    font-family: 'Georgia', serif !important;
-    font-size: 11pt !important;
-    color: #000 !important;
-    padding: 20mm !important;
+    {
+    "id": "hemorragie-post-partum-protocole",
+    "titre": "Hémorragie du Post-Partum",
+    "description": "Protocole séquentiel de prise en charge des HPP : définition, causes (4T), lignes thérapeutiques (0-15/15-30/30-60/>60 min), et gestion HPP tardive (CNGOF 2014).",
+    "categorie": ["Obstétrique"],
+    "url": "/tools/hemorragie-post-partum-protocole/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "🚨"
+  },
+  
+  {
+    "id": "imc-poids-ideal",
+    "titre": "Poids idéal et IMC",
+    "description": "Calculateur d'indice de masse corporelle (IMC) avec plage de poids normal OMS, jauge visuelle animée et classification clinique.",
+    "categorie": ["Biologie et explorations", "Score"],
+    "url": "/tools/imc-poids-ideal/",
+    "target": "_blank",
+    "statut": "actif",
+    "icone": "⚖️"
   }
-  #azo-print-sheet h2 { font-size: 14pt !important; margin-bottom: 6pt !important; }
-  #azo-print-sheet h3 { font-size: 11pt !important; margin: 10pt 0 4pt !important; border-bottom: 1px solid #ccc !important; padding-bottom: 2pt !important; }
-  #azo-print-sheet p, #azo-print-sheet li { margin-bottom: 3pt !important; line-height: 1.5 !important; }
-  #azo-print-sheet ul { padding-left: 16pt !important; }
-  #azo-print-sheet .print-footer { margin-top: 14pt !important; font-size: 8pt !important; color: #666 !important; border-top: 1px solid #ccc !important; padding-top: 6pt !important; }
-}
-
-/* ============================================================
-   DISCLAIMER
-   ============================================================ */
-#azo-tool .azo-disclaimer {
-  background: #f8fafc !important;
-  border-top: 1px solid var(--azo-border) !important;
-  padding: 10px 20px !important;
-  font-size: 0.71rem !important;
-  color: var(--azo-muted) !important;
-  font-family: var(--azo-mono) !important;
-  line-height: 1.5 !important;
-  text-align: center !important;
-}
-/* CORRECTION 5 : \26A0 = ⚠ — unicode CSS correct dans pseudo-élément */
-#azo-tool .azo-disclaimer::before { content: "\26A0\0020" !important; color: var(--azo-amber) !important; }
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 580px) {
-  #azo-tool .azo-header { padding: 14px 14px 12px !important; }
-  #azo-tool .azo-header h1 { font-size: 1rem !important; }
-  #azo-tool .azo-panel { padding: 12px 12px !important; }
-  #azo-tool .azo-tab-btn { font-size: 0.66rem !important; padding: 9px 4px !important; }
-  #azo-tool .azo-table { font-size: 0.75rem !important; }
-  #azo-tool .azo-table th, #azo-tool .azo-table td { padding: 5px 7px !important; }
-  #azo-tool .azo-diag-grid { grid-template-columns: 1fr !important; }
-  #azo-tool .azo-calc-form { grid-template-columns: 1fr !important; }
-  #azo-tool .azo-tip-content { width: 170px !important; font-size: 0.70rem !important; }
-}
-
-/* ============================================================
-   CORRECTION 6 : scrollbar scopée à l'outil uniquement
-   (la version originale ciblait html/body globalement)
-   ============================================================ */
-#azo-tool { scrollbar-width: none !important; }
-#azo-tool::-webkit-scrollbar { display: none !important; }
-</style>
-
-<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
-</head>
-<body>
-
-<div id="azo-tool">
-
-  <!-- EN-TÊTE -->
-  <div class="azo-header">
-    <h1>Azoospermie &#8212; Algorithme diagnostique et prise en charge</h1>
-    <p>Outil d&#8217;aide &#224; la d&#233;cision &#8212; Infertilité masculine</p>
-    <span class="azo-badge">Usage professionnel &#8212; Réservé aux praticiens</span>
-  </div>
-
-  <!-- ONGLETS -->
-  <div class="azo-tabs" role="tablist">
-    <button class="azo-tab-btn active" onclick="azoTab(this,'algo')"       role="tab">Algorithme</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'definition')" role="tab">Déf. &amp; Épid.</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'bilan')"      role="tab">Bilan</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'etiologies')" role="tab">Étiologies</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'pec')"        role="tab">Prise en charge</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'cas')"        role="tab">Cas cliniques</button>
-    <button class="azo-tab-btn"        onclick="azoTab(this,'refs')"       role="tab">Références</button>
-  </div>
-
-  <!-- ============================================================
-       ONGLET 1 : ALGORITHME
-       ============================================================ -->
-  <div id="azo-panel-algo" class="azo-panel">
-
-    <!-- Grille comparaison rapide -->
-    <div class="azo-section">
-      <div class="azo-section-title">Comparaison diagnostique rapide</div>
-      <div class="azo-section-body">
-        <div class="azo-diag-grid">
-          <div class="azo-diag-card">
-            <div class="azo-diag-card-header excr">Excrétoire (obstructive)</div>
-            <div class="azo-diag-card-body">
-              <div class="azo-diag-row"><span class="azo-diag-label">Volume testiculaire</span><span class="azo-diag-val norm">Normal</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">FSH</span><span class="azo-diag-val norm">Normale</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">Inhibine B</span><span class="azo-diag-val norm">Normale</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">Épididymes</span><span class="azo-diag-val absent">Tendus / absents</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">Biochimie séminale</span><span class="azo-diag-val down">Anomalie</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">Biopsie testiculaire</span><span class="azo-diag-val norm">Spz présents</span></div>
-            </div>
-          </div>
-          <div class="azo-diag-card">
-            <div class="azo-diag-card-header secr">Sécrétoire (non obstructive)</div>
-            <div class="azo-diag-card-body">
-              <div class="azo-diag-row"><span class="azo-diag-label">Volume testiculaire</span><span class="azo-diag-val down">Réduit / atrophique</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">FSH</span><span class="azo-diag-val up">Élevée (testiculaire)</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">Inhibine B</span><span class="azo-diag-val up">Basse</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">Épididymes</span><span class="azo-diag-val norm">Normaux</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">Biochimie séminale</span><span class="azo-diag-val norm">Normale</span></div>
-              <div class="azo-diag-row"><span class="azo-diag-label">Biopsie testiculaire</span><span class="azo-diag-val up">Spz absents / rares</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Algorithme interactif -->
-    <div class="azo-section">
-      <div class="azo-section-title">Algorithme interactif pas à pas</div>
-      <div class="azo-section-body">
-
-        <!-- Barre de progression -->
-        <div class="azo-progress-wrap">
-          <div class="azo-progress-label" id="azo-prog-label">Étape 1 sur 3</div>
-          <div class="azo-progress-bar"><div class="azo-progress-fill" id="azo-prog-fill" style="width:33%"></div></div>
-        </div>
-
-        <!-- Fil d'Ariane -->
-        <div id="azo-breadcrumb" class="azo-breadcrumb"></div>
-
-        <!-- ÉTAPE 0 -->
-        <div class="azo-step" id="azo-s0">
-          <div class="azo-question">Étape 1 &#8212; Examen clinique : volume testiculaire et épididymes</div>
-          <div class="azo-choices">
-            <button class="azo-choice-btn" onclick="azoGo('s0','Testicules normaux + épididymes tendus','s1',2,3)">
-              Testicules de volume normal (&ge;15 ml), épididymes tendus ou non palpables
-            </button>
-            <button class="azo-choice-btn" onclick="azoGo('s0','Testicules atrophiques + épididymes normaux','s2',2,3)">
-              Testicules petits ou atrophiques (&lt;15 ml), épididymes et déférents normaux
-            </button>
-          </div>
-        </div>
-
-        <!-- ÉTAPE 1 : orientation excrétoire -->
-        <div class="azo-step" id="azo-s1">
-          <div class="azo-question">Étape 2 &#8212; Bilan hormonal et biochimie séminale</div>
-          <div class="azo-choices">
-            <button class="azo-choice-btn" onclick="azoGo('s1','FSH normale + biochimie séminale anormale','s3',3,3)">
-              <abbr class="azo-tip">FSH<span class="azo-tip-content">Hormone folliculo-stimulante. Normale = spermatogenèse conservée.</span></abbr>
-              normale + anomalie biochimie séminale (fructose bas / alpha-glucosidase basse)
-            </button>
-            <button class="azo-choice-btn" onclick="azoGo('s1','Déférents non palpables','s4',3,3)">
-              Déférents non palpables bilatéralement &#8212;
-              <abbr class="azo-tip">CBAVD<span class="azo-tip-content">Congénital Bilateral Absence of the Vas Deferens. Associé dans ~80% des cas à une mutation CFTR (mucoviscidose).</span></abbr>
-            </button>
-            <button class="azo-choice-btn" onclick="azoGo('s1','ATCD chirurgie / IST / vasectomie','s5',3,3)">
-              Antécédent chirurgical inguino-scrotal, <abbr class="azo-tip">IST<span class="azo-tip-content">Infection Sexuellement Transmissible : gonocoque, Chlamydia — peuvent créer des sténoses épididymaires.</span></abbr> ou vasectomie
-            </button>
-          </div>
-        </div>
-
-        <!-- ÉTAPE 2 : orientation sécrétoire -->
-        <div class="azo-step" id="azo-s2">
-          <div class="azo-question">Étape 2 &#8212; Bilan hormonal : préciser le niveau atteint</div>
-          <div class="azo-choices">
-            <button class="azo-choice-btn" onclick="azoGo('s2','FSH élevée + Inhibine B basse','s6',3,3)">
-              FSH élevée +
-              <abbr class="azo-tip">Inhibine B<span class="azo-tip-content">Sécrétée par les cellules de Sertoli. Basse = insuffisance de la spermatogenèse testiculaire.</span></abbr>
-              basse &#8212; Origine testiculaire (&#171;basse&#187;)
-            </button>
-            <button class="azo-choice-btn" onclick="azoGo('s2','FSH basse + LH basse + T basse','s7',3,3)">
-              FSH basse + LH basse + Testostérone basse &#8212;
-              <abbr class="azo-tip">Hypogonadisme HH<span class="azo-tip-content">Hypogonadisme hypogonadotrope : déficit de stimulation hypothalamo-hypophysaire. FSH et LH insuffisantes = testicule non stimulé.</span></abbr>
-              (&#171;haute&#187;)
-            </button>
-          </div>
-        </div>
-
-        <!-- RÉSULTAT s3 : excrétoire confirmé -->
-        <!-- CORRECTION 7 : \u2713 remplacé par &#x2713; (entité HTML valide) dans tout le HTML statique -->
-        <div class="azo-step" id="azo-s3">
-          <div class="azo-result-box azo-result-excretoire">
-            <div class="azo-result-title">&#x2713; Azoospermie excrétoire (obstructive) confirmée</div>
-            <div class="azo-result-content">
-              <p><strong>Mécanisme :</strong> Spermatogenèse conservée, obstacle sur les voies excrétritrices.</p>
-              <ul>
-                <li>FSH normale, volumes testiculaires normaux</li>
-                <li>Biochimie séminale : fructose bas = obstacle post-vésicule séminale ; alpha-glucosidase basse = obstacle post-épididymaire</li>
-                <li>Biopsie testiculaire : spermatogenèse normale &#8594; <abbr class="azo-tip">TESE<span class="azo-tip-content">Testicular Sperm Extraction : biopsie testiculaire pour récupérer des spermatozoïdes destinés à l'ICSI.</span></abbr>/<abbr class="azo-tip">PESA<span class="azo-tip-content">Percutaneous Epididymal Sperm Aspiration : aspiration percutanée de spermatozoïdes épididymaires.</span></abbr> faisable</li>
-                <li>Exploration chirurgicale + reperméabilisation éventuelle</li>
-                <li>En cas d'échec : <abbr class="azo-tip">ICSI<span class="azo-tip-content">Intra Cytoplasmic Sperm Injection : injection directe d'un spermatozoïde dans l'ovocyte. Technique de référence si peu ou pas de spermatozoïdes.</span></abbr> avec spermatozoïdes épididymaires ou testiculaires</li>
-              </ul>
-            </div>
-          </div>
-          <div class="azo-btn-row">
-            <button class="azo-reset-btn" onclick="azoReset()">&#8635; Recommencer</button>
-            <button class="azo-print-btn" onclick="azoPrint('excretoire-confirme')">&#128438; Imprimer la fiche</button>
-          </div>
-        </div>
-
-        <!-- RÉSULTAT s4 : CBAVD -->
-        <div class="azo-step" id="azo-s4">
-          <div class="azo-result-box azo-result-excretoire">
-            <div class="azo-result-title">&#x2713; Agénésie bilatérale des canaux déférents (CBAVD)</div>
-            <div class="azo-result-content">
-              <p><strong>Association :</strong> 80 % liés à une mutation du gène <abbr class="azo-tip">CFTR<span class="azo-tip-content">Cystic Fibrosis Transmembrane conductance Regulator. Gène de la mucoviscidose. Les mutations CFTR en hétérozygotie peuvent donner une CBAVD isolée sans atteinte pulmonaire.</span></abbr> (mucoviscidose).</p>
-              <ul>
-                <li>Recherche mutation CFTR chez le patient <strong>et</strong> la partenaire — conseil génétique obligatoire</li>
-                <li>Spermatogenèse conservée &#8594; TESE/PESA faisable</li>
-                <li>Indication ICSI après bilan génétique complet</li>
-                <li>Pas d'indication de reconstruction chirurgicale</li>
-              </ul>
-            </div>
-          </div>
-          <div class="azo-btn-row">
-            <button class="azo-reset-btn" onclick="azoReset()">&#8635; Recommencer</button>
-            <button class="azo-print-btn" onclick="azoPrint('cbavd')">&#128438; Imprimer la fiche</button>
-          </div>
-        </div>
-
-        <!-- RÉSULTAT s5 : post-infectieux -->
-        <div class="azo-step" id="azo-s5">
-          <div class="azo-result-box azo-result-excretoire">
-            <div class="azo-result-title">&#x2713; Azoospermie excrétoire post-infectieuse ou post-chirurgicale</div>
-            <div class="azo-result-content">
-              <ul>
-                <li>Échographie-Doppler scrotal &#8594; recherche lésion épididymo-déférentielle</li>
-                <li>Si vasectomie : reperméabilisation envisageable si délai &lt;10 ans</li>
-                <li>IST (gonocoque, Chlamydia) : séquelles déférentielles ou épididymaires</li>
-                <li>ICSI avec spermatozoïdes récupérés si reconstruction impossible ou infructueuse</li>
-              </ul>
-            </div>
-          </div>
-          <div class="azo-btn-row">
-            <button class="azo-reset-btn" onclick="azoReset()">&#8635; Recommencer</button>
-            <button class="azo-print-btn" onclick="azoPrint('post-infectieux')">&#128438; Imprimer la fiche</button>
-          </div>
-        </div>
-
-        <!-- RÉSULTAT s6 : sécrétoire testiculaire -->
-        <div class="azo-step" id="azo-s6">
-          <div class="azo-result-box azo-result-secretoire">
-            <div class="azo-result-title">&#9670; Azoospermie sécrétoire d'origine testiculaire (&#171;basse&#187;)</div>
-            <div class="azo-result-content">
-              <p><strong>Mécanisme :</strong> Défaut de spermatogenèse à l'étage testiculaire.</p>
-              <ul>
-                <li>Caryotype + microdélétions <abbr class="azo-tip">AZF<span class="azo-tip-content">Azoospermia Factor : régions AZFa, AZFb, AZFc du chromosome Y. Les microdélétions AZFc permettent encore une TESE dans ~50% des cas. AZFa/b = TESE pratiquement impossible.</span></abbr> (régions AZFa, AZFb, AZFc)</li>
-                <li>Si <abbr class="azo-tip">AZFc<span class="azo-tip-content">Région AZFc : la plus fréquente des microdélétions. Taux de récupération TESE ~40-60%. Transmission aux fils en cas de succès.</span></abbr> : TESE possible, taux de récupération ~50 %</li>
-                <li>Si AZFa ou AZFb complètes : TESE pratiquement impossible &#8594; orienter vers IAD</li>
-                <li>Si <abbr class="azo-tip">Klinefelter<span class="azo-tip-content">Syndrome 47,XXY : cause la plus fréquente d'azoospermie sécrétoire. Micro-TESE possible dans ~50% des cas avant 35 ans.</span></abbr> (47,XXY) : micro-TESE possible dans ~50 % avant 35 ans</li>
-                <li><abbr class="azo-tip">TESE<span class="azo-tip-content">Testicular Sperm Extraction : biopsie(s) testiculaire(s) pour récupérer des spermatozoïdes rares en vue d'une ICSI.</span></abbr> / micro-TESE + ICSI : décision en RCP d'AMP</li>
-              </ul>
-            </div>
-          </div>
-          <div class="azo-btn-row">
-            <button class="azo-reset-btn" onclick="azoReset()">&#8635; Recommencer</button>
-            <button class="azo-print-btn" onclick="azoPrint('secretoire-testiculaire')">&#128438; Imprimer la fiche</button>
-          </div>
-        </div>
-
-        <!-- RÉSULTAT s7 : HH central -->
-        <div class="azo-step" id="azo-s7">
-          <div class="azo-result-box azo-result-secretoire">
-            <div class="azo-result-title">&#9670; Hypogonadisme hypogonadotrope (origine centrale &#171;haute&#187;)</div>
-            <div class="azo-result-content">
-              <p><strong>Mécanisme :</strong> Déficit de stimulation hypothalamo-hypophysaire.</p>
-              <ul>
-                <li>IRM hypophysaire systématique</li>
-                <li>Bilan hypophysaire complet : prolactine, cortisol, IGF-1</li>
-                <li>Étiologies : <abbr class="azo-tip">Kallmann<span class="azo-tip-content">Syndrome de Kallmann-de Morsier : déficit congénital en GnRH + anosmie. Traitement par gonadotrophines très efficace.</span></abbr>, hyperprolactinémie, anabolisants +++, tumeur HH</li>
-                <li>Traitement : hCG 1 500–5 000 UI SC × 3/sem ± FSH recombinante</li>
-                <li>Durée : 12 à 24 mois selon réponse</li>
-                <li>Pronostic favorable si volume testiculaire &gt;4 ml</li>
-                <li><strong>Arrêt impératif</strong> des anabolisants avant tout traitement</li>
-              </ul>
-            </div>
-          </div>
-          <div class="azo-btn-row">
-            <button class="azo-reset-btn" onclick="azoReset()">&#8635; Recommencer</button>
-            <button class="azo-print-btn" onclick="azoPrint('hh-central')">&#128438; Imprimer la fiche</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Calculateur pronostique TESE -->
-    <div class="azo-section">
-      <div class="azo-section-title">Score pronostique &#8212; Probabilité de récupération TESE</div>
-      <div class="azo-section-body">
-        <p class="azo-text-sm" style="margin-bottom:14px !important;">
-          Estimation du taux de succès de la <abbr class="azo-tip">TESE<span class="azo-tip-content">Testicular Sperm Extraction. Biopsie testiculaire visant à récupérer des spermatozoïdes pour ICSI. Le taux de succès dépend du type histologique, des données biologiques et de l'étiologie.</span></abbr>
-          d'après les données de la littérature (Tournaye 2012, Schlegel 2014, Esteves 2022).
-        </p>
-        <div class="azo-calc-form" id="azo-calc-form">
-          <div class="azo-field">
-            <label for="azo-c-fsh">FSH (UI/L)</label>
-            <input type="number" id="azo-c-fsh" min="1" max="60" placeholder="ex : 18" />
-          </div>
-          <div class="azo-field">
-            <label for="azo-c-vol">Volume testiculaire (ml, plus petit testicule)</label>
-            <input type="number" id="azo-c-vol" min="1" max="25" placeholder="ex : 6" />
-          </div>
-          <div class="azo-field">
-            <label for="azo-c-histo">Histologie / étiologie présumée</label>
-            <select id="azo-c-histo">
-              <option value="">-- Sélectionner --</option>
-              <option value="hypo">Hypospermatogenèse</option>
-              <option value="arrest">Arrêt de maturation</option>
-              <option value="scos">SCOS (cellules de Sertoli seules)</option>
-              <option value="kline">Syndrome de Klinefelter</option>
-              <option value="azfc">Microdélétion AZFc</option>
-              <option value="azfab">Microdélétion AZFa/b complète</option>
-            </select>
-          </div>
-          <div class="azo-field">
-            <label for="azo-c-age">Âge du patient (ans)</label>
-            <input type="number" id="azo-c-age" min="18" max="70" placeholder="ex : 32" />
-          </div>
-          <button class="azo-calc-btn" onclick="azoCalc()">Calculer le score pronostique</button>
-        </div>
-        <div class="azo-calc-result" id="azo-calc-result" style="display:none">
-          <div class="azo-calc-result-pct" id="azo-calc-pct"></div>
-          <div class="azo-calc-result-label" id="azo-calc-label"></div>
-        </div>
-        <div class="azo-note">Ce score est indicatif. La décision de TESE doit être prise en RCP d'AMP après bilan complet. Données issues de méta-analyses (Esteves et al., Human Reproduction Update, 2022).</div>
-      </div>
-    </div>
-
-  </div><!-- fin panel algo -->
-
-  <!-- ============================================================
-       ONGLET 2 : DÉFINITION & ÉPIDÉMIOLOGIE
-       ============================================================ -->
-  <div id="azo-panel-definition" class="azo-panel">
-
-    <div class="azo-section">
-      <div class="azo-section-title">Définition</div>
-      <div class="azo-section-body azo-text-sm">
-        <p>L'<strong>azoospermie</strong> est définie par l'absence totale de spermatozoïdes dans le sperme éjaculé, constatée après centrifugation du liquide séminal.</p>
-        <p>Le diagnostic ne peut être retenu qu'après <strong>deux spermogrammes réalisés à 3 mois d'intervalle</strong>, avec examen du culot de centrifugation (direct + coloration).</p>
-        <div class="azo-note">Selon les normes OMS 2021 : toute concentration de spermatozoïdes inférieure au seuil de détection après centrifugation constitue une azoospermie.</div>
-        <p><strong>Deux grandes catégories :</strong></p>
-        <ul>
-          <li><strong>Excrétoire (obstructive) :</strong> spermatogenèse conservée, obstacle sur les voies excrétritrices.</li>
-          <li><strong>Sécrétoire (non obstructive) :</strong> défaut de production testiculaire, d'origine testiculaire (&#171;basse&#187;) ou hypothalamo-hypophysaire (&#171;haute&#187;).</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Épidémiologie</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead><tr><th>Donnée</th><th>Valeur</th></tr></thead>
-            <tbody>
-              <tr><td>Prévalence dans la population masculine générale</td><td>~&#160;1&#160;%</td></tr>
-              <tr><td>Prévalence chez les hommes consultant pour infertilité</td><td>10&#160;–&#160;15&#160;%</td></tr>
-              <tr><td>Part de l'infertilité masculine dans les causes d'infertilité du couple</td><td>~&#160;25&#160;%</td></tr>
-              <tr><td>Causes mixtes (féminine + masculine)</td><td>~&#160;35&#160;%</td></tr>
-              <tr><td>Proportion azoospermie excrétoire vs sécrétoire</td><td>~&#160;40&#160;% vs&#160;60&#160;%</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Physiopathologie &#8212; Rappel de la spermatogenèse</div>
-      <div class="azo-section-body azo-text-sm">
-        <p>La <strong>spermatogenèse</strong> dure environ <strong>74 jours</strong> et se déroule dans les tubes séminifères. Les spermatozoïdes sont ensuite véhiculés vers l'épididyme (maturation), puis le canal déférent, avant de rejoindre le sperme lors de l'éjaculation.</p>
-        <p>Elle est régulée par l'<strong>axe hypothalamo-hypophyso-testiculaire</strong> :</p>
-        <ul>
-          <li><strong>LH</strong> &#8594; stimule les cellules de Leydig &#8594; testostérone</li>
-          <li><strong>FSH</strong> &#8594; stimule les cellules de Sertoli &#8594; spermatogenèse + Inhibine B</li>
-          <li><strong>Inhibine B</strong> &#8594; rétrocontrôle négatif de la FSH</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ============================================================
-       ONGLET 3 : BILAN
-       ============================================================ -->
-  <div id="azo-panel-bilan" class="azo-panel">
-
-    <div class="azo-section">
-      <div class="azo-section-title">Interrogatoire et examen clinique</div>
-      <div class="azo-section-body azo-text-sm">
-        <p><strong>Éléments clés à l'interrogatoire :</strong></p>
-        <ul>
-          <li>Cryptorchidie (uni- ou bilatérale), âge de traitement</li>
-          <li>Chirurgie inguino-scrotale (hernie, varicocèle, vasectomie)</li>
-          <li>Traumatisme testiculaire ou torsion</li>
-          <li>Traitement anticancéreux (radiothérapie, chimiothérapie)</li>
-          <li>IST (gonocoque, Chlamydia) — orchite ourlienne</li>
-          <li>Prise de testostérone exogène ou anabolisants <strong>+++</strong></li>
-          <li>Antécédents familiaux (mucoviscidose, Klinefelter)</li>
-        </ul>
-        <p><strong>Examen physique :</strong> Volume testiculaire (orchidométrie de Prader), palpation des épididymes et déférents, varicocèle, gynécomastie, morphotype.</p>
-        <div class="azo-note">Deux testicules de volume normal avec épididymes tendus &#8594; orienter vers l'excrétoire. Testicules atrophiques avec épididymes et déférents normaux &#8594; orienter vers le sécrétoire.</div>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Bilan hormonal &#8212; Interprétation synthétique</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead><tr><th>Dosage</th><th>Résultat</th><th>Orientation</th></tr></thead>
-            <tbody>
-              <tr><td><strong>FSH</strong></td><td><span class="azo-pill azo-pill-red">Élevée</span></td><td>Insuffisance sécrétoire testiculaire</td></tr>
-              <tr><td><strong>FSH</strong></td><td><span class="azo-pill azo-pill-teal">Normale / basse</span></td><td>Excrétoire ou hypogonadisme central</td></tr>
-              <tr><td><strong>LH</strong></td><td><span class="azo-pill azo-pill-red">Élevée</span></td><td>Insuffisance gonadique primitive</td></tr>
-              <tr><td><strong>LH</strong></td><td><span class="azo-pill azo-pill-teal">Basse</span></td><td>Hypogonadisme hypogonadotrope</td></tr>
-              <tr><td><strong>Testostérone totale</strong></td><td><span class="azo-pill azo-pill-teal">Basse + LH basse</span></td><td>Hypogonadisme central (origine HH)</td></tr>
-              <tr><td><strong>Inhibine B</strong></td><td><span class="azo-pill azo-pill-red">Basse</span></td><td>Déficit sécrétoire testiculaire</td></tr>
-              <tr><td><strong>Prolactine</strong></td><td><span class="azo-pill azo-pill-amber">Élevée</span></td><td>Hyperprolactinémie &#8594; IRM HH</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Biochimie séminale &#8212; Localisation de l'obstacle</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead><tr><th>Marqueur</th><th>Source</th><th>Si abaissé</th></tr></thead>
-            <tbody>
-              <tr><td>Fructose</td><td>Vésicules séminales</td><td>Obstacle post-vésicule ou agénésie déférentielle</td></tr>
-              <tr><td>Zinc, Acide citrique, Phosphatases acides</td><td>Prostate</td><td>Obstacle prostatique ou agénésie</td></tr>
-              <tr><td>L-Carnitine, Alpha-glucosidase</td><td>Épididyme</td><td>Obstacle épididymaire</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Bilan génétique</div>
-      <div class="azo-section-body azo-text-sm">
-        <ul>
-          <li><strong>Caryotype :</strong> syndrome de Klinefelter (47,XXY) et anomalies gonosomales</li>
-          <li><strong>Microdélétions AZF (chr. Y) :</strong>
-            <ul>
-              <li>AZFa : SCOS total &#8594; TESE contre-indiquée</li>
-              <li>AZFb : arrêt de maturation &#8594; TESE peu efficace</li>
-              <li>AZFc : oligospermie sévère ou azoospermie &#8594; TESE ~50 % de succès</li>
-            </ul>
-          </li>
-          <li><strong>Mutation CFTR :</strong> si agénésie bilatérale des canaux déférents &#8594; conseil génétique obligatoire</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Imagerie</div>
-      <div class="azo-section-body azo-text-sm">
-        <ul>
-          <li><strong>Échographie-Doppler scrotal :</strong> volume testiculaire, varicocèle, anomalies épididymaires</li>
-          <li><strong>Échographie endorectale :</strong> si volume éjaculatoire très bas — kyste müllérien, obstacle éjaculatoire</li>
-          <li><strong>IRM hypophysaire :</strong> si hypogonadisme central confirmé</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ============================================================
-       ONGLET 4 : ÉTIOLOGIES
-       ============================================================ -->
-  <div id="azo-panel-etiologies" class="azo-panel">
-
-    <div class="azo-section">
-      <div class="azo-section-title">Azoospermie excrétoire &#8212; Étiologies</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead><tr><th>Cause</th><th>Mécanisme</th><th>Marqueur clé</th></tr></thead>
-            <tbody>
-              <tr><td>Agénésie bilat. des canaux déférents (CBAVD)</td><td>Absence congénitale, associée CFTR</td><td>Fructose absent ou bas</td></tr>
-              <tr><td>Obstruction épididymaire</td><td>Post-infectieuse (IST), post-chirurgicale</td><td>Alpha-glucosidase basse</td></tr>
-              <tr><td>Vasectomie</td><td>Section volontaire des déférents</td><td>Antécédent</td></tr>
-              <tr><td>Obstacle éjaculatoire</td><td>Kyste préspermatique, prostite</td><td>Volume éjaculatoire très bas</td></tr>
-              <tr><td>Varicocèle bilatérale sévère</td><td>Rarement cause d'azoospermie vraie</td><td>Écho-Doppler</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Azoospermie sécrétoire testiculaire (&#171;basse&#187;) &#8212; Étiologies</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead><tr><th>Cause</th><th>Remarques</th></tr></thead>
-            <tbody>
-              <tr><td>Syndrome de Klinefelter (47,XXY)</td><td>Cause la plus fréquente ; gynécomastie, caryotype</td></tr>
-              <tr><td>Microdélétions AZF (chr. Y)</td><td>AZFc : TESE possible ; AZFa/b : pronostic très réservé</td></tr>
-              <tr><td>Cryptorchidie bilatérale non corrigée</td><td>Risque d'atrophie + tumeur testiculaire</td></tr>
-              <tr><td>Séquelles de torsion / traumatisme</td><td>Atrophie testiculaire secondaire</td></tr>
-              <tr><td>Orchite ourlienne bilatérale</td><td>Post-orchite à virus ourlien après la puberté</td></tr>
-              <tr><td>Chimiothérapie / radiothérapie</td><td>Altération des cellules souches spermatogoniales</td></tr>
-              <tr><td>SCOS (cellules de Sertoli seules)</td><td>Absence totale de cellules germinales ; biopsie</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Hypogonadisme hypogonadotrope (&#171;haute&#187;) &#8212; Étiologies</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead><tr><th>Cause</th><th>Remarques</th></tr></thead>
-            <tbody>
-              <tr><td>Syndrome de Kallmann-de Morsier</td><td>Déficit GnRH congénital + anosmie</td></tr>
-              <tr><td>Hyperprolactinémie</td><td>Adénome à PRL +++ ; IRM systématique</td></tr>
-              <tr><td>Prise de testostérone exogène / anabolisants</td><td>Cause fréquente et réversible à l'arrêt</td></tr>
-              <tr><td>Tumeur ou pathologie HH</td><td>Craniopharyngiome, adénome non fonctionnel</td></tr>
-              <tr><td>Hémochromatose</td><td>Dépôts de fer hypophysaires ; ferritinémie élevée</td></tr>
-              <tr><td>Obésité morbide</td><td>Conversion androgènes &#8594; œstrogènes (aromatase)</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ============================================================
-       ONGLET 5 : PRISE EN CHARGE
-       ============================================================ -->
-  <div id="azo-panel-pec" class="azo-panel">
-
-    <div class="azo-section">
-      <div class="azo-section-title">Stratégie générale</div>
-      <div class="azo-section-body azo-text-sm">
-        <p>La prise en charge est <strong>multidisciplinaire</strong> (andrologue, urologue, généticien, biologiste AMP) et doit être validée en <strong>RCP d'AMP</strong> avant toute décision.</p>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Azoospermie excrétoire &#8212; PEC</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead><tr><th>Situation</th><th>1ère intention</th><th>Si échec / non éligible</th></tr></thead>
-            <tbody>
-              <tr><td>Obstruction épididymaire réparable</td><td>Anastomose épididymo-déférentielle (délai &lt;10 ans)</td><td>PESA + ICSI</td></tr>
-              <tr><td>Obstruction non réparable / CBAVD</td><td>PESA (aspiration percutanée)</td><td>ICSI avec spz épididymaires</td></tr>
-              <tr><td>Vasectomie</td><td>Reperméabilisation si délai &lt;10 ans</td><td>TESE + ICSI</td></tr>
-              <tr><td>Obstacle éjaculatoire</td><td>Traitement chir. + électroéjaculation</td><td>TESE + ICSI</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Azoospermie sécrétoire testiculaire &#8212; PEC</div>
-      <div class="azo-section-body azo-text-sm">
-        <ul>
-          <li><strong>TESE conventionnelle :</strong> biopsie(s) testiculaire(s) &#8594; récupération de spermatozoïdes pour ICSI</li>
-          <li><strong>Micro-TESE :</strong> dissection microchirurgicale sous microscope &#8212; réservée aux TESE conventionnelles infructueuses</li>
-          <li><strong>Congélation de tissu testiculaire :</strong> avant chimiothérapie / radiothérapie (préservation de fertilité)</li>
-          <li><strong>Klinefelter :</strong> micro-TESE réussie dans ~50 % avant 35 ans</li>
-          <li><strong>AZFc :</strong> TESE possible — conseil génétique préalable (transmission mutation aux fils)</li>
-          <li><strong>AZFa/b complètes :</strong> TESE contre-indiquée &#8594; orienter vers don de sperme (IAD)</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Hypogonadisme hypogonadotrope &#8212; PEC médicale</div>
-      <div class="azo-section-body azo-text-sm">
-        <p>Seule forme d'azoospermie sécrétoire avec un <strong>traitement médical efficace</strong> :</p>
-        <ul>
-          <li><strong>hCG (Pregnyl® / Ovitrelle®) :</strong> 1 500 à 5 000 UI SC × 3/sem pendant 6 mois &#8594; restauration testostérone</li>
-          <li><strong>+ FSH recombinante ou ménotropines</strong> si absence de spermatozoïdes à 6 mois</li>
-          <li>Durée totale : 12 à 24 mois selon réponse</li>
-          <li>Arrêt des anabolisants = condition préalable indispensable</li>
-          <li>Hyperprolactinémie : cabergoline en 1ère ligne</li>
-          <li>Pronostic favorable si volume testiculaire initial &gt;4 ml</li>
-        </ul>
-        <div class="azo-note">Ne pas prescrire de testostérone exogène chez un homme désirant une paternité : la testostérone exogène supprime la spermatogenèse par rétrocontrôle négatif sur l'axe HH.</div>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Synthèse thérapeutique</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead>
-              <tr><th>Type</th><th>1ère intention</th><th>Si échec</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="azo-pill azo-pill-teal">Excrétoire</span></td>
-                <td>Chirurgie de l'obstacle / PESA</td>
-                <td>ICSI avec spermatozoïdes récupérés</td>
-              </tr>
-              <tr>
-                <td><span class="azo-pill azo-pill-amber">Sécrétoire testiculaire</span></td>
-                <td>TESE / micro-TESE + ICSI</td>
-                <td>Don de sperme (IAD)</td>
-              </tr>
-              <tr>
-                <td><span class="azo-pill azo-pill-blue">HH (centrale)</span></td>
-                <td>Gonadotrophines (hCG ± FSH)</td>
-                <td>TESE si réponse partielle, puis IAD</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ============================================================
-       ONGLET 6 : CAS CLINIQUES
-       ============================================================ -->
-  <div id="azo-panel-cas" class="azo-panel">
-
-    <div class="azo-section">
-      <div class="azo-section-title">Vignettes cliniques interactives</div>
-      <div class="azo-section-body">
-        <div class="azo-cc-nav">
-          <button class="azo-cc-nav-btn active" onclick="azoCcNav(this,0)">Cas n&#176;1</button>
-          <button class="azo-cc-nav-btn" onclick="azoCcNav(this,1)">Cas n&#176;2</button>
-          <button class="azo-cc-nav-btn" onclick="azoCcNav(this,2)">Cas n&#176;3</button>
-        </div>
-
-        <!-- CAS 1 -->
-        <!-- CORRECTION 8 : ajout data-correct="true/false" sur chaque option
-             pour remplacer la détection fragile via onclick.toString() -->
-        <div class="azo-cc-case" id="azo-cc-0">
-          <div class="azo-cc-vignette">
-            <strong>Patient :</strong> Homme de 32 ans, consulte pour infertilité primaire depuis 18 mois. Examen physique : testicules de volume normal (18 ml bilatéraux), épididymes légèrement tendus, déférents palpables. Pas d'antécédent chirurgical. Spermogramme &#215;2 : azoospermie confirmée après centrifugation.<br><br>
-            <strong>Bilan :</strong> FSH = 4,2 UI/L (normale), LH = 3,1 UI/L (normale), testostérone = 14 nmol/L (normale), Inhibine B = 180 pg/mL (normale). Biochimie séminale : fructose = 0,8 µmol/éjaculat (bas, N&gt;13), alpha-glucosidase = 2,4 mUI/éjaculat (basse).
-          </div>
-          <div class="azo-cc-q">Quelle est l'orientation diagnostique la plus probable ?</div>
-          <div class="azo-cc-options" id="azo-cc-opts-0">
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,0)">Azoospermie sécrétoire testiculaire</button>
-            <button class="azo-cc-opt" data-correct="true"  onclick="azoCcAnswer(this,0)">Azoospermie excrétoire par obstacle épididymaire et déférentiel</button>
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,0)">Hypogonadisme hypogonadotrope</button>
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,0)">Agénésie bilatérale des canaux déférents (CBAVD)</button>
-          </div>
-          <div class="azo-cc-explanation" id="azo-cc-exp-0" style="display:none">
-            <strong>Bonne réponse : Azoospermie excrétoire par obstacle épididymaire et déférentiel.</strong>
-            <ul>
-              <li>FSH et Inhibine B normales &#8594; spermatogenèse conservée &#8594; élimine l'origine sécrétoire</li>
-              <li>Fructose bas &#8594; obstacle au niveau ou en amont des vésicules séminales</li>
-              <li>Alpha-glucosidase basse &#8594; obstacle épididymaire associé</li>
-              <li>Épididymes tendus à l'examen &#8594; concordant avec une obstruction</li>
-              <li>Prochaine étape : exploration chirurgicale ± PESA + ICSI</li>
-            </ul>
-          </div>
-          <button class="azo-cc-next" id="azo-cc-next-0" style="display:none" onclick="azoCcNav(document.querySelectorAll('#azo-tool .azo-cc-nav-btn')[1], 1)">Cas suivant &#8594;</button>
-        </div>
-
-        <!-- CAS 2 -->
-        <div class="azo-cc-case" id="azo-cc-1">
-          <div class="azo-cc-vignette">
-            <strong>Patient :</strong> Homme de 28 ans, consulte pour infertilité avec sa partenaire. Grand, morphotype eunuchoïde, discrète gynécomastie. Testicules de petit volume (5 ml bilatéraux), épididymes et déférents normaux.<br><br>
-            <strong>Bilan :</strong> FSH = 38 UI/L (très élevée), LH = 22 UI/L (élevée), testostérone = 6,2 nmol/L (basse), Inhibine B = 12 pg/mL (effondrée). Spermogramme &#215;2 : azoospermie confirmée.
-          </div>
-          <div class="azo-cc-q">Quel est le diagnostic le plus probable et quelle exploration est indispensable en première intention ?</div>
-          <div class="azo-cc-options" id="azo-cc-opts-1">
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,1)">Hypogonadisme hypogonadotrope — IRM hypophysaire</button>
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,1)">Azoospermie excrétoire — Échographie endorectale</button>
-            <button class="azo-cc-opt" data-correct="true"  onclick="azoCcAnswer(this,1)">Syndrome de Klinefelter — Caryotype</button>
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,1)">Microdélétion AZFc — Recherche microdélétions Y</button>
-          </div>
-          <div class="azo-cc-explanation" id="azo-cc-exp-1" style="display:none">
-            <strong>Bonne réponse : Syndrome de Klinefelter (47,XXY) — Caryotype indispensable.</strong>
-            <ul>
-              <li>Petit volume testiculaire bilatéral + gynécomastie + morphotype eunuchoïde &#8594; tableau évocateur</li>
-              <li>FSH très élevée + Inhibine B effondrée &#8594; insuffisance sécrétoire testiculaire sévère</li>
-              <li>Testostérone basse avec LH élevée &#8594; hypogonadisme hypergonadotrope primitif</li>
-              <li>Diagnostic de certitude : caryotype (47,XXY)</li>
-              <li>PEC : micro-TESE + ICSI possible dans ~50 % des cas avant 35 ans</li>
-            </ul>
-          </div>
-          <button class="azo-cc-next" id="azo-cc-next-1" style="display:none" onclick="azoCcNav(document.querySelectorAll('#azo-tool .azo-cc-nav-btn')[2], 2)">Cas suivant &#8594;</button>
-        </div>
-
-        <!-- CAS 3 -->
-        <div class="azo-cc-case" id="azo-cc-2">
-          <div class="azo-cc-vignette">
-            <strong>Patient :</strong> Homme de 26 ans, infertilité depuis 2 ans. Pratique de musculation intensive avec prise d'anabolisants depuis 4 ans (testostérone injectable + stanozolol). Examen : testicules petits (8 ml), souples, épididymes normaux.<br><br>
-            <strong>Bilan :</strong> FSH = 0,2 UI/L (effondrée), LH = 0,1 UI/L (effondrée), testostérone = 32 nmol/L (élevée car exogène), Inhibine B = 28 pg/mL (très basse). Spermogramme &#215;2 : azoospermie.
-          </div>
-          <div class="azo-cc-q">Quelle est la conduite à tenir en première intention ?</div>
-          <div class="azo-cc-options" id="azo-cc-opts-2">
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,2)">IRM hypophysaire en urgence + bilan d'adénome</button>
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,2)">Initier immédiatement un traitement par hCG + FSH</button>
-            <button class="azo-cc-opt" data-correct="true"  onclick="azoCcAnswer(this,2)">Arrêt des anabolisants + réévaluation à 6 mois avant toute décision</button>
-            <button class="azo-cc-opt" data-correct="false" onclick="azoCcAnswer(this,2)">TESE d'emblée avant toute autre exploration</button>
-          </div>
-          <div class="azo-cc-explanation" id="azo-cc-exp-2" style="display:none">
-            <strong>Bonne réponse : Arrêt des anabolisants + réévaluation à 6 mois.</strong>
-            <ul>
-              <li>FSH et LH effondrées &#8594; frein de l'axe HH par testostérone exogène (rétrocontrôle négatif)</li>
-              <li>La spermatogenèse est supprimée par excès d'androgènes exogènes, non par une pathologie intrinsèque</li>
-              <li>Arrêt des anabolisants &#8594; restauration de l'axe dans 6 à 18 mois dans la majorité des cas</li>
-              <li>Si non-reprise après 12-18 mois : induction par gonadotrophines (hCG + FSH)</li>
-              <li>Ne jamais initier de traitement par testostérone substitutive chez un homme désirant une paternité</li>
-            </ul>
-          </div>
-          <button class="azo-cc-next" id="azo-cc-next-2" style="display:none" onclick="azoReset(); azoTab(document.querySelector('#azo-tool .azo-tab-btn'), 'algo')">&#8635; Retour à l'algorithme</button>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ============================================================
-       ONGLET 7 : RÉFÉRENCES
-       ============================================================ -->
-  <div id="azo-panel-refs" class="azo-panel">
-
-    <div class="azo-section">
-      <div class="azo-section-title">Recommandations et guidelines</div>
-      <div class="azo-section-body">
-        <ul class="azo-ref-list">
-          <li>
-            <span class="azo-ref-year">2023</span>
-            <span class="azo-ref-title">ESHRE &#8212; Male Infertility Guidelines</span><br>
-            <span class="azo-ref-source">European Society of Human Reproduction and Embryology. Guideline on the diagnosis and treatment of male infertility. Hum Reprod Open. 2023.</span>
-          </li>
-          <li>
-            <span class="azo-ref-year">2021</span>
-            <span class="azo-ref-title">OMS &#8212; WHO Laboratory Manual for the Examination and Processing of Human Semen, 6th edition</span><br>
-            <span class="azo-ref-source">World Health Organization. Geneva: WHO Press, 2021. Nouvelles valeurs de référence pour l'analyse du sperme.</span>
-          </li>
-          <li>
-            <span class="azo-ref-year">2022</span>
-            <span class="azo-ref-title">Esteves SC et al. &#8212; Testicular sperm extraction outcomes in men with nonobstructive azoospermia</span><br>
-            <span class="azo-ref-source">Esteves SC, Sánchez-Martín F, Sánchez-Martín P, Schneider DT, Gosálvez J. Human Reproduction Update, 2022. Méta-analyse sur les facteurs prédictifs de la TESE.</span>
-          </li>
-          <li>
-            <span class="azo-ref-year">2014</span>
-            <span class="azo-ref-title">Schlegel PN &#8212; Microdissection TESE</span><br>
-            <span class="azo-ref-source">Schlegel PN. Micro-TESE: state of the art. Asian J Androl. 2014. Référence pour la technique de micro-TESE et ses indications.</span>
-          </li>
-          <li>
-            <span class="azo-ref-year">2021</span>
-            <span class="azo-ref-title">EAU Guidelines &#8212; Male Infertility</span><br>
-            <span class="azo-ref-source">European Association of Urology. Guidelines on Male Infertility. EAU Annual Congress 2021. Bilan et PEC de l'azoospermie.</span>
-          </li>
-          <li>
-            <span class="azo-ref-year">2020</span>
-            <span class="azo-ref-title">CNGOF &#8212; Recommandations infertilité masculine</span><br>
-            <span class="azo-ref-source">Collège National des Gynécologues et Obstétriciens Français. Recommandations pour la prise en charge de l'infertilité masculine dans le cadre de l'AMP. 2020.</span>
-          </li>
-          <li>
-            <span class="azo-ref-year">2019</span>
-            <span class="azo-ref-title">Krausz C, Riera-Escamilla A &#8212; Genetics of male infertility</span><br>
-            <span class="azo-ref-source">Krausz C, Riera-Escamilla A. Nature Reviews Urology. 2019. Microdélétions AZF, CFTR et génétique de l'azoospermie.</span>
-          </li>
-          <li>
-            <span class="azo-ref-year">2016</span>
-            <span class="azo-ref-title">Tournaye H et al. &#8212; Novel concepts in the aetiology of male reproductive impairment</span><br>
-            <span class="azo-ref-source">Tournaye H, Krausz C, Oates RD. Lancet Diabetes Endocrinol. 2017. Physiopathologie et classification des azoospermies.</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="azo-section">
-      <div class="azo-section-title">Abréviations</div>
-      <div class="azo-section-body">
-        <div class="azo-table-wrap">
-          <table class="azo-table">
-            <thead><tr><th>Sigle</th><th>Définition</th></tr></thead>
-            <tbody>
-              <tr><td>AMP</td><td>Assistance Médicale à la Procréation</td></tr>
-              <tr><td>AZF</td><td>Azoospermia Factor (régions du chromosome Y)</td></tr>
-              <tr><td>CBAVD</td><td>Congenital Bilateral Absence of the Vas Deferens</td></tr>
-              <tr><td>CFTR</td><td>Cystic Fibrosis Transmembrane conductance Regulator</td></tr>
-              <tr><td>HH</td><td>Hypothalamo-Hypophysaire</td></tr>
-              <tr><td>IAD</td><td>Insémination Avec Donneur</td></tr>
-              <tr><td>ICSI</td><td>Intra Cytoplasmic Sperm Injection</td></tr>
-              <tr><td>PESA</td><td>Percutaneous Epididymal Sperm Aspiration</td></tr>
-              <tr><td>RCP</td><td>Réunion de Concertation Pluridisciplinaire</td></tr>
-              <tr><td>SCOS</td><td>Syndrome des Cellules de Sertoli seules (Sertoli Cell Only Syndrome)</td></tr>
-              <tr><td>TESE</td><td>Testicular Sperm Extraction</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- DISCLAIMER -->
-  <div class="azo-disclaimer">
-    Outil d'aide à la décision à usage exclusivement professionnel. Ne se substitue pas au jugement clinique ni aux recommandations actualisées (OMS 2021, ESHRE 2023, EAU 2021, CNGOF 2020). Toute décision médicale engage la responsabilité du praticien.
-  </div>
-
-</div><!-- fin #azo-tool -->
-
-<!-- FICHE D'IMPRESSION (hors outil) -->
-<div id="azo-print-sheet">
-  <h2 id="azo-ps-title">Azoospermie &#8212; Fiche de conclusion</h2>
-  <p id="azo-ps-date"></p>
-  <div id="azo-ps-content"></div>
-  <div class="print-footer">Dr KARA-ZAITRI M.A. &#8212; Gynécologue-Obstétricien &#8212; Outil diagnostique Azoospermie &#8212; Usage professionnel uniquement</div>
-</div>
-
-<script>
-(function() {
-
-  /* ============================================================
-     DONNÉES FICHES IMPRESSION
-     ============================================================ */
-  var AZO_FICHES = {
-    'excretoire-confirme': {
-      titre: 'Azoospermie excrétoire (obstructive) — Conclusion',
-      contenu: '<h3>Diagnostic</h3><p>Azoospermie excrétoire confirmée. Spermatogenèse conservée, obstacle sur les voies excrétritrices.</p><h3>Arguments</h3><ul><li>FSH normale, volumes testiculaires normaux</li><li>Biochimie séminale anormale (fructose et/ou alpha-glucosidase bas)</li><li>Épididymes tendus à l\'examen clinique</li></ul><h3>Conduite à tenir</h3><ul><li>Exploration chirurgicale des voies séminales</li><li>Reperméabilisation si techniquement possible</li><li>Si échec : PESA + ICSI</li></ul>'
-    },
-    'cbavd': {
-      titre: 'Agénésie bilatérale des canaux déférents (CBAVD) — Conclusion',
-      contenu: '<h3>Diagnostic</h3><p>CBAVD — agénésie congénitale des canaux déférents, associée dans ~80% des cas à une mutation CFTR.</p><h3>Conduite à tenir</h3><ul><li>Mutation CFTR chez le patient ET la partenaire — conseil génétique obligatoire</li><li>PESA + ICSI si spermatogenèse conservée</li><li>Pas de reconstruction chirurgicale possible</li></ul>'
-    },
-    'post-infectieux': {
-      titre: 'Azoospermie excrétoire post-infectieuse / post-chirurgicale — Conclusion',
-      contenu: '<h3>Diagnostic</h3><p>Obstruction des voies séminales sur séquelles infectieuses ou chirurgicales.</p><h3>Conduite à tenir</h3><ul><li>Échographie-Doppler scrotal</li><li>Reperméabilisation si délai &lt;10 ans et obstruction accessible</li><li>ICSI avec spermatozoïdes récupérés si reconstruction impossible</li></ul>'
-    },
-    'secretoire-testiculaire': {
-      titre: 'Azoospermie sécrétoire testiculaire — Conclusion',
-      contenu: '<h3>Diagnostic</h3><p>Azoospermie sécrétoire d\'origine testiculaire. Défaut de spermatogenèse à l\'étage testiculaire.</p><h3>Bilan complémentaire</h3><ul><li>Caryotype</li><li>Microdélétions AZF (régions AZFa, AZFb, AZFc)</li></ul><h3>Conduite à tenir</h3><ul><li>AZFc : TESE/micro-TESE + ICSI (~50% de succès)</li><li>AZFa/b complètes : orienter vers IAD</li><li>Klinefelter : micro-TESE avant 35 ans</li><li>Décision en RCP d\'AMP</li></ul>'
-    },
-    'hh-central': {
-      titre: 'Hypogonadisme hypogonadotrope — Conclusion',
-      contenu: '<h3>Diagnostic</h3><p>Hypogonadisme hypogonadotrope (origine centrale). Déficit de stimulation hypothalamo-hypophysaire.</p><h3>Bilan complémentaire</h3><ul><li>IRM hypophysaire</li><li>Bilan hypophysaire complet (PRL, cortisol, IGF-1)</li></ul><h3>Conduite à tenir</h3><ul><li>Arrêt des anabolisants si concerné</li><li>hCG 1500-5000 UI SC × 3/sem pendant 6 mois</li><li>+ FSH recombinante si pas de spz à 6 mois</li><li>Durée totale : 12-24 mois</li></ul>'
-    }
-  };
-
-  /* ============================================================
-     UTILITAIRE : forcer display via style inline
-     (méthode unique et cohérente dans tout le script)
-     ============================================================ */
-  function show(el) {
-    if (el) el.style.setProperty('display', 'block', 'important');
-  }
-  function showInline(el) {
-    if (el) el.style.setProperty('display', 'inline-block', 'important');
-  }
-  function hide(el) {
-    if (el) el.style.setProperty('display', 'none', 'important');
-  }
-  function hideAll(selector) {
-    var els = document.querySelectorAll(selector);
-    for (var i = 0; i < els.length; i++) { hide(els[i]); }
-  }
-
-  /* ============================================================
-     NAVIGATION ONGLETS
-     ============================================================ */
-  window.azoTab = function(btn, panelId) {
-    /* Désactiver tous les boutons */
-    var tabs = document.querySelectorAll('#azo-tool .azo-tab-btn');
-    for (var i = 0; i < tabs.length; i++) { tabs[i].classList.remove('active'); }
-    /* Cacher tous les panels via style inline */
-    hideAll('#azo-tool .azo-panel');
-    /* Activer le bouton cliqué */
-    btn.classList.add('active');
-    /* Afficher le panel cible */
-    var p = document.getElementById('azo-panel-' + panelId);
-    show(p);
-  };
-
-  /* ============================================================
-     ALGORITHME
-     ============================================================ */
-  var azoCrumbs = [];
-
-  window.azoGo = function(fromId, label, toId, stepNum, stepTotal) {
-    azoCrumbs.push(label);
-    azoRenderCrumb();
-    azoSetProgress(stepNum, stepTotal);
-    hideAll('#azo-tool .azo-step');
-    var t = document.getElementById('azo-' + toId);
-    show(t);
-  };
-
-  window.azoReset = function() {
-    azoCrumbs = [];
-    azoRenderCrumb();
-    azoSetProgress(1, 3);
-    hideAll('#azo-tool .azo-step');
-    show(document.getElementById('azo-s0'));
-  };
-
-  function azoSetProgress(n, total) {
-    var pct   = Math.round((n / total) * 100);
-    var fill  = document.getElementById('azo-prog-fill');
-    var label = document.getElementById('azo-prog-label');
-    if (fill)  { fill.style.setProperty('width', pct + '%', 'important'); }
-    if (label) { label.textContent = 'Étape ' + n + ' sur ' + total; }
-  }
-
-  function azoRenderCrumb() {
-    var bc = document.getElementById('azo-breadcrumb');
-    if (!bc) { return; }
-    if (azoCrumbs.length === 0) { bc.innerHTML = ''; return; }
-    var html = '';
-    for (var i = 0; i < azoCrumbs.length; i++) {
-      html += '<span style="background:#eef2f8;padding:2px 7px;border-radius:2px;color:#1a3a5c;font-size:0.73rem;font-family:\'Courier New\',monospace;display:inline-block">' + azoCrumbs[i] + '</span>';
-      if (i < azoCrumbs.length - 1) { html += '<span style="color:#d1d9e6;margin:0 4px">&#x203A;</span>'; }
-    }
-    bc.innerHTML = html;
-  }
-
-  /* ============================================================
-     CALCULATEUR TESE
-     ============================================================ */
-  window.azoCalc = function() {
-    var fsh   = parseFloat(document.getElementById('azo-c-fsh').value);
-    var vol   = parseFloat(document.getElementById('azo-c-vol').value);
-    var histo = document.getElementById('azo-c-histo').value;
-    var age   = parseFloat(document.getElementById('azo-c-age').value);
-    var el    = document.getElementById('azo-calc-result');
-
-    if (!histo || isNaN(fsh) || isNaN(vol) || isNaN(age)) {
-      el.className = 'azo-calc-result moderate';
-      show(el);
-      document.getElementById('azo-calc-pct').textContent = '?';
-      document.getElementById('azo-calc-label').textContent = 'Veuillez renseigner tous les champs.';
-      return;
-    }
-
-    var base = { hypo: 72, arrest: 45, scos: 28, kline: 50, azfc: 50, azfab: 3 };
-    var pct = base[histo] || 30;
-
-    if (fsh > 30) pct -= 12;
-    else if (fsh > 15) pct -= 6;
-    else if (fsh <= 10) pct += 5;
-
-    if (vol < 4) pct -= 10;
-    else if (vol >= 10) pct += 8;
-
-    if (age > 40) pct -= 8;
-    else if (age < 35) pct += 4;
-
-    if (histo === 'azfab') pct = Math.min(pct, 5);
-    pct = Math.max(3, Math.min(85, Math.round(pct)));
-
-    var cls, msg;
-    if (pct >= 50) {
-      cls = 'good';
-      msg = 'Probabilité favorable de récupération de spermatozoïdes. Une TESE conventionnelle est indiquée en première intention, après discussion en RCP d\'AMP et bilan génétique si non fait.';
-    } else if (pct >= 25) {
-      cls = 'moderate';
-      msg = 'Probabilité modérée. Une micro-TESE peut être préférable à la TESE conventionnelle. Décision en RCP d\'AMP. Informer le couple du risque d\'échec et de la possibilité de recours au don de sperme.';
-    } else {
-      cls = 'poor';
-      msg = 'Probabilité faible. La TESE a peu de chances d\'aboutir. Envisager d\'emblée le don de sperme (IAD) après discussion pluridisciplinaire et accompagnement du couple.';
-    }
-
-    el.className = 'azo-calc-result ' + cls;
-    show(el);
-    document.getElementById('azo-calc-pct').textContent = pct + ' %';
-    document.getElementById('azo-calc-label').textContent = msg;
-  };
-
-  /* ============================================================
-     CAS CLINIQUES
-     CORRECTION : azoCcAnswer() utilise data-correct au lieu de
-     onclick.toString() pour identifier la bonne réponse
-     ============================================================ */
-  window.azoCcNav = function(btn, idx) {
-    var navBtns = document.querySelectorAll('#azo-tool .azo-cc-nav-btn');
-    var cases   = document.querySelectorAll('#azo-tool .azo-cc-case');
-    for (var i = 0; i < navBtns.length; i++) { navBtns[i].classList.remove('active'); }
-    hideAll('#azo-tool .azo-cc-case');
-    btn.classList.add('active');
-    show(document.getElementById('azo-cc-' + idx));
-  };
-
-  window.azoCcAnswer = function(btn, caseIdx) {
-    var correct = btn.getAttribute('data-correct') === 'true';
-    var opts = document.querySelectorAll('#azo-cc-opts-' + caseIdx + ' .azo-cc-opt');
-
-    for (var i = 0; i < opts.length; i++) {
-      opts[i].disabled = true;
-      opts[i].style.setProperty('cursor', 'default', 'important');
-      /* Révéler la bonne réponse dans tous les cas */
-      if (opts[i].getAttribute('data-correct') === 'true') {
-        opts[i].classList.add('correct');
-      }
-    }
-    /* Marquer la réponse choisie si fausse */
-    if (!correct) {
-      btn.classList.add('wrong');
-    }
-
-    var exp  = document.getElementById('azo-cc-exp-' + caseIdx);
-    var next = document.getElementById('azo-cc-next-' + caseIdx);
-    show(exp);
-    showInline(next);
-  };
-
-  /* ============================================================
-     IMPRESSION
-     ============================================================ */
-  window.azoPrint = function(ficheKey) {
-    var fiche = AZO_FICHES[ficheKey];
-    if (!fiche) { window.print(); return; }
-    var now     = new Date();
-    var dateStr = now.toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
-    document.getElementById('azo-ps-title').textContent  = fiche.titre;
-    document.getElementById('azo-ps-date').textContent   = 'Généré le ' + dateStr;
-    document.getElementById('azo-ps-content').innerHTML  = fiche.contenu;
-    window.print();
-  };
-
-  /* ============================================================
-     INITIALISATION
-     Tout est géré par style inline — aucune dépendance aux
-     classes CSS pour les états display.
-     ============================================================ */
-  function azoInit() {
-    /* Cacher tous les panels sauf algo */
-    hideAll('#azo-tool .azo-panel');
-    show(document.getElementById('azo-panel-algo'));
-
-    /* Cacher toutes les étapes sauf s0 */
-    hideAll('#azo-tool .azo-step');
-    show(document.getElementById('azo-s0'));
-
-    /* Cacher tous les cas cliniques sauf le premier */
-    hideAll('#azo-tool .azo-cc-case');
-    show(document.getElementById('azo-cc-0'));
-  }
-
-  /* Lancement robuste : DOMContentLoaded ou immédiat si DOM déjà prêt */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', azoInit);
-  } else {
-    azoInit();
-  }
-
-})();
-</script>
-</body>
-</html>
+]
