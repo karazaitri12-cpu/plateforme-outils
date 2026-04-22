@@ -803,6 +803,8 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 
 </style>
 
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </head>
 <body>
 
@@ -816,16 +818,16 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   </div>
 
   <!-- ONGLETS -->
-<div class="azo-tabs" role="tablist">
-  <button class="azo-tab-btn active" onclick="azoTab(this,'algo')" role="tab">Algorithme</button>
-  <button class="azo-tab-btn" onclick="azoTab(this,'definition')" role="tab">Déf. &amp; Épid.</button>
-  <button class="azo-tab-btn" onclick="azoTab(this,'bilan')" role="tab">Bilan</button>
-  <button class="azo-tab-btn" onclick="azoTab(this,'etiologies')" role="tab">Étiologies</button>
-  <button class="azo-tab-btn" onclick="azoTab(this,'pec')" role="tab">Prise en charge</button>
-  <!-- Onglets masqués sur mobile -->
-  <button class="azo-tab-btn desktop-only" onclick="azoTab(this,'cas')" role="tab">Cas cliniques</button>
-  <button class="azo-tab-btn desktop-only" onclick="azoTab(this,'refs')" role="tab">Références</button>
-</div>
+  <div class="azo-tabs" role="tablist">
+    <button class="azo-tab-btn active" onclick="azoTab(this,'algo')" role="tab">Algorithme</button>
+    <button class="azo-tab-btn" onclick="azoTab(this,'definition')" role="tab">Déf. &amp; Épid.</button>
+    <button class="azo-tab-btn" onclick="azoTab(this,'bilan')" role="tab">Bilan</button>
+    <button class="azo-tab-btn" onclick="azoTab(this,'etiologies')" role="tab">Étiologies</button>
+    <button class="azo-tab-btn" onclick="azoTab(this,'pec')" role="tab">Prise en charge</button>
+    <!-- Onglets masqués sur mobile -->
+    <button class="azo-tab-btn desktop-only" onclick="azoTab(this,'cas')" role="tab">Cas cliniques</button>
+    <button class="azo-tab-btn desktop-only" onclick="azoTab(this,'refs')" role="tab">Références</button>
+  </div>
 
   <!-- ============================================================
        ONGLET 1 : ALGORITHME
@@ -1374,7 +1376,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   </div>
 
   <!-- ============================================================
-       ONGLET 6 : CAS CLINIQUES
+       ONGLET 6 : CAS CLINIQUES (desktop)
        ============================================================ -->
   <div id="azo-panel-cas" class="azo-panel">
 
@@ -1471,7 +1473,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   </div>
 
   <!-- ============================================================
-       ONGLET 7 : RÉFÉRENCES
+       ONGLET 7 : RÉFÉRENCES (desktop)
        ============================================================ -->
   <div id="azo-panel-refs" class="azo-panel">
 
@@ -1554,40 +1556,186 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     Outil d'aide à la décision à usage exclusivement professionnel. Ne se substitue pas au jugement clinique ni aux recommandations actualisées (OMS 2021, ESHRE 2023, EAU 2021, CNGOF 2020). Toute décision médicale engage la responsabilité du praticien.
   </div>
 
-<!-- SECTIONS MOBILES (Cas cliniques + Références) -->
-<div class="azo-mobile-sections">
-  
-  <!-- Cas cliniques mobile -->
-  <div class="azo-mobile-section" onclick="this.classList.toggle('open')">
-    <div class="azo-mobile-header">
-      <span>📚 Cas cliniques interactifs</span>
-    </div>
-    <div class="azo-mobile-content" onclick="event.stopPropagation()">
-      <!-- Copier ici TOUT le contenu de #azo-panel-cas -->
-      <div class="azo-cc-nav">
-        <button class="azo-cc-nav-btn active" onclick="azoCcNav(this,0)">Cas n°1</button>
-        <button class="azo-cc-nav-btn" onclick="azoCcNav(this,1)">Cas n°2</button>
-        <button class="azo-cc-nav-btn" onclick="azoCcNav(this,2)">Cas n°3</button>
+  <!-- ============================================================
+       SECTIONS MOBILES (Cas cliniques + Références)
+       ============================================================ -->
+  <div class="azo-mobile-sections">
+    
+    <!-- Cas cliniques mobile -->
+    <div class="azo-mobile-section" onclick="this.classList.toggle('open')">
+      <div class="azo-mobile-header">
+        <span>📚 Cas cliniques interactifs</span>
       </div>
-      <!-- ... copier tous les cas ... -->
-    </div>
-  </div>
+      <div class="azo-mobile-content" onclick="event.stopPropagation()">
+        <div class="azo-cc-nav">
+          <button class="azo-cc-nav-btn active" onclick="azoCcNav(this,0)">Cas n°1</button>
+          <button class="azo-cc-nav-btn" onclick="azoCcNav(this,1)">Cas n°2</button>
+          <button class="azo-cc-nav-btn" onclick="azoCcNav(this,2)">Cas n°3</button>
+        </div>
 
-  <!-- Références mobile -->
-  <div class="azo-mobile-section" onclick="this.classList.toggle('open')">
-    <div class="azo-mobile-header">
-      <span>📖 Références &amp; Abréviations</span>
-    </div>
-    <div class="azo-mobile-content" onclick="event.stopPropagation()">
-      <!-- Copier ici TOUT le contenu de #azo-panel-refs -->
-      <div class="azo-section">
-        <div class="azo-section-title">Recommandations et guidelines</div>
-        <!-- ... copier toutes les références ... -->
+        <!-- CAS 1 MOBILE -->
+        <div class="azo-cc-case active" id="azo-cc-0-m">
+          <div class="azo-cc-vignette">
+            <strong>Patient :</strong> Homme de 32 ans, consulte pour infertilité primaire depuis 18 mois. Examen physique : testicules de volume normal (18 ml bilatéraux), épididymes légèrement tendus, déférents palpables. Pas d'antécédent chirurgical. Spermogramme ×2 : azoospermie confirmée après centrifugation.<br><br>
+            <strong>Bilan :</strong> FSH = 4,2 UI/L (normale), LH = 3,1 UI/L (normale), testostérone = 14 nmol/L (normale), Inhibine B = 180 pg/mL (normale). Biochimie séminale : fructose = 0,8 µmol/éjaculat (bas, N>13), alpha-glucosidase = 2,4 mUI/éjaculat (basse).
+          </div>
+          <div class="azo-cc-q">Quelle est l'orientation diagnostique la plus probable ?</div>
+          <div class="azo-cc-options" id="azo-cc-opts-0-m">
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,0,false)">Azoospermie sécrétoire testiculaire</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,0,true)">Azoospermie excrétoire par obstacle épididymaire et déférentiel</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,0,false)">Hypogonadisme hypogonadotrope</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,0,false)">Agénésie bilatérale des canaux déférents (CBAVD)</button>
+          </div>
+          <div class="azo-cc-explanation" id="azo-cc-exp-0-m">
+            <strong>Bonne réponse : Azoospermie excrétoire par obstacle épididymaire et déférentiel.</strong>
+            <ul>
+              <li>FSH et Inhibine B normales → spermatogenèse conservée → élimine l'origine sécrétoire</li>
+              <li>Fructose bas → obstacle au niveau ou en amont des vésicules séminales</li>
+              <li>Alpha-glucosidase basse → obstacle épididymaire associé</li>
+              <li>Épididymes tendus à l'examen → concordant avec une obstruction</li>
+              <li>Prochaine étape : exploration chirurgicale ± PESA + ICSI</li>
+            </ul>
+          </div>
+          <button class="azo-cc-next" id="azo-cc-next-0-m" onclick="azoCcNav(document.querySelector('#azo-tool .azo-cc-nav-btn:nth-child(2)'), 1)">Cas suivant →</button>
+        </div>
+
+        <!-- CAS 2 MOBILE -->
+        <div class="azo-cc-case" id="azo-cc-1-m">
+          <div class="azo-cc-vignette">
+            <strong>Patient :</strong> Homme de 28 ans, consulte pour infertilité avec sa partenaire. Grand, morphotype eunuchoïde, discrète gynécomastie. Testicules de petit volume (5 ml bilatéraux), épididymes et déférents normaux.<br><br>
+            <strong>Bilan :</strong> FSH = 38 UI/L (très élevée), LH = 22 UI/L (élevée), testostérone = 6,2 nmol/L (basse), Inhibine B = 12 pg/mL (effondrée). Spermogramme ×2 : azoospermie confirmée.
+          </div>
+          <div class="azo-cc-q">Quel est le diagnostic le plus probable et quelle exploration est indispensable en première intention ?</div>
+          <div class="azo-cc-options" id="azo-cc-opts-1-m">
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,1,false)">Hypogonadisme hypogonadotrope — IRM hypophysaire</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,1,false)">Azoospermie excrétoire — Échographie endorectale</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,1,true)">Syndrome de Klinefelter — Caryotype</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,1,false)">Microdélétion AZFc — Recherche microdélétions Y</button>
+          </div>
+          <div class="azo-cc-explanation" id="azo-cc-exp-1-m">
+            <strong>Bonne réponse : Syndrome de Klinefelter (47,XXY) — Caryotype indispensable.</strong>
+            <ul>
+              <li>Petit volume testiculaire bilatéral + gynécomastie + morphotype eunuchoïde → tableau évocateur</li>
+              <li>FSH très élevée + Inhibine B effondrée → insuffisance sécrétoire testiculaire sévère</li>
+              <li>Testostérone basse avec LH élevée → hypogonadisme hypergonadotrope primitif</li>
+              <li>Diagnostic de certitude : caryotype (47,XXY)</li>
+              <li>PEC : micro-TESE + ICSI possible dans ~50 % des cas avant 35 ans</li>
+            </ul>
+          </div>
+          <button class="azo-cc-next" id="azo-cc-next-1-m" onclick="azoCcNav(document.querySelector('#azo-tool .azo-cc-nav-btn:nth-child(3)'), 2)">Cas suivant →</button>
+        </div>
+
+        <!-- CAS 3 MOBILE -->
+        <div class="azo-cc-case" id="azo-cc-2-m">
+          <div class="azo-cc-vignette">
+            <strong>Patient :</strong> Homme de 26 ans, infertilité depuis 2 ans. Pratique de musculation intensive avec prise d'anabolisants depuis 4 ans (testostérone injectable + stanozolol). Examen : testicules petits (8 ml), souples, épididymes normaux.<br><br>
+            <strong>Bilan :</strong> FSH = 0,2 UI/L (effondrée), LH = 0,1 UI/L (effondrée), testostérone = 32 nmol/L (élevée car exogène), Inhibine B = 28 pg/mL (très basse). Spermogramme ×2 : azoospermie.
+          </div>
+          <div class="azo-cc-q">Quelle est la conduite à tenir en première intention ?</div>
+          <div class="azo-cc-options" id="azo-cc-opts-2-m">
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,2,false)">IRM hypophysaire en urgence + bilan d'adénome</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,2,false)">Initier immédiatement un traitement par hCG + FSH</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,2,true)">Arrêt des anabolisants + réévaluation à 6 mois avant toute décision</button>
+            <button class="azo-cc-opt" onclick="azoCcAnswer(this,2,false)">TESE d'emblée avant toute autre exploration</button>
+          </div>
+          <div class="azo-cc-explanation" id="azo-cc-exp-2-m">
+            <strong>Bonne réponse : Arrêt des anabolisants + réévaluation à 6 mois.</strong>
+            <ul>
+              <li>FSH et LH effondrées → frein de l'axe HH par testostérone exogène (rétrocontrôle négatif)</li>
+              <li>La spermatogenèse est supprimée par excès d'androgènes exogènes, non par une pathologie intrinsèque</li>
+              <li>Arrêt des anabolisants → restauration de l'axe dans 6 à 18 mois dans la majorité des cas</li>
+              <li>Si non-reprise après 12-18 mois : induction par gonadotrophines (hCG + FSH)</li>
+              <li>Ne jamais initier de traitement par testostérone substitutive chez un homme désirant une paternité</li>
+            </ul>
+          </div>
+          <button class="azo-cc-next" id="azo-cc-next-2-m" onclick="azoReset(); azoTab(document.querySelector('#azo-tool .azo-tab-btn'), 'algo')">&#8635; Retour à l'algorithme</button>
+        </div>
+
       </div>
     </div>
-  </div>
 
-</div>
+    <!-- Références mobile -->
+    <div class="azo-mobile-section" onclick="this.classList.toggle('open')">
+      <div class="azo-mobile-header">
+        <span>📖 Références &amp; Abréviations</span>
+      </div>
+      <div class="azo-mobile-content" onclick="event.stopPropagation()">
+        <div class="azo-section">
+          <div class="azo-section-title">Recommandations et guidelines</div>
+          <div class="azo-section-body">
+            <ul class="azo-ref-list">
+              <li>
+                <span class="azo-ref-year">2023</span>
+                <span class="azo-ref-title">ESHRE — Male Infertility Guidelines</span><br>
+                <span class="azo-ref-source">European Society of Human Reproduction and Embryology. Guideline on the diagnosis and treatment of male infertility. Hum Reprod Open. 2023.</span>
+              </li>
+              <li>
+                <span class="azo-ref-year">2021</span>
+                <span class="azo-ref-title">OMS — WHO Laboratory Manual for the Examination and Processing of Human Semen, 6th edition</span><br>
+                <span class="azo-ref-source">World Health Organization. Geneva: WHO Press, 2021. Nouvelles valeurs de référence pour l'analyse du sperme.</span>
+              </li>
+              <li>
+                <span class="azo-ref-year">2022</span>
+                <span class="azo-ref-title">Esteves SC et al. — Testicular sperm extraction outcomes in men with nonobstructive azoospermia</span><br>
+                <span class="azo-ref-source">Esteves SC, Sánchez-Martín F, Sánchez-Martín P, Schneider DT, Gosálvez J. Human Reproduction Update, 2022. Méta-analyse sur les facteurs prédictifs de la TESE.</span>
+              </li>
+              <li>
+                <span class="azo-ref-year">2014</span>
+                <span class="azo-ref-title">Schlegel PN — Microdissection TESE</span><br>
+                <span class="azo-ref-source">Schlegel PN. Micro-TESE: state of the art. Asian J Androl. 2014. Référence pour la technique de micro-TESE et ses indications.</span>
+              </li>
+              <li>
+                <span class="azo-ref-year">2021</span>
+                <span class="azo-ref-title">EAU Guidelines — Male Infertility</span><br>
+                <span class="azo-ref-source">European Association of Urology. Guidelines on Male Infertility. EAU Annual Congress 2021. Bilan et PEC de l'azoospermie.</span>
+              </li>
+              <li>
+                <span class="azo-ref-year">2020</span>
+                <span class="azo-ref-title">CNGOF — Recommandations infertilité masculine</span><br>
+                <span class="azo-ref-source">Collège National des Gynécologues et Obstétriciens Français. Recommandations pour la prise en charge de l'infertilité masculine dans le cadre de l'AMP. 2020.</span>
+              </li>
+              <li>
+                <span class="azo-ref-year">2019</span>
+                <span class="azo-ref-title">Krausz C, Riera-Escamilla A — Genetics of male infertility</span><br>
+                <span class="azo-ref-source">Krausz C, Riera-Escamilla A. Nature Reviews Urology. 2019. Microdélétions AZF, CFTR et génétique de l'azoospermie.</span>
+              </li>
+              <li>
+                <span class="azo-ref-year">2016</span>
+                <span class="azo-ref-title">Tournaye H et al. — Novel concepts in the aetiology of male reproductive impairment</span><br>
+                <span class="azo-ref-source">Tournaye H, Krausz C, Oates RD. Lancet Diabetes Endocrinol. 2017. Physiopathologie et classification des azoospermies.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="azo-section">
+          <div class="azo-section-title">Abréviations</div>
+          <div class="azo-section-body">
+            <div class="azo-table-wrap">
+              <table class="azo-table">
+                <thead><tr><th>Sigle</th><th>Définition</th></tr></thead>
+                <tbody>
+                  <tr><td>AMP</td><td>Assistance Médicale à la Procréation</td></tr>
+                  <tr><td>AZF</td><td>Azoospermia Factor (régions du chromosome Y)</td></tr>
+                  <tr><td>CBAVD</td><td>Congenital Bilateral Absence of the Vas Deferens</td></tr>
+                  <tr><td>CFTR</td><td>Cystic Fibrosis Transmembrane conductance Regulator</td></tr>
+                  <tr><td>HH</td><td>Hypothalamo-Hypophysaire</td></tr>
+                  <tr><td>IAD</td><td>Insémination Avec Donneur</td></tr>
+                  <tr><td>ICSI</td><td>Intra Cytoplasmic Sperm Injection</td></tr>
+                  <tr><td>PESA</td><td>Percutaneous Epididymal Sperm Aspiration</td></tr>
+                  <tr><td>RCP</td><td>Réunion de Concertation Pluridisciplinaire</td></tr>
+                  <tr><td>SCOS</td><td>Syndrome des Cellules de Sertoli seules (Sertoli Cell Only Syndrome)</td></tr>
+                  <tr><td>TESE</td><td>Testicular Sperm Extraction</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
    
 </div><!-- fin #azo-tool -->
 
@@ -1752,6 +1900,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
      CAS CLINIQUES
      ============================================================ */
   window.azoCcNav = function(btn, idx) {
+    // Gérer les boutons desktop
     var navBtns = document.querySelectorAll('#azo-tool .azo-cc-nav-btn');
     var cases   = document.querySelectorAll('#azo-tool .azo-cc-case');
     for (var i = 0; i < navBtns.length; i++) { navBtns[i].classList.remove('active'); }
@@ -1759,16 +1908,25 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     btn.classList.add('active');
     var c = document.getElementById('azo-cc-' + idx);
     if (c) { c.classList.add('active'); c.style.setProperty('display','block','important'); }
+    
+    // Gérer les boutons mobile (IDs avec suffixe -m)
+    var navBtnsM = document.querySelectorAll('.azo-mobile-content .azo-cc-nav-btn');
+    var casesM   = document.querySelectorAll('.azo-mobile-content .azo-cc-case');
+    for (var i = 0; i < navBtnsM.length; i++) { navBtnsM[i].classList.remove('active'); }
+    for (var i = 0; i < casesM.length;   i++) { casesM[i].classList.remove('active'); casesM[i].style.setProperty('display','none','important'); }
+    btn.classList.add('active');
+    var cM = document.getElementById('azo-cc-' + idx + '-m');
+    if (cM) { cM.classList.add('active'); cM.style.setProperty('display','block','important'); }
   };
 
   window.azoCcAnswer = function(btn, caseIdx, correct) {
+    // Gérer desktop
     var opts = document.querySelectorAll('#azo-cc-opts-' + caseIdx + ' .azo-cc-opt');
     for (var i = 0; i < opts.length; i++) {
       opts[i].disabled = true;
       opts[i].style.setProperty('cursor','default','important');
     }
     btn.classList.add(correct ? 'correct' : 'wrong');
-    /* Afficher la bonne réponse si mauvais choix */
     if (!correct) {
       for (var i = 0; i < opts.length; i++) {
         if (opts[i].onclick && opts[i].onclick.toString().indexOf('true') !== -1) {
@@ -1780,6 +1938,25 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     var next = document.getElementById('azo-cc-next-' + caseIdx);
     if (exp)  { exp.classList.add('show');  exp.style.setProperty('display','block','important'); }
     if (next) { next.classList.add('show'); next.style.setProperty('display','inline-block','important'); }
+    
+    // Gérer mobile (suffixe -m)
+    var optsM = document.querySelectorAll('#azo-cc-opts-' + caseIdx + '-m .azo-cc-opt');
+    for (var i = 0; i < optsM.length; i++) {
+      optsM[i].disabled = true;
+      optsM[i].style.setProperty('cursor','default','important');
+    }
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    if (!correct) {
+      for (var i = 0; i < optsM.length; i++) {
+        if (optsM[i].onclick && optsM[i].onclick.toString().indexOf('true') !== -1) {
+          optsM[i].classList.add('correct');
+        }
+      }
+    }
+    var expM  = document.getElementById('azo-cc-exp-' + caseIdx + '-m');
+    var nextM = document.getElementById('azo-cc-next-' + caseIdx + '-m');
+    if (expM)  { expM.classList.add('show');  expM.style.setProperty('display','block','important'); }
+    if (nextM) { nextM.classList.add('show'); nextM.style.setProperty('display','inline-block','important'); }
   };
 
   /* ============================================================
@@ -1813,11 +1990,17 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     var s0 = document.getElementById('azo-s0');
     if (s0) { s0.style.setProperty('display','block','important'); }
 
-    /* Cases cliniques */
+    /* Cases cliniques desktop */
     var cases = document.querySelectorAll('#azo-tool .azo-cc-case');
     for (var i = 0; i < cases.length; i++) { cases[i].style.setProperty('display','none','important'); }
     var c0 = document.getElementById('azo-cc-0');
     if (c0) { c0.style.setProperty('display','block','important'); }
+    
+    /* Cases cliniques mobile */
+    var casesM = document.querySelectorAll('.azo-mobile-content .azo-cc-case');
+    for (var i = 0; i < casesM.length; i++) { casesM[i].style.setProperty('display','none','important'); }
+    var c0M = document.getElementById('azo-cc-0-m');
+    if (c0M) { c0M.style.setProperty('display','block','important'); }
   });
 
 })();
@@ -1830,9 +2013,6 @@ document.querySelectorAll('.azo-mobile-section').forEach(function(section) {
     }
   });
 });
-   
-  </script>
-  <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
-<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+</script>
 </body>
 </html>
