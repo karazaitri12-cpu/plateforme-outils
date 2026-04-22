@@ -75,27 +75,30 @@
 }
 
 /* ============================================================
-   ONGLETS
+   ONGLETS (Scrollable sur mobile)
    ============================================================ */
 #azo-tool .azo-tabs {
   display: flex !important;
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important; /* Empêche le retour à la ligne */
+  overflow-x: auto !important; /* Scroll horizontal */
+  -webkit-overflow-scrolling: touch !important;
   background: var(--azo-white) !important;
   border-bottom: 2px solid var(--azo-border) !important;
+  scrollbar-width: none !important; /* Masque scrollbar Firefox */
 }
+#azo-tool .azo-tabs::-webkit-scrollbar { display: none !important; } /* Masque scrollbar Chrome */
+
 #azo-tool .azo-tab-btn {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  padding: 10px 5px !important;
+  flex: 0 0 auto !important; /* Taille fixe, ne rétrécit pas */
+  padding: 10px 14px !important;
   background: none !important;
   border: none !important;
   border-bottom: 3px solid transparent !important;
   cursor: pointer !important;
-  font-size: 0.70rem !important;
+  font-size: 0.75rem !important;
   font-family: var(--azo-font) !important;
   color: var(--azo-muted) !important;
-  white-space: normal !important;
-  word-break: break-word !important;
+  white-space: nowrap !important; /* Texte sur une ligne */
   text-align: center !important;
   line-height: 1.3 !important;
   margin-bottom: -2px !important;
@@ -721,71 +724,6 @@ html { scrollbar-width: none; }               /* Firefox */
 body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 ::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
 
-/* =========================================
-   RESPONSIVE AVANCÉ
-   ========================================= */
-
-/* Masquer les onglets Cas cliniques et Références sur mobile */
-@media (max-width: 768px) {
-  .azo-tab-btn.desktop-only {
-    display: none !important;
-  }
-  
-  /* Afficher les sections mobiles en bas */
-  .azo-mobile-sections {
-    display: block !important;
-    margin-top: 20px !important;
-    border-top: 2px solid var(--azo-border) !important;
-    padding-top: 20px !important;
-  }
-}
-
-/* Desktop : cacher les sections mobiles */
-.azo-mobile-sections {
-  display: none !important;
-}
-
-/* Style pour les sections collapsibles mobiles */
-.azo-mobile-section {
-  margin-bottom: 16px !important;
-  border: 1px solid var(--azo-border) !important;
-  border-radius: var(--azo-radius) !important;
-  overflow: hidden !important;
-}
-
-.azo-mobile-header {
-  background: #eef2f8 !important;
-  padding: 12px 16px !important;
-  font-weight: 700 !important;
-  color: var(--azo-blue) !important;
-  cursor: pointer !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  font-size: 0.85rem !important;
-}
-
-.azo-mobile-header::after {
-  content: "\25BC" !important;
-  font-size: 0.7rem !important;
-  transition: transform 0.2s !important;
-}
-
-.azo-mobile-section.open .azo-mobile-header::after {
-  transform: rotate(180deg) !important;
-}
-
-.azo-mobile-content {
-  display: none !important;
-  padding: 16px !important;
-  background: var(--azo-white) !important;
-}
-
-.azo-mobile-section.open .azo-mobile-content {
-  display: block !important;
-}
-   
-
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -793,7 +731,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   #azo-tool .azo-header { padding: 14px 14px 12px !important; }
   #azo-tool .azo-header h1 { font-size: 1rem !important; }
   #azo-tool .azo-panel { padding: 12px 12px !important; }
-  #azo-tool .azo-tab-btn { font-size: 0.66rem !important; padding: 9px 4px !important; }
+  #azo-tool .azo-tab-btn { font-size: 0.70rem !important; padding: 8px 10px !important; }
   #azo-tool .azo-table { font-size: 0.75rem !important; }
   #azo-tool .azo-table th, #azo-tool .azo-table td { padding: 5px 7px !important; }
   #azo-tool .azo-diag-grid { grid-template-columns: 1fr !important; }
@@ -817,16 +755,15 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     <span class="azo-badge">Usage professionnel &#8212; Réservé aux praticiens</span>
   </div>
 
-  <!-- ONGLETS -->
+  <!-- ONGLETS (Tous visibles, scroll horizontal sur mobile) -->
   <div class="azo-tabs" role="tablist">
     <button class="azo-tab-btn active" onclick="azoTab(this,'algo')" role="tab">Algorithme</button>
     <button class="azo-tab-btn" onclick="azoTab(this,'definition')" role="tab">Déf. &amp; Épid.</button>
     <button class="azo-tab-btn" onclick="azoTab(this,'bilan')" role="tab">Bilan</button>
     <button class="azo-tab-btn" onclick="azoTab(this,'etiologies')" role="tab">Étiologies</button>
     <button class="azo-tab-btn" onclick="azoTab(this,'pec')" role="tab">Prise en charge</button>
-    <!-- Onglets masqués sur mobile -->
-    <button class="azo-tab-btn desktop-only" onclick="azoTab(this,'cas')" role="tab">Cas cliniques</button>
-    <button class="azo-tab-btn desktop-only" onclick="azoTab(this,'refs')" role="tab">Références</button>
+    <button class="azo-tab-btn" onclick="azoTab(this,'cas')" role="tab">Cas cliniques</button>
+    <button class="azo-tab-btn" onclick="azoTab(this,'refs')" role="tab">Références</button>
   </div>
 
   <!-- ============================================================
@@ -1376,7 +1313,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   </div>
 
   <!-- ============================================================
-       ONGLET 6 : CAS CLINIQUES (desktop)
+       ONGLET 6 : CAS CLINIQUES
        ============================================================ -->
   <div id="azo-panel-cas" class="azo-panel">
 
@@ -1473,7 +1410,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   </div>
 
   <!-- ============================================================
-       ONGLET 7 : RÉFÉRENCES (desktop)
+       ONGLET 7 : RÉFÉRENCES
        ============================================================ -->
   <div id="azo-panel-refs" class="azo-panel">
 
@@ -1556,125 +1493,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     Outil d'aide à la décision à usage exclusivement professionnel. Ne se substitue pas au jugement clinique ni aux recommandations actualisées (OMS 2021, ESHRE 2023, EAU 2021, CNGOF 2020). Toute décision médicale engage la responsabilité du praticien.
   </div>
 
-  <!-- ============================================================
-       SECTIONS MOBILES (Cas cliniques + Références)
-       ============================================================ -->
-  <div class="azo-mobile-sections">
-    
-    <!-- Cas cliniques mobile -->
-    <div class="azo-mobile-section" onclick="this.classList.toggle('open')">
-      <div class="azo-mobile-header">
-        <span>📚 Cas cliniques interactifs</span>
-      </div>
-      <div class="azo-mobile-content" onclick="event.stopPropagation()">
-        <!-- CONTENU RÉEL COPIÉ ICI -->
-        <div class="azo-cc-nav">
-          <button class="azo-cc-nav-btn active" onclick="azoCcNav(this,0)">Cas n°1</button>
-          <button class="azo-cc-nav-btn" onclick="azoCcNav(this,1)">Cas n°2</button>
-          <button class="azo-cc-nav-btn" onclick="azoCcNav(this,2)">Cas n°3</button>
-        </div>
-
-        <div class="azo-cc-case active" id="azo-cc-0-m">
-          <div class="azo-cc-vignette">
-            <strong>Patient :</strong> Homme de 32 ans, consulte pour infertilité primaire depuis 18 mois... [Voir contenu complet]</strong>
-          </div>
-          <div class="azo-cc-q">Quelle est l'orientation diagnostique la plus probable ?</div>
-          <div class="azo-cc-options" id="azo-cc-opts-0-m">
-            <button class="azo-cc-opt" onclick="azoCcAnswer(this,0,false)">Azoospermie sécrétoire testiculaire</button>
-            <button class="azo-cc-opt" onclick="azoCcAnswer(this,0,true)">Azoospermie excrétoire par obstacle épididymaire et déférentiel</button>
-            <button class="azo-cc-opt" onclick="azoCcAnswer(this,0,false)">Hypogonadisme hypogonadotrope</button>
-            <button class="azo-cc-opt" onclick="azoCcAnswer(this,0,false)">Agénésie bilatérale des canaux déférents (CBAVD)</button>
-          </div>
-          <div class="azo-cc-explanation" id="azo-cc-exp-0-m">
-            <strong>Bonne réponse : Azoospermie excrétoire par obstacle épididymaire et déférentiel.</strong>
-            <ul>
-              <li>FSH et Inhibine B normales &#8594; spermatogenèse conservée</li>
-              <li>Fructose bas &#8594; obstacle vésiculaire</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="azo-cc-case" id="azo-cc-1-m" style="display:none !important;">
-          <div class="azo-cc-vignette">
-            <strong>Patient :</strong> Homme de 28 ans... [Voir contenu complet]</strong>
-          </div>
-          <div class="azo-cc-q">Quel est le diagnostic le plus probable ?</div>
-          <div class="azo-cc-options" id="azo-cc-opts-1-m">
-            <button class="azo-cc-opt" onclick="azoCcAnswer(this,1,false)">Hypogonadisme hypogonadotrope</button>
-            <button class="azo-cc-opt" onclick="azoCcAnswer(this,1,true)">Syndrome de Klinefelter</button>
-          </div>
-          <div class="azo-cc-explanation" id="azo-cc-exp-1-m">
-             <strong>Bonne réponse : Syndrome de Klinefelter.</strong>
-          </div>
-        </div>
-
-        <div class="azo-cc-case" id="azo-cc-2-m" style="display:none !important;">
-          <div class="azo-cc-vignette">
-            <strong>Patient :</strong> Homme de 26 ans... [Voir contenu complet]</strong>
-          </div>
-          <div class="azo-cc-q">Conduite à tenir ?</div>
-          <div class="azo-cc-options" id="azo-cc-opts-2-m">
-            <button class="azo-cc-opt" onclick="azoCcAnswer(this,2,true)">Arrêt des anabolisants</button>
-          </div>
-          <div class="azo-cc-explanation" id="azo-cc-exp-2-m">
-             <strong>Bonne réponse : Arrêt des anabolisants.</strong>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Références mobile -->
-    <div class="azo-mobile-section" onclick="this.classList.toggle('open')">
-      <div class="azo-mobile-header">
-        <span>📖 Références &amp; Abréviations</span>
-      </div>
-      <div class="azo-mobile-content" onclick="event.stopPropagation()">
-        <!-- CONTENU RÉEL COPIÉ ICI -->
-        <div class="azo-section">
-          <div class="azo-section-title">Recommandations et guidelines</div>
-          <div class="azo-section-body">
-            <ul class="azo-ref-list">
-              <li>
-                <span class="azo-ref-year">2023</span>
-                <span class="azo-ref-title">ESHRE &#8212; Male Infertility Guidelines</span><br>
-                <span class="azo-ref-source">European Society of Human Reproduction and Embryology. 2023.</span>
-              </li>
-              <li>
-                <span class="azo-ref-year">2021</span>
-                <span class="azo-ref-title">OMS &#8212; WHO Laboratory Manual</span><br>
-                <span class="azo-ref-source">World Health Organization. 6th edition.</span>
-              </li>
-              <li>
-                <span class="azo-ref-year">2020</span>
-                <span class="azo-ref-title">CNGOF &#8212; Recommandations infertilité masculine</span><br>
-                <span class="azo-ref-source">Collège National des Gynécologues et Obstétriciens Français.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="azo-section">
-          <div class="azo-section-title">Abréviations</div>
-          <div class="azo-section-body">
-            <div class="azo-table-wrap">
-              <table class="azo-table">
-                <thead><tr><th>Sigle</th><th>Définition</th></tr></thead>
-                <tbody>
-                  <tr><td>AMP</td><td>Assistance Médicale à la Procréation</td></tr>
-                  <tr><td>ICSI</td><td>Intra Cytoplasmic Sperm Injection</td></tr>
-                  <tr><td>TESE</td><td>Testicular Sperm Extraction</td></tr>
-                  <tr><td>CBAVD</td><td>Congenital Bilateral Absence of the Vas Deferens</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-   
 </div><!-- fin #azo-tool -->
 
 <!-- FICHE D'IMPRESSION (hors outil) -->
@@ -1693,23 +1511,23 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
   var AZO_FICHES = {
     'excretoire-confirme': {
       titre: 'Azoospermie excrétoire (obstructive) — Conclusion',
-      contenu: '<h3>Diagnostic</h3><p>Azoospermie excrétoire confirmée.</p>'
+      contenu: '<h3>Diagnostic</h3><p>Azoospermie excrétoire confirmée. Spermatogenèse conservée, obstacle sur les voies excrétritrices.</p><h3>Arguments</h3><ul><li>FSH normale, volumes testiculaires normaux</li><li>Biochimie séminale anormale (fructose et/ou alpha-glucosidase bas)</li><li>Épididymes tendus à l\'examen clinique</li></ul><h3>Conduite à tenir</h3><ul><li>Exploration chirurgicale des voies séminales</li><li>Reperméabilisation si techniquement possible</li><li>Si échec : PESA + ICSI</li></ul>'
     },
     'cbavd': {
-      titre: 'Agénésie bilatérale des canaux déférents (CBAVD)',
-      contenu: '<h3>Diagnostic</h3><p>CBAVD.</p>'
+      titre: 'Agénésie bilatérale des canaux déférents (CBAVD) — Conclusion',
+      contenu: '<h3>Diagnostic</h3><p>CBAVD — agénésie congénitale des canaux déférents, associée dans ~80% des cas à une mutation CFTR.</p><h3>Conduite à tenir</h3><ul><li>Mutation CFTR chez le patient ET la partenaire — conseil génétique obligatoire</li><li>PESA + ICSI si spermatogenèse conservée</li><li>Pas de reconstruction chirurgicale possible</li></ul>'
     },
     'post-infectieux': {
-      titre: 'Azoospermie excrétoire post-infectieuse',
-      contenu: '<h3>Diagnostic</h3><p>Post-infectieux.</p>'
+      titre: 'Azoospermie excrétoire post-infectieuse / post-chirurgicale — Conclusion',
+      contenu: '<h3>Diagnostic</h3><p>Obstruction des voies séminales sur séquelles infectieuses ou chirurgicales.</p><h3>Conduite à tenir</h3><ul><li>Échographie-Doppler scrotal</li><li>Reperméabilisation si délai &lt;10 ans et obstruction accessible</li><li>ICSI avec spermatozoïdes récupérés si reconstruction impossible</li></ul>'
     },
     'secretoire-testiculaire': {
-      titre: 'Azoospermie sécrétoire testiculaire',
-      contenu: '<h3>Diagnostic</h3><p>Sécrétoire.</p>'
+      titre: 'Azoospermie sécrétoire testiculaire — Conclusion',
+      contenu: '<h3>Diagnostic</h3><p>Azoospermie sécrétoire d\'origine testiculaire. Défaut de spermatogenèse à l\'étage testiculaire.</p><h3>Bilan complémentaire</h3><ul><li>Caryotype</li><li>Microdélétions AZF (régions AZFa, AZFb, AZFc)</li></ul><h3>Conduite à tenir</h3><ul><li>AZFc : TESE/micro-TESE + ICSI (~50% de succès)</li><li>AZFa/b complètes : orienter vers IAD</li><li>Klinefelter : micro-TESE avant 35 ans</li><li>Décision en RCP d\'AMP</li></ul>'
     },
     'hh-central': {
-      titre: 'Hypogonadisme hypogonadotrope',
-      contenu: '<h3>Diagnostic</h3><p>HH.</p>'
+      titre: 'Hypogonadisme hypogonadotrope — Conclusion',
+      contenu: '<h3>Diagnostic</h3><p>Hypogonadisme hypogonadotrope (origine centrale). Déficit de stimulation hypothalamo-hypophysaire.</p><h3>Bilan complémentaire</h3><ul><li>IRM hypophysaire</li><li>Bilan hypophysaire complet (PRL, cortisol, IGF-1)</li></ul><h3>Conduite à tenir</h3><ul><li>Arrêt des anabolisants si concerné</li><li>hCG 1500-5000 UI SC × 3/sem pendant 6 mois</li><li>+ FSH recombinante si pas de spz à 6 mois</li><li>Durée totale : 12-24 mois</li></ul>'
     }
   };
 
@@ -1795,32 +1613,37 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
       return;
     }
 
+    /* Score de base selon histologie/étiologie */
     var base = { hypo: 72, arrest: 45, scos: 28, kline: 50, azfc: 50, azfab: 3 };
     var pct = base[histo] || 30;
 
+    /* Modulation FSH */
     if (fsh > 30) pct -= 12;
     else if (fsh > 15) pct -= 6;
     else if (fsh <= 10) pct += 5;
 
+    /* Modulation volume */
     if (vol < 4) pct -= 10;
     else if (vol >= 10) pct += 8;
 
+    /* Modulation âge */
     if (age > 40) pct -= 8;
     else if (age < 35) pct += 4;
 
+    /* Limites */
     if (histo === 'azfab') pct = Math.min(pct, 5);
     pct = Math.max(3, Math.min(85, Math.round(pct)));
 
     var cls, msg;
     if (pct >= 50) {
       cls = 'good';
-      msg = 'Probabilité favorable. TESE indiquée.';
+      msg = 'Probabilité favorable de récupération de spermatozoïdes. Une TESE conventionnelle est indiquée en première intention, après discussion en RCP d\'AMP et bilan génétique si non fait.';
     } else if (pct >= 25) {
       cls = 'moderate';
-      msg = 'Probabilité modérée. Discussion RCP.';
+      msg = 'Probabilité modérée. Une micro-TESE peut être préférable à la TESE conventionnelle. Décision en RCP d\'AMP. Informer le couple du risque d\'échec et de la possibilité de recours au don de sperme.';
     } else {
       cls = 'poor';
-      msg = 'Probabilité faible. Don de sperme envisagé.';
+      msg = 'Probabilité faible. La TESE a peu de chances d\'aboutir. Envisager d\'emblée le don de sperme (IAD) après discussion pluridisciplinaire et accompagnement du couple.';
     }
 
     el.className = 'azo-calc-result show ' + cls;
@@ -1833,7 +1656,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
      CAS CLINIQUES
      ============================================================ */
   window.azoCcNav = function(btn, idx) {
-    // Desktop
     var navBtns = document.querySelectorAll('#azo-tool .azo-cc-nav-btn');
     var cases   = document.querySelectorAll('#azo-tool .azo-cc-case');
     for (var i = 0; i < navBtns.length; i++) { navBtns[i].classList.remove('active'); }
@@ -1841,25 +1663,16 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     btn.classList.add('active');
     var c = document.getElementById('azo-cc-' + idx);
     if (c) { c.classList.add('active'); c.style.setProperty('display','block','important'); }
-    
-    // Mobile
-    var navBtnsM = document.querySelectorAll('.azo-mobile-content .azo-cc-nav-btn');
-    var casesM   = document.querySelectorAll('.azo-mobile-content .azo-cc-case');
-    for (var i = 0; i < navBtnsM.length; i++) { navBtnsM[i].classList.remove('active'); }
-    for (var i = 0; i < casesM.length;   i++) { casesM[i].classList.remove('active'); casesM[i].style.setProperty('display','none','important'); }
-    btn.classList.add('active');
-    var cM = document.getElementById('azo-cc-' + idx + '-m');
-    if (cM) { cM.classList.add('active'); cM.style.setProperty('display','block','important'); }
   };
 
   window.azoCcAnswer = function(btn, caseIdx, correct) {
-    // Desktop
     var opts = document.querySelectorAll('#azo-cc-opts-' + caseIdx + ' .azo-cc-opt');
     for (var i = 0; i < opts.length; i++) {
       opts[i].disabled = true;
       opts[i].style.setProperty('cursor','default','important');
     }
     btn.classList.add(correct ? 'correct' : 'wrong');
+    /* Afficher la bonne réponse si mauvais choix */
     if (!correct) {
       for (var i = 0; i < opts.length; i++) {
         if (opts[i].onclick && opts[i].onclick.toString().indexOf('true') !== -1) {
@@ -1871,25 +1684,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     var next = document.getElementById('azo-cc-next-' + caseIdx);
     if (exp)  { exp.classList.add('show');  exp.style.setProperty('display','block','important'); }
     if (next) { next.classList.add('show'); next.style.setProperty('display','inline-block','important'); }
-    
-    // Mobile
-    var optsM = document.querySelectorAll('#azo-cc-opts-' + caseIdx + '-m .azo-cc-opt');
-    for (var i = 0; i < optsM.length; i++) {
-      optsM[i].disabled = true;
-      optsM[i].style.setProperty('cursor','default','important');
-    }
-    btn.classList.add(correct ? 'correct' : 'wrong');
-    if (!correct) {
-      for (var i = 0; i < optsM.length; i++) {
-        if (optsM[i].onclick && optsM[i].onclick.toString().indexOf('true') !== -1) {
-          optsM[i].classList.add('correct');
-        }
-      }
-    }
-    var expM  = document.getElementById('azo-cc-exp-' + caseIdx + '-m');
-    var nextM = document.getElementById('azo-cc-next-' + caseIdx + '-m');
-    if (expM)  { expM.classList.add('show');  expM.style.setProperty('display','block','important'); }
-    if (nextM) { nextM.classList.add('show'); nextM.style.setProperty('display','inline-block','important'); }
   };
 
   /* ============================================================
@@ -1911,37 +1705,26 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
      INIT AU CHARGEMENT
      ============================================================ */
   document.addEventListener('DOMContentLoaded', function() {
+    /* Panels */
     var panels = document.querySelectorAll('#azo-tool .azo-panel');
     for (var i = 0; i < panels.length; i++) { panels[i].style.setProperty('display','none','important'); }
     var pa = document.getElementById('azo-panel-algo');
     if (pa) { pa.style.setProperty('display','block','important'); }
 
+    /* Steps algo */
     var steps = document.querySelectorAll('#azo-tool .azo-step');
     for (var i = 0; i < steps.length; i++) { steps[i].style.setProperty('display','none','important'); }
     var s0 = document.getElementById('azo-s0');
     if (s0) { s0.style.setProperty('display','block','important'); }
 
+    /* Cases cliniques */
     var cases = document.querySelectorAll('#azo-tool .azo-cc-case');
     for (var i = 0; i < cases.length; i++) { cases[i].style.setProperty('display','none','important'); }
     var c0 = document.getElementById('azo-cc-0');
     if (c0) { c0.style.setProperty('display','block','important'); }
-    
-    var casesM = document.querySelectorAll('.azo-mobile-content .azo-cc-case');
-    for (var i = 0; i < casesM.length; i++) { casesM[i].style.setProperty('display','none','important'); }
-    var c0M = document.getElementById('azo-cc-0-m');
-    if (c0M) { c0M.style.setProperty('display','block','important'); }
   });
 
 })();
-
-// Gestion des sections mobiles collapsibles
-document.querySelectorAll('.azo-mobile-section').forEach(function(section) {
-  section.addEventListener('click', function(e) {
-    if (e.target.closest('.azo-mobile-header')) {
-      this.classList.toggle('open');
-    }
-  });
-});
 </script>
 </body>
 </html>
