@@ -3,8 +3,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IST - Resume clinique structure</title>
+<title>IST - Résumé clinique structuré</title>
 <style>
+/* ========================================================
+   SYSTÈME PREMIUM — ÉCRAN DE BLOCAGE
+   ======================================================== */
+.kz-block-screen {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 9999; display: flex; justify-content: center; align-items: center;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+.kz-block-card {
+  background: white; border-radius: 16px; padding: 40px 32px;
+  max-width: 450px; width: 90%; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+}
+.kz-block-icon { font-size: 64px; margin-bottom: 16px; }
+.kz-block-card h2 {
+  color: #1a3a5c; margin: 0 0 12px; font-size: 20px; font-weight: 700;
+}
+.kz-block-card p {
+  color: #607d8b; margin: 0 0 24px; line-height: 1.6; font-size: 14px;
+}
+.kz-block-btn {
+  background: linear-gradient(135deg, #1a3a5c, #345a7a);
+  color: white; padding: 14px 32px; text-decoration: none;
+  border-radius: 8px; display: inline-block; font-weight: 600;
+  font-size: 14px; font-family: inherit;
+}
+.kz-block-btn:hover { background: linear-gradient(135deg, #122a44, #2a4a6a); }
+.kz-block-footer {
+  margin-top: 24px; font-size: 12px; color: #999;
+  border-top: 1px solid #eee; padding-top: 20px;
+}
+
+/* ========================================================
+   CARTE GRISÉE — STYLE PREMIUM (inspiré plateforme GitHub)
+   ======================================================== */
+.kz-premium-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 8000; display: flex; justify-content: center; align-items: center;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  /* fond semi-transparent flouté */
+  background: rgba(240, 243, 248, 0.72);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.kz-premium-card {
+  background: #fff;
+  border: 1px solid #dde3ec;
+  border-radius: 12px;
+  padding: 32px 28px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(26,74,122,.12);
+}
+.kz-premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff8e0;
+  border: 1px solid #e0c060;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #7a5a00;
+  margin-bottom: 16px;
+  letter-spacing: .04em;
+}
+.kz-premium-lock {
+  font-size: 40px;
+  margin-bottom: 12px;
+  display: block;
+}
+.kz-premium-card h3 {
+  color: #1a4a7a;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.kz-premium-card p {
+  color: #5a6478;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+.kz-premium-btn {
+  background: linear-gradient(135deg, #1a4a7a, #2a7ab8);
+  color: #fff;
+  text-decoration: none;
+  padding: 11px 28px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  font-family: inherit;
+}
+.kz-premium-btn:hover { background: linear-gradient(135deg, #133a62, #1e6aa8); }
+.kz-premium-note {
+  margin-top: 16px;
+  font-size: 11px;
+  color: #999;
+  border-top: 1px solid #eef1f7;
+  padding-top: 14px;
+}
+
+/* ========================================================
+   OUTIL IST — STYLES PRINCIPAUX
+   ======================================================== */
 #ist-tool-root {
   --c-bg:       #f8f9fb !important;
   --c-surface:  #ffffff !important;
@@ -52,6 +161,24 @@
   font-size: 12px !important;
   color: rgba(255,255,255,.75) !important;
 }
+
+/* Badge premium dans le header */
+#ist-tool-root .ist-header-premium {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(255,220,60,.18) !important;
+  border: 1px solid rgba(255,220,60,.45) !important;
+  border-radius: 20px !important;
+  padding: 2px 10px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #ffe080 !important;
+  margin-left: 10px !important;
+  vertical-align: middle !important;
+  letter-spacing: .04em !important;
+}
+
 #ist-tool-root .ist-tabs {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -86,19 +213,15 @@
   border-color: var(--c-primary) !important;
 }
 #ist-tool-root .ist-tab-dot {
-  width: 8px !important;
-  height: 8px !important;
-  border-radius: 50% !important;
-  display: inline-block !important;
+  width: 8px !important; height: 8px !important;
+  border-radius: 50% !important; display: inline-block !important;
   flex-shrink: 0 !important;
 }
 #ist-tool-root .ist-search-bar {
   padding: 10px 14px !important;
   background: var(--c-surface) !important;
   border-bottom: 1px solid var(--c-border) !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
+  display: flex !important; align-items: center !important; gap: 8px !important;
 }
 #ist-tool-root .ist-search-bar input {
   flex: 1 !important;
@@ -172,19 +295,15 @@
   transition: transform .2s !important;
   display: inline-block !important;
 }
-#ist-tool-root .ist-card.open .ist-card-chevron {
-  transform: rotate(90deg) !important;
-}
+#ist-tool-root .ist-card.open .ist-card-chevron { transform: rotate(90deg) !important; }
 #ist-tool-root .ist-card-body {
   display: none !important;
   padding: 12px 14px !important;
 }
 #ist-tool-root .ist-card.open .ist-card-body { display: block !important; }
 #ist-tool-root .ist-tags {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 5px !important;
-  margin-bottom: 10px !important;
+  display: flex !important; flex-wrap: wrap !important;
+  gap: 5px !important; margin-bottom: 10px !important;
 }
 #ist-tool-root .ist-tag {
   display: inline-block !important;
@@ -210,9 +329,7 @@
   border-bottom: 1px solid #eef1f7 !important;
 }
 #ist-tool-root .ist-list {
-  margin: 0 !important;
-  padding: 0 !important;
-  list-style: none !important;
+  margin: 0 !important; padding: 0 !important; list-style: none !important;
 }
 #ist-tool-root .ist-list li {
   padding: 2px 0 2px 16px !important;
@@ -222,14 +339,11 @@
 }
 #ist-tool-root .ist-list li::before {
   content: "\2014" !important;
-  position: absolute !important;
-  left: 0 !important;
-  color: var(--c-accent) !important;
-  font-weight: 700 !important;
+  position: absolute !important; left: 0 !important;
+  color: var(--c-accent) !important; font-weight: 700 !important;
 }
 #ist-tool-root .ist-list.check li::before {
-  content: "\2713" !important;
-  color: var(--c-accent2) !important;
+  content: "\2713" !important; color: var(--c-accent2) !important;
 }
 #ist-tool-root .ist-rx {
   background: #f0f6ff !important;
@@ -275,10 +389,8 @@
   color: var(--c-primary) !important;
 }
 #ist-tool-root .ist-stat-row {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-  margin-top: 8px !important;
+  display: flex !important; flex-wrap: wrap !important;
+  gap: 8px !important; margin-top: 8px !important;
 }
 #ist-tool-root .ist-stat {
   background: #eef3fb !important;
@@ -318,14 +430,20 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   #ist-tool-root .ist-tab  { font-size: 11px !important; padding: 4px 8px !important; }
 }
 </style>
-<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </head>
 <body>
+
+<!-- ================================================================
+     CONTENU DE L'OUTIL (caché jusqu'à validation premium)
+     ================================================================ -->
+<div id="appContent" style="display:none;">
 
 <div id="ist-tool-root">
 
   <div class="ist-header">
-    <h1>Infections Sexuellement Transmissibles (IST) &#8212; R&#233;sum&#233; clinique structur&#233;</h1>
+    <h1>Infections Sexuellement Transmissibles (IST) &#8212; R&#233;sum&#233; clinique structur&#233;
+      <span class="ist-header-premium">&#9733; PREMIUM</span>
+    </h1>
     <p>Synth&#232;se diagnostique et th&#233;rapeutique &bull; Usage m&#233;dical professionnel &bull; Dr KARA-ZAITRI M.A.</p>
   </div>
 
@@ -361,180 +479,226 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   </div>
 </div>
 
+</div><!-- /#appContent -->
+
+
+<!-- ================================================================
+     ÉCRAN DE BLOCAGE COMPLET (accès refusé)
+     ================================================================ -->
+<div id="blockScreen" class="kz-block-screen" style="display:none;">
+  <div class="kz-block-card">
+    <div class="kz-block-icon">&#128274;</div>
+    <h2>Acc&#232;s Premium Requis</h2>
+    <p>Cet utilitaire est r&#233;serv&#233; aux membres premium.<br>
+    Connectez-vous depuis la plateforme principale pour y acc&#233;der.</p>
+    <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" class="kz-block-btn">
+      Se connecter / S&#8217;abonner
+    </a>
+    <div class="kz-block-footer">&#128273; Acc&#232;s via token personnel</div>
+  </div>
+</div>
+
+
+<!-- ================================================================
+     CARTE GRISÉE PREMIUM (accès refusé — version overlay discret)
+     Affichée à la place de blockScreen si vous préférez
+     laisser l'outil visible mais verrouillé
+     ================================================================ -->
+<div id="premiumOverlay" class="kz-premium-overlay" style="display:none;">
+  <div class="kz-premium-card">
+    <div class="kz-premium-badge">&#9733; Contenu Premium</div>
+    <span class="kz-premium-lock">&#128274;</span>
+    <h3>IST — R&#233;sum&#233; clinique structur&#233;</h3>
+    <p>Cet outil est r&#233;serv&#233; aux membres premium de FemCare Hub.<br>
+    Connectez-vous pour acc&#233;der &#224; la synth&#232;se compl&#232;te.</p>
+    <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" class="kz-premium-btn">
+      Se connecter / S&#8217;abonner
+    </a>
+    <div class="kz-premium-note">&#128273; Acc&#232;s via token personnel &mdash; FemCare Hub</div>
+  </div>
+</div>
+
+
 <script>
+/* ================================================================
+   DONNÉES IST
+   ================================================================ */
 var IST_DATA = [
   { id:"gonococcie", cat:"bact",
     titre:"Gonococcie",
-    agent:"Neisseria gonorrhoeae (diplocoque Gram negatif)",
-    tags:[{l:"Bacterienne",c:"bact"}],
-    clinique:["Femme : souvent asymptomatique, cervicite muco-purulente, dysurie","Homme : uretrite aigue, ecoulement purulent, brulures mictionnelles","Formes compliquees : salpingite, bartholinite, gonococcie disseminee"],
-    diag:["Prelevement endocervical ou uretral + culture sur milieu selectif (Theyer-Martin)","PCR multiplex (diagnostic rapide, haute sensibilite)","Antibiogramme systematique (resistances croissantes)"],
+    agent:"Neisseria gonorrhoeae (diplocoque Gram n\u00e9gatif)",
+    tags:[{l:"Bact\u00e9rienne",c:"bact"}],
+    clinique:["Femme : souvent asymptomatique, cervicite muco-purulente, dysurie","Homme : ur\u00e9trite aigu\u00eb, \u00e9coulement purulent, br\u00fblures mictionnelles","Formes compliqu\u00e9es : salpingite, bartholinite, gonococcie diss\u00e9min\u00e9e"],
+    diag:["Pr\u00e9l\u00e8vement endocervical ou ur\u00e9tral + culture sur milieu s\u00e9lectif (Theyer-Martin)","PCR multiplex (diagnostic rapide, haute sensibilit\u00e9)","Antibiogramme syst\u00e9matique (r\u00e9sistances croissantes)"],
     traitement:"Ceftriaxone 500 mg IM dose unique (OMS 2023). Si allergie : gentamicine 240 mg IM + azithromycine 2 g PO. Toujours traiter le partenaire.",
-    grossesse:"Risque ophtalmie neonatale, pneumonie neonatale. Traitement identique (ceftriaxone).",
-    prevention:["Preservatif","Depistage systematique sujets a risque","Notification et traitement du partenaire"]
+    grossesse:"Risque ophtalmie n\u00e9onatale, pneumonie n\u00e9onatale. Traitement identique (ceftriaxone).",
+    prevention:["Pr\u00e9servatif","D\u00e9pistage syst\u00e9matique sujets \u00e0 risque","Notification et traitement du partenaire"]
   },
   { id:"chlamydia", cat:"bact",
-    titre:"Chlamydiose uro-genitale",
-    agent:"Chlamydia trachomatis serotypes D-K",
-    tags:[{l:"Bacterienne",c:"bact"}],
-    clinique:["Tres souvent asymptomatique (70 % femmes, 50 % hommes)","Cervicite, mucopus, metrorragies de contact","Uretrite, epididymite, orchite (homme)","Salpingite chronique : sterilite tubaire, GEU"],
-    diag:["PCR sur prelevement cervical, uretral ou urinaire (premier jet)","Test rapide (TAAN) disponible","Serologie peu utile en aigu"],
-    traitement:"Doxycycline 100 mg x2/j x 7 j (1re ligne) ou azithromycine 1 g PO dose unique. Traitement systematique du partenaire.",
-    grossesse:"Risque pneumonie et conjonctivite neonatale. Utiliser azithromycine (doxycycline contre-indiquee).",
-    prevention:["Preservatif","Depistage systematique moins de 25 ans","Traitement du partenaire"]
+    titre:"Chlamydiose uro-g\u00e9nitale",
+    agent:"Chlamydia trachomatis s\u00e9rotypes D-K",
+    tags:[{l:"Bact\u00e9rienne",c:"bact"}],
+    clinique:["Tr\u00e8s souvent asymptomatique (70 % femmes, 50 % hommes)","Cervicite, mucopus, m\u00e9trorragies de contact","Ur\u00e9trite, \u00e9pididymite, orchite (homme)","Salpingite chronique : st\u00e9rilit\u00e9 tubaire, GEU"],
+    diag:["PCR sur pr\u00e9l\u00e8vement cervical, ur\u00e9tral ou urinaire (premier jet)","Test rapide (TAAN) disponible","S\u00e9rologie peu utile en aigu"],
+    traitement:"Doxycycline 100 mg x2/j x 7 j (1re ligne) ou azithromycine 1 g PO dose unique. Traitement syst\u00e9matique du partenaire.",
+    grossesse:"Risque pneumonie et conjonctivite n\u00e9onatale. Utiliser azithromycine (doxycycline contre-indiqu\u00e9e).",
+    prevention:["Pr\u00e9servatif","D\u00e9pistage syst\u00e9matique moins de 25 ans","Traitement du partenaire"]
   },
   { id:"lgv", cat:"bact",
-    titre:"Lymphogranulomatose venerienne (LGV)",
-    agent:"Chlamydia trachomatis serotypes L1, L2, L3",
-    tags:[{l:"Bacterienne",c:"bact"}],
-    clinique:["Phase 1 : vesicule puis ulceration indolore transitoire","Phase 2 : adenopathies inguinales douloureuses bilaterales (bubons)","Phase 3 : syndromes rectaux, elephantiasis genital (tardif)"],
-    diag:["PCR specifique (serogenotypage Chlamydia L1-L3)","Serologie (IF, MIF) : taux eleves"],
+    titre:"Lymphogranulomatose v\u00e9n\u00e9rienne (LGV)",
+    agent:"Chlamydia trachomatis s\u00e9rotypes L1, L2, L3",
+    tags:[{l:"Bact\u00e9rienne",c:"bact"}],
+    clinique:["Phase 1 : v\u00e9sicule puis ulc\u00e9ration indolore transitoire","Phase 2 : ad\u00e9nopathies inguinales douloureuses bilat\u00e9rales (bubons)","Phase 3 : syndromes rectaux, \u00e9l\u00e9phantiasis g\u00e9nital (tardif)"],
+    diag:["PCR sp\u00e9cifique (s\u00e9rog\u00e9notypage Chlamydia L1-L3)","S\u00e9rologie (IF, MIF) : taux \u00e9lev\u00e9s"],
     traitement:"Doxycycline 100 mg x2/j x 21 j. Alternative : azithromycine 1 g/semaine x 3 semaines.",
-    grossesse:"Doxycycline contre-indiquee. Utiliser erythromycine 500 mg x4/j x 21 j.",
-    prevention:["Preservatif","Depistage partenaires"]
+    grossesse:"Doxycycline contre-indiqu\u00e9e. Utiliser \u00e9rythromycine 500 mg x4/j x 21 j.",
+    prevention:["Pr\u00e9servatif","D\u00e9pistage partenaires"]
   },
   { id:"syphilis", cat:"bact",
     titre:"Syphilis",
-    agent:"Treponema pallidum (spirochete)",
-    tags:[{l:"Bacterienne",c:"bact"},{l:"Spirochete",c:"bact"}],
-    clinique:["S1 : chancre syphilitique (ulceration propre, induree, indolore) + adenopathie satellite","S2 : rosy lichen, plaques muqueuses, condylomes plats, adenopathies generalisees","S3 (tertiaire) : gommes, neurosyphilis, syphilis cardiovasculaire"],
-    diag:["Serologies : TPHA + VDRL (non-treponemique) - taux correle a l'activite","Examen sur fond noir du chancre (direct)","PCR sur ulceration (avant traitement)"],
-    traitement:"S1/S2 recente : Benzylpenicilline benzathine 2,4 MUI IM dose unique. S2 tardive/S3 : 3 injections hebdomadaires. Allergie : doxycycline 100 mg x2/j x 14 j.",
-    grossesse:"Risque : mort foetale, syphilis congenitale. Penicilline obligatoire (seul traitement efficace pour le foetus). Depistage OBLIGATOIRE au 1er trimestre.",
-    prevention:["Preservatif","Depistage prenuptial et prenatal","Traitement des partenaires"]
+    agent:"Treponema pallidum (spiroch\u00e8te)",
+    tags:[{l:"Bact\u00e9rienne",c:"bact"},{l:"Spiroch\u00e8te",c:"bact"}],
+    clinique:["S1 : chancre syphilitique (ulc\u00e9ration propre, indur\u00e9e, indolore) + ad\u00e9nopathie satellite","S2 : rosy lichen, plaques muqueuses, condylomes plats, ad\u00e9nopathies g\u00e9n\u00e9ralis\u00e9es","S3 (tertiaire) : gommes, neurosyphilis, syphilis cardiovasculaire"],
+    diag:["S\u00e9rologiess : TPHA + VDRL (non-tr\u00e9pon\u00e9mique) — taux corr\u00e9l\u00e9 \u00e0 l\u2019activit\u00e9","Examen sur fond noir du chancre (direct)","PCR sur ulc\u00e9ration (avant traitement)"],
+    traitement:"S1/S2 r\u00e9cente : Benzylp\u00e9nicilline benzathine 2,4 MUI IM dose unique. S2 tardive/S3 : 3 injections hebdomadaires. Allergie : doxycycline 100 mg x2/j x 14 j.",
+    grossesse:"Risque : mort f\u0153tale, syphilis cong\u00e9nitale. P\u00e9nicilline obligatoire (seul traitement efficace pour le f\u0153tus). D\u00e9pistage OBLIGATOIRE au 1er trimestre.",
+    prevention:["Pr\u00e9servatif","D\u00e9pistage pr\u00e9nuptial et pr\u00e9natal","Traitement des partenaires"]
   },
   { id:"mycoplasme", cat:"bact",
-    titre:"Mycoplasmoses genitales",
+    titre:"Mycoplasmoses g\u00e9nitales",
     agent:"Mycoplasma hominis, M. genitalium, Ureaplasma urealyticum",
-    tags:[{l:"Bacterienne",c:"bact"}],
-    clinique:["Souvent asymptomatique ou pauci-symptomatique","Uretrite non-gonococcique, cervicite","Salpingite, endometrite (M. genitalium ++)","Complications obstetricales : RPM, MAP"],
-    diag:["Culture specifique (mycoplasmose) + antibiogramme","PCR multiplex : M. genitalium avec detection resistances macrolides"],
+    tags:[{l:"Bact\u00e9rienne",c:"bact"}],
+    clinique:["Souvent asymptomatique ou pauci-symptomatique","Ur\u00e9trite non-gonococcique, cervicite","Salpingite, endom\u00e9trite (M. genitalium ++)","Complications obst\u00e9tricales : RPM, MAP"],
+    diag:["Culture sp\u00e9cifique (mycoplasmose) + antibiogramme","PCR multiplex : M. genitalium avec d\u00e9tection r\u00e9sistances macrolides"],
     traitement:"M. genitalium : azithromycine 1 g PO puis 500 mg/j x 4 j (si sensible) ou moxifloxacine 400 mg/j x 7 j. Ureaplasma : doxycycline 100 mg x2 x 7 j.",
-    grossesse:"Ureaplasma : risque chorioamniotite, prematurite. Traiter si culture positive + symptomatologie.",
-    prevention:["Preservatif","Traitement du partenaire"]
+    grossesse:"Ureaplasma : risque chorioamniotite, pr\u00e9maturit\u00e9. Traiter si culture positive + symptomatologie.",
+    prevention:["Pr\u00e9servatif","Traitement du partenaire"]
   },
   { id:"chancremou", cat:"bact",
     titre:"Chancre mou",
     agent:"Haemophilus ducreyi",
-    tags:[{l:"Bacterienne",c:"bact"}],
-    clinique:["Ulceration genitale douloureuse, bords dechiquetes, fond necrotique","Bubons inguinaux (50-60 % des cas)","Contexte : pays tropicaux, MSM, faible niveau socio-economique"],
-    diag:["Culture sur milieu selectif (sensibilite inferieure a 80 %)","PCR sur ecouvillonnage de l'ulcere (meilleure performance)","Diagnostic souvent clinique d'exclusion"],
+    tags:[{l:"Bact\u00e9rienne",c:"bact"}],
+    clinique:["Ulc\u00e9ration g\u00e9nitale douloureuse, bords d\u00e9chiquets, fond n\u00e9crotique","Bubons inguinaux (50-60 % des cas)","Contexte : pays tropicaux, MSM, faible niveau socio-\u00e9conomique"],
+    diag:["Culture sur milieu s\u00e9lectif (sensibilit\u00e9 inf\u00e9rieure \u00e0 80 %)","PCR sur \u00e9cou villonnage de l\u2019ulc\u00e8re (meilleure performance)","Diagnostic souvent clinique d\u2019exclusion"],
     traitement:"Azithromycine 1 g PO dose unique ou ceftriaxone 250 mg IM dose unique ou ciprofloxacine 500 mg x2 x 3 j.",
-    grossesse:"Ciprofloxacine contre-indiquee. Preferer azithromycine ou ceftriaxone.",
-    prevention:["Preservatif","Traitement du partenaire"]
+    grossesse:"Ciprofloxacine contre-indiqu\u00e9e. Pr\u00e9f\u00e9rer azithromycine ou ceftriaxone.",
+    prevention:["Pr\u00e9servatif","Traitement du partenaire"]
   },
   { id:"donovanose", cat:"bact",
     titre:"Donovanose (Granulome inguinal)",
     agent:"Klebsiella granulomatis",
-    tags:[{l:"Bacterienne",c:"bact"}],
-    clinique:["Ulcerations genitales chroniques, indolores, bourgeonnantes","Sans adenopathies (pseudo-bubons = granulomes sous-cutanes)","Endemique : Inde, Papouasie, Afrique du Sud, Caraibes"],
-    diag:["Corps de Donovan a l'etalement colore (Giemsa) sur biopsie ou ecouvillonnage"],
-    traitement:"Azithromycine 1 g/sem x 3 semaines minimum (jusqu'a guerison complete) ou doxycycline 100 mg x2 x 21 j minimum.",
-    grossesse:"Azithromycine de preference (doxycycline contre-indiquee).",
-    prevention:["Preservatif"]
+    tags:[{l:"Bact\u00e9rienne",c:"bact"}],
+    clinique:["Ulc\u00e9rations g\u00e9nitales chroniques, indolores, bourgeonnantes","Sans ad\u00e9nopathies (pseudo-bubons = granulomes sous-cutan\u00e9s)","End\u00e9mique : Inde, Papouasie, Afrique du Sud, Cara\u00efbes"],
+    diag:["Corps de Donovan \u00e0 l\u2019\u00e9talement color\u00e9 (Giemsa) sur biopsie ou \u00e9cou villonnage"],
+    traitement:"Azithromycine 1 g/sem x 3 semaines minimum (jusqu\u2019\u00e0 gu\u00e9rison compl\u00e8te) ou doxycycline 100 mg x2 x 21 j minimum.",
+    grossesse:"Azithromycine de pr\u00e9f\u00e9rence (doxycycline contre-indiqu\u00e9e).",
+    prevention:["Pr\u00e9servatif"]
   },
   { id:"vaginose", cat:"bact",
-    titre:"Vaginose bacterienne",
-    agent:"Gardnerella vaginalis + flore anaerobie (Mobiluncus, Prevotella...)",
-    tags:[{l:"Bacterienne",c:"bact"}],
-    clinique:["Pertes vaginales grises, homogenes, odeur de poisson pourri","pH vaginal superieur a 4,5","Criteres d'Amsel : 3/4 positifs pour le diagnostic"],
-    diag:["Criteres d'Amsel : pertes gris-blanchatres, pH > 4,5, test a la potasse (Whiff), clue-cells","Score de Nugent (frottis Gram) : score 7 ou plus = vaginose","PCR multiplex"],
-    traitement:"Metronidazole 500 mg x2/j x 7 j PO ou 2 g dose unique. Gel vaginal metronidazole 7 j. Alternative : clindamycine 300 mg x2 x 7 j.",
-    grossesse:"Risque de MAP, RPM, chorioamniotite. Traiter systematiquement (metronidazole 500 mg x2 x 7 j).",
-    prevention:["Abstention de douches vaginales","Preservatif reduit les recidives"]
+    titre:"Vaginose bact\u00e9rienne",
+    agent:"Gardnerella vaginalis + flore ana\u00e9robie (Mobiluncus, Prevotella...)",
+    tags:[{l:"Bact\u00e9rienne",c:"bact"}],
+    clinique:["Pertes vaginales grises, homog\u00e8nes, odeur de poisson pourri","pH vaginal sup\u00e9rieur \u00e0 4,5","Crit\u00e8res d\u2019Amsel : 3/4 positifs pour le diagnostic"],
+    diag:["Crit\u00e8res d\u2019Amsel : pertes gris-blanchâtres, pH > 4,5, test \u00e0 la potasse (Whiff), clue-cells","Score de Nugent (frottis Gram) : score 7 ou plus = vaginose","PCR multiplex"],
+    traitement:"M\u00e9tronidazole 500 mg x2/j x 7 j PO ou 2 g dose unique. Gel vaginal m\u00e9tronidazole 7 j. Alternative : clindamycine 300 mg x2 x 7 j.",
+    grossesse:"Risque de MAP, RPM, chorioamniotite. Traiter syst\u00e9matiquement (m\u00e9tronidazole 500 mg x2 x 7 j).",
+    prevention:["Abstention de douches vaginales","Pr\u00e9servatif r\u00e9duit les r\u00e9cidives"]
   },
   { id:"hpv", cat:"vir",
-    titre:"Infection a Papillomavirus (HPV)",
-    agent:"Human Papillomavirus (plus de 200 types ; oncogenes : 16, 18, 31, 33, 45...)",
-    tags:[{l:"Virale",c:"vir"},{l:"Oncogene",c:"vir"}],
-    clinique:["Condylomes acumines (verrues genitales) : HPV 6 et 11 (bas risque)","Lesions intra-epitheliales du col (CIN) : HPV haut risque (16, 18...)","Cancer du col uterin, vagin, vulve, anus, oropharynx","Papillomatose laryngienne recidivante (HPV 6/11)"],
-    diag:["Test HPV + cytologie cervicale (FCV)","Colposcopie +/- biopsie si CIN suspectee","Genotypage HPV (identifie types a haut risque)"],
-    traitement:"Condylomes : imiquimod 5 %, podophyllotoxine, TCA, electrochirurgie, laser. CIN : selon grade + conisation si necessaire. Pas de traitement antiviral specifique.",
-    grossesse:"Condylomes augmentent en taille. Risque de papillomatose laryngienne neonatale (rare).",
-    prevention:["Vaccination HPV (Gardasil 9 : 9-valent) recommandee 9-14 ans, possible jusqu'a 26 ans","Preservatif (protection partielle)","Depistage organise du col"]
+    titre:"Infection \u00e0 Papillomavirus (HPV)",
+    agent:"Human Papillomavirus (plus de 200 types\u00a0; oncog\u00e8nes : 16, 18, 31, 33, 45...)",
+    tags:[{l:"Virale",c:"vir"},{l:"Oncog\u00e8ne",c:"vir"}],
+    clinique:["Condylomes acumin\u00e9s (verrues g\u00e9nitales) : HPV 6 et 11 (bas risque)","L\u00e9sions intra-\u00e9pith\u00e9liales du col (CIN) : HPV haut risque (16, 18...)","Cancer du col ut\u00e9rin, vagin, vulve, anus, oropharynx","Papillomatose laryngienne r\u00e9cidivante (HPV 6/11)"],
+    diag:["Test HPV + cytologie cervicale (FCV)","Colposcopie +/- biopsie si CIN suspect\u00e9e","G\u00e9notypage HPV (identifie types \u00e0 haut risque)"],
+    traitement:"Condylomes : imiquimod 5\u00a0%, podophyllotoxine, TCA, \u00e9lectrochirurgie, laser. CIN : selon grade + conisation si n\u00e9cessaire. Pas de traitement antiviral sp\u00e9cifique.",
+    grossesse:"Condylomes augmentent en taille. Risque de papillomatose laryngienne n\u00e9onatale (rare).",
+    prevention:["Vaccination HPV (Gardasil 9 : 9-valent) recommand\u00e9e 9-14 ans, possible jusqu\u2019\u00e0 26 ans","Pr\u00e9servatif (protection partielle)","D\u00e9pistage organis\u00e9 du col"]
   },
   { id:"herpes", cat:"vir",
-    titre:"Herpes genital",
+    titre:"Herp\u00e8s g\u00e9nital",
     agent:"Herpes Simplex Virus type 2 (HSV-2, majoritaire) et HSV-1",
     tags:[{l:"Virale",c:"vir"}],
-    clinique:["Primo-infection : vesicules douloureuses, erosions, adenopathies inguinales, fievre","Recidives : prodrome (brulures), vesicules localisees, duree inferieure a 7 j","Formes atypiques frequentes (fissures, erytheme)"],
-    diag:["Prelevement de la lesion vesiculeuse + PCR HSV (or-standard)","Serologie (IgG anti-HSV2) : interet pour le depistage du portage asymptomatique"],
-    traitement:"Aciclovir 200 mg x5/j x 5-10 j (primo-infection) ou valaciclovir 500 mg x2/j. Traitement suppressif : valaciclovir 500 mg/j si plus de 6 recidives/an.",
-    grossesse:"RISQUE HERPES NEONATAL (meningo-encephalite). Traitement suppressif a partir de 36 SA. Cesarienne si lesions actives a l'accouchement.",
-    prevention:["Preservatif (protection partielle, surtout en dehors des lesions)","Informer le partenaire sur le risque de transmission asymptomatique"]
+    clinique:["Primo-infection : v\u00e9sicules douloureuses, \u00e9rosions, ad\u00e9nopathies inguinales, fi\u00e8vre","R\u00e9cidives : prodrome (br\u00fblures), v\u00e9sicules localis\u00e9es, dur\u00e9e inf\u00e9rieure \u00e0 7 j","Formes atypiques fr\u00e9quentes (fissures, \u00e9ryth\u00e8me)"],
+    diag:["Pr\u00e9l\u00e8vement de la l\u00e9sion v\u00e9siculeuse + PCR HSV (or-standard)","S\u00e9rologie (IgG anti-HSV2) : int\u00e9r\u00eat pour le d\u00e9pistage du portage asymptomatique"],
+    traitement:"Aciclovir 200 mg x5/j x 5-10 j (primo-infection) ou valaciclovir 500 mg x2/j. Traitement suppressif : valaciclovir 500 mg/j si plus de 6 r\u00e9cidives/an.",
+    grossesse:"RISQUE HERP\u00c8S N\u00c9ONATAL (m\u00e9ningo-enc\u00e9phalite). Traitement suppressif \u00e0 partir de 36 SA. C\u00e9sarienne si l\u00e9sions actives \u00e0 l\u2019accouchement.",
+    prevention:["Pr\u00e9servatif (protection partielle, surtout en dehors des l\u00e9sions)","Informer le partenaire sur le risque de transmission asymptomatique"]
   },
   { id:"vih", cat:"vir",
     titre:"Infection VIH / SIDA",
-    agent:"Virus de l'Immunodeficience Humaine (VIH-1 et VIH-2), retrovirus",
-    tags:[{l:"Virale",c:"vir"},{l:"Immunodeficience",c:"vir"}],
-    clinique:["Primo-infection : syndrome mononucleosique, fievre, rash, ulcerations muqueuses","Phase asymptomatique : latence clinique, baisse CD4","SIDA (CD4 < 200/mm3) : infections opportunistes, tumeurs (Kaposi, lymphomes)"],
-    diag:["ELISA 4eme generation (Ag p24 + Ac) : fenetre 3-45 j apres exposition","Western Blot de confirmation","Charge virale + CD4 pour suivi","TROD (Test Rapide d'Orientation Diagnostique) disponible"],
-    traitement:"Tritherapie antiretrovirale (ARV) : 2 INTI + 1 IP ou 1 INI. Initiation des le diagnostic. PrEP pour les personnes a haut risque.",
-    grossesse:"Transmission mere-enfant reduite a moins de 1 % avec tritherapie efficace. Charge virale indetectable essentielle. Cesarienne si CV superieure a 50 copies.",
-    prevention:["Preservatif","PrEP (Truvada / Descovy)","Traitement comme prevention (TasP)","Reduction des risques (seringues propres)","PTME (prevention transmission mere-enfant)"]
+    agent:"Virus de l\u2019Immunod\u00e9ficience Humaine (VIH-1 et VIH-2), r\u00e9trovirus",
+    tags:[{l:"Virale",c:"vir"},{l:"Immunod\u00e9ficience",c:"vir"}],
+    clinique:["Primo-infection : syndrome mononucl\u00e9osique, fi\u00e8vre, rash, ulc\u00e9rations muqueuses","Phase asymptomatique : latence clinique, baisse CD4","SIDA (CD4 < 200/mm\u00b3) : infections opportunistes, tumeurs (Kaposi, lymphomes)"],
+    diag:["ELISA 4\u00e8me g\u00e9n\u00e9ration (Ag p24 + Ac) : fen\u00eatre 3-45 j apr\u00e8s exposition","Western Blot de confirmation","Charge virale + CD4 pour suivi","TROD (Test Rapide d\u2019Orientation Diagnostique) disponible"],
+    traitement:"Trith\u00e9rapie antir\u00e9trovirale (ARV) : 2 INTI + 1 IP ou 1 INI. Initiation d\u00e8s le diagnostic. PrEP pour les personnes \u00e0 haut risque.",
+    grossesse:"Transmission m\u00e8re-enfant r\u00e9duite \u00e0 moins de 1\u00a0% avec trioth\u00e9rapie efficace. Charge virale ind\u00e9tectable essentielle. C\u00e9sarienne si CV sup\u00e9rieure \u00e0 50 copies.",
+    prevention:["Pr\u00e9servatif","PrEP (Truvada / Descovy)","Traitement comme pr\u00e9vention (TasP)","R\u00e9duction des risques (seringues propres)","PTME (pr\u00e9vention transmission m\u00e8re-enfant)"]
   },
   { id:"hepatites", cat:"vir",
-    titre:"Hepatites virales B et C",
-    agent:"VHB (hepadnavirus) - VHC (hepacivirus, Flaviviridae)",
+    titre:"H\u00e9patites virales B et C",
+    agent:"VHB (hepadnavirus) — VHC (hepacivirus, Flaviviridae)",
     tags:[{l:"Virale",c:"vir"}],
-    clinique:["VHB : transmission sexuelle ++, feco-orale, parenterale. Risque cirrhose, CHC","VHC : transmission parenterale +++ (sexuelle faible). Chronicite 80 %","Souvent asymptomatique jusqu'a la cirrhose"],
+    clinique:["VHB : transmission sexuelle ++, f\u00e9co-orale, parent\u00e9rale. Risque cirrhose, CHC","VHC : transmission parent\u00e9rale +++ (sexuelle faible). Chronicit\u00e9 80\u00a0%","Souvent asymptomatique jusqu\u2019\u00e0 la cirrhose"],
     diag:["VHB : Ag HBs, Ac anti-HBs, Ac anti-HBc, ADN VHB","VHC : Ac anti-VHC puis ARN VHC (PCR)"],
-    traitement:"VHB : tenofovir ou entecavir (chronique). VHC : agents antiviraux directs (AAD) - taux guerison superieur a 95 %.",
-    grossesse:"VHB : vaccination + immunoglobulines du nouveau-ne a la naissance. VHC : AAD contre-indiques pendant grossesse.",
-    prevention:["Vaccination VHB obligatoire (nourrisson)","Preservatif","Materiel a usage unique"]
+    traitement:"VHB : t\u00e9nofovir ou ent\u00e9cavir (chronique). VHC : agents antiviraux directs (AAD) — taux gu\u00e9rison sup\u00e9rieur \u00e0 95\u00a0%.",
+    grossesse:"VHB : vaccination + immunoglobulines du nouveau-n\u00e9 \u00e0 la naissance. VHC : AAD contre-indiqu\u00e9s pendant grossesse.",
+    prevention:["Vaccination VHB obligatoire (nourrisson)","Pr\u00e9servatif","Mat\u00e9riel \u00e0 usage unique"]
   },
   { id:"cmv", cat:"vir",
-    titre:"Cytomegalovirus (CMV)",
-    agent:"Cytomegalovirus (Herpesviridae beta)",
+    titre:"Cytom\u00e9galovirus (CMV)",
+    agent:"Cytom\u00e9galovirus (Herpesviridae beta)",
     tags:[{l:"Virale",c:"vir"}],
-    clinique:["Adulte immunocompetent : asymptomatique ou syndrome grippal","Immunodeprime : retinite, pneumopathie, colite, encephalite","Transmission sexuelle, salivaire, parenterale"],
-    diag:["Serologie IgG / IgM + avidite (primo-infection vs reactivation)","PCR CMV (sang, liquide amniotique, urine nouveau-ne)"],
-    traitement:"Immunocompetent : abstention. Immunodeprime : ganciclovir IV / valganciclovir PO.",
-    grossesse:"Principal agent de sequelle neurologique foetale (surdite, RCIU, microcephalie). Amniocentese + PCR si primo-infection maternelle avant 20 SA.",
-    prevention:["Mesures hygiene strictes chez femme enceinte seronegative","Pas de vaccin disponible"]
+    clinique:["Adulte immunocomp\u00e9tent : asymptomatique ou syndrome grippal","Immunod\u00e9prim\u00e9 : r\u00e9tinite, pneumopathie, colite, enc\u00e9phalite","Transmission sexuelle, salivaire, parent\u00e9rale"],
+    diag:["S\u00e9rologie IgG / IgM + avidit\u00e9 (primo-infection vs r\u00e9activation)","PCR CMV (sang, liquide amniotique, urine nouveau-n\u00e9)"],
+    traitement:"Immunocomp\u00e9tent : abstention. Immunod\u00e9prim\u00e9 : ganciclovir IV / valganciclovir PO.",
+    grossesse:"Principal agent de s\u00e9quelle neurologique f\u0153tale (surdit\u00e9, RCIU, microc\u00e9phalie). Amniocent\u00e8se + PCR si primo-infection maternelle avant 20 SA.",
+    prevention:["Mesures hygi\u00e8ne strictes chez femme enceinte s\u00e9ron\u00e9gative","Pas de vaccin disponible"]
   },
   { id:"molluscum", cat:"vir",
     titre:"Molluscum contagiosum",
     agent:"Poxvirus (Molluscipoxvirus)",
     tags:[{l:"Virale",c:"vir"}],
-    clinique:["Papules ombiliquees, perleuses, indolores, 2-5 mm","Localisation genitale, pubienne, peri-anale","Chez l'immunodeprime : lesions larges, nombreuses, refractaires"],
-    diag:["Clinique (aspect caracteristique)","Anatomopathologie : corps de Henderson-Patterson"],
-    traitement:"Exerese mecanique, curetage, cryotherapie. Imiquimod 5 % (hors AMM). Guerison spontanee possible.",
-    grossesse:"Traitement local, pas de risque foetal direct decrit.",
-    prevention:["Preservatif (partiel)","Abstention de contact direct sur les lesions"]
+    clinique:["Papules ombiliqu\u00e9es, perleuses, indolores, 2-5 mm","Localisation g\u00e9nitale, pubienne, p\u00e9ri-anale","Chez l\u2019immunod\u00e9prim\u00e9 : l\u00e9sions larges, nombreuses, r\u00e9fractaires"],
+    diag:["Clinique (aspect caract\u00e9ristique)","Anatomopathologie : corps de Henderson-Patterson"],
+    traitement:"Ex\u00e9r\u00e8se m\u00e9canique, curetage, cryoth\u00e9rapie. Imiquimod 5\u00a0% (hors AMM). Gu\u00e9rison spontan\u00e9e possible.",
+    grossesse:"Traitement local, pas de risque f\u0153tal direct d\u00e9crit.",
+    prevention:["Pr\u00e9servatif (partiel)","Abstention de contact direct sur les l\u00e9sions"]
   },
   { id:"trichomonas", cat:"par",
     titre:"Trichomonose vaginale",
-    agent:"Trichomonas vaginalis (protozoaire flagelle)",
+    agent:"Trichomonas vaginalis (protozoaire flagell\u00e9)",
     tags:[{l:"Parasitaire",c:"par"}],
-    clinique:["Pertes vaginales abondantes, jaune-verdatres, mousseuses, malodorantes","Prurit vulvo-vaginal, dyspareunie","Colpite a fraises (petites erosions hemorragiques du col)","Homme : porteur asymptomatique le plus souvent, parfois uretrite"],
-    diag:["Examen direct du frottis vaginal : trichomonas mobiles","Culture (milieu de Diamond) : or-standard","PCR multiplex (haute sensibilite)"],
-    traitement:"Metronidazole 2 g PO dose unique ou 500 mg x2 x 7 j. Traitement simultane du partenaire OBLIGATOIRE.",
-    grossesse:"Risque MAP, RPM, prematurite. Metronidazole autorise apres le 1er trimestre.",
-    prevention:["Preservatif","Traitement du partenaire"]
+    clinique:["Pertes vaginales abondantes, jaune-verd\u00e2tres, mousseuses, malodorantes","Prurit vulvo-vaginal, dyspareunie","Colpite \u00e0 fraises (petites \u00e9rosions h\u00e9morragiques du col)","Homme : porteur asymptomatique le plus souvent, parfois ur\u00e9trite"],
+    diag:["Examen direct du frottis vaginal : trichomonas mobiles","Culture (milieu de Diamond) : or-standard","PCR multiplex (haute sensibilit\u00e9)"],
+    traitement:"M\u00e9tronidazole 2 g PO dose unique ou 500 mg x2 x 7 j. Traitement simultan\u00e9 du partenaire OBLIGATOIRE.",
+    grossesse:"Risque MAP, RPM, pr\u00e9maturit\u00e9. M\u00e9tronidazole autoris\u00e9 apr\u00e8s le 1er trimestre.",
+    prevention:["Pr\u00e9servatif","Traitement du partenaire"]
   },
   { id:"gale", cat:"ecto",
     titre:"Gale (Scabiose)",
     agent:"Sarcoptes scabiei var. hominis",
     tags:[{l:"Ectoparasite",c:"ecto"}],
-    clinique:["Prurit intense, nocturne, epargnant le visage","Sillons acariens (interdigitaux, poignets, emmanchures, region genitale)","Vesicules perleuses, nodules scabieux des organes genitaux externes"],
-    diag:["Clinique : prurit nocturne + sillons caracteristiques","Grattage du sillon + examen direct (acarien, oeufs, dejections)","Dermoscopie (sensibilite croissante)"],
-    traitement:"Ivermectine 200 microg/kg PO dose unique (1re ligne adulte) ou permethrine 5 % creme. 2eme dose a J14 recommandee. Traitement simultane de l'entourage + decontamination du linge (60 degres).",
-    grossesse:"Ivermectine contre-indiquee. Permethrine 5 % topique (2eme trimestre et au-dela).",
-    prevention:["Traitement simultane de tous les sujets contacts","Linge et literie lavage a 60 degres ou mise en sac 72h","Eviter contacts intimes pendant traitement"]
+    clinique:["Prurit intense, nocturne, \u00e9pargnant le visage","Sillons acariens (interdigitaux, poignets, emmanchures, r\u00e9gion g\u00e9nitale)","V\u00e9sicules perleuses, nodules scabieux des organes g\u00e9nitaux externes"],
+    diag:["Clinique : prurit nocturne + sillons caract\u00e9ristiques","Grattage du sillon + examen direct (acarien, \u0153ufs, d\u00e9jections)","Dermoscopie (sensibilit\u00e9 croissante)"],
+    traitement:"Ivermectine 200 microg/kg PO dose unique (1re ligne adulte) ou perm\u00e9thrine 5\u00a0% cr\u00e8me. 2\u00e8me dose \u00e0 J14 recommand\u00e9e. Traitement simultan\u00e9 de l\u2019entourage + d\u00e9contamination du linge (60 degr\u00e9s).",
+    grossesse:"Ivermectine contre-indiqu\u00e9e. Perm\u00e9thrine 5\u00a0% topique (2\u00e8me trimestre et au-del\u00e0).",
+    prevention:["Traitement simultan\u00e9 de tous les sujets contacts","Linge et literie lavage \u00e0 60 degr\u00e9s ou mise en sac 72h","Eviter contacts intimes pendant traitement"]
   },
   { id:"poux", cat:"ecto",
     titre:"Phtiriase du pubis (Morpion)",
     agent:"Phthirus pubis (Pou du pubis)",
     tags:[{l:"Ectoparasite",c:"ecto"}],
-    clinique:["Prurit pubien, inguinal, peri-anal, parfois sourcils/cils","Taches bleutees (macules cerulees) sur le tronc","Lentes accrochees aux poils pubiens visibles a l'examen"],
+    clinique:["Prurit pubien, inguinal, p\u00e9ri-anal, parfois sourcils/cils","Taches bleu\u00e2tres (macules c\u00e9rul\u00e9es) sur le tronc","Lentes accroch\u00e9es aux poils pubiens visibles \u00e0 l\u2019examen"],
     diag:["Examen clinique direct : poux adultes ou lentes (1-2 mm) sur les poils"],
-    traitement:"Permethrine 1 % lotion, malathion 0,5 %, ou ivermectine PO 200 microg/kg. 2eme application a J7-10. Traiter cils si atteints (vaseline 2 fois/j).",
-    grossesse:"Permethrine topique acceptee.",
-    prevention:["Preservatif (partiel)","Traitement du partenaire","Examen des vetements et literie"]
+    traitement:"Perm\u00e9thrine 1\u00a0% lotion, malathion 0,5\u00a0%, ou ivermectine PO 200 microg/kg. 2\u00e8me application \u00e0 J7-10. Traiter cils si atteints (vaseline 2 fois/j).",
+    grossesse:"Perm\u00e9thrine topique accept\u00e9e.",
+    prevention:["Pr\u00e9servatif (partiel)","Traitement du partenaire","Examen des v\u00eatements et literie"]
   }
 ];
 
+/* ================================================================
+   RENDU DES CARTES
+   ================================================================ */
 function istToggle(headEl) {
   headEl.parentElement.classList.toggle('open');
 }
@@ -554,7 +718,7 @@ function buildCard(d) {
     +'<div class="ist-section"><p class="ist-section-title">Clinique</p><ul class="ist-list">'+cl+'</ul></div>'
     +'<div class="ist-section"><p class="ist-section-title">Diagnostic</p><ul class="ist-list check">'+dg+'</ul></div>'
     +'<div class="ist-section"><div class="ist-rx"><strong>Traitement 1re ligne</strong>'+d.traitement+'</div>'+pg+'</div>'
-    +'<div class="ist-section"><p class="ist-section-title">Prevention</p><ul class="ist-list check">'+pv+'</ul></div>'
+    +'<div class="ist-section"><p class="ist-section-title">Pr\u00e9vention</p><ul class="ist-list check">'+pv+'</ul></div>'
     +'</div></div>';
 }
 
@@ -598,7 +762,51 @@ document.getElementById('istSearch').addEventListener('input', function(e) {
   timer = setTimeout(function(){ currentQ = v; render(); }, 200);
 });
 
-render();
+/* ================================================================
+   initApp() — appelée après validation premium
+   ================================================================ */
+function initApp() {
+  render();
+}
+
+/* ================================================================
+   SYSTÈME PREMIUM — VÉRIFICATION TOKEN
+   ================================================================ */
+function showBlockScreen() {
+  document.getElementById('blockScreen').style.display = 'flex';
+  document.getElementById('premiumOverlay').style.display = 'none';
+  document.getElementById('appContent').style.display = 'none';
+}
+
+function showPremiumOverlay() {
+  /* Variante : montrer l'outil grisé avec carte de blocage par-dessus */
+  document.getElementById('appContent').style.display = 'block';
+  document.getElementById('premiumOverlay').style.display = 'flex';
+  document.getElementById('blockScreen').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('blockScreen').style.display = 'none';
+  document.getElementById('premiumOverlay').style.display = 'none';
+  document.getElementById('appContent').style.display = 'block';
+  initApp();
+}
+
+async function checkPremiumAccess() {
+  var token = localStorage.getItem('kz_premium_token');
+  if (!token) { showPremiumOverlay(); return false; }
+  try {
+    var response = await fetch(
+      'https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token)
+    );
+    var data = await response.json();
+    if (data.valid === true) { showApp(); return true; }
+    else { showPremiumOverlay(); return false; }
+  } catch (error) { showPremiumOverlay(); return false; }
+}
+
+checkPremiumAccess();
 </script>
+
 </body>
 </html>
