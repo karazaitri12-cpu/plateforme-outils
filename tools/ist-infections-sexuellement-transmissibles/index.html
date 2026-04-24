@@ -793,8 +793,21 @@ function showApp() {
 }
 
 async function checkPremiumAccess() {
-  var token = localStorage.getItem('kz_premium_token');
+  // 1. Lire le token depuis l'URL (?token=XXXX) et le stocker en localStorage
+  var urlParams = new URLSearchParams(window.location.search);
+  var urlToken  = urlParams.get('token');
+  if (urlToken) {
+    localStorage.setItem('kz_platform_token', urlToken);
+    // Nettoyer l'URL sans recharger la page
+    var cleanUrl = window.location.pathname;
+    window.history.replaceState({}, document.title, cleanUrl);
+  }
+
+  // 2. Lire le token depuis localStorage
+  var token = localStorage.getItem('kz_platform_token');
   if (!token) { showPremiumOverlay(); return false; }
+
+  // 3. Vérifier via l'API WordPress
   try {
     var response = await fetch(
       'https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token)
