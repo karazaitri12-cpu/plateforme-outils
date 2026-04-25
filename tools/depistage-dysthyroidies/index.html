@@ -102,7 +102,7 @@
             border-radius: 6px !important; 
         }
 
-        /* =========== LISTES UNICODE BLINDÉES =========== */
+        /* =========== LISTES UNICODE BLINDÉES — FIX 1 =========== */
         .thyro-app-list { 
             list-style: none !important; 
             padding-left: 0 !important; 
@@ -110,7 +110,7 @@
         }
         .thyro-app-list li { 
             position: relative !important;
-            padding-left: 18px !important;
+            padding-left: 22px !important;  /* ← corrigé : 18px→22px pour que le texte ne chevauche pas la puce */
             margin-bottom: 10px !important; 
             font-size: 14.5px !important; 
             line-height: 1.5 !important;
@@ -118,11 +118,12 @@
         .thyro-app-list li::before {
             content: "\2022" !important;
             position: absolute !important;
-            left: 0 !important;
-            top: -1px !important;
+            left: 2px !important;           /* ← puce décalée de 2px depuis le bord gauche */
+            top: 0px !important;
             color: inherit !important;
             font-weight: bold !important;
-            font-size: 1.3em !important;
+            font-size: 1.1em !important;    /* ← réduit de 1.3→1.1 : évite le débordement vertical */
+            line-height: 1.5 !important;   /* ← aligné sur le line-height du li */
         }
 
         /* =========== BOÎTES RECOMMANDATIONS =========== */
@@ -174,7 +175,7 @@
             transform: translateY(-50%) !important; 
         }
 
-        /* =========== CALCULATEURS (Remplacement de Gap par Marges) =========== */
+        /* =========== CALCULATEURS =========== */
         .thyro-app-calc-container { 
             margin-top: 25px !important; 
             background: #f9fdf9 !important; 
@@ -215,21 +216,25 @@
             border-radius: 4px !important; 
         }
 
-        /* =========== RAPPORT CLINIQUE =========== */
+        /* =========== RAPPORT CLINIQUE — FIX 2 =========== */
         .thyro-app-report-box { 
-            width: 100% !important; 
-            height: 200px !important; 
+            width: 100% !important;
+            display: block !important;          /* ← évite les quirks inline */
+            min-height: 200px !important;       /* ← min-height au lieu de height fixe */
+            height: 200px !important;           /* ← hauteur initiale */
             padding: 12px !important; 
             background: #f8f9fa !important; 
             border: 1px solid #ddd !important; 
             border-radius: 8px !important; 
             font-family: 'Courier New', Courier, monospace !important; 
             font-size: 12px !important; 
-            resize: vertical !important; 
+            resize: vertical !important;        /* ← forcé avec !important */
+            -webkit-appearance: none !important;
             margin-bottom: 15px !important; 
             color: #333 !important; 
             white-space: pre-wrap !important; 
-            overflow-y: auto !important; 
+            overflow-y: scroll !important;      /* ← scroll (stable) plutôt que auto (bloque resize) */
+            box-sizing: border-box !important;
         }
 
         /* =========== BOUTON COPIER =========== */
@@ -333,7 +338,7 @@
             .thyro-app-calc-row { flex-direction: column !important; align-items: flex-start !important; }
             .thyro-app-calc-row > * { margin-bottom: 8px !important; }
             .thyro-app-step-title { font-size: 18px !important; }
-            .thyro-app-report-box { height: 150px !important; }
+            .thyro-app-report-box { min-height: 150px !important; height: 150px !important; }
         }
 
         /* =========== MASQUER SCROLLBAR =========== */
@@ -377,20 +382,14 @@
 (function() {
     'use strict';
 
-    /* ========================================
-       ERREUR GLOBALE HANDLER
-       ======================================== */
     window.addEventListener('error', function(e) {
         console.error('Erreur ThyroApp:', e);
         const screen = document.getElementById('thyro-app-content');
         if(screen) {
-            screen.innerHTML = '<div class="thyro-app-reco-box thyro-app-danger"><strong>Une erreur s\'est produite.</strong><br><br>Veuillez recharger la page.<br><br><button class="thyro-app-submit" onclick="location.reload()">🔄 Recharger</button></div>';
+            screen.innerHTML = '<div class="thyro-app-reco-box thyro-app-danger"><strong>Une erreur s\'est produite.</strong><br><br>Veuillez recharger la page.<br><br><button class="thyro-app-submit" onclick="location.reload()">Recharger</button></div>';
         }
     });
 
-    /* ========================================
-       CALCULATEURS (Globalisés et préfixés)
-       ======================================== */
     window.thyroAppUpdateDose = function(el) {
         const val = parseFloat(el.value);
         const res = el.parentElement.querySelector('.thyro-app-calc-result');
@@ -420,9 +419,6 @@
         return '<div class="thyro-app-calc-container" style="background-color: #ffebee !important; border-color: #ffcdd2 !important;"><p style="margin:0; font-size:13px; color:#d32f2f;"><strong>Aide à la prescription (Hypothyroïdie avérée)</strong></p><p style="margin:5px 0 8px 0; font-size:12px; color:#555;">Dose théorique de substitution complète (1,6 µg/kg/j) :</p><div class="thyro-app-calc-row"><input type="number" class="thyro-app-calc-input" placeholder="Poids kg" min="30" step="1" oninput="window.thyroAppCalcWeightDose(this)"><span>kg × 1,6 ≈ </span><span class="thyro-app-weight-result" style="font-weight:bold; color:#d32f2f;">---</span> <span>µg/jour</span></div><p style="font-size:11px; color:#666; margin-top:5px;">À adapter selon la réponse clinique et biologique.</p></div>';
     }
 
-    /* ========================================
-       DONNÉES DÉCISIONNELLES
-       ======================================== */
     const data = {
         "start": {
             q: "Quelle est la situation clinique ?",
@@ -475,25 +471,25 @@
             q: "Objectifs - 1er Trimestre (≤ 15 SA)",
             isFinal: true,
             reco: "Objectif TSH T1 : 0,1 – 2,5 mUI/L\n\nConduite à tenir :\n• Si TSH non contrôlée récemment : faire dosage immédiat.\n• Augmenter la dose de Lévothyroxine de 20-30 % dès la confirmation de grossesse.\n• Maintenir supplémentation iodée (200 µg/j).",
-            content: '<div class="thyro-app-reco-box thyro-app-danger"><p><strong>🎯 Objectif TSH T1 : 0,1 – 2,5 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffcdd2; margin:10px 0;"><strong>Actions requises :</strong><ul class="thyro-app-list"><li>Augmenter la dose de Lévothyroxine de <strong>20 à 30 %</strong> immédiatement.</li><li>Contrôler la TSH toutes les 4 semaines.</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
+            content: '<div class="thyro-app-reco-box thyro-app-danger"><p><strong>Objectif TSH T1 : 0,1 – 2,5 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffcdd2; margin:10px 0;"><strong>Actions requises :</strong><ul class="thyro-app-list"><li>Augmenter la dose de Lévothyroxine de <strong>20 à 30 %</strong> immédiatement.</li><li>Contrôler la TSH toutes les 4 semaines.</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
         },
         "hypo_traitee_t2": {
             q: "Objectifs - 2ème Trimestre (16-28 SA)",
             isFinal: true,
             reco: "Objectif TSH T2 : 0,2 – 3,0 mUI/L\n\nConduite à tenir :\n• Adapter la posologie pour rester dans la cible.\n• Contrôle TSH mensuel.\n• Maintenir supplémentation iodée (200 µg/j).",
-            content: '<div class="thyro-app-reco-box thyro-app-warning"><p><strong>🎯 Objectif TSH T2 : 0,2 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="thyro-app-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel (toutes les 4 semaines).</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
+            content: '<div class="thyro-app-reco-box thyro-app-warning"><p><strong>Objectif TSH T2 : 0,2 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="thyro-app-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel (toutes les 4 semaines).</li><li>Supplémentation iodée : 200 µg/j.</li></ul></div>'
         },
         "hypo_traitee_t3": {
             q: "Objectifs - 3ème Trimestre (≥ 29 SA)",
             isFinal: true,
             reco: "Objectif TSH T3 : 0,3 – 3,0 mUI/L\n\nConduite à tenir :\n• Adapter la posologie pour rester dans la cible.\n• Contrôle TSH mensuel jusqu'à l'accouchement.\n• Prévoir le retour à la dose pré-conceptionnelle après l'accouchement.",
-            content: '<div class="thyro-app-reco-box thyro-app-warning"><p><strong>🎯 Objectif TSH T3 : 0,3 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="thyro-app-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel jusqu\'à l\'accouchement.</li><li><strong>Anticipation Post-partum :</strong> Retour à la dose pré-conceptionnelle juste après l\'accouchement.</li></ul></div>'
+            content: '<div class="thyro-app-reco-box thyro-app-warning"><p><strong>Objectif TSH T3 : 0,3 – 3,0 mUI/L</strong></p><hr style="border:0; border-top:1px solid #ffecb3; margin:10px 0;"><strong>Suivi :</strong><ul class="thyro-app-list"><li>Ajuster le traitement si TSH hors cible.</li><li>Contrôle TSH mensuel jusqu\'à l\'accouchement.</li><li><strong>Anticipation Post-partum :</strong> Retour à la dose pré-conceptionnelle juste après l\'accouchement.</li></ul></div>'
         },
         "hyper_traitee": {
             q: "Conclusion",
             isFinal: true,
             reco: "Suivi spécialisé par un(e) endocrinologue impératif.",
-            content: '<div class="thyro-app-reco-box thyro-app-danger"><strong>⚠️ Suivi spécialisé par un(e) endocrinologue impératif.</strong><br><br>La prise en charge de l\'hyperthyroïdie pendant la grossesse nécessite un suivi spécialisé étroit.</div>'
+            content: '<div class="thyro-app-reco-box thyro-app-danger"><strong>Suivi spécialisé par un(e) endocrinologue impératif.</strong><br><br>La prise en charge de l\'hyperthyroïdie pendant la grossesse nécessite un suivi spécialisé étroit.</div>'
         },
         "postpartum": {
             q: "Surveillance Post-partum",
@@ -525,36 +521,27 @@
         "input_tsh": { q: "Dosage de la TSH.", isInput: true }
     };
 
-    /* ========================================
-       ÉTAT APP
-       ======================================== */
     let history = [];
     let currentStepKey = "start";
     let tri = 1;
     let qaLog = [];
 
-    /* ========================================
-       GÉNÉRATEUR RAPPORT
-       ======================================== */
     function getReportText() {
         const date = new Date().toLocaleDateString('fr-FR');
         const time = new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
-        let text = '═══════════════════════════════════════════════\nBILAN CLINIQUE | Dépistage Dysthyroïdie\nGénéré le ' + date + ' à ' + time + '\n═══════════════════════════════════════════════\n\nDONNÉES RECUEILLIES\n───────────────────────────────────────────────\n';
-        qaLog.forEach((h) => { text += '▸ ' + h.q + '\n  → ' + h.ans + '\n\n'; });
+        let text = '\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\nBILAN CLINIQUE | D\u00e9pistage Dysthyro\u00efdie\nG\u00e9n\u00e9r\u00e9 le ' + date + ' \u00e0 ' + time + '\n\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n\nDONN\u00c9ES RECUEILLIES\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n';
+        qaLog.forEach((h) => { text += '\u25b8 ' + h.q + '\n  \u2192 ' + h.ans + '\n\n'; });
         if(data[currentStepKey] && data[currentStepKey].reco) {
-            text += 'CONCLUSION & RECOMMANDATIONS\n───────────────────────────────────────────────\n' + data[currentStepKey].reco + '\n\n';
+            text += 'CONCLUSION & RECOMMANDATIONS\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n' + data[currentStepKey].reco + '\n\n';
             const reco = data[currentStepKey].reco;
-            if(reco.includes("Lévothyroxine") || reco.includes("traitement")) {
-                text += '\nCONSEILS PRATIQUES\n───────────────────────────────────────────────\n• Interaction Fer/Calcium : Espacer la prise de 4h min.\n  (Ces minéraux bloquent l\'absorption du Lévothyrox)\n';
+            if(reco.includes("L\u00e9vothyroxine") || reco.includes("traitement")) {
+                text += '\nCONSEILS PRATIQUES\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\u2022 Interaction Fer/Calcium : Espacer la prise de 4h min.\n  (Ces min\u00e9raux bloquent l\'absorption du L\u00e9vothyrox)\n';
             }
         }
-        text += '═══════════════════════════════════════════════\nRéférences : ATA 2017, Consensus SFE/HAS\nOutil : Dr KARA-ZAITRI M.A\nATTENTION : Aide à la décision - Ne remplace pas le jugement clinique\n═══════════════════════════════════════════════';
+        text += '\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\nR\u00e9f\u00e9rences : ATA 2017, Consensus SFE/HAS\nOutil : Dr KARA-ZAITRI M.A\nATTENTION : Aide \u00e0 la d\u00e9cision - Ne remplace pas le jugement clinique\n\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550';
         return text;
     }
 
-    /* ========================================
-       RENDU (ENGINE)
-       ======================================== */
     function render(key) {
         currentStepKey = key;
         const step = data[key];
@@ -565,7 +552,7 @@
         if (!screen || !bread || !step) return;
 
         backBtn.style.display = history.length > 0 ? "block" : "none";
-        bread.innerText = qaLog.map(h => h.ans).join(" › ") || "Début";
+        bread.innerText = qaLog.map(h => h.ans).join(" \u203a ") || "D\u00e9but";
 
         let html = '<div class="thyro-app-step-title">' + step.q + '</div>';
         if(step.content) html += step.content;
@@ -577,25 +564,21 @@
             });
         } else if(step.isInput) {
             const threshold = tri === 1 ? 2.5 : 3.0;
-            html += '<div style="font-size:12px; color:#e65100; background:#fff3e0; padding:10px; border-radius:6px; margin-bottom:15px; border-left:3px solid #ff9800;"><strong>⚠️ Attention à la Biotine (Vit B8) :</strong><br>Les compléments "Cheveux/Ongles" faussent le dosage (fausse baisse TSH). Arrêt impératif 48h avant le prélèvement.</div>';
-            html += '<p style="margin-bottom:10px; background: #fff8e1; padding: 12px; border-radius: 6px; border-left: 4px solid #856404;"><strong>Seuil d\'alerte (Consensus) :</strong> ' + threshold + ' mUI/L<br><small>Norme ATA : ~4,0 mUI/L. Utiliser les normes labo trimestre-spécifiques en priorité si disponibles.</small></p><input type="number" id="thyro-app-val-tsh" class="thyro-app-input" placeholder="Valeur TSH (mUI/L)" min="0" step="0.01" aria-label="Entrez la valeur de TSH" autofocus><button class="thyro-app-submit" id="thyro-app-btn-analyze">📊 Analyser la TSH</button>';
+            html += '<div style="font-size:12px; color:#e65100; background:#fff3e0; padding:10px; border-radius:6px; margin-bottom:15px; border-left:3px solid #ff9800;"><strong>Attention \u00e0 la Biotine (Vit B8) :</strong><br>Les compl\u00e9ments "Cheveux/Ongles" faussent le dosage (fausse baisse TSH). Arr\u00eat imp\u00e9ratif 48h avant le pr\u00e9l\u00e8vement.</div>';
+            html += '<p style="margin-bottom:10px; background: #fff8e1; padding: 12px; border-radius: 6px; border-left: 4px solid #856404;"><strong>Seuil d\'alerte (Consensus) :</strong> ' + threshold + ' mUI/L<br><small>Norme ATA : ~4,0 mUI/L. Utiliser les normes labo trimestre-sp\u00e9cifiques en priorit\u00e9 si disponibles.</small></p><input type="number" id="thyro-app-val-tsh" class="thyro-app-input" placeholder="Valeur TSH (mUI/L)" min="0" step="0.01" aria-label="Entrez la valeur de TSH" autofocus><button class="thyro-app-submit" id="thyro-app-btn-analyze">Analyser la TSH</button>';
         }
 
         if(step.isFinal) {
             const reportTxt = getReportText();
-            html += '<div style="margin-top:25px;"><label style="font-size:12px; font-weight:600; color:#555; margin-bottom:5px; display:block;">Aperçu du rapport (Consultation) :</label><textarea class="thyro-app-report-box" readonly onclick="this.select()">' + reportTxt + '</textarea></div>';
-            html += '<button class="thyro-app-copy-btn" id="thyro-app-btn-copy">📋 Copier le rapport clinique</button>';
+            html += '<div style="margin-top:25px;"><label style="font-size:12px; font-weight:600; color:#555; margin-bottom:5px; display:block;">Aper\u00e7u du rapport (Consultation) :</label><textarea class="thyro-app-report-box" readonly onclick="this.select()">' + reportTxt + '</textarea></div>';
+            html += '<button class="thyro-app-copy-btn" id="thyro-app-btn-copy">Copier le rapport clinique</button>';
         }
 
         screen.innerHTML = html;
         attachEventListeners();
     }
 
-    /* ========================================
-       EVENT LISTENERS
-       ======================================== */
     function attachEventListeners() {
-        // Boutons options
         document.querySelectorAll('#thyro-app-final-scope .thyro-app-btn[data-next]').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -606,29 +589,22 @@
             });
         });
 
-        // Bouton analyse TSH
         const analyzeBtn = document.getElementById('thyro-app-btn-analyze');
         if(analyzeBtn) analyzeBtn.addEventListener('click', function(e) { e.preventDefault(); window.thyroAppHandleTsh(); });
 
-        // Bouton copier
         const copyBtn = document.getElementById('thyro-app-btn-copy');
         if(copyBtn) copyBtn.addEventListener('click', function(e) { e.preventDefault(); window.thyroAppCopyFinal(); });
 
-        // Bouton retour
         const backBtn = document.getElementById('thyro-app-back');
         if(backBtn) backBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if(history.length > 0) { const prev = history.pop(); tri = prev.tri; qaLog = prev.qaLog.slice(); render(prev.key); }
         });
 
-        // Bouton redémarrer
         const restartBtn = document.getElementById('thyro-app-restart');
         if(restartBtn) restartBtn.addEventListener('click', function(e) { e.preventDefault(); history = []; qaLog = []; tri = 1; render("start"); });
     }
 
-    /* ========================================
-       NAVIGATION
-       ======================================== */
     window.thyroAppNextStep = function(next, ans, t) {
         history.push({key: currentStepKey, tri: tri, qaLog: qaLog.slice()});
         qaLog.push({q: data[currentStepKey].q, ans: ans});
@@ -644,17 +620,17 @@
         if(isNaN(v) || v <= 0) {
             input.classList.add('thyro-app-error');
             setTimeout(() => input.classList.remove('thyro-app-error'), 300);
-            alert("⚠️ Veuillez saisir une valeur TSH positive valide.");
+            alert("Veuillez saisir une valeur TSH positive valide.");
             input.focus();
             return;
         }
 
         if(v > 100) {
-            if(!confirm("⚠️ Valeur inhabituelle (> 100 mUI/L).\n\nVoulez-vous confirmer cette valeur ?")) { input.focus(); return; }
+            if(!confirm("Valeur inhabituelle (> 100 mUI/L).\n\nVoulez-vous confirmer cette valeur ?")) { input.focus(); return; }
         }
 
         btn.disabled = true;
-        btn.innerText = "⏳ Analyse en cours...";
+        btn.innerText = "Analyse en cours...";
 
         setTimeout(() => {
             const threshold = tri === 1 ? 2.5 : 3.0;
@@ -666,11 +642,11 @@
                 window.thyroAppFinalAta(v, true, true);
             } else {
                 if(v <= threshold) {
-                    renderFinal("Conclusion", "TSH Normale (TSH = " + v + " mUI/L)\n\nRecommandations\n\n• Fonction thyroïdienne normale ;\n• Pas de surveillance ni de traitement spécifique ;\n• Maintenir la supplémentation iodée systématique (200 µg/j via complément prénatal).");
+                    renderFinal("Conclusion", "TSH Normale (TSH = " + v + " mUI/L)\n\nRecommandations\n\n\u2022 Fonction thyro\u00efdienne normale ;\n\u2022 Pas de surveillance ni de traitement sp\u00e9cifique ;\n\u2022 Maintenir la suppl\u00e9mentation iod\u00e9e syst\u00e9matique (200 \u00b5g/j via compl\u00e9ment pr\u00e9natal).");
                 } else {
                     const screen = document.getElementById('thyro-app-content');
                     if(screen) {
-                        screen.innerHTML = '<div class="thyro-app-step-title">Statut Anticorps anti-TPO ?</div><p style="margin-bottom: 15px; color: #666;">La TSH est élevée (' + v + ' mUI/L). Le statut des anticorps anti-TPO orientera la prise en charge.</p><button class="thyro-app-btn" data-tpo="pos">Anticorps anti-TPO Positifs</button><button class="thyro-app-btn" data-tpo="neg">Anticorps anti-TPO Négatifs ou Inconnus</button>';
+                        screen.innerHTML = '<div class="thyro-app-step-title">Statut Anticorps anti-TPO ?</div><p style="margin-bottom: 15px; color: #666;">La TSH est \u00e9lev\u00e9e (' + v + ' mUI/L). Le statut des anticorps anti-TPO orientera la prise en charge.</p><button class="thyro-app-btn" data-tpo="pos">Anticorps anti-TPO Positifs</button><button class="thyro-app-btn" data-tpo="neg">Anticorps anti-TPO N\u00e9gatifs ou Inconnus</button>';
 
                         const tpoPosBtn = screen.querySelector('[data-tpo="pos"]');
                         const tpoNegBtn = screen.querySelector('[data-tpo="neg"]');
@@ -682,51 +658,51 @@
             }
 
             btn.disabled = false;
-            btn.innerText = "📊 Analyser la TSH";
+            btn.innerText = "Analyser la TSH";
         }, 300);
     };
 
     window.thyroAppFinalAta = function(tsh, isPos, isKnownPrior) {
         if(!isKnownPrior) {
             history.push({key: "tpo_ask", tri: tri, qaLog: qaLog.slice()});
-            qaLog.push({q: "Anticorps anti-TPO", ans: isPos ? "Positifs" : "Négatifs/Inconnus"});
+            qaLog.push({q: "Anticorps anti-TPO", ans: isPos ? "Positifs" : "N\u00e9gatifs/Inconnus"});
         }
 
         let result = "", dosageInfo = "", showSuivi = true, showInitCalc = false;
         const targetVal = (tri === 1) ? "2,5" : "3,0";
-        const targetText = "Objectif TSH : valeur basse de la norme à " + targetVal + " mUI/L.";
-        const tpoText = isPos ? "positifs" : "négatifs/inconnus";
+        const targetText = "Objectif TSH : valeur basse de la norme \u00e0 " + targetVal + " mUI/L.";
+        const tpoText = isPos ? "positifs" : "n\u00e9gatifs/inconnus";
         const details = "(TSH = " + tsh + " mUI/L ; ATPO " + tpoText + ")";
 
-        if (tsh > 10.0) { result = "Hypothyroïdie AVÉRÉE " + details + " - Traitement IMPÉRATIF"; dosageInfo = "Lévothyroxine 50-100 µg/j (dose d'attaque selon poids : 1,6 µg/kg/j)."; showInitCalc = true; }
-        else if (tsh > 4.0) { result = "Hypothyroïdie fruste confirmée " + details + " - Traitement recommandé"; dosageInfo = "Lévothyroxine 25 à 50 µg/j (adapter selon poids et âge)."; }
+        if (tsh > 10.0) { result = "Hypothy\u00efroi\u00efdie AV\u00c9R\u00c9E " + details + " - Traitement IMP\u00c9RATIF"; dosageInfo = "L\u00e9vothyroxine 50-100 \u00b5g/j (dose d'attaque selon poids : 1,6 \u00b5g/kg/j)."; showInitCalc = true; }
+        else if (tsh > 4.0) { result = "Hypothy\u00efro\u00efdie fruste confirm\u00e9e " + details + " - Traitement recommand\u00e9"; dosageInfo = "L\u00e9vothyroxine 25 \u00e0 50 \u00b5g/j (adapter selon poids et \u00e2ge)."; }
         else if (tsh > parseFloat(targetVal)) {
-            if (isPos) { result = "Hypothyroïdie infraclinique avec TPO+ " + details + " - Traitement à discuter"; dosageInfo = "Envisager Lévothyroxine 25-50 µg/j (bénéfice probable avec TPO+)."; }
-            else { result = "Euthyroïdie probable " + details + " (TSH < 4 et TPO-)"; dosageInfo = "Ne pas traiter systématiquement. Maintenir supplémentation iodée. Surveillance."; showSuivi = false; }
+            if (isPos) { result = "Hypothy\u00efro\u00efdie infraclinique avec TPO+ " + details + " - Traitement \u00e0 discuter"; dosageInfo = "Envisager L\u00e9vothyroxine 25-50 \u00b5g/j (b\u00e9n\u00e9fice probable avec TPO+)."; }
+            else { result = "Euthy\u00efro\u00efdie probable " + details + " (TSH < 4 et TPO-)"; dosageInfo = "Ne pas traiter syst\u00e9matiquement. Maintenir suppl\u00e9mentation iod\u00e9e. Surveillance."; showSuivi = false; }
         }
-        else if (isKnownPrior && isPos) { result = "Euthyroïdie avec TPO+ connus " + details + " - Surveillance requise"; dosageInfo = "Pas de traitement immédiat (TSH normale). Surveillance rapprochée impérative."; showSuivi = true; }
-        else { result = "Euthyroïdie " + details; dosageInfo = "Pas de traitement."; showSuivi = false; }
+        else if (isKnownPrior && isPos) { result = "Euthy\u00efro\u00efdie avec TPO+ connus " + details + " - Surveillance requise"; dosageInfo = "Pas de traitement imm\u00e9diat (TSH normale). Surveillance rapproch\u00e9e imp\u00e9rative."; showSuivi = true; }
+        else { result = "Euthy\u00efro\u00efdie " + details; dosageInfo = "Pas de traitement."; showSuivi = false; }
 
-        let reco = result + "\n\nRecommandations\n\n• " + dosageInfo + "\n• " + targetText + "\n• Supplémentation iodée : 200 µg/j.";
+        let reco = result + "\n\nRecommandations\n\n\u2022 " + dosageInfo + "\n\u2022 " + targetText + "\n\u2022 Suppl\u00e9mentation iod\u00e9e : 200 \u00b5g/j.";
 
         if (showSuivi) {
-            let followUp = (tri === 1) ? "• TSH toutes les 4-6 semaines jusqu'à 22 SA ;\n• TSH une fois par mois de 22 SA jusqu'à 34 SA ;\n• TSH en post-partum." : "• TSH une fois par mois jusqu'à 34 SA ;\n• TSH en post-partum.";
+            let followUp = (tri === 1) ? "\u2022 TSH toutes les 4-6 semaines jusqu'\u00e0 22 SA ;\n\u2022 TSH une fois par mois de 22 SA jusqu'\u00e0 34 SA ;\n\u2022 TSH en post-partum." : "\u2022 TSH une fois par mois jusqu'\u00e0 34 SA ;\n\u2022 TSH en post-partum.";
             reco += "\n\nSuivi :\n" + followUp;
-        } else if (!reco.includes("Euthyroïdie")) { reco += "\n• Surveillance TSH mensuelle recommandée."; }
+        } else if (!reco.includes("Euthy\u00efro\u00efdie")) { reco += "\n\u2022 Surveillance TSH mensuelle recommand\u00e9e."; }
 
         renderFinal("Conclusion", reco, showInitCalc);
     };
 
     function renderFinal(title, reco, showInitCalc) {
         let boxClass = "thyro-app-success";
-        if (reco.includes("AVÉRÉE") || reco.includes("IMPÉRATIF")) { boxClass = "thyro-app-danger"; }
-        else if (reco.includes("fruste confirmée")) { boxClass = "thyro-app-danger"; }
+        if (reco.includes("AV\u00c9R\u00c9E") || reco.includes("IMP\u00c9RATIF")) { boxClass = "thyro-app-danger"; }
+        else if (reco.includes("fruste confirm\u00e9e")) { boxClass = "thyro-app-danger"; }
         else if (reco.includes("infraclinique") || reco.includes("Surveillance requise")) { boxClass = "thyro-app-warning"; }
 
         let finalHTML = '<div class="thyro-app-reco-box ' + boxClass + '">' + reco.replace(/\n/g, '<br>') + '</div>';
 
-        if(reco.includes("Lévothyroxine") || reco.includes("traitement") || reco.includes("adapter")) {
-            finalHTML += '<div style="margin-top:15px; font-size:13px; background:#e3f2fd; color:#0277bd; padding:10px; border-radius:6px; border-left:4px solid #0288d1;"><strong>💊 Conseil Prise :</strong> Le Fer et le Calcium bloquent l\'absorption du Lévothyrox.<br>→ Espacer les prises d\'au moins <strong>4 heures</strong> (ex: Lévothyrox le matin à jeun, Fer le midi).</div>';
+        if(reco.includes("L\u00e9vothyroxine") || reco.includes("traitement") || reco.includes("adapter")) {
+            finalHTML += '<div style="margin-top:15px; font-size:13px; background:#e3f2fd; color:#0277bd; padding:10px; border-radius:6px; border-left:4px solid #0288d1;"><strong>Conseil Prise :</strong> Le Fer et le Calcium bloquent l\'absorption du L\u00e9vothyrox.<br>\u2192 Espacer les prises d\'au moins <strong>4 heures</strong> (ex: L\u00e9vothyrox le matin \u00e0 jeun, Fer le midi).</div>';
         }
 
         if(showInitCalc) finalHTML += getInitDoseHTML();
@@ -738,10 +714,9 @@
 
     window.thyroAppCopyFinal = function() {
         const text = getReportText();
-
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(text).then(
-                function() { alert("✅ Rapport copié dans le presse-papiers !"); },
+                function() { alert("Rapport copi\u00e9 dans le presse-papiers !"); },
                 function() { fallbackCopyTextToClipboard(text); }
             );
         } else {
@@ -756,27 +731,19 @@
         textArea.style.top = "0";
         textArea.style.left = "0";
         textArea.style.opacity = "0";
-        
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-
         try {
             var successful = document.execCommand('copy');
-            if (successful) {
-                alert("✅ Rapport copié dans le presse-papiers !");
-            } else {
-                alert("⚠️ Erreur : impossible de copier automatiquement. Le texte est sélectionné, faites CTRL+C (ou CMD+C) pour copier.");
-            }
+            if (successful) { alert("Rapport copi\u00e9 dans le presse-papiers !"); }
+            else { alert("Erreur : impossible de copier automatiquement. S\u00e9lectionnez le texte et faites CTRL+C."); }
         } catch (err) {
-            alert("⚠️ Erreur de copie. Veuillez sélectionner le texte manuellement.");
+            alert("Erreur de copie. Veuillez s\u00e9lectionner le texte manuellement.");
         }
         document.body.removeChild(textArea);
-    };
+    }
 
-    /* ========================================
-       INIT
-       ======================================== */
     function init() { render("start"); }
     if (document.readyState === 'complete' || document.readyState === 'interactive') { init(); } else { document.addEventListener('DOMContentLoaded', init); }
 
