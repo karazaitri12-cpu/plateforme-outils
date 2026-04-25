@@ -173,16 +173,16 @@
   const searchInput      = document.getElementById('searchInput');
   const clearSearchBtn   = document.getElementById('clearSearch');
 
-  let allTools      = [];
+  let allTools       = [];
   let activeCategory = 'all';
-  let searchTerm    = '';
-  let favorites     = JSON.parse(localStorage.getItem('drkz_favorites')) || [];
+  let searchTerm     = '';
+  let favorites      = JSON.parse(localStorage.getItem('drkz_favorites')) || [];
+  let isPremiumUser  = false;
 
-  // Vérification du statut premium (token localStorage)
-  let isPremiumUser = false;
-
+  // -------------------------------------------------------
+  // Vérification premium via API WordPress
+  // -------------------------------------------------------
   async function checkPremium() {
-    // Récupérer le token depuis l'URL (?token=) ou le localStorage
     const urlParams = new URLSearchParams(window.location.search);
     const urlToken  = urlParams.get('token');
     if (urlToken) {
@@ -197,6 +197,25 @@
       return data.valid === true;
     } catch { return false; }
   }
+
+  // -------------------------------------------------------
+  // RÉCEPTION DU TOKEN DEPUIS LE PARENT WORDPRESS (postMessage)
+  // outils.dr-karazaitri-ma.net et dr-karazaitri-ma.net
+  // ont des localStorage séparés — postMessage fait le pont
+  // -------------------------------------------------------
+  window.addEventListener('message', function(e) {
+    if (e.origin !== 'https://www.dr-karazaitri-ma.net' &&
+        e.origin !== 'https://dr-karazaitri-ma.net') return;
+    if (e.data && e.data.type === 'KZ_TOKEN' && e.data.token) {
+      localStorage.setItem('kz_platform_token', e.data.token);
+      checkPremium().then(function(status) {
+        if (status !== isPremiumUser) {
+          isPremiumUser = status;
+          renderTools();
+        }
+      });
+    }
+  });
 
   (async function init() {
     if (localStorage.getItem('drkz_theme') === 'dark') {
