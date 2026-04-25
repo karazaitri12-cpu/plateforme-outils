@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plateforme d'outils médicaux | Dr. Kara Zaitri</title>
   <meta name="description" content="Outils professionnels d'aide à la décision en gynécologie-obstétrique." />
-  
-  <!-- === LIENS PWA (Mode Hors-Ligne & Installation App) === -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#2B6CB0">
   <link rel="apple-touch-icon" href="/icon-192.png">
 
   <style>
-    /* === VARIABLES CSS (Light & Dark Mode) === */
     :root {
       --primary: #2B6CB0; --primary-dark: #2C5282;
       --accent: #2F855A; --warning: #B7791F;
@@ -21,75 +18,94 @@
       --border: #E2E8F0; --radius: 8px;
       --shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-
     body.dark-mode {
       --bg: #1A202C; --card: #2D3748;
       --text: #F7FAFC; --text-muted: #A0AEC0;
       --border: #4A5568; --shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-    
-    /* === EN-TÊTE STYLE UTILITAIRES (NOUVEAU) === */
-    .main-header {
-      background: #fff !important;
-      border-bottom: 3px solid #1a3a5c !important;
-      padding: 25px 20px !important;
-      text-align: center !important;
-    }
-    .main-header h1 {
-      font-size: 20px !important;
-      color: #1a3a5c !important;
-      margin: 0 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.5px !important;
-      font-weight: 700 !important;
-    }
-    .main-header .subtitle {
-      font-size: 13px !important;
-      color: #607d8b !important;
-      margin: 5px 0 0 0 !important;
-    }
-    .main-header .subtitle a {
-      color: #1a3a5c !important;
-      text-decoration: none !important;
-      border-bottom: 1px dotted #1a3a5c !important;
-    }
-    
-    /* === HEADER ACTIONS (gardé de l'original) === */
+
+    .main-header { background: #fff !important; border-bottom: 3px solid #1a3a5c !important; padding: 25px 20px !important; text-align: center !important; }
+    .main-header h1 { font-size: 20px !important; color: #1a3a5c !important; margin: 0 !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; font-weight: 700 !important; }
+    .main-header .subtitle { font-size: 13px !important; color: #607d8b !important; margin: 5px 0 0 0 !important; }
+    .main-header .subtitle a { color: #1a3a5c !important; text-decoration: none !important; border-bottom: 1px dotted #1a3a5c !important; }
+
     .header-actions { display: flex; gap: 10px; align-items: center; }
     .icon-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; text-decoration: none; }
     .icon-btn:hover { background: var(--border); }
-    
-    /* === RECHERCHE & FILTRES (inchangé) === */
+
     .search-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin: 24px 0; transition: background 0.3s; }
     .search-box { position: relative; margin-bottom: 16px; }
     .search-box input { width: 100%; padding: 12px 44px 12px 44px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; background: var(--bg); color: var(--text); transition: all 0.2s; }
     .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); background: var(--card); }
     .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
-    
     .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); background: var(--border); width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; transition: background 0.2s, color 0.2s; }
     .clear-icon:hover { background: var(--text-muted); color: var(--card); }
-    
+
     .filters { display: flex; gap: 10px; flex-wrap: wrap; }
     .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: normal; transition: all 0.2s; color: var(--text); }
     .filter-btn:hover { background: #EBF8FF; border-color: var(--primary); color: var(--primary); }
     .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 600; }
     body.dark-mode .filter-btn:hover { background: rgba(43,108,176,0.2); }
-    
-    .filter-btn.fav-btn { background: rgba(214, 158, 46, 0.1); border-color: #D69E2E; color: #D69E2E; }
+    .filter-btn.fav-btn { background: rgba(214,158,46,0.1); border-color: #D69E2E; color: #D69E2E; }
     .filter-btn.fav-btn.active { background: #D69E2E; color: white; border-color: #D69E2E; font-weight: 600; }
-    
-    /* === GRID OUTILS (inchangé) === */
+
     .section-title { font-size: 1.05rem; font-weight: 600; color: var(--primary); margin: 28px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
     .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-bottom: 32px; }
-    
-    .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; transition: all 0.2s; text-decoration: none; color: inherit; display: flex; gap: 12px; position: relative; }
+
+    /* === CARTE STANDARD === */
+    .tool-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px;
+      transition: all 0.2s; text-decoration: none; color: inherit;
+      display: flex; gap: 12px; position: relative;
+    }
     .tool-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px); }
     .tool-card.disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
-    
+
+    /* === CARTE PREMIUM — bordure dorée, grisée, non cliquable === */
+    .tool-card.premium {
+      border: 2px solid #C9A84C !important;
+      background: #fafaf7 !important;
+      opacity: 0.72 !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
+      filter: grayscale(0.35) !important;
+      box-shadow: 0 0 0 1px rgba(201,168,76,0.18) !important;
+      transform: none !important;
+    }
+    body.dark-mode .tool-card.premium {
+      background: #252d3a !important;
+      border-color: #a07d2a !important;
+    }
+    .tool-card.premium .tool-content h3 { color: #6b7280 !important; }
+    .tool-card.premium .tool-content p  { color: #9ca3af !important; }
+    .tool-card.premium .tool-icon {
+      background: linear-gradient(135deg, #9ca3af, #6b7280) !important;
+    }
+
+    /* Badge ★ PREMIUM en haut à droite (remplace l'étoile favori) */
+    .premium-badge {
+      position: absolute; top: 10px; right: 10px;
+      display: flex; align-items: center; gap: 3px;
+      background: linear-gradient(135deg, #C9A84C, #e8c96a);
+      color: #fff; font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 10px;
+      letter-spacing: 0.04em; z-index: 2;
+      box-shadow: 0 1px 4px rgba(201,168,76,0.35);
+      pointer-events: none;
+    }
+
+    /* Icône cadenas en bas à droite de l'icône outil */
+    .premium-lock {
+      position: absolute; bottom: 10px; right: 10px;
+      font-size: 14px; color: #C9A84C;
+      opacity: 0.85; pointer-events: none;
+    }
+
+    /* Étoile favori (cartes normales uniquement) */
     .star-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--border); transition: 0.2s; z-index: 2; padding: 0; line-height: 1; }
     .star-btn:hover { transform: scale(1.1); }
     .star-btn.is-fav { color: #D69E2E; }
@@ -101,54 +117,43 @@
     .tool-content { flex: 1; min-width: 0; padding-right: 15px; }
     .tool-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin: 0 0 4px; line-height: 1.3; }
     .tool-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
-    
-    /* === FOOTER (inchangé) === */
+
     .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; transition: background 0.3s; }
 
     ::-webkit-scrollbar { width: 0px; background: transparent; }
     html { scrollbar-width: none; }
     body { -ms-overflow-style: none; overflow-y: auto; }
-    
+
     @media (max-width: 600px) {
       .tools-grid { grid-template-columns: 1fr; }
       .header-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
       .header-actions { width: 100%; justify-content: flex-end; }
     }
   </style>
-<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </head>
 <body>
 
-  <!-- === NOUVEL EN-TÊTE STYLE UTILITAIRES === -->
   <header class="main-header">
     <h1>Plateforme d'outils médicaux</h1>
     <p class="subtitle">DR KARA-ZAITRI M.A - Gynécologie-Obstétrique | Site FemCare Hub sur <a href="https://www.dr-karazaitri-ma.net" target="_blank" rel="noopener noreferrer">www.dr-karazaitri-ma.net</a></p>
   </header>
 
-  <!-- === BOUTONS ACTIONS (gardé de l'original) === -->
   <div class="container" style="margin-top: 16px;">
     <div class="header-actions" style="justify-content: flex-end;">
-      <a href="/tools/guide-pwa.html" class="icon-btn" title="Comment installer l'App ?">
-        📱 Installer l'App
-      </a>
-      <button class="icon-btn" id="themeToggle" title="Mode Sombre" onclick="toggleTheme()">
-        🌙
-      </button>
+      <a href="/tools/guide-pwa.html" class="icon-btn" title="Comment installer l'App ?">📱 Installer l'App</a>
+      <button class="icon-btn" id="themeToggle" title="Mode Sombre" onclick="toggleTheme()">🌙</button>
     </div>
   </div>
 
   <main class="container">
-    <!-- Disclaimer SUPPRIMÉ ICI et déplacé en bas -->
-
     <section class="search-section">
       <div class="search-box">
         <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Rechercher un outil (ex: Bishop, IMC, sein...)" autocomplete="off">
         <span class="clear-icon" id="clearSearch" title="Effacer">✖</span>
       </div>
-      <div class="filters" id="filtersContainer">
-        <!-- Rempli par JS -->
-      </div>
+      <div class="filters" id="filtersContainer"></div>
     </section>
 
     <h3 class="section-title">Outils disponibles</h3>
@@ -158,117 +163,147 @@
   </main>
 
   <footer class="footer">
-    <!-- Disclaimer déplacé ICI en bas -->
     <p><strong>Mention légale :</strong> Outils destinés aux professionnels de santé. Ne se substituent pas au jugement clinique.</p>
     <p style="margin-top:6px;">© 2026 DR KARA-ZAITRI M.A</p>
   </footer>
+
 <script>
-    const grid = document.getElementById('toolsGrid');
-    const filtersContainer = document.getElementById('filtersContainer');
-    const searchInput = document.getElementById('searchInput');
-    const clearSearchBtn = document.getElementById('clearSearch');
-    
-    let allTools = [];
-    let activeCategory = 'all';
-    let searchTerm = '';
-    
-    let favorites = JSON.parse(localStorage.getItem('drkz_favorites')) || [];
+  const grid             = document.getElementById('toolsGrid');
+  const filtersContainer = document.getElementById('filtersContainer');
+  const searchInput      = document.getElementById('searchInput');
+  const clearSearchBtn   = document.getElementById('clearSearch');
 
-    // Initialisation
-    (async function init() {
-      if (localStorage.getItem('drkz_theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('themeToggle').innerText = '☀️';
-      }
+  let allTools      = [];
+  let activeCategory = 'all';
+  let searchTerm    = '';
+  let favorites     = JSON.parse(localStorage.getItem('drkz_favorites')) || [];
 
-      try {
-        const res = await fetch('/tools.json');
-        allTools = await res.json();
-        renderFilters();
-        renderTools();
-      } catch (err) {
-        grid.innerHTML = '<p>Erreur chargement JSON.</p>';
-      }
-    })();
+  // Vérification du statut premium (token localStorage)
+  let isPremiumUser = false;
 
-    function toggleTheme() {
-      const isDark = document.body.classList.toggle('dark-mode');
-      document.getElementById('themeToggle').innerText = isDark ? '☀️' : '🌙';
-      localStorage.setItem('drkz_theme', isDark ? 'dark' : 'light');
+  async function checkPremium() {
+    const token = localStorage.getItem('kz_platform_token');
+    if (!token) return false;
+    try {
+      const r    = await fetch('https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token));
+      const data = await r.json();
+      return data.valid === true;
+    } catch { return false; }
+  }
+
+  (async function init() {
+    if (localStorage.getItem('drkz_theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('themeToggle').innerText = '☀️';
     }
 
-    function toggleFav(e, id) {
-      e.preventDefault(); 
-      const index = favorites.indexOf(id);
-      if (index === -1) favorites.push(id); else favorites.splice(index, 1);
-      localStorage.setItem('drkz_favorites', JSON.stringify(favorites));
+    // Vérification premium en parallèle du chargement des outils
+    const [tools] = await Promise.all([
+      fetch('/tools.json').then(r => r.json()).catch(() => []),
+      checkPremium().then(v => { isPremiumUser = v; })
+    ]);
+
+    allTools = tools;
+    renderFilters();
+    renderTools();
+  })();
+
+  function toggleTheme() {
+    const isDark = document.body.classList.toggle('dark-mode');
+    document.getElementById('themeToggle').innerText = isDark ? '☀️' : '🌙';
+    localStorage.setItem('drkz_theme', isDark ? 'dark' : 'light');
+  }
+
+  function toggleFav(e, id) {
+    e.preventDefault();
+    const index = favorites.indexOf(id);
+    if (index === -1) favorites.push(id); else favorites.splice(index, 1);
+    localStorage.setItem('drkz_favorites', JSON.stringify(favorites));
+    renderTools();
+  }
+
+  function renderFilters() {
+    const cats = new Set();
+    allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
+    let html = `<button class="filter-btn active" data-cat="all">Tous</button>
+                <button class="filter-btn fav-btn" data-cat="favorites">⭐ Favoris</button>`;
+    html += Array.from(cats).map(c =>
+      `<button class="filter-btn" data-cat="${c}">${c}</button>`
+    ).join('');
+    filtersContainer.innerHTML = html;
+    filtersContainer.addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.cat;
       renderTools();
-    }
+    });
+  }
 
-    function renderFilters() {
-      const cats = new Set();
-      allTools.forEach(t => t.categorie.forEach(c => cats.add(c)));
-      
-      const orderedCats = Array.from(cats);
-      
-      let html = `<button class="filter-btn active" data-cat="all">Tous</button><button class="filter-btn fav-btn" data-cat="favorites">⭐ Favoris</button>`;
-      html += orderedCats.map(c => `<button class="filter-btn" data-cat="${c}">${c}</button>`).join('');
-      filtersContainer.innerHTML = html;
+  function renderTools() {
+    const normalize = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 
-      filtersContainer.addEventListener('click', e => {
-        const btn = e.target.closest('.filter-btn');
-        if (!btn) return;
-        filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeCategory = btn.dataset.cat;
-        renderTools();
-      });
-    }
+    let filtered = allTools.filter(t => {
+      const matchCat = activeCategory === 'all'
+        || (activeCategory === 'favorites' ? favorites.includes(t.id) : t.categorie.includes(activeCategory));
+      const term = normalize(searchTerm);
+      return matchCat && (!term || normalize(t.titre).includes(term) || normalize(t.description).includes(term));
+    });
 
-    function renderTools() {
-      const normalizeText = (str) => 
-        str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    grid.innerHTML = filtered.map(t => {
+      const isFav     = favorites.includes(t.id);
+      const isPremium = t.premium === true;
 
-      let filtered = allTools.filter(t => {
-        let matchCat = activeCategory === 'all' || (activeCategory === 'favorites' ? favorites.includes(t.id) : t.categorie.includes(activeCategory));
-        const term = normalizeText(searchTerm);
-        const titleNorm = normalizeText(t.titre);
-        const descNorm = normalizeText(t.description);
-
-        return matchCat && (!term || titleNorm.includes(term) || descNorm.includes(term));
-      });
-
-      grid.innerHTML = filtered.map(t => {
-        const isFav = favorites.includes(t.id);
+      // Carte premium : grisée + bordure dorée + badge + cadenas, non cliquable
+      if (isPremium && !isPremiumUser) {
         const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
         return `
-        <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
+        <div class="tool-card premium" title="Accès réservé aux membres premium">
           ${badgeHtml}
-          <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">
-            ${isFav ? '★' : '☆'}
-          </button>
+          <span class="premium-badge">★ Premium</span>
           <div class="tool-icon">${t.icone || '🛠️'}</div>
           <div class="tool-content">
             <h3>${t.titre}</h3>
             <p>${t.description}</p>
           </div>
-        </a>`}).join('');
-    }
+          <span class="premium-lock">🔒</span>
+        </div>`;
+      }
 
-    searchInput.addEventListener('input', e => {
-      searchTerm = e.target.value.trim();
-      clearSearchBtn.style.display = searchTerm.length > 0 ? 'flex' : 'none';
-      renderTools();
-    });
+      // Carte normale (gratuite ou premium déverrouillé)
+      const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
+      return `
+      <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
+        ${badgeHtml}
+        <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">
+          ${isFav ? '★' : '☆'}
+        </button>
+        <div class="tool-icon">${t.icone || '🛠️'}</div>
+        <div class="tool-content">
+          <h3>${t.titre}</h3>
+          <p>${t.description}</p>
+        </div>
+      </a>`;
+    }).join('');
+  }
 
-    clearSearchBtn.addEventListener('click', () => {
-      searchInput.value = ''; searchTerm = ''; clearSearchBtn.style.display = 'none'; renderTools();
-    });
+  searchInput.addEventListener('input', e => {
+    searchTerm = e.target.value.trim();
+    clearSearchBtn.style.display = searchTerm.length > 0 ? 'flex' : 'none';
+    renderTools();
+  });
 
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); });
-    }
-  </script>
-  
+  clearSearchBtn.addEventListener('click', () => {
+    searchInput.value = ''; searchTerm = '';
+    clearSearchBtn.style.display = 'none';
+    renderTools();
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); });
+  }
+</script>
+
 </body>
 </html>
