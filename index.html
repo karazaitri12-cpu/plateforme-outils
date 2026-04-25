@@ -182,6 +182,13 @@
   let isPremiumUser = false;
 
   async function checkPremium() {
+    // Récupérer le token depuis l'URL (?token=) ou le localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlToken  = urlParams.get('token');
+    if (urlToken) {
+      localStorage.setItem('kz_platform_token', urlToken);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
     const token = localStorage.getItem('kz_platform_token');
     if (!token) return false;
     try {
@@ -197,13 +204,14 @@
       document.getElementById('themeToggle').innerText = '☀️';
     }
 
-    // Vérification premium en parallèle du chargement des outils
-    const [tools] = await Promise.all([
+    const [tools, premiumStatus] = await Promise.all([
       fetch('/tools.json').then(r => r.json()).catch(() => []),
-      checkPremium().then(v => { isPremiumUser = v; })
+      checkPremium()
     ]);
 
-    allTools = tools;
+    allTools      = tools;
+    isPremiumUser = premiumStatus;
+
     renderFilters();
     renderTools();
   })();
