@@ -58,7 +58,9 @@
 
 #rcf-tool-root .btn-launch-ai { background: var(--normal) !important; color: #fff !important; border: none !important; padding: 12px 25px !important; border-radius: 5px !important; font-size: 15px !important; font-weight: bold !important; cursor: pointer !important; width: 100% !important; margin-top: 15px !important; box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2) !important; transition: 0.3s !important; }
 #rcf-tool-root .btn-launch-ai:hover { background: #229954 !important; transform: translateY(-1px) !important; }
-.mobile-only-btn { display: none !important; }
+
+/* CORRECTION : Cacher de force le bouton caméra sur PC */
+#rcf-tool-root .mobile-only-btn { display: none !important; }
 
 /* Analyse & Resultats */
 #rcf-tool-root .rcf-analysis-section { margin-bottom: 25px !important; }
@@ -96,7 +98,8 @@
   #rcf-tool-root .rcf-grid { grid-template-columns: 1fr !important; }
   #rcf-tool-root .rcf-patient-grid { grid-template-columns: 1fr !important; }
   #rcf-tool-root .rcf-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
-  .mobile-only-btn { display: inline-flex !important; }
+  /* CORRECTION : Autorise l'affichage sur mobile uniquement */
+  #rcf-tool-root .mobile-only-btn { display: inline-flex !important; }
 }
 
 /* Impression */
@@ -398,7 +401,7 @@ function analyseRCF() {
     const interp = document.getElementById('interpretation');
     const list = document.getElementById('criteria-list');
     
-    // CORRECTION DU BUG "NORMAL" : Si les champs ne sont pas tous remplis
+    // Si les champs ne sont pas tous remplis
     if(!basal || !variability || !decels || !accels) {
         tag.style.background = '#95a5a6';
         tag.innerText = 'EN ATTENTE';
@@ -486,7 +489,6 @@ function imprimerRCF() {
     const status = document.getElementById('status-tag').innerText;
     if(status === 'EN ATTENTE') { alert("Veuillez d'abord remplir l'analyse ou utiliser l'IA."); return; }
     
-    // Remplissage des données d'impression
     document.getElementById('pr-nom-medecin').innerText = document.getElementById('p-medecin').value || 'Non renseigné';
     document.getElementById('pr-nom-prenom').innerText = document.getElementById('p-nom-prenom').value || 'Non renseigné';
     document.getElementById('pr-dob').innerText = document.getElementById('p-dob').value ? new Date(document.getElementById('p-dob').value).toLocaleDateString('fr-FR') : 'Non renseignée';
@@ -539,11 +541,9 @@ function processImageFile(file) {
         document.getElementById('ai-details-box').style.display = 'none';
         document.getElementById('ai-status-msg').style.display = 'none';
         
-        // Rend le bouton "Afficher source" disponible en bas
         document.getElementById('btn-toggle-source').style.display = 'inline-block';
         document.getElementById('source-image-container').style.display = 'none';
         document.getElementById('btn-toggle-source').innerHTML = '👁️ Afficher l\'image source';
-        // Affecte l'image source en bas (avec rotation par défaut à 0)
         document.getElementById('source-image-display').src = e.target.result;
         document.getElementById('source-image-display').style.transform = `rotate(0deg)`;
     };
@@ -578,14 +578,12 @@ function resetImage() {
     document.getElementById('ai-status-msg').style.display = 'none';
     document.getElementById('rcf-drop-area').style.display = 'block';
     
-    // Cache l'image en bas
     document.getElementById('btn-toggle-source').style.display = 'none';
     document.getElementById('source-image-container').style.display = 'none';
     document.getElementById('source-image-display').src = '';
     currentRotationAngle = 0;
 }
 
-// Fonction pour le bouton Afficher/Masquer en bas
 function toggleSourceImage() {
     const container = document.getElementById('source-image-container');
     const btn = document.getElementById('btn-toggle-source');
@@ -633,7 +631,6 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
 
         statusDiv.innerHTML = "🧠 Analyse médicale en cours par l'IA (5 à 10 secondes)...";
         
-        // Appel vers le serveur PHP sécurisé
         const response = await fetch('https://dr-karazaitri-ma.net/rcf-proxy.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
