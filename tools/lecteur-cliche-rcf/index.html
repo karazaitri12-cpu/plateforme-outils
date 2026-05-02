@@ -7,7 +7,6 @@
 <style>
 /* ═══════════════════════════════════════════════
    LECTURE RCF - STYLE INSTITUTIONNEL (HAS/FIGO) + IA
-   Blindage Elementor + Scrollbar masqué
    ═══════════════════════════════════════════════ */
 
 /* Reset global namespacé */
@@ -42,8 +41,6 @@
   box-sizing: border-box !important;
   position: relative !important;
 }
-
-#rcf-tool-root * { box-sizing: border-box !important; font-family: inherit !important; }
 
 #rcf-tool-root .rcf-header {
   background: var(--primary-med) !important;
@@ -102,7 +99,7 @@
   border-bottom: 2px solid var(--border-med) !important;
 }
 
-/* Section Identité Patiente & Praticien */
+/* Identité Patiente & Praticien */
 #rcf-tool-root .rcf-patient-info {
   background: #fff !important;
   padding: 18px !important;
@@ -118,297 +115,95 @@
   gap: 12px 16px !important;
 }
 
-#rcf-tool-root .rcf-field-group {
-  display: flex !important;
-  flex-direction: column !important;
-}
+#rcf-tool-root .rcf-field-group { display: flex !important; flex-direction: column !important; }
+#rcf-tool-root .rcf-field-row { display: grid !important; grid-template-columns: 1fr 80px !important; gap: 10px !important; }
 
-#rcf-tool-root .rcf-field-row {
-  display: grid !important;
-  grid-template-columns: 1fr 80px !important;
-  gap: 10px !important;
+/* Zone Drag & Drop de l'IA */
+#rcf-tool-root .rcf-dropzone {
+  border: 2px dashed #c39bd3 !important;
+  border-radius: 8px !important;
+  padding: 30px 20px !important;
+  text-align: center !important;
+  background: #fff !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  margin-bottom: 15px !important;
 }
+#rcf-tool-root .rcf-dropzone:hover { background: #f4ecf7 !important; border-color: var(--ai-color) !important; }
+#rcf-tool-root .rcf-dropzone.dragover { background: #e8daef !important; border-color: var(--ai-color) !important; }
+#rcf-tool-root .rcf-dropzone input[type="file"] { display: none !important; }
+#rcf-tool-root .rcf-file-info { font-size: 13px !important; color: var(--normal) !important; margin-top: 10px !important; font-weight: bold !important; }
 
-/* Section Analyse du Tracé */
-#rcf-tool-root .rcf-analysis-section {
-  margin-bottom: 25px !important;
-}
+/* Analyse du Tracé */
+#rcf-tool-root .rcf-analysis-section { margin-bottom: 25px !important; }
+#rcf-tool-root .rcf-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+#rcf-tool-root .rcf-section { background: var(--bg-med) !important; padding: 15px !important; border-radius: 4px !important; border-left: 4px solid var(--accent-med) !important; }
 
-#rcf-tool-root .rcf-grid {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 16px !important;
-}
-
-#rcf-tool-root .rcf-section {
-  background: var(--bg-med) !important;
-  padding: 15px !important;
-  border-radius: 4px !important;
-  border-left: 4px solid var(--accent-med) !important;
-}
-
-#rcf-tool-root label {
-  display: block !important;
-  font-weight: 600 !important;
-  font-size: 12px !important;
-  margin-bottom: 6px !important;
-  color: var(--primary-med) !important;
-}
+#rcf-tool-root label { display: block !important; font-weight: 600 !important; font-size: 12px !important; margin-bottom: 6px !important; color: var(--primary-med) !important; }
 
 #rcf-tool-root select, #rcf-tool-root input {
-  width: 100% !important;
-  padding: 9px 12px !important;
-  border: 1px solid var(--border-med) !important;
-  border-radius: 4px !important;
-  font-size: 13px !important;
-  background: #fff !important;
-  color: var(--text-dark) !important;
-  appearance: auto !important;
-  -webkit-appearance: auto !important;
+  width: 100% !important; padding: 9px 12px !important; border: 1px solid var(--border-med) !important;
+  border-radius: 4px !important; font-size: 13px !important; background: #fff !important; color: var(--text-dark) !important;
+  appearance: auto !important; -webkit-appearance: auto !important;
 }
+#rcf-tool-root select:focus, #rcf-tool-root input:focus, #rcf-tool-root textarea:focus { outline: none !important; border-color: var(--accent-med) !important; box-shadow: 0 0 0 2px rgba(58,110,163,0.1) !important; }
+#rcf-tool-root input[readonly], #rcf-tool-root textarea[readonly] { background-color: #eaeff3 !important; color: #4a5a6a !important; font-weight: 600 !important; }
 
-#rcf-tool-root select:focus, #rcf-tool-root input:focus {
-  outline: none !important;
-  border-color: var(--accent-med) !important;
-  box-shadow: 0 0 0 2px rgba(58,110,163,0.1) !important;
-}
-
-#rcf-tool-root input[readonly], #rcf-tool-root textarea[readonly] {
-  background-color: #eaeff3 !important;
-  color: #4a5a6a !important;
-  font-weight: 600 !important;
-}
-
-#rcf-tool-root .rcf-result-box {
-  margin-top: 25px !important;
-  padding: 20px !important;
-  border: 2px solid var(--border-med) !important;
-  background: #fff !important;
-  text-align: center !important;
-}
-
-#rcf-tool-root .status-tag {
-  display: inline-block !important;
-  padding: 8px 15px !important;
-  border-radius: 20px !important;
-  font-weight: 700 !important;
-  color: #fff !important;
-  text-transform: uppercase !important;
-  margin-bottom: 10px !important;
-}
-
-#rcf-tool-root .interpretation-text {
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  margin: 10px 0 !important;
-}
-
-#rcf-tool-root .figo-criteria {
-  margin-top: 15px !important;
-  text-align: left !important;
-  font-size: 12px !important;
-  background: #f9f9f9 !important;
-  padding: 12px !important;
-  border: 1px solid #e1e8ed !important;
-}
-
-#rcf-tool-root .figo-criteria ul {
-  list-style: none !important;
-  padding: 0 !important;
-  margin: 6px 0 0 0 !important;
-}
-
-#rcf-tool-root .figo-criteria li {
-  position: relative !important;
-  padding-left: 16px !important;
-  margin-bottom: 4px !important;
-}
-
-#rcf-tool-root .figo-criteria li::before {
-  content: "\2192" !important;
-  position: absolute !important;
-  left: 0 !important;
-  top: 0 !important;
-  color: var(--accent-med) !important;
-  font-weight: 700 !important;
-}
+#rcf-tool-root .rcf-result-box { margin-top: 25px !important; padding: 20px !important; border: 2px solid var(--border-med) !important; background: #fff !important; text-align: center !important; }
+#rcf-tool-root .status-tag { display: inline-block !important; padding: 8px 15px !important; border-radius: 20px !important; font-weight: 700 !important; color: #fff !important; text-transform: uppercase !important; margin-bottom: 10px !important; }
+#rcf-tool-root .interpretation-text { font-size: 14px !important; font-weight: 500 !important; margin: 10px 0 !important; }
+#rcf-tool-root .figo-criteria { margin-top: 15px !important; text-align: left !important; font-size: 12px !important; background: #f9f9f9 !important; padding: 12px !important; border: 1px solid #e1e8ed !important; }
+#rcf-tool-root .figo-criteria ul { list-style: none !important; padding: 0 !important; margin: 6px 0 0 0 !important; }
+#rcf-tool-root .figo-criteria li { position: relative !important; padding-left: 16px !important; margin-bottom: 4px !important; }
+#rcf-tool-root .figo-criteria li::before { content: "\2192" !important; position: absolute !important; left: 0 !important; top: 0 !important; color: var(--accent-med) !important; font-weight: 700 !important; }
 
 /* Zone Compte-Rendu Texte Brut */
-#rcf-tool-root .rcf-export-section {
-  margin-top: 25px !important;
-  background: #fff !important;
-  padding: 15px !important;
-  border: 1px solid var(--border-med) !important;
-  border-radius: 4px !important;
-}
+#rcf-tool-root .rcf-export-section { margin-top: 25px !important; background: #fff !important; padding: 15px !important; border: 1px solid var(--border-med) !important; border-radius: 4px !important; }
+#rcf-tool-root .export-header { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 10px !important; }
+#rcf-tool-root .export-title { font-size: 12px !important; font-weight: 700 !important; color: var(--primary-med) !important; text-transform: uppercase !important; }
+#rcf-tool-root .btn-copy { background: var(--accent-med) !important; color: #fff !important; border: none !important; padding: 5px 12px !important; border-radius: 3px !important; font-size: 11px !important; font-weight: bold !important; cursor: pointer !important; transition: all 0.2s !important; }
+#rcf-tool-root .btn-copy:hover { background: var(--primary-med) !important; }
 
-#rcf-tool-root .export-header {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  margin-bottom: 10px !important;
-}
-
-#rcf-tool-root .export-title {
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  color: var(--primary-med) !important;
-  text-transform: uppercase !important;
-}
-
-#rcf-tool-root .btn-copy {
-  background: var(--accent-med) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 5px 12px !important;
-  border-radius: 3px !important;
-  font-size: 11px !important;
-  font-weight: bold !important;
-  cursor: pointer !important;
-  transition: all 0.2s !important;
-}
-
-#rcf-tool-root .btn-copy:hover {
-  background: var(--primary-med) !important;
-}
-
+/* CORRECTION DU PROBLEME DE REDIMENSIONNEMENT : on remplace height par min-height */
 #rcf-tool-root textarea {
   width: 100% !important;
-  height: 150px !important;
-  min-height: 110px !important;
+  min-height: 180px !important; 
   padding: 12px !important;
   border: 1px solid var(--border-med) !important;
   border-radius: 4px !important;
   font-family: 'Courier New', Courier, monospace !important;
   font-size: 13px !important;
   line-height: 1.4 !important;
-  resize: vertical !important;
+  resize: vertical !important; /* Le redimensionnement marche maintenant ! */
   color: #333 !important;
-  outline: none !important;
   white-space: pre-wrap !important;
 }
 
-#rcf-tool-root textarea:focus {
-  border-color: var(--accent-med) !important;
-}
+#rcf-tool-root .rcf-footer { padding: 15px 20px !important; font-size: 11px !important; color: #7f8c8d !important; background: #fdfdfd !important; border-top: 1px solid var(--border-med) !important; line-height: 1.6 !important; text-align: center !important; }
 
-#rcf-tool-root .rcf-footer {
-  padding: 15px 20px !important;
-  font-size: 11px !important;
-  color: #7f8c8d !important;
-  background: #fdfdfd !important;
-  border-top: 1px solid var(--border-med) !important;
-  line-height: 1.6 !important;
-  text-align: center !important;
-}
-
-/* Zone d'impression masquée à l'écran */
+/* Impression */
 #rcf-print-zone { display: none !important; }
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  body * { visibility: hidden !important; }
+  #rcf-tool-root, #rcf-tool-root #rcf-print-zone, #rcf-tool-root #rcf-print-zone * { visibility: visible !important; }
+  #rcf-tool-root { border: none !important; margin: 0 !important; max-width: 100% !important; }
+  #rcf-screen-zone { display: none !important; }
+  #rcf-print-zone { display: flex !important; flex-direction: column !important; min-height: 95vh !important; font-family: Arial, Helvetica, sans-serif !important; font-size: 10pt !important; line-height: 1.25 !important; background: #fff !important; }
+  #rcf-print-zone .print-header { border-bottom: 1.5px solid #000 !important; padding-bottom: 6px !important; margin-bottom: 12px !important; }
+  #rcf-print-zone .print-header h1 { font-size: 13pt !important; font-weight: bold !important; text-transform: uppercase !important; margin: 0 !important; color: #000 !important; }
+  #rcf-print-zone .print-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 6px 12px !important; margin-bottom: 10px !important; border-bottom: 1px dashed #bbb !important; padding-bottom: 10px !important; }
+  #rcf-print-zone .print-full { grid-column: 1 / -1 !important; margin-top: 2px !important; }
+  #rcf-print-zone .print-title { font-size: 9pt !important; font-weight: bold !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; margin: 10px 0 4px 0 !important; border-bottom: 1px solid #222 !important; padding-bottom: 2px !important; }
+  #rcf-print-zone .print-result { border: 1px solid #000 !important; padding: 8px 12px !important; margin-top: 8px !important; background: #fafafa !important; }
+  #rcf-print-zone .print-tag { font-size: 11pt !important; font-weight: bold !important; text-transform: uppercase !important; margin-bottom: 3px !important; }
+  #rcf-print-zone .print-signature { margin-top: 20px !important; display: flex !important; justify-content: space-between !important; font-size: 10pt !important; }
+  #rcf-print-zone .print-footer-fixed { margin-top: auto !important; padding-top: 8px !important; border-top: 1px solid #ccc !important; font-size: 8pt !important; color: #666 !important; font-style: italic !important; }
+}
 
-/* =========================================
-   PRO : Masque l'ascenseur (style App native)
-   ========================================= */
 html { scrollbar-width: none !important; }
 body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 ::-webkit-scrollbar { display: none !important; }
-
-/* ═══════════════════════════════════════════════
-   MEDIA PRINT : PARAMÈTRES POUR LE DOSSIER / A4
-   ═══════════════════════════════════════════════ */
-@media print {
-  body {
-    background: #fff !important;
-    color: #000 !important;
-  }
-  body * { visibility: hidden !important; }
-  #rcf-tool-root, #rcf-tool-root #rcf-print-zone, #rcf-tool-root #rcf-print-zone * {
-    visibility: visible !important;
-  }
-  #rcf-tool-root {
-    border: none !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-  }
-  #rcf-screen-zone { display: none !important; }
-  
-  #rcf-print-zone {
-    display: flex !important;
-    flex-direction: column !important;
-    min-height: 95vh !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    font-size: 10pt !important;
-    line-height: 1.25 !important;
-    background: #fff !important;
-  }
-  
-  #rcf-print-zone .print-header {
-    border-bottom: 1.5px solid #000 !important;
-    padding-bottom: 6px !important;
-    margin-bottom: 12px !important;
-  }
-  
-  #rcf-print-zone .print-header h1 {
-    font-size: 13pt !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
-    margin: 0 !important;
-    color: #000 !important;
-  }
-  
-  #rcf-print-zone .print-grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 6px 12px !important;
-    margin-bottom: 10px !important;
-    border-bottom: 1px dashed #bbb !important;
-    padding-bottom: 10px !important;
-  }
-
-  #rcf-print-zone .print-full {
-    grid-column: 1 / -1 !important;
-    margin-top: 2px !important;
-  }
-  
-  #rcf-print-zone .print-title {
-    font-size: 9pt !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    margin: 10px 0 4px 0 !important;
-    border-bottom: 1px solid #222 !important;
-    padding-bottom: 2px !important;
-  }
-
-  #rcf-print-zone .print-result {
-    border: 1px solid #000 !important;
-    padding: 8px 12px !important;
-    margin-top: 8px !important;
-    background: #fafafa !important;
-  }
-
-  #rcf-print-zone .print-tag {
-    font-size: 11pt !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
-    margin-bottom: 3px !important;
-  }
-
-  #rcf-print-zone .print-signature {
-    margin-top: 20px !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    font-size: 10pt !important;
-  }
-
-  #rcf-print-zone .print-footer-fixed {
-    margin-top: auto !important;
-    padding-top: 8px !important;
-    border-top: 1px solid #ccc !important;
-    font-size: 8pt !important;
-    color: #666 !important;
-    font-style: italic !important;
-  }
-}
 
 @media (max-width: 640px) {
   #rcf-tool-root .rcf-grid { grid-template-columns: 1fr !important; }
@@ -417,7 +212,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 }
 </style>
 
-<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<!-- TRACKING UMAMI -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </head>
 <body>
@@ -443,12 +238,10 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
                         <label>Médecin examinateur</label>
                         <input type="text" id="p-medecin" placeholder="Nom du médecin" oninput="saveDoctorName(); analyseRCF();">
                     </div>
-
                     <div class="rcf-field-group">
                         <label>Nom & Prénom de la patiente</label>
                         <input type="text" id="p-nom-prenom" placeholder="Ex: Mme Dupont Marie" oninput="analyseRCF()">
                     </div>
-
                     <div class="rcf-field-group">
                         <label>Date de Naissance / Âge</label>
                         <div class="rcf-field-row">
@@ -456,17 +249,14 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
                             <input type="text" id="p-age" placeholder="Âge" readonly>
                         </div>
                     </div>
-
                     <div class="rcf-field-group">
                         <label>Date des Dernières Règles (DDR)</label>
                         <input type="date" id="p-ddr" onchange="calculateDPA(); analyseRCF();">
                     </div>
-
                     <div class="rcf-field-group">
                         <label>Date Prévue d'Accouchement (DPA)</label>
                         <input type="text" id="p-dpa" placeholder="Calculée" readonly>
                     </div>
-
                     <div class="rcf-field-group" style="grid-column: 1 / -1;">
                         <label>Motif du RCF / Contexte clinique</label>
                         <input type="text" id="p-motif" placeholder="Ex: Suspicion de RPM, Travail spontané..." oninput="analyseRCF()">
@@ -474,17 +264,36 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
                 </div>
             </div>
 
-            <!-- NOUVEAU BLOC : ASSISTANT IA -->
-            <div class="rcf-sub-title" style="color: var(--ai-color); border-bottom-color: #d2b4de;">🤖 Assistant IA (Analyse de tracé)</div>
-            <div class="rcf-patient-info" style="border-color: #d2b4de; background: #fbf6fd;">
-                <p style="font-size: 12px; color: #555; margin-top:0;">Importez une photo du tracé (sans l'identité de la patiente) pour pré-remplir les critères ci-dessous.</p>
-                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                    <input type="file" id="ai-image-upload" accept="image/png, image/jpeg, image/webp" style="flex: 1; min-width: 200px; padding: 5px; border: 1px solid #ccc; background: #fff;">
-                    <button type="button" id="btn-ai-analyse" class="rcf-btn-print" style="background: var(--ai-color); color: white; border-color: var(--ai-color);">
-                        Lancer l'analyse IA
-                    </button>
+            <!-- NOUVEAU BLOC : ASSISTANT IA AVEC DRAG & DROP -->
+            <div class="rcf-sub-title" style="color: var(--ai-color); border-bottom-color: #d2b4de;">🤖 Assistant IA (Analyse d'image)</div>
+            <div class="rcf-patient-info no-print" style="border-color: #d2b4de; background: #fbf6fd;">
+                <p style="font-size: 12px; color: #555; margin-bottom: 15px; text-align: center;">
+                    Glissez-déposez le cliché du tracé RCF (sans l'identité) dans la zone ci-dessous.
+                </p>
+                
+                <div id="rcf-drop-area" class="rcf-dropzone">
+                    <div style="font-size: 40px; margin-bottom: 10px;">📸</div>
+                    <div style="font-weight: bold; color: #555; font-size: 15px;">Glissez et déposez votre cliché ici</div>
+                    <div style="font-size: 13px; color: #888; margin-top: 5px;">ou cliquez pour parcourir vos fichiers</div>
+                    <input type="file" id="ai-image-upload" accept="image/png, image/jpeg, image/webp">
+                    <div id="file-name-display" class="rcf-file-info"></div>
                 </div>
-                <div id="ai-status-msg" style="margin-top: 10px; font-size: 13px; font-weight: bold; display: none;"></div>
+
+                <button type="button" id="btn-ai-analyse" class="rcf-btn-print" style="width: 100%; justify-content: center; background: var(--ai-color); color: white; border-color: var(--ai-color); padding: 12px; font-size: 14px;">
+                    ✨ Lancer l'analyse par l'IA
+                </button>
+                
+                <div id="ai-status-msg" style="margin-top: 15px; font-size: 13px; font-weight: bold; text-align: center; display: none;"></div>
+                
+                <!-- Zone d'affichage : Confiance et Note de l'IA -->
+                <div id="ai-details-box" style="display: none; margin-top: 15px; padding: 15px; background: #fdfefe; border-left: 4px solid var(--ai-color); border-radius: 4px; border: 1px solid #ebdef0;">
+                    <div style="font-size: 12px; font-weight: bold; margin-bottom: 8px;">
+                        🎯 Indice de confiance de l'IA : <span id="ai-confidence"></span>
+                    </div>
+                    <div style="font-size: 13px; color: #34495e; font-style: italic; background: #f4f6f7; padding: 10px; border-radius: 4px;">
+                        " <span id="ai-note"></span> "
+                    </div>
+                </div>
             </div>
 
             <div class="rcf-sub-title">Analyse du Tracé RCF</div>
@@ -500,7 +309,6 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
                             <option value="Tachycardie sévère (&gt; 180)">Tachycardie sévère (&gt; 180)</option>
                         </select>
                     </div>
-
                     <div class="rcf-section">
                         <label>Variabilité (bpm)</label>
                         <select id="variability" onchange="analyseRCF()">
@@ -511,7 +319,6 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
                             <option value="Sinusoïdal (≥ 10 min)">Sinusoïdal (≥ 10 min)</option>
                         </select>
                     </div>
-
                     <div class="rcf-section">
                         <label>Décélérations</label>
                         <select id="decelerations" onchange="analyseRCF()">
@@ -522,7 +329,6 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
                             <option value="Prolongée (&gt; 5 min / &lt; 80 bpm)">Prolongée (&gt; 5 min / &lt; 80 bpm)</option>
                         </select>
                     </div>
-
                     <div class="rcf-section">
                         <label>Accélérations</label>
                         <select id="accelerations" onchange="analyseRCF()">
@@ -536,7 +342,6 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
             <div id="result-area" class="rcf-result-box">
                 <div id="status-tag" class="status-tag" style="background: var(--normal);">Normal</div>
                 <p id="interpretation" class="interpretation-text">Tracé rassurant. Poursuite de la surveillance habituelle.</p>
-                
                 <div class="figo-criteria">
                     <strong>Critères FIGO associés :</strong>
                     <ul id="criteria-list">
@@ -549,9 +354,10 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 
             <div class="rcf-export-section">
                 <div class="export-header">
-                    <div class="export-title">Compte-rendu prêt pour copier-coller</div>
+                    <div class="export-title">Compte-rendu médical</div>
                     <button type="button" id="btn-copy-action" class="btn-copy" onclick="copyRawText()">Copier le texte</button>
                 </div>
+                <!-- TEXTAREA MAINTENANT REDIMENSIONNABLE -->
                 <textarea id="rcf-raw-text" readonly></textarea>
             </div>
         </div>
@@ -792,21 +598,65 @@ function imprimerRCF() {
 }
 
 // ==========================================
-// MOTEUR IA POUR L'ANALYSE D'IMAGE
+// GESTION DU DRAG & DROP
+// ==========================================
+const dropArea = document.getElementById('rcf-drop-area');
+const fileInput = document.getElementById('ai-image-upload');
+const fileNameDisplay = document.getElementById('file-name-display');
+
+// Ouvre l'explorateur de fichiers si on clique sur la zone
+dropArea.addEventListener('click', () => fileInput.click());
+
+// Empêche le comportement par défaut du navigateur
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+});
+function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+
+// Ajoute/Retire la couleur lors du survol
+['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'), false);
+});
+['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'), false);
+});
+
+// Gère le fichier quand il est lâché
+dropArea.addEventListener('drop', handleDrop, false);
+function handleDrop(e) {
+    let dt = e.dataTransfer;
+    let files = dt.files;
+    if(files.length > 0) {
+        fileInput.files = files; // Injecte le fichier dans l'input invisible
+        updateFileName();
+    }
+}
+
+// Gère le fichier quand il est sélectionné via clic
+fileInput.addEventListener('change', updateFileName);
+function updateFileName() {
+    if(fileInput.files.length > 0) {
+        fileNameDisplay.innerHTML = "Fichier sélectionné : " + fileInput.files[0].name;
+    }
+}
+
+// ==========================================
+// MOTEUR IA - ANALYSE ET COMMUNICATION
 // ==========================================
 document.getElementById('btn-ai-analyse').addEventListener('click', async function() {
-    const fileInput = document.getElementById('ai-image-upload');
     const statusDiv = document.getElementById('ai-status-msg');
+    const detailsBox = document.getElementById('ai-details-box');
 
     if (fileInput.files.length === 0) {
-        alert("Veuillez d'abord sélectionner une image du tracé RCF.");
+        alert("Veuillez d'abord sélectionner ou glisser une image du tracé RCF.");
         return;
     }
 
     const file = fileInput.files[0];
     statusDiv.style.display = "block";
+    detailsBox.style.display = "none";
     statusDiv.style.color = "#d35400";
-    statusDiv.innerHTML = "⏳ Conversion de l'image...";
+    statusDiv.innerHTML = "⏳ Préparation de l'image...";
 
     const reader = new FileReader();
     reader.onload = async function(event) {
@@ -815,7 +665,7 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
         try {
             statusDiv.innerHTML = "🧠 Analyse en cours par l'IA (5 à 10 secondes)...";
             
-            // Appel vers votre serveur sécurisé (o2switch)
+            // Appel vers votre serveur o2switch sécurisé
             const response = await fetch('https://dr-karazaitri-ma.net/rcf-proxy.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -824,6 +674,7 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
 
             const donneesIA = await response.json();
 
+            // Gestion de l'erreur (Ex: Ce n'est pas un cliché RCF)
             if (donneesIA.error) {
                 statusDiv.innerHTML = "❌ Erreur : " + donneesIA.error;
                 statusDiv.style.color = "#c0392b";
@@ -836,21 +687,35 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
             if(donneesIA.decelerations) document.getElementById('decelerations').value = donneesIA.decelerations;
             if(donneesIA.accelerations) document.getElementById('accelerations').value = donneesIA.accelerations;
             
-            // Ajout des infos sur les contractions dans le motif de l'examen
+            // Ajout des infos sur les contractions
             if(donneesIA.contractions && donneesIA.contractions !== "") {
                 const motifInput = document.getElementById('p-motif');
                 const separateur = motifInput.value ? " | " : "";
                 motifInput.value = motifInput.value + separateur + "Activité utérine (IA): " + donneesIA.contractions;
             }
 
-            // Mise à jour de la classification globale (Couleur Verte, Orange, Rouge)
+            // Affichage de la Note et de la Confiance
+            if(donneesIA.confiance || donneesIA.note) {
+                detailsBox.style.display = "block";
+                document.getElementById('ai-note').innerText = donneesIA.note || "Pas de note supplémentaire.";
+                
+                // Coloration de l'indice de confiance
+                let confPourcentage = Math.round((donneesIA.confiance || 0) * 100);
+                let confElement = document.getElementById('ai-confidence');
+                confElement.innerText = confPourcentage + "%";
+                if(confPourcentage >= 80) confElement.style.color = "#27ae60"; // Vert
+                else if(confPourcentage >= 60) confElement.style.color = "#f39c12"; // Orange
+                else confElement.style.color = "#c0392b"; // Rouge
+            }
+
+            // Mise à jour de la classification FIGO globale (Couleurs)
             analyseRCF();
 
-            statusDiv.innerHTML = "✅ Analyse terminée ! Les champs ont été pré-remplis. Veuillez vérifier l'interprétation de l'IA.";
+            statusDiv.innerHTML = "✅ Analyse terminée ! Les champs ont été pré-remplis.";
             statusDiv.style.color = "#27ae60";
 
         } catch (error) {
-            statusDiv.innerHTML = "❌ Erreur de communication avec le serveur (Avez-vous bien créé rcf-proxy.php ?).";
+            statusDiv.innerHTML = "❌ Erreur de communication avec le serveur o2switch.";
             statusDiv.style.color = "#c0392b";
         }
     };
