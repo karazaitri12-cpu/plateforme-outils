@@ -47,7 +47,6 @@
 #rcf-tool-root .rcf-preview-wrapper { display: flex !important; flex-direction: column !important; align-items: center !important; }
 #rcf-tool-root .rcf-image-frame { border: 3px solid #34495e !important; border-radius: 8px !important; padding: 3px !important; background: #fff !important; display: inline-block !important; overflow: hidden !important; max-width: 100% !important; margin-bottom: 15px !important; position: relative !important; }
 
-/* Cursors pour le zoom */
 #rcf-tool-root #rcf-image-preview { max-height: 250px !important; max-width: 100% !important; display: block !important; transition: transform 0.3s !important; cursor: zoom-in !important; }
 #rcf-tool-root #source-image-display { cursor: zoom-in !important; }
 
@@ -68,7 +67,6 @@
 #rcf-tool-root .rcf-section { background: var(--bg-med) !important; padding: 15px !important; border-radius: 4px !important; border-left: 4px solid var(--accent-med) !important; }
 #rcf-tool-root label { display: block !important; font-weight: 600 !important; font-size: 12px !important; margin-bottom: 6px !important; color: var(--primary-med) !important; }
 
-/* Champ rythme exact (grisé) */
 #rcf-tool-root .input-exact { font-weight: bold !important; color: var(--primary-med) !important; background: #e8ebed !important; text-align: center !important; }
 
 #rcf-tool-root select, #rcf-tool-root input[type="text"], #rcf-tool-root input[type="date"] { width: 100% !important; padding: 9px 12px !important; border: 1px solid var(--border-med) !important; border-radius: 4px !important; font-size: 13px !important; background: #fff !important; color: var(--text-dark) !important; appearance: auto !important; -webkit-appearance: auto !important; }
@@ -101,14 +99,6 @@
 #rcf-lightbox { display: none; position: fixed; z-index: 999999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; cursor: zoom-out; }
 #rcf-lightbox img { max-width: 95%; max-height: 95%; object-fit: contain; border: 3px solid #fff; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
 
-/* =========================================
-   PRO : Masque l'ascenseur (style App native)
-A placer en fin de css dans chaque outil
-   ========================================= */
-html { scrollbar-width: none; }               /* Firefox */
-body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
-::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
-   
 @media (max-width: 768px) {
   #rcf-tool-root .rcf-grid { grid-template-columns: 1fr !important; }
   #rcf-tool-root .rcf-patient-grid { grid-template-columns: 1fr !important; }
@@ -118,15 +108,12 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 
 /* Impression */
 #rcf-print-zone { display: none !important; }
-   
 @media print {
   body { background: #fff !important; color: #000 !important; }
   body * { visibility: hidden !important; }
   #rcf-tool-root, #rcf-tool-root #rcf-print-zone, #rcf-tool-root #rcf-print-zone * { visibility: visible !important; }
   #rcf-tool-root { border: none !important; margin: 0 !important; max-width: 100% !important; }
   #rcf-screen-zone { display: none !important; }
-  
-  /* Cacher les éléments non désirés à l'impression (ex: valeur exacte du rythme) */
   #rcf-tool-root .no-print { display: none !important; }
   
   #rcf-print-zone { display: flex !important; flex-direction: column !important; min-height: 95vh !important; font-family: Arial, Helvetica, sans-serif !important; font-size: 10pt !important; line-height: 1.25 !important; background: #fff !important; }
@@ -257,7 +244,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
                 <div class="rcf-grid">
                     <div class="rcf-section">
                         <label>Rythme de base (bpm)</label>
-                        <!-- MODIFICATION : Ajout de la textbox grisée à droite -->
                         <div style="display: flex; gap: 8px;">
                             <select id="basal-rate" onchange="analyseRCF()" style="flex: 2;">
                                 <option value="" disabled selected>-- À renseigner --</option>
@@ -554,16 +540,13 @@ function openLightbox(imgSrc) {
     const lightbox = document.getElementById('rcf-lightbox');
     const lightboxImg = document.getElementById('rcf-lightbox-img');
     lightboxImg.src = imgSrc;
-    // Applique la même rotation à l'image du lightbox
     lightboxImg.style.transform = `rotate(${currentRotationAngle}deg)`;
     lightbox.style.display = 'flex';
 }
-function closeLightbox() {
-    document.getElementById('rcf-lightbox').style.display = 'none';
-}
+function closeLightbox() { document.getElementById('rcf-lightbox').style.display = 'none'; }
 
 // ==========================================
-// GESTION DE L'IMAGE (Drag & Drop, Coller, Rotation, Caméra)
+// GESTION DE L'IMAGE (Drag & Drop, Coller, Rotation)
 // ==========================================
 let currentRotationAngle = 0;
 const dropArea = document.getElementById('rcf-drop-area');
@@ -583,7 +566,14 @@ function processImageFile(file) {
         document.getElementById('rcf-preview-container').style.display = 'block';
         document.getElementById('ai-details-box').style.display = 'none';
         document.getElementById('ai-status-msg').style.display = 'none';
-        document.getElementById('exact-basal-rate').value = ''; // Reset du champ BPM exact
+        
+        // VIDER LES MENUS DEROULANTS ET LA TEXTBOX EXACTE
+        document.getElementById('basal-rate').value = '';
+        document.getElementById('variability').value = '';
+        document.getElementById('decelerations').value = '';
+        document.getElementById('accelerations').value = '';
+        document.getElementById('exact-basal-rate').value = '';
+        analyseRCF(); // Remet en attente
         
         document.getElementById('btn-toggle-source').style.display = 'inline-block';
         document.getElementById('source-image-container').style.display = 'none';
@@ -621,7 +611,14 @@ function resetImage() {
     document.getElementById('ai-details-box').style.display = 'none';
     document.getElementById('ai-status-msg').style.display = 'none';
     document.getElementById('rcf-drop-area').style.display = 'block';
+    
+    // VIDER LES MENUS DEROULANTS ET LA TEXTBOX EXACTE
+    document.getElementById('basal-rate').value = '';
+    document.getElementById('variability').value = '';
+    document.getElementById('decelerations').value = '';
+    document.getElementById('accelerations').value = '';
     document.getElementById('exact-basal-rate').value = '';
+    analyseRCF(); // Remet en attente
     
     document.getElementById('btn-toggle-source').style.display = 'none';
     document.getElementById('source-image-container').style.display = 'none';
