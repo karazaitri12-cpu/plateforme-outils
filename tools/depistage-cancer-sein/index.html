@@ -3,12 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Dépistage du Cancer du Sein — Évaluation Avancée du Risque | Gynécologie-Obstétrique</title>
+<title>D&#233;pistage Cancer du Sein &#8212; &#201;valuation du Risque v3 | Gyn&#233;cologie-Obst&#233;trique</title>
 <style>
 /* ============================================================
-   VERSION ENRICHIE GYNÉCOLOGIE-OBSTÉTRIQUE v2.1
-   Blindage Elementor + !important systématique
-   CORRECTIFS : init display, apostrophes, irradiation thoracique
+   D&#201;PISTAGE CANCER DU SEIN &#8212; v3.0
+   Blindage Elementor &#183; !important syst&#233;matique
+   Nouveaut&#233;s v3 :
+     - THM : distinction prog. naturelle vs synth&#232;se (E3N/CNGOF 2021)
+     - Ant&#233;c&#233;dent personnel cancer de l&#8217;ovaire
+     - Module post-traitement chimiopr&#233;vention
+     - Mode consultation rapide (risque standard)
+     - Export PDF structur&#233; (@media print d&#233;di&#233;)
+     - Num&#233;ro de version + date MAJ dans le bandeau
+     - Section &#171; &#192; propos / M&#233;thodologie &#187; (accordi&#233;on)
+     - Mention origine / population (alerte triple n&#233;gatif)
    ============================================================ */
 
 #csein-tool *,
@@ -20,18 +28,18 @@
 }
 
 #csein-tool {
-  --cs-primary:    #1a3a5c !important;
-  --cs-secondary:  #2c6e9e !important;
-  --cs-accent:     #c0392b !important;
-  --cs-alert-bg:   #fdf6ec !important;
-  --cs-alert-bdr:  #e67e22 !important;
-  --cs-info-bg:    #eaf3fb !important;
-  --cs-info-bdr:   #2c6e9e !important;
-  --cs-success-bg: #eef7f0 !important;
-  --cs-success-bdr:#27ae60 !important;
-  --cs-warning-bg: #fff8e1 !important;
-  --cs-warning-bdr:#f9a825 !important;
-  --cs-highrisk-bg:#fdedec !important;
+  --cs-primary:     #1a3a5c !important;
+  --cs-secondary:   #2c6e9e !important;
+  --cs-accent:      #c0392b !important;
+  --cs-alert-bg:    #fdf6ec !important;
+  --cs-alert-bdr:   #e67e22 !important;
+  --cs-info-bg:     #eaf3fb !important;
+  --cs-info-bdr:    #2c6e9e !important;
+  --cs-success-bg:  #eef7f0 !important;
+  --cs-success-bdr: #27ae60 !important;
+  --cs-warning-bg:  #fff8e1 !important;
+  --cs-warning-bdr: #f9a825 !important;
+  --cs-highrisk-bg: #fdedec !important;
   --cs-highrisk-bdr:#e74c3c !important;
   --cs-bg:          #f4f6f9 !important;
   --cs-card:        #ffffff !important;
@@ -51,10 +59,10 @@
   margin: 0 auto !important;
 }
 
-/* ---- EN-TÊTE ---- */
+/* ---- EN-T&#202;TE ---- */
 #csein-tool .cs-header {
   background: var(--cs-primary) !important;
-  color: #ffffff !important;
+  color: #fff !important;
   padding: 20px 24px !important;
   border-radius: var(--cs-radius) !important;
   margin-bottom: 16px !important;
@@ -75,7 +83,7 @@
   font-family: Georgia, serif !important;
   font-size: 18px !important;
   font-weight: normal !important;
-  color: #ffffff !important;
+  color: #fff !important;
   letter-spacing: 0.02em !important;
   line-height: 1.35 !important;
   margin-bottom: 4px !important;
@@ -93,7 +101,14 @@
   border-top: 1px solid rgba(255,255,255,0.2) !important;
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 10px !important;
+  gap: 8px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+#csein-tool .cs-header-badges {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
 }
 #csein-tool .cs-badge {
   font-size: 10.5px !important;
@@ -104,6 +119,13 @@
   border-radius: 2px !important;
   letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
+}
+#csein-tool .cs-version-tag {
+  font-family: Arial, sans-serif !important;
+  font-size: 10px !important;
+  color: rgba(255,255,255,0.5) !important;
+  letter-spacing: 0.03em !important;
+  white-space: nowrap !important;
 }
 
 /* ---- DISCLAIMER ---- */
@@ -123,6 +145,44 @@
   font-weight: bold !important;
 }
 
+/* ---- MODE RAPIDE TOGGLE ---- */
+#csein-tool .cs-quickmode-bar {
+  background: var(--cs-info-bg) !important;
+  border: 1px solid var(--cs-info-bdr) !important;
+  border-radius: var(--cs-radius) !important;
+  padding: 10px 14px !important;
+  margin-bottom: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+#csein-tool .cs-quickmode-bar span {
+  font-family: Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  color: var(--cs-primary) !important;
+}
+#csein-tool .cs-quickmode-bar strong {
+  font-weight: bold !important;
+}
+#csein-tool .cs-btn-quick {
+  font-family: Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  padding: 6px 16px !important;
+  border-radius: var(--cs-radius) !important;
+  border: 1.5px solid var(--cs-secondary) !important;
+  background: #fff !important;
+  color: var(--cs-secondary) !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: background 0.15s !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+#csein-tool .cs-btn-quick:hover { background: var(--cs-info-bg) !important; }
+
 /* ---- BARRE DE PROGRESSION ---- */
 #csein-tool .cs-progress-wrap {
   background: var(--cs-border) !important;
@@ -139,7 +199,7 @@
   width: 0% !important;
 }
 
-/* ---- CARTE ÉTAPE ---- */
+/* ---- CARTE ---- */
 #csein-tool .cs-card {
   background: var(--cs-card) !important;
   border: 1px solid var(--cs-border) !important;
@@ -148,11 +208,7 @@
   padding: 24px !important;
   margin-bottom: 16px !important;
 }
-
-/* CORRECTIF CRITIQUE : gestion display via JS uniquement, pas via CSS */
-#csein-tool .cs-step {
-  display: none !important;
-}
+#csein-tool .cs-step { display: none !important; }
 
 /* ---- TITRE DE SECTION ---- */
 #csein-tool .cs-section-title {
@@ -192,6 +248,7 @@
   margin-bottom: 6px !important;
 }
 #csein-tool input[type="number"],
+#csein-tool input[type="text"],
 #csein-tool select {
   display: block !important;
   width: 100% !important;
@@ -211,6 +268,7 @@
   -webkit-appearance: none !important;
 }
 #csein-tool input[type="number"]:focus,
+#csein-tool input[type="text"]:focus,
 #csein-tool select:focus {
   border-color: var(--cs-secondary) !important;
   box-shadow: 0 0 0 3px rgba(44,110,158,0.12) !important;
@@ -222,17 +280,25 @@
   color: var(--cs-muted) !important;
   line-height: 1.4 !important;
 }
+#csein-tool .cs-hint.red {
+  color: var(--cs-accent) !important;
+  font-weight: bold !important;
+}
 
-/* ---- GRID 2 COLONNES ---- */
+/* ---- GRIDS ---- */
 #csein-tool .cs-grid-2 {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 16px !important;
 }
-@media (max-width: 540px) {
-  #csein-tool .cs-grid-2 {
-    grid-template-columns: 1fr !important;
-  }
+#csein-tool .cs-grid-3 {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr !important;
+  gap: 12px !important;
+}
+@media (max-width: 600px) {
+  #csein-tool .cs-grid-2,
+  #csein-tool .cs-grid-3 { grid-template-columns: 1fr !important; }
 }
 
 /* ---- RADIO / CHECKBOX OPTIONS ---- */
@@ -264,7 +330,27 @@
   accent-color: var(--cs-secondary) !important;
 }
 
-/* ---- SECTION DENSITÉ MAMMAIRE ---- */
+/* Sous-options THM (affich&#233;es conditionnellement) */
+#csein-tool .cs-thm-sub {
+  background: var(--cs-info-bg) !important;
+  border: 1px solid var(--cs-info-bdr) !important;
+  border-radius: var(--cs-radius) !important;
+  padding: 12px 14px !important;
+  margin-top: 6px !important;
+  margin-bottom: 8px !important;
+  display: none !important;
+}
+#csein-tool .cs-thm-sub.visible { display: block !important; }
+#csein-tool .cs-thm-sub label {
+  text-transform: none !important;
+  font-size: 12px !important;
+  letter-spacing: 0 !important;
+  font-weight: normal !important;
+  color: var(--cs-text) !important;
+  margin-bottom: 4px !important;
+}
+
+/* ---- DENSIT&#201; MAMMAIRE ---- */
 #csein-tool .cs-density-section {
   background: var(--cs-info-bg) !important;
   border: 1px solid var(--cs-info-bdr) !important;
@@ -303,8 +389,11 @@
   color: var(--cs-muted) !important;
   line-height: 1.3 !important;
 }
+@media (max-width: 540px) {
+  #csein-tool .cs-density-legend { grid-template-columns: 1fr 1fr !important; }
+}
 
-/* ---- ANTÉCÉDENTS FAMILIAUX ---- */
+/* ---- ANT&#201;C&#201;DENTS FAMILIAUX ---- */
 #csein-tool .cs-family-row {
   display: grid !important;
   grid-template-columns: 1fr 1fr 80px 36px !important;
@@ -335,10 +424,7 @@
   color: var(--cs-muted) !important;
   margin-bottom: 2px !important;
 }
-#csein-tool .cs-col-inner {
-  display: flex !important;
-  flex-direction: column !important;
-}
+#csein-tool .cs-col-inner { display: flex !important; flex-direction: column !important; }
 #csein-tool .cs-btn-del {
   background: #fef0ef !important;
   border: 1px solid #e0b0ad !important;
@@ -355,7 +441,6 @@
   padding: 0 !important;
 }
 #csein-tool .cs-btn-del:hover { background: #f8d7d5 !important; }
-
 #csein-tool .cs-add-btn {
   display: inline-flex !important;
   align-items: center !important;
@@ -378,8 +463,16 @@
   font-size: 16px !important;
   line-height: 1 !important;
 }
+@media (max-width: 540px) {
+  #csein-tool .cs-family-row {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: auto auto auto !important;
+  }
+  #csein-tool .cs-family-row .cs-col-score { grid-column: 1 !important; }
+  #csein-tool .cs-family-row .cs-col-del { grid-column: 2 !important; justify-self: end !important; }
+}
 
-/* ---- SCORE DISPLAY ---- */
+/* ---- SCORE BOX ---- */
 #csein-tool .cs-score-box {
   background: var(--cs-primary) !important;
   color: #fff !important;
@@ -404,7 +497,7 @@
   margin-top: 6px !important;
 }
 
-/* ---- LÉGENDE EISINGER ---- */
+/* ---- L&#201;GENDE / D&#201;TAILS ---- */
 #csein-tool details.cs-legend {
   border: 1px solid var(--cs-border) !important;
   border-radius: var(--cs-radius) !important;
@@ -422,13 +515,8 @@
   list-style: none !important;
   user-select: none !important;
 }
-#csein-tool details.cs-legend summary::before {
-  content: "\25B6\0020" !important;
-  font-size: 10px !important;
-}
-#csein-tool details.cs-legend[open] summary::before {
-  content: "\25BC\0020" !important;
-}
+#csein-tool details.cs-legend summary::before { content: "\25B6\0020" !important; font-size: 10px !important; }
+#csein-tool details.cs-legend[open] summary::before { content: "\25BC\0020" !important; }
 #csein-tool details.cs-legend .cs-legend-body {
   padding: 12px 16px !important;
   font-family: Arial, sans-serif !important;
@@ -470,19 +558,19 @@
   border-left: 3px solid var(--cs-secondary) !important;
   color: #1a3a5c !important;
 }
-#csein-tool .cs-note.info::before {
-  content: "\2139\0020" !important;
-  font-weight: bold !important;
-}
+#csein-tool .cs-note.info::before { content: "\2139\0020" !important; font-weight: bold !important; }
 #csein-tool .cs-note.warning {
   background: var(--cs-warning-bg) !important;
   border-left: 3px solid var(--cs-warning-bdr) !important;
   color: #6b4c1e !important;
 }
-#csein-tool .cs-note.warning::before {
-  content: "\26A0\0020" !important;
-  font-weight: bold !important;
+#csein-tool .cs-note.warning::before { content: "\26A0\0020" !important; font-weight: bold !important; }
+#csein-tool .cs-note.alert {
+  background: var(--cs-highrisk-bg) !important;
+  border-left: 3px solid var(--cs-accent) !important;
+  color: #6b1e1a !important;
 }
+#csein-tool .cs-note.alert::before { content: "\203C\0020" !important; font-weight: bold !important; }
 
 /* ---- BOUTONS NAVIGATION ---- */
 #csein-tool .cs-actions {
@@ -493,6 +581,7 @@
   padding-top: 16px !important;
   border-top: 1px solid var(--cs-border) !important;
   gap: 10px !important;
+  flex-wrap: wrap !important;
 }
 #csein-tool .cs-btn {
   font-family: Arial, sans-serif !important;
@@ -508,10 +597,7 @@
 }
 #csein-tool .cs-btn:hover { opacity: 0.88 !important; }
 #csein-tool .cs-btn:active { transform: scale(0.98) !important; }
-#csein-tool .cs-btn-primary {
-  background: var(--cs-secondary) !important;
-  color: #fff !important;
-}
+#csein-tool .cs-btn-primary { background: var(--cs-secondary) !important; color: #fff !important; }
 #csein-tool .cs-btn-secondary {
   background: transparent !important;
   color: var(--cs-secondary) !important;
@@ -524,7 +610,7 @@
   font-weight: normal !important;
 }
 
-/* ---- RÉSULTATS ---- */
+/* ---- R&#201;SULTATS ---- */
 #csein-tool .cs-result-header {
   display: flex !important;
   align-items: center !important;
@@ -541,7 +627,6 @@
   justify-content: center !important;
   font-family: Georgia, serif !important;
   font-size: 12px !important;
-  font-weight: normal !important;
   text-align: center !important;
   line-height: 1.3 !important;
   color: #fff !important;
@@ -551,7 +636,6 @@
 #csein-tool .cs-risk-badge.low  { background: #27ae60 !important; }
 #csein-tool .cs-risk-badge.mod  { background: #e67e22 !important; }
 #csein-tool .cs-risk-badge.high { background: var(--cs-accent) !important; }
-
 #csein-tool .cs-result-title {
   font-family: Georgia, serif !important;
   font-size: 17px !important;
@@ -564,10 +648,7 @@
   font-size: 13px !important;
   color: var(--cs-muted) !important;
 }
-
-#csein-tool .cs-reco-block {
-  margin-bottom: 20px !important;
-}
+#csein-tool .cs-reco-block { margin-bottom: 20px !important; }
 #csein-tool .cs-reco-block h3 {
   font-family: Arial, sans-serif !important;
   font-size: 12px !important;
@@ -591,36 +672,16 @@
   line-height: 1.5 !important;
   border: 1px solid transparent !important;
 }
-#csein-tool .cs-reco-item.green {
-  background: var(--cs-success-bg) !important;
-  border-color: #b2dfcc !important;
-  color: #1a4a2e !important;
-}
-#csein-tool .cs-reco-item.orange {
-  background: var(--cs-alert-bg) !important;
-  border-color: #f0d0a0 !important;
-  color: #6b4c1e !important;
-}
-#csein-tool .cs-reco-item.red {
-  background: var(--cs-highrisk-bg) !important;
-  border-color: #e8b0ad !important;
-  color: #6b1e1a !important;
-}
-#csein-tool .cs-reco-item.purple {
-  background: #f3e5f5 !important;
-  border-color: #ce93d8 !important;
-  color: #4a148c !important;
-}
-#csein-tool .cs-reco-item::before {
-  content: "\2713" !important;
-  flex-shrink: 0 !important;
-  font-weight: bold !important;
-  margin-top: 1px !important;
-}
-#csein-tool .cs-reco-item.orange::before { content: "\26A0" !important; }
-#csein-tool .cs-reco-item.red::before    { content: "\203C" !important; }
-#csein-tool .cs-reco-item.purple::before { content: "\2605" !important; }
+#csein-tool .cs-reco-item.green  { background: var(--cs-success-bg) !important; border-color: #b2dfcc !important; color: #1a4a2e !important; }
+#csein-tool .cs-reco-item.orange { background: var(--cs-alert-bg)   !important; border-color: #f0d0a0 !important; color: #6b4c1e !important; }
+#csein-tool .cs-reco-item.red    { background: var(--cs-highrisk-bg)!important; border-color: #e8b0ad !important; color: #6b1e1a !important; }
+#csein-tool .cs-reco-item.purple { background: #f3e5f5 !important; border-color: #ce93d8 !important; color: #4a148c !important; }
+#csein-tool .cs-reco-item::before        { content: "\2713" !important; flex-shrink: 0 !important; font-weight: bold !important; margin-top: 1px !important; }
+#csein-tool .cs-reco-item.orange::before { content: "\26A0"  !important; }
+#csein-tool .cs-reco-item.red::before    { content: "\203C"  !important; }
+#csein-tool .cs-reco-item.purple::before { content: "\2605"  !important; }
 
+/* ---- SOURCES ---- */
 #csein-tool .cs-sources {
   background: #f0f2f6 !important;
   border-radius: var(--cs-radius) !important;
@@ -633,105 +694,60 @@
 }
 #csein-tool .cs-sources strong { color: var(--cs-text) !important; }
 
-/* ---- MODAL ALERTE ---- */
-#csein-tool .cs-modal-overlay {
-  display: none !important;
-  position: fixed !important;
-  inset: 0 !important;
-  background: rgba(0,0,0,0.45) !important;
-  z-index: 9999 !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-#csein-tool .cs-modal-overlay.open {
-  display: flex !important;
-}
-#csein-tool .cs-modal {
-  background: #fff !important;
+/* ---- SECTION &#192; PROPOS ---- */
+#csein-tool .cs-about-section {
+  margin-top: 24px !important;
+  border: 1px solid var(--cs-border) !important;
   border-radius: var(--cs-radius) !important;
-  padding: 24px !important;
-  max-width: 400px !important;
-  width: 90% !important;
-  font-family: Arial, sans-serif !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important;
+  overflow: hidden !important;
 }
-#csein-tool .cs-modal p { font-size: 14px !important; color: var(--cs-text) !important; margin-bottom: 16px !important; }
-#csein-tool .cs-modal-close {
-  background: var(--cs-secondary) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 8px 20px !important;
-  border-radius: var(--cs-radius) !important;
-  font-size: 13px !important;
+#csein-tool .cs-about-section summary {
+  padding: 11px 16px !important;
   font-family: Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: bold !important;
+  color: var(--cs-secondary) !important;
   cursor: pointer !important;
-  display: block !important;
-  margin: 0 auto !important;
+  background: var(--cs-info-bg) !important;
+  list-style: none !important;
+  user-select: none !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
 }
-
-/* ---- RÉCAPITULATIF PDF ---- */
-#csein-tool .cs-pdf-header {
-  display: none !important;
+#csein-tool .cs-about-section summary::before { content: "\25B6\0020" !important; font-size: 10px !important; }
+#csein-tool .cs-about-section[open] summary::before { content: "\25BC\0020" !important; }
+#csein-tool .cs-about-body {
+  padding: 16px !important;
+  font-family: Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  color: var(--cs-text) !important;
+  line-height: 1.65 !important;
 }
-@media print {
-  #csein-tool .cs-pdf-header {
-    display: block !important;
-    text-align: center !important;
-    border-bottom: 2px solid var(--cs-primary) !important;
-    padding-bottom: 12px !important;
-    margin-bottom: 20px !important;
-  }
-  #csein-tool .cs-pdf-header h2 {
-    font-family: Georgia, serif !important;
-    font-size: 18px !important;
-    color: var(--cs-primary) !important;
-    margin-bottom: 4px !important;
-  }
-  #csein-tool .cs-pdf-header p {
-    font-family: Arial, sans-serif !important;
-    font-size: 11px !important;
-    color: var(--cs-muted) !important;
-  }
-  #csein-tool .cs-actions,
-  #csein-tool .cs-progress-wrap,
-  #csein-tool .cs-disclaimer {
-    display: none !important;
-  }
+#csein-tool .cs-about-body h4 {
+  font-family: Georgia, serif !important;
+  font-size: 13px !important;
+  font-weight: normal !important;
+  color: var(--cs-primary) !important;
+  margin-top: 14px !important;
+  margin-bottom: 6px !important;
+  border-bottom: 1px solid var(--cs-border) !important;
+  padding-bottom: 4px !important;
 }
+#csein-tool .cs-about-body p { margin-bottom: 8px !important; }
 
-/* ---- RESPONSIVE ---- */
-@media (max-width: 540px) {
-  #csein-tool .cs-family-row {
-    grid-template-columns: 1fr 1fr !important;
-    grid-template-rows: auto auto auto !important;
-  }
-  #csein-tool .cs-family-row .cs-col-score { grid-column: 1 !important; }
-  #csein-tool .cs-family-row .cs-col-del    { grid-column: 2 !important; justify-self: end !important; }
-  #csein-tool .cs-density-legend {
-    grid-template-columns: 1fr 1fr !important;
-  }
-}
-
-/* ============================================================
-   PANNEAU COMPTE-RENDU DOSSIER — REDIMENSIONNABLE
-   ============================================================ */
-
+/* ---- PANNEAU COMPTE-RENDU DOSSIER ---- */
 #csein-tool .cs-cr-wrapper {
   margin-top: 20px !important;
   border: 2px solid var(--cs-secondary) !important;
   border-radius: var(--cs-radius) !important;
   background: #fff !important;
   overflow: hidden !important;
-  /* Redimensionnement natif CSS : poignée en bas à droite */
   resize: vertical !important;
   min-height: 220px !important;
   max-height: 900px !important;
   display: flex !important;
   flex-direction: column !important;
-  position: relative !important;
 }
-
-/* Barre de titre draggable */
 #csein-tool .cs-cr-titlebar {
   background: var(--cs-primary) !important;
   color: #fff !important;
@@ -743,19 +759,9 @@
   text-transform: uppercase !important;
   display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
-  user-select: none !important;
-  cursor: default !important;
-  flex-shrink: 0 !important;
-}
-#csein-tool .cs-cr-titlebar-left {
-  display: flex !important;
-  align-items: center !important;
   gap: 8px !important;
-}
-#csein-tool .cs-cr-titlebar-icon {
-  font-size: 14px !important;
-  opacity: 0.8 !important;
+  flex-shrink: 0 !important;
+  user-select: none !important;
 }
 #csein-tool .cs-cr-titlebar-hint {
   font-size: 10px !important;
@@ -765,8 +771,6 @@
   text-transform: none !important;
   letter-spacing: 0 !important;
 }
-
-/* Corps scrollable */
 #csein-tool .cs-cr-body {
   flex: 1 !important;
   overflow-y: auto !important;
@@ -775,19 +779,14 @@
   flex-direction: column !important;
   gap: 14px !important;
 }
-
-/* Section identification */
 #csein-tool .cs-cr-id-section {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 12px !important;
 }
 @media (max-width: 540px) {
-  #csein-tool .cs-cr-id-section {
-    grid-template-columns: 1fr !important;
-  }
+  #csein-tool .cs-cr-id-section { grid-template-columns: 1fr !important; }
 }
-
 #csein-tool .cs-cr-field-group {
   display: flex !important;
   flex-direction: column !important;
@@ -802,8 +801,7 @@
   color: var(--cs-muted) !important;
   margin-bottom: 0 !important;
 }
-#csein-tool .cs-cr-field-group input,
-#csein-tool .cs-cr-field-group select {
+#csein-tool .cs-cr-field-group input {
   width: 100% !important;
   padding: 7px 10px !important;
   font-size: 13.5px !important;
@@ -814,20 +812,15 @@
   border-radius: var(--cs-radius) !important;
   outline: none !important;
 }
-#csein-tool .cs-cr-field-group input:focus,
-#csein-tool .cs-cr-field-group select:focus {
+#csein-tool .cs-cr-field-group input:focus {
   border-color: var(--cs-secondary) !important;
   box-shadow: 0 0 0 2px rgba(44,110,158,0.12) !important;
 }
-
-/* Séparateur */
 #csein-tool .cs-cr-sep {
   border: none !important;
   border-top: 1px dashed var(--cs-border) !important;
   margin: 0 !important;
 }
-
-/* Zone de texte du résumé */
 #csein-tool .cs-cr-text-label {
   font-family: Arial, sans-serif !important;
   font-size: 10.5px !important;
@@ -857,14 +850,11 @@
   border-color: var(--cs-secondary) !important;
   background: #fff !important;
 }
-
-/* Barre d'actions du panneau */
 #csein-tool .cs-cr-actions {
   display: flex !important;
   gap: 10px !important;
   align-items: center !important;
   flex-wrap: wrap !important;
-  padding-top: 4px !important;
 }
 #csein-tool .cs-btn-copy {
   font-family: Arial, sans-serif !important;
@@ -877,23 +867,17 @@
   cursor: pointer !important;
   background: #27ae60 !important;
   color: #fff !important;
-  transition: opacity 0.15s, transform 0.1s !important;
+  transition: opacity 0.15s !important;
   text-transform: uppercase !important;
   display: flex !important;
   align-items: center !important;
   gap: 7px !important;
 }
 #csein-tool .cs-btn-copy:hover { opacity: 0.88 !important; }
-#csein-tool .cs-btn-copy:active { transform: scale(0.97) !important; }
-#csein-tool .cs-btn-copy::before {
-  content: "\2398" !important;
-  font-size: 15px !important;
-  line-height: 1 !important;
-}
+#csein-tool .cs-btn-copy::before { content: "\2398" !important; font-size: 15px !important; }
 #csein-tool .cs-btn-regen {
   font-family: Arial, sans-serif !important;
   font-size: 12.5px !important;
-  font-weight: normal !important;
   padding: 8px 16px !important;
   border-radius: var(--cs-radius) !important;
   cursor: pointer !important;
@@ -905,11 +889,7 @@
   letter-spacing: 0.03em !important;
 }
 #csein-tool .cs-btn-regen:hover { background: var(--cs-info-bg) !important; }
-#csein-tool .cs-btn-regen::before {
-  content: "\21BA\0020" !important;
-}
-
-/* Toast de confirmation copie */
+#csein-tool .cs-btn-regen::before { content: "\21BA\0020" !important; }
 #csein-tool .cs-copy-toast {
   font-family: Arial, sans-serif !important;
   font-size: 12px !important;
@@ -919,8 +899,6 @@
   transition: opacity 0.3s !important;
 }
 #csein-tool .cs-copy-toast.visible { opacity: 1 !important; }
-
-/* Poignée visuelle redimensionnement (cosmétique) */
 #csein-tool .cs-cr-resize-hint {
   text-align: right !important;
   padding: 3px 8px !important;
@@ -931,46 +909,280 @@
   background: #f8f9fc !important;
   border-top: 1px solid var(--cs-border) !important;
   user-select: none !important;
-  letter-spacing: 0.02em !important;
 }
 
+/* ---- MODAL ---- */
+#csein-tool .cs-modal-overlay {
+  display: none !important;
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,0.45) !important;
+  z-index: 9999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+#csein-tool .cs-modal-overlay.open { display: flex !important; }
+#csein-tool .cs-modal {
+  background: #fff !important;
+  border-radius: var(--cs-radius) !important;
+  padding: 24px !important;
+  max-width: 400px !important;
+  width: 90% !important;
+  font-family: Arial, sans-serif !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important;
+}
+#csein-tool .cs-modal p { font-size: 14px !important; color: var(--cs-text) !important; margin-bottom: 16px !important; }
+#csein-tool .cs-modal-close {
+  background: var(--cs-secondary) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 8px 20px !important;
+  border-radius: var(--cs-radius) !important;
+  font-size: 13px !important;
+  font-family: Arial, sans-serif !important;
+  cursor: pointer !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* ============================================================
+   IMPRESSION PDF &#8212; @media print d&#233;di&#233;
+   N&#8217;affiche que le compte-rendu structur&#233;
+   ============================================================ */
 @media print {
-  #csein-tool .cs-cr-wrapper { display: none !important; }
+  /* ---- Masquer TOUT sauf la zone d'impression ---- */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+  body > * { display: none !important; }
+  #cs-print-zone { display: block !important; }
+
+  /* ---- Zone d'impression : flux normal, pas de position absolue ---- */
+  #cs-print-zone {
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    /* Marges internes : 1.5cm haut/bas, 2cm gauche/droite */
+    padding: 1.5cm 2cm !important;
+    margin: 0 !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 10pt !important;
+    color: #000 !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  /* Forcer le retour à la ligne sur tous les éléments texte */
+  #cs-print-zone * {
+    box-sizing: border-box !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+  }
+
+  #cs-print-zone .csp-logo {
+    font-family: Georgia, serif !important;
+    font-size: 10pt !important;
+    color: #1a3a5c !important;
+    border-bottom: 1.5pt solid #1a3a5c !important;
+    padding-bottom: 6pt !important;
+    margin-bottom: 12pt !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 4pt !important;
+  }
+  #cs-print-zone .csp-logo-title {
+    font-size: 12pt !important;
+    font-weight: normal !important;
+    color: #1a3a5c !important;
+  }
+  #cs-print-zone .csp-logo-version {
+    font-size: 7.5pt !important;
+    color: #777 !important;
+  }
+  #cs-print-zone h2 {
+    font-family: Georgia, serif !important;
+    font-size: 12pt !important;
+    font-weight: normal !important;
+    color: #1a3a5c !important;
+    margin-bottom: 8pt !important;
+    border-bottom: 0.75pt solid #d0d7e3 !important;
+    padding-bottom: 5pt !important;
+  }
+
+  /* Grille identification : 2 colonnes, largeurs fixes */
+  #cs-print-zone .csp-grid {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-bottom: 12pt !important;
+  }
+  #cs-print-zone .csp-grid .csp-field {
+    display: table-cell !important;
+    width: 50% !important;
+    vertical-align: top !important;
+    padding: 3pt 6pt 3pt 0 !important;
+  }
+  #cs-print-zone .csp-grid .csp-field:nth-child(even) {
+    padding-left: 8pt !important;
+    border-left: 0.5pt solid #d0d7e3 !important;
+  }
+  /* Forcer les paires de cellules sur la même ligne via pseudo-lignes */
+  #cs-print-zone .csp-row {
+    display: table-row !important;
+  }
+  #cs-print-zone .csp-field label {
+    font-size: 7pt !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    color: #5a6a82 !important;
+    display: block !important;
+    margin-bottom: 1pt !important;
+    font-weight: bold !important;
+  }
+  #cs-print-zone .csp-field span {
+    font-family: Georgia, serif !important;
+    font-size: 10pt !important;
+    color: #000 !important;
+    border-bottom: 0.5pt solid #e0e4ec !important;
+    display: block !important;
+    padding-bottom: 2pt !important;
+    min-height: 13pt !important;
+  }
+
+  #cs-print-zone .csp-risk-line {
+    border-left: 3pt solid #1a3a5c !important;
+    padding: 6pt 10pt !important;
+    margin-bottom: 10pt !important;
+    font-size: 11pt !important;
+    font-family: Georgia, serif !important;
+    color: #1a3a5c !important;
+    background: #f0f2f6 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  #cs-print-zone .csp-section-label {
+    font-size: 7pt !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.07em !important;
+    color: #5a6a82 !important;
+    font-weight: bold !important;
+    border-bottom: 0.5pt solid #d0d7e3 !important;
+    padding-bottom: 3pt !important;
+    margin-bottom: 6pt !important;
+    margin-top: 12pt !important;
+    display: block !important;
+  }
+  #cs-print-zone ul {
+    margin: 0 0 0 14pt !important;
+    padding: 0 !important;
+  }
+  #cs-print-zone ul li {
+    font-size: 9.5pt !important;
+    margin-bottom: 3pt !important;
+    color: #000 !important;
+    line-height: 1.45 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  #cs-print-zone .csp-footer {
+    margin-top: 16pt !important;
+    border-top: 0.5pt solid #d0d7e3 !important;
+    padding-top: 5pt !important;
+    font-size: 7pt !important;
+    color: #777 !important;
+    font-style: italic !important;
+    line-height: 1.4 !important;
+  }
 }
 </style>
 </head>
 <body>
 
+<!-- Zone impression PDF (invisible en mode normal) -->
+<div id="cs-print-zone" style="display:none;">
+  <div class="csp-logo">
+    <div class="csp-logo-title">D&#233;pistage Cancer du Sein &#8212; &#201;valuation du Risque</div>
+    <div class="csp-logo-version">v3.0 &#183; INCa 2023 / HAS 2014 / EUSOMA 2023 &#183; Dr&#160;Kara-Zaitri&#160;M.A.</div>
+  </div>
+  <h2>Compte-rendu d&#8217;&#233;valuation</h2>
+
+  <!-- Grille identification en display:table pour compatibilité print universelle -->
+  <div class="csp-grid">
+    <div class="csp-row">
+      <div class="csp-field"><label>Patiente</label><span id="csp-nom">&#8212;</span></div>
+      <div class="csp-field"><label>Date de naissance</label><span id="csp-ddn">&#8212;</span></div>
+    </div>
+    <div class="csp-row">
+      <div class="csp-field"><label>N&#176; dossier / IPP</label><span id="csp-doss">&#8212;</span></div>
+      <div class="csp-field"><label>Date de consultation</label><span id="csp-date">&#8212;</span></div>
+    </div>
+    <div class="csp-row">
+      <div class="csp-field"><label>Praticien</label><span id="csp-med">&#8212;</span></div>
+      <div class="csp-field"><label>&#194;ge / IMC</label><span id="csp-agebmi">&#8212;</span></div>
+    </div>
+  </div>
+
+  <div class="csp-risk-line" id="csp-risklevel">&#8212;</div>
+  <div class="csp-section-label" id="csp-rf-label" style="display:none;">Facteurs de risque identifi&#233;s</div>
+  <ul id="csp-rf-list"></ul>
+  <div class="csp-section-label">Recommandations de prise en charge</div>
+  <ul id="csp-reco-list"></ul>
+  <div class="csp-footer">
+    Outil d&#8217;aide &#224; la d&#233;cision &#8212; R&#233;serv&#233; aux professionnels de sant&#233;. Ne se substitue pas au jugement clinique.<br>
+    R&#233;f&#233;rentiels&#160;: INCa 2023 &#183; HAS 2014 &#183; EUSOMA 2023 &#183; Score Eisinger &#183; Tyrer-Cuzick v8 &#183; CNGOF 2021
+  </div>
+</div>
+
 <div id="csein-tool">
 
+  <!-- EN-T&#202;TE -->
   <div class="cs-header">
     <div class="cs-header-top">
       <div class="cs-header-icon">&#9673;</div>
       <div>
         <h1>D&#233;pistage du Cancer du Sein &#8212; &#201;valuation Avanc&#233;e du Risque</h1>
-        <div class="cs-header-sub">Outil d&#8217;aide &#224; la d&#233;cision clinique &middot; Gyn&#233;cologie-Obst&#233;trique &middot; Usage m&#233;dical exclusif</div>
+        <div class="cs-header-sub">Outil d&#8217;aide &#224; la d&#233;cision clinique con&#231;u par <strong style="color:#ffffff;opacity:0.9;font-style:normal;">Dr&#160;Kara-Zaitri&#160;M.A.</strong>&middot; Gyn&#233;cologie-Obst&#233;trique &middot; Usage m&#233;dical exclusif.</div>
       </div>
     </div>
     <div class="cs-header-meta">
-      <span class="cs-badge">INCa 2023</span>
-      <span class="cs-badge">HAS 2014</span>
-      <span class="cs-badge">EUSOMA 2023</span>
-      <span class="cs-badge">Score Eisinger</span>
-      <span class="cs-badge">Tyrer-Cuzick</span>
-      <span class="cs-badge">CNGOF</span>
+      <div class="cs-header-badges">
+        <span class="cs-badge">INCa 2023</span>
+        <span class="cs-badge">HAS 2014</span>
+        <span class="cs-badge">EUSOMA 2023</span>
+        <span class="cs-badge">CNGOF 2021</span>
+        <span class="cs-badge">Score Eisinger</span>
+        <span class="cs-badge">Tyrer-Cuzick v8</span>
+      </div>
+      <span class="cs-version-tag">v3.0 &#183; MAJ juin 2025</span>
     </div>
   </div>
 
+  <!-- DISCLAIMER -->
   <div class="cs-disclaimer">
     <strong>Outil d&#8217;aide &#224; la d&#233;cision &#8212; R&#233;serv&#233; aux professionnels de sant&#233;.</strong>
-    Ce formulaire int&#232;gre les r&#233;f&#233;rentiels INCa 2023, HAS 2014, EUSOMA 2023 et le score de risque Tyrer-Cuzick v8. Il ne se substitue pas au jugement clinique. La d&#233;cision finale de prise en charge rel&#232;ve de la responsabilit&#233; du praticien.
+    Ce formulaire int&#232;gre les r&#233;f&#233;rentiels INCa 2023, HAS 2014, EUSOMA 2023, CNGOF 2021 et le score Eisinger/Tyrer-Cuzick. Il ne se substitue pas au jugement clinique. La d&#233;cision finale rel&#232;ve de la responsabilit&#233; du praticien.
   </div>
 
+  <!-- MODE CONSULTATION RAPIDE -->
+  <div class="cs-quickmode-bar">
+    <span><strong>Mode consultation rapide</strong> &#8212; Patiente sans facteur de risque identifi&#233; ? Acc&#233;dez directement aux recommandations standard.</span>
+    <button class="cs-btn-quick" onclick="csQuickMode()">&#8594;&#160;Risque standard</button>
+  </div>
+
+  <!-- BARRE DE PROGRESSION -->
   <div class="cs-progress-wrap">
     <div class="cs-progress-bar" id="csProgBar"></div>
   </div>
 
-  <!-- ÉTAPE 1 : Données démographiques et hormonales -->
+  <!-- &#201;TAPE 1 : D&#233;mographie + hormonaux -->
   <div class="cs-card cs-step" id="csStep1">
     <div class="cs-section-title">
       <span class="cs-step-num">1</span>Donn&#233;es d&#233;mographiques et facteurs hormonaux
@@ -979,17 +1191,17 @@
     <div class="cs-grid-2">
       <div>
         <label for="csAge">&#194;ge de la patiente (ans)</label>
-        <input type="number" id="csAge" min="18" max="120" placeholder="ex. 52" inputmode="numeric" pattern="[0-9]*">
-        <div class="cs-hint">D&#233;pistage organis&#233; : 50-74 ans (mammographie biennale). Surveillance sp&#233;cialis&#233;e : d&#232;s 25-30 ans selon profil g&#233;n&#233;tique.</div>
+        <input type="number" id="csAge" min="18" max="120" placeholder="ex. 52" inputmode="numeric">
+        <div class="cs-hint">D&#233;pistage organis&#233;&#160;: 50&#8211;74 ans (mammographie biennale). Surveillance sp&#233;cialis&#233;e&#160;: d&#232;s 25&#8211;30 ans selon profil g&#233;n&#233;tique.</div>
       </div>
       <div>
         <label for="csBmi">IMC (kg/m&#178;)</label>
         <input type="number" id="csBmi" min="15" max="60" step="0.1" placeholder="ex. 24.5" inputmode="decimal">
-        <div class="cs-hint">Risque accru post-m&#233;nopause si IMC &gt; 25. Risque relatif x1,1 par +5 unit&#233;s d&#8217;IMC.</div>
+        <div class="cs-hint">Risque accru post-m&#233;nopause si IMC &gt; 25. RR&#160;&#215;&#160;1,1 par +5 unit&#233;s d&#8217;IMC.</div>
       </div>
     </div>
 
-    <div class="cs-grid-2" style="margin-top: 16px;">
+    <div class="cs-grid-2" style="margin-top:16px;">
       <div>
         <label for="csMenarche">&#194;ge de m&#233;narche (ans)</label>
         <select id="csMenarche">
@@ -997,7 +1209,7 @@
           <option value="12">12 ans</option>
           <option value="11">&#8804; 11 ans (+19% de risque)</option>
         </select>
-        <div class="cs-hint">M&#233;narche pr&#233;coce = exposition prolong&#233;e aux &#339;strog&#232;nes endog&#232;nes.</div>
+        <div class="cs-hint">M&#233;narche pr&#233;coce&#160;= exposition prolong&#233;e aux &#339;strog&#232;nes endog&#232;nes.</div>
       </div>
       <div>
         <label for="csMenopause">Statut m&#233;nopausique</label>
@@ -1005,32 +1217,64 @@
           <option value="premeno">Pr&#233;-m&#233;nopaus&#233;e</option>
           <option value="peri">P&#233;ri-m&#233;nopaus&#233;e</option>
           <option value="postmeno">Post-m&#233;nopaus&#233;e</option>
-          <option value="surgical">M&#233;nopause chirurgicale (&lt; 45 ans)</option>
+          <option value="surgical">M&#233;nopause chirurgicale (&lt;&#160;45 ans)</option>
         </select>
-        <div class="cs-hint">M&#233;nopause &lt; 45 ans = facteur protecteur (exposition hormonale r&#233;duite).</div>
+        <div class="cs-hint">M&#233;nopause &lt;&#160;45 ans&#160;= facteur protecteur (exposition hormonale r&#233;duite).</div>
       </div>
     </div>
 
-    <div class="cs-grid-2" style="margin-top: 16px;">
-      <div>
-        <label for="csThm">Traitement hormonal de la m&#233;nopause (THM)</label>
-        <select id="csThm">
-          <option value="never">Jamais</option>
-          <option value="current_short">En cours (&lt; 5 ans)</option>
-          <option value="current_long">En cours (&gt; 5 ans) &#8212; Risque accru</option>
-          <option value="stopped">Arr&#234;t&#233; depuis &gt; 5 ans</option>
-        </select>
-        <div class="cs-hint">THM oestroprogestatif : risque dose-dur&#233;e. 1&#160;236 cas/an attribuables en France (INCa/ANSM).</div>
+    <!-- THM ENRICHI : type de progestatif -->
+    <div style="margin-top:16px;">
+      <label for="csThmDuree">Traitement hormonal de la m&#233;nopause (THM)</label>
+      <select id="csThmDuree" onchange="csThmChange()">
+        <option value="never">Jamais utilis&#233;</option>
+        <option value="current_short">En cours depuis &lt;&#160;5 ans</option>
+        <option value="current_long">En cours depuis &gt;&#160;5 ans</option>
+        <option value="stopped">Arr&#234;t&#233; depuis &gt;&#160;5 ans</option>
+      </select>
+      <!-- Sous-options : type de progestatif -->
+      <div class="cs-thm-sub" id="csThmTypeSub">
+        <label>Type de progestatif associ&#233;</label>
+        <div class="cs-options" style="margin-top:6px;">
+          <label class="cs-option" style="font-size:13px; padding:8px 10px;">
+            <input type="radio" name="csThmType" value="progesterone_naturelle" checked>
+            <span><strong>Progest&#233;rone naturelle micronisée ou pr&#233;gnan&#233;s</strong> (Utrogestan&#174;, Luteran&#174;)<br>
+            <span style="font-size:11px; color:#5a6a82;">Risque non significativement accru &#8212; &#201;tude E3N/INSERM &#183; CNGOF 2021</span></span>
+          </label>
+          <label class="cs-option" style="font-size:13px; padding:8px 10px;">
+            <input type="radio" name="csThmType" value="progestatif_synthese">
+            <span><strong>Progestatif de synth&#232;se</strong> (norpregnanes, progestines)<br>
+            <span style="font-size:11px; color:#5a6a82;">Risque accru significatif (RR 1,4&#8211;2,0) &#8212; WHI &#183; MWS &#183; E3N</span></span>
+          </label>
+          <label class="cs-option" style="font-size:13px; padding:8px 10px;">
+            <input type="radio" name="csThmType" value="inconnu">
+            <span>Type non pr&#233;cis&#233; / inconnu</span>
+          </label>
+        </div>
       </div>
+      <div class="cs-hint">1&#160;236 cas/an attribuables en France (INCa/ANSM). Le type de progestatif module significativement le risque (E3N/INSERM, Lancet Oncol. 2019).</div>
+    </div>
+
+    <div class="cs-grid-2" style="margin-top:16px;">
       <div>
         <label for="csPregnancy">Parit&#233; et allaitement</label>
         <select id="csPregnancy">
           <option value="nulliparous">Nullipare</option>
-          <option value="primiparous_30">Primipare &lt; 30 ans (protecteur)</option>
-          <option value="primiparous_30plus">Primipare &#8805; 30 ans (+4%/an apr&#232;s 22 ans)</option>
-          <option value="multiparous">Multipare avec allaitement &gt; 12 mois</option>
+          <option value="primiparous_30">Primipare &lt;&#160;30 ans (protecteur)</option>
+          <option value="primiparous_30plus">Primipare &#8805;&#160;30 ans</option>
+          <option value="multiparous">Multipare avec allaitement &gt;&#160;12 mois</option>
         </select>
-        <div class="cs-hint">Allaitement &gt; 12 mois cumul&#233;s : r&#233;duction du risque d&#8217;environ 4,3% (Collaborative Group, Lancet 2002).</div>
+        <div class="cs-hint">Allaitement &gt;&#160;12 mois cumul&#233;s&#160;: r&#233;duction ~&#160;4,3% (Collaborative Group, Lancet 2002).</div>
+      </div>
+      <div>
+        <label for="csOrigine">Origine / population (optionnel)</label>
+        <select id="csOrigine">
+          <option value="non_precise">Non pr&#233;cis&#233; / autre</option>
+          <option value="afrique_subsaharienne">Afrique subsaharienne / Maghreb</option>
+          <option value="europe_nord_amerique">Europe / Am&#233;rique du Nord</option>
+          <option value="asie">Asie</option>
+        </select>
+        <div class="cs-hint">Les femmes d&#8217;origine africaine pr&#233;sentent une plus grande proportion de cancers triple n&#233;gatifs, diagnostiqu&#233;s &#224; un stade plus avanc&#233;.</div>
       </div>
     </div>
 
@@ -1040,12 +1284,13 @@
     </div>
   </div>
 
-  <!-- ÉTAPE 2 : Antécédents personnels -->
+  <!-- &#201;TAPE 2 : Ant&#233;c&#233;dents personnels -->
   <div class="cs-card cs-step" id="csStep2">
     <div class="cs-section-title">
-      <span class="cs-step-num">2</span>Ant&#233;c&#233;dents personnels mammaires et oncologiques
+      <span class="cs-step-num">2</span>Ant&#233;c&#233;dents personnels et post-traitement
     </div>
 
+    <label>Ant&#233;c&#233;dent personnel oncologique</label>
     <div class="cs-options" id="csPersonalOpts">
       <label class="cs-option">
         <input type="radio" name="csPersonal" value="none" checked>
@@ -1061,11 +1306,15 @@
       </label>
       <label class="cs-option">
         <input type="radio" name="csPersonal" value="clis">
-        Carcinome lobulaire in situ (CLIS) &#8212; risque accru de 8-10x
+        Carcinome lobulaire in situ (CLIS) &#8212; risque relatif x&#160;8&#8211;10
       </label>
       <label class="cs-option">
         <input type="radio" name="csPersonal" value="atypical_hyperplasia">
         Hyperplasie atypique document&#233;e (canalaire ou lobulaire)
+      </label>
+      <label class="cs-option">
+        <input type="radio" name="csPersonal" value="ovarian_cancer">
+        <span><strong>Ant&#233;c&#233;dent personnel de cancer de l&#8217;ovaire</strong><br><span style="font-size:12px;color:#5a6a82;">Signal fort pour mutation BRCA1/2&#160;&#8212; consultation oncog&#233;n&#233;tique syst&#233;matique</span></span>
       </label>
       <label class="cs-option">
         <input type="radio" name="csPersonal" value="thoracic_radiation">
@@ -1073,7 +1322,30 @@
       </label>
     </div>
 
-    <div style="margin-top: 16px;">
+    <!-- Post-traitement / chimiopr&#233;vention -->
+    <div style="margin-top:16px;">
+      <label>Prise en charge en cours (post-traitement ou pr&#233;vention)</label>
+      <div class="cs-options">
+        <label class="cs-option">
+          <input type="checkbox" id="csChemoNone" checked onchange="csToggleChemo(this)">
+          Aucun traitement sp&#233;cifique en cours
+        </label>
+        <label class="cs-option">
+          <input type="checkbox" id="csTamoxifene" onchange="csToggleChemo(this)">
+          <span>Chimiopr&#233;vention par <strong>tamoxif&#232;ne</strong> en cours (5&#160;ans)<br><span style="font-size:12px;color:#5a6a82;">R&#233;duction du risque ~&#160;38% &#8212; IBIS-I &#183; P-1 trial</span></span>
+        </label>
+        <label class="cs-option">
+          <input type="checkbox" id="csRaloxifene" onchange="csToggleChemo(this)">
+          <span>Chimiopr&#233;vention par <strong>raloxif&#232;ne</strong> en cours (post-m&#233;nopause)<br><span style="font-size:12px;color:#5a6a82;">R&#233;duction comparable au tamoxif&#232;ne, profil TV moins favorable</span></span>
+        </label>
+        <label class="cs-option">
+          <input type="checkbox" id="csHormono" onchange="csToggleChemo(this)">
+          <span>Hormonoth&#233;rapie adjuvante en cours (sein HR+)<br><span style="font-size:12px;color:#5a6a82;">Surveillance adapt&#233;e au stade et aux caract&#233;ristiques mol&#233;culaires</span></span>
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;">
       <label>Biopsies mammaires pr&#233;c&#233;dentes (hors cancer)</label>
       <div class="cs-options">
         <label class="cs-option">
@@ -1082,7 +1354,7 @@
         </label>
         <label class="cs-option">
           <input type="checkbox" id="csBiopsyComplex" onchange="csToggleBiopsy(this)">
-          Hyperplasie complexe sans atypie (risque relatif x 2-3)
+          Hyperplasie complexe sans atypie (RR&#160;x&#160;2&#8211;3)
         </label>
         <label class="cs-option">
           <input type="checkbox" id="csBiopsyRadial" onchange="csToggleBiopsy(this)">
@@ -1091,25 +1363,25 @@
       </div>
     </div>
 
-    <div class="cs-density-section" style="margin-top: 16px;">
+    <div class="cs-density-section" style="margin-top:16px;">
       <label>Densit&#233; mammaire (classification ACR BI-RADS)</label>
-      <div class="cs-hint" style="margin-bottom: 12px;">La densit&#233; mammaire &#233;lev&#233;e est un facteur de risque ind&#233;pendant (RR 1,2 &#224; 5,0) et r&#233;duit la sensibilit&#233; de la mammographie.</div>
+      <div class="cs-hint" style="margin-bottom:12px;">Facteur de risque ind&#233;pendant (RR&#160;1,2&#8211;5,0) et r&#233;ducteur de sensibilit&#233; mammographique.</div>
       <div class="cs-density-legend" id="csDensityLegend">
         <div class="cs-density-item" data-value="a" onclick="csSelectDensity(this)">
-          <div class="cs-d-label">A : Gras</div>
-          <div class="cs-d-desc">&lt; 25% tissu dense<br>RR faible</div>
+          <div class="cs-d-label">A&#160;: Gras</div>
+          <div class="cs-d-desc">&lt;&#160;25% dense<br>RR faible</div>
         </div>
         <div class="cs-density-item" data-value="b" onclick="csSelectDensity(this)">
-          <div class="cs-d-label">B : Diss&#233;min&#233;</div>
-          <div class="cs-d-desc">25-50% tissu dense<br>RR mod&#233;r&#233;</div>
+          <div class="cs-d-label">B&#160;: Diss&#233;min&#233;</div>
+          <div class="cs-d-desc">25&#8211;50% dense<br>RR mod&#233;r&#233;</div>
         </div>
         <div class="cs-density-item" data-value="c" onclick="csSelectDensity(this)">
-          <div class="cs-d-label">C : H&#233;t&#233;rog&#232;ne</div>
-          <div class="cs-d-desc">51-75% tissu dense<br>RR &#233;lev&#233;</div>
+          <div class="cs-d-label">C&#160;: H&#233;t&#233;rog&#232;ne</div>
+          <div class="cs-d-desc">51&#8211;75% dense<br>RR &#233;lev&#233;</div>
         </div>
         <div class="cs-density-item" data-value="d" onclick="csSelectDensity(this)">
-          <div class="cs-d-label">D : Dense</div>
-          <div class="cs-d-desc">&gt; 75% tissu dense<br>RR 1,2 &#224; 5,0</div>
+          <div class="cs-d-label">D&#160;: Dense</div>
+          <div class="cs-d-desc">&gt;&#160;75% dense<br>RR jusqu\u2019&#224; 5,0</div>
         </div>
       </div>
       <input type="hidden" id="csDensityValue" value="">
@@ -1121,17 +1393,17 @@
     </div>
   </div>
 
-  <!-- ÉTAPE 3 : Antécédents familiaux et génétique -->
+  <!-- &#201;TAPE 3 : Familiaux + g&#233;n&#233;tique -->
   <div class="cs-card cs-step" id="csStep3">
     <div class="cs-section-title">
       <span class="cs-step-num">3</span>Ant&#233;c&#233;dents familiaux et facteurs g&#233;n&#233;tiques
     </div>
 
     <div class="cs-note info">
-      Le score d&#8217;Eisinger &#233;value le risque familial. En l&#8217;absence d&#8217;ant&#233;c&#233;dent, passer directement aux recommandations. Pour les syndromes g&#233;n&#233;tiques rares (Li-Fraumeni, Cowden, Peutz-Jeghers), utiliser le champ &#171; Autre mutation &#187;.
+      Le score d&#8217;Eisinger &#233;value le risque familial. En l&#8217;absence d&#8217;ant&#233;c&#233;dent, passer directement aux recommandations. Pour les syndromes g&#233;n&#233;tiques rares (Li-Fraumeni, Cowden, Peutz-Jeghers), utiliser le champ &#171;&#160;Autre mutation&#160;&#187;.
     </div>
 
-    <div style="margin-bottom: 16px;">
+    <div style="margin-bottom:16px;">
       <label>Mutation g&#233;n&#233;tique connue (test&#233;e ou suspect&#233;e)</label>
       <div class="cs-options">
         <label class="cs-option">
@@ -1140,23 +1412,23 @@
         </label>
         <label class="cs-option">
           <input type="radio" name="csGenetic" value="brca1" onchange="csToggleGenetic(this)">
-          <strong>BRCA1</strong> &#8212; Risque &#224; vie ~72% | D&#233;pistage IRM d&#232;s 25 ans
+          <strong>BRCA1</strong> &#8212; Risque &#224; vie ~&#160;72% | IRM d&#232;s 25&#160;ans
         </label>
         <label class="cs-option">
           <input type="radio" name="csGenetic" value="brca2" onchange="csToggleGenetic(this)">
-          <strong>BRCA2</strong> &#8212; Risque &#224; vie ~69% | D&#233;pistage IRM d&#232;s 30 ans
+          <strong>BRCA2</strong> &#8212; Risque &#224; vie ~&#160;69% | IRM d&#232;s 30&#160;ans
         </label>
         <label class="cs-option">
           <input type="radio" name="csGenetic" value="palb2" onchange="csToggleGenetic(this)">
-          <strong>PALB2</strong> &#8212; Risque &#224; vie ~35-60% | Surveillance rapproch&#233;e
+          <strong>PALB2</strong> &#8212; Risque &#224; vie ~&#160;35&#8211;60% | BRCA2-like (ENIGMA 2021)
         </label>
         <label class="cs-option">
           <input type="radio" name="csGenetic" value="chek2" onchange="csToggleGenetic(this)">
-          <strong>CHEK2</strong> &#8212; Risque mod&#233;r&#233; (~20-30%) | Mammographie annuelle d&#232;s 40 ans
+          <strong>CHEK2</strong> &#8212; Risque mod&#233;r&#233; ~&#160;20&#8211;30% | Mammo. annuelle d&#232;s 40&#160;ans
         </label>
         <label class="cs-option">
           <input type="radio" name="csGenetic" value="atm" onchange="csToggleGenetic(this)">
-          <strong>ATM</strong> &#8212; Risque faible &#224; mod&#233;r&#233; (~20-30%)
+          <strong>ATM</strong> &#8212; Risque faible &#224; mod&#233;r&#233; ~&#160;20&#8211;30%
         </label>
         <label class="cs-option">
           <input type="radio" name="csGenetic" value="other" onchange="csToggleGenetic(this)">
@@ -1166,43 +1438,38 @@
     </div>
 
     <div id="csFamilySection">
-      <div class="cs-section-title" style="font-size: 14px; margin-top: 20px;">
+      <div class="cs-section-title" style="font-size:14px; margin-top:20px;">
         Score d&#8217;Eisinger &#8212; Ant&#233;c&#233;dents familiaux
       </div>
-
       <div id="csFamilyRows"></div>
       <button class="cs-add-btn" onclick="csAddFamily()">Ajouter un apparent&#233; atteint</button>
-
       <div class="cs-score-box" id="csScoreBox">
         <div class="cs-score-line">
-          <span>Score branche maternelle : <strong id="csScoreMat">0</strong></span>
-          <span>Score branche paternelle : <strong id="csScorePat">0</strong></span>
+          <span>Score branche maternelle&#160;: <strong id="csScoreMat">0</strong></span>
+          <span>Score branche paternelle&#160;: <strong id="csScorePat">0</strong></span>
         </div>
-        <div class="cs-score-final">Score Eisinger retenu : <span id="csScoreFinal">0</span></div>
+        <div class="cs-score-final">Score Eisinger retenu&#160;: <span id="csScoreFinal">0</span></div>
       </div>
-
       <details class="cs-legend">
         <summary>Bar&#232;me d&#233;taill&#233; du score d&#8217;Eisinger (INCa)</summary>
         <div class="cs-legend-body">
           <table>
-            <thead>
-              <tr><th>Cas</th><th>Degr&#233;</th><th>&#194;ge diagnostic</th><th>Points</th></tr>
-            </thead>
+            <thead><tr><th>Cas</th><th>Degr&#233;</th><th>&#194;ge diagnostic</th><th>Points</th></tr></thead>
             <tbody>
               <tr><td>Mutation BRCA1/2 identifi&#233;e</td><td>&#8212;</td><td>&#8212;</td><td><strong>5</strong></td></tr>
-              <tr><td rowspan="4">Cancer du sein (femme)</td><td rowspan="4">1<sup>er</sup> degr&#233;</td><td>&lt; 30 ans</td><td><strong>4</strong></td></tr>
+              <tr><td rowspan="4">Cancer du sein (femme)</td><td rowspan="4">1<sup>er</sup> degr&#233;</td><td>&lt;&#160;30 ans</td><td><strong>4</strong></td></tr>
               <tr><td>30&#8211;39 ans</td><td><strong>3</strong></td></tr>
               <tr><td>40&#8211;49 ans</td><td><strong>2</strong></td></tr>
               <tr><td>50&#8211;70 ans</td><td><strong>1</strong></td></tr>
-              <tr><td rowspan="2">Cancer du sein (femme)</td><td rowspan="2">2<sup>e</sup> degr&#233;</td><td>&lt; 50 ans</td><td><strong>1</strong></td></tr>
+              <tr><td rowspan="2">Cancer du sein (femme)</td><td rowspan="2">2<sup>e</sup> degr&#233;</td><td>&lt;&#160;50 ans</td><td><strong>1</strong></td></tr>
               <tr><td>50&#8211;70 ans</td><td><strong>0,5</strong></td></tr>
               <tr><td>Cancer du sein (homme)</td><td>1<sup>er</sup> ou 2<sup>e</sup></td><td>Tout &#226;ge</td><td><strong>4</strong></td></tr>
               <tr><td>Cancer de l&#8217;ovaire</td><td>1<sup>er</sup> ou 2<sup>e</sup></td><td>Tout &#226;ge</td><td><strong>3</strong></td></tr>
             </tbody>
           </table>
           <p style="margin-top:10px !important; font-size:11.5px !important; color:#5a6a82 !important;">
-            Seuil d&#8217;orientation oncog&#233;n&#233;tique : score &#8805; 3 (branche maternelle <strong>ou</strong> paternelle).<br>
-            Seuil de surveillance renforc&#233;e : score &#8805; 2.
+            Seuil d&#8217;orientation oncog&#233;n&#233;tique&#160;: score &#8805;&#160;3 (branche maternelle <strong>ou</strong> paternelle).<br>
+            Seuil de surveillance renforc&#233;e&#160;: score &#8805;&#160;2.
           </p>
         </div>
       </details>
@@ -1214,13 +1481,8 @@
     </div>
   </div>
 
-  <!-- RÉSULTATS -->
+  <!-- R&#201;SULTATS -->
   <div class="cs-card cs-step" id="csResults">
-    <div class="cs-pdf-header">
-      <h2>Compte-rendu d&#8217;&#233;valuation du risque de cancer du sein</h2>
-      <p id="csPdfDate">Date d&#8217;&#233;valuation : </p>
-      <p id="csPdfPraticien">Praticien : _________________________</p>
-    </div>
 
     <div class="cs-result-header">
       <div class="cs-risk-badge" id="csRiskBadge">&#8212;</div>
@@ -1230,35 +1492,34 @@
       </div>
     </div>
 
+    <!-- Alerte triple n&#233;gatif si pertinente -->
+    <div class="cs-note alert" id="csTnAlert" style="display:none;">
+      Patiente d&#8217;origine africaine/maghr&#233;bine&#160;: proportion plus &#233;lev&#233;e de cancers triple n&#233;gatifs (RH&#8722;/HER2&#8722;, agressifs, pr&#233;coces). Maintenir un haut niveau de vigilance clinique et abaisser le seuil d&#8217;exploration m&#234;me en dehors du calendrier de d&#233;pistage organis&#233;.
+    </div>
+
     <div class="cs-reco-block">
       <h3>Recommandations de prise en charge</h3>
       <div id="csRecoList"></div>
     </div>
 
-    <div class="cs-reco-block" id="csRiskFactorsBlock" style="display: none;">
+    <div class="cs-reco-block" id="csRiskFactorsBlock" style="display:none;">
       <h3>Synth&#232;se des facteurs de risque identifi&#233;s</h3>
       <div id="csRiskFactorsList"></div>
     </div>
 
     <div class="cs-sources">
-      <strong>Sources :</strong> INCa &#8211; D&#233;pistage du cancer du sein (2023) &middot; HAS &#8211; D&#233;pistage chez les femmes &#224; haut risque (2014) &middot; EUSOMA &#8211; Guidelines 2023 &middot; Score d&#8217;Eisinger actualis&#233; (INCa/CNGOF) &middot; Tyrer-Cuzick v8 &middot; NCCN Guidelines 2024 &middot; Collaborative Group on Hormonal Factors in Breast Cancer (Lancet, 2002).<br><br>
-      <strong>Limites :</strong> Cet outil ne prend pas en compte les co-morbidit&#233;s s&#233;v&#232;res, l&#8217;esp&#233;rance de vie limit&#233;e, ni les pr&#233;f&#233;rences individuelles de la patiente. La d&#233;cision finale appartient au clinicien. Le score de risque absolu (Tyrer-Cuzick) doit &#234;tre calcul&#233; sur la plateforme IBIS valid&#233;e pour les d&#233;cisions de chimiopr&#233;vention.
+      <strong>Sources&#160;:</strong> INCa &#8211; D&#233;pistage du cancer du sein (2023) &middot; HAS &#8211; Femmes &#224; haut risque (2014) &middot; EUSOMA (2023) &middot; CNGOF &#8211; THM (2021) &middot; Score Eisinger (INCa/CNGOF) &middot; Tyrer-Cuzick v8 &middot; NCCN 2024 &middot; E3N/INSERM (Lancet Oncol. 2019) &middot; Collaborative Group on Hormonal Factors (Lancet 2002) &middot; ENIGMA Consortium (2021).<br><br>
+      <strong>Limites&#160;:</strong> Cet outil ne prend pas en compte les co-morbidit&#233;s s&#233;v&#232;res, l&#8217;esp&#233;rance de vie limit&#233;e, ni les pr&#233;f&#233;rences individuelles. La d&#233;cision finale appartient au clinicien. Le score de risque absolu (Tyrer-Cuzick) doit &#234;tre calcul&#233; sur la plateforme IBIS valid&#233;e pour les d&#233;cisions de chimiopr&#233;vention.
     </div>
 
-    <!-- ===== PANNEAU COMPTE-RENDU DOSSIER ===== -->
+    <!-- PANNEAU COMPTE-RENDU -->
     <div class="cs-cr-wrapper" id="csCrWrapper">
-
       <div class="cs-cr-titlebar">
-        <div class="cs-cr-titlebar-left">
-          <span class="cs-cr-titlebar-icon">&#128196;</span>
-          Compte-rendu dossier
-          <span class="cs-cr-titlebar-hint">&#8212; Redimensionnable par la poign&#233;e en bas &#224; droite</span>
-        </div>
+        <span>&#128196;</span>
+        Compte-rendu dossier
+        <span class="cs-cr-titlebar-hint">&#8212; Redimensionnable par la poign&#233;e en bas &#224; droite</span>
       </div>
-
       <div class="cs-cr-body">
-
-        <!-- Identification patiente + médecin -->
         <div class="cs-cr-id-section">
           <div class="cs-cr-field-group">
             <label for="crPatNom">Nom de la patiente</label>
@@ -1270,7 +1531,7 @@
           </div>
           <div class="cs-cr-field-group">
             <label for="crPatDdn">Date de naissance</label>
-            <input type="text" id="crPatDdn" placeholder="JJ/MM/AAAA" maxlength="10" inputmode="numeric" oninput="csFormatDdn(this); csRegenResume()">
+            <input type="text" id="crPatDdn" placeholder="JJ/MM/AAAA" maxlength="10" inputmode="numeric" oninput="csFormatDdn(this);csRegenResume()">
           </div>
           <div class="cs-cr-field-group">
             <label for="crPatDoss">N&#176; dossier / IPP</label>
@@ -1282,37 +1543,49 @@
           </div>
           <div class="cs-cr-field-group">
             <label for="crConsultDate">Date de consultation</label>
-            <input type="text" id="crConsultDate" placeholder="JJ/MM/AAAA" maxlength="10" inputmode="numeric" oninput="csFormatDdn(this); csRegenResume()">
+            <input type="text" id="crConsultDate" placeholder="JJ/MM/AAAA" maxlength="10" inputmode="numeric" oninput="csFormatDdn(this);csRegenResume()">
           </div>
         </div>
-
         <hr class="cs-cr-sep">
-
-        <!-- Résumé structuré -->
         <div>
           <span class="cs-cr-text-label">R&#233;sum&#233; &#224; coller dans le dossier</span>
           <textarea class="cs-cr-textarea" id="csCrTextarea" spellcheck="false" readonly></textarea>
         </div>
-
-        <!-- Actions -->
         <div class="cs-cr-actions">
           <button class="cs-btn-copy" onclick="csCopyResume()">Copier le r&#233;sum&#233;</button>
           <button class="cs-btn-regen" onclick="csRegenResume()">Reg&#233;n&#233;rer</button>
           <span class="cs-copy-toast" id="csCopyToast">&#10003;&#160;Copi&#233; dans le presse-papier</span>
         </div>
-
       </div>
-
       <div class="cs-cr-resize-hint">&#8690; Faites glisser pour redimensionner</div>
     </div>
-    <!-- ===== FIN PANNEAU COMPTE-RENDU ===== -->
 
     <div class="cs-actions">
       <button class="cs-btn cs-btn-reset" onclick="csRestart()">&#8635; Nouvelle &#233;valuation</button>
-      <button class="cs-btn cs-btn-primary" onclick="window.print()">Imprimer le compte-rendu</button>
+      <button class="cs-btn cs-btn-secondary" onclick="showStep(3)" style="font-weight:normal !important;">&#8249; Retour &#224; l&#8217;&#233;tape pr&#233;c&#233;dente</button>
+      <button class="cs-btn cs-btn-primary" onclick="csPrintPdf()">&#128438; Imprimer / Exporter PDF</button>
     </div>
   </div>
 
+  <!-- SECTION &#192; PROPOS -->
+  <details class="cs-about-section" id="csAboutSection">
+    <summary>&#192; propos &#183; M&#233;thodologie &#183; Version</summary>
+    <div class="cs-about-body">
+      <h4>Version et mise &#224; jour</h4>
+      <p><strong>Version 3.0</strong> &#8212; juin 2025. Outil d&#233;velopp&#233; pour un usage exclusif par des professionnels de sant&#233; form&#233;s en gyn&#233;cologie-obst&#233;trique et en oncologie.</p>
+      <h4>M&#233;thodologie</h4>
+      <p><strong>Score Eisinger (INCa/CNGOF)</strong>&#160;: &#233;value le risque familial de cancer du sein et de l&#8217;ovaire en pondant les cas selon le degr&#233; de parent&#233; et l&#8217;&#226;ge au diagnostic. Le seuil de 3 points oriente vers une consultation d&#8217;oncog&#233;n&#233;tique.</p>
+      <p><strong>Classification du risque personnel</strong>&#160;: bas&#233;e sur les d&#233;finitions INCa 2023 et HAS 2014 (femmes &#224; haut risque)&#160;: risque standard (population g&#233;n&#233;rale), risque &#233;lev&#233; (RR &gt;&#160;4 ou risque cumulatif &gt;&#160;20%), risque tr&#232;s &#233;lev&#233; (mutation BRCA1/2, irradiation thoracique, syndrome g&#233;n&#233;tique).</p>
+      <p><strong>THM et type de progestatif</strong>&#160;: La distinction entre progest&#233;rone naturelle micronisée (Utrogestan&#174;) et progestatifs de synth&#232;se repose sur les donn&#233;es de la cohorte E3N/INSERM (Fournier et al., Lancet Oncol. 2019) et les recommandations CNGOF 2021. Le risque associ&#233; &#224; la progest&#233;rone naturelle n&#8217;est pas significativement accru &#224; moins de 5 ans d&#8217;utilisation.</p>
+      <p><strong>Alerte triple n&#233;gatif</strong>&#160;: bas&#233;e sur les donn&#233;es &#233;pid&#233;miologiques montrant une surrepr&#233;sentation des cancers du sein triple n&#233;gatifs dans les populations d&#8217;Afrique subsaharienne et de la diaspora, avec un &#226;ge m&#233;dian au diagnostic inf&#233;rieur de 5&#8211;10 ans &#224; celui des populations europ&#233;ennes (SEER database, 2022&#160;; INCa rapport ethnicit&#233;, 2021).</p>
+      <h4>Limites</h4>
+      <p>Cet outil ne calcule pas le risque absolu &#224; 10 ans (n&#233;cessitant la plateforme IBIS/Tyrer-Cuzick v8). Il ne tient pas compte des co-morbidit&#233;s, de l&#8217;esp&#233;rance de vie limit&#233;e, de la pr&#233;f&#233;rence de la patiente, ni des &#233;l&#233;ments de l&#8217;examen clinique. Il ne remplace pas une consultation sp&#233;cialis&#233;e en cas de risque &#233;lev&#233; ou tr&#232;s &#233;lev&#233;.</p>
+      <h4>Absence de conflit d&#8217;int&#233;r&#234;t</h4>
+      <p>Outil &#233;labor&#233; ind&#233;pendamment de tout financement industriel. Aucun lien avec l&#8217;industrie pharmaceutique ou l&#8217;imagerie m&#233;dicale.</p>
+    </div>
+  </details>
+
+  <!-- MODAL -->
   <div class="cs-modal-overlay" id="csModal">
     <div class="cs-modal">
       <p id="csModalMsg"></p>
@@ -1320,49 +1593,89 @@
     </div>
   </div>
 
-</div>
+</div><!-- fin #csein-tool -->
 
 <script>
 (function() {
 
-  /* ================================================================
-     CORRECTIF PRINCIPAL : showStep() gère display inline sur TOUS
-     les panneaux via style.display, sans conflit CSS .active
-     => Fonctionne dans Elementor même si all:initial est absent
-  ================================================================ */
-
-  var PANELS = ['csStep1','csStep2','csStep3','csResults'];
+  var PANELS     = ['csStep1','csStep2','csStep3','csResults'];
   var totalSteps = 3;
 
+  /* ---- showStep ---- */
   function showStep(n) {
-    /* Cacher tous les panneaux */
     for (var i = 0; i < PANELS.length; i++) {
       var el = document.getElementById(PANELS[i]);
-      if (el) el.style.setProperty('display', 'none', 'important');
+      if (el) el.style.setProperty('display','none','important');
     }
-    /* Afficher le panneau cible */
-    var targetId = (n === 'results') ? 'csResults' : ('csStep' + n);
-    var target = document.getElementById(targetId);
-    if (target) target.style.setProperty('display', 'block', 'important');
+    var tid = (n === 'results') ? 'csResults' : ('csStep' + n);
+    var tgt = document.getElementById(tid);
+    if (tgt) tgt.style.setProperty('display','block','important');
 
-    /* Barre de progression */
     var pct = (n === 'results') ? 100 : Math.round((n / totalSteps) * 100);
     var bar = document.getElementById('csProgBar');
     if (bar) bar.style.setProperty('width', pct + '%', 'important');
 
-    /* Scroll vers le haut de l'outil */
     var tool = document.getElementById('csein-tool');
     if (tool) {
       var top = tool.getBoundingClientRect().top + window.pageYOffset - 20;
       window.scrollTo({ top: top, behavior: 'smooth' });
     }
   }
+  window.showStep = showStep;
 
-  /* ---- ÉTAT ---- */
+  /* ---- MODE RAPIDE ---- */
+  window.csQuickMode = function() {
+    /* Risque standard : patiente 50-74 ans, aucun facteur */
+    var age = parseInt(document.getElementById('csAge').value, 10) || 0;
+    if (!age || age < 18 || age > 120) {
+      csShowModal('Veuillez d\u2019abord saisir l\u2019\u00e2ge de la patiente (champ \u00e9tape 1), puis utilisez le mode rapide.');
+      return;
+    }
+    /* Forcer les valeurs standard */
+    document.getElementById('csBmi').value || (document.getElementById('csBmi').value = '');
+    document.getElementById('csMenarche').value = '13';
+    document.getElementById('csMenopause').value = 'premeno';
+    document.getElementById('csThmDuree').value = 'never';
+    csThmChange();
+    document.getElementById('csPregnancy').value = 'nulliparous';
+    document.getElementById('csOrigine').value = 'non_precise';
+    /* &#201;tape 1 -> state */
+    state.age      = age;
+    state.bmi      = 0;
+    state.menarche = 13;
+    state.menopause= 'premeno';
+    state.thm      = 'never';
+    state.thmType  = 'progesterone_naturelle';
+    state.pregnancy= 'nulliparous';
+    state.origine  = 'non_precise';
+    /* &#201;tape 2 defaults */
+    state.personal = 'none';
+    state.biopsy   = 'none';
+    state.density  = '';
+    state.chemo    = 'none';
+    /* &#201;tape 3 defaults */
+    state.genetic  = 'none';
+    csCalculate();
+  };
+
+  /* ---- &#201;TAT ---- */
   var state = {
     age: null, bmi: null, menarche: 13, menopause: 'premeno',
-    thm: 'never', pregnancy: 'nulliparous', personal: 'none',
-    biopsy: 'none', density: '', genetic: 'none', family: []
+    thm: 'never', thmType: 'progesterone_naturelle',
+    pregnancy: 'nulliparous', origine: 'non_precise',
+    personal: 'none', biopsy: 'none', density: '', chemo: 'none',
+    genetic: 'none', family: []
+  };
+
+  /* ---- THM CHANGE ---- */
+  window.csThmChange = function() {
+    var v   = document.getElementById('csThmDuree').value;
+    var sub = document.getElementById('csThmTypeSub');
+    if (v === 'never' || v === 'stopped') {
+      sub.classList.remove('visible');
+    } else {
+      sub.classList.add('visible');
+    }
   };
 
   /* ---- NAVIGATION ---- */
@@ -1370,15 +1683,18 @@
     if (from === 1) {
       var v = parseInt(document.getElementById('csAge').value, 10);
       if (!v || v < 18 || v > 120) {
-        csShowModal("Veuillez saisir un \u00e2ge valide (18\u2013120 ans) pour la patiente.");
+        csShowModal('Veuillez saisir un \u00e2ge valide (18\u2013120 ans).');
         return;
       }
       state.age      = v;
       state.bmi      = parseFloat(document.getElementById('csBmi').value) || 0;
       state.menarche = parseInt(document.getElementById('csMenarche').value, 10);
       state.menopause= document.getElementById('csMenopause').value;
-      state.thm      = document.getElementById('csThm').value;
+      state.thm      = document.getElementById('csThmDuree').value;
+      var tSel = document.querySelector('input[name="csThmType"]:checked');
+      state.thmType  = tSel ? tSel.value : 'inconnu';
       state.pregnancy= document.getElementById('csPregnancy').value;
+      state.origine  = document.getElementById('csOrigine').value;
     }
     if (from === 2) {
       var sel = document.querySelector('input[name="csPersonal"]:checked');
@@ -1387,43 +1703,61 @@
       if (document.getElementById('csBiopsyComplex').checked)     state.biopsy = 'complex';
       else if (document.getElementById('csBiopsyRadial').checked) state.biopsy = 'radial';
       else                                                         state.biopsy = 'none';
+      if (document.getElementById('csTamoxifene').checked)  state.chemo = 'tamoxifene';
+      else if (document.getElementById('csRaloxifene').checked) state.chemo = 'raloxifene';
+      else if (document.getElementById('csHormono').checked)    state.chemo = 'hormonotherapie';
+      else state.chemo = 'none';
     }
     showStep(from + 1);
   };
 
   window.csPrev = function(from) { showStep(from - 1); };
 
+  /* ---- RESET ---- */
   window.csRestart = function() {
     state = {
       age: null, bmi: null, menarche: 13, menopause: 'premeno',
-      thm: 'never', pregnancy: 'nulliparous', personal: 'none',
-      biopsy: 'none', density: '', genetic: 'none', family: []
+      thm: 'never', thmType: 'progesterone_naturelle',
+      pregnancy: 'nulliparous', origine: 'non_precise',
+      personal: 'none', biopsy: 'none', density: '', chemo: 'none',
+      genetic: 'none', family: []
     };
-    document.getElementById('csAge').value = '';
-    document.getElementById('csBmi').value = '';
-    document.getElementById('csMenarche').value = '13';
-    document.getElementById('csMenopause').value = 'premeno';
-    document.getElementById('csThm').value = 'never';
-    document.getElementById('csPregnancy').value = 'nulliparous';
+    document.getElementById('csAge').value        = '';
+    document.getElementById('csBmi').value        = '';
+    document.getElementById('csMenarche').value   = '13';
+    document.getElementById('csMenopause').value  = 'premeno';
+    document.getElementById('csThmDuree').value   = 'never';
+    csThmChange();
+    document.getElementById('csPregnancy').value  = 'nulliparous';
+    document.getElementById('csOrigine').value    = 'non_precise';
     var rNone = document.querySelector('input[name="csPersonal"][value="none"]');
     if (rNone) rNone.checked = true;
-    document.getElementById('csBiopsyNone').checked    = true;
-    document.getElementById('csBiopsyComplex').checked = false;
-    document.getElementById('csBiopsyRadial').checked  = false;
-    document.getElementById('csDensityValue').value = '';
-    document.querySelectorAll('.cs-density-item').forEach(function(el) { el.classList.remove('selected'); });
+    document.getElementById('csChemoNone').checked    = true;
+    document.getElementById('csTamoxifene').checked   = false;
+    document.getElementById('csRaloxifene').checked   = false;
+    document.getElementById('csHormono').checked      = false;
+    document.getElementById('csBiopsyNone').checked   = true;
+    document.getElementById('csBiopsyComplex').checked= false;
+    document.getElementById('csBiopsyRadial').checked = false;
+    document.getElementById('csDensityValue').value   = '';
+    document.querySelectorAll('.cs-density-item').forEach(function(e) { e.classList.remove('selected'); });
     var gNone = document.querySelector('input[name="csGenetic"][value="none"]');
     if (gNone) gNone.checked = true;
     var fs = document.getElementById('csFamilySection');
     if (fs) { fs.style.opacity = '1'; fs.style.pointerEvents = 'auto'; }
     document.getElementById('csFamilyRows').innerHTML = '';
     document.getElementById('csScoreBox').classList.remove('visible');
+    document.getElementById('crPatNom').value    = '';
+    document.getElementById('crPatPrenom').value = '';
+    document.getElementById('crPatDdn').value    = '';
+    document.getElementById('crPatDoss').value   = '';
+    document.getElementById('crConsultDate').value = '';
     showStep(1);
   };
 
-  /* ---- DENSITÉ MAMMAIRE ---- */
+  /* ---- DENSIT&#201; ---- */
   window.csSelectDensity = function(el) {
-    document.querySelectorAll('.cs-density-item').forEach(function(item) { item.classList.remove('selected'); });
+    document.querySelectorAll('.cs-density-item').forEach(function(i) { i.classList.remove('selected'); });
     el.classList.add('selected');
     document.getElementById('csDensityValue').value = el.dataset.value;
   };
@@ -1438,7 +1772,18 @@
     }
   };
 
-  /* ---- GÉNÉTIQUE ---- */
+  /* ---- CHIMO TOGGLE ---- */
+  window.csToggleChemo = function(el) {
+    if (el.id === 'csChemoNone' && el.checked) {
+      document.getElementById('csTamoxifene').checked = false;
+      document.getElementById('csRaloxifene').checked = false;
+      document.getElementById('csHormono').checked    = false;
+    } else if (el.checked) {
+      document.getElementById('csChemoNone').checked = false;
+    }
+  };
+
+  /* ---- G&#201;N&#201;TIQUE ---- */
   window.csToggleGenetic = function(el) {
     state.genetic = el.value;
     var fs = document.getElementById('csFamilySection');
@@ -1452,43 +1797,34 @@
     }
   };
 
-  /* ---- ANTÉCÉDENTS FAMILIAUX ---- */
+  /* ---- ANT&#201;C&#201;DENTS FAMILIAUX ---- */
   window.csAddFamily = function() {
     var row = document.createElement('div');
     row.className = 'cs-family-row';
     var uid = 'fr_' + Date.now();
-    /* CORRECTIF : apostrophes HTML entities dans innerHTML pour compatibilité Elementor */
     row.innerHTML =
-      '<div class="cs-col-inner">' +
-        '<label>Lien de parent\u00e9</label>' +
-        '<select class="cs-rel-sel" id="rel_' + uid + '">' +
-          '<option value="mat1">1er degr\u00e9 branche mat.</option>' +
-          '<option value="mat2">2e degr\u00e9 branche mat.</option>' +
-          '<option value="pat1">1er degr\u00e9 branche pat.</option>' +
-          '<option value="pat2">2e degr\u00e9 branche pat.</option>' +
-          '<option value="homme">Homme (tout degr\u00e9)</option>' +
-        '</select>' +
-      '</div>' +
-      '<div class="cs-col-inner">' +
-        '<label>Type de cancer</label>' +
-        '<select class="cs-type-sel" id="type_' + uid + '">' +
-          '<option value="sein_f">Cancer du sein (femme)</option>' +
-          '<option value="sein_h">Cancer du sein (homme)</option>' +
-          '<option value="ovaire">Cancer de l\u2019ovaire</option>' +
-          '<option value="brca">Mutation BRCA1/2</option>' +
-        '</select>' +
-      '</div>' +
-      '<div class="cs-col-inner cs-col-score">' +
-        '<label>\u00c2ge au diag.</label>' +
-        '<input type="number" class="cs-age-sel" id="age_' + uid + '" min="20" max="90" placeholder="ex. 55" inputmode="numeric">' +
-      '</div>' +
-      '<div class="cs-col-inner cs-col-del">' +
-        '<label>&nbsp;</label>' +
-        '<button class="cs-btn-del" onclick="csDelFamily(this)" title="Supprimer">\u00d7</button>' +
-      '</div>';
-    row.querySelector('.cs-rel-sel').addEventListener('change', csUpdateScore);
+      '<div class="cs-col-inner"><label>Lien de parent\u00e9</label>' +
+      '<select class="cs-rel-sel" id="rel_'+uid+'">' +
+        '<option value="mat1">1er degr\u00e9 mat.</option>' +
+        '<option value="mat2">2e degr\u00e9 mat.</option>' +
+        '<option value="pat1">1er degr\u00e9 pat.</option>' +
+        '<option value="pat2">2e degr\u00e9 pat.</option>' +
+        '<option value="homme">Homme (tout degr\u00e9)</option>' +
+      '</select></div>' +
+      '<div class="cs-col-inner"><label>Type de cancer</label>' +
+      '<select class="cs-type-sel" id="type_'+uid+'">' +
+        '<option value="sein_f">Cancer sein (femme)</option>' +
+        '<option value="sein_h">Cancer sein (homme)</option>' +
+        '<option value="ovaire">Cancer de l\u2019ovaire</option>' +
+        '<option value="brca">Mutation BRCA1/2</option>' +
+      '</select></div>' +
+      '<div class="cs-col-inner cs-col-score"><label>\u00c2ge diag.</label>' +
+      '<input type="number" class="cs-age-sel" id="age_'+uid+'" min="20" max="90" placeholder="55" inputmode="numeric"></div>' +
+      '<div class="cs-col-inner cs-col-del"><label>&nbsp;</label>' +
+      '<button class="cs-btn-del" onclick="csDelFamily(this)">\u00d7</button></div>';
+    row.querySelector('.cs-rel-sel').addEventListener('change',  csUpdateScore);
     row.querySelector('.cs-type-sel').addEventListener('change', csUpdateScore);
-    row.querySelector('.cs-age-sel').addEventListener('input', csUpdateScore);
+    row.querySelector('.cs-age-sel').addEventListener('input',   csUpdateScore);
     document.getElementById('csFamilyRows').appendChild(row);
     csUpdateScore();
   };
@@ -1499,268 +1835,470 @@
   };
 
   function csGetScore() {
-    var matScore = 0, patScore = 0;
-    var rows = document.querySelectorAll('#csFamilyRows .cs-family-row');
-    for (var i = 0; i < rows.length; i++) {
-      var rel  = rows[i].querySelector('.cs-rel-sel').value;
-      var type = rows[i].querySelector('.cs-type-sel').value;
-      var age  = parseInt(rows[i].querySelector('.cs-age-sel').value, 10) || 0;
+    var mat = 0, pat = 0;
+    document.querySelectorAll('#csFamilyRows .cs-family-row').forEach(function(r) {
+      var rel  = r.querySelector('.cs-rel-sel').value;
+      var type = r.querySelector('.cs-type-sel').value;
+      var age  = parseInt(r.querySelector('.cs-age-sel').value, 10) || 0;
       var pts  = 0;
-
-      if (type === 'brca') {
-        pts = 5;
-      } else if (type === 'sein_h') {
-        pts = 4;
-      } else if (type === 'ovaire') {
-        pts = 3;
-      } else if (type === 'sein_f') {
+      if      (type === 'brca')   pts = 5;
+      else if (type === 'sein_h') pts = 4;
+      else if (type === 'ovaire') pts = 3;
+      else if (type === 'sein_f') {
         var deg = (rel === 'mat1' || rel === 'pat1') ? 1 : 2;
         if (deg === 1) {
-          if      (age > 0 && age < 30)        pts = 4;
-          else if (age >= 30 && age < 40)      pts = 3;
-          else if (age >= 40 && age < 50)      pts = 2;
-          else                                 pts = 1;
+          if      (age > 0 && age < 30)   pts = 4;
+          else if (age >= 30 && age < 40)  pts = 3;
+          else if (age >= 40 && age < 50)  pts = 2;
+          else                             pts = 1;
         } else {
           pts = (age > 0 && age < 50) ? 1 : 0.5;
         }
       }
-
-      /* CORRECTIF : "homme" = cancer sein masculin → 4 pts peu importe la branche */
-      if (rel === 'homme') {
-        pts = 4;
-        /* Attribuer à la branche selon comment l'utilisateur a défini le lien */
-        /* Par défaut : si non précisé, on l'ajoute dans les deux max() */
-        matScore = Math.max(matScore, pts);
-        patScore = Math.max(patScore, pts);
-      } else if (rel === 'mat1' || rel === 'mat2') {
-        matScore += pts;
-      } else {
-        patScore += pts;
-      }
-    }
-    return { mat: matScore, pat: patScore, final: Math.max(matScore, patScore) };
+      if (rel === 'homme') { mat = Math.max(mat, pts); pat = Math.max(pat, pts); }
+      else if (rel === 'mat1' || rel === 'mat2') mat += pts;
+      else pat += pts;
+    });
+    return { mat: mat, pat: pat, final: Math.max(mat, pat) };
   }
 
   function csUpdateScore() {
-    var sc  = csGetScore();
-    var box = document.getElementById('csScoreBox');
+    var sc = csGetScore();
     document.getElementById('csScoreMat').textContent   = sc.mat;
     document.getElementById('csScorePat').textContent   = sc.pat;
     document.getElementById('csScoreFinal').textContent = sc.final;
     var rows = document.querySelectorAll('#csFamilyRows .cs-family-row');
-    if (rows.length > 0) box.classList.add('visible');
-    else                 box.classList.remove('visible');
+    var box  = document.getElementById('csScoreBox');
+    rows.length > 0 ? box.classList.add('visible') : box.classList.remove('visible');
   }
 
-  /* ---- CALCUL & RÉSULTATS ---- */
+  /* ================================================================
+     CALCUL PRINCIPAL
+  ================================================================ */
   window.csCalculate = function() {
-    /* Lire l'état génétique */
     var gSel = document.querySelector('input[name="csGenetic"]:checked');
     state.genetic = gSel ? gSel.value : 'none';
 
     var sc       = csGetScore();
     var eisinger = sc.final;
-    var genetic  = state.genetic;
+    var G        = state.genetic;
     var age      = state.age;
-    var density  = state.density;
-    var personal = state.personal;
-    var biopsy   = state.biopsy;
     var bmi      = state.bmi;
     var menopause= state.menopause;
     var thm      = state.thm;
+    var thmType  = state.thmType;
+    var personal = state.personal;
+    var biopsy   = state.biopsy;
+    var density  = state.density;
+    var chemo    = state.chemo;
+    var origine  = state.origine;
 
-    var riskLevel   = 'low';
-    var riskLabel   = '';
-    var riskDesc    = '';
+    /* ---- Facteurs de risque ---- */
     var riskFactors = [];
-
-    /* --- Facteurs de risque identifiés --- */
-    if (genetic === 'brca1')  riskFactors.push('Mutation BRCA1 (risque \u00e0 vie ~72\u202f%)');
-    if (genetic === 'brca2')  riskFactors.push('Mutation BRCA2 (risque \u00e0 vie ~69\u202f%)');
-    if (genetic === 'palb2')  riskFactors.push('Mutation PALB2 (risque \u00e0 vie ~35\u201360\u202f%)');
-    if (genetic === 'chek2')  riskFactors.push('Mutation CHEK2 (risque mod\u00e9r\u00e9 ~20\u201330\u202f%)');
-    if (genetic === 'atm')    riskFactors.push('Mutation ATM (risque faible \u00e0 mod\u00e9r\u00e9)');
-    if (genetic === 'other')  riskFactors.push('Syndrome g\u00e9n\u00e9tique rare (Li-Fraumeni, Cowden, Peutz-Jeghers)');
-    if (personal === 'breast_cancer')       riskFactors.push('Ant\u00e9c\u00e9dent de cancer du sein invasif');
-    if (personal === 'ccis')                riskFactors.push('Ant\u00e9c\u00e9dent de CCIS');
-    if (personal === 'clis')                riskFactors.push('Ant\u00e9c\u00e9dent de CLIS (risque relatif x 8\u201310)');
-    if (personal === 'atypical_hyperplasia')riskFactors.push('Hyperplasie atypique document\u00e9e (RR x 4\u20135)');
-    if (personal === 'thoracic_radiation')  riskFactors.push('Irradiation thoracique haute dose avant 30 ans');
+    if (G === 'brca1')  riskFactors.push('Mutation BRCA1 (risque \u00e0 vie ~\u202f72\u202f%)');
+    if (G === 'brca2')  riskFactors.push('Mutation BRCA2 (risque \u00e0 vie ~\u202f69\u202f%)');
+    if (G === 'palb2')  riskFactors.push('Mutation PALB2 (risque \u00e0 vie ~\u202f35\u201360\u202f%)');
+    if (G === 'chek2')  riskFactors.push('Mutation CHEK2 (risque mod\u00e9r\u00e9 ~\u202f20\u201330\u202f%)');
+    if (G === 'atm')    riskFactors.push('Mutation ATM (risque faible \u00e0 mod\u00e9r\u00e9)');
+    if (G === 'other')  riskFactors.push('Syndrome g\u00e9n\u00e9tique rare (Li-Fraumeni / Cowden / Peutz-Jeghers)');
+    if (personal === 'breast_cancer')        riskFactors.push('Ant\u00e9c\u00e9dent de cancer du sein invasif');
+    if (personal === 'ccis')                 riskFactors.push('Ant\u00e9c\u00e9dent de CCIS');
+    if (personal === 'clis')                 riskFactors.push('Ant\u00e9c\u00e9dent de CLIS (RR x 8\u201310)');
+    if (personal === 'atypical_hyperplasia') riskFactors.push('Hyperplasie atypique (RR x 4\u20135)');
+    if (personal === 'ovarian_cancer')       riskFactors.push('Ant\u00e9c\u00e9dent personnel de cancer de l\u2019ovaire \u2014 bilan BRCA syst\u00e9matique');
+    if (personal === 'thoracic_radiation')   riskFactors.push('Irradiation thoracique haute dose avant 30 ans');
     if (biopsy === 'complex')  riskFactors.push('Hyperplasie complexe sans atypie (RR x 2\u20133)');
     if (biopsy === 'radial')   riskFactors.push('L\u00e9sion radiale / papillome atypique');
-    if (eisinger >= 3)  riskFactors.push('Score Eisinger \u2265 3 (risque familial \u00e9lev\u00e9 \u2014 indication oncog\u00e9n\u00e9tique)');
+    if (eisinger >= 3)      riskFactors.push('Score Eisinger \u2265 3 \u2014 indication oncog\u00e9n\u00e9tique');
     else if (eisinger >= 2) riskFactors.push('Score Eisinger = ' + eisinger + ' (risque familial mod\u00e9r\u00e9)');
     else if (eisinger >= 1) riskFactors.push('Score Eisinger = ' + eisinger + ' (risque familial l\u00e9ger)');
     if (density === 'c') riskFactors.push('Densit\u00e9 mammaire ACR C (h\u00e9t\u00e9rog\u00e8ne dense)');
     if (density === 'd') riskFactors.push('Densit\u00e9 mammaire ACR D (tr\u00e8s dense) \u2014 RR jusqu\u2019\u00e0 5,0');
     if (bmi > 30 && menopause === 'postmeno') riskFactors.push('Ob\u00e9sit\u00e9 post-m\u00e9nopausique (IMC > 30)');
-    if (thm === 'current_long') riskFactors.push('THM oestroprogestatif en cours depuis > 5 ans');
 
-    /* --- Niveau de risque --- */
-    if (genetic !== 'none' && genetic !== 'atm' && genetic !== 'chek2') {
-      riskLevel = 'high';
-      riskLabel = 'Risque\nTr\u00e8s \u00c9lev\u00e9';
-      riskDesc  = 'Mutation g\u00e9n\u00e9tique de haut risque \u2014 Prise en charge en centre expert indispensable';
-    } else if (personal === 'thoracic_radiation' || eisinger >= 3 || genetic === 'palb2') {
-      riskLevel = 'high';
-      riskLabel = 'Risque\n\u00c9lev\u00e9';
-      riskDesc  = 'Risque \u00e9lev\u00e9 identifi\u00e9 \u2014 Surveillance sp\u00e9cialis\u00e9e et/ou oncog\u00e9n\u00e9tique recommand\u00e9e';
-    } else if (personal === 'breast_cancer' || personal === 'clis' || personal === 'atypical_hyperplasia' ||
-               eisinger >= 2 || genetic === 'chek2' || genetic === 'atm') {
-      riskLevel = 'mod';
-      riskLabel = 'Risque\nMod\u00e9r\u00e9-\u00c9lev\u00e9';
-      riskDesc  = 'Facteur(s) de risque significatif(s) \u2014 Surveillance renforc\u00e9e \u00e0 mettre en place';
-    } else if (personal === 'ccis' || biopsy !== 'none' || eisinger >= 1 ||
-               density === 'd' || density === 'c' ||
-               (bmi > 30 && menopause === 'postmeno') || thm === 'current_long') {
-      riskLevel = 'mod';
-      riskLabel = 'Risque\nMod\u00e9r\u00e9';
-      riskDesc  = 'Facteur(s) de risque mod\u00e9r\u00e9(s) \u2014 Surveillance adapt\u00e9e recommand\u00e9e';
-    } else {
-      riskLabel = 'Risque\nStandard';
-      riskDesc  = 'Pas de facteur de risque majeur identifi\u00e9 \u2014 D\u00e9pistage standard applicable';
+    /* THM : nuance progestatif */
+    if (thm === 'current_short' || thm === 'current_long') {
+      if (thmType === 'progestatif_synthese') {
+        riskFactors.push('THM avec progestatif de synth\u00e8se (RR 1,4\u20132,0) \u2014 risque dose-dur\u00e9e significatif');
+      } else if (thmType === 'progesterone_naturelle') {
+        if (thm === 'current_long') riskFactors.push('THM avec progest\u00e9rone naturelle depuis > 5 ans (risque mod\u00e9r\u00e9ment accru long terme)');
+      } else {
+        if (thm === 'current_long') riskFactors.push('THM en cours > 5 ans, type progestatif non pr\u00e9cis\u00e9');
+      }
     }
 
-    /* --- Recommandations --- */
+    /* ---- Niveau de risque ---- */
+    var riskLevel = 'low', riskLabel = '', riskDesc = '';
+
+    if (G !== 'none' && G !== 'atm' && G !== 'chek2') {
+      riskLevel = 'high'; riskLabel = 'Risque\nTr\u00e8s \u00c9lev\u00e9';
+      riskDesc = 'Mutation g\u00e9n\u00e9tique de haut risque \u2014 Centre expert indispensable';
+    } else if (personal === 'thoracic_radiation' || personal === 'ovarian_cancer' || eisinger >= 3 || G === 'palb2') {
+      riskLevel = 'high'; riskLabel = 'Risque\n\u00c9lev\u00e9';
+      riskDesc = 'Risque \u00e9lev\u00e9 identifi\u00e9 \u2014 Surveillance sp\u00e9cialis\u00e9e et/ou oncog\u00e9n\u00e9tique';
+    } else if (personal === 'breast_cancer' || personal === 'clis' || personal === 'atypical_hyperplasia' ||
+               eisinger >= 2 || G === 'chek2' || G === 'atm' || (thm !== 'never' && thm !== 'stopped' && thmType === 'progestatif_synthese' && thm === 'current_long')) {
+      riskLevel = 'mod'; riskLabel = 'Risque\nMod\u00e9r\u00e9-\u00c9lev\u00e9';
+      riskDesc = 'Facteur(s) de risque significatif(s) \u2014 Surveillance renforc\u00e9e';
+    } else if (personal === 'ccis' || biopsy !== 'none' || eisinger >= 1 || density === 'd' || density === 'c' ||
+               (bmi > 30 && menopause === 'postmeno') ||
+               (thm !== 'never' && thm !== 'stopped' && thmType === 'progestatif_synthese')) {
+      riskLevel = 'mod'; riskLabel = 'Risque\nMod\u00e9r\u00e9';
+      riskDesc = 'Facteur(s) de risque mod\u00e9r\u00e9(s) \u2014 Surveillance adapt\u00e9e';
+    } else {
+      riskLabel = 'Risque\nStandard';
+      riskDesc  = 'Aucun facteur de risque majeur \u2014 D\u00e9pistage standard applicable';
+    }
+
+    /* ---- Recommandations ---- */
     var recos = [];
+
+    /* Mention chimiopr\u00e9vention en cours */
+    if (chemo === 'tamoxifene') {
+      recos.push({ c:'purple', t:'Chimiopr\u00e9vention par tamoxif\u00e8ne en cours : r\u00e9duction du risque d\u2019environ 38\u202f%. Maintenir le suivi ann\u00e9el clinique et mammographique. Surveiller l\u2019end\u00f4metre (DDIU/\u00e9chographie si sympt\u00f4mes). Dur\u00e9e optimale\u202f: 5 ans (r\u00e9\u00e9valuation \u00e0 10 ans pour les patientes BRCA2/haut risque).' });
+    }
+    if (chemo === 'raloxifene') {
+      recos.push({ c:'purple', t:'Chimiopr\u00e9vention par raloxif\u00e8ne en cours (post-m\u00e9nopause). Efficacit\u00e9 comparable au tamoxif\u00e8ne sur le risque de cancer du sein RH+. Pas d\u2019effet sur l\u2019end\u00f4metre. Contr\u00f4le du risque thrombo-embolique.' });
+    }
+    if (chemo === 'hormonotherapie') {
+      recos.push({ c:'purple', t:'Hormonoth\u00e9rapie adjuvante en cours : protocole de surveillance adapt\u00e9 au profil mol\u00e9culaire (RH+/HER2). Mammographie annuelle contralat\u00e9rale. Surveillance \u00e9chographique si sein dense.' });
+    }
 
     if (riskLevel === 'low') {
       if (age >= 50 && age <= 74) {
-        recos.push({ c:'green', t:'D\u00e9pistage organis\u00e9 \u00e9ligible : mammographie bilat\u00e9rale tous les 2 ans (programme national INCa/Cnam).' });
-        recos.push({ c:'green', t:'Examen clinique des seins annuel recommand\u00e9 par le m\u00e9decin traitant ou le gyn\u00e9cologue.' });
+        recos.push({ c:'green', t:'D\u00e9pistage organis\u00e9 \u00e9ligible\u202f: mammographie bilat\u00e9rale tous les 2 ans (programme national INCa/Cnam).' });
+        recos.push({ c:'green', t:'Examen clinique des seins annuel recommand\u00e9.' });
       } else if (age < 50) {
         recos.push({ c:'orange', t:'Patiente de moins de 50 ans, hors tranche du d\u00e9pistage organis\u00e9. D\u00e9pistage individuel \u00e0 discuter selon le contexte clinique.' });
         recos.push({ c:'green',  t:'Examen clinique des seins annuel recommand\u00e9.' });
       } else {
-        recos.push({ c:'orange', t:'Patiente de plus de 74 ans \u2014 hors d\u00e9pistage organis\u00e9. \u00c0 discuter individuellement selon l\u2019\u00e9tat g\u00e9n\u00e9ral et l\u2019esp\u00e9rance de vie.' });
+        recos.push({ c:'orange', t:'Patiente de plus de 74 ans \u2014 hors d\u00e9pistage organis\u00e9. \u00c0 discuter selon l\u2019\u00e9tat g\u00e9n\u00e9ral et l\u2019esp\u00e9rance de vie.' });
       }
     }
 
     if (riskLevel === 'mod') {
       if (personal === 'breast_cancer') {
-        recos.push({ c:'orange', t:'Ant\u00e9c\u00e9dent de cancer du sein invasif : surveillance par IRM mammaire annuelle \u00e0 discuter selon les recommandations INCa 2023 et la date de fin de traitement.' });
-        recos.push({ c:'orange', t:'Consultation d\u2019oncologie ou de s\u00e9nologie recommand\u00e9e pour protocole de surveillance individualis\u00e9.' });
+        recos.push({ c:'orange', t:'Ant\u00e9c\u00e9dent de cancer du sein invasif\u202f: surveillance IRM mammaire annuelle \u00e0 discuter selon recommandations INCa 2023 et date de fin de traitement.' });
+        recos.push({ c:'orange', t:'Consultation d\u2019oncologie ou de s\u00e9nologie pour protocole individualis\u00e9.' });
       }
       if (personal === 'ccis') {
-        recos.push({ c:'orange', t:'CCIS trait\u00e9 : surveillance mammographique annuelle \u00b1 IRM altern\u00e9es selon protocole INCa. Surveillance prolong\u00e9e \u00e0 vie.' });
-        recos.push({ c:'orange', t:'Discussion de radioth\u00e9rapie compl\u00e9mentaire si non r\u00e9alis\u00e9e et \u00e9valuation du risque local r\u00e9siduel.' });
+        recos.push({ c:'orange', t:'CCIS trait\u00e9\u202f: surveillance mammographique annuelle \u00b1 IRM altern\u00e9es (protocole INCa). Surveillance \u00e0 vie.' });
+        recos.push({ c:'orange', t:'Discussion de radioth\u00e9rapie compl\u00e9mentaire si non r\u00e9alis\u00e9e.' });
       }
       if (personal === 'clis') {
-        recos.push({ c:'red', t:'CLIS document\u00e9 : risque relatif x 8\u201310. Surveillance rapproch\u00e9e annuelle (mammographie + IRM recommand\u00e9e).' });
+        recos.push({ c:'red', t:'CLIS document\u00e9\u202f: RR x 8\u201310. Surveillance rapproch\u00e9e annuelle (mammographie + IRM recommand\u00e9e).' });
         recos.push({ c:'orange', t:'Discussion de chimiopr\u00e9vention (tamoxif\u00e8ne 5 ans) selon mod\u00e8le Tyrer-Cuzick et pr\u00e9f\u00e9rences patiente.' });
       }
       if (personal === 'atypical_hyperplasia') {
-        recos.push({ c:'orange', t:'Hyperplasie atypique : risque relatif x 4\u20135. Surveillance rapproch\u00e9e clinique et mammographique annuelle (HAS 2014).' });
-        recos.push({ c:'orange', t:'Consultation de s\u00e9nologie sp\u00e9cialis\u00e9e pour \u00e9valuation du risque absolu (plateforme IBIS/Tyrer-Cuzick) et discussion d\u2019une chimiopr\u00e9vention.' });
+        recos.push({ c:'orange', t:'Hyperplasie atypique\u202f: RR x 4\u20135. Surveillance rapproch\u00e9e clinique et mammographique annuelle (HAS 2014).' });
+        recos.push({ c:'orange', t:'Consultation de s\u00e9nologie sp\u00e9cialis\u00e9e pour risque absolu (IBIS/Tyrer-Cuzick) et discussion de chimiopr\u00e9vention.' });
       }
       if (biopsy === 'complex') {
-        recos.push({ c:'orange', t:'Hyperplasie complexe sans atypie : risque relatif x 2\u20133. Mammographie annuelle recommand\u00e9e d\u00e8s 40 ans.' });
+        recos.push({ c:'orange', t:'Hyperplasie complexe sans atypie (RR x 2\u20133)\u202f: mammographie annuelle d\u00e8s 40 ans.' });
       }
       if (biopsy === 'radial') {
-        recos.push({ c:'orange', t:'L\u00e9sion radiale / papillome atypique : excision chirurgicale recommand\u00e9e si non r\u00e9alis\u00e9e, puis surveillance annuelle.' });
+        recos.push({ c:'orange', t:'L\u00e9sion radiale / papillome atypique\u202f: excision si non r\u00e9alis\u00e9e, puis surveillance annuelle.' });
       }
       if (density === 'c' || density === 'd') {
-        recos.push({ c:'purple', t:'Densit\u00e9 mammaire \u00e9lev\u00e9e (ACR ' + density.toUpperCase() + ') : compl\u00e9ment \u00e9chographique recommand\u00e9 avec la mammographie. Discuter de l\u2019IRM si autres facteurs de risque associ\u00e9s.' });
+        recos.push({ c:'purple', t:'Densit\u00e9 mammaire \u00e9lev\u00e9e (ACR ' + density.toUpperCase() + ')\u202f: compl\u00e9ment \u00e9chographique recommand\u00e9. Discuter IRM si autres facteurs associ\u00e9s.' });
       }
       if (eisinger >= 1 && eisinger < 3) {
-        recos.push({ c:'orange', t:'Score Eisinger ' + eisinger + ' \u2014 risque familial mod\u00e9r\u00e9. Mammographie annuelle \u00e0 partir de 40 ans (ou 5 ans avant l\u2019\u00e2ge du cas index le plus jeune).' });
+        recos.push({ c:'orange', t:'Score Eisinger ' + eisinger + ' \u2014 risque familial mod\u00e9r\u00e9. Mammographie annuelle d\u00e8s 40 ans (ou 5 ans avant l\u2019\u00e2ge du cas index le plus jeune).' });
       }
-      if (genetic === 'chek2' || genetic === 'atm') {
-        recos.push({ c:'orange', t:'Mutation ' + genetic.toUpperCase() + ' : mammographie annuelle d\u00e8s 40 ans + IRM \u00e0 discuter selon le contexte familial.' });
+      if (G === 'chek2' || G === 'atm') {
+        recos.push({ c:'orange', t:'Mutation ' + G.toUpperCase() + '\u202f: mammographie annuelle d\u00e8s 40 ans + IRM \u00e0 discuter selon le contexte familial.' });
+      }
+      /* THM synth\u00e8se court terme */
+      if (thm === 'current_short' && thmType === 'progestatif_synthese') {
+        recos.push({ c:'orange', t:'THM avec progestatif de synth\u00e8se < 5 ans\u202f: surveiller l\u2019\u00e9volution, mammographie annuelle maintenue. Discuter la transition vers progest\u00e9rone naturelle (CNGOF 2021).' });
       }
     }
 
     if (riskLevel === 'high') {
-      if (eisinger >= 3 && genetic === 'none') {
-        recos.push({ c:'red', t:'Score Eisinger \u2265 3 \u2014 Consultation d\u2019oncog\u00e9n\u00e9tique recommand\u00e9e (recherche de mutation BRCA1/2 et g\u00e8nes associ\u00e9s : PALB2, CHEK2, ATM, TP53).' });
-        recos.push({ c:'red', t:'En attente de r\u00e9sultat g\u00e9n\u00e9tique : IRM mammaire annuelle + mammographie \u00e0 partir de 30 ans (ou 5 ans avant l\u2019\u00e2ge du cas index le plus jeune). HAS 2014 / EUSOMA 2023.' });
+      if (personal === 'ovarian_cancer') {
+        recos.push({ c:'red', t:'Ant\u00e9c\u00e9dent de cancer de l\u2019ovaire\u202f: consultation d\u2019oncog\u00e9n\u00e9tique syst\u00e9matique (recherche BRCA1/2, RAD51C/D, BRIP1). Mammographie + IRM annuelles en attente de r\u00e9sultat.' });
+        recos.push({ c:'orange', t:'Si mutation identifi\u00e9e\u202f: prise en charge en centre de r\u00e9f\u00e9rence BRCA avec protocole sp\u00e9cifique.' });
       }
-      if (genetic === 'brca1') {
-        recos.push({ c:'red', t:'Mutation BRCA1 : IRM mammaire annuelle d\u00e8s 25 ans + mammographie annuelle d\u00e8s 30 ans (alternance IRM/mammographie tous les 6 mois). HAS 2014.' });
-        recos.push({ c:'red', t:'Discussion de mastectomie prophylactique bilat\u00e9rale (r\u00e9duction du risque ~90\u202f%) et salpingo-ovariectomie bilat\u00e9rale entre 35 et 40 ans.' });
-        recos.push({ c:'orange', t:'Prise en charge en centre de r\u00e9f\u00e9rence BRCA avec suivi multidisciplinaire gyn\u00e9cologue-oncologue.' });
+      if (eisinger >= 3 && G === 'none') {
+        recos.push({ c:'red', t:'Score Eisinger \u2265 3 \u2014 Consultation d\u2019oncog\u00e9n\u00e9tique recommand\u00e9e (BRCA1/2, PALB2, CHEK2, ATM, TP53).' });
+        recos.push({ c:'red', t:'En attente de r\u00e9sultat\u202f: IRM + mammographie annuelles d\u00e8s 30 ans (ou 5 ans avant le cas index le plus jeune). HAS 2014 / EUSOMA 2023.' });
       }
-      if (genetic === 'brca2') {
-        recos.push({ c:'red', t:'Mutation BRCA2 : IRM mammaire annuelle d\u00e8s 30 ans + mammographie annuelle (alternance tous les 6 mois). HAS 2014.' });
+      if (G === 'brca1') {
+        recos.push({ c:'red', t:'Mutation BRCA1\u202f: IRM annuelle d\u00e8s 25 ans + mammographie annuelle d\u00e8s 30 ans (alternance tous les 6 mois). HAS 2014.' });
+        recos.push({ c:'red', t:'Discussion de mastectomie prophylactique bilat\u00e9rale (~90\u202f% de r\u00e9duction) et salpingo-ovariectomie bilat\u00e9rale entre 35 et 40 ans.' });
+        recos.push({ c:'orange', t:'Centre de r\u00e9f\u00e9rence BRCA \u2014 suivi multidisciplinaire gyn\u00e9cologue-oncologue.' });
+      }
+      if (G === 'brca2') {
+        recos.push({ c:'red', t:'Mutation BRCA2\u202f: IRM annuelle d\u00e8s 30 ans + mammographie annuelle (alternance tous les 6 mois). HAS 2014.' });
         recos.push({ c:'red', t:'Discussion de mastectomie prophylactique et salpingo-ovariectomie bilat\u00e9rale entre 40 et 45 ans.' });
-        recos.push({ c:'orange', t:'Surveillance ovarienne associ\u00e9e (CA-125 + \u00e9chographie pelvienne) compte tenu du risque de cancer de l\u2019ovaire (~17\u202f%).' });
+        recos.push({ c:'orange', t:'Surveillance ovarienne associ\u00e9e (CA-125 + \u00e9chographie pelvienne) \u2014 risque cancer ovaire ~\u202f17\u202f%.' });
       }
-      if (genetic === 'palb2') {
-        recos.push({ c:'red', t:'Mutation PALB2 : IRM annuelle d\u00e8s 30 ans + mammographie annuelle. Surveillance en centre expert (niveau BRCA2-like selon donn\u00e9es ENIGMA 2021).' });
-        recos.push({ c:'orange', t:'Discussion de chimiopr\u00e9vention selon le risque absolu calcul\u00e9 (plateforme IBIS Tyrer-Cuzick v8).' });
+      if (G === 'palb2') {
+        recos.push({ c:'red', t:'Mutation PALB2\u202f: IRM annuelle d\u00e8s 30 ans + mammographie annuelle. Niveau BRCA2-like (ENIGMA 2021). Centre expert.' });
+        recos.push({ c:'orange', t:'Discussion de chimiopr\u00e9vention (IBIS Tyrer-Cuzick v8) selon risque absolu calcul\u00e9.' });
       }
-      if (genetic === 'other') {
-        recos.push({ c:'red', t:'Syndrome g\u00e9n\u00e9tique rare : prise en charge en centre expert avec protocole sp\u00e9cifique (Li-Fraumeni : IRM corps entier annuelle ; Cowden : surveillance thyro\u00efde + sein + end\u00f4metre).' });
+      if (G === 'other') {
+        recos.push({ c:'red', t:'Syndrome g\u00e9n\u00e9tique rare\u202f: centre expert (Li-Fraumeni\u202f: IRM corps entier annuelle\u202f; Cowden\u202f: surveillance thyro\u00efde + sein + end\u00f4metre).' });
       }
       if (personal === 'thoracic_radiation') {
-        /* CORRECTIF MÉDICAL : "dès 8 ans après irradiation ou dès 25 ans" selon INCa */
-        recos.push({ c:'red', t:'Irradiation thoracique haute dose avant 30 ans : sur-risque \u00e9lev\u00e9. IRM + mammographie annuelles \u00e0 d\u00e9buter 8 ans apr\u00e8s la fin de l\u2019irradiation, et au plus t\u00f4t \u00e0 partir de 25 ans (r\u00e9f\u00e9rentiel INCa \u00ab femmes irradi\u00e9es \u00bb).' });
-        recos.push({ c:'orange', t:'Avis oncologique sp\u00e9cialis\u00e9 recommand\u00e9. Coordination avec l\u2019\u00e9quipe ayant r\u00e9alis\u00e9 l\u2019irradiation pour le bilan dosim\u00e9trique.' });
+        recos.push({ c:'red', t:'Irradiation thoracique haute dose avant 30 ans\u202f: IRM + mammographie annuelles \u00e0 d\u00e9buter 8 ans apr\u00e8s fin d\u2019irradiation, et au plus t\u00f4t \u00e0 25 ans (INCa \u00ab femmes irradi\u00e9es \u00bb).' });
+        recos.push({ c:'orange', t:'Avis oncologique sp\u00e9cialis\u00e9. Coordination avec l\u2019\u00e9quipe d\u2019irradiation pour bilan dosim\u00e9trique.' });
       }
     }
 
-    /* Recommandations transversales */
-    recos.push({ c:'green', t:'Sensibiliser la patiente \u00e0 l\u2019autopalpation mensuelle et \u00e0 la consultation imm\u00e9diate en cas de symptôme (masse, \u00e9coulement, modification cutan\u00e9e ou du mamelon).' });
+    /* Transversaux */
+    recos.push({ c:'green', t:'Sensibiliser \u00e0 l\u2019autopalpation mensuelle et \u00e0 la consultation imm\u00e9diate en cas de sympt\u00f4me (masse, \u00e9coulement, modification cutan\u00e9e ou du mamelon).' });
     if (bmi > 25 && menopause === 'postmeno') {
-      recos.push({ c:'green', t:'Conseil de gestion pond\u00e9rale (cible IMC < 25) : r\u00e9duit le risque post-m\u00e9nopausique et am\u00e9liore la sensibilit\u00e9 de la mammographie.' });
+      recos.push({ c:'green', t:'Gestion pond\u00e9rale (IMC cible < 25)\u202f: r\u00e9duit le risque post-m\u00e9nopausique et am\u00e9liore la sensibilit\u00e9 mammographique.' });
     }
-    if (thm === 'current_long') {
-      recos.push({ c:'green', t:'R\u00e9\u00e9valuation du THM : discuter l\u2019arr\u00eat ou la r\u00e9duction apr\u00e8s 5 ans selon les recommandations HAS/CNGOF. Le risque diminue significativement dans les 5 ans suivant l\u2019arr\u00eat.' });
+    if ((thm === 'current_short' || thm === 'current_long') && thmType === 'progestatif_synthese') {
+      recos.push({ c:'green', t:'THM avec progestatif de synth\u00e8se\u202f: discuter la substitution par progest\u00e9rone naturelle micronisée (Utrogestan\u00ae) selon les recommandations CNGOF 2021 et le profil clinique.' });
+    }
+    if (thm === 'current_long' && thmType === 'progesterone_naturelle') {
+      recos.push({ c:'green', t:'THM avec progest\u00e9rone naturelle depuis > 5 ans\u202f: r\u00e9\u00e9valuation annuelle du rapport b\u00e9n\u00e9fice-risque recommand\u00e9e (HAS/CNGOF).' });
     }
 
-    /* --- Affichage --- */
+    /* ---- Affichage ---- */
     var badge = document.getElementById('csRiskBadge');
-    badge.className  = 'cs-risk-badge ' + riskLevel;
+    badge.className   = 'cs-risk-badge ' + riskLevel;
     badge.textContent = riskLabel;
-
     document.getElementById('csResultTitle').textContent = riskDesc;
     document.getElementById('csResultDesc').textContent  =
-      'Score Eisinger\u00a0: ' + eisinger + ' \u2014 \u00c2ge\u00a0: ' + age + ' ans \u2014 IMC\u00a0: ' + (bmi || 'non renseign\u00e9');
+      'Score Eisinger\u00a0: ' + eisinger +
+      ' \u2014 \u00c2ge\u00a0: ' + age + ' ans' +
+      (bmi ? ' \u2014 IMC\u00a0: ' + bmi : '');
+
+    /* Alerte triple n\u00e9gatif */
+    var tnAlert = document.getElementById('csTnAlert');
+    if (origine === 'afrique_subsaharienne') {
+      tnAlert.style.setProperty('display','block','important');
+    } else {
+      tnAlert.style.setProperty('display','none','important');
+    }
 
     var list = document.getElementById('csRecoList');
     list.innerHTML = '';
-    for (var i = 0; i < recos.length; i++) {
-      var div = document.createElement('div');
-      div.className   = 'cs-reco-item ' + recos[i].c;
-      div.textContent = recos[i].t;
-      list.appendChild(div);
-    }
+    recos.forEach(function(r) {
+      var d = document.createElement('div');
+      d.className = 'cs-reco-item ' + r.c;
+      d.textContent = r.t;
+      list.appendChild(d);
+    });
 
     var rfBlock = document.getElementById('csRiskFactorsBlock');
     var rfList  = document.getElementById('csRiskFactorsList');
     if (riskFactors.length > 0) {
-      rfBlock.style.setProperty('display', 'block', 'important');
+      rfBlock.style.setProperty('display','block','important');
       rfList.innerHTML = '';
-      for (var j = 0; j < riskFactors.length; j++) {
-        var item = document.createElement('div');
-        item.className   = 'cs-reco-item purple';
-        item.textContent = riskFactors[j];
-        rfList.appendChild(item);
-      }
+      riskFactors.forEach(function(f) {
+        var d = document.createElement('div');
+        d.className   = 'cs-reco-item purple';
+        d.textContent = f;
+        rfList.appendChild(d);
+      });
     } else {
-      rfBlock.style.setProperty('display', 'none', 'important');
+      rfBlock.style.setProperty('display','none','important');
     }
-
-    var now = new Date();
-    document.getElementById('csPdfDate').textContent =
-      'Date d\u2019\u00e9valuation\u00a0: ' + now.toLocaleDateString('fr-FR') +
-      ' \u00e0 ' + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 
     showStep('results');
 
-    /* Pré-remplir le résumé dossier (et la date de consultation si vide) */
+    /* Pr\u00e9-remplissage compte-rendu */
     setTimeout(function() {
       var cdField = document.getElementById('crConsultDate');
       if (cdField && !cdField.value) {
         var d = new Date();
-        var dd = String(d.getDate()).padStart(2,'0');
-        var mm = String(d.getMonth()+1).padStart(2,'0');
-        var yy = d.getFullYear();
-        cdField.value = dd + '/' + mm + '/' + yy;
+        cdField.value = String(d.getDate()).padStart(2,'0') + '/' +
+                        String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
       }
       csRegenResume();
+      csBuildPrintZone(eisinger, riskLabel, riskDesc, riskFactors, recos, age, bmi);
     }, 80);
   };
+
+  /* ================================================================
+     ZONE D'IMPRESSION PDF
+  ================================================================ */
+  function csBuildPrintZone(eisinger, riskLabel, riskDesc, riskFactors, recos, age, bmi) {
+    var patNom   = (document.getElementById('crPatNom').value   || '').trim();
+    var patPre   = (document.getElementById('crPatPrenom').value|| '').trim();
+    var patDdn   = document.getElementById('crPatDdn').value    || '';
+    var patDoss  = document.getElementById('crPatDoss').value   || '';
+    var medNom   = document.getElementById('crMedNom').value    || '';
+    var consDate = document.getElementById('crConsultDate').value|| '';
+
+    var setTxt = function(id, v) { var e = document.getElementById(id); if (e) e.textContent = v || '\u2014'; };
+    setTxt('csp-nom',    ((patNom + ' ' + patPre).trim() || '\u2014'));
+    setTxt('csp-ddn',    patDdn   || '\u2014');
+    setTxt('csp-doss',   patDoss  || '\u2014');
+    setTxt('csp-date',   consDate || '\u2014');
+    setTxt('csp-med',    medNom   || '\u2014');
+    setTxt('csp-agebmi', age + ' ans' + (bmi ? ' \u2014 IMC ' + bmi : ''));
+    setTxt('csp-risklevel', riskDesc.replace('\n',' '));
+
+    var rfLabel = document.getElementById('csp-rf-label');
+    var rfUl    = document.getElementById('csp-rf-list');
+    rfUl.innerHTML = '';
+    if (riskFactors.length > 0) {
+      rfLabel.style.display = '';
+      riskFactors.forEach(function(f) {
+        var li = document.createElement('li');
+        li.textContent = f;
+        rfUl.appendChild(li);
+      });
+    } else {
+      rfLabel.style.display = 'none';
+    }
+
+    var recoUl = document.getElementById('csp-reco-list');
+    recoUl.innerHTML = '';
+    recos.forEach(function(r) {
+      var li = document.createElement('li');
+      li.textContent = r.t;
+      recoUl.appendChild(li);
+    });
+  }
+
+  window.csPrintPdf = function() {
+    var cdField = document.getElementById('crConsultDate');
+    var medField= document.getElementById('crMedNom');
+    var patNom  = document.getElementById('crPatNom').value.trim();
+    var patPre  = document.getElementById('crPatPrenom').value.trim();
+    var patDdn  = document.getElementById('crPatDdn').value.trim();
+    var patDoss = document.getElementById('crPatDoss').value.trim();
+    var consDate= cdField ? cdField.value : '';
+    var medNom  = medField ? medField.value : '';
+
+    /* Reconstruire la zone print avec les valeurs \u00e0 jour */
+    var eisinger = parseFloat(document.getElementById('csScoreFinal').textContent) || 0;
+    var riskDesc = document.getElementById('csResultTitle').textContent;
+    var rfItems  = document.querySelectorAll('#csRiskFactorsList .cs-reco-item');
+    var recoItems= document.querySelectorAll('#csRecoList .cs-reco-item');
+    var rfs = [], recos = [];
+    rfItems.forEach(function(e) { rfs.push(e.textContent.trim()); });
+    recoItems.forEach(function(e) { recos.push({ t: e.textContent.trim() }); });
+
+    var setTxt = function(id, v) { var e = document.getElementById(id); if (e) e.textContent = v || '\u2014'; };
+    setTxt('csp-nom',    ((patNom + ' ' + patPre).trim()) || '\u2014');
+    setTxt('csp-ddn',    patDdn   || '\u2014');
+    setTxt('csp-doss',   patDoss  || '\u2014');
+    setTxt('csp-date',   consDate || '\u2014');
+    setTxt('csp-med',    medNom   || '\u2014');
+    setTxt('csp-risklevel', riskDesc);
+
+    var rfLabel = document.getElementById('csp-rf-label');
+    var rfUl    = document.getElementById('csp-rf-list');
+    rfUl.innerHTML = '';
+    if (rfs.length > 0) {
+      rfLabel.style.display = '';
+      rfs.forEach(function(f) { var li = document.createElement('li'); li.textContent = f; rfUl.appendChild(li); });
+    } else { rfLabel.style.display = 'none'; }
+
+    var recoUl = document.getElementById('csp-reco-list');
+    recoUl.innerHTML = '';
+    recos.forEach(function(r) { var li = document.createElement('li'); li.textContent = r.t; recoUl.appendChild(li); });
+
+    document.getElementById('cs-print-zone').style.display = '';
+    window.print();
+    setTimeout(function() {
+      document.getElementById('cs-print-zone').style.display = 'none';
+    }, 500);
+  };
+
+  /* ================================================================
+     COMPTE-RENDU DOSSIER
+  ================================================================ */
+  window.csFormatDdn = function(input) {
+    var v = input.value.replace(/\D/g,'').substring(0,8);
+    var out = '';
+    if (v.length >= 1) out = v.substring(0,2);
+    if (v.length >= 3) out += '/' + v.substring(2,4);
+    if (v.length >= 5) out += '/' + v.substring(4,8);
+    input.value = out;
+  };
+
+  window.csRegenResume = function() {
+    var ta = document.getElementById('csCrTextarea');
+    if (!ta) return;
+    var patNom   = (document.getElementById('crPatNom').value   || '').trim();
+    var patPre   = (document.getElementById('crPatPrenom').value|| '').trim();
+    var patDdn   = (document.getElementById('crPatDdn').value   || '').trim();
+    var patDoss  = (document.getElementById('crPatDoss').value  || '').trim();
+    var medNom   = (document.getElementById('crMedNom').value   || '').trim();
+    var consDate = (document.getElementById('crConsultDate').value|| '').trim();
+    var riskTitle= (document.getElementById('csResultTitle') || {}).textContent || '';
+    var riskDesc = (document.getElementById('csResultDesc')  || {}).textContent || '';
+
+    var rfItems   = document.querySelectorAll('#csRiskFactorsList .cs-reco-item');
+    var recoItems = document.querySelectorAll('#csRecoList .cs-reco-item');
+    var rfLines = [], recoLines = [];
+    rfItems.forEach(function(e)   { rfLines.push('  \u2022 ' + e.textContent.trim()); });
+    recoItems.forEach(function(e) { recoLines.push('  \u2022 ' + e.textContent.trim()); });
+
+    var sep = '\u2015'.repeat(52);
+    var lines = [];
+    lines.push(sep);
+    lines.push('  BILAN D\u2019\u00c9VALUATION DU RISQUE \u2014 CANCER DU SEIN');
+    lines.push('  v3.0 \u00b7 INCa 2023 / HAS 2014 / EUSOMA 2023 / CNGOF 2021');
+    lines.push(sep);
+    lines.push('');
+    lines.push('  Date           : ' + (consDate || new Date().toLocaleDateString('fr-FR')));
+    lines.push('  Praticien      : ' + (medNom || '___________________________'));
+    lines.push('');
+    lines.push('  Patiente       : ' + ((patNom || patPre) ? (patNom + ' ' + patPre).trim() : '___________________________'));
+    if (patDdn)  lines.push('  N\u00e9e le        : ' + patDdn);
+    if (patDoss) lines.push('  N\u00b0 dossier    : ' + patDoss);
+    lines.push('');
+    lines.push(sep);
+    lines.push('');
+    lines.push('  NIVEAU DE RISQUE');
+    lines.push('  ' + riskTitle);
+    if (riskDesc) lines.push('  (' + riskDesc + ')');
+    lines.push('');
+    if (rfLines.length > 0) {
+      lines.push('  FACTEURS DE RISQUE IDENTIFI\u00c9S');
+      rfLines.forEach(function(l) { lines.push(l); });
+      lines.push('');
+    }
+    lines.push('  RECOMMANDATIONS DE PRISE EN CHARGE');
+    recoLines.forEach(function(l) { lines.push(l); });
+    lines.push('');
+    lines.push(sep);
+    lines.push('  Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 ne se substitue pas au jugement clinique.');
+    lines.push('  R\u00e9f\u00e9rentiels : INCa 2023 \u00b7 HAS 2014 \u00b7 EUSOMA 2023 \u00b7 Score Eisinger \u00b7 CNGOF 2021');
+    lines.push(sep);
+    ta.value = lines.join('\n');
+
+    /* Synchroniser aussi la zone PDF */
+    setTimeout(function() {
+      var cd   = document.getElementById('crConsultDate').value || '';
+      var med  = document.getElementById('crMedNom').value || '';
+      var nom  = ((document.getElementById('crPatNom').value || '') + ' ' + (document.getElementById('crPatPrenom').value || '')).trim();
+      var ddn  = document.getElementById('crPatDdn').value || '';
+      var doss = document.getElementById('crPatDoss').value || '';
+      var setT = function(id,v) { var e = document.getElementById(id); if (e) e.textContent = v || '\u2014'; };
+      setT('csp-nom', nom); setT('csp-ddn', ddn); setT('csp-doss', doss);
+      setT('csp-date', cd); setT('csp-med', med);
+    }, 10);
+  };
+
+  window.csCopyResume = function() {
+    var ta    = document.getElementById('csCrTextarea');
+    var toast = document.getElementById('csCopyToast');
+    if (!ta || !ta.value.trim()) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ta.value).then(function() { csShowToast(toast); }).catch(function() { csFallbackCopy(ta, toast); });
+    } else { csFallbackCopy(ta, toast); }
+  };
+  function csFallbackCopy(ta, toast) {
+    ta.removeAttribute('readonly'); ta.select(); ta.setSelectionRange(0, 99999);
+    try { document.execCommand('copy'); csShowToast(toast); } catch(e) {}
+    ta.setAttribute('readonly',''); window.getSelection && window.getSelection().removeAllRanges();
+  }
+  function csShowToast(toast) {
+    if (!toast) return;
+    toast.classList.add('visible');
+    setTimeout(function() { toast.classList.remove('visible'); }, 2800);
+  }
 
   /* ---- MODAL ---- */
   window.csShowModal = function(msg) {
@@ -1771,128 +2309,7 @@
     document.getElementById('csModal').classList.remove('open');
   };
 
-  /* ================================================================
-     PANNEAU COMPTE-RENDU DOSSIER
-  ================================================================ */
-
-  /* Formatage auto JJ/MM/AAAA sur les champs date */
-  window.csFormatDdn = function(input) {
-    var v = input.value.replace(/\D/g, '').substring(0, 8);
-    var out = '';
-    if (v.length >= 1) out = v.substring(0, 2);
-    if (v.length >= 3) out += '/' + v.substring(2, 4);
-    if (v.length >= 5) out += '/' + v.substring(4, 8);
-    input.value = out;
-  };
-
-  /* Génère et injecte le texte du résumé dans le textarea */
-  window.csRegenResume = function() {
-    var ta = document.getElementById('csCrTextarea');
-    if (!ta) return;
-
-    var patNom    = (document.getElementById('crPatNom').value    || '').trim();
-    var patPre    = (document.getElementById('crPatPrenom').value  || '').trim();
-    var patDdn    = (document.getElementById('crPatDdn').value     || '').trim();
-    var patDoss   = (document.getElementById('crPatDoss').value    || '').trim();
-    var medNom    = (document.getElementById('crMedNom').value     || '').trim();
-    var consDate  = (document.getElementById('crConsultDate').value|| '').trim();
-
-    /* Récupère les données résultats déjà calculées depuis le DOM */
-    var riskTitle = (document.getElementById('csResultTitle')  || {}).textContent || '';
-    var riskDesc  = (document.getElementById('csResultDesc')   || {}).textContent || '';
-
-    /* Facteurs de risque */
-    var rfItems = document.querySelectorAll('#csRiskFactorsList .cs-reco-item');
-    var rfLines = [];
-    for (var i = 0; i < rfItems.length; i++) {
-      rfLines.push('  \u2022 ' + rfItems[i].textContent.trim());
-    }
-
-    /* Recommandations */
-    var recoItems = document.querySelectorAll('#csRecoList .cs-reco-item');
-    var recoLines = [];
-    for (var j = 0; j < recoItems.length; j++) {
-      recoLines.push('  \u2022 ' + recoItems[j].textContent.trim());
-    }
-
-    var sep  = '\u2015'.repeat(52);
-    var now  = new Date();
-    var dateStr = consDate || now.toLocaleDateString('fr-FR');
-
-    var lines = [];
-    lines.push(sep);
-    lines.push('  BILAN D\u2019\u00c9VALUATION DU RISQUE \u2014 CANCER DU SEIN');
-    lines.push(sep);
-    lines.push('');
-    lines.push('  Date         : ' + dateStr);
-    lines.push('  Praticien    : ' + (medNom    || '___________________________'));
-    lines.push('');
-    lines.push('  Patiente     : ' + ((patNom || patPre) ? (patNom + ' ' + patPre).trim() : '___________________________'));
-    if (patDdn)  lines.push('  N\u00e9e le      : ' + patDdn);
-    if (patDoss) lines.push('  N\u00b0 dossier  : ' + patDoss);
-    lines.push('');
-    lines.push(sep);
-    lines.push('');
-    lines.push('  NIVEAU DE RISQUE');
-    lines.push('  ' + riskTitle);
-    if (riskDesc) lines.push('  (' + riskDesc + ')');
-    lines.push('');
-
-    if (rfLines.length > 0) {
-      lines.push('  FACTEURS DE RISQUE IDENTIFI\u00c9S');
-      for (var k = 0; k < rfLines.length; k++) lines.push(rfLines[k]);
-      lines.push('');
-    }
-
-    lines.push('  RECOMMANDATIONS DE PRISE EN CHARGE');
-    for (var l = 0; l < recoLines.length; l++) lines.push(recoLines[l]);
-    lines.push('');
-    lines.push(sep);
-    lines.push('  Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 ne se substitue pas au jugement clinique.');
-    lines.push('  R\u00e9f\u00e9rentiels\u00a0: INCa 2023 \u00b7 HAS 2014 \u00b7 EUSOMA 2023 \u00b7 Score Eisinger');
-    lines.push(sep);
-
-    ta.value = lines.join('\n');
-  };
-
-  /* Copie dans le presse-papier */
-  window.csCopyResume = function() {
-    var ta = document.getElementById('csCrTextarea');
-    if (!ta || !ta.value.trim()) return;
-
-    var toast = document.getElementById('csCopyToast');
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(ta.value).then(function() {
-        csShowToast(toast);
-      }).catch(function() {
-        csFallbackCopy(ta, toast);
-      });
-    } else {
-      csFallbackCopy(ta, toast);
-    }
-  };
-
-  function csFallbackCopy(ta, toast) {
-    /* Fallback pour navigateurs sans Clipboard API (ex. certains mobiles) */
-    ta.removeAttribute('readonly');
-    ta.select();
-    ta.setSelectionRange(0, 99999);
-    try {
-      document.execCommand('copy');
-      csShowToast(toast);
-    } catch(e) {}
-    ta.setAttribute('readonly', '');
-    window.getSelection && window.getSelection().removeAllRanges();
-  }
-
-  function csShowToast(toast) {
-    if (!toast) return;
-    toast.classList.add('visible');
-    setTimeout(function() { toast.classList.remove('visible'); }, 2800);
-  }
-
-  /* ---- INIT : afficher l'étape 1 après chargement DOM complet ---- */
+  /* ---- INIT ---- */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() { showStep(1); });
   } else {
@@ -1901,6 +2318,5 @@
 
 })();
 </script>
-
 </body>
 </html>
