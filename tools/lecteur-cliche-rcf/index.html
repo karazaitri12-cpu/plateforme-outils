@@ -27,7 +27,7 @@
   --normal: #27ae60 !important;
   --suspect: #f39c12 !important;
   --patho: #c0392b !important;
-  --ai-color: #21618C !important; /* Bleu foncé façon OCR */
+  --ai-color: #21618C !important;
   
   all: initial !important;
   display: block !important;
@@ -82,13 +82,8 @@
    NOUVEAU DESIGN DE LA ZONE IA (Façon OCR)
    ------------------------------------- */
 #rcf-tool-root .rcf-ai-zone {
-  border: 1px solid var(--border-med) !important;
-  background: #fdfefe !important;
-  padding: 20px !important;
-  border-radius: 8px !important;
-  margin-bottom: 25px !important;
-  text-align: center !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important;
+  border: 1px solid var(--border-med) !important; background: #fdfefe !important; padding: 20px !important;
+  border-radius: 8px !important; margin-bottom: 25px !important; text-align: center !important; box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important;
 }
 
 /* Zone Drag & Drop quand vide */
@@ -101,9 +96,7 @@
 #rcf-tool-root .rcf-dropzone input[type="file"] { display: none !important; }
 
 /* Conteneur Image quand chargée */
-#rcf-tool-root .rcf-preview-wrapper {
-  display: flex !important; flex-direction: column !important; align-items: center !important;
-}
+#rcf-tool-root .rcf-preview-wrapper { display: flex !important; flex-direction: column !important; align-items: center !important; }
 #rcf-tool-root .rcf-image-frame {
   border: 3px solid #34495e !important; border-radius: 8px !important; padding: 3px !important;
   background: #fff !important; display: inline-block !important; overflow: hidden !important;
@@ -134,6 +127,9 @@
   box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2) !important; transition: 0.3s !important;
 }
 #rcf-tool-root .btn-launch-ai:hover { background: #229954 !important; transform: translateY(-1px) !important; }
+
+/* Bouton Caméra (Caché sur ordinateur, affiché sur mobile) */
+.mobile-only-btn { display: none !important; }
 
 /* -------------------------------------
    REST DU DESIGN (FIGO, etc.)
@@ -167,23 +163,11 @@
 #rcf-tool-root .btn-copy { background: var(--accent-med) !important; color: #fff !important; border: none !important; padding: 5px 12px !important; border-radius: 3px !important; font-size: 11px !important; font-weight: bold !important; cursor: pointer !important; transition: all 0.2s !important; }
 #rcf-tool-root .btn-copy:hover { background: var(--primary-med) !important; }
 
-/* CORRECTION DU REDIMENSIONNEMENT DU TEXTAREA */
 #rcf-tool-root textarea {
-  width: 100% !important;
-  min-height: 180px !important;
-  height: auto !important;
-  max-height: none !important;
-  padding: 12px !important;
-  border: 1px solid var(--border-med) !important;
-  border-radius: 4px !important;
-  font-family: 'Courier New', Courier, monospace !important;
-  font-size: 13px !important;
-  line-height: 1.4 !important;
-  resize: vertical !important; /* Autorise le redimensionnement en hauteur */
-  color: #333 !important;
-  outline: none !important;
-  white-space: pre-wrap !important;
-  overflow-y: auto !important;
+  width: 100% !important; min-height: 180px !important; height: auto !important; max-height: none !important;
+  padding: 12px !important; border: 1px solid var(--border-med) !important; border-radius: 4px !important;
+  font-family: 'Courier New', Courier, monospace !important; font-size: 13px !important; line-height: 1.4 !important;
+  resize: vertical !important; color: #333 !important; outline: none !important; white-space: pre-wrap !important; overflow-y: auto !important;
 }
 
 #rcf-tool-root .rcf-footer { padding: 15px 20px !important; font-size: 11px !important; color: #7f8c8d !important; background: #fdfdfd !important; border-top: 1px solid var(--border-med) !important; line-height: 1.6 !important; text-align: center !important; }
@@ -212,10 +196,13 @@ html { scrollbar-width: none !important; }
 body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 ::-webkit-scrollbar { display: none !important; }
 
-@media (max-width: 640px) {
+/* REGLAGES MOBILES */
+@media (max-width: 768px) {
   #rcf-tool-root .rcf-grid { grid-template-columns: 1fr !important; }
   #rcf-tool-root .rcf-patient-grid { grid-template-columns: 1fr !important; }
   #rcf-tool-root .rcf-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  /* Affichage du bouton Caméra uniquement sur mobile */
+  .mobile-only-btn { display: inline-flex !important; }
 }
 </style>
 
@@ -272,7 +259,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
             </div>
 
             <!-- ------------------------------------------------ -->
-            <!-- NOUVEAU BLOC : ASSISTANT IA (FAÇON OUTIL OCR)    -->
+            <!-- BLOC : ASSISTANT IA (AVEC BOUTON CAMERA MOBILE)  -->
             <!-- ------------------------------------------------ -->
             <div class="rcf-sub-title" style="color: var(--ai-color); border-bottom-color: #aed6f1;">
                 <span style="font-size:16px;">🔍</span> Analyse par l'IA du Tracé RCF
@@ -280,22 +267,30 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
             
             <div class="rcf-ai-zone no-print">
                 <div style="font-weight: bold; color: var(--ai-color); margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #ebedef; padding-bottom: 10px;">
-                    Charger une image
+                    Charger le tracé
                 </div>
 
                 <!-- ETAPE 1 : Zone de glisser-déposer / Boutons -->
                 <div id="rcf-drop-area" class="rcf-dropzone">
                     <div style="font-size: 35px; margin-bottom: 10px;">📸</div>
                     <div style="font-weight: bold; color: #555; font-size: 15px;">Glissez et déposez votre cliché ici</div>
-                    <div style="font-size: 13px; color: #888; margin-top: 5px; margin-bottom: 20px;">ou utilisez les boutons ci-dessous (Ctrl+V supporté)</div>
+                    <div style="font-size: 13px; color: #888; margin-top: 5px; margin-bottom: 20px;">ou utilisez les boutons (Ctrl+V supporté)</div>
                     
-                    <div style="display: flex; gap: 10px; justify-content: center;">
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                         <button type="button" class="rcf-btn-action" onclick="document.getElementById('ai-image-upload').click()">
-                            📁 Choisir fichier
+                            📁 Parcourir
+                        </button>
+                        <!-- Bouton Caméra Mobile -->
+                        <button type="button" class="rcf-btn-action mobile-only-btn" onclick="document.getElementById('ai-camera-upload').click()">
+                            📷 Prendre une photo
                         </button>
                     </div>
                 </div>
-                <input type="file" id="ai-image-upload" accept="image/png, image/jpeg, image/webp">
+                
+                <!-- Input standard pour fichiers -->
+                <input type="file" id="ai-image-upload" accept="image/png, image/jpeg, image/webp" style="display:none;">
+                <!-- Input spécial Mobile (Capture environnement) -->
+                <input type="file" id="ai-camera-upload" accept="image/*" capture="environment" style="display:none;">
 
                 <!-- ETAPE 2 : Image chargée (Prévisualisation + Rotation) -->
                 <div id="rcf-preview-container" style="display: none;">
@@ -315,9 +310,13 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 10px; justify-content: center;">
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                         <button type="button" class="rcf-btn-action" onclick="document.getElementById('ai-image-upload').click()">
                             📁 Changer fichier
+                        </button>
+                        <!-- Bouton Caméra Mobile -->
+                        <button type="button" class="rcf-btn-action mobile-only-btn" onclick="document.getElementById('ai-camera-upload').click()">
+                            📷 Reprendre photo
                         </button>
                         <button type="button" class="rcf-btn-action btn-danger" onclick="resetImage()">
                             🗑️ Réinitialiser
@@ -638,11 +637,12 @@ function imprimerRCF() {
 }
 
 // ==========================================
-// GESTION DE L'IMAGE (Drag & Drop, Coller, Rotation)
+// GESTION DE L'IMAGE (Drag & Drop, Coller, Rotation, Caméra)
 // ==========================================
 let currentRotationAngle = 0;
 const dropArea = document.getElementById('rcf-drop-area');
 const fileInput = document.getElementById('ai-image-upload');
+const cameraInput = document.getElementById('ai-camera-upload'); // Ajout de l'input Caméra
 
 // Fonction centrale de traitement d'image
 function processImageFile(file) {
@@ -652,17 +652,12 @@ function processImageFile(file) {
     }
     const reader = new FileReader();
     reader.onload = function(e) {
-        // Cacher la zone de drop, afficher la prévisualisation
         document.getElementById('rcf-drop-area').style.display = 'none';
-        
         const imgPreview = document.getElementById('rcf-image-preview');
         imgPreview.src = e.target.result;
-        
-        // Réinitialiser la rotation
         currentRotationAngle = 0;
         imgPreview.style.transform = `rotate(0deg)`;
         
-        // Afficher les éléments
         document.getElementById('rcf-preview-container').style.display = 'block';
         document.getElementById('ai-details-box').style.display = 'none';
         document.getElementById('ai-status-msg').style.display = 'none';
@@ -670,12 +665,17 @@ function processImageFile(file) {
     reader.readAsDataURL(file);
 }
 
-// 1. Bouton "Parcourir"
+// 1. Bouton "Parcourir" (Fichiers)
 fileInput.addEventListener('change', (e) => {
     if (e.target.files.length > 0) processImageFile(e.target.files[0]);
 });
 
-// 2. Drag & Drop
+// 2. Bouton "Caméra" (Mobile direct)
+cameraInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) processImageFile(e.target.files[0]);
+});
+
+// 3. Drag & Drop
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => dropArea.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); }, false));
 ['dragenter', 'dragover'].forEach(evt => dropArea.addEventListener(evt, () => dropArea.classList.add('dragover'), false));
 ['dragleave', 'drop'].forEach(evt => dropArea.addEventListener(evt, () => dropArea.classList.remove('dragover'), false));
@@ -686,7 +686,7 @@ dropArea.addEventListener('drop', (e) => {
     }
 }, false);
 
-// 3. CTRL+V / CMD+V (Coller une capture)
+// 4. CTRL+V / CMD+V (Coller une capture)
 document.addEventListener('paste', (e) => {
     if (e.clipboardData && e.clipboardData.files.length > 0) {
         const file = e.clipboardData.files[0];
@@ -706,6 +706,7 @@ function rotatePreview(angle) {
 // Réinitialiser l'image
 function resetImage() {
     fileInput.value = '';
+    cameraInput.value = '';
     document.getElementById('rcf-preview-container').style.display = 'none';
     document.getElementById('ai-details-box').style.display = 'none';
     document.getElementById('ai-status-msg').style.display = 'none';
@@ -723,7 +724,6 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
 
     if (!imgPreview.src) return;
 
-    // Blocage interface pendant le chargement
     this.disabled = true;
     this.style.opacity = '0.7';
     statusDiv.style.display = "block";
@@ -732,7 +732,6 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
     statusDiv.innerHTML = "⏳ Conversion et envoi de l'image de façon sécurisée...";
 
     try {
-        // Appliquer la rotation "physique" à l'image via un Canvas avant envoi (Si l'image a été tournée par l'utilisateur)
         let finalBase64 = imgPreview.src;
         if (currentRotationAngle % 360 !== 0) {
             const canvas = document.createElement('canvas');
@@ -770,20 +769,17 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
             return;
         }
 
-        // Remplissage des cases FIGO
         if(donneesIA.rythme) document.getElementById('basal-rate').value = donneesIA.rythme;
         if(donneesIA.variabilite) document.getElementById('variability').value = donneesIA.variabilite;
         if(donneesIA.decelerations) document.getElementById('decelerations').value = donneesIA.decelerations;
         if(donneesIA.accelerations) document.getElementById('accelerations').value = donneesIA.accelerations;
         
-        // Remplissage du motif (contractions)
         if(donneesIA.contractions && donneesIA.contractions !== "") {
             const motifInput = document.getElementById('p-motif');
             const separateur = motifInput.value ? " | " : "";
             motifInput.value = motifInput.value + separateur + "Activité utérine (IA): " + donneesIA.contractions;
         }
 
-        // Affichage Confiance & Note
         if(donneesIA.confiance || donneesIA.note) {
             detailsBox.style.display = "block";
             document.getElementById('ai-note').innerText = donneesIA.note || "Pas d'informations supplémentaires.";
@@ -791,12 +787,12 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
             let confPourcentage = Math.round((donneesIA.confiance || 0) * 100);
             let confElement = document.getElementById('ai-confidence');
             confElement.innerText = confPourcentage + "%";
-            if(confPourcentage >= 80) detailsBox.style.borderColor = "#d5f5e3"; // Vert clair
-            else if(confPourcentage >= 60) detailsBox.style.borderColor = "#fdebd0"; // Orange clair
-            else detailsBox.style.borderColor = "#fadbd8"; // Rouge clair
+            if(confPourcentage >= 80) detailsBox.style.borderColor = "#d5f5e3"; 
+            else if(confPourcentage >= 60) detailsBox.style.borderColor = "#fdebd0"; 
+            else detailsBox.style.borderColor = "#fadbd8"; 
         }
 
-        analyseRCF(); // Force la mise à jour visuelle des alertes (Vert/Orange/Rouge)
+        analyseRCF(); 
 
         statusDiv.innerHTML = "✅ Extraction terminée avec succès !";
         statusDiv.style.color = "#27ae60";
