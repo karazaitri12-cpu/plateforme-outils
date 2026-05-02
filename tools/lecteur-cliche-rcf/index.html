@@ -9,7 +9,6 @@
    LECTURE RCF - STYLE INSTITUTIONNEL (HAS/FIGO) + IA
    ═══════════════════════════════════════════════ */
 
-/* Reset global */
 #rcf-tool-root *, #rcf-tool-root *::before, #rcf-tool-root *::after { box-sizing: border-box !important; margin: 0 !important; padding: 0 !important; }
 
 #rcf-tool-root {
@@ -46,8 +45,11 @@
 #rcf-tool-root .rcf-dropzone input[type="file"] { display: none !important; }
 
 #rcf-tool-root .rcf-preview-wrapper { display: flex !important; flex-direction: column !important; align-items: center !important; }
-#rcf-tool-root .rcf-image-frame { border: 3px solid #34495e !important; border-radius: 8px !important; padding: 3px !important; background: #fff !important; display: inline-block !important; overflow: hidden !important; max-width: 100% !important; margin-bottom: 15px !important; }
-#rcf-tool-root #rcf-image-preview { max-height: 250px !important; max-width: 100% !important; display: block !important; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important; }
+#rcf-tool-root .rcf-image-frame { border: 3px solid #34495e !important; border-radius: 8px !important; padding: 3px !important; background: #fff !important; display: inline-block !important; overflow: hidden !important; max-width: 100% !important; margin-bottom: 15px !important; position: relative !important; }
+
+/* Cursors pour le zoom */
+#rcf-tool-root #rcf-image-preview { max-height: 250px !important; max-width: 100% !important; display: block !important; transition: transform 0.3s !important; cursor: zoom-in !important; }
+#rcf-tool-root #source-image-display { cursor: zoom-in !important; }
 
 #rcf-tool-root .rcf-btn-action { background: #fff !important; color: #2c3e50 !important; border: 1px solid #aeb6bf !important; padding: 8px 15px !important; border-radius: 5px !important; cursor: pointer !important; font-size: 13px !important; font-weight: bold !important; display: inline-flex !important; align-items: center !important; gap: 8px !important; transition: 0.2s !important; }
 #rcf-tool-root .rcf-btn-action:hover { background: #eaeded !important; }
@@ -58,8 +60,6 @@
 
 #rcf-tool-root .btn-launch-ai { background: var(--normal) !important; color: #fff !important; border: none !important; padding: 12px 25px !important; border-radius: 5px !important; font-size: 15px !important; font-weight: bold !important; cursor: pointer !important; width: 100% !important; margin-top: 15px !important; box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2) !important; transition: 0.3s !important; }
 #rcf-tool-root .btn-launch-ai:hover { background: #229954 !important; transform: translateY(-1px) !important; }
-
-/* CORRECTION : Cacher de force le bouton caméra sur PC */
 #rcf-tool-root .mobile-only-btn { display: none !important; }
 
 /* Analyse & Resultats */
@@ -67,6 +67,10 @@
 #rcf-tool-root .rcf-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
 #rcf-tool-root .rcf-section { background: var(--bg-med) !important; padding: 15px !important; border-radius: 4px !important; border-left: 4px solid var(--accent-med) !important; }
 #rcf-tool-root label { display: block !important; font-weight: 600 !important; font-size: 12px !important; margin-bottom: 6px !important; color: var(--primary-med) !important; }
+
+/* Champ rythme exact (grisé) */
+#rcf-tool-root .input-exact { font-weight: bold !important; color: var(--primary-med) !important; background: #e8ebed !important; text-align: center !important; }
+
 #rcf-tool-root select, #rcf-tool-root input[type="text"], #rcf-tool-root input[type="date"] { width: 100% !important; padding: 9px 12px !important; border: 1px solid var(--border-med) !important; border-radius: 4px !important; font-size: 13px !important; background: #fff !important; color: var(--text-dark) !important; appearance: auto !important; -webkit-appearance: auto !important; }
 #rcf-tool-root select:focus, #rcf-tool-root input:focus { outline: none !important; border-color: var(--accent-med) !important; box-shadow: 0 0 0 2px rgba(58,110,163,0.1) !important; }
 #rcf-tool-root input[readonly], #rcf-tool-root textarea[readonly] { background-color: #eaeff3 !important; color: #4a5a6a !important; font-weight: 600 !important; }
@@ -88,17 +92,19 @@
 
 #rcf-tool-root textarea { width: 100% !important; min-height: 180px !important; height: auto !important; max-height: none !important; padding: 12px !important; border: 1px solid var(--border-med) !important; border-radius: 4px !important; font-family: 'Courier New', Courier, monospace !important; font-size: 13px !important; line-height: 1.4 !important; resize: vertical !important; color: #333 !important; outline: none !important; white-space: pre-wrap !important; overflow-y: auto !important; }
 
-/* Bouton bascule image source */
 #rcf-tool-root .btn-toggle-img { background: #7f8c8d !important; color: #fff !important; border: none !important; padding: 8px 15px !important; border-radius: 4px !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important; transition: all 0.2s !important; margin-top: 15px !important; }
 #rcf-tool-root .btn-toggle-img:hover { background: #34495e !important; }
 
 #rcf-tool-root .rcf-footer { padding: 15px 20px !important; font-size: 11px !important; color: #7f8c8d !important; background: #fdfdfd !important; border-top: 1px solid var(--border-med) !important; line-height: 1.6 !important; text-align: center !important; }
 
+/* LIGHTBOX POUR LE ZOOM */
+#rcf-lightbox { display: none; position: fixed; z-index: 999999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; cursor: zoom-out; }
+#rcf-lightbox img { max-width: 95%; max-height: 95%; object-fit: contain; border: 3px solid #fff; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
 @media (max-width: 768px) {
   #rcf-tool-root .rcf-grid { grid-template-columns: 1fr !important; }
   #rcf-tool-root .rcf-patient-grid { grid-template-columns: 1fr !important; }
   #rcf-tool-root .rcf-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
-  /* CORRECTION : Autorise l'affichage sur mobile uniquement */
   #rcf-tool-root .mobile-only-btn { display: inline-flex !important; }
 }
 
@@ -110,6 +116,10 @@
   #rcf-tool-root, #rcf-tool-root #rcf-print-zone, #rcf-tool-root #rcf-print-zone * { visibility: visible !important; }
   #rcf-tool-root { border: none !important; margin: 0 !important; max-width: 100% !important; }
   #rcf-screen-zone { display: none !important; }
+  
+  /* Cacher les éléments non désirés à l'impression (ex: valeur exacte du rythme) */
+  #rcf-tool-root .no-print { display: none !important; }
+  
   #rcf-print-zone { display: flex !important; flex-direction: column !important; min-height: 95vh !important; font-family: Arial, Helvetica, sans-serif !important; font-size: 10pt !important; line-height: 1.25 !important; background: #fff !important; }
   #rcf-print-zone .print-header { border-bottom: 1.5px solid #000 !important; padding-bottom: 6px !important; margin-bottom: 12px !important; }
   #rcf-print-zone .print-header h1 { font-size: 13pt !important; font-weight: bold !important; text-transform: uppercase !important; margin: 0 !important; color: #000 !important; }
@@ -130,6 +140,11 @@
 
 <div id="rcf-tool-root">
     
+    <!-- LIGHTBOX MODAL POUR LE ZOOM -->
+    <div id="rcf-lightbox" onclick="closeLightbox()">
+        <img id="rcf-lightbox-img" src="">
+    </div>
+
     <div id="rcf-screen-zone">
         <div class="rcf-header">
             <div>
@@ -202,7 +217,7 @@
                 <div id="rcf-preview-container" style="display: none;">
                     <div class="rcf-preview-wrapper">
                         <div class="rcf-image-frame">
-                            <img id="rcf-image-preview" src="">
+                            <img id="rcf-image-preview" src="" onclick="openLightbox(this.src)" title="Cliquez pour zoomer en plein écran">
                         </div>
                         <div style="display: flex; gap: 15px; justify-content: center; align-items: center; margin-bottom: 15px;">
                             <button type="button" class="rcf-btn-action btn-rotate" onclick="rotatePreview(-90)" title="Pivoter à gauche">↺ <span style="font-size: 12px; color: #555;">Rotation</span></button>
@@ -227,20 +242,24 @@
                 </div>
             </div>
 
-            <!-- ANALYSE DU TRACÉ (AVEC OPTIONS VIDES PAR DÉFAUT) -->
+            <!-- ANALYSE DU TRACÉ -->
             <div class="rcf-sub-title">Analyse du Tracé RCF</div>
             <div class="rcf-analysis-section">
                 <div class="rcf-grid">
                     <div class="rcf-section">
                         <label>Rythme de base (bpm)</label>
-                        <select id="basal-rate" onchange="analyseRCF()">
-                            <option value="" disabled selected>-- À renseigner --</option>
-                            <option value="Normal (110 - 160)">Normal (110 - 160)</option>
-                            <option value="Bradycardie modérée (100 - 109)">Bradycardie modérée (100 - 109)</option>
-                            <option value="Bradycardie sévère (&lt; 100)">Bradycardie sévère (&lt; 100)</option>
-                            <option value="Tachycardie modérée (161 - 180)">Tachycardie modérée (161 - 180)</option>
-                            <option value="Tachycardie sévère (&gt; 180)">Tachycardie sévère (&gt; 180)</option>
-                        </select>
+                        <!-- MODIFICATION : Ajout de la textbox grisée à droite -->
+                        <div style="display: flex; gap: 8px;">
+                            <select id="basal-rate" onchange="analyseRCF()" style="flex: 2;">
+                                <option value="" disabled selected>-- À renseigner --</option>
+                                <option value="Normal (110 - 160)">Normal (110 - 160)</option>
+                                <option value="Bradycardie modérée (100 - 109)">Bradycardie modérée (100 - 109)</option>
+                                <option value="Bradycardie sévère (&lt; 100)">Bradycardie sévère (&lt; 100)</option>
+                                <option value="Tachycardie modérée (161 - 180)">Tachycardie modérée (161 - 180)</option>
+                                <option value="Tachycardie sévère (&gt; 180)">Tachycardie sévère (&gt; 180)</option>
+                            </select>
+                            <input type="text" id="exact-basal-rate" class="no-print input-exact" readonly placeholder="BPM" title="Valeur exacte estimée par l'IA" style="flex: 1;">
+                        </div>
                     </div>
                     <div class="rcf-section">
                         <label>Variabilité (bpm)</label>
@@ -295,19 +314,19 @@
                 <textarea id="rcf-raw-text" readonly></textarea>
                 
                 <div style="text-align: center;">
-                    <button type="button" id="btn-toggle-source" class="btn-toggle-img" style="display: none;" onclick="toggleSourceImage()">
+                    <button type="button" id="btn-toggle-source" class="btn-toggle-img no-print" style="display: none;" onclick="toggleSourceImage()">
                         👁️ Afficher l'image source
                     </button>
                 </div>
                 
-                <!-- Conteneur image source en bas -->
-                <div id="source-image-container" style="display: none; margin-top: 15px; text-align: center; border: 1px solid #ddd; padding: 10px; background: #fbfcfc; border-radius: 4px;">
-                    <img id="source-image-display" src="" style="max-width: 100%; max-height: 400px; border-radius: 4px;">
+                <div id="source-image-container" class="no-print" style="display: none; margin-top: 15px; text-align: center; border: 1px solid #ddd; padding: 10px; background: #fbfcfc; border-radius: 4px;">
+                    <img id="source-image-display" src="" onclick="openLightbox(this.src)" title="Cliquez pour zoomer en plein écran" style="max-width: 100%; max-height: 400px; border-radius: 4px;">
+                    <p style="font-size: 11px; color: #7f8c8d; margin-top: 5px;">Cliquez sur l'image pour l'agrandir</p>
                 </div>
             </div>
         </div>
 
-        <div class="rcf-footer">
+        <div class="rcf-footer no-print">
             <strong>MISE EN GARDE MÉDICO-LÉGALE :</strong> Cet outil est une aide à la classification selon les critères FIGO. L'analyse finale doit impérativement intégrer l'identité de la patiente, le contexte clinique et l'évaluation continue du tracé. Ne se substitue pas au jugement clinique du praticien.
             <br><strong>Dr KARA-ZAITRI M.A. © 2026</strong>
         </div>
@@ -360,7 +379,7 @@
 window.addEventListener('DOMContentLoaded', () => {
     const savedDoctor = localStorage.getItem('rcf_medecin');
     if (savedDoctor) { document.getElementById('p-medecin').value = savedDoctor; }
-    analyseRCF(); // Initialise l'état "En attente"
+    analyseRCF();
 });
 
 function saveDoctorName() {
@@ -401,7 +420,6 @@ function analyseRCF() {
     const interp = document.getElementById('interpretation');
     const list = document.getElementById('criteria-list');
     
-    // Si les champs ne sont pas tous remplis
     if(!basal || !variability || !decels || !accels) {
         tag.style.background = '#95a5a6';
         tag.innerText = 'EN ATTENTE';
@@ -520,6 +538,22 @@ function imprimerRCF() {
 }
 
 // ==========================================
+// GESTION DU ZOOM (LIGHTBOX)
+// ==========================================
+function openLightbox(imgSrc) {
+    if(!imgSrc) return;
+    const lightbox = document.getElementById('rcf-lightbox');
+    const lightboxImg = document.getElementById('rcf-lightbox-img');
+    lightboxImg.src = imgSrc;
+    // Applique la même rotation à l'image du lightbox
+    lightboxImg.style.transform = `rotate(${currentRotationAngle}deg)`;
+    lightbox.style.display = 'flex';
+}
+function closeLightbox() {
+    document.getElementById('rcf-lightbox').style.display = 'none';
+}
+
+// ==========================================
 // GESTION DE L'IMAGE (Drag & Drop, Coller, Rotation, Caméra)
 // ==========================================
 let currentRotationAngle = 0;
@@ -540,6 +574,7 @@ function processImageFile(file) {
         document.getElementById('rcf-preview-container').style.display = 'block';
         document.getElementById('ai-details-box').style.display = 'none';
         document.getElementById('ai-status-msg').style.display = 'none';
+        document.getElementById('exact-basal-rate').value = ''; // Reset du champ BPM exact
         
         document.getElementById('btn-toggle-source').style.display = 'inline-block';
         document.getElementById('source-image-container').style.display = 'none';
@@ -577,6 +612,7 @@ function resetImage() {
     document.getElementById('ai-details-box').style.display = 'none';
     document.getElementById('ai-status-msg').style.display = 'none';
     document.getElementById('rcf-drop-area').style.display = 'block';
+    document.getElementById('exact-basal-rate').value = '';
     
     document.getElementById('btn-toggle-source').style.display = 'none';
     document.getElementById('source-image-container').style.display = 'none';
@@ -649,6 +685,9 @@ document.getElementById('btn-ai-analyse').addEventListener('click', async functi
         if(donneesIA.variabilite) document.getElementById('variability').value = donneesIA.variabilite;
         if(donneesIA.decelerations) document.getElementById('decelerations').value = donneesIA.decelerations;
         if(donneesIA.accelerations) document.getElementById('accelerations').value = donneesIA.accelerations;
+        
+        // Remplissage de la textbox BPM exacte
+        if(donneesIA.rythme_exact) document.getElementById('exact-basal-rate').value = donneesIA.rythme_exact + ' bpm';
         
         if(donneesIA.contractions && donneesIA.contractions !== "") {
             const motifInput = document.getElementById('p-motif');
