@@ -1,10 +1,10 @@
 <!-- ================================================================
      Outil de Diagnostic : Dermatoses Spécifiques de la Grossesse
-     Version 2.3 — Mai 2026
+     Version 2.4 — Mai 2026
      Références : HAS, CNGOF, Cours GHR, UpToDate 2024
      Blindé pour intégration Elementor (widget HTML)
-     Nouveautés v2.3 : panneau patient (nom, prénom, DDN+âge, DDR+aménorrhée),
-                       zone résumé redimensionnable, copie dossier patient
+     Nouveautés v2.4 : disclaimer en bas, impression via window.open(),
+                       bouton Copier unifié (dossier uniquement)
      ================================================================ -->
 
 <div id="dsg-tool-container" class="dsg-app-wrapper">
@@ -37,11 +37,6 @@
             <span class="dsg-prog-label">Diagnostic</span>
         </div>
     </div>
-
-    <!-- DISCLAIMER -->
-    <section class="dsg-disclaimer">
-        <strong>MISE EN GARDE&#160;:</strong> Cet outil constitue une aide &#224; la d&#233;cision clinique fond&#233;e sur les recommandations en vigueur (HAS, CNGOF, cours GHR). Il ne remplace en aucun cas l&#39;examen clinique ni l&#39;avis sp&#233;cialis&#233;. En cas de doute ou de signes de gravit&#233;, un avis dermatologique est requis.
-    </section>
 
     <div class="dsg-card">
 
@@ -88,15 +83,19 @@
             <div class="dsg-result-actions">
                 <button class="dsg-btn-reset" onclick="dsgReset()">&#8635;&#160;Nouvelle &#233;valuation</button>
                 <button class="dsg-btn-print" onclick="dsgPrint()">&#128438;&#160;Imprimer</button>
-                <button class="dsg-btn-copy" id="dsg-btn-copy" onclick="dsgCopyResult()">&#128203;&#160;Copier le r&#233;sultat</button>
             </div>
         </div>
 
     </div>
 
+    <!-- DISCLAIMER déplacé en bas -->
+    <section class="dsg-disclaimer">
+        <strong>MISE EN GARDE&#160;:</strong> Cet outil constitue une aide &#224; la d&#233;cision clinique fond&#233;e sur les recommandations en vigueur (HAS, CNGOF, cours GHR). Il ne remplace en aucun cas l&#39;examen clinique ni l&#39;avis sp&#233;cialis&#233;. En cas de doute ou de signes de gravit&#233;, un avis dermatologique est requis.
+    </section>
+
     <!-- FOOTER -->
     <footer class="dsg-footer">
-        Version 2.3 &#8212; Mai 2026 &nbsp;|&nbsp; R&#233;f.&#160;: HAS, CNGOF, Cours GHR &nbsp;|&nbsp; Dr Kara-Za&#239;tri M.A.
+        Version 2.4 &#8212; Mai 2026 &nbsp;|&nbsp; R&#233;f.&#160;: HAS, CNGOF, Cours GHR &nbsp;|&nbsp; Dr Kara-Za&#239;tri M.A.
     </footer>
 
     <!-- ============================================================
@@ -184,9 +183,6 @@
     </section>
 
 </div>
-
-<!-- ZONE D'IMPRESSION CACHÉE -->
-<div id="dsg-print-zone" style="display:none;"></div>
 
 <!-- ================================================================ CSS ================================================================ -->
 <style>
@@ -878,21 +874,6 @@
     #dsg-tool-container .dsg-btn-copy { width: 100% !important; text-align: center; }
 }
 
-/* === IMPRESSION === */
-@media print {
-    body * { visibility: hidden; }
-    #dsg-print-zone, #dsg-print-zone * { visibility: visible; }
-    #dsg-print-zone {
-        display: block !important;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%;
-        font-family: Arial, sans-serif;
-        font-size: 13px;
-        color: #000;
-        padding: 20px;
-    }
-}
 
 </style>
 
@@ -1110,7 +1091,7 @@
                 d.urgence_cat.map(function(i){return '<li>'+i+'</li>';}).join('') + '</ul></div>';
         }
         var ddxHtml = d.ddx ? '<div class="dsg-ddx-box"><span class="dsg-ddx-title">Diagnostics \u00e0 \u00e9liminer</span>'+d.ddx+'</div>' : '';
-        var coursHtml = '<a class="dsg-cours-link" href="https://www.dr-karazaitri-ma.net/obstetrique/ghr/der1/" target="_blank" rel="noopener">\u2192\u00a0Voir le cours complet sur les dermatoses de la grossesse</a>';
+        var coursHtml = '<a class="dsg-cours-link" href="'+DSG_COURS_URL+'" target="_blank" rel="noopener">\u2192\u00a0Voir le cours complet sur les dermatoses de la grossesse</a>';
 
         document.getElementById('dsg-result-content').innerHTML =
             '<div class="dsg-result-header">' +
@@ -1289,28 +1270,7 @@
     };
 
     /* ================================================================
-       COPIE RÉSULTAT (bouton résultat)
-    ================================================================ */
-    window.dsgCopyResult = function() {
-        if (!dsgState.currentType) return;
-        var d = dsgDB[dsgState.currentType];
-        var lines = [
-            '=== DERMATOSES DE LA GROSSESSE ===',
-            'Dr Kara-Za\u00eftri M.A. \u2014 v2.3 \u2014 ' + new Date().toLocaleDateString('fr-FR'),
-            '',
-            'DIAGNOSTIC\u00a0: ' + d.title,
-            'P\u00e9riode\u00a0: ' + d.trimestre,
-            '',
-            '-- EXAMENS --'
-        ];
-        d.diag.forEach(function(i,idx){ lines.push((idx+1)+'. '+i); });
-        lines.push('', '-- PRISE EN CHARGE --', d.traitement, '', '-- RISQUES --', d.complications, '',
-            'Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 Ne remplace pas l\u2019examen clinique.');
-        dsgDoClipboard(lines.join('\n'), 'dsg-btn-copy');
-    };
-
-    /* ================================================================
-       COPIE DOSSIER PATIENT (grand bouton panneau)
+       COPIE DOSSIER PATIENT (bouton panneau)
     ================================================================ */
     window.dsgCopyDossier = function() {
         var ta = document.getElementById('dsg-resume-textarea');
@@ -1351,24 +1311,78 @@
     }
 
     /* ================================================================
-       IMPRESSION
+       IMPRESSION — fenêtre dédiée (évite tout chevauchement Elementor)
     ================================================================ */
     window.dsgPrint = function() {
         var content = document.getElementById('dsg-result-content');
-        if (!content) return;
-        var pz = document.getElementById('dsg-print-zone');
+        if (!content) { alert('Obtenez d\u2019abord un diagnostic.'); return; }
+
         var resume = document.getElementById('dsg-resume-textarea');
-        var resumeHtml = (resume && resume.value.trim())
-            ? '<hr style="border:none;border-top:1px solid #ccc;margin:12px 0;"><h3 style="font-size:13px;font-weight:700;margin-bottom:6px;">R\u00e9sum\u00e9 clinique</h3><pre style="font-size:12px;white-space:pre-wrap;line-height:1.5;">'+resume.value+'</pre>'
-            : '';
-        pz.innerHTML =
-            '<h2 style="font-size:16px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">Aide au Diagnostic \u2014 Dermatoses Sp\u00e9cifiques de la Grossesse</h2>' +
-            '<p style="font-size:11px;color:#666;margin-bottom:12px;">Dr Kara-Za\u00eftri M.A. \u2014 Version 2.3 \u2014 ' + new Date().toLocaleDateString('fr-FR') + '</p>' +
-            '<hr style="border:none;border-top:1px solid #ccc;margin-bottom:12px;">' +
-            content.innerHTML + resumeHtml +
-            '<hr style="border:none;border-top:1px solid #ccc;margin-top:12px;">' +
-            '<p style="font-size:10px;color:#888;">Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 Ne remplace pas l\u2019examen clinique ni l\u2019avis sp\u00e9cialis\u00e9.</p>';
-        window.print();
+        var resumeBlock = '';
+        if (resume && resume.value.trim()) {
+            resumeBlock =
+                '<div style="margin-top:18px;padding-top:14px;border-top:2px solid #1a3a5c;">' +
+                '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#5a6a7e;margin:0 0 8px;">R\u00e9sum\u00e9 clinique</p>' +
+                '<pre style="font-size:12px;white-space:pre-wrap;line-height:1.6;font-family:Arial,sans-serif;margin:0;color:#111;">' +
+                resume.value.replace(/</g,'&lt;').replace(/>/g,'&gt;') +
+                '</pre></div>';
+        }
+
+        /* Nettoyer le HTML du résultat pour impression : supprimer liens, badges emoji */
+        var cleanHtml = content.innerHTML
+            .replace(/<a [^>]*>[\s\S]*?<\/a>/gi, '')   /* supprimer lien cours */
+            .replace(/\ud83d[\udc00-\udfff]/g, '')       /* supprimer emoji */
+            .replace(/[\u2600-\u27BF]/g, '');            /* supprimer autres symboles déco */
+
+        var w = window.open('', '_blank', 'width=800,height=900,scrollbars=yes');
+        if (!w) { alert('Autorisez les popups pour imprimer.'); return; }
+
+        w.document.write(
+            '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">' +
+            '<title>Dermatoses de la Grossesse \u2014 Dr Kara-Za\u00eftri</title>' +
+            '<style>' +
+            'body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#111;padding:28px 32px;line-height:1.6;max-width:720px;margin:0 auto;}' +
+            'h1{font-size:16px;font-weight:700;color:#1a3a5c;margin:0 0 3px;}' +
+            'p.meta{font-size:11px;color:#666;margin:0 0 14px;}' +
+            'hr{border:none;border-top:1px solid #ccc;margin:12px 0;}' +
+            '.dsg-result-header{background:#f0f5fb;border-left:4px solid #1a3a5c;padding:12px 16px;border-radius:0 4px 4px 0;margin-bottom:16px;}' +
+            '.dsg-result-title{display:block;color:#1a3a5c;font-size:14px;font-weight:700;margin-bottom:4px;}' +
+            '.dsg-result-desc{display:block;font-size:12px;color:#3a4a5c;}' +
+            '.dsg-result-meta{margin-top:8px;}' +
+            '.dsg-meta-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #90b8e0;background:#eaf1fb;color:#1a3a5c;margin-right:6px;}' +
+            '.dsg-meta-badge.recidive-eleve{background:#fdecea;border-color:#e57373;color:#6b1a1a;}' +
+            '.dsg-meta-badge.recidive-faible{background:#e6f4ee;border-color:#6abf8a;color:#1a5a30;}' +
+            '.dsg-meta-badge.recidive-moyen{background:#fff8e1;border-color:#f0c040;color:#5a3e00;}' +
+            '.dsg-section-label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5a6a7e;margin:14px 0 6px;padding-bottom:3px;border-bottom:1px solid #e4eaf0;}' +
+            '.dsg-list{list-style:none;padding:0;margin:0;}' +
+            '.dsg-list li{position:relative;padding-left:16px;margin-bottom:4px;font-size:12px;}' +
+            '.dsg-list li:before{content:"\u2022";position:absolute;left:0;color:#1a3a5c;font-weight:bold;}' +
+            '.dsg-list.dsg-list-urgence li:before{content:"\u2192";color:#c0392b;}' +
+            '.dsg-traitement-text{font-size:12px;display:block;margin-top:4px;line-height:1.6;}' +
+            '.dsg-alert-box{padding:10px 14px;border-radius:4px;margin-top:12px;font-size:11px;line-height:1.5;}' +
+            '.dsg-alert-warn{background:#fff8e1;border:1px solid #f0c040;color:#5a3e00;}' +
+            '.dsg-alert-danger{background:#fdecea;border:1px solid #e57373;color:#6b1a1a;}' +
+            '.dsg-alert-info{background:#e8f4fd;border:1px solid #90c4e8;color:#1a3a5c;}' +
+            '.dsg-urgence-box{background:#fdecea;border:2px solid #c0392b;border-radius:4px;padding:10px 14px;margin-top:12px;}' +
+            '.dsg-urgence-box-title{display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#c0392b;margin-bottom:6px;}' +
+            '.dsg-urgence-badge{display:inline-block;background:#c0392b;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;padding:1px 6px;border-radius:2px;margin-right:6px;}' +
+            '.dsg-ddx-box{background:#fffbea;border:1px solid #e8c840;border-radius:4px;padding:9px 12px;margin-top:10px;font-size:11px;color:#4a3800;}' +
+            '.dsg-ddx-title{display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#8a6a00;margin-bottom:4px;}' +
+            '.dsg-breadcrumb{display:none;}' +
+            '.dsg-cours-link{display:none;}' +
+            'p.footer-note{font-size:10px;color:#888;margin-top:14px;border-top:1px solid #eee;padding-top:8px;}' +
+            '@media print{body{padding:14px;}@page{margin:1.5cm;}}' +
+            '</style></head><body>' +
+            '<h1>Aide au Diagnostic \u2014 Dermatoses Sp\u00e9cifiques de la Grossesse</h1>' +
+            '<p class="meta">Dr Kara-Za\u00eftri M.A. \u2014 Version 2.4 \u2014 ' + new Date().toLocaleDateString('fr-FR') + '</p>' +
+            '<hr>' +
+            cleanHtml +
+            resumeBlock +
+            '<p class="footer-note">Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 Ne remplace pas l\u2019examen clinique ni l\u2019avis sp\u00e9cialis\u00e9 \u2014 R\u00e9f.\u00a0: HAS, CNGOF, Cours GHR</p>' +
+            '</body></html>'
+        );
+        w.document.close();
+        setTimeout(function() { w.focus(); w.print(); }, 400);
     };
 
     /* ================================================================
@@ -1383,7 +1397,6 @@
 
 })();
 </script>
-
 </script>
   <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
