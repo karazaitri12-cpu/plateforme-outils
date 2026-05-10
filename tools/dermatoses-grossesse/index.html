@@ -82,13 +82,13 @@
             <div id="dsg-result-content"></div>
             <div class="dsg-result-actions">
                 <button class="dsg-btn-reset" onclick="dsgReset()">&#8635;&#160;Nouvelle &#233;valuation</button>
-                <button class="dsg-btn-print" onclick="dsgPrint()">&#128438;&#160;Imprimer</button>
+                <button class="dsg-btn-print" onclick="dsgPrint()">&#128438;&#160;Imprimer le r&#233;sultat</button>
             </div>
         </div>
 
     </div>
 
-    <!-- DISCLAIMER déplacé en bas -->
+    <!-- DISCLAIMER -->
     <section class="dsg-disclaimer">
         <strong>MISE EN GARDE&#160;:</strong> Cet outil constitue une aide &#224; la d&#233;cision clinique fond&#233;e sur les recommandations en vigueur (HAS, CNGOF, cours GHR). Il ne remplace en aucun cas l&#39;examen clinique ni l&#39;avis sp&#233;cialis&#233;. En cas de doute ou de signes de gravit&#233;, un avis dermatologique est requis.
     </section>
@@ -100,11 +100,9 @@
 
     <!-- ============================================================
          PANNEAU DOSSIER PATIENT
-         Toujours visible, indépendant de la navigation
     ============================================================ -->
     <section class="dsg-patient-panel" id="dsg-patient-panel">
 
-        <!-- En-tête panneau -->
         <div class="dsg-patient-header" onclick="dsgTogglePatient()">
             <span class="dsg-patient-header-title">
                 &#128196;&#160;Dossier patient &#8212; R&#233;sum&#233; clinique
@@ -112,22 +110,17 @@
             <span class="dsg-patient-toggle-icon" id="dsg-patient-icon">&#9660;</span>
         </div>
 
-        <!-- Corps panneau -->
         <div class="dsg-patient-body" id="dsg-patient-body">
 
-            <!-- Identification -->
             <div class="dsg-patient-id-grid">
-
                 <div class="dsg-field-group">
                     <label class="dsg-field-label" for="dsg-nom">Nom</label>
                     <input class="dsg-field-input" type="text" id="dsg-nom" placeholder="NOM" oninput="dsgUpdateResume()" autocomplete="off" />
                 </div>
-
                 <div class="dsg-field-group">
                     <label class="dsg-field-label" for="dsg-prenom">Pr&#233;nom</label>
                     <input class="dsg-field-input" type="text" id="dsg-prenom" placeholder="Pr&#233;nom" oninput="dsgUpdateResume()" autocomplete="off" />
                 </div>
-
                 <div class="dsg-field-group">
                     <label class="dsg-field-label" for="dsg-ddn">
                         Date de naissance
@@ -135,7 +128,6 @@
                     </label>
                     <input class="dsg-field-input" type="date" id="dsg-ddn" oninput="dsgCalcAge(); dsgUpdateResume();" />
                 </div>
-
                 <div class="dsg-field-group">
                     <label class="dsg-field-label" for="dsg-ddr">
                         Derni&#232;res r&#232;gles (DDR)
@@ -143,18 +135,20 @@
                     </label>
                     <input class="dsg-field-input" type="date" id="dsg-ddr" oninput="dsgCalcAmenorrhee(); dsgUpdateResume();" />
                 </div>
-
             </div>
 
-            <!-- Séparateur -->
             <div class="dsg-patient-sep"></div>
 
-            <!-- Zone résumé -->
+            <!-- Zone résumé avec les 3 boutons -->
             <div class="dsg-resume-header">
                 <span class="dsg-field-label" style="margin:0;">R&#233;sum&#233; clinique (&#233;ditable)</span>
                 <div class="dsg-resume-actions">
                     <button class="dsg-resume-btn dsg-resume-btn-fill" onclick="dsgFillResume()" title="G&#233;n&#233;rer le r&#233;sum&#233; depuis le diagnostic">
-                        &#8635;&#160;G&#233;n&#233;rer depuis le diagnostic
+                        &#8635;&#160;G&#233;n&#233;rer
+                    </button>
+                    <!-- BOUTON IMPRIMER LE RÉSUMÉ AJOUTÉ ICI -->
+                    <button class="dsg-resume-btn dsg-resume-btn-print" onclick="dsgPrintResume()" title="Imprimer uniquement le r&#233;sum&#233;">
+                        &#128438;&#160;Imprimer
                     </button>
                     <button class="dsg-resume-btn dsg-resume-btn-clear" onclick="dsgClearResume()" title="Effacer">
                         &#10005;&#160;Effacer
@@ -169,7 +163,6 @@
                 spellcheck="true"
             ></textarea>
 
-            <!-- Actions copie dossier -->
             <div class="dsg-patient-copy-bar">
                 <span class="dsg-patient-copy-hint">
                     &#8505;&#160;Ce texte est copi&#233; tel quel &#8212; vous pouvez l&#39;&#233;diter avant de coller dans le dossier.
@@ -189,10 +182,10 @@
 
 /* === RESET & WRAPPER BLINDÉ === */
 #dsg-tool-container.dsg-app-wrapper {
-    /* SUPPRESSION DE all: initial; ICI */
+    /* SUPPRESSION DE all: initial; pour la PWA */
     display: block !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-    font-size: 16px !important; /* Le font-size est maintenant correctement hérité */
+    font-size: 16px !important;
     color: #1a1a1a !important;
     line-height: 1.6 !important;
     width: 100% !important;
@@ -203,14 +196,15 @@
     border-radius: 4px !important;
     box-shadow: 0 2px 6px rgba(0,0,0,0.07) !important;
     overflow: visible !important;
-    -webkit-text-size-adjust: 100% !important; /* Maintenu UNIQUEMENT sur le parent */
+    -webkit-text-size-adjust: 100% !important;
     text-size-adjust: 100% !important;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
 #dsg-tool-container.dsg-app-wrapper * {
     box-sizing: border-box !important;
-    font-family: inherit !important; /* Hérite de la police du parent */
-    /* SUPPRESSION DE -webkit-text-size-adjust: 100% ICI POUR LES ENFANTS */
+    font-family: inherit !important;
+    /* SUPPRESSION DE text-size-adjust ici pour éviter les bugs de zoom iOS */
 }
 
 /* === EN-TÊTE === */
@@ -543,7 +537,6 @@
     line-height: 1.5;
 }
 
-/* Puces Unicode CSS — jamais entités HTML dans ::before */
 #dsg-tool-container .dsg-list li::before {
     content: "\2022";
     position: absolute;
@@ -791,6 +784,14 @@
 }
 #dsg-tool-container .dsg-resume-btn-fill:hover { background: #d4e5f7; }
 
+/* Nouveau style pour le bouton Imprimer Résumé */
+#dsg-tool-container .dsg-resume-btn-print {
+    background: #f4f7fb;
+    border-color: #c8d3df;
+    color: #1a3a5c;
+}
+#dsg-tool-container .dsg-resume-btn-print:hover { background: #e4eaf0; }
+
 #dsg-tool-container .dsg-resume-btn-clear {
     background: #fdecea;
     border-color: #e57373;
@@ -798,14 +799,13 @@
 }
 #dsg-tool-container .dsg-resume-btn-clear:hover { background: #fbd5d5; }
 
-/* Zone textarea redimensionnable */
+/* Zone textarea redimensionnable (CORRECTION : suppression de all:unset pour garder le resize natif) */
 #dsg-tool-container .dsg-resume-textarea {
-    all: unset;
     display: block;
     width: 100% !important;
     min-height: 160px;
     max-height: 600px;
-    resize: vertical;
+    resize: vertical; /* Rétablit le redimensionnement */
     background: #fff;
     border: 1px solid #c8d3df;
     border-radius: 4px;
@@ -817,6 +817,8 @@
     font-family: "Segoe UI", Arial, sans-serif;
     transition: border-color 0.15s;
     overflow-y: auto;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 #dsg-tool-container .dsg-resume-textarea:focus { border-color: #1a3a5c; outline: none; }
@@ -868,7 +870,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 ::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
 
 /* === RESPONSIVE === */
-/* APRÈS */
 @media (max-width: 768px) {
     #dsg-tool-container.dsg-app-wrapper {
         font-size: 15px !important;
@@ -903,7 +904,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 
     var DSG_COURS_URL = 'https://www.dr-karazaitri-ma.net/dermatoses-grossesse/';
 
-    /* --- État navigation --- */
     var dsgState = {
         path: null,
         step2Choice: null,
@@ -920,9 +920,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         'nu':            'Prurit nu (paumes/plantes)'
     };
 
-    /* ================================================================
-       BASE CLINIQUE
-    ================================================================ */
     var dsgDB = {
         pemphigoide: {
             title: "Pemphigo\u00efde Gestationnelle (Herp\u00e8s Gestationis)",
@@ -1035,9 +1032,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         }
     };
 
-    /* ================================================================
-       NAVIGATION
-    ================================================================ */
     window.dsgNextStep = function(step, choice, btn) {
         if (btn) {
             var siblings = btn.parentNode.querySelectorAll('.dsg-btn');
@@ -1087,16 +1081,12 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         dsgUpdateProgress(1);
     };
 
-    /* ================================================================
-       AFFICHAGE RÉSULTAT
-    ================================================================ */
     window.dsgShowResult = function(type, btn) {
         if (btn) btn.classList.add('dsg-btn-selected');
         if (!dsgDB[type]) type = 'puppp';
         dsgState.currentType = type;
         var d = dsgDB[type];
 
-        /* Fil d'Ariane */
         var bcItems = dsgState.breadcrumb.map(function(i){ return '<span class="dsg-breadcrumb-item">'+i+'</span>'; }).join('<span class="dsg-breadcrumb-sep">&#8250;</span>');
         document.getElementById('dsg-breadcrumb').innerHTML = '<span style="color:#8a9ab0;font-size:0.8rem;margin-right:4px;">Chemin\u00a0:</span>' + bcItems;
 
@@ -1129,14 +1119,9 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 
         dsgSetActiveStep('dsg-result');
         dsgUpdateProgress(4);
-
-        /* Auto-génération du résumé si le panneau est ouvert */
         dsgFillResume();
     };
 
-    /* ================================================================
-       PROGRESSION
-    ================================================================ */
     function dsgUpdateProgress(currentStep) {
         for (var s=1; s<=4; s++) {
             var dot = document.getElementById('dsg-prog-'+s);
@@ -1160,9 +1145,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         if (t) t.classList.add('active');
     }
 
-    /* ================================================================
-       PANNEAU PATIENT — TOGGLE
-    ================================================================ */
     window.dsgTogglePatient = function() {
         var body = document.getElementById('dsg-patient-body');
         var icon = document.getElementById('dsg-patient-icon');
@@ -1176,9 +1158,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         }
     };
 
-    /* ================================================================
-       CALCUL ÂGE
-    ================================================================ */
     window.dsgCalcAge = function() {
         var val = document.getElementById('dsg-ddn').value;
         var badge = document.getElementById('dsg-age-badge');
@@ -1191,9 +1170,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         badge.textContent = age >= 0 ? age + ' ans' : '';
     };
 
-    /* ================================================================
-       CALCUL AMÉNORRHÉE
-    ================================================================ */
     window.dsgCalcAmenorrhee = function() {
         var val = document.getElementById('dsg-ddr').value;
         var badge = document.getElementById('dsg-amenorrhee-badge');
@@ -1208,22 +1184,14 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         badge.textContent = sa + ' SA + ' + j + ' j';
     };
 
-    /* ================================================================
-       MISE À JOUR RÉSUMÉ EN TEMPS RÉEL (identité)
-    ================================================================ */
     window.dsgUpdateResume = function() {
-        /* Ne régénère le résumé que si un diagnostic est actif */
         if (dsgState.currentType) dsgFillResume();
     };
 
-    /* ================================================================
-       GÉNÉRATION DU RÉSUMÉ CLINIQUE
-    ================================================================ */
     window.dsgFillResume = function() {
         var ta = document.getElementById('dsg-resume-textarea');
         if (!ta) return;
 
-        /* Identité */
         var nom    = (document.getElementById('dsg-nom').value || '').trim().toUpperCase();
         var prenom = (document.getElementById('dsg-prenom').value || '').trim();
         var ddn    = document.getElementById('dsg-ddn').value;
@@ -1237,11 +1205,9 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         if (ddr) identite += 'DDR\u00a0: ' + dsgFormatDate(ddr) + (amBadge ? ' \u2014 Am\u00e9norh\u00e9e\u00a0: ' + amBadge : '') + '\n';
         if (identite) identite += '\n';
 
-        /* Date de consultation */
         var today = new Date();
         var dateConsult = 'Consultation du ' + today.toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'}) + '\n\n';
 
-        /* Contenu clinique */
         var corps = '';
         if (dsgState.currentType && dsgDB[dsgState.currentType]) {
             var d = dsgDB[dsgState.currentType];
@@ -1281,17 +1247,11 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         ta.value = identite + dateConsult + corps + footer;
     };
 
-    /* ================================================================
-       EFFACER LE RÉSUMÉ
-    ================================================================ */
     window.dsgClearResume = function() {
         var ta = document.getElementById('dsg-resume-textarea');
         if (ta) ta.value = '';
     };
 
-    /* ================================================================
-       COPIE DOSSIER PATIENT (bouton panneau)
-    ================================================================ */
     window.dsgCopyDossier = function() {
         var ta = document.getElementById('dsg-resume-textarea');
         if (!ta || !ta.value.trim()) {
@@ -1301,9 +1261,6 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         dsgDoClipboard(ta.value, 'dsg-patient-copy-btn');
     };
 
-    /* ================================================================
-       FONCTION COMMUNE CLIPBOARD
-    ================================================================ */
     function dsgDoClipboard(text, btnId) {
         function feedback() {
             var btn = document.getElementById(btnId);
@@ -1330,9 +1287,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         document.body.removeChild(ta);
     }
 
-    /* ================================================================
-       IMPRESSION — fenêtre dédiée (évite tout chevauchement Elementor)
-    ================================================================ */
+    /* === IMPRESSION DU DIAGNOSTIC === */
     window.dsgPrint = function() {
         var content = document.getElementById('dsg-result-content');
         if (!content) { alert('Obtenez d\u2019abord un diagnostic.'); return; }
@@ -1348,11 +1303,10 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
                 '</pre></div>';
         }
 
-        /* Nettoyer le HTML du résultat pour impression : supprimer liens, badges emoji */
         var cleanHtml = content.innerHTML
-            .replace(/<a [^>]*>[\s\S]*?<\/a>/gi, '')   /* supprimer lien cours */
-            .replace(/\ud83d[\udc00-\udfff]/g, '')       /* supprimer emoji */
-            .replace(/[\u2600-\u27BF]/g, '');            /* supprimer autres symboles déco */
+            .replace(/<a [^>]*>[\s\S]*?<\/a>/gi, '')
+            .replace(/\ud83d[\udc00-\udfff]/g, '')
+            .replace(/[\u2600-\u27BF]/g, '');
 
         var w = window.open('', '_blank', 'width=800,height=900,scrollbars=yes');
         if (!w) { alert('Autorisez les popups pour imprimer.'); return; }
@@ -1405,9 +1359,34 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
         setTimeout(function() { w.focus(); w.print(); }, 400);
     };
 
-    /* ================================================================
-       UTILITAIRE : formatage date
-    ================================================================ */
+    /* === IMPRESSION DU RÉSUMÉ SEUL (NOUVEAU) === */
+    window.dsgPrintResume = function() {
+        var resume = document.getElementById('dsg-resume-textarea');
+        if (!resume || !resume.value.trim()) { 
+            alert('Le r\u00e9sum\u00e9 est vide. Veuillez d\'abord g\u00e9n\u00e9rer ou \u00e9crire un texte.'); 
+            return; 
+        }
+
+        var w = window.open('', '_blank', 'width=800,height=900,scrollbars=yes');
+        if (!w) { alert('Autorisez les popups pour imprimer.'); return; }
+
+        w.document.write(
+            '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">' +
+            '<title>R\u00e9sum\u00e9 Clinique \u2014 Dermatoses</title>' +
+            '<style>' +
+            'body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#111;padding:28px 32px;line-height:1.6;max-width:720px;margin:0 auto;}' +
+            'h1{font-size:16px;font-weight:700;color:#1a3a5c;margin:0 0 3px; border-bottom: 2px solid #1a3a5c; padding-bottom: 10px;}' +
+            'pre{font-size:13px;white-space:pre-wrap;line-height:1.6;font-family:Arial,sans-serif;margin-top:20px;}' +
+            '@media print{body{padding:14px;}@page{margin:1.5cm;}}' +
+            '</style></head><body>' +
+            '<h1>Dossier Patient \u2014 R\u00e9sum\u00e9 Clinique</h1>' +
+            '<pre>' + resume.value.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre>' +
+            '</body></html>'
+        );
+        w.document.close();
+        setTimeout(function() { w.focus(); w.print(); }, 400);
+    };
+
     function dsgFormatDate(isoStr) {
         if (!isoStr) return '';
         var parts = isoStr.split('-');
