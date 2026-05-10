@@ -1,11 +1,10 @@
 <!-- ================================================================
      Outil de Diagnostic : Dermatoses Spécifiques de la Grossesse
-     Version 2.2 — Mai 2026
+     Version 2.3 — Mai 2026
      Références : HAS, CNGOF, Cours GHR, UpToDate 2024
      Blindé pour intégration Elementor (widget HTML)
-     Nouveautés v2.2 : barre de progression, fil d'Ariane, impression/copie,
-     diagnostic différentiel, trimestre, CAT urgence séparée, lien cours,
-     fade-in, feedback bouton actif, badge risque récidive
+     Nouveautés v2.3 : panneau patient (nom, prénom, DDN+âge, DDR+aménorrhée),
+                       zone résumé redimensionnable, copie dossier patient
      ================================================================ -->
 
 <div id="dsg-tool-container" class="dsg-app-wrapper">
@@ -84,23 +83,105 @@
 
         <!-- RÉSULTAT -->
         <div id="dsg-result" class="dsg-step">
-            <!-- Fil d'Ariane -->
             <div class="dsg-breadcrumb" id="dsg-breadcrumb"></div>
-            <!-- Contenu -->
             <div id="dsg-result-content"></div>
-            <!-- Actions -->
             <div class="dsg-result-actions">
                 <button class="dsg-btn-reset" onclick="dsgReset()">&#8635;&#160;Nouvelle &#233;valuation</button>
                 <button class="dsg-btn-print" onclick="dsgPrint()">&#128438;&#160;Imprimer</button>
-                <button class="dsg-btn-copy" id="dsg-btn-copy" onclick="dsgCopy()">&#128203;&#160;Copier</button>
+                <button class="dsg-btn-copy" id="dsg-btn-copy" onclick="dsgCopyResult()">&#128203;&#160;Copier le r&#233;sultat</button>
             </div>
         </div>
 
     </div>
 
+    <!-- FOOTER -->
     <footer class="dsg-footer">
-        Version 2.2 &#8212; Mai 2026 &nbsp;|&nbsp; R&#233;f.&#160;: HAS, CNGOF, Cours GHR &nbsp;|&nbsp; Dr Kara-Za&#239;tri M.A.
+        Version 2.3 &#8212; Mai 2026 &nbsp;|&nbsp; R&#233;f.&#160;: HAS, CNGOF, Cours GHR &nbsp;|&nbsp; Dr Kara-Za&#239;tri M.A.
     </footer>
+
+    <!-- ============================================================
+         PANNEAU DOSSIER PATIENT
+         Toujours visible, indépendant de la navigation
+    ============================================================ -->
+    <section class="dsg-patient-panel" id="dsg-patient-panel">
+
+        <!-- En-tête panneau -->
+        <div class="dsg-patient-header" onclick="dsgTogglePatient()">
+            <span class="dsg-patient-header-title">
+                &#128196;&#160;Dossier patient &#8212; R&#233;sum&#233; clinique
+            </span>
+            <span class="dsg-patient-toggle-icon" id="dsg-patient-icon">&#9660;</span>
+        </div>
+
+        <!-- Corps panneau -->
+        <div class="dsg-patient-body" id="dsg-patient-body">
+
+            <!-- Identification -->
+            <div class="dsg-patient-id-grid">
+
+                <div class="dsg-field-group">
+                    <label class="dsg-field-label" for="dsg-nom">Nom</label>
+                    <input class="dsg-field-input" type="text" id="dsg-nom" placeholder="NOM" oninput="dsgUpdateResume()" autocomplete="off" />
+                </div>
+
+                <div class="dsg-field-group">
+                    <label class="dsg-field-label" for="dsg-prenom">Pr&#233;nom</label>
+                    <input class="dsg-field-input" type="text" id="dsg-prenom" placeholder="Pr&#233;nom" oninput="dsgUpdateResume()" autocomplete="off" />
+                </div>
+
+                <div class="dsg-field-group">
+                    <label class="dsg-field-label" for="dsg-ddn">
+                        Date de naissance
+                        <span class="dsg-calc-badge" id="dsg-age-badge"></span>
+                    </label>
+                    <input class="dsg-field-input" type="date" id="dsg-ddn" oninput="dsgCalcAge(); dsgUpdateResume();" />
+                </div>
+
+                <div class="dsg-field-group">
+                    <label class="dsg-field-label" for="dsg-ddr">
+                        Derni&#232;res r&#232;gles (DDR)
+                        <span class="dsg-calc-badge" id="dsg-amenorrhee-badge"></span>
+                    </label>
+                    <input class="dsg-field-input" type="date" id="dsg-ddr" oninput="dsgCalcAmenorrhee(); dsgUpdateResume();" />
+                </div>
+
+            </div>
+
+            <!-- Séparateur -->
+            <div class="dsg-patient-sep"></div>
+
+            <!-- Zone résumé -->
+            <div class="dsg-resume-header">
+                <span class="dsg-field-label" style="margin:0;">R&#233;sum&#233; clinique (&#233;ditable)</span>
+                <div class="dsg-resume-actions">
+                    <button class="dsg-resume-btn dsg-resume-btn-fill" onclick="dsgFillResume()" title="G&#233;n&#233;rer le r&#233;sum&#233; depuis le diagnostic">
+                        &#8635;&#160;G&#233;n&#233;rer depuis le diagnostic
+                    </button>
+                    <button class="dsg-resume-btn dsg-resume-btn-clear" onclick="dsgClearResume()" title="Effacer">
+                        &#10005;&#160;Effacer
+                    </button>
+                </div>
+            </div>
+
+            <textarea
+                class="dsg-resume-textarea"
+                id="dsg-resume-textarea"
+                placeholder="Le r&#233;sum&#233; clinique s&#39;affiche ici apr&#232;s avoir obtenu un diagnostic. Vous pouvez aussi saisir librement ou compl&#233;ter ce texte avant de le copier dans le dossier patient."
+                spellcheck="true"
+            ></textarea>
+
+            <!-- Actions copie dossier -->
+            <div class="dsg-patient-copy-bar">
+                <span class="dsg-patient-copy-hint">
+                    &#8505;&#160;Ce texte est copi&#233; tel quel &#8212; vous pouvez l&#39;&#233;diter avant de coller dans le dossier.
+                </span>
+                <button class="dsg-patient-copy-btn" id="dsg-patient-copy-btn" onclick="dsgCopyDossier()">
+                    &#128203;&#160;Copier pour le dossier
+                </button>
+            </div>
+
+        </div>
+    </section>
 
 </div>
 
@@ -124,7 +205,7 @@
     border: 1px solid #d0d7de;
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-    overflow: hidden;
+    overflow: visible;
 }
 
 #dsg-tool-container.dsg-app-wrapper * {
@@ -189,13 +270,8 @@
     transition: background 0.3s;
 }
 
-#dsg-tool-container .dsg-progress-step.active .dsg-prog-dot {
-    background: #1a3a5c;
-}
-
-#dsg-tool-container .dsg-progress-step.done .dsg-prog-dot {
-    background: #1a7a4a;
-}
+#dsg-tool-container .dsg-progress-step.active .dsg-prog-dot { background: #1a3a5c; }
+#dsg-tool-container .dsg-progress-step.done .dsg-prog-dot   { background: #1a7a4a; }
 
 #dsg-tool-container .dsg-prog-label {
     font-size: 0.72rem;
@@ -205,9 +281,7 @@
 }
 
 #dsg-tool-container .dsg-progress-step.active .dsg-prog-label,
-#dsg-tool-container .dsg-progress-step.done .dsg-prog-label {
-    color: #1a3a5c;
-}
+#dsg-tool-container .dsg-progress-step.done .dsg-prog-label { color: #1a3a5c; }
 
 #dsg-tool-container .dsg-progress-line {
     flex: 1;
@@ -218,9 +292,7 @@
     transition: background 0.3s;
 }
 
-#dsg-tool-container .dsg-progress-line.done {
-    background: #1a7a4a;
-}
+#dsg-tool-container .dsg-progress-line.done { background: #1a7a4a; }
 
 /* === DISCLAIMER === */
 #dsg-tool-container .dsg-disclaimer {
@@ -233,17 +305,14 @@
     line-height: 1.5;
 }
 
-/* === CONTENU PRINCIPAL === */
+/* === CARD === */
 #dsg-tool-container .dsg-card {
     padding: 28px !important;
     box-sizing: border-box !important;
 }
 
 /* === ÉTAPES avec FADE === */
-#dsg-tool-container .dsg-step {
-    display: none;
-    opacity: 0;
-}
+#dsg-tool-container .dsg-step { display: none; opacity: 0; }
 
 #dsg-tool-container .dsg-step.active {
     display: block;
@@ -309,13 +378,8 @@
     transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
-#dsg-tool-container .dsg-btn:hover {
-    background: #eaf1fb;
-    border-color: #1a3a5c;
-    color: #1a3a5c;
-}
+#dsg-tool-container .dsg-btn:hover { background: #eaf1fb; border-color: #1a3a5c; color: #1a3a5c; }
 
-/* Feedback visuel bouton sélectionné */
 #dsg-tool-container .dsg-btn.dsg-btn-selected {
     background: #ddeeff;
     border-color: #1a3a5c;
@@ -338,7 +402,7 @@
     color: #922b21;
 }
 
-/* === BOUTONS NAVIGATION === */
+/* === NAVIGATION === */
 #dsg-tool-container .dsg-btn-back {
     all: unset;
     display: inline-block;
@@ -348,10 +412,9 @@
     text-decoration: underline;
     margin-top: 4px;
 }
-
 #dsg-tool-container .dsg-btn-back:hover { color: #1a3a5c; }
 
-/* === BOUTONS RÉSULTAT === */
+/* === ACTIONS RÉSULTAT === */
 #dsg-tool-container .dsg-result-actions {
     display: flex;
     flex-wrap: wrap;
@@ -365,7 +428,7 @@
     all: unset;
     display: inline-block;
     background: #1a3a5c;
-    color: #ffffff;
+    color: #fff;
     padding: 9px 20px;
     border-radius: 4px;
     cursor: pointer;
@@ -373,25 +436,9 @@
     font-weight: 500;
     transition: background 0.15s;
 }
-
 #dsg-tool-container .dsg-btn-reset:hover { background: #122a44; }
 
-#dsg-tool-container .dsg-btn-print {
-    all: unset;
-    display: inline-block;
-    background: #f4f7fb;
-    color: #1a3a5c;
-    border: 1px solid #c8d3df;
-    padding: 9px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.92rem;
-    font-weight: 500;
-    transition: background 0.15s;
-}
-
-#dsg-tool-container .dsg-btn-print:hover { background: #e4eaf0; }
-
+#dsg-tool-container .dsg-btn-print,
 #dsg-tool-container .dsg-btn-copy {
     all: unset;
     display: inline-block;
@@ -405,7 +452,7 @@
     font-weight: 500;
     transition: background 0.15s;
 }
-
+#dsg-tool-container .dsg-btn-print:hover,
 #dsg-tool-container .dsg-btn-copy:hover { background: #e4eaf0; }
 
 #dsg-tool-container .dsg-btn-copy.dsg-copied {
@@ -429,15 +476,8 @@
     color: #5a6a7e;
 }
 
-#dsg-tool-container .dsg-breadcrumb-item {
-    color: #1a3a5c;
-    font-weight: 500;
-}
-
-#dsg-tool-container .dsg-breadcrumb-sep {
-    color: #aab5c0;
-    font-size: 0.8rem;
-}
+#dsg-tool-container .dsg-breadcrumb-item { color: #1a3a5c; font-weight: 500; }
+#dsg-tool-container .dsg-breadcrumb-sep  { color: #aab5c0; font-size: 0.8rem; }
 
 /* === RÉSULTATS === */
 #dsg-tool-container .dsg-result-header {
@@ -448,12 +488,7 @@
     margin-bottom: 22px;
 }
 
-#dsg-tool-container .dsg-result-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-}
+#dsg-tool-container .dsg-result-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 
 #dsg-tool-container .dsg-meta-badge {
     display: inline-block;
@@ -463,30 +498,10 @@
     border-radius: 20px;
     border: 1px solid;
 }
-
-#dsg-tool-container .dsg-meta-badge.trimestre {
-    background: #eaf1fb;
-    border-color: #90b8e0;
-    color: #1a3a5c;
-}
-
-#dsg-tool-container .dsg-meta-badge.recidive-eleve {
-    background: #fdecea;
-    border-color: #e57373;
-    color: #6b1a1a;
-}
-
-#dsg-tool-container .dsg-meta-badge.recidive-faible {
-    background: #e6f4ee;
-    border-color: #6abf8a;
-    color: #1a5a30;
-}
-
-#dsg-tool-container .dsg-meta-badge.recidive-moyen {
-    background: #fff8e1;
-    border-color: #f0c040;
-    color: #5a3e00;
-}
+#dsg-tool-container .dsg-meta-badge.trimestre      { background:#eaf1fb; border-color:#90b8e0; color:#1a3a5c; }
+#dsg-tool-container .dsg-meta-badge.recidive-eleve { background:#fdecea; border-color:#e57373; color:#6b1a1a; }
+#dsg-tool-container .dsg-meta-badge.recidive-faible{ background:#e6f4ee; border-color:#6abf8a; color:#1a5a30; }
+#dsg-tool-container .dsg-meta-badge.recidive-moyen { background:#fff8e1; border-color:#f0c040; color:#5a3e00; }
 
 #dsg-tool-container .dsg-result-title {
     all: unset;
@@ -518,12 +533,7 @@
     border-bottom: 1px solid #e4eaf0;
 }
 
-/* LISTES PUCES — Unicode CSS uniquement dans ::before */
-#dsg-tool-container .dsg-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+#dsg-tool-container .dsg-list { list-style: none; padding: 0; margin: 0; }
 
 #dsg-tool-container .dsg-list li {
     position: relative;
@@ -534,26 +544,17 @@
     line-height: 1.5;
 }
 
+/* Puces Unicode CSS — jamais entités HTML dans ::before */
 #dsg-tool-container .dsg-list li::before {
     content: "\2022";
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 0; top: 0;
     color: #1a3a5c;
     font-weight: bold;
-    font-size: 1rem;
 }
 
-#dsg-tool-container .dsg-list.dsg-list-urgence li::before {
-    content: "\2192";
-    color: #c0392b;
-    font-weight: bold;
-}
-
-#dsg-tool-container .dsg-list.dsg-list-ddx li::before {
-    content: "\2022";
-    color: #8a6a00;
-}
+#dsg-tool-container .dsg-list.dsg-list-urgence li::before { content: "\2192"; color: #c0392b; }
+#dsg-tool-container .dsg-list.dsg-list-ddx    li::before { content: "\2022"; color: #8a6a00; }
 
 #dsg-tool-container .dsg-traitement-text {
     all: unset;
@@ -564,7 +565,6 @@
     line-height: 1.6;
 }
 
-/* === BOÎTES D'ALERTE === */
 #dsg-tool-container .dsg-alert-box {
     padding: 13px 16px;
     border-radius: 4px;
@@ -572,26 +572,10 @@
     font-size: 0.9rem;
     line-height: 1.5;
 }
+#dsg-tool-container .dsg-alert-box.dsg-alert-warn   { background:#fff8e1; border:1px solid #f0c040; color:#5a3e00; }
+#dsg-tool-container .dsg-alert-box.dsg-alert-danger { background:#fdecea; border:1px solid #e57373; color:#6b1a1a; }
+#dsg-tool-container .dsg-alert-box.dsg-alert-info   { background:#e8f4fd; border:1px solid #90c4e8; color:#1a3a5c; }
 
-#dsg-tool-container .dsg-alert-box.dsg-alert-warn {
-    background: #fff8e1;
-    border: 1px solid #f0c040;
-    color: #5a3e00;
-}
-
-#dsg-tool-container .dsg-alert-box.dsg-alert-danger {
-    background: #fdecea;
-    border: 1px solid #e57373;
-    color: #6b1a1a;
-}
-
-#dsg-tool-container .dsg-alert-box.dsg-alert-info {
-    background: #e8f4fd;
-    border: 1px solid #90c4e8;
-    color: #1a3a5c;
-}
-
-/* CAT urgence séparée */
 #dsg-tool-container .dsg-urgence-box {
     background: #fdecea;
     border: 2px solid #c0392b;
@@ -599,7 +583,6 @@
     padding: 14px 16px;
     margin-top: 16px;
 }
-
 #dsg-tool-container .dsg-urgence-box-title {
     all: unset;
     display: block;
@@ -611,7 +594,6 @@
     margin-bottom: 8px;
 }
 
-/* Lien cours */
 #dsg-tool-container .dsg-cours-link {
     display: inline-block;
     margin-top: 14px;
@@ -620,10 +602,8 @@
     text-decoration: underline;
     cursor: pointer;
 }
-
 #dsg-tool-container .dsg-cours-link:hover { color: #0d2238; }
 
-/* Badge urgence */
 #dsg-tool-container .dsg-urgence-badge {
     display: inline-block;
     background: #c0392b;
@@ -638,7 +618,6 @@
     vertical-align: middle;
 }
 
-/* DDx bloc */
 #dsg-tool-container .dsg-ddx-box {
     background: #fffbea;
     border: 1px solid #e8c840;
@@ -648,7 +627,6 @@
     font-size: 0.88rem;
     color: #4a3800;
 }
-
 #dsg-tool-container .dsg-ddx-title {
     all: unset;
     display: block;
@@ -660,7 +638,7 @@
     margin-bottom: 6px;
 }
 
-/* === PIED DE PAGE === */
+/* === FOOTER === */
 #dsg-tool-container .dsg-footer {
     background: #f4f7fb;
     border-top: 1px solid #d0d7de;
@@ -670,15 +648,231 @@
     text-align: center;
 }
 
+/* ================================================================
+   PANNEAU DOSSIER PATIENT
+================================================================ */
+#dsg-tool-container .dsg-patient-panel {
+    border-top: 3px solid #1a3a5c;
+    background: #f9fafb;
+    overflow: hidden;
+}
+
+/* En-tête cliquable */
+#dsg-tool-container .dsg-patient-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    cursor: pointer;
+    background: #f0f5fb;
+    border-bottom: 1px solid #d8e4f0;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+#dsg-tool-container .dsg-patient-header:hover { background: #e4edf8; }
+
+#dsg-tool-container .dsg-patient-header-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a3a5c;
+    letter-spacing: 0.01em;
+}
+
+#dsg-tool-container .dsg-patient-toggle-icon {
+    color: #1a3a5c;
+    font-size: 0.85rem;
+    transition: transform 0.25s;
+}
+
+#dsg-tool-container .dsg-patient-toggle-icon.closed { transform: rotate(-90deg); }
+
+/* Corps du panneau (collapsible) */
+#dsg-tool-container .dsg-patient-body {
+    padding: 22px 24px 20px;
+    display: block;
+}
+
+#dsg-tool-container .dsg-patient-body.dsg-collapsed { display: none; }
+
+/* Grille d'identification */
+#dsg-tool-container .dsg-patient-id-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+    margin-bottom: 18px;
+}
+
+#dsg-tool-container .dsg-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#dsg-tool-container .dsg-field-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #5a6a7e;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+#dsg-tool-container .dsg-field-input {
+    all: unset;
+    display: block;
+    width: 100% !important;
+    background: #fff;
+    border: 1px solid #c8d3df;
+    border-radius: 4px;
+    padding: 9px 12px;
+    font-size: 0.95rem;
+    color: #1a1a1a;
+    transition: border-color 0.15s;
+}
+
+#dsg-tool-container .dsg-field-input:focus { border-color: #1a3a5c; outline: none; }
+
+/* Badge calculé (âge / aménorrhée) */
+#dsg-tool-container .dsg-calc-badge {
+    display: inline-block;
+    background: #1a3a5c;
+    color: #fff;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    min-width: 10px;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* Séparateur */
+#dsg-tool-container .dsg-patient-sep {
+    height: 1px;
+    background: #d8e4f0;
+    margin: 4px 0 16px;
+}
+
+/* En-tête zone résumé */
+#dsg-tool-container .dsg-resume-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#dsg-tool-container .dsg-resume-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+#dsg-tool-container .dsg-resume-btn {
+    all: unset;
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid;
+    transition: background 0.15s;
+}
+
+#dsg-tool-container .dsg-resume-btn-fill {
+    background: #eaf1fb;
+    border-color: #90b8e0;
+    color: #1a3a5c;
+}
+#dsg-tool-container .dsg-resume-btn-fill:hover { background: #d4e5f7; }
+
+#dsg-tool-container .dsg-resume-btn-clear {
+    background: #fdecea;
+    border-color: #e57373;
+    color: #922b21;
+}
+#dsg-tool-container .dsg-resume-btn-clear:hover { background: #fbd5d5; }
+
+/* Zone textarea redimensionnable */
+#dsg-tool-container .dsg-resume-textarea {
+    all: unset;
+    display: block;
+    width: 100% !important;
+    min-height: 160px;
+    max-height: 600px;
+    resize: vertical;
+    background: #fff;
+    border: 1px solid #c8d3df;
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 0.92rem;
+    color: #1a1a1a;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    font-family: "Segoe UI", Arial, sans-serif;
+    transition: border-color 0.15s;
+    overflow-y: auto;
+}
+
+#dsg-tool-container .dsg-resume-textarea:focus { border-color: #1a3a5c; outline: none; }
+
+/* Barre de copie dossier */
+#dsg-tool-container .dsg-patient-copy-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#dsg-tool-container .dsg-patient-copy-hint {
+    font-size: 0.8rem;
+    color: #7a8a9a;
+    font-style: italic;
+    flex: 1;
+    min-width: 0;
+}
+
+#dsg-tool-container .dsg-patient-copy-btn {
+    all: unset;
+    display: inline-block;
+    background: #1a3a5c;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.94rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+#dsg-tool-container .dsg-patient-copy-btn:hover { background: #122a44; }
+
+#dsg-tool-container .dsg-patient-copy-btn.dsg-copied {
+    background: #1a7a4a;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 600px) {
     #dsg-tool-container .dsg-card { padding: 16px !important; }
     #dsg-tool-container .dsg-main-header { padding: 16px; }
     #dsg-tool-container .dsg-title { font-size: 1.1rem; }
     #dsg-tool-container .dsg-btn { font-size: 0.92rem; padding: 12px 14px; }
-    #dsg-tool-container .dsg-progress-bar { padding: 10px 14px; gap: 2px; }
+    #dsg-tool-container .dsg-progress-bar { padding: 10px 14px; }
     #dsg-tool-container .dsg-prog-label { display: none; }
     #dsg-tool-container .dsg-result-actions { flex-direction: column; }
+    #dsg-tool-container .dsg-patient-id-grid { grid-template-columns: 1fr; }
+    #dsg-tool-container .dsg-resume-header { flex-direction: column; align-items: flex-start; }
+    #dsg-tool-container .dsg-patient-copy-bar { flex-direction: column; align-items: stretch; }
+    #dsg-tool-container .dsg-patient-copy-btn { text-align: center; width: 100% !important; }
     #dsg-tool-container .dsg-btn-reset,
     #dsg-tool-container .dsg-btn-print,
     #dsg-tool-container .dsg-btn-copy { width: 100% !important; text-align: center; }
@@ -706,10 +900,9 @@
 <script>
 (function() {
 
-    /* --- URL de votre cours (à adapter) --- */
-    var DSG_COURS_URL = 'https://www.dr-karazaitri-ma.net/obstetrique/ghr/der1/';
+    var DSG_COURS_URL = 'https://www.dr-karazaitri-ma.net/dermatoses-grossesse/';
 
-    /* --- Etat --- */
+    /* --- État navigation --- */
     var dsgState = {
         path: null,
         step2Choice: null,
@@ -717,396 +910,475 @@
         currentType: null
     };
 
-    /* --- Labels lisibles pour le fil d'Ariane --- */
     var dsgLabels = {
-        'prurit':        'Prurit pr&#233;dominant',
-        'pustules':      '&#9888;&#160;&#201;ruption pustuleuse + fi&#232;vre',
-        'periumbilical': 'D&#233;but p&#233;ri-ombilical',
-        'stries':        'D&#233;but sur les stries',
+        'prurit':        'Prurit pr\u00e9dominant',
+        'pustules':      '\u26a0\u00a0\u00c9ruption pustuleuse + fi\u00e8vre',
+        'periumbilical': 'D\u00e9but p\u00e9ri-ombilical',
+        'stries':        'D\u00e9but sur les stries',
         'atopie':        'Terrain atopique (plis/cou/visage)',
         'nu':            'Prurit nu (paumes/plantes)'
     };
 
-    /* --- Base de données clinique complète --- */
+    /* ================================================================
+       BASE CLINIQUE
+    ================================================================ */
     var dsgDB = {
-
         pemphigoide: {
-            title: "Pemphigo&#239;de Gestationnelle (Herp&#232;s Gestationis)",
+            title: "Pemphigo\u00efde Gestationnelle (Herp\u00e8s Gestationis)",
             urgence: false,
-            trimestre: "2e&#8211;3e trimestre",
+            trimestre: "2e\u20113e trimestre",
             recidive: "eleve",
-            recidive_label: "R&#233;cidive&#160;: 50&#8211;70&#160;%",
-            desc: "Dermatose auto-immune rare (1/50&#160;000 &#224; 1/60&#160;000 grossesses). D&#233;bute fr&#233;quemment en r&#233;gion p&#233;ri-ombilicale, parfois sous forme urticarienne sans bulles en phase initiale.",
+            recidive_label: "R\u00e9cidive\u00a0: 50\u201370\u00a0%",
+            desc: "Dermatose auto-immune rare (1/50\u00a0000 \u00e0 1/60\u00a0000 grossesses). D\u00e9bute fr\u00e9quemment en r\u00e9gion p\u00e9ri-ombilicale, parfois sous forme urticarienne sans bulles en phase initiale.",
             diag: [
-                "Biopsie cutan&#233;e avec immunofluorescence directe (IFD)&#160;: d&#233;p&#244;ts lin&#233;aires d&#39;IgG et/ou C3 &#224; la jonction dermo-&#233;pidermique",
-                "NFS&#160;: &#233;osinophilie (pr&#233;sente dans ~50&#160;% des cas)",
-                "Anticorps anti-BP180 (Collag&#232;ne XVII) &#8212; marqueur le plus sensible",
-                "Anticorps anti-BP230 (compl&#233;ment du bilan auto-immun)",
-                "Avis dermatologique imp&#233;ratif"
+                "Biopsie cutan\u00e9e avec immunofluorescence directe (IFD)\u00a0: d\u00e9p\u00f4ts lin\u00e9aires d\u2019IgG et/ou C3 \u00e0 la jonction dermo-\u00e9pidermique",
+                "NFS\u00a0: \u00e9osinophilie (pr\u00e9sente dans ~50\u00a0% des cas)",
+                "Anticorps anti-BP180 (Collag\u00e8ne XVII) \u2014 marqueur le plus sensible",
+                "Anticorps anti-BP230 (compl\u00e9ment du bilan auto-immun)",
+                "Avis dermatologique imp\u00e9ratif"
             ],
-            traitement: "Dermocortico&#239;des forts (clob&#233;tasol) en phase initiale&#160;; Prednisone orale 0,5&#8211;1&#160;mg/kg/j si bulles extensives ou atteinte s&#233;v&#232;re. R&#233;duction progressive post-partum. Surveillance n&#233;onatale (atteinte n&#233;onatale transitoire possible).",
+            traitement: "Dermocortico\u00efdes forts (clob\u00e9tasol) en phase initiale\u00a0; Prednisone orale 0,5\u20131\u00a0mg/kg/j si bulles extensives ou atteinte s\u00e9v\u00e8re. R\u00e9duction progressive post-partum. Surveillance n\u00e9onatale.",
             urgence_cat: null,
-            complications: "Risque de pr&#233;maturit&#233; et de RCIU mod&#233;r&#233;. R&#233;cidive aux grossesses ult&#233;rieures dans 50&#8211;70&#160;% des cas. Risque d&#39;atteinte n&#233;onatale transitoire par transfert passif des IgG (&lt;&#160;10&#160;%).",
+            complications: "Risque de pr\u00e9maturit\u00e9 et de RCIU mod\u00e9r\u00e9. R\u00e9cidive aux grossesses ult\u00e9rieures dans 50\u201370\u00a0% des cas. Risque d\u2019atteinte n\u00e9onatale transitoire par transfert passif des IgG (<\u00a010\u00a0%).",
             alerte_class: "dsg-alert-warn",
-            alerte_titre: "Surveillance f&#339;tale",
-            ddx: "&#201;liminer&#160;: DPG/PUPPP (IFD n&#233;gative), &#233;ruption atopique (contexte clinique)"
+            alerte_titre: "Surveillance f\u0153tale",
+            ddx: "\u00c9liminer\u00a0: DPG/PUPPP (IFD n\u00e9gative), \u00e9ruption atopique (contexte clinique)"
         },
-
         puppp: {
-            title: "Dermatose Polymorphe Gravidique (DPG &#8212; PUPPP)",
+            title: "Dermatose Polymorphe Gravidique (DPG \u2014 PUPPP)",
             urgence: false,
             trimestre: "3e trimestre",
             recidive: "faible",
-            recidive_label: "R&#233;cidive&#160;: rare",
-            desc: "Dermatose la plus fr&#233;quente&#160;: incidence estim&#233;e &#224; 1/130&#8211;1/200 grossesses. Surtout 3e trimestre, primipares. Respect caract&#233;ristique de la r&#233;gion ombilicale.",
+            recidive_label: "R\u00e9cidive\u00a0: rare",
+            desc: "Dermatose la plus fr\u00e9quente\u00a0: incidence estim\u00e9e \u00e0 1/130\u20131/200 grossesses. Surtout 3e trimestre, primipares. Respect caract\u00e9ristique de la r\u00e9gion ombilicale.",
             diag: [
                 "Diagnostic essentiellement clinique (aspect, localisation, contexte)",
-                "Absence de bulles &#8212; distingue de la pemphigo&#239;de",
-                "Bilan h&#233;patique (ALAT/ASAT, GGT, acides biliaires)&#160;: normal &#8212; &#224; r&#233;aliser syst&#233;matiquement pour &#233;liminer une cholestase",
-                "IFD non n&#233;cessaire si tableau typique"
+                "Absence de bulles \u2014 distingue de la pemphigo\u00efde",
+                "Bilan h\u00e9patique (ALAT/ASAT, GGT, acides biliaires)\u00a0: normal \u2014 \u00e0 r\u00e9aliser syst\u00e9matiquement pour \u00e9liminer une cholestase",
+                "IFD non n\u00e9cessaire si tableau typique"
             ],
-            traitement: "Dermocortico&#239;des classe II ou III (7&#8211;10 jours) + Antihistaminiques H1 s&#233;datifs (nuit). &#201;mollients pluriquotidiens.",
+            traitement: "Dermocortico\u00efdes classe II ou III (7\u201310 jours) + Antihistaminiques H1 s\u00e9datifs (nuit). \u00c9mollients pluriquotidiens.",
             urgence_cat: null,
-            complications: "Pronostic materno-f&#339;tal excellent. Pas de r&#233;cidive habituelle aux grossesses ult&#233;rieures.",
+            complications: "Pronostic materno-f\u0153tal excellent. Pas de r\u00e9cidive habituelle aux grossesses ult\u00e9rieures.",
             alerte_class: "dsg-alert-info",
             alerte_titre: "Pronostic",
-            ddx: "&#201;liminer&#160;: pemphigo&#239;de gestationnelle (IFD si doute), cholestase intrah&#233;patique (acides biliaires)"
+            ddx: "\u00c9liminer\u00a0: pemphigo\u00efde gestationnelle (IFD si doute), cholestase intrah\u00e9patique (acides biliaires)"
         },
-
         eczema: {
-            title: "&#201;ruption Atopique de la Grossesse (EAG)",
+            title: "\u00c9ruption Atopique de la Grossesse (EAG)",
             urgence: false,
-            trimestre: "1er&#8211;2e trimestre (majorit&#233;)",
+            trimestre: "1er\u20112e trimestre (majorit\u00e9)",
             recidive: "moyen",
-            recidive_label: "R&#233;cidive&#160;: possible",
-            desc: "Entit&#233; la plus fr&#233;quente des dermatoses gestationnelles (1/300 env.). Inclut eczema atopique aggrav&#233; et prurigo gravidique. Terrain atopique personnel ou familial retrouv&#233; dans ~80&#160;% des cas.",
+            recidive_label: "R\u00e9cidive\u00a0: possible",
+            desc: "Entit\u00e9 la plus fr\u00e9quente des dermatoses gestationnelles (1/300 env.). Inclut eczema atopique aggrav\u00e9 et prurigo gravidique. Terrain atopique personnel ou familial retrouv\u00e9 dans ~80\u00a0% des cas.",
             diag: [
-                "Diagnostic clinique&#160;: l&#233;sions des plis (coudes, creux poplit&#233;s), cou, visage",
-                "Bilan h&#233;patique + acides biliaires &#224; jeun&#160;: normaux (&#233;limination de cholestase)",
-                "IgE totales &#233;lev&#233;es possibles (non indispensables au diagnostic)"
+                "Diagnostic clinique\u00a0: l\u00e9sions des plis (coudes, creux poplit\u00e9s), cou, visage",
+                "Bilan h\u00e9patique + acides biliaires \u00e0 jeun\u00a0: normaux (\u00e9limination de cholestase)",
+                "IgE totales \u00e9lev\u00e9es possibles (non indispensables au diagnostic)"
             ],
-            traitement: "&#201;mollients pluriquotidiens + Dermocortico&#239;des classe II&#8211;III sur l&#233;sions actives. Savons surgras. Antihistaminiques H1 si prurit invalidant.",
+            traitement: "\u00c9mollients pluriquotidiens + Dermocortico\u00efdes classe II\u2013III sur l\u00e9sions actives. Savons surgras. Antihistaminiques H1 si prurit invalidant.",
             urgence_cat: null,
-            complications: "Risque de surinfection bact&#233;rienne cutan&#233;e (&#224; surveiller). Pronostic maternel et f&#339;tal excellent. Peut r&#233;cidiver &#224; la grossesse suivante.",
+            complications: "Risque de surinfection bact\u00e9rienne cutan\u00e9e (\u00e0 surveiller). Pronostic maternel et f\u0153tal excellent. Peut r\u00e9cidiver \u00e0 la grossesse suivante.",
             alerte_class: "dsg-alert-info",
             alerte_titre: "Pronostic",
-            ddx: "&#201;liminer&#160;: cholestase intrah&#233;patique (acides biliaires), gale (topographie, entourage)"
+            ddx: "\u00c9liminer\u00a0: cholestase intrah\u00e9patique (acides biliaires), gale (topographie, entourage)"
         },
-
         cholestase: {
-            title: "Cholestase Intrah&#233;patique Gravidique (CIG)",
+            title: "Cholestase Intrah\u00e9patique Gravidique (CIG)",
             urgence: false,
             trimestre: "3e trimestre",
             recidive: "eleve",
-            recidive_label: "R&#233;cidive&#160;: 45&#8211;70&#160;%",
-            desc: "Prurit nu, intense, &#224; recrudescence nocturne, pr&#233;dominant aux paumes et plantes. Troisi&#232;me trimestre principalement. Absence de l&#233;sion cutan&#233;e primaire (l&#233;sions de grattage secondaires).",
+            recidive_label: "R\u00e9cidive\u00a0: 45\u201370\u00a0%",
+            desc: "Prurit nu, intense, \u00e0 recrudescence nocturne, pr\u00e9dominant aux paumes et plantes. Troisi\u00e8me trimestre principalement. Absence de l\u00e9sion cutan\u00e9e primaire (l\u00e9sions de grattage secondaires).",
             diag: [
-                "Acides biliaires totaux &#224; jeun&#160;: &#8805;&#160;10&#160;&#181;mol/L (seuil diagnostique) &#8212; forme s&#233;v&#232;re si &#8805;&#160;40&#160;&#181;mol/L",
-                "ALAT/ASAT&#160;: augment&#233;es dans 20&#8211;60&#160;% des cas (inconstantes)",
+                "Acides biliaires totaux \u00e0 jeun\u00a0: \u2265\u00a010\u00a0\u00b5mol/L (seuil diagnostique) \u2014 forme s\u00e9v\u00e8re si \u2265\u00a040\u00a0\u00b5mol/L",
+                "ALAT/ASAT\u00a0: augment\u00e9es dans 20\u201360\u00a0% des cas (inconstantes)",
                 "GGT, bilirubine (augmentation inconstante)",
-                "TP, facteur V (surveillance si cholestase s&#233;v&#232;re &#8212; malabsorption Vit.&#160;K)",
-                "&#201;chographie h&#233;patobiliaire (&#233;limination lithiase)",
-                "Bilan hebdomadaire &#224; adapter selon s&#233;v&#233;rit&#233;"
+                "TP, facteur V (surveillance si cholestase s\u00e9v\u00e8re \u2014 malabsorption Vit.\u00a0K)",
+                "\u00c9chographie h\u00e9patobiliaire (\u00e9limination lithiase)",
+                "Bilan hebdomadaire \u00e0 adapter selon s\u00e9v\u00e9rit\u00e9"
             ],
-            traitement: "Acide ursod&#233;soxycholique (AUDCA)&#160;: 10&#8211;15&#160;mg/kg/j en 2&#8211;3 prises. Vitamine K si TP bas ou cholestase s&#233;v&#232;re. Surveillance RCF rapproch&#233;e d&#232;s 34&#160;SA. Discussion d&#39;un d&#233;clenchement &#224; partir de 37&#8211;38&#160;SA selon s&#233;v&#233;rit&#233; (acides biliaires &#8805;&#160;40&#160;&#181;mol/L).",
+            traitement: "Acide ursod\u00e9soxycholique (AUDCA)\u00a0: 10\u201315\u00a0mg/kg/j en 2\u20133 prises. Vitamine K si TP bas ou cholestase s\u00e9v\u00e8re. Surveillance RCF rapproch\u00e9e d\u00e8s 34\u00a0SA. Discussion d\u2019un d\u00e9clenchement \u00e0 partir de 37\u201338\u00a0SA selon s\u00e9v\u00e9rit\u00e9 (acides biliaires \u2265\u00a040\u00a0\u00b5mol/L).",
             urgence_cat: null,
-            complications: "Risque de pr&#233;maturit&#233; (30&#8211;60&#160;%). Risque de mort in utero (0,75&#8211;3&#160;%) &#8212; plus &#233;lev&#233; si acides biliaires &#8805;&#160;40&#160;&#181;mol/L. Risque de d&#233;tresse respiratoire n&#233;onatale.",
+            complications: "Risque de pr\u00e9maturit\u00e9 (30\u201360\u00a0%). Risque de mort in utero (0,75\u20133\u00a0%) \u2014 plus \u00e9lev\u00e9 si acides biliaires \u2265\u00a040\u00a0\u00b5mol/L. Risque de d\u00e9tresse respiratoire n\u00e9onatale.",
             alerte_class: "dsg-alert-danger",
-            alerte_titre: "Risque f&#339;tal &#8212; Surveillance obligatoire",
-            ddx: "&#201;liminer&#160;: h&#233;patite virale (s&#233;rologies), HELLP syndrome (bilan complet), steatose h&#233;patique aigu&#235; gravidique"
+            alerte_titre: "Risque f\u0153tal \u2014 Surveillance obligatoire",
+            ddx: "\u00c9liminer\u00a0: h\u00e9patite virale (s\u00e9rologies), HELLP syndrome (bilan complet), st\u00e9atose h\u00e9patique aigu\u00eb gravidique"
         },
-
         impetigo: {
-            title: "Imp&#233;tigo Herp&#233;tiforme (Psoriasis Pustuleux de la Grossesse)",
+            title: "Imp\u00e9tigo Herp\u00e9tiforme (Psoriasis Pustuleux de la Grossesse)",
             urgence: true,
             trimestre: "Tout trimestre (3e trimestre +++)",
             recidive: "moyen",
-            recidive_label: "R&#233;cidive&#160;: possible",
-            desc: "Urgence m&#233;dicale rare. &#201;ruption pustuleuse st&#233;rile sur plaques &#233;ryth&#233;mateuses, souvent d&#233;butant dans les plis. Fi&#232;vre, alt&#233;ration de l&#39;&#233;tat g&#233;n&#233;ral. Terrain souvent sans ant&#233;c&#233;dent de psoriasis.",
+            recidive_label: "R\u00e9cidive\u00a0: possible",
+            desc: "Urgence m\u00e9dicale rare. \u00c9ruption pustuleuse st\u00e9rile sur plaques \u00e9ryth\u00e9mateuses, souvent d\u00e9butant dans les plis. Fi\u00e8vre, alt\u00e9ration de l\u2019\u00e9tat g\u00e9n\u00e9ral. Terrain souvent sans ant\u00e9c\u00e9dent de psoriasis.",
             diag: [
-                "Biopsie cutan&#233;e (pustule st&#233;rile spongiforme intra-corn&#233;e)",
-                "Bact&#233;riologie des pustules&#160;: n&#233;gative (pustules aseptiques)",
-                "Bilan biologique&#160;: hypocalc&#233;mie (fr&#233;quente), carence en vitamine&#160;D",
-                "NFS, CRP, bilan h&#233;patique, ionogramme complet",
-                "Surveillance f&#339;tale&#160;: ERCF, &#233;chographie doppler"
+                "Biopsie cutan\u00e9e (pustule st\u00e9rile spongiforme intra-corn\u00e9e)",
+                "Bact\u00e9riologie des pustules\u00a0: n\u00e9gative (pustules aseptiques)",
+                "Bilan biologique\u00a0: hypocalc\u00e9mie (fr\u00e9quente), carence en vitamine\u00a0D",
+                "NFS, CRP, bilan h\u00e9patique, ionogramme complet",
+                "Surveillance f\u0153tale\u00a0: ERCF, \u00e9chographie doppler"
             ],
-            traitement: "Corticoth&#233;rapie orale (Prednisone). Correction de l&#39;hypocalc&#233;mie et de la carence en vitamine&#160;D. Antibioth&#233;rapie si surinfection. D&#233;clenchement ou c&#233;sarienne &#224; discuter selon terme et s&#233;v&#233;rit&#233;. Transfert en maternit&#233; de niveau adapt&#233;.",
+            traitement: "Corticoth\u00e9rapie orale (Prednisone). Correction de l\u2019hypocalc\u00e9mie et de la carence en vitamine\u00a0D. Antibioth\u00e9rapie si surinfection. D\u00e9clenchement ou c\u00e9sarienne \u00e0 discuter selon terme et s\u00e9v\u00e9rit\u00e9. Transfert en maternit\u00e9 de niveau adapt\u00e9.",
             urgence_cat: [
-                "Hospitalisation imm&#233;diate en urgence",
-                "Appel du r&#233;f&#233;rent dermatologue et de l&#39;&#233;quipe obst&#233;tricale",
+                "Hospitalisation imm\u00e9diate en urgence",
+                "Appel du r\u00e9f\u00e9rent dermatologue et de l\u2019\u00e9quipe obst\u00e9tricale",
                 "Bilan biologique en urgence (calcium, vitamine D, NFS, ionogramme)",
-                "Monitoring f&#339;tal continu",
-                "Voie veineuse p&#233;riph&#233;rique + r&#233;hydratation si alt&#233;ration &#233;tat g&#233;n&#233;ral"
+                "Monitoring f\u0153tal continu",
+                "Voie veineuse p\u00e9riph\u00e9rique + r\u00e9hydratation si alt\u00e9ration \u00e9tat g\u00e9n\u00e9ral"
             ],
-            complications: "Pronostic f&#339;tal grave&#160;: risque de mort in utero jusqu&#39;&#224; 50&#160;% dans les s&#233;ries anciennes. Risque maternel engag&#233;&#160;: insuffisance r&#233;nale, cardiaque, surr&#233;nalienne.",
+            complications: "Pronostic f\u0153tal grave\u00a0: risque de mort in utero jusqu\u2019\u00e0 50\u00a0% dans les s\u00e9ries anciennes. Risque maternel engag\u00e9\u00a0: insuffisance r\u00e9nale, cardiaque, surr\u00e9nalienne.",
             alerte_class: "dsg-alert-danger",
-            alerte_titre: "&#9888;&#160;URGENCE &#8212; Hospitalisation imm&#233;diate",
-            ddx: "&#201;liminer&#160;: pustulose exanth&#233;matique aigu&#235; g&#233;n&#233;ralis&#233;e (PEAG, cause m&#233;dicamenteuse), varicelle dissemin&#233;e (v&#233;sicules not pustules)"
+            alerte_titre: "\u26a0\u00a0URGENCE \u2014 Hospitalisation imm\u00e9diate",
+            ddx: "\u00c9liminer\u00a0: pustulose exanth\u00e9matique aigu\u00eb g\u00e9n\u00e9ralis\u00e9e (PEAG, cause m\u00e9dicamenteuse), varicelle dissemin\u00e9e (v\u00e9sicules not pustules)"
         }
     };
 
     /* ================================================================
        NAVIGATION
     ================================================================ */
-
     window.dsgNextStep = function(step, choice, btn) {
-
-        /* Feedback visuel bouton cliqué */
         if (btn) {
             var siblings = btn.parentNode.querySelectorAll('.dsg-btn');
-            for (var i = 0; i < siblings.length; i++) {
-                siblings[i].classList.remove('dsg-btn-selected');
-            }
+            for (var i = 0; i < siblings.length; i++) siblings[i].classList.remove('dsg-btn-selected');
             btn.classList.add('dsg-btn-selected');
         }
-
         var opt2 = document.getElementById('options-step-2');
         var opt3 = document.getElementById('options-step-3');
 
         if (step === 2) {
             dsgState.path = choice;
             dsgState.breadcrumb = [dsgLabels[choice] || choice];
-
-            setTimeout(function() {
-                dsgSetActiveStep('dsg-step-2');
-                dsgUpdateProgress(2);
-            }, 120);
-
+            setTimeout(function() { dsgSetActiveStep('dsg-step-2'); dsgUpdateProgress(2); }, 120);
             if (choice === 'prurit') {
                 opt2.innerHTML =
-                    '<button class="dsg-btn" onclick="dsgNextStep(3, \'periumbilical\', this)">D&#233;but p&#233;ri-ombilical&#160;: papules urticariennes ou v&#233;sicules/bulles tendues</button>' +
-                    '<button class="dsg-btn" onclick="dsgNextStep(3, \'stries\', this)">D&#233;but sur les stries abdominales avec respect strict de la r&#233;gion ombilicale</button>' +
-                    '<button class="dsg-btn" onclick="dsgNextStep(3, \'atopie\', this)">L&#233;sions des plis (coudes, creux poplit&#233;s), cou, visage &#8212; terrain atopique</button>' +
-                    '<button class="dsg-btn" onclick="dsgNextStep(3, \'nu\', this)">Prurit isol&#233; sans l&#233;sion cutan&#233;e primaire, pr&#233;dominant aux paumes et plantes (nuit)</button>';
+                    '<button class="dsg-btn" onclick="dsgNextStep(3,\'periumbilical\',this)">D\u00e9but p\u00e9ri-ombilical\u00a0: papules urticariennes ou v\u00e9sicules/bulles tendues</button>' +
+                    '<button class="dsg-btn" onclick="dsgNextStep(3,\'stries\',this)">D\u00e9but sur les stries abdominales avec respect strict de la r\u00e9gion ombilicale</button>' +
+                    '<button class="dsg-btn" onclick="dsgNextStep(3,\'atopie\',this)">L\u00e9sions des plis (coudes, creux poplit\u00e9s), cou, visage \u2014 terrain atopique</button>' +
+                    '<button class="dsg-btn" onclick="dsgNextStep(3,\'nu\',this)">Prurit isol\u00e9 sans l\u00e9sion cutan\u00e9e primaire, pr\u00e9dominant aux paumes et plantes (nuit)</button>';
             } else {
-                /* Pustules -> impétigo directement */
                 setTimeout(function() { dsgShowResult('impetigo'); }, 130);
             }
-
         } else if (step === 3) {
             dsgState.step2Choice = choice;
             dsgState.breadcrumb.push(dsgLabels[choice] || choice);
-
             if (choice === 'periumbilical') {
-                setTimeout(function() {
-                    dsgSetActiveStep('dsg-step-3');
-                    dsgUpdateProgress(3);
-                }, 120);
+                setTimeout(function() { dsgSetActiveStep('dsg-step-3'); dsgUpdateProgress(3); }, 120);
                 opt3.innerHTML =
-                    '<button class="dsg-btn" onclick="dsgShowResult(\'pemphigoide\', this)">Pr&#233;sence de bulles tendues, ou &#233;volution de plaques urticariennes p&#233;ri-ombilicales vers des v&#233;sicules</button>' +
-                    '<button class="dsg-btn" onclick="dsgShowResult(\'puppp\', this)">Papules et plaques urticariennes uniquement, sans bulles (apr&#232;s &#233;limination de pemphigo&#239;de)</button>';
-            } else if (choice === 'stries') {
-                setTimeout(function() { dsgShowResult('puppp'); }, 120);
-            } else if (choice === 'atopie') {
-                setTimeout(function() { dsgShowResult('eczema'); }, 120);
-            } else if (choice === 'nu') {
-                setTimeout(function() { dsgShowResult('cholestase'); }, 120);
-            }
+                    '<button class="dsg-btn" onclick="dsgShowResult(\'pemphigoide\',this)">Pr\u00e9sence de bulles tendues, ou \u00e9volution de plaques urticariennes p\u00e9ri-ombilicales vers des v\u00e9sicules</button>' +
+                    '<button class="dsg-btn" onclick="dsgShowResult(\'puppp\',this)">Papules et plaques urticariennes uniquement, sans bulles (apr\u00e8s \u00e9limination de pemphigo\u00efde)</button>';
+            } else if (choice === 'stries')  { setTimeout(function(){dsgShowResult('puppp');},120); }
+              else if (choice === 'atopie')  { setTimeout(function(){dsgShowResult('eczema');},120); }
+              else if (choice === 'nu')      { setTimeout(function(){dsgShowResult('cholestase');},120); }
         }
     };
 
     window.dsgBackStep = function(step) {
         dsgSetActiveStep('dsg-step-' + step);
         dsgUpdateProgress(step);
-        if (step === 1) {
-            dsgState = { path: null, step2Choice: null, breadcrumb: [], currentType: null };
-        } else if (step === 2) {
-            dsgState.step2Choice = null;
-            dsgState.breadcrumb = dsgState.breadcrumb.slice(0, 1);
-        }
+        if (step === 1) dsgState = { path:null, step2Choice:null, breadcrumb:[], currentType:null };
+        else if (step === 2) { dsgState.step2Choice = null; dsgState.breadcrumb = dsgState.breadcrumb.slice(0,1); }
     };
 
     window.dsgReset = function() {
-        dsgState = { path: null, step2Choice: null, breadcrumb: [], currentType: null };
+        dsgState = { path:null, step2Choice:null, breadcrumb:[], currentType:null };
         dsgSetActiveStep('dsg-step-1');
         dsgUpdateProgress(1);
     };
 
     /* ================================================================
-       AFFICHAGE DU RÉSULTAT
+       AFFICHAGE RÉSULTAT
     ================================================================ */
-
     window.dsgShowResult = function(type, btn) {
-        if (btn) { btn.classList.add('dsg-btn-selected'); }
-        if (!dsgDB[type]) { type = 'puppp'; }
+        if (btn) btn.classList.add('dsg-btn-selected');
+        if (!dsgDB[type]) type = 'puppp';
         dsgState.currentType = type;
         var d = dsgDB[type];
 
         /* Fil d'Ariane */
-        var bcItems = dsgState.breadcrumb.map(function(item) {
-            return '<span class="dsg-breadcrumb-item">' + item + '</span>';
-        }).join('<span class="dsg-breadcrumb-sep">&#8250;</span>');
-        document.getElementById('dsg-breadcrumb').innerHTML =
-            '<span style="color:#8a9ab0;font-size:0.8rem;margin-right:4px;">Chemin&#160;:</span>' + bcItems;
+        var bcItems = dsgState.breadcrumb.map(function(i){ return '<span class="dsg-breadcrumb-item">'+i+'</span>'; }).join('<span class="dsg-breadcrumb-sep">&#8250;</span>');
+        document.getElementById('dsg-breadcrumb').innerHTML = '<span style="color:#8a9ab0;font-size:0.8rem;margin-right:4px;">Chemin\u00a0:</span>' + bcItems;
 
-        /* Badge urgence */
-        var urgenceBadge = d.urgence
-            ? '<span class="dsg-urgence-badge">&#9888;&#160;Urgence</span>'
-            : '';
-
-        /* Badges méta */
-        var trimestreBadge = '<span class="dsg-meta-badge trimestre">&#128197;&#160;' + d.trimestre + '</span>';
+        var urgenceBadge = d.urgence ? '<span class="dsg-urgence-badge">\u26a0\u00a0Urgence</span>' : '';
+        var trimestreBadge = '<span class="dsg-meta-badge trimestre">\ud83d\udcc5\u00a0' + d.trimestre + '</span>';
         var recidiveBadge  = '<span class="dsg-meta-badge recidive-' + d.recidive + '">' + d.recidive_label + '</span>';
+        var diagItems = d.diag.map(function(i){ return '<li>'+i+'</li>'; }).join('');
 
-        /* Examens */
-        var diagItems = d.diag.map(function(i) { return '<li>' + i + '</li>'; }).join('');
-
-        /* CAT urgence séparée (impétigo) */
         var catUrgenceHtml = '';
         if (d.urgence_cat && d.urgence_cat.length) {
-            var catItems = d.urgence_cat.map(function(i) { return '<li>' + i + '</li>'; }).join('');
-            catUrgenceHtml =
-                '<div class="dsg-urgence-box">' +
-                    '<span class="dsg-urgence-box-title">&#9888;&#160;CAT imm&#233;diate &#8212; Urgence</span>' +
-                    '<ul class="dsg-list dsg-list-urgence">' + catItems + '</ul>' +
-                '</div>';
+            catUrgenceHtml = '<div class="dsg-urgence-box"><span class="dsg-urgence-box-title">\u26a0\u00a0CAT imm\u00e9diate \u2014 Urgence</span><ul class="dsg-list dsg-list-urgence">' +
+                d.urgence_cat.map(function(i){return '<li>'+i+'</li>';}).join('') + '</ul></div>';
         }
+        var ddxHtml = d.ddx ? '<div class="dsg-ddx-box"><span class="dsg-ddx-title">Diagnostics \u00e0 \u00e9liminer</span>'+d.ddx+'</div>' : '';
+        var coursHtml = '<a class="dsg-cours-link" href="https://www.dr-karazaitri-ma.net/obstetrique/ghr/der1/" target="_blank" rel="noopener">\u2192\u00a0Voir le cours complet sur les dermatoses de la grossesse</a>';
 
-        /* Diagnostic différentiel */
-        var ddxHtml = d.ddx
-            ? '<div class="dsg-ddx-box"><span class="dsg-ddx-title">Diagnostics &#224; &#233;liminer</span>' + d.ddx + '</div>'
-            : '';
-
-        /* Lien cours */
-        var coursHtml =
-            '<a class="dsg-cours-link" href="' + DSG_COURS_URL + '" target="_blank" rel="noopener">' +
-            '&#8594;&#160;Voir le cours complet sur les dermatoses de la grossesse' +
-            '</a>';
-
-        var html =
+        document.getElementById('dsg-result-content').innerHTML =
             '<div class="dsg-result-header">' +
                 '<span class="dsg-result-title">' + urgenceBadge + d.title + '</span>' +
                 '<span class="dsg-result-desc">' + d.desc + '</span>' +
                 '<div class="dsg-result-meta">' + trimestreBadge + recidiveBadge + '</div>' +
             '</div>' +
-
             catUrgenceHtml +
-
-            '<span class="dsg-section-label">Examens compl&#233;mentaires cl&#233;s</span>' +
+            '<span class="dsg-section-label">Examens compl\u00e9mentaires cl\u00e9s</span>' +
             '<ul class="dsg-list">' + diagItems + '</ul>' +
-
             '<span class="dsg-section-label">Prise en charge</span>' +
             '<span class="dsg-traitement-text">' + d.traitement + '</span>' +
+            '<div class="dsg-alert-box ' + d.alerte_class + '"><strong>' + d.alerte_titre + '\u00a0:</strong> ' + d.complications + '</div>' +
+            ddxHtml + coursHtml;
 
-            '<div class="dsg-alert-box ' + d.alerte_class + '">' +
-                '<strong>' + d.alerte_titre + '&#160;:</strong> ' + d.complications +
-            '</div>' +
-
-            ddxHtml +
-            coursHtml;
-
-        document.getElementById('dsg-result-content').innerHTML = html;
         dsgSetActiveStep('dsg-result');
         dsgUpdateProgress(4);
+
+        /* Auto-génération du résumé si le panneau est ouvert */
+        dsgFillResume();
     };
 
     /* ================================================================
        PROGRESSION
     ================================================================ */
-
     function dsgUpdateProgress(currentStep) {
-        for (var s = 1; s <= 4; s++) {
-            var dot = document.getElementById('dsg-prog-' + s);
+        for (var s=1; s<=4; s++) {
+            var dot = document.getElementById('dsg-prog-'+s);
             if (!dot) continue;
-            dot.classList.remove('active', 'done');
-            if (s < currentStep)       dot.classList.add('done');
+            dot.classList.remove('active','done');
+            if (s < currentStep) dot.classList.add('done');
             else if (s === currentStep) dot.classList.add('active');
         }
-        for (var l = 1; l <= 3; l++) {
-            var line = document.getElementById('dsg-prog-line-' + l);
+        for (var l=1; l<=3; l++) {
+            var line = document.getElementById('dsg-prog-line-'+l);
             if (!line) continue;
             if (l < currentStep) line.classList.add('done');
             else line.classList.remove('done');
         }
     }
 
-    /* ================================================================
-       TRANSITION
-    ================================================================ */
-
     function dsgSetActiveStep(id) {
         var steps = document.querySelectorAll('#dsg-tool-container .dsg-step');
-        for (var i = 0; i < steps.length; i++) {
-            steps[i].classList.remove('active');
+        for (var i=0; i<steps.length; i++) steps[i].classList.remove('active');
+        var t = document.getElementById(id);
+        if (t) t.classList.add('active');
+    }
+
+    /* ================================================================
+       PANNEAU PATIENT — TOGGLE
+    ================================================================ */
+    window.dsgTogglePatient = function() {
+        var body = document.getElementById('dsg-patient-body');
+        var icon = document.getElementById('dsg-patient-icon');
+        if (!body || !icon) return;
+        if (body.classList.contains('dsg-collapsed')) {
+            body.classList.remove('dsg-collapsed');
+            icon.classList.remove('closed');
+        } else {
+            body.classList.add('dsg-collapsed');
+            icon.classList.add('closed');
         }
-        var target = document.getElementById(id);
-        if (target) target.classList.add('active');
+    };
+
+    /* ================================================================
+       CALCUL ÂGE
+    ================================================================ */
+    window.dsgCalcAge = function() {
+        var val = document.getElementById('dsg-ddn').value;
+        var badge = document.getElementById('dsg-age-badge');
+        if (!val) { badge.textContent = ''; return; }
+        var ddn = new Date(val);
+        var now = new Date();
+        var age = now.getFullYear() - ddn.getFullYear();
+        var m = now.getMonth() - ddn.getMonth();
+        if (m < 0 || (m === 0 && now.getDate() < ddn.getDate())) age--;
+        badge.textContent = age >= 0 ? age + ' ans' : '';
+    };
+
+    /* ================================================================
+       CALCUL AMÉNORRHÉE
+    ================================================================ */
+    window.dsgCalcAmenorrhee = function() {
+        var val = document.getElementById('dsg-ddr').value;
+        var badge = document.getElementById('dsg-amenorrhee-badge');
+        if (!val) { badge.textContent = ''; return; }
+        var ddr = new Date(val);
+        var now = new Date();
+        var diffMs = now - ddr;
+        if (diffMs < 0) { badge.textContent = 'date future'; return; }
+        var diffDays = Math.floor(diffMs / 86400000);
+        var sa = Math.floor(diffDays / 7);
+        var j  = diffDays % 7;
+        badge.textContent = sa + ' SA + ' + j + ' j';
+    };
+
+    /* ================================================================
+       MISE À JOUR RÉSUMÉ EN TEMPS RÉEL (identité)
+    ================================================================ */
+    window.dsgUpdateResume = function() {
+        /* Ne régénère le résumé que si un diagnostic est actif */
+        if (dsgState.currentType) dsgFillResume();
+    };
+
+    /* ================================================================
+       GÉNÉRATION DU RÉSUMÉ CLINIQUE
+    ================================================================ */
+    window.dsgFillResume = function() {
+        var ta = document.getElementById('dsg-resume-textarea');
+        if (!ta) return;
+
+        /* Identité */
+        var nom    = (document.getElementById('dsg-nom').value || '').trim().toUpperCase();
+        var prenom = (document.getElementById('dsg-prenom').value || '').trim();
+        var ddn    = document.getElementById('dsg-ddn').value;
+        var ddr    = document.getElementById('dsg-ddr').value;
+        var ageBadge  = document.getElementById('dsg-age-badge').textContent;
+        var amBadge   = document.getElementById('dsg-amenorrhee-badge').textContent;
+
+        var identite = '';
+        if (nom || prenom) identite += 'Patiente\u00a0: ' + [prenom, nom].filter(Boolean).join(' ') + '\n';
+        if (ddn) identite += 'N\u00e9e le\u00a0: ' + dsgFormatDate(ddn) + (ageBadge ? ' (' + ageBadge + ')' : '') + '\n';
+        if (ddr) identite += 'DDR\u00a0: ' + dsgFormatDate(ddr) + (amBadge ? ' \u2014 Am\u00e9norh\u00e9e\u00a0: ' + amBadge : '') + '\n';
+        if (identite) identite += '\n';
+
+        /* Date de consultation */
+        var today = new Date();
+        var dateConsult = 'Consultation du ' + today.toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'}) + '\n\n';
+
+        /* Contenu clinique */
+        var corps = '';
+        if (dsgState.currentType && dsgDB[dsgState.currentType]) {
+            var d = dsgDB[dsgState.currentType];
+            corps += '--- ORIENTATION DIAGNOSTIQUE ---\n';
+            corps += d.title + '\n';
+            corps += d.trimestre + '\n\n';
+
+            corps += '--- SIGNES D\u2019APPEL ---\n';
+            corps += d.desc + '\n\n';
+
+            if (d.urgence_cat && d.urgence_cat.length) {
+                corps += '--- CAT IMMED\u00cdATE (URGENCE) ---\n';
+                d.urgence_cat.forEach(function(item, i) { corps += (i+1) + '. ' + item + '\n'; });
+                corps += '\n';
+            }
+
+            corps += '--- EXAMENS COMPL\u00c9MENTAIRES PROPOS\u00c9S ---\n';
+            d.diag.forEach(function(item, i) { corps += (i+1) + '. ' + item + '\n'; });
+            corps += '\n';
+
+            corps += '--- PRISE EN CHARGE ---\n';
+            corps += d.traitement + '\n\n';
+
+            corps += '--- \u00c9VOLUTION / RISQUES ---\n';
+            corps += d.complications + '\n\n';
+
+            if (d.ddx) {
+                corps += '--- DIAGNOSTICS \u00c0 \u00c9LIMINER ---\n';
+                corps += d.ddx + '\n\n';
+            }
+        } else {
+            corps = '(Compl\u00e9ter apr\u00e8s obtention d\u2019un diagnostic via l\u2019outil)\n\n';
+        }
+
+        var footer = '---\nOutil d\u2019aide \u00e0 la d\u00e9cision \u2014 Dr Kara-Za\u00eftri M.A. \u2014 v2.3 \u2014 Ne remplace pas l\u2019examen clinique.';
+
+        ta.value = identite + dateConsult + corps + footer;
+    };
+
+    /* ================================================================
+       EFFACER LE RÉSUMÉ
+    ================================================================ */
+    window.dsgClearResume = function() {
+        var ta = document.getElementById('dsg-resume-textarea');
+        if (ta) ta.value = '';
+    };
+
+    /* ================================================================
+       COPIE RÉSULTAT (bouton résultat)
+    ================================================================ */
+    window.dsgCopyResult = function() {
+        if (!dsgState.currentType) return;
+        var d = dsgDB[dsgState.currentType];
+        var lines = [
+            '=== DERMATOSES DE LA GROSSESSE ===',
+            'Dr Kara-Za\u00eftri M.A. \u2014 v2.3 \u2014 ' + new Date().toLocaleDateString('fr-FR'),
+            '',
+            'DIAGNOSTIC\u00a0: ' + d.title,
+            'P\u00e9riode\u00a0: ' + d.trimestre,
+            '',
+            '-- EXAMENS --'
+        ];
+        d.diag.forEach(function(i,idx){ lines.push((idx+1)+'. '+i); });
+        lines.push('', '-- PRISE EN CHARGE --', d.traitement, '', '-- RISQUES --', d.complications, '',
+            'Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 Ne remplace pas l\u2019examen clinique.');
+        dsgDoClipboard(lines.join('\n'), 'dsg-btn-copy');
+    };
+
+    /* ================================================================
+       COPIE DOSSIER PATIENT (grand bouton panneau)
+    ================================================================ */
+    window.dsgCopyDossier = function() {
+        var ta = document.getElementById('dsg-resume-textarea');
+        if (!ta || !ta.value.trim()) {
+            alert('Le r\u00e9sum\u00e9 est vide. G\u00e9n\u00e9rez-le d\u2019abord ou saisissez du texte.');
+            return;
+        }
+        dsgDoClipboard(ta.value, 'dsg-patient-copy-btn');
+    };
+
+    /* ================================================================
+       FONCTION COMMUNE CLIPBOARD
+    ================================================================ */
+    function dsgDoClipboard(text, btnId) {
+        function feedback() {
+            var btn = document.getElementById(btnId);
+            if (!btn) return;
+            var orig = btn.innerHTML;
+            btn.innerHTML = '\u2713 Copi\u00e9 !';
+            btn.classList.add('dsg-copied');
+            setTimeout(function() { btn.innerHTML = orig; btn.classList.remove('dsg-copied'); }, 2400);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(feedback).catch(function() { dsgFallbackClipboard(text, feedback); });
+        } else {
+            dsgFallbackClipboard(text, feedback);
+        }
+    }
+
+    function dsgFallbackClipboard(text, cb) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        try { document.execCommand('copy'); if (cb) cb(); } catch(e) {}
+        document.body.removeChild(ta);
     }
 
     /* ================================================================
        IMPRESSION
     ================================================================ */
-
     window.dsgPrint = function() {
         var content = document.getElementById('dsg-result-content');
         if (!content) return;
         var pz = document.getElementById('dsg-print-zone');
+        var resume = document.getElementById('dsg-resume-textarea');
+        var resumeHtml = (resume && resume.value.trim())
+            ? '<hr style="border:none;border-top:1px solid #ccc;margin:12px 0;"><h3 style="font-size:13px;font-weight:700;margin-bottom:6px;">R\u00e9sum\u00e9 clinique</h3><pre style="font-size:12px;white-space:pre-wrap;line-height:1.5;">'+resume.value+'</pre>'
+            : '';
         pz.innerHTML =
-            '<h2 style="font-size:16px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">Aide au Diagnostic &#8212; Dermatoses Sp&#233;cifiques de la Grossesse</h2>' +
-            '<p style="font-size:11px;color:#666;margin-bottom:12px;">Dr Kara-Za&#239;tri M.A. &#8212; Version 2.2 &#8212; Mai 2026</p>' +
+            '<h2 style="font-size:16px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">Aide au Diagnostic \u2014 Dermatoses Sp\u00e9cifiques de la Grossesse</h2>' +
+            '<p style="font-size:11px;color:#666;margin-bottom:12px;">Dr Kara-Za\u00eftri M.A. \u2014 Version 2.3 \u2014 ' + new Date().toLocaleDateString('fr-FR') + '</p>' +
             '<hr style="border:none;border-top:1px solid #ccc;margin-bottom:12px;">' +
-            content.innerHTML +
+            content.innerHTML + resumeHtml +
             '<hr style="border:none;border-top:1px solid #ccc;margin-top:12px;">' +
-            '<p style="font-size:10px;color:#888;margin-top:6px;">Outil d&#39;aide &#224; la d&#233;cision &#8212; Ne remplace pas l&#39;examen clinique ni l&#39;avis sp&#233;cialis&#233;.</p>';
+            '<p style="font-size:10px;color:#888;">Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 Ne remplace pas l\u2019examen clinique ni l\u2019avis sp\u00e9cialis\u00e9.</p>';
         window.print();
     };
 
     /* ================================================================
-       COPIE TEXTE
+       UTILITAIRE : formatage date
     ================================================================ */
-
-    window.dsgCopy = function() {
-        if (!dsgState.currentType) return;
-        var d = dsgDB[dsgState.currentType];
-        var lines = [];
-        lines.push('=== DERMATOSES DE LA GROSSESSE ===');
-        lines.push('Dr Kara-Za\u00eftri M.A. \u2014 Version 2.2 \u2014 Mai 2026');
-        lines.push('');
-        lines.push('DIAGNOSTIC : ' + d.title.replace(/&#[0-9]+;/g, function(m) {
-            var map = {'&#239;':'&#239;','&#232;':'e','&#233;':'e','&#234;':'e','&#224;':'a','&#226;':'a','&#238;':'i','&#244;':'o','&#251;':'u','&#8212;':'-','&#8211;':'-','&#160;':' ','&#339;':'oe','&#8805;':'>=','&#181;':'u'};
-            return map[m] || '';
-        }));
-        lines.push('P\u00e9riode : ' + d.trimestre.replace(/&#[0-9]+;/g, ''));
-        lines.push('');
-        lines.push('-- EXAMENS COMPL\u00c9MENTAIRES --');
-        d.diag.forEach(function(item, idx) {
-            lines.push((idx+1) + '. ' + item.replace(/&#[0-9]+;/g, function(m){var map={'&#233;':'e','&#224;':'a','&#8805;':'>=','&#181;':'u','&#160;':' ','&#8211;':'-','&#8212;':'-','&#239;':'i','&#339;':'oe'};return map[m]||'';}));
-        });
-        lines.push('');
-        lines.push('-- PRISE EN CHARGE --');
-        lines.push(d.traitement.replace(/&#[0-9]+;/g, function(m){var map={'&#233;':'e','&#224;':'a','&#8805;':'>=','&#181;':'u','&#160;':' ','&#8211;':'-','&#8212;':'-','&#239;':'i','&#339;':'oe','&#201;':'E'};return map[m]||'';}));
-        lines.push('');
-        lines.push('-- \u00c9VOLUTION / RISQUES --');
-        lines.push(d.complications.replace(/&#[0-9]+;/g, function(m){var map={'&#233;':'e','&#224;':'a','&#8805;':'>=','&#181;':'u','&#160;':' ','&#8211;':'-','&#8212;':'-','&#239;':'i','&#339;':'oe','&#233;':'e'};return map[m]||'';}));
-        lines.push('');
-        lines.push('Outil d\'aide \u00e0 la d\u00e9cision \u2014 Ne remplace pas l\'examen clinique.');
-
-        var text = lines.join('\n');
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(function() { dsgCopiedFeedback(); });
-        } else {
-            /* Fallback */
-            var ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed';
-            ta.style.top = '-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            try { document.execCommand('copy'); dsgCopiedFeedback(); } catch(e) {}
-            document.body.removeChild(ta);
-        }
-    };
-
-    function dsgCopiedFeedback() {
-        var btn = document.getElementById('dsg-btn-copy');
-        if (!btn) return;
-        btn.textContent = '\u2713 Copi\u00e9 !';
-        btn.classList.add('dsg-copied');
-        setTimeout(function() {
-            btn.innerHTML = '&#128203;&#160;Copier';
-            btn.classList.remove('dsg-copied');
-        }, 2200);
+    function dsgFormatDate(isoStr) {
+        if (!isoStr) return '';
+        var parts = isoStr.split('-');
+        if (parts.length !== 3) return isoStr;
+        return parts[2] + '/' + parts[1] + '/' + parts[0];
     }
 
 })();
