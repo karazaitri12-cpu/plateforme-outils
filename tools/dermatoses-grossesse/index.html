@@ -1,18 +1,77 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dermatoses Spécifiques de la Grossesse — Aide au diagnostic</title>
-<style>
-/* ================================================================
+<!-- ================================================================
      Outil de Diagnostic : Dermatoses Spécifiques de la Grossesse
      Version 2.1 — Mai 2026
      Références : HAS, CNGOF, Cours GHR, UpToDate 2024
      Blindé pour intégration Elementor (widget HTML)
-     ================================================================ */
+     ================================================================ -->
 
-/* === RESET & WRAPPER BLINDÉ === */
+<div id="dsg-tool-container" class="dsg-app-wrapper">
+
+    <header class="dsg-main-header">
+        <h2 class="dsg-title">Aide au Diagnostic : Dermatoses Spécifiques de la Grossesse</h2>
+        <p class="dsg-subtitle">Outil d'orientation clinique &#8212; Professionnels de sant&#233;</p>
+    </header>
+
+    <section class="dsg-disclaimer">
+        <strong>MISE EN GARDE :</strong> Cet outil constitue une aide &#224; la d&#233;cision clinique fond&#233;e sur les recommandations en vigueur (HAS, CNGOF, cours GHR). Il ne remplace en aucun cas l&#39;examen clinique ni l&#39;avis sp&#233;cialis&#233;. En cas de doute ou de signes de gravit&#233;, un avis dermatologique est requis.
+    </section>
+
+    <div class="dsg-card">
+
+        <!-- &#201;TAPE 1 -->
+        <div id="dsg-step-1" class="dsg-step active">
+            <h3 class="dsg-step-title">
+                <span class="dsg-step-num">1</span>
+                Quel est le signe ou sympt&#244;me d&#39;appel principal ?
+            </h3>
+            <div class="dsg-options">
+                <button class="dsg-btn" onclick="dsgNextStep(2, 'prurit')">
+                    Prurit pr&#233;dominant (d&#233;mangeaisons), avec ou sans l&#233;sions visibles
+                </button>
+                <button class="dsg-btn dsg-btn-urgent" onclick="dsgNextStep(2, 'pustules')">
+                    &#9888; &#201;ruption pustuleuse associ&#233;e &#224; fi&#232;vre ou alt&#233;ration de l&#39;&#233;tat g&#233;n&#233;ral
+                </button>
+            </div>
+        </div>
+
+        <!-- &#201;TAPE 2 -->
+        <div id="dsg-step-2" class="dsg-step">
+            <h3 class="dsg-step-title">
+                <span class="dsg-step-num">2</span>
+                Localisation initiale et aspect des l&#233;sions
+            </h3>
+            <div class="dsg-options" id="options-step-2"></div>
+            <button class="dsg-btn-back" onclick="dsgBackStep(1)">&#8592; Retour</button>
+        </div>
+
+        <!-- &#201;TAPE 3 -->
+        <div id="dsg-step-3" class="dsg-step">
+            <h3 class="dsg-step-title">
+                <span class="dsg-step-num">3</span>
+                &#201;l&#233;ments cliniques compl&#233;mentaires
+            </h3>
+            <div class="dsg-options" id="options-step-3"></div>
+            <button class="dsg-btn-back" onclick="dsgBackStep(2)">&#8592; Retour</button>
+        </div>
+
+        <!-- R&#201;SULTAT -->
+        <div id="dsg-result" class="dsg-step">
+            <div id="dsg-result-content"></div>
+            <button class="dsg-btn-reset" onclick="dsgReset()">&#8635; Nouvelle &#233;valuation</button>
+        </div>
+
+    </div>
+
+    <footer class="dsg-footer">
+        Version 2.1 &#8212; Mai 2026 &nbsp;|&nbsp; R&#233;f. : HAS, CNGOF, Cours GHR &nbsp;|&nbsp; Dr Kara-Za&#239;tri M.A.
+    </footer>
+
+</div>
+
+<!-- ================================================================ CSS ================================================================ -->
+<style>
+
+/* === RESET & WRAPPER BLIND&#201; === */
 #dsg-tool-container.dsg-app-wrapper {
     all: initial;
     display: block;
@@ -27,7 +86,6 @@
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.07);
     overflow: hidden;
-    position: relative !important;
 }
 
 #dsg-tool-container.dsg-app-wrapper * {
@@ -36,7 +94,7 @@
     line-height: inherit;
 }
 
-/* === EN-TÊTE === */
+/* === EN-T&#202;TE === */
 #dsg-tool-container .dsg-main-header {
     background-color: #f4f7fb;
     padding: 24px 28px 20px;
@@ -77,7 +135,7 @@
     padding: 28px;
 }
 
-/* === ÉTAPES === */
+/* === &#201;TAPES === */
 #dsg-tool-container .dsg-step {
     display: none;
 }
@@ -188,7 +246,7 @@
     background: #122a44;
 }
 
-/* === RÉSULTATS === */
+/* === R&#201;SULTATS === */
 #dsg-tool-container .dsg-result-header {
     background: #f0f5fb;
     border-left: 4px solid #1a3a5c;
@@ -227,7 +285,7 @@
     border-bottom: 1px solid #e4eaf0;
 }
 
-/* LISTE AVEC PUCES - Unicode CSS uniquement */
+/* LISTE AVEC PUCES - Unicode CSS uniquement, jamais d'entit&#233;s HTML dans ::before */
 #dsg-tool-container .dsg-list {
     list-style: none;
     padding: 0;
@@ -263,7 +321,7 @@
     line-height: 1.6;
 }
 
-/* === BOÎTES D'ALERTE === */
+/* === BO&#206;TES D'ALERTE === */
 #dsg-tool-container .dsg-alert-box {
     padding: 13px 16px;
     border-radius: 4px;
@@ -323,82 +381,7 @@
     #dsg-tool-container .dsg-btn { font-size: 0.92rem; padding: 12px 14px; }
 }
 
-/* =========================================
-   PRO : Masque l'ascenseur (style App native)
-   A placer en fin de css dans chaque outil
-   ========================================= */
-html { scrollbar-width: none !important; }
-body { -ms-overflow-style: none !important; overflow-y: auto !important; }
-::-webkit-scrollbar { display: none !important; }
 </style>
-
-<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
-<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
-</head>
-<body>
-
-<div id="dsg-tool-container" class="dsg-app-wrapper">
-
-    <header class="dsg-main-header">
-        <h2 class="dsg-title">Aide au Diagnostic : Dermatoses Spécifiques de la Grossesse</h2>
-        <p class="dsg-subtitle">Outil d'orientation clinique &#8212; Professionnels de sant&#233;</p>
-    </header>
-
-    <section class="dsg-disclaimer">
-        <strong>MISE EN GARDE :</strong> Cet outil constitue une aide &#224; la d&#233;cision clinique fond&#233;e sur les recommandations en vigueur (HAS, CNGOF, cours GHR). Il ne remplace en aucun cas l&#39;examen clinique ni l&#39;avis sp&#233;cialis&#233;. En cas de doute ou de signes de gravit&#233;, un avis dermatologique est requis.
-    </section>
-
-    <div class="dsg-card">
-
-        <!-- ÉTAPE 1 -->
-        <div id="dsg-step-1" class="dsg-step active">
-            <h3 class="dsg-step-title">
-                <span class="dsg-step-num">1</span>
-                Quel est le signe ou sympt&#244;me d&#39;appel principal ?
-            </h3>
-            <div class="dsg-options">
-                <button class="dsg-btn" onclick="dsgNextStep(2, 'prurit')">
-                    Prurit pr&#233;dominant (d&#233;mangeaisons), avec ou sans l&#233;sions visibles
-                </button>
-                <button class="dsg-btn dsg-btn-urgent" onclick="dsgNextStep(2, 'pustules')">
-                    &#9888; &#201;ruption pustuleuse associ&#233;e &#224; fi&#232;vre ou alt&#233;ration de l&#39;&#233;tat g&#233;n&#233;ral
-                </button>
-            </div>
-        </div>
-
-        <!-- ÉTAPE 2 -->
-        <div id="dsg-step-2" class="dsg-step">
-            <h3 class="dsg-step-title">
-                <span class="dsg-step-num">2</span>
-                Localisation initiale et aspect des l&#233;sions
-            </h3>
-            <div class="dsg-options" id="options-step-2"></div>
-            <button class="dsg-btn-back" onclick="dsgBackStep(1)">&#8592; Retour</button>
-        </div>
-
-        <!-- ÉTAPE 3 -->
-        <div id="dsg-step-3" class="dsg-step">
-            <h3 class="dsg-step-title">
-                <span class="dsg-step-num">3</span>
-                &#201;l&#233;ments cliniques compl&#233;mentaires
-            </h3>
-            <div class="dsg-options" id="options-step-3"></div>
-            <button class="dsg-btn-back" onclick="dsgBackStep(2)">&#8592; Retour</button>
-        </div>
-
-        <!-- RÉSULTAT -->
-        <div id="dsg-result" class="dsg-step">
-            <div id="dsg-result-content"></div>
-            <button class="dsg-btn-reset" onclick="dsgReset()">&#8635; Nouvelle &#233;valuation</button>
-        </div>
-
-    </div>
-
-    <footer class="dsg-footer">
-        Version 2.1 &#8212; Mai 2026 &nbsp;|&nbsp; R&#233;f. : HAS, CNGOF, Cours GHR &nbsp;|&nbsp; Dr Kara-Za&#239;tri M.A.
-    </footer>
-
-</div>
 
 <!-- ================================================================ JS ================================================================ -->
 <script>
@@ -408,6 +391,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     var dsgState = { path: null, step2Choice: null };
 
     /* --- Base de donnees clinique --- */
+    /* Note : caracteres speciaux ecrits en UTF-8 direct dans les strings JS (pas de \uXXXX sauf necessity) */
     var dsgDB = {
 
         pemphigoide: {
@@ -585,5 +569,3 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 
 })();
 </script>
-</body>
-</html>
