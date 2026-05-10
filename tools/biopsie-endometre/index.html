@@ -5,617 +5,1258 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Outil Décisionnel : Biopsie d'Endomètre</title>
     <style>
-        /* CONTENEUR PRINCIPAL */
-        #decision-tool-container {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #ffffff;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            max-width: 800px;
-            margin: 0 auto;
-            min-height: 450px; 
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; 
+        /* ============================================================
+           RESET & ISOLATION ELEMENTOR
+        ============================================================ */
+        #bde-root *,
+        #bde-root *::before,
+        #bde-root *::after {
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
-        /* HEADER INSTITUTIONNEL */
-        .dt-header {
-            background-color: #1a5c78; 
-            color: #ffffff;
-            padding: 25px 30px;
+        #bde-root {
+            font-family: 'Georgia', 'Times New Roman', serif !important;
+            background: #ffffff !important;
+            border-radius: 10px !important;
+            border: 1px solid #dde3ea !important;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08) !important;
+            max-width: 820px !important;
+            margin: 0 auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+            color: #1a2332 !important;
         }
 
-        .dt-header-tag {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #93c5fd;
-            margin-bottom: 10px;
-            font-weight: 600;
+        /* ============================================================
+           HEADER
+        ============================================================ */
+        #bde-root .bde-header {
+            background: linear-gradient(135deg, #0f3c52 0%, #1a5c78 60%, #1e6d8a 100%) !important;
+            color: #ffffff !important;
+            padding: 28px 32px 24px !important;
+            position: relative !important;
+            overflow: hidden !important;
         }
 
-        .dt-header h1 {
-            margin: 0 0 8px 0;
-            font-size: 1.8rem;
-            font-weight: 700;
-            line-height: 1.2;
+        #bde-root .bde-header::before {
+            content: '\0022' !important; /* fallback Unicode innocu */
+            display: none !important;
         }
 
-        .dt-header p {
-            margin: 0;
-            font-size: 0.95rem;
-            color: #e2e8f0;
+        #bde-root .bde-header-rule {
+            width: 40px !important;
+            height: 3px !important;
+            background: #5bbcd4 !important;
+            border-radius: 2px !important;
+            margin-bottom: 14px !important;
         }
 
-        /* CORPS DE L'OUTIL */
-        .dt-body {
-            padding: 30px;
-            flex-grow: 1;
+        #bde-root .bde-header-tag {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.72rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.12em !important;
+            color: #7dd3e8 !important;
+            font-weight: 600 !important;
+            margin-bottom: 8px !important;
         }
 
-        /* ANIMATION */
-        .dt-step {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .dt-step.active {
-            display: block;
-            opacity: 1;
-            animation: fadeIn 0.3s forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        #bde-root .bde-header h1 {
+            font-family: 'Georgia', serif !important;
+            font-size: 1.75rem !important;
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
+            color: #ffffff !important;
+            letter-spacing: -0.01em !important;
+            margin-bottom: 10px !important;
         }
 
-        /* BOITES DE QUESTIONS */
-        .dt-question-box {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .dt-question-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #334155;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .dt-question-desc {
-            font-size: 1.15rem;
-            font-weight: 500;
-            color: #1e293b;
-            line-height: 1.5;
+        #bde-root .bde-header-sub {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.85rem !important;
+            color: #b8dcea !important;
+            line-height: 1.5 !important;
         }
 
-        .dt-question-list {
-            color: #475569; 
-            font-size: 1rem; 
-            margin-top: 10px;
-            padding-left: 20px;
+        /* PROGRESS BAR */
+        #bde-root .bde-progress-bar-wrap {
+            margin-top: 20px !important;
+            background: rgba(255,255,255,0.12) !important;
+            border-radius: 4px !important;
+            height: 4px !important;
+            overflow: hidden !important;
         }
 
-        /* BOUTONS (Flexbox) */
-        .dt-buttons-flex {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            width: 100%;
+        #bde-root .bde-progress-bar {
+            height: 100% !important;
+            background: #5bbcd4 !important;
+            border-radius: 4px !important;
+            transition: width 0.4s ease !important;
+            width: 5% !important;
         }
 
-        .dt-btn {
-            flex: 1 1 auto;
-            min-width: 200px;
-            padding: 14px 20px;
-            border: 1px solid transparent;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1.05rem; 
-            font-weight: 500;
-            text-align: center;
-            color: white;
-            background-color: #3b82f6; 
-            transition: all 0.2s;
-            text-decoration: none !important;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        /* ============================================================
+           BODY
+        ============================================================ */
+        #bde-root .bde-body {
+            padding: 30px 32px !important;
+            flex-grow: 1 !important;
+            background: #ffffff !important;
         }
 
-        .dt-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            filter: brightness(1.05);
+        /* BREADCRUMB */
+        #bde-root .bde-breadcrumb {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.78rem !important;
+            color: #8fa3b3 !important;
+            margin-bottom: 22px !important;
+            letter-spacing: 0.02em !important;
         }
 
-        .dt-btn:focus {
-            outline: 3px solid #93c5fd;
-            outline-offset: 2px;
+        /* STEP ANIMATION */
+        #bde-root .bde-step {
+            display: none !important;
+            opacity: 0 !important;
         }
 
-        .dt-btn-yes { background-color: #10b981; } 
-        .dt-btn-no { background-color: #ef4444; } 
-        .dt-btn-neutral { background-color: #64748b; border: 1px solid #475569;}
-
-        /* ZONE NAVIGATION BAS */
-        .dt-navigation-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            padding-top: 20px;
+        #bde-root .bde-step.active {
+            display: block !important;
+            opacity: 1 !important;
+            animation: bdeSlideIn 0.3s ease-out forwards !important;
         }
 
-        .dt-btn-prev {
-            background: transparent;
-            color: #64748b;
-            border: 1px solid #cbd5e1;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-        .dt-btn-prev:hover {
-            background: #f8fafc;
-            color: #0f172a;
-            border-color: #94a3b8;
+        @keyframes bdeSlideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .dt-btn-reset {
-            background: transparent;
-            color: #ef4444;
-            border: none;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-        .dt-btn-reset:hover {
-            text-decoration: underline;
-            background: #fef2f2;
-            border-radius: 6px;
+        /* ============================================================
+           QUESTION BOX
+        ============================================================ */
+        #bde-root .bde-question-wrap {
+            margin-bottom: 26px !important;
         }
 
-        /* BOITES DE RÉSULTATS */
-        .dt-result-box {
-            padding: 25px;
-            border-radius: 6px;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .dt-res-biopsy { background-color: #fef2f2; border-left: 6px solid #ef4444; color: #991b1b; }
-        .dt-res-surveillance { background-color: #f0fdf4; border-left: 6px solid #10b981; color: #065f46; }
-        .dt-res-discuss { background-color: #fffbeb; border-left: 6px solid #f59e0b; color: #92400e; }
-
-        .dt-result-box h3 { 
-            margin-top: 0; 
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-        }
-        .dt-result-box p, .dt-result-box ul { 
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 10px;
+        #bde-root .bde-step-label {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.72rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.1em !important;
+            color: #1a5c78 !important;
+            margin-bottom: 6px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
         }
 
-        /* FOOTER / DISCLAIMER INSTITUTIONNEL */
-        .dt-footer {
-            background-color: #f8fafc;
-            border-top: 1px solid #e2e8f0;
-            padding: 20px 30px;
-            font-size: 0.85rem;
-            color: #64748b;
-            line-height: 1.5;
+        #bde-root .bde-step-label::after {
+            content: '' !important;
+            flex: 1 !important;
+            height: 1px !important;
+            background: #dde3ea !important;
+            display: block !important;
         }
 
-        .dt-footer strong {
-            color: #475569;
+        #bde-root .bde-question-text {
+            font-family: 'Georgia', serif !important;
+            font-size: 1.18rem !important;
+            font-weight: 400 !important;
+            color: #0f2233 !important;
+            line-height: 1.55 !important;
+            margin-bottom: 8px !important;
         }
 
-        .dt-disclaimer {
-            margin-bottom: 15px;
+        #bde-root .bde-question-note {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.88rem !important;
+            color: #5a7080 !important;
+            line-height: 1.5 !important;
+            margin-top: 6px !important;
+            padding-left: 0 !important;
         }
 
-        .dt-references ul {
-            margin: 8px 0 0 0;
-            padding-left: 20px;
-            list-style-type: square;
+        #bde-root .bde-criteria-list {
+            list-style: none !important;
+            padding: 12px 16px !important;
+            background: #f4f8fa !important;
+            border-left: 3px solid #1a5c78 !important;
+            border-radius: 0 6px 6px 0 !important;
+            margin-top: 12px !important;
         }
 
-        .dt-references li {
-            margin-bottom: 4px;
+        #bde-root .bde-criteria-list li {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.9rem !important;
+            color: #334155 !important;
+            padding: 4px 0 4px 20px !important;
+            position: relative !important;
+            line-height: 1.45 !important;
         }
 
+        #bde-root .bde-criteria-list li::before {
+            content: '\2022' !important;
+            position: absolute !important;
+            left: 6px !important;
+            color: #1a5c78 !important;
+            font-weight: 700 !important;
+        }
+
+        /* ============================================================
+           BOUTONS DE CHOIX
+        ============================================================ */
+        #bde-root .bde-choices {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+
+        #bde-root .bde-choice-btn {
+            display: flex !important;
+            align-items: center !important;
+            gap: 14px !important;
+            padding: 14px 18px !important;
+            border: 1.5px solid #dde3ea !important;
+            border-radius: 8px !important;
+            background: #ffffff !important;
+            cursor: pointer !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.97rem !important;
+            font-weight: 500 !important;
+            color: #1a2332 !important;
+            text-align: left !important;
+            transition: all 0.18s ease !important;
+            width: 100% !important;
+            line-height: 1.4 !important;
+        }
+
+        #bde-root .bde-choice-btn:hover {
+            border-color: #1a5c78 !important;
+            background: #f0f7fa !important;
+            color: #0f3c52 !important;
+            transform: translateX(3px) !important;
+            box-shadow: 0 2px 8px rgba(26,92,120,0.1) !important;
+        }
+
+        #bde-root .bde-choice-btn:focus {
+            outline: 2px solid #5bbcd4 !important;
+            outline-offset: 2px !important;
+        }
+
+        #bde-root .bde-choice-icon {
+            width: 36px !important;
+            height: 36px !important;
+            min-width: 36px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.85rem !important;
+            font-weight: 700 !important;
+        }
+
+        #bde-root .bde-icon-yes  { background: #dcfce7 !important; color: #166534 !important; }
+        #bde-root .bde-icon-no   { background: #fee2e2 !important; color: #991b1b !important; }
+        #bde-root .bde-icon-alt  { background: #f0f7fa !important; color: #1a5c78 !important; }
+        #bde-root .bde-icon-warn { background: #fef9c3 !important; color: #854d0e !important; }
+
+        #bde-root .bde-choice-content {
+            flex: 1 !important;
+        }
+
+        #bde-root .bde-choice-title {
+            font-weight: 600 !important;
+            display: block !important;
+        }
+
+        #bde-root .bde-choice-desc {
+            font-size: 0.82rem !important;
+            color: #64748b !important;
+            margin-top: 2px !important;
+            font-weight: 400 !important;
+        }
+
+        /* ============================================================
+           NAVIGATION
+        ============================================================ */
+        #bde-root .bde-nav {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin-top: 26px !important;
+            padding-top: 18px !important;
+            border-top: 1px solid #f1f5f9 !important;
+        }
+
+        #bde-root .bde-btn-back {
+            background: transparent !important;
+            color: #64748b !important;
+            border: 1px solid #cbd5e1 !important;
+            padding: 8px 16px !important;
+            cursor: pointer !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.87rem !important;
+            font-weight: 500 !important;
+            border-radius: 6px !important;
+            transition: all 0.18s !important;
+        }
+
+        #bde-root .bde-btn-back:hover {
+            background: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #94a3b8 !important;
+        }
+
+        #bde-root .bde-btn-reset {
+            background: transparent !important;
+            color: #94a3b8 !important;
+            border: none !important;
+            padding: 8px 12px !important;
+            cursor: pointer !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.85rem !important;
+            border-radius: 6px !important;
+            transition: all 0.18s !important;
+        }
+
+        #bde-root .bde-btn-reset:hover {
+            color: #ef4444 !important;
+            background: #fef2f2 !important;
+        }
+
+        /* ============================================================
+           RÉSULTATS
+        ============================================================ */
+        #bde-root .bde-result {
+            border-radius: 8px !important;
+            padding: 24px !important;
+            border: 1px solid rgba(0,0,0,0.06) !important;
+            margin-bottom: 16px !important;
+        }
+
+        #bde-root .bde-result-header {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 14px !important;
+            margin-bottom: 16px !important;
+        }
+
+        #bde-root .bde-result-badge {
+            width: 44px !important;
+            height: 44px !important;
+            min-width: 44px !important;
+            border-radius: 10px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1.2rem !important;
+        }
+
+        #bde-root .bde-result-title-wrap h3 {
+            font-family: 'Georgia', serif !important;
+            font-size: 1.15rem !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+            margin-bottom: 2px !important;
+        }
+
+        #bde-root .bde-result-subtitle {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.8rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.08em !important;
+            font-weight: 600 !important;
+            opacity: 0.7 !important;
+        }
+
+        #bde-root .bde-result-body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.93rem !important;
+            line-height: 1.65 !important;
+        }
+
+        #bde-root .bde-result-body p {
+            margin-bottom: 10px !important;
+        }
+
+        #bde-root .bde-result-body ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 10px 0 !important;
+        }
+
+        #bde-root .bde-result-body li {
+            padding: 5px 0 5px 20px !important;
+            position: relative !important;
+            line-height: 1.5 !important;
+        }
+
+        #bde-root .bde-result-body li::before {
+            content: '\203A' !important;
+            position: absolute !important;
+            left: 4px !important;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+        }
+
+        #bde-root .bde-result-alert {
+            margin-top: 14px !important;
+            padding: 10px 14px !important;
+            border-radius: 6px !important;
+            font-size: 0.85rem !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            line-height: 1.5 !important;
+        }
+
+        /* Variantes résultat */
+        #bde-root .res-biopsy {
+            background: #fef5f5 !important;
+            border-left: 5px solid #dc2626 !important;
+        }
+        #bde-root .res-biopsy .bde-result-badge { background: #fee2e2 !important; }
+        #bde-root .res-biopsy h3 { color: #991b1b !important; }
+        #bde-root .res-biopsy .bde-result-subtitle { color: #dc2626 !important; }
+        #bde-root .res-biopsy .bde-result-body { color: #7f1d1d !important; }
+        #bde-root .res-biopsy .bde-result-alert { background: rgba(220,38,38,0.08) !important; color: #7f1d1d !important; }
+
+        #bde-root .res-surveillance {
+            background: #f0fdf5 !important;
+            border-left: 5px solid #16a34a !important;
+        }
+        #bde-root .res-surveillance .bde-result-badge { background: #dcfce7 !important; }
+        #bde-root .res-surveillance h3 { color: #166534 !important; }
+        #bde-root .res-surveillance .bde-result-subtitle { color: #16a34a !important; }
+        #bde-root .res-surveillance .bde-result-body { color: #14532d !important; }
+        #bde-root .res-surveillance .bde-result-alert { background: rgba(22,163,74,0.08) !important; color: #14532d !important; }
+
+        #bde-root .res-discuss {
+            background: #fffbeb !important;
+            border-left: 5px solid #d97706 !important;
+        }
+        #bde-root .res-discuss .bde-result-badge { background: #fef3c7 !important; }
+        #bde-root .res-discuss h3 { color: #92400e !important; }
+        #bde-root .res-discuss .bde-result-subtitle { color: #d97706 !important; }
+        #bde-root .res-discuss .bde-result-body { color: #78350f !important; }
+        #bde-root .res-discuss .bde-result-alert { background: rgba(217,119,6,0.08) !important; color: #78350f !important; }
+
+        #bde-root .res-genetic {
+            background: #f5f3ff !important;
+            border-left: 5px solid #7c3aed !important;
+        }
+        #bde-root .res-genetic .bde-result-badge { background: #ede9fe !important; }
+        #bde-root .res-genetic h3 { color: #4c1d95 !important; }
+        #bde-root .res-genetic .bde-result-subtitle { color: #7c3aed !important; }
+        #bde-root .res-genetic .bde-result-body { color: #3b1f7a !important; }
+        #bde-root .res-genetic .bde-result-alert { background: rgba(124,58,237,0.08) !important; color: #3b1f7a !important; }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        #bde-root .bde-footer {
+            background: #f8fafc !important;
+            border-top: 1px solid #e8edf2 !important;
+            padding: 20px 32px !important;
+        }
+
+        #bde-root .bde-disclaimer {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.8rem !important;
+            color: #64748b !important;
+            line-height: 1.6 !important;
+            margin-bottom: 14px !important;
+            padding: 12px 14px !important;
+            background: #fff8e1 !important;
+            border-radius: 6px !important;
+            border-left: 3px solid #f59e0b !important;
+        }
+
+        #bde-root .bde-refs {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-size: 0.78rem !important;
+            color: #94a3b8 !important;
+            line-height: 1.5 !important;
+        }
+
+        #bde-root .bde-refs strong {
+            color: #64748b !important;
+            display: block !important;
+            margin-bottom: 6px !important;
+        }
+
+        #bde-root .bde-refs ul {
+            list-style: none !important;
+            padding: 0 !important;
+        }
+
+        #bde-root .bde-refs li {
+            padding: 3px 0 3px 14px !important;
+            position: relative !important;
+        }
+
+        #bde-root .bde-refs li::before {
+            content: '\2014' !important;
+            position: absolute !important;
+            left: 0 !important;
+            color: #cbd5e1 !important;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 600px) {
+            #bde-root .bde-header,
+            #bde-root .bde-body,
+            #bde-root .bde-footer {
+                padding-left: 18px !important;
+                padding-right: 18px !important;
+            }
+
+            #bde-root .bde-header h1 {
+                font-size: 1.4rem !important;
+            }
+
+            #bde-root .bde-choice-btn {
+                padding: 12px 14px !important;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div id="decision-tool-container">
-    
-    <!-- HEADER INSTITUTIONNEL -->
-    <div class="dt-header">
-        <div class="dt-header-tag">Outil d'aide à la décision — Gynécologie</div>
+<div id="bde-root">
+
+    <!-- ═══════════════════════ HEADER ═══════════════════════ -->
+    <div class="bde-header">
+        <div class="bde-header-rule"></div>
+        <div class="bde-header-tag">Aide à la décision clinique &mdash; Gynécologie-Obstétrique</div>
         <h1>Biopsie de l'Endomètre</h1>
-        <p>Algorithme basé sur les critères cliniques et échographiques actuels • Usage professionnel exclusif</p>
+        <p class="bde-header-sub">
+            Algorithme décisionnel basé sur les recommandations ESGO/ESTRO/ESP 2025,
+            CNGOF et ACOG &bull; Dr KARA-ZAITRI M.A ; Réservé aux professionnels de santé
+        </p>
+        <div class="bde-progress-bar-wrap">
+            <div class="bde-progress-bar" id="bde-progress"></div>
+        </div>
     </div>
 
-    <!-- CORPS DE L'OUTIL -->
-    <div class="dt-body">
+    <!-- ═══════════════════════ BODY ═══════════════════════ -->
+    <div class="bde-body">
+        <div class="bde-breadcrumb" id="bde-breadcrumb">Accueil</div>
 
-        <!-- STEP 0: ACCUEIL -->
-        <div class="dt-step active" id="step0">
-            <div class="dt-question-box">
-                <div class="dt-question-title">1 — Motif de consultation</div>
-                <div class="dt-question-desc">Quelle est la situation clinique principale justifiant l'évaluation ?</div>
+        <!-- ───────── STEP 0 : MOTIF ───────── -->
+        <div class="bde-step active" id="step0" data-progress="5">
+            <div class="bde-question-wrap">
+                <div class="bde-step-label">Étape 1 &mdash; Motif clinique</div>
+                <p class="bde-question-text">Quelle est la situation clinique principale justifiant l'évaluation endométriale ?</p>
             </div>
-            <div class="dt-buttons-flex">
-                <button type="button" class="dt-btn" onclick="nextStep('step_bleeding')">Saignements utérins anormaux</button>
-                <button type="button" class="dt-btn" onclick="nextStep('step_asymptomatic')">Découverte fortuite (Asymptomatique)</button>
-                <button type="button" class="dt-btn" onclick="nextStep('step_infertility')">Infertilité / Fausses couches</button>
-                <button type="button" class="dt-btn" onclick="nextStep('step_surveillance')">Surveillance (Tamoxifène, THS...)</button>
+            <div class="bde-choices">
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('step_bleeding', 'Saignements utérins anormaux')">
+                    <span class="bde-choice-icon bde-icon-no">&#8599;</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Saignements utérins anormaux</span>
+                        <span class="bde-choice-desc">Métrorragies post-ménopausiques ou ménorragies pré-ménopausiques</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('step_asymptomatic', 'Découverte fortuite / Asymptomatique')">
+                    <span class="bde-choice-icon bde-icon-alt">&#9782;</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Découverte fortuite (Asymptomatique)</span>
+                        <span class="bde-choice-desc">Épaississement endométrial sans symptôme clinique</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('step_infertility', 'Infertilité / Fausses couches')">
+                    <span class="bde-choice-icon bde-icon-alt">&#9854;</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Infertilité / Fausses couches à répétition</span>
+                        <span class="bde-choice-desc">Échecs d'implantation, FCR — recherche endométrite chronique</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('step_surveillance', 'Surveillance particulière')">
+                    <span class="bde-choice-icon bde-icon-warn">&#9888;</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Surveillance particulière</span>
+                        <span class="bde-choice-desc">Tamoxifène, THS, Syndrome de Lynch</span>
+                    </span>
+                </button>
             </div>
         </div>
 
-        <!-- BRANCHE 1 : SAIGNEMENTS -->
-        <div class="dt-step" id="step_bleeding">
-            <div class="dt-question-box">
-                <div class="dt-question-title">2 — Statut Ménopausique</div>
-                <div class="dt-question-desc">La patiente est-elle ménopausée ?</div>
+        <!-- ───────── STEP BLEEDING ───────── -->
+        <div class="bde-step" id="step_bleeding" data-progress="25">
+            <div class="bde-question-wrap">
+                <div class="bde-step-label">Étape 2 &mdash; Statut ménopausique</div>
+                <p class="bde-question-text">La patiente est-elle ménopausée ?</p>
+                <p class="bde-question-note">Aménorrhée ≥ 12 mois d'origine ovarienne confirmée ou présumée</p>
             </div>
-            <div class="dt-buttons-flex">
-                <button type="button" class="dt-btn dt-btn-yes" onclick="nextStep('step_postmeno_bleeding_echo')">OUI (Ménopausée)</button>
-                <button type="button" class="dt-btn dt-btn-no" onclick="nextStep('step_premeno_age')">NON (En activité génitale)</button>
+            <div class="bde-choices">
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('step_postmeno_echo', 'Ménopausée')">
+                    <span class="bde-choice-icon bde-icon-yes">OUI</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Oui — Ménopausée</span>
+                        <span class="bde-choice-desc">Métrorragies post-ménopausiques</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('step_premeno_age', 'En activité génitale')">
+                    <span class="bde-choice-icon bde-icon-no">NON</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Non — En activité génitale</span>
+                        <span class="bde-choice-desc">Cycles présents ou récents, saignements anormaux</span>
+                    </span>
+                </button>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Recommencer</button>
-            </div>
-        </div>
-
-        <!-- Saignement Post-Ménopause -->
-        <div class="dt-step" id="step_postmeno_bleeding_echo">
-            <div class="dt-question-box">
-                <div class="dt-question-title">3 — Données Échographiques</div>
-                <div class="dt-question-desc">Quelle est l'épaisseur de l'endomètre mesurée (double feuillet) ?</div>
-            </div>
-            <div class="dt-buttons-flex">
-                <button type="button" class="dt-btn dt-btn-yes" onclick="nextStep('res_biopsy_postmeno')">Épaissie (> 4 mm)</button>
-                <button type="button" class="dt-btn dt-btn-no" onclick="nextStep('res_surveillance_postmeno')">Fine (≤ 4 mm)</button>
-                <button type="button" class="dt-btn dt-btn-neutral" onclick="nextStep('res_biopsy_postmeno_noecho')">Échographie impossible</button>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Recommencer</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Recommencer</button>
             </div>
         </div>
 
-        <!-- Saignement Pré-Ménopause -->
-        <div class="dt-step" id="step_premeno_age">
-            <div class="dt-question-box">
-                <div class="dt-question-title">3 — Âge de la patiente</div>
-                <div class="dt-question-desc">La patiente a-t-elle 45 ans ou plus ?</div>
+        <!-- ───────── POST-MENO : ECHO ───────── -->
+        <div class="bde-step" id="step_postmeno_echo" data-progress="50">
+            <div class="bde-question-wrap">
+                <div class="bde-step-label">Étape 3 &mdash; Données échographiques</div>
+                <p class="bde-question-text">Quelle est l'épaisseur endométriale en double feuillet (écho endo-vaginale) ?</p>
+                <p class="bde-question-note">Seuil de référence : 4 mm en post-ménopause symptomatique</p>
             </div>
-            <div class="dt-buttons-flex">
-                <button type="button" class="dt-btn dt-btn-yes" onclick="nextStep('res_biopsy_premeno_45')">OUI (≥ 45 ans)</button>
-                <button type="button" class="dt-btn dt-btn-no" onclick="nextStep('step_premeno_risk')">NON (< 45 ans)</button>
+            <div class="bde-choices">
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_biopsy_postmeno', 'Endomètre > 4 mm')">
+                    <span class="bde-choice-icon bde-icon-no">&gt;4</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Épaissie &mdash; > 4 mm</span>
+                        <span class="bde-choice-desc">Endomètre suspect, investigation histologique requise</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_surveillance_postmeno', 'Endomètre ≤ 4 mm')">
+                    <span class="bde-choice-icon bde-icon-yes">&#8804;4</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Fine &mdash; ≤ 4 mm</span>
+                        <span class="bde-choice-desc">Valeur prédictive négative élevée (&lt; 1 % de risque)</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_echo_impossible', 'Échographie impossible')">
+                    <span class="bde-choice-icon bde-icon-warn">?</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Échographie impossible ou non contributive</span>
+                        <span class="bde-choice-desc">Cavité non visualisée, col imperméable, mauvaise fenêtre</span>
+                    </span>
+                </button>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Recommencer</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Recommencer</button>
             </div>
         </div>
 
-        <div class="dt-step" id="step_premeno_risk">
-            <div class="dt-question-box">
-                <div class="dt-question-title">4 — Évaluation des Risques</div>
-                <div class="dt-question-desc">La patiente présente-t-elle au moins l'un des critères suivants ?</div>
-                <ul class="dt-question-list">
-                    <li>Obésité (IMC > 30)</li>
-                    <li>Exposition prolongée aux œstrogènes (ex: SOPK)</li>
+        <!-- ───────── PRÉ-MENO : ÂGE ───────── -->
+        <div class="bde-step" id="step_premeno_age" data-progress="45">
+            <div class="bde-question-wrap">
+                <div class="bde-step-label">Étape 3 &mdash; Âge de la patiente</div>
+                <p class="bde-question-text">La patiente a-t-elle 45 ans ou plus ?</p>
+                <p class="bde-question-note">L'âge constitue un facteur de risque indépendant du cancer de l'endomètre</p>
+            </div>
+            <div class="bde-choices">
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_biopsy_premeno45', '≥ 45 ans')">
+                    <span class="bde-choice-icon bde-icon-no">OUI</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Oui — ≥ 45 ans</span>
+                        <span class="bde-choice-desc">Âge à risque, biopsie recommandée en première intention</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('step_premeno_risk', '< 45 ans')">
+                    <span class="bde-choice-icon bde-icon-yes">NON</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Non — &lt; 45 ans</span>
+                        <span class="bde-choice-desc">Évaluation des facteurs de risque associés</span>
+                    </span>
+                </button>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Recommencer</button>
+            </div>
+        </div>
+
+        <!-- ───────── PRÉ-MENO : RISQUE ───────── -->
+        <div class="bde-step" id="step_premeno_risk" data-progress="60">
+            <div class="bde-question-wrap">
+                <div class="bde-step-label">Étape 4 &mdash; Facteurs de risque</div>
+                <p class="bde-question-text">La patiente présente-t-elle au moins un des critères suivants ?</p>
+                <ul class="bde-criteria-list">
+                    <li>Obésité (IMC &gt; 30 kg/m²)</li>
+                    <li>Hyperœstrogénie chronique (SOPK, anovulation persistante)</li>
                     <li>Traitement médical bien conduit mais inefficace</li>
-                    <li>Antécédents familiaux évocateurs (Syndrome de Lynch, etc.)</li>
+                    <li>Antécédents familiaux du spectre de Lynch / HNPCC</li>
+                    <li>Diabète de type 2, hypertension artérielle</li>
                 </ul>
             </div>
-            <div class="dt-buttons-flex">
-                <button type="button" class="dt-btn dt-btn-yes" onclick="nextStep('res_biopsy_premeno_risk')">OUI (Facteur(s) présent(s))</button>
-                <button type="button" class="dt-btn dt-btn-no" onclick="nextStep('res_surveillance_premeno')">NON (Aucun facteur)</button>
+            <div class="bde-choices">
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_biopsy_premeno_risk', 'Facteur(s) présent(s)')">
+                    <span class="bde-choice-icon bde-icon-no">OUI</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Oui — Facteur(s) présent(s)</span>
+                        <span class="bde-choice-desc">Biopsie indiquée malgré le jeune âge</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_surveillance_premeno', 'Aucun facteur')">
+                    <span class="bde-choice-icon bde-icon-yes">NON</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Non — Aucun facteur identifié</span>
+                        <span class="bde-choice-desc">Traitement médical en première intention</span>
+                    </span>
+                </button>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Recommencer</button>
-            </div>
-        </div>
-
-        <!-- BRANCHE 2 : ASYMPTOMATIQUE -->
-        <div class="dt-step" id="step_asymptomatic">
-            <div class="dt-question-box">
-                <div class="dt-question-title">2 — Statut de la Patiente</div>
-                <div class="dt-question-desc">Dans quel contexte s'inscrit cette découverte fortuite ?</div>
-            </div>
-            <div class="dt-buttons-flex">
-                <button type="button" class="dt-btn dt-btn-yes" onclick="nextStep('step_asymptomatic_postmeno_size')">Patiente Ménopausée</button>
-                <button type="button" class="dt-btn dt-btn-no" onclick="nextStep('res_surveillance_asymptomatic_pre')">Patiente Non Ménopausée</button>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Recommencer</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Recommencer</button>
             </div>
         </div>
 
-        <div class="dt-step" id="step_asymptomatic_postmeno_size">
-            <div class="dt-question-box">
-                <div class="dt-question-title">3 — Mesure Échographique</div>
-                <div class="dt-question-desc">Quelle est l'épaisseur endométriale mesurée (échographie endovaginale) ?</div>
+        <!-- ───────── ASYMPTOMATIQUE ───────── -->
+        <div class="bde-step" id="step_asymptomatic" data-progress="25">
+            <div class="bde-question-wrap">
+                <div class="bde-step-label">Étape 2 &mdash; Statut de la patiente</div>
+                <p class="bde-question-text">Dans quel contexte s'inscrit cette découverte fortuite ?</p>
             </div>
-            <div class="dt-buttons-flex">
-                <button type="button" class="dt-btn dt-btn-yes" onclick="nextStep('res_biopsy_asymptomatic_11')">Supérieure à 11 mm</button>
-                <button type="button" class="dt-btn dt-btn-neutral" onclick="nextStep('res_discuss_asymptomatic')">Entre 5 et 11 mm</button>
-                <button type="button" class="dt-btn dt-btn-no" onclick="nextStep('res_surveillance_simple')">Inférieure à 5 mm</button>
+            <div class="bde-choices">
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('step_asympto_size', 'Ménopausée')">
+                    <span class="bde-choice-icon bde-icon-warn">PM</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Patiente Ménopausée</span>
+                        <span class="bde-choice-desc">Épaississement sans symptôme en post-ménopause</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_asympto_premeno', 'Non ménopausée')">
+                    <span class="bde-choice-icon bde-icon-yes">AG</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Patiente en Activité Génitale</span>
+                        <span class="bde-choice-desc">Endomètre physiologiquement variable selon le cycle</span>
+                    </span>
+                </button>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Recommencer</button>
-            </div>
-        </div>
-
-        <!-- BRANCHE 3 : SURVEILLANCE -->
-        <div class="dt-step" id="step_surveillance">
-            <div class="dt-question-box">
-                <div class="dt-question-title">2 — Contexte de Surveillance</div>
-                <div class="dt-question-desc">Précisez le type de surveillance requise :</div>
-            </div>
-            <div class="dt-buttons-flex">
-                <button type="button" class="dt-btn" onclick="nextStep('res_tamoxifen')">Patiente sous Tamoxifène</button>
-                <button type="button" class="dt-btn" onclick="nextStep('res_lynch')">Syndrome de Lynch</button>
-                <button type="button" class="dt-btn" onclick="nextStep('res_ths')">Patiente sous THS</button>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Recommencer</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Recommencer</button>
             </div>
         </div>
 
-        <!-- RÉSULTATS -->
-        
-        <div class="dt-step" id="step_infertility">
-            <div class="dt-result-box dt-res-discuss">
-                <h3>🔍 Biopsie à visée étiologique</h3>
-                <p><strong>Indication :</strong> Bilan d'infertilité (échecs d'implantation) ou fausses couches à répétition.</p>
-                <ul>
-                    <li><strong>Recherche :</strong> Endométrite Chronique (plasmocytes CD138).</li>
-                    <li><strong>Timing recommandé :</strong> Phase lutéale moyenne (J21-J24 du cycle).</li>
-                </ul>
+        <div class="bde-step" id="step_asympto_size" data-progress="50">
+            <div class="bde-question-wrap">
+                <div class="bde-step-label">Étape 3 &mdash; Épaisseur échographique</div>
+                <p class="bde-question-text">Quelle est l'épaisseur endométriale (double feuillet, écho endo-vaginale) ?</p>
+                <p class="bde-question-note">Chez la femme ménopausée asymptomatique, les seuils diffèrent de la femme symptomatique</p>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
+            <div class="bde-choices">
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_biopsy_asympto11', '> 11 mm')">
+                    <span class="bde-choice-icon bde-icon-no">&gt;11</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Supérieure à 11 mm</span>
+                        <span class="bde-choice-desc">Biopsie indiquée malgré l'absence de symptômes</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_discuss_asympto', '5–11 mm')">
+                    <span class="bde-choice-icon bde-icon-warn">&#8776;</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Entre 5 et 11 mm</span>
+                        <span class="bde-choice-desc">Zone grise — décision selon les facteurs de risque individuels</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_surveillance_simple', '< 5 mm')">
+                    <span class="bde-choice-icon bde-icon-yes">&lt;5</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Inférieure à 5 mm</span>
+                        <span class="bde-choice-desc">Pas d'indication de biopsie en l'absence de symptôme</span>
+                    </span>
+                </button>
             </div>
-        </div>
-
-        <div class="dt-step" id="res_biopsy_postmeno">
-            <div class="dt-result-box dt-res-biopsy">
-                <h3>🔴 Indication de Biopsie</h3>
-                <p><strong>Patiente ménopausée avec saignements et endomètre > 4 mm.</strong></p>
-                <p>L'exploration histologique est indispensable pour écarter un processus malin (Hyperplasie atypique ou Cancer de l'endomètre).</p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
-            </div>
-        </div>
-
-        <div class="dt-step" id="res_biopsy_postmeno_noecho">
-            <div class="dt-result-box dt-res-discuss">
-                <h3>⚠️ Échographie de triage requise</h3>
-                <p>Devant des métrorragies post-ménopausiques, l'échographie pelvienne constitue l'examen de triage en première intention :</p>
-                <ul>
-                    <li><strong>Si > 4 mm :</strong> Biopsie indiquée.</li>
-                    <li><strong>Si ≤ 4 mm :</strong> Surveillance clinique.</li>
-                </ul>
-                <p><em>Note : Si la réalisation de l'échographie est techniquement impossible, une biopsie à l'aveugle est indiquée par défaut.</em></p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Recommencer</button>
             </div>
         </div>
 
-        <div class="dt-step" id="res_surveillance_postmeno">
-            <div class="dt-result-box dt-res-surveillance">
-                <h3>🟢 Surveillance Clinique</h3>
-                <p><strong>Métrorragies avec endomètre fin (≤ 4 mm).</strong></p>
-                <p>Le risque de cancer est inférieur à 1% dans cette configuration (probabilité d'atrophie). La réalisation d'une biopsie n'est justifiée qu'en cas de récidive ou de persistance des saignements.</p>
+        <!-- ───────── SURVEILLANCE ───────── -->
+        <div class="bde-step" id="step_surveillance" data-progress="25">
+            <div class="bde-question-wrap">
+                <div class="bde-step-label">Étape 2 &mdash; Contexte de surveillance</div>
+                <p class="bde-question-text">Précisez le contexte clinique de surveillance :</p>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
+            <div class="bde-choices">
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_tamoxifen', 'Tamoxifène')">
+                    <span class="bde-choice-icon bde-icon-warn">Rx</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Patiente sous Tamoxifène</span>
+                        <span class="bde-choice-desc">Cancer du sein traité, traitement hormono-modulateur</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_lynch', 'Lynch')">
+                    <span class="bde-choice-icon bde-icon-no">&#9856;</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Syndrome de Lynch (HNPCC)</span>
+                        <span class="bde-choice-desc">Mutation MMR confirmée — haut risque génétique</span>
+                    </span>
+                </button>
+                <button type="button" class="bde-choice-btn" onclick="bdeGo('res_ths', 'THS')">
+                    <span class="bde-choice-icon bde-icon-alt">THS</span>
+                    <span class="bde-choice-content">
+                        <span class="bde-choice-title">Patiente sous THS de la Ménopause</span>
+                        <span class="bde-choice-desc">Traitement hormonal de substitution en cours</span>
+                    </span>
+                </button>
             </div>
-        </div>
-
-        <div class="dt-step" id="res_biopsy_asymptomatic_11">
-            <div class="dt-result-box dt-res-biopsy">
-                <h3>🔴 Indication de Biopsie</h3>
-                <p><strong>Patiente ménopausée asymptomatique avec épaisseur > 11 mm.</strong></p>
-                <p>Le risque d'hyperplasie ou de cancer justifie une vérification histologique malgré l'absence de saignements.</p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
-            </div>
-        </div>
-
-        <div class="dt-step" id="res_discuss_asymptomatic">
-            <div class="dt-result-box dt-res-discuss">
-                <h3>🔸 Discussion Multidisciplinaire</h3>
-                <p><strong>Endomètre épaissi modérément (5 à 11 mm) sans saignement.</strong></p>
-                <p>La décision de biopsier doit être évaluée au cas par cas selon la présence de co-morbidités ou de facteurs de risque associés (Obésité, Diabète, HTA).</p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
-            </div>
-        </div>
-
-        <div class="dt-step" id="res_surveillance_simple">
-            <div class="dt-result-box dt-res-surveillance">
-                <h3>🟢 Pas d'Indication de Biopsie</h3>
-                <p><strong>Épaisseur endométriale normale et absence de symptomatologie clinique.</strong></p>
-                <p>Aucune investigation supplémentaire n'est requise.</p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Recommencer</button>
             </div>
         </div>
 
-        <div class="dt-step" id="res_biopsy_premeno_45">
-            <div class="dt-result-box dt-res-biopsy">
-                <h3>🔴 Indication de Biopsie</h3>
-                <p><strong>Patiente ≥ 45 ans avec saignements utérins anormaux.</strong></p>
-                <p>L'âge est un facteur de risque indépendant. L'évaluation histologique est recommandée en première intention.</p>
+        <!-- ══════════════════ RÉSULTATS ══════════════════ -->
+
+        <!-- INFERTILITÉ -->
+        <div class="bde-step" id="step_infertility" data-progress="80">
+            <div class="bde-result res-discuss">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#128269;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Biopsie diagnostique</div>
+                        <h3>Biopsie à visée étiologique</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Indication :</strong> Bilan d'infertilité (échecs d'implantation répétés en FIV) ou fausses couches à répétition (FCR ≥ 3, ou ≥ 2 après 35 ans).</p>
+                    <ul>
+                        <li><strong>Objectif principal :</strong> Endométrite chronique subclinique — marqueur clé : plasmocytes CD138+ en immunohistochimie</li>
+                        <li><strong>Timing optimal :</strong> Phase lutéale moyenne (J21–J24 du cycle naturel)</li>
+                        <li><strong>Si structurel suspecté :</strong> Compléter par hystéroscopie diagnostique pour éliminer polype, synéchie ou fibrome sous-muqueux</li>
+                        <li><strong>Traitement si positif :</strong> Doxycycline 200 mg/j × 14 jours (antibiothérapie guidée)</li>
+                    </ul>
+                    <div class="bde-result-alert">
+                        <strong>Note :</strong> La biopsie d'endomètre seule ne remplace pas l'hystéroscopie pour le diagnostic des lésions intracavitaires structurales.
+                    </div>
+                </div>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
             </div>
         </div>
 
-        <div class="dt-step" id="res_biopsy_premeno_risk">
-            <div class="dt-result-box dt-res-biopsy">
-                <h3>🔴 Indication de Biopsie</h3>
-                <p><strong>Patiente < 45 ans présentant des facteurs de risque.</strong></p>
-                <p>L'association de saignements anormaux et de facteurs de risque (SOPK, obésité, etc.) justifie un prélèvement endométrial.</p>
+        <!-- BIOPSY POST-MENO -->
+        <div class="bde-step" id="res_biopsy_postmeno" data-progress="100">
+            <div class="bde-result res-biopsy">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#9888;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Indication formelle</div>
+                        <h3>Biopsie d'endomètre indiquée</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Patiente ménopausée, saignements post-ménopausiques, endomètre &gt; 4 mm.</strong></p>
+                    <p>Le risque de cancer de l'endomètre est estimé à 5–10 % dans cette configuration. L'exploration histologique est impérative.</p>
+                    <ul>
+                        <li><strong>Technique :</strong> Biopsie à la pipelle de Cornier (procédure de 1re intention, ambulatoire)</li>
+                        <li><strong>Si biopsie insuffisante :</strong> Hystéroscopie diagnostique avec biopsies dirigées</li>
+                        <li><strong>IRM pelvienne :</strong> à compléter si histologie confirmant une lésion (bilan d'extension pré-opératoire)</li>
+                    </ul>
+                    <div class="bde-result-alert">
+                        &#9888; Toute métrorragie post-ménopausique est un cancer de l'endomètre jusqu'à preuve du contraire (HAS 2010, confirmé 2024).
+                    </div>
+                </div>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
-            </div>
-        </div>
-        
-        <div class="dt-step" id="res_surveillance_premeno">
-            <div class="dt-result-box dt-res-surveillance">
-                <h3>🟢 Traitement Médical de 1ère Intention</h3>
-                <p><strong>Patiente < 45 ans sans facteur de risque.</strong></p>
-                <p>Pas de biopsie indiquée d'emblée. Un essai de traitement médical (hormonal) est recommandé. La biopsie sera discutée en cas d'échec thérapeutique.</p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
-            </div>
-        </div>
-        
-        <div class="dt-step" id="res_surveillance_asymptomatic_pre">
-            <div class="dt-result-box dt-res-surveillance">
-                <h3>🟢 Pas d'Indication de Biopsie</h3>
-                <p><strong>Patiente non ménopausée asymptomatique.</strong></p>
-                <p>Chez la femme en période d'activité génitale, l'épaisseur de l'endomètre varie physiologiquement avec le cycle menstruel. Il n'y a pas d'indication à biopsier sur un simple critère échographique en l'absence de symptômes.</p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
             </div>
         </div>
 
-        <div class="dt-step" id="res_tamoxifen">
-            <div class="dt-result-box dt-res-discuss">
-                <h3>⚠️ Patiente sous Tamoxifène</h3>
-                <p><strong>Si Asymptomatique :</strong> Pas de dépistage systématique recommandé (l'échographie est souvent faussement anormale sous Tamoxifène).</p>
-                <p><strong>Si Saignements :</strong> Biopsie indispensable (et souvent hystéroscopie) devant le risque majoré de polypes et de cancer de l'endomètre.</p>
+        <!-- SURVEILLANCE POST-MENO -->
+        <div class="bde-step" id="res_surveillance_postmeno" data-progress="100">
+            <div class="bde-result res-surveillance">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#10003;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Surveillance clinique</div>
+                        <h3>Pas d'indication de biopsie immédiate</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Endomètre fin (≤ 4 mm) chez la femme ménopausée symptomatique.</strong></p>
+                    <p>Le risque de cancer est inférieur à 1 % dans cette configuration (valeur prédictive négative &gt; 99 %). Ce résultat est compatible avec une atrophie endométriale.</p>
+                    <ul>
+                        <li><strong>Conduite :</strong> Surveillance clinique, pas de biopsie immédiate</li>
+                        <li><strong>Si récidive :</strong> Nouvelle exploration recommandée</li>
+                        <li><strong>Si persistance :</strong> Envisager une hystéroscopie (éliminer un polype ou un cancer de type séreux à endomètre fin)</li>
+                    </ul>
+                    <div class="bde-result-alert">
+                        <strong>Rappel :</strong> Un endomètre fin n'élimine pas formellement un carcinome séreux ou à cellules claires (types histologiques rares mais agressifs).
+                    </div>
+                </div>
             </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
-            </div>
-        </div>
-
-        <div class="dt-step" id="res_lynch">
-            <div class="dt-result-box dt-res-biopsy">
-                <h3>🧬 Syndrome de Lynch</h3>
-                <p><strong>Haut risque génétique de cancer de l'endomètre.</strong></p>
-                <p>Recommandation actuelle : Dépistage par biopsie d'endomètre (à la pipelle) recommandée annuellement, à débuter généralement entre 30 et 35 ans (ou 5 ans avant l'âge du cancer le plus précoce dans la famille).</p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
-            </div>
-        </div>
-
-        <div class="dt-step" id="res_ths">
-            <div class="dt-result-box dt-res-discuss">
-                <h3>💊 Patiente sous THS (Traitement Hormonal)</h3>
-                <p>La survenue de saignements est fréquente dans les premiers mois de traitement.</p>
-                <p><strong>Indication de biopsie si :</strong> Saignements persistants au-delà de 6 mois d'utilisation, ou saignements survenant de novo (hors fenêtre de privation attendue).</p>
-            </div>
-            <div class="dt-navigation-area">
-                <button type="button" class="dt-btn-prev" onclick="prevStep()">← Étape précédente</button>
-                <button type="button" class="dt-btn-reset" onclick="resetTool()">Nouvelle évaluation</button>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
             </div>
         </div>
 
-    </div> <!-- FIN dt-body -->
-
-    <!-- FOOTER / DISCLAIMER INSTITUTIONNEL -->
-    <div class="dt-footer">
-        <div class="dt-disclaimer">
-            <strong>⚠️ Avertissement :</strong> Cet algorithme est une aide à la décision destinée exclusivement aux professionnels de santé. Il synthétise les recommandations actuelles de bonne pratique mais ne saurait en aucun cas se substituer au jugement médical, clinique et individualisé du praticien. En cas de doute, une concertation pluridisciplinaire est recommandée.
+        <!-- ECHO IMPOSSIBLE -->
+        <div class="bde-step" id="res_echo_impossible" data-progress="100">
+            <div class="bde-result res-discuss">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#9783;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Exploration alternative</div>
+                        <h3>Échographie non contributive</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p>L'échographie constitue l'examen de triage en 1re intention devant des métrorragies post-ménopausiques. Si elle est techniquement impossible ou non contributive :</p>
+                    <ul>
+                        <li><strong>Option 1 :</strong> Biopsie à l'aveugle (pipelle) — à réaliser par défaut</li>
+                        <li><strong>Option 2 :</strong> Hystéroscopie diagnostique d'emblée (si col imperméable, cavité non accessible)</li>
+                        <li><strong>Option 3 :</strong> Échographie avec agent de contraste ou hystérosonographie</li>
+                    </ul>
+                    <div class="bde-result-alert">
+                        L'absence de résultat échographique exploitable ne doit pas retarder l'investigation histologique.
+                    </div>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
         </div>
-        <div class="dt-references">
-            <strong>Principales références médicales :</strong>
+
+        <!-- BIOPSY PRÉ-MENO ≥45 -->
+        <div class="bde-step" id="res_biopsy_premeno45" data-progress="100">
+            <div class="bde-result res-biopsy">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#9888;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Indication formelle</div>
+                        <h3>Biopsie d'endomètre indiquée</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Patiente ≥ 45 ans avec saignements utérins anormaux.</strong></p>
+                    <p>L'âge constitue un facteur de risque indépendant de cancer de l'endomètre. L'évaluation histologique est recommandée en première intention, avant tout traitement médical.</p>
+                    <ul>
+                        <li><strong>Technique :</strong> Biopsie à la pipelle (ambulatoire)</li>
+                        <li><strong>Bilan complémentaire :</strong> Échographie pelvienne systématique pour recherche de lésion structurale associée</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- BIOPSY PRÉ-MENO + RISQUE -->
+        <div class="bde-step" id="res_biopsy_premeno_risk" data-progress="100">
+            <div class="bde-result res-biopsy">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#9888;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Indication avec facteur de risque</div>
+                        <h3>Biopsie d'endomètre indiquée</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Patiente &lt; 45 ans avec saignements utérins anormaux et facteur(s) de risque.</strong></p>
+                    <p>L'association de saignements anormaux avec un facteur de risque identifié justifie un prélèvement endométrial avant toute escalade thérapeutique.</p>
+                    <ul>
+                        <li>SOPK avec anovulation chronique : risque d'hyperplasie endométriale majoré</li>
+                        <li>Obésité : exposition œstrogénique périphérique (aromatisation du tissu adipeux)</li>
+                        <li>Traitement médical bien conduit et inefficace : écarter une lésion organique</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- SURVEILLANCE PRÉ-MENO SANS RISQUE -->
+        <div class="bde-step" id="res_surveillance_premeno" data-progress="100">
+            <div class="bde-result res-surveillance">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#10003;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Traitement médical 1re ligne</div>
+                        <h3>Pas de biopsie d'emblée</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Patiente &lt; 45 ans, sans facteur de risque identifié.</strong></p>
+                    <p>Un essai de traitement médical (progestatifs, DIU au lévonorgestrel, traitement hormonal cyclique) est recommandé en première intention. La biopsie sera indiquée en cas :</p>
+                    <ul>
+                        <li>d'échec du traitement médical bien conduit</li>
+                        <li>de récidive des saignements à l'arrêt du traitement</li>
+                        <li>d'apparition d'un facteur de risque surajouté</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- ASYMPTO PRÉMENO -->
+        <div class="bde-step" id="res_asympto_premeno" data-progress="100">
+            <div class="bde-result res-surveillance">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#10003;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Pas d'indication</div>
+                        <h3>Pas de biopsie indiquée</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Patiente en activité génitale, asymptomatique.</strong></p>
+                    <p>L'épaisseur endométriale varie physiologiquement de 2 à 16 mm selon la phase du cycle. Il n'existe pas d'indication à biopsier sur un simple critère échographique en l'absence de symptôme chez la femme en période d'activité génitale.</p>
+                    <ul>
+                        <li>Recontrôler l'échographie en phase folliculaire précoce (J5–J7) si doute</li>
+                        <li>Si persistance ou anomalie morphologique : envisager une hystéroscopie</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- BIOPSY ASYMPTO >11mm -->
+        <div class="bde-step" id="res_biopsy_asympto11" data-progress="100">
+            <div class="bde-result res-biopsy">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#9888;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Indication malgré l'absence de symptôme</div>
+                        <h3>Biopsie d'endomètre indiquée</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Patiente ménopausée asymptomatique, endomètre &gt; 11 mm.</strong></p>
+                    <p>Au-delà de ce seuil, le risque d'hyperplasie ou de cancer justifie une vérification histologique même en l'absence de saignements.</p>
+                    <ul>
+                        <li>Biopsie à la pipelle en première intention</li>
+                        <li>Si résultat non contributif : hystéroscopie diagnostique</li>
+                        <li>Évaluation morphologique échographique concomitante (contours, hétérogénéité)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- DISCUSS ASYMPTO 5-11 -->
+        <div class="bde-step" id="res_discuss_asympto" data-progress="100">
+            <div class="bde-result res-discuss">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#9654;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Zone d'incertitude clinique</div>
+                        <h3>Discussion au cas par cas</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Endomètre modérément épaissi (5–11 mm), patiente ménopausée asymptomatique.</strong></p>
+                    <p>La décision doit être individualisée selon le profil de risque de la patiente :</p>
+                    <ul>
+                        <li><strong>Biopsie recommandée si :</strong> obésité, diabète, HTA, antécédents familiaux, épaississement hétérogène ou avec vascularisation</li>
+                        <li><strong>Surveillance acceptable si :</strong> endomètre homogène, absence de facteur de risque, morphologie bénigne à l'échographie</li>
+                        <li><strong>Contrôle recommandé :</strong> échographie de contrôle à 3–6 mois</li>
+                    </ul>
+                    <div class="bde-result-alert">
+                        Une concertation pluridisciplinaire peut être utile en cas de doute persistant.
+                    </div>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- SURVEILLANCE SIMPLE -->
+        <div class="bde-step" id="res_surveillance_simple" data-progress="100">
+            <div class="bde-result res-surveillance">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#10003;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Pas d'indication</div>
+                        <h3>Pas de biopsie indiquée</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Épaisseur endométriale normale (&lt; 5 mm) et absence de symptomatologie clinique.</strong></p>
+                    <p>Aucune investigation histologique supplémentaire n'est requise dans cette configuration. Pas de biopsie systématique.</p>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- TAMOXIFÈNE -->
+        <div class="bde-step" id="res_tamoxifen" data-progress="100">
+            <div class="bde-result res-discuss">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#128138;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Iatrogène — Tamoxifène</div>
+                        <h3>Conduite selon la symptomatologie</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Si Asymptomatique :</strong><br>Aucun dépistage systématique recommandé. L'échographie est fréquemment faussement anormale sous Tamoxifène (effet pseudo-hyperplasiant sur le stroma sous-endométrial). Pas de biopsie systématique.</p>
+                    <p><strong>Si Saignements :</strong><br>Biopsie indispensable. L'hystéroscopie diagnostique est souvent associée (risque majoré de polypes endométriaux et de cancer de l'endomètre sous Tamoxifène).</p>
+                    <ul>
+                        <li>Risque de cancer de l'endomètre multiplié par 2 à 3 sous Tamoxifène</li>
+                        <li>Le seuil de 4 mm n'est pas applicable sous Tamoxifène</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- LYNCH — MISE À JOUR 2024 -->
+        <div class="bde-step" id="res_lynch" data-progress="100">
+            <div class="bde-result res-genetic">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#9856;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Prédisposition génétique — MMR</div>
+                        <h3>Syndrome de Lynch : stratégie de surveillance</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p><strong>Risque cumulatif de cancer de l'endomètre :</strong> 40–60 % (MLH1/MSH2), 20–40 % (MSH6), plus élevé que le cancer colorectal chez la femme.</p>
+                    <ul>
+                        <li><strong>Surveillance recommandée :</strong> Biopsie d'endomètre ± échographie endo-vaginale tous les <strong>1–2 ans</strong>, à débuter entre <strong>30 et 35 ans</strong> (ou 5 ans avant le plus jeune âge diagnostiqué dans la famille)</li>
+                        <li><strong>Note NCCN/ESGO 2024 :</strong> Absence de preuve formelle d'efficacité du dépistage endométrial — décision partagée avec la patiente après information</li>
+                        <li><strong>Option préventive :</strong> Hystérectomie totale avec annexectomie bilatérale après réalisation du projet parental (réduit le risque à quasi-zéro)</li>
+                        <li><strong>En cas de saignements :</strong> Exploration histologique immédiate, indépendamment du calendrier de dépistage</li>
+                    </ul>
+                    <div class="bde-result-alert">
+                        &#9856; Consultation d'oncogénétique recommandée pour toute femme avec Lynch confirmé. La IHC MMR sur biopsie initiale peut orienter le sous-type muté.
+                    </div>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+        <!-- THS -->
+        <div class="bde-step" id="res_ths" data-progress="100">
+            <div class="bde-result res-discuss">
+                <div class="bde-result-header">
+                    <div class="bde-result-badge">&#128138;</div>
+                    <div class="bde-result-title-wrap">
+                        <div class="bde-result-subtitle">Iatrogène — THS ménopause</div>
+                        <h3>Saignements sous THS</h3>
+                    </div>
+                </div>
+                <div class="bde-result-body">
+                    <p>Des saignements irréguliers sont fréquents dans les 3 à 6 premiers mois d'un THS (adaptation muqueuse). Au-delà :</p>
+                    <ul>
+                        <li><strong>Biopsie indiquée si :</strong> saignements persistants &gt; 6 mois de traitement</li>
+                        <li><strong>Biopsie indiquée si :</strong> saignements de novo en dehors de la fenêtre de privation attendue</li>
+                        <li><strong>Saignements en fenêtre de privation (THS séquentiel) :</strong> normaux si réguliers — surveiller</li>
+                        <li><strong>THS continu combiné :</strong> tout saignement après les 6 premiers mois justifie une exploration</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bde-nav">
+                <button type="button" class="bde-btn-back" onclick="bdeBack()">&#8592; Retour</button>
+                <button type="button" class="bde-btn-reset" onclick="bdeReset()">&#8635; Nouvelle évaluation</button>
+            </div>
+        </div>
+
+    </div><!-- FIN bde-body -->
+
+    <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+    <div class="bde-footer">
+        <div class="bde-disclaimer">
+            <strong>&#9888; Avertissement médico-légal :</strong> Cet outil est une aide à la décision destinée exclusivement aux professionnels de santé. Il synthétise les recommandations actuelles de bonne pratique mais ne saurait se substituer au jugement clinique individualisé du praticien. Toute décision thérapeutique relève de la responsabilité du médecin en charge de la patiente. En cas de doute, une concertation pluridisciplinaire est recommandée.
+        </div>
+        <div class="bde-refs">
+            <strong>Références principales :</strong>
             <ul>
-                <li>CNGOF - <em>Saignements utérins anormaux (SUA) : recommandations pour la pratique clinique</em>.</li>
-                <li>ACOG (American College of Obstetricians and Gynecologists) - <em>Practice Bulletin No. 149: Endometrial Cancer</em>.</li>
-                <li>ESGO/ESTRO/ESP - <em>Guidelines on the management of patients with endometrial carcinoma</em>.</li>
-                <li>SOGC - <em>Directive clinique sur la prise en charge des saignements postménopausiques</em>.</li>
+                <li>ESGO/ESTRO/ESP — <em>Guidelines for the management of patients with endometrial carcinoma, Update 2025</em>. Lancet Oncology, 2025.</li>
+                <li>CNGOF — <em>Recommandations pour la Pratique Clinique : Saignements Utérins Anormaux (SUA)</em>, 2021.</li>
+                <li>ACOG — <em>Practice Bulletin No. 149: Endometrial Cancer</em>. Obstet Gynecol, 2021 (réaffirmé 2024).</li>
+                <li>FIGO — <em>Revised FIGO staging system for endometrial carcinoma</em>, 2023.</li>
+                <li>NCCN — <em>Genetic/Familial High-Risk Assessment: Colorectal, Endometrial, and Gastric</em>, v.2.2025.</li>
             </ul>
         </div>
     </div>
 
-</div>
+</div><!-- FIN bde-root -->
 
 <script>
-    // --- SCRIPT DE NAVIGATION ---
-    
-    let historyStack =['step0'];
+(function() {
+    "use strict";
+
+    var historyStack = [{ id: 'step0', label: 'Accueil' }];
 
     function showStep(stepId) {
-        document.querySelectorAll('.dt-step').forEach(el => el.classList.remove('active'));
-        const target = document.getElementById(stepId);
-        if(target) {
+        var steps = document.querySelectorAll('#bde-root .bde-step');
+        for (var i = 0; i < steps.length; i++) {
+            steps[i].classList.remove('active');
+        }
+        var target = document.getElementById(stepId);
+        if (target) {
             target.classList.add('active');
+            var progress = target.getAttribute('data-progress') || '5';
+            document.getElementById('bde-progress').style.width = progress + '%';
+            updateBreadcrumb();
         }
     }
 
-    function nextStep(stepId) {
-        historyStack.push(stepId);
+    function updateBreadcrumb() {
+        var bc = document.getElementById('bde-breadcrumb');
+        if (!bc) return;
+        var labels = historyStack.map(function(s) { return s.label; });
+        bc.textContent = labels.join(' \u203A ');
+    }
+
+    window.bdeGo = function(stepId, label) {
+        historyStack.push({ id: stepId, label: label || stepId });
         showStep(stepId);
-    }
+    };
 
-    function prevStep() {
+    window.bdeBack = function() {
         if (historyStack.length > 1) {
-            historyStack.pop(); 
-            const prevStepId = historyStack[historyStack.length - 1]; 
-            showStep(prevStepId);
+            historyStack.pop();
+            var prev = historyStack[historyStack.length - 1];
+            showStep(prev.id);
         }
-    }
+    };
 
-    function resetTool() {
-        historyStack = ['step0'];
+    window.bdeReset = function() {
+        historyStack = [{ id: 'step0', label: 'Accueil' }];
         showStep('step0');
-    }
+    };
+
+})();
 </script>
 
-<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<!-- Tracking Umami (RGPD, sans cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
-    
+
 </body>
 </html>
