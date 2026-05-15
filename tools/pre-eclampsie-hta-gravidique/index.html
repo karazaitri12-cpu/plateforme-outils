@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#1e3a5f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Pré-éclampsie / HTA Gravidique — Outil Diagnostique et Thérapeutique</title>
     <style>
-        :root {
+        /* ============================================================
+           BLINDAGE CSS : Isolation pour ne pas casser le thème WordPress
+           ============================================================ */
+        #hta-wizard-root {
             --primaire: #1e3a5f; --primaire-vif: #2563eb; --primaire-pale: #eff6ff; --primaire-bord: #bfdbfe;
             --rouge: #8b1a1a; --rouge-vif: #b91c1c; --rouge-pale: #fef2f2; --rouge-bord: #fca5a5;
             --vert: #14532d; --vert-pale: #f0fdf4; --vert-bord: #86efac;
@@ -16,23 +17,40 @@
             --gris-100: #f8f9fa; --gris-200: #e9ecef; --gris-400: #adb5bd;
             --gris-600: #6c757d; --gris-800: #343a40; --noir: #212529; --blanc: #ffffff;
             --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; --radius: 6px;
+            
+            font-family: var(--font);
+            font-size: 15px;
+            color: var(--noir);
+            background: #f1f3f5;
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
         }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { font-family: var(--font); font-size: 15px; color: var(--noir); background: #f1f3f5; -webkit-text-size-adjust: 100%; }
-        body { min-height: 100vh; min-height: -webkit-fill-available; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
-        .tool-wrap { max-width: 720px; margin: 0 auto; }
+        
+        #hta-wizard-root *, #hta-wizard-root *::before, #hta-wizard-root *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        .tool-wrap { max-width: 720px; margin: 0 auto; background: #f1f3f5; }
+        
+        /* HEADER */
         .tool-header { background: var(--primaire); padding: 22px 24px 18px; position: relative; overflow: hidden; }
         .tool-header::after { content: ''; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05); pointer-events: none; }
         .tool-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-        .tool-header h1 { font-size: clamp(14px, 3vw, 18px); font-weight: 700; color: var(--blanc); line-height: 1.25; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+        .tool-header h1 { font-size: clamp(16px, 3vw, 20px); font-weight: 700; color: var(--blanc); line-height: 1.25; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin: 0; }
         .tool-header-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 5px; }
         .tool-header-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
         .tool-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.2); padding: 3px 9px; border-radius: 3px; white-space: nowrap; }
+        
+        /* ACTIONS */
         .header-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: flex-start; }
         .btn-hdr { border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 600; font-family: var(--font); white-space: nowrap; touch-action: manipulation; transition: background 0.2s; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.12); }
         .btn-hdr:hover { background: rgba(255,255,255,0.25); }
         .btn-retour { background: rgba(255,255,255,0.22); display: none; }
         .btn-retour.visible { display: inline-block; }
+        
+        /* PROGRESS BAR */
         .tool-progress { background: var(--blanc); border-bottom: 1px solid var(--gris-200); padding: 12px 24px; display: flex; align-items: center; }
         .prog-step { display: flex; align-items: center; gap: 8px; flex: 1; }
         .prog-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; background: var(--gris-200); color: var(--gris-600); transition: all 0.3s; }
@@ -41,18 +59,24 @@
         .prog-label.active { color: var(--primaire-vif); }
         .prog-line { flex: 1; height: 2px; background: var(--gris-200); margin: 0 8px; transition: background 0.3s; }
         .prog-line.active { background: var(--primaire-vif); }
+        
+        /* CONTENU */
         .tool-body { padding: 20px; }
         .step-content { display: none; }
         .step-content.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
         .sec-title { font-size: 15px; font-weight: 700; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 2px solid var(--primaire-pale); color: var(--primaire); display: flex; align-items: center; gap: 8px; }
+        
+        /* BOITES D'INFO */
         .ibox { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 13px; border-left: 4px solid; }
-        .ibox p, .ibox li { font-size: 13px; line-height: 1.5; }
+        .ibox p, .ibox li { font-size: 13px; line-height: 1.5; margin-bottom: 4px; }
+        .ibox p:last-child { margin-bottom: 0; }
         .ibox strong { font-weight: 700; }
         .ibox h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
         .ibox ul { list-style: none; padding: 0; margin: 0; }
         .ibox ul li { padding: 4px 0 4px 16px; position: relative; }
         .ibox ul li::before { content: "\2022"; position: absolute; left: 0; font-weight: bold; }
+        
         .ibox.blue  { background: var(--primaire-pale); border-left-color: var(--primaire); }
         .ibox.blue h3 { color: var(--primaire); } .ibox.blue ul li::before { color: var(--primaire-vif); } .ibox.blue ul li { color: #1e3a5f; }
         .ibox.red   { background: var(--rouge-pale); border-left-color: var(--rouge-vif); }
@@ -63,10 +87,14 @@
         .ibox.green h3 { color: var(--vert); } .ibox.green ul li::before { color: var(--vert); }
         .ibox.orange { background: var(--orange-pale); border-left-color: #ea580c; }
         .ibox.orange h3 { color: var(--orange); } .ibox.orange ul li::before { color: #ea580c; }
+        
+        /* BOUTONS CHOIX */
         .choice-btn { width: 100%; background: var(--blanc); border: 2px solid var(--primaire-vif); color: var(--primaire); padding: 12px 15px; border-radius: var(--radius); font-size: 14px; font-weight: 600; font-family: var(--font); cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; margin-bottom: 9px; transition: all 0.2s; touch-action: manipulation; line-height: 1.3; }
         .choice-btn::before { content: "\25B6"; font-size: 10px; color: var(--primaire-vif); flex-shrink: 0; }
         .choice-btn:hover, .choice-btn:active { background: var(--primaire-vif); color: var(--blanc); }
         .choice-btn:hover::before, .choice-btn:active::before { color: var(--blanc); }
+        
+        /* RESULTATS ET LISTES EXAMENS */
         .result-box { border-radius: var(--radius); padding: 15px; margin-top: 14px; border: 1px solid; border-top-width: 4px; }
         .result-box.green { background: var(--vert-pale); border-color: var(--vert-bord); border-top-color: var(--vert); }
         .result-box.green .rb-title { color: var(--vert); }
@@ -77,6 +105,7 @@
         .result-box.blue { background: var(--primaire-pale); border-color: var(--primaire-bord); border-top-color: var(--primaire-vif); }
         .result-box.blue .rb-title { color: var(--primaire); }
         .rb-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+        
         .exam-list { background: var(--blanc); border: 1px solid var(--gris-200); border-radius: var(--radius); margin: 10px 0; overflow: hidden; }
         .exam-item { padding: 10px 13px; border-bottom: 1px solid var(--gris-200); font-size: 13px; line-height: 1.45; color: var(--gris-800); }
         .exam-item:last-child { border-bottom: none; }
@@ -85,14 +114,17 @@
         .exam-item ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
         .exam-item ul li { font-size: 12px; color: var(--gris-600); padding: 2px 0 2px 13px; position: relative; }
         .exam-item ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--gris-400); }
+        
         .alert-urg { background: #fee2e2; border: 1px solid #fca5a5; border-radius: var(--radius); padding: 13px; margin-bottom: 12px; }
         .alert-urg .urg-title { font-weight: 700; color: var(--rouge-vif); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 7px; }
         .alert-urg ul { list-style: none; padding: 0; margin: 0; }
         .alert-urg ul li { font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px; position: relative; font-weight: 500; }
         .alert-urg ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--rouge-vif); }
+        
         .note-ambre { background: var(--ambre-pale); border: 1px solid var(--ambre-bord); border-radius: var(--radius); padding: 11px 13px; margin-top: 11px; }
         .note-ambre .na-title { font-size: 11px; font-weight: 700; color: var(--ambre); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
         .note-ambre p { font-size: 12px; color: var(--ambre); line-height: 1.4; }
+        
         /* TABLEAU HTA */
         .hta-table { width: 100%; border-collapse: collapse; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--gris-200); margin: 12px 0; font-size: 12px; }
         .hta-table th { background: var(--primaire); color: var(--blanc); padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
@@ -103,20 +135,16 @@
         .badge-sev.mild { background: #dcfce7; color: var(--vert); }
         .badge-sev.mod  { background: var(--ambre-pale); color: var(--ambre); border: 1px solid var(--ambre-bord); }
         .badge-sev.sev  { background: var(--rouge-pale); color: var(--rouge-vif); border: 1px solid var(--rouge-bord); }
+        
+        /* FOOTER */
         .tool-footer { background: var(--blanc); border-top: 1px dashed var(--gris-200); padding: 13px 20px; text-align: center; }
-        .tool-footer p { font-size: 11px; color: var(--gris-600); line-height: 1.5; }
+        .tool-footer p { font-size: 11px; color: var(--gris-600); line-height: 1.5; margin-bottom: 4px; }
         .tool-footer strong { color: var(--gris-800); }
 
+        /* SCROLLBAR MASQUEE */
+        #hta-wizard-root { scrollbar-width: none; }               
+        #hta-wizard-root ::-webkit-scrollbar { display: none; }
 
-/* =========================================
-   PRO : Masque l'ascenseur (style App native)
-A placer en fin de css dans chaque outil
-   ========================================= */
-html { scrollbar-width: none; }               /* Firefox */
-body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
-::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
-
-      
         @media (max-width: 480px) {
             .tool-header { padding: 15px 15px 13px; }
             .tool-header h1 { font-size: 13px; }
@@ -127,204 +155,206 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
             .hta-table th, .hta-table td { padding: 7px 8px; font-size: 11px; }
         }
     </style>
-</head>
-<body>
-<div class="tool-wrap">
 
-    <div class="tool-header">
-        <div class="tool-header-top">
-            <div>
-                <h1>&#9889; Pré-éclampsie / HTA Gravidique</h1>
-                <p class="tool-header-sub">Outil diagnostique et thérapeutique — Usage médical professionnel</p>
-            </div>
-            <div class="header-actions">
-                <button class="btn-hdr btn-retour" id="btn-retour" onclick="goBack()">&#8592; Retour</button>
-                <button class="btn-hdr" onclick="resetTool()">&#8635; Reset</button>
-            </div>
-        </div>
-        <div class="tool-header-badges">
-            <span class="tool-badge">Obstétrique</span>
-            <span class="tool-badge">SFHTA / CNGOF 2023</span>
-            <span class="tool-badge">ISSHP 2018</span>
-        </div>
-    </div>
+    <div id="hta-wizard-root">
+        <div class="tool-wrap">
 
-    <div class="tool-progress" id="progressBar"></div>
-
-    <div class="tool-body">
-
-        <!-- ÉTAPE 1 : Classification -->
-        <div class="step-content active" id="step1">
-            <h2 class="sec-title">&#9654; Classification de l'HTA gravidique</h2>
-
-            <div class="ibox blue">
-                <p><strong>Définition HTA gravidique :</strong> PAS &#8805; 140 mmHg et/ou PAD &#8805; 90 mmHg, mesurée à 2 reprises à 4h d'intervalle, après 20 SA.</p>
-            </div>
-
-            <table class="hta-table">
-                <tr><th>Entité</th><th>Critères</th><th>Sévérité</th></tr>
-                <tr><td><strong>HTA gravidique</strong></td><td>PAS 140–159 / PAD 90–109, sans protéinurie, après 20 SA</td><td><span class="badge-sev mild">Légère</span></td></tr>
-                <tr><td><strong>Pré-éclampsie</strong></td><td>HTA + protéinurie &#8805; 300 mg/24h (ou ratio P/C &#8805; 30 mg/mmol)</td><td><span class="badge-sev mod">Modérée</span></td></tr>
-                <tr><td><strong>PE sévère</strong></td><td>PAS &#8805; 160 ou PAD &#8805; 110 + critères de gravité</td><td><span class="badge-sev sev">Sévère</span></td></tr>
-                <tr><td><strong>HELLP Syndrome</strong></td><td>Hémolyse + ALAT/ASAT élevées + thrombopénie &lt; 100 G/L</td><td><span class="badge-sev sev">Urgence</span></td></tr>
-                <tr><td><strong>Éclampsie</strong></td><td>Convulsions tonico-cloniques sur PE, sans autre cause neurologique</td><td><span class="badge-sev sev">Urgence</span></td></tr>
-            </table>
-
-            <button class="choice-btn" onclick="goTo('hta-simple')">HTA gravidique non compliquée</button>
-            <button class="choice-btn" onclick="goTo('pe-moderee')">Pré-éclampsie modérée</button>
-            <button class="choice-btn" onclick="goTo('pe-severe')">Pré-éclampsie sévère / HELLP / Éclampsie</button>
-        </div>
-
-        <!-- BRANCHE : HTA simple -->
-        <div class="step-content" id="step-hta-simple">
-            <h2 class="sec-title">&#9654; HTA Gravidique — Surveillance ambulatoire</h2>
-
-            <div class="ibox green">
-                <h3>Critères de surveillance ambulatoire</h3>
-                <ul>
-                    <li>PAS &lt; 160 mmHg et PAD &lt; 110 mmHg</li>
-                    <li>Absence de protéinurie significative</li>
-                    <li>Bon état fœtal (mouvements actifs, croissance normale)</li>
-                    <li>Bonne compliance et compréhension des signes d'alarme</li>
-                </ul>
-            </div>
-
-            <div class="exam-list">
-                <div class="exam-item"><strong>Bilan biologique initial</strong>NFS, plaquettes, créatininémie, uricémie, ASAT, ALAT, LDH, fibrinogène, RAI</div>
-                <div class="exam-item"><strong>Protéinurie</strong>Bandelette urinaire &#177; protéinurie des 24h ou ratio P/créatinine</div>
-                <div class="exam-item"><strong>Surveillance fœtale</strong>Échographie (biométries, Doppler utérins et fœtaux), RCF hebdomadaire</div>
-                <div class="exam-item"><strong>Automesure tensionnelle</strong>3 mesures matin et soir — carnet de surveillance</div>
-            </div>
-
-            <div class="result-box blue">
-                <div class="rb-title">&#10003; Traitement antihypertenseur</div>
-                <div class="exam-list">
-                    <div class="exam-item"><strong>1ère intention — Labétalol (Trandate&#174;)</strong>200 mg x2/j per os — max 1200 mg/j</div>
-                    <div class="exam-item"><strong>Alternative — Nicardipine (Loxen&#174;)</strong>20 mg x3/j per os — si contre-indication aux bêtabloquants</div>
-                    <div class="exam-item"><strong>Alternative — Alpha-méthyldopa (Aldomet&#174;)</strong>250 mg x2/j — 3g/j maximum</div>
-                    <div class="exam-item"><strong>Objectif tensionnel</strong>PAS 130–150 mmHg / PAD 80–100 mmHg</div>
-                </div>
-                <div class="note-ambre">
-                    <div class="na-title">Contre-indications absolues en grossesse</div>
-                    <p>IEC, Sartans (ARAII), diurétiques thiazidiques (sauf indication spécifique), Atenolol</p>
-                </div>
-            </div>
-
-            <div class="ibox yellow">
-                <p><strong>&#9888; Signes d'alarme justifiant une hospitalisation en urgence :</strong><br>
-                Céphalées intenses, phosphènes, acouphènes, épigastralgies, œdème pulmonaire, oligurie, hyperréflexie ostéotendineuse, convulsions.</p>
-            </div>
-        </div>
-
-        <!-- BRANCHE : PE modérée -->
-        <div class="step-content" id="step-pe-moderee">
-            <h2 class="sec-title">&#9654; Pré-éclampsie Modérée — Hospitalisation</h2>
-
-            <div class="ibox yellow">
-                <p><strong>Indication d'hospitalisation systématique</strong><br>
-                Surveillance bi-quotidienne PA + bandelette urinaire + surveillance fœtale.</p>
-            </div>
-
-            <div class="exam-list">
-                <div class="exam-item">
-                    <strong>Bilan biologique (à répéter 2x/semaine)</strong>
-                    <ul>
-                        <li>NFS + plaquettes, TP, TCA, fibrinogène</li>
-                        <li>Créatininémie, uricémie, ionogramme</li>
-                        <li>ASAT, ALAT, LDH, bilirubine</li>
-                        <li>Protéinurie des 24h ou ratio P/C</li>
-                    </ul>
-                </div>
-                <div class="exam-item"><strong>Surveillance fœtale</strong>RCF pluriquotidien + Échographie Doppler 2x/semaine + Doppler ombilical</div>
-                <div class="exam-item"><strong>Corticothérapie de maturation</strong>Bétaméthasone 12 mg IM x2 (24h d'intervalle) si terme &lt; 34 SA</div>
-            </div>
-
-            <div class="result-box orange">
-                <div class="rb-title">&#9888; Indications d'extraction fœtale</div>
-                <div class="exam-list">
-                    <div class="exam-item"><strong>&#8805; 37 SA</strong>Extraction systématique recommandée</div>
-                    <div class="exam-item"><strong>34 – 37 SA</strong>Selon évolution clinicobiologique et bien-être fœtal</div>
-                    <div class="exam-item"><strong>&lt; 34 SA</strong>Expectative sous surveillance intensive sauf aggravation</div>
-                    <div class="exam-item"><strong>Toute aggravation</strong>Transfert en maternité de niveau III + extraction</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- BRANCHE : PE Sévère -->
-        <div class="step-content" id="step-pe-severe">
-            <h2 class="sec-title">&#128680; Pré-éclampsie Sévère — URGENCE</h2>
-
-            <div class="alert-urg">
-                <div class="urg-title">Critères de gravité (ISSHP / SFHTA)</div>
-                <ul>
-                    <li>PAS &#8805; 160 mmHg ou PAD &#8805; 110 mmHg</li>
-                    <li>Oligurie &lt; 25 mL/h ou créatinine &gt; 90 &#956;mol/L</li>
-                    <li>Thrombopénie &lt; 100 G/L — HELLP syndrome</li>
-                    <li>ASAT/ALAT &gt; 2x la normale — douleurs épigastriques (signe de Chaussier)</li>
-                    <li>Œdème pulmonaire — SpO2 &lt; 94%</li>
-                    <li>Signes neurologiques : céphalées résistantes, phosphènes, convulsions (éclampsie)</li>
-                    <li>Retentissement fœtal sévère : Doppler ombilical diastole nulle/reverse flow</li>
-                </ul>
-            </div>
-
-            <div class="result-box red">
-                <div class="rb-title">&#128680; Prise en charge immédiate</div>
-
-                <div class="exam-list">
-                    <div class="exam-item">
-                        <strong>1. Hospitalisation en urgence en maternité de niveau III</strong>
-                        <p>Unité de soins intensifs obstétricaux — Monitoring continu PA + SpO2 + RCF</p>
+            <div class="tool-header">
+                <div class="tool-header-top">
+                    <div>
+                        <h1>&#9889; Pré-éclampsie / HTA Gravidique</h1>
+                        <p class="tool-header-sub">Outil diagnostique et thérapeutique — Usage médical</p>
                     </div>
-                    <div class="exam-item">
-                        <strong>2. Antihypertenseur IV en urgence (si PAS &#8805; 160)</strong>
+                    <div class="header-actions">
+                        <button class="btn-hdr btn-retour" id="btn-retour" onclick="goBack()">&#8592; Retour</button>
+                        <button class="btn-hdr" onclick="resetTool()">&#8635; Reset</button>
+                    </div>
+                </div>
+                <div class="tool-header-badges">
+                    <span class="tool-badge">Obstétrique</span>
+                    <span class="tool-badge">HAS / CNGOF 2025</span>
+                    <span class="tool-badge">ESC 2024</span>
+                </div>
+            </div>
+
+            <div class="tool-progress" id="progressBar"></div>
+
+            <div class="tool-body">
+
+                <!-- ÉTAPE 1 : Classification -->
+                <div class="step-content active" id="step1">
+                    <h2 class="sec-title">&#9654; Classification de l'HTA gravidique</h2>
+
+                    <div class="ibox blue">
+                        <p><strong>Définition HTA gravidique :</strong> PAS &#8805; 140 mmHg et/ou PAD &#8805; 90 mmHg, mesurée à 2 reprises à 4h d'intervalle, après 20 SA.</p>
+                    </div>
+
+                    <table class="hta-table">
+                        <tr><th>Entité</th><th>Critères</th><th>Sévérité</th></tr>
+                        <tr><td><strong>HTA gravidique</strong></td><td>PAS 140–159 / PAD 90–109, sans protéinurie, après 20 SA</td><td><span class="badge-sev mild">Légère</span></td></tr>
+                        <tr><td><strong>Pré-éclampsie</strong></td><td>HTA + protéinurie &#8805; 300 mg/24h (ou ratio P/C &#8805; 30 mg/mmol)</td><td><span class="badge-sev mod">Modérée</span></td></tr>
+                        <tr><td><strong>PE sévère</strong></td><td>PAS &#8805; 160 ou PAD &#8805; 110 + critères de gravité</td><td><span class="badge-sev sev">Sévère</span></td></tr>
+                        <tr><td><strong>HELLP Syndrome</strong></td><td>Hémolyse + ALAT/ASAT élevées + thrombopénie &lt; 100 G/L</td><td><span class="badge-sev sev">Urgence</span></td></tr>
+                        <tr><td><strong>Éclampsie</strong></td><td>Convulsions tonico-cloniques sur PE, sans autre cause neuro.</td><td><span class="badge-sev sev">Urgence</span></td></tr>
+                    </table>
+
+                    <button class="choice-btn" onclick="goTo('hta-simple')">HTA gravidique non compliquée</button>
+                    <button class="choice-btn" onclick="goTo('pe-moderee')">Pré-éclampsie modérée</button>
+                    <button class="choice-btn" onclick="goTo('pe-severe')">Pré-éclampsie sévère / HELLP / Éclampsie</button>
+                </div>
+
+                <!-- BRANCHE : HTA simple -->
+                <div class="step-content" id="step-hta-simple">
+                    <h2 class="sec-title">&#9654; HTA Gravidique — Surveillance ambulatoire</h2>
+
+                    <div class="ibox green">
+                        <h3>Critères de surveillance ambulatoire</h3>
                         <ul>
-                            <li><strong>Nicardipine (Loxen&#174;) 5 mg/h IV</strong> — Titration toutes les 15 min (max 15 mg/h)</li>
-                            <li><strong>Labétalol (Trandate&#174;) 20 mg IV</strong> — Bolus répétables (max 300 mg)</li>
-                            <li>Objectif : PAS &lt; 160 mmHg et PAD &lt; 110 mmHg en &lt; 1h</li>
+                            <li>PAS &lt; 160 mmHg et PAD &lt; 110 mmHg</li>
+                            <li>Absence de protéinurie significative</li>
+                            <li>Bon état fœtal (mouvements actifs, croissance normale)</li>
+                            <li>Bonne compliance et compréhension des signes d'alarme</li>
                         </ul>
                     </div>
-                    <div class="exam-item">
-                        <strong>3. Sulfate de Magnésium — Prévention / Traitement de l'éclampsie</strong>
-                        <ul>
-                            <li>Dose de charge : 4g IV sur 20 min</li>
-                            <li>Entretien : 1 g/h IV à la seringue électrique</li>
-                            <li>Antidote : Gluconate de calcium 1g IV si signes de surdosage</li>
-                            <li>Surveillance : réflexe rotulien, diurèse &#8805; 25 mL/h, FR &#8805; 14/min</li>
-                        </ul>
+
+                    <div class="exam-list">
+                        <div class="exam-item"><strong>Bilan biologique initial</strong>NFS, plaquettes, créatininémie, uricémie, ASAT, ALAT, LDH, fibrinogène, RAI</div>
+                        <div class="exam-item"><strong>Protéinurie</strong>Bandelette urinaire &#177; protéinurie des 24h ou ratio P/créatinine</div>
+                        <div class="exam-item"><strong>Surveillance fœtale</strong>Échographie (biométries, Doppler utérins et fœtaux), RCF hebdomadaire</div>
+                        <div class="exam-item"><strong>Automesure tensionnelle</strong>3 mesures matin et soir — carnet de surveillance</div>
+                        <div class="exam-item"><strong>Suivi Post-partum (HAS 2025)</strong>Consultation à distance pour évaluer le risque cardiovasculaire (SCORE2). L'HTA est un FRCV à vie.</div>
                     </div>
-                    <div class="exam-item">
-                        <strong>4. Bilan biologique toutes les 6h</strong>
-                        <p>NFS, plaquettes, ASAT, ALAT, LDH, créatinine, fibrinogène, TP</p>
+
+                    <div class="result-box blue">
+                        <div class="rb-title">&#10003; Traitement antihypertenseur</div>
+                        <div class="exam-list">
+                            <div class="exam-item"><strong>1ère intention — Labétalol (Trandate&#174;)</strong>200 mg x2/j per os — max 1200 mg/j</div>
+                            <div class="exam-item"><strong>Alternative — Nicardipine (Loxen&#174;)</strong>20 mg x3/j per os — si contre-indication aux bêtabloquants</div>
+                            <div class="exam-item"><strong>Alternative — Alpha-méthyldopa (Aldomet&#174;)</strong>250 mg x2/j — 3g/j maximum</div>
+                            <div class="exam-item"><strong>Objectif tensionnel (ESC 2024 / HAS 2025)</strong>Cible : &lt; 140/90 mmHg (Traitement recommandé dès 140/90)</div>
+                        </div>
+                        <div class="note-ambre">
+                            <div class="na-title">Contre-indications absolues en grossesse</div>
+                            <p>IEC, Sartans (ARAII), diurétiques thiazidiques, Atenolol.</p>
+                        </div>
                     </div>
-                    <div class="exam-item">
-                        <strong>5. Décision d'extraction fœtale</strong>
-                        <p>En urgence si &#8805; 34 SA ou toute aggravation materno-fœtale. Discussion collégiale si &lt; 34 SA.</p>
+
+                    <div class="ibox yellow">
+                        <p><strong>&#9888; Signes d'alarme justifiant une hospitalisation en urgence :</strong><br>
+                        Céphalées intenses, phosphènes, acouphènes, épigastralgies, œdème pulmonaire, oligurie, hyperréflexie ostéotendineuse, convulsions.</p>
                     </div>
                 </div>
+
+                <!-- BRANCHE : PE modérée -->
+                <div class="step-content" id="step-pe-moderee">
+                    <h2 class="sec-title">&#9654; Pré-éclampsie Modérée — Hospitalisation</h2>
+
+                    <div class="ibox yellow">
+                        <p><strong>Indication d'hospitalisation systématique</strong><br>
+                        Surveillance bi-quotidienne PA + bandelette urinaire + surveillance fœtale.</p>
+                    </div>
+
+                    <div class="exam-list">
+                        <div class="exam-item">
+                            <strong>Bilan biologique (à répéter 2x/semaine)</strong>
+                            <ul>
+                                <li>NFS + plaquettes, TP, TCA, fibrinogène</li>
+                                <li>Créatininémie, uricémie, ionogramme</li>
+                                <li>ASAT, ALAT, LDH, bilirubine</li>
+                                <li>Protéinurie des 24h ou ratio P/C</li>
+                                <li>Ratio sFlt-1/PlGF (si disponible, VPN > 99% à 7 jours si &lt; 38)</li>
+                            </ul>
+                        </div>
+                        <div class="exam-item"><strong>Surveillance fœtale</strong>RCF pluriquotidien + Échographie Doppler 2x/semaine + Doppler ombilical</div>
+                        <div class="exam-item"><strong>Corticothérapie de maturation</strong>Bétaméthasone 12 mg IM x2 (24h d'intervalle) si terme &lt; 34 SA</div>
+                    </div>
+
+                    <div class="result-box orange">
+                        <div class="rb-title">&#9888; Indications d'extraction fœtale</div>
+                        <div class="exam-list">
+                            <div class="exam-item"><strong>&#8805; 37 SA</strong>Extraction systématique recommandée</div>
+                            <div class="exam-item"><strong>34 – 37 SA</strong>Selon évolution clinicobiologique et bien-être fœtal</div>
+                            <div class="exam-item"><strong>&lt; 34 SA</strong>Expectative sous surveillance intensive sauf aggravation</div>
+                            <div class="exam-item"><strong>Toute aggravation</strong>Transfert en maternité de niveau III + extraction</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BRANCHE : PE Sévère -->
+                <div class="step-content" id="step-pe-severe">
+                    <h2 class="sec-title">&#128680; Pré-éclampsie Sévère — URGENCE</h2>
+
+                    <div class="alert-urg">
+                        <div class="urg-title">Critères de gravité (SFHTA / CNGOF)</div>
+                        <ul>
+                            <li>PAS &#8805; 160 mmHg ou PAD &#8805; 110 mmHg</li>
+                            <li>Oligurie &lt; 25 mL/h ou créatinine &gt; 90 &#956;mol/L</li>
+                            <li>Thrombopénie &lt; 100 G/L — HELLP syndrome</li>
+                            <li>ASAT/ALAT &gt; 2x la normale — douleurs épigastriques (signe de Chaussier)</li>
+                            <li>Œdème pulmonaire — SpO2 &lt; 94%</li>
+                            <li>Signes neurologiques : céphalées résistantes, phosphènes, convulsions</li>
+                            <li>Retentissement fœtal sévère : Doppler ombilical reverse flow</li>
+                        </ul>
+                    </div>
+
+                    <div class="result-box red">
+                        <div class="rb-title">&#128680; Prise en charge immédiate</div>
+
+                        <div class="exam-list">
+                            <div class="exam-item">
+                                <strong>1. Hospitalisation en urgence en maternité de niveau III</strong>
+                                <p>Unité de soins intensifs obstétricaux — Monitoring continu PA + SpO2 + RCF</p>
+                            </div>
+                            <div class="exam-item">
+                                <strong>2. Antihypertenseur IV en urgence (si PAS &#8805; 160)</strong>
+                                <ul>
+                                    <li><strong>Nicardipine (Loxen&#174;) 5 mg/h IV</strong> — Titration toutes les 15 min (max 15 mg/h)</li>
+                                    <li><strong>Labétalol (Trandate&#174;) 20 mg IV</strong> — Bolus répétables (max 300 mg)</li>
+                                    <li>Objectif : Abaisser la PA en &lt; 1h sans chute brutale (éviter PAD &lt; 80)</li>
+                                </ul>
+                            </div>
+                            <div class="exam-item">
+                                <strong>3. Sulfate de Magnésium — Prévention / Traitement de l'éclampsie</strong>
+                                <ul>
+                                    <li>Dose de charge : 4g IV sur 20 min</li>
+                                    <li>Entretien : 1 g/h IV à la seringue électrique</li>
+                                    <li>Antidote : Gluconate de calcium 1g IV si signes de surdosage</li>
+                                    <li>Surveillance : réflexe rotulien, diurèse &#8805; 25 mL/h, FR &#8805; 14/min</li>
+                                </ul>
+                            </div>
+                            <div class="exam-item">
+                                <strong>4. Thromboprophylaxie (HBPM)</strong>
+                                <p>À discuter systématiquement en post-partum ou si alitement (dès que Plaquettes &gt; 100 G/L).</p>
+                            </div>
+                            <div class="exam-item">
+                                <strong>5. Décision d'extraction fœtale</strong>
+                                <p>En urgence si &#8805; 34 SA ou toute aggravation materno-fœtale. Discussion collégiale si &lt; 34 SA.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ibox red">
+                        <p><strong>&#9888; Éclampsie :</strong> Diazépam 10 mg IV lente + MgSO4 en urgence + extraction fœtale dès la mère stabilisée.</p>
+                    </div>
+
+                    <div class="ibox orange">
+                        <h3>HELLP Syndrome — Points clés</h3>
+                        <ul>
+                            <li>Hémostase complète urgente — Concentrés plaquettaires si &lt; 50 G/L avant geste</li>
+                            <li>Extraction fœtale dans les 24h sauf si &lt; 32 SA et état stable (corticothérapie d'abord)</li>
+                            <li>Risque de CIVD : fibrinogène, D-dimères, TP</li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="ibox red">
-                <p><strong>&#9888; Éclampsie :</strong> Diazépam 10 mg IV lente (ou Clonazépam 1 mg IV) + MgSO4 en urgence + extraction fœtale dès la mère stabilisée.</p>
-            </div>
-
-            <div class="ibox orange">
-                <h3>HELLP Syndrome — Points clés</h3>
-                <ul>
-                    <li>Hémostase complète urgente — Concentrés plaquettaires si &lt; 50 G/L avant geste</li>
-                    <li>Extraction fœtale dans les 24h sauf si &lt; 32 SA et état stable (corticothérapie d'abord)</li>
-                    <li>Risque de CIVD : fibrinogène, D-dimères, TP</li>
-                    <li>Dexaméthasone IV discutée pour accélérer la récupération plaquettaire</li>
-                </ul>
+            <div class="tool-footer">
+                <p><strong>Références :</strong> HAS / CNGOF 2025, ESC 2024, ISSHP 2021 — Aide à la décision clinique.</p>
+                <p>Ce contenu ne remplace pas l'évaluation clinique individuelle.</p>
             </div>
         </div>
-
     </div>
-
-    <div class="tool-footer">
-        <p><strong>Références :</strong> SFHTA, CNGOF 2023, ISSHP 2018, ESC 2018 — Outil d'aide à la décision clinique</p>
-        <p style="margin-top:4px;">Ce contenu ne remplace pas l'évaluation clinique individuelle. En cas de doute, avis spécialisé recommandé.</p>
-    </div>
-</div>
 
 <script>
 (function() {
@@ -377,8 +407,7 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 })();
 </script>
 
- <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<!-- TRACKING UMAMI -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
-    
 </body>
 </html>
