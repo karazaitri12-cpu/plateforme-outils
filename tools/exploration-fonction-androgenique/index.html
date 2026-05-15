@@ -485,13 +485,13 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <div class="efa-refs">R&#233;f&#233;rences&nbsp;: HAS &bull; CNGOF &bull; SFE 2023 &bull; ESHRE/ASRM &bull; Dr Kara-Zaitri M.A. &bull; Mise &#224; jour 2025</div>
   </div>
 
-  <!-- ONGLETS -->
+  <!-- ONGLETS (Correction : utilisation des data-tab) -->
   <div class="efa-tabs-bar" role="tablist">
-    <button class="efa-tab-btn active" onclick="efaTab('physio',this)">1. Physiologie</button>
-    <button class="efa-tab-btn" onclick="efaTab('dosages',this)">2. Dosages</button>
-    <button class="efa-tab-btn" onclick="efaTab('bilan',this)">3. Bilan clinique</button>
-    <button class="efa-tab-btn" onclick="efaTab('diagnostic',this)">4. Diagnostics</button>
-    <button class="efa-tab-btn" onclick="efaTab('interprete',this)">5. Interpr&#233;tation</button>
+    <button class="efa-tab-btn active" data-tab="physio">1. Physiologie</button>
+    <button class="efa-tab-btn" data-tab="dosages">2. Dosages</button>
+    <button class="efa-tab-btn" data-tab="bilan">3. Bilan clinique</button>
+    <button class="efa-tab-btn" data-tab="diagnostic">4. Diagnostics</button>
+    <button class="efa-tab-btn" data-tab="interprete">5. Interpr&#233;tation</button>
   </div>
   <div class="efa-scroll-hint">&#8592; Faire d&#233;filer les onglets &#8594;</div>
 
@@ -973,8 +973,10 @@ body { -ms-overflow-style: none; overflow-y: auto; }
             </select>
           </div>
         </div>
-        <button class="efa-btn" onclick="efaInterprete()">Interpr&#233;ter</button>
-        <button class="efa-btn-sec" onclick="efaReset()">R&#233;initialiser</button>
+        
+        <!-- Correction : Remplacement des onclick par des IDs -->
+        <button class="efa-btn" id="btn-efa-interprete">Interpr&#233;ter</button>
+        <button class="efa-btn-sec" id="btn-efa-reset">R&#233;initialiser</button>
 
         <div class="efa-result" id="efa-result">
           <div class="efa-result-title" id="efa-result-title">Orientation</div>
@@ -993,19 +995,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 
 </div><!-- /#outil-efa-2025 -->
 
+<!-- NOUVEAU SCRIPT (COMPATIBLE WORDPRESS / ELEMENTOR / WP ROCKET) -->
 <script>
 (function() {
   'use strict';
 
-  window.efaTab = function(id, btn) {
-    document.querySelectorAll('#outil-efa-2025 .efa-panel').forEach(function(p) { p.classList.remove('active'); });
-    document.querySelectorAll('#outil-efa-2025 .efa-tab-btn').forEach(function(b) { b.classList.remove('active'); });
-    var t = document.getElementById('panel-' + id);
-    if (t) t.classList.add('active');
-    if (btn) { btn.classList.add('active'); btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
-  };
-
-  window.efaInterprete = function() {
+  function efaInterprete() {
     var testo   = parseFloat(document.getElementById('efa-testo').value);
     var sdhea   = parseFloat(document.getElementById('efa-sdhea').value);
     var ohp     = parseFloat(document.getElementById('efa-ohp').value);
@@ -1020,9 +1015,9 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     var hasLhratio = !isNaN(lhratio) && document.getElementById('efa-lhratio').value !== '';
 
     var lines = [];
-    var score = 0; // 0=normal, 1=fonctionnel, 2=sev\u00E8re, 3=tumoral
+    var score = 0;
 
-    // -- Testost\u00E9rone --
+    // -- Testostérone --
     if (hasTesto) {
       if (testo < 0.70) {
         lines.push({ t: 'ok',  msg: '<strong>Testost\u00E9rone</strong> ' + testo + '\u00A0ng/mL \u2014 Normale. Pas d\u2019hyperandrog\u00E9nie biologique.' });
@@ -1142,16 +1137,52 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     document.getElementById('efa-result-title').style.color = concluColor;
     document.getElementById('efa-result-lines').innerHTML = html;
     res.classList.add('visible');
-    res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  };
+    try { res.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch(e) {}
+  }
 
-  window.efaReset = function() {
+  function efaReset() {
     ['efa-testo','efa-sdhea','efa-ohp','efa-shbg','efa-lhratio'].forEach(function(id) {
       var el = document.getElementById(id); if (el) el.value = '';
     });
     var s = document.getElementById('efa-clinique'); if (s) s.value = '';
     var r = document.getElementById('efa-result'); if (r) r.classList.remove('visible');
-  };
+  }
+
+  function initEfaTool() {
+    // 1. Initialisation des onglets
+    var tabBtns = document.querySelectorAll('#outil-efa-2025 .efa-tab-btn');
+    tabBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var id = this.getAttribute('data-tab');
+        
+        // Retirer la classe active
+        document.querySelectorAll('#outil-efa-2025 .efa-panel').forEach(function(p) { p.classList.remove('active'); });
+        tabBtns.forEach(function(b) { b.classList.remove('active'); });
+        
+        // Activer
+        var t = document.getElementById('panel-' + id);
+        if (t) t.classList.add('active');
+        this.classList.add('active');
+        
+        // Scroll horizontal
+        try { this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(e) {}
+      });
+    });
+
+    // 2. Initialisation des boutons d'interprétation
+    var btnInterprete = document.getElementById('btn-efa-interprete');
+    if (btnInterprete) btnInterprete.addEventListener('click', efaInterprete);
+
+    var btnReset = document.getElementById('btn-efa-reset');
+    if (btnReset) btnReset.addEventListener('click', efaReset);
+  }
+
+  // Permet le fonctionnement même si WP Rocket a différé l'exécution
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEfaTool);
+  } else {
+    initEfaTool();
+  }
 
 })();
 </script>
