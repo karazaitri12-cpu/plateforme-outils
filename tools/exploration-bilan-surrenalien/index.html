@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exploration du Bilan Surrénalien</title>
+<style>
+/* ============================================================
+   BLINDAGE ELEMENTOR — Exploration Bilan Surrénalien
+   ============================================================ */
+#outil-ebs-2025 {
+  all: initial;
+  display: block;
+  box-sizing: border-box;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1a2733;
+  background: #f5f6f8;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 0 32px 0;
+  position: relative !important;
+}
+#outil-ebs-2025 *, #outil-ebs-2025 *::before, #outil-ebs-2025 *::after {
+  box-sizing: border-box; margin: 0; padding: 0;
+}
+/* HEADER */
+#outil-ebs-2025 .ebs-header {
+  background: linear-gradient(135deg, #1a3a5c 0%, #0f2540 100%);
+  color: #fff;
+  padding: 24px 28px 20px;
+  border-bottom: 4px solid #c8a84b;
+}
+#outil-ebs-2025 .ebs-badge {
+  display: block; width: fit-content;
+  background: rgba(200,168,75,0.18); border: 1px solid #c8a84b;
+  color: #e8c96a; font-family: 'Trebuchet MS', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 3px 10px; border-radius: 2px; margin-bottom: 10px;
+}
+#outil-ebs-2025 .ebs-title {
+  font-family: 'Georgia', serif; font-size: 22px; font-weight: 700;
+  color: #fff; line-height: 1.25; margin-bottom: 6px;
+}
+#outil-ebs-2025 .ebs-subtitle {
+  font-family: 'Trebuchet MS', sans-serif; font-size: 13px; color: #a8c4e0; letter-spacing: 0.02em;
+}
+#outil-ebs-2025 .ebs-refs {
+  font-family: 'Trebuchet MS', sans-serif; font-size: 10.5px; color: #7da8c8;
+  margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 10px;
+}
+/* ONGLETS */
+#outil-ebs-2025 .ebs-tabs-bar {
+  background: #1a3a5c; display: flex; overflow-x: auto;
+  -webkit-overflow-scrolling: touch; border-bottom: 3px solid #c8a84b;
+  position: sticky; top: 0; z-index: 100; scrollbar-width: none;
+}
+#outil-ebs-2025 .ebs-tabs-bar::-webkit-scrollbar { display: none; }
+#outil-ebs-2025 .ebs-tab-btn {
+  all: initial; display: block; box-sizing: border-box;
+  background: transparent; color: #a8c4e0;
+  font-family: 'Trebuchet MS', sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 13px 16px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  border-bottom: 3px solid transparent; margin-bottom: -3px; transition: background 0.2s, color 0.2s;
+}
+#outil-ebs-2025 .ebs-tab-btn:hover { background: rgba(255,255,255,0.06); color: #dce9f4; }
+#outil-ebs-2025 .ebs-tab-btn.active { background: rgba(200,168,75,0.14); color: #e8c96a; border-bottom: 3px solid #c8a84b; }
+#outil-ebs-2025 .ebs-scroll-hint {
+  display: none; background: #1a3a5c; color: #a8c4e0;
+  font-family: 'Trebuchet MS', sans-serif; font-size: 10px; padding: 3px 10px; text-align: right;
+}
+@media (max-width:600px) { #outil-ebs-2025 .ebs-scroll-hint { display: block; } }
+/* CONTENU */
+#outil-ebs-2025 .ebs-content { background: #fff; padding: 28px 28px 24px; min-height: 300px; }
+#outil-ebs-2025 .ebs-panel { display: none !important; }
+#outil-ebs-2025 .ebs-panel.active { display: block !important; }
+/* TYPO */
+#outil-ebs-2025 .ebs-section-title {
+  font-family: 'Georgia', serif; font-size: 17px; font-weight: 700; color: #1a3a5c;
+  border-left: 4px solid #c8a84b; padding-left: 12px;
+  margin-bottom: 16px; margin-top: 28px; line-height: 1.3;
+}
+#outil-ebs-2025 .ebs-section-title:first-child { margin-top: 0; }
+#outil-ebs-2025 p {
+  font-family: 'Georgia', serif; font-size: 14.5px; color: #2a3a4a; line-height: 1.7; margin-bottom: 12px;
+}
+#outil-ebs-2025 ul { list-style: none; padding-left: 0; margin-bottom: 14px; }
+#outil-ebs-2025 ul li {
+  font-family: 'Georgia', serif; font-size: 14px; color: #2a3a4a;
+  line-height: 1.65; padding: 4px 0 4px 22px; position: relative;
+}
+#outil-ebs-2025 ul li::before {
+  content: "\2023"; color: #c8a84b; font-size: 16px;
+  position: absolute; left: 6px; top: 3px; font-weight: 700;
+}
+/* TABLEAUX */
+#outil-ebs-2025 .ebs-table-wrap {
+  overflow-x: auto; margin: 18px 0 22px; border-radius: 4px;
+  border: 1px solid #cdd9e8; -webkit-overflow-scrolling: touch;
+}
+#outil-ebs-2025 table {
+  width: 100%; border-collapse: collapse;
+  font-family: 'Trebuchet MS', sans-serif; font-size: 13px; min-width: 360px;
+}
+#outil-ebs-2025 table thead tr { background: #1a3a5c; color: #fff; }
+#outil-ebs-2025 table thead th {
+  padding: 10px 14px; text-align: left; font-weight: 700;
+  letter-spacing: 0.04em; font-size: 12px; text-transform: uppercase; white-space: nowrap;
+}
+#outil-ebs-2025 table tbody tr { border-bottom: 1px solid #e2eaf4; }
+#outil-ebs-2025 table tbody tr:hover { background: #f0f5fb; }
+#outil-ebs-2025 table tbody tr:nth-child(even) { background: #f8fafc; }
+#outil-ebs-2025 table tbody tr:nth-child(even):hover { background: #eef4fa; }
+#outil-ebs-2025 table tbody td { padding: 9px 14px; color: #2a3a4a; vertical-align: top; line-height: 1.5; }
+#outil-ebs-2025 table tbody td:first-child { font-weight: 600; color: #1a3a5c; }
+#outil-ebs-2025 table tbody tr.sub-head td {
+  background: #e8eef7; color: #1a3a5c; font-weight: 700;
+  font-style: italic; font-size: 12px; letter-spacing: 0.04em;
+}
+/* ENCADRES */
+#outil-ebs-2025 .ebs-box {
+  border-radius: 4px; padding: 14px 18px; margin: 16px 0;
+  font-family: 'Georgia', serif; font-size: 14px; line-height: 1.65;
+}
+#outil-ebs-2025 .ebs-box-info  { background: #eef4fb; border-left: 4px solid #1a3a5c; color: #1a3a5c; }
+#outil-ebs-2025 .ebs-box-gold  { background: #fef9ec; border-left: 4px solid #c8a84b; color: #5a4200; }
+#outil-ebs-2025 .ebs-box-alert { background: #fef0f0; border-left: 4px solid #b03030; color: #6a1a1a; }
+#outil-ebs-2025 .ebs-box-green { background: #edf7f0; border-left: 4px solid #2e7d52; color: #1a4a2a; }
+#outil-ebs-2025 .ebs-box strong {
+  font-weight: 700; display: block; margin-bottom: 5px;
+  font-family: 'Trebuchet MS', sans-serif; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+/* GRILLES */
+#outil-ebs-2025 .ebs-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+#outil-ebs-2025 .ebs-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 16px 0; }
+@media (max-width:700px) {
+  #outil-ebs-2025 .ebs-grid-2, #outil-ebs-2025 .ebs-grid-3 { grid-template-columns: 1fr; }
+  #outil-ebs-2025 .ebs-title { font-size: 18px; }
+  #outil-ebs-2025 .ebs-content { padding: 18px 16px 20px; }
+}
+/* CARTES */
+#outil-ebs-2025 .ebs-card {
+  background: #f5f8fc; border: 1px solid #cdd9e8;
+  border-top: 3px solid #1a3a5c; border-radius: 4px; padding: 14px 16px;
+}
+#outil-ebs-2025 .ebs-card h4 {
+  font-family: 'Trebuchet MS', sans-serif; font-size: 12.5px; font-weight: 700;
+  color: #1a3a5c; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px;
+}
+#outil-ebs-2025 .ebs-card-row {
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #e2eaf4; padding: 5px 0;
+  font-family: 'Trebuchet MS', sans-serif; font-size: 12px;
+}
+#outil-ebs-2025 .ebs-card-row:last-child { border-bottom: none; }
+#outil-ebs-2025 .ebs-card-row .ebs-lbl { color: #4a5a6a; flex: 1; }
+#outil-ebs-2025 .ebs-card-row .ebs-val {
+  font-weight: 700; color: #1a3a5c; background: #e0ecf8;
+  padding: 2px 8px; border-radius: 3px; white-space: nowrap; font-size: 11.5px; margin-left: 8px;
+}
+#outil-ebs-2025 .ebs-card-row .ebs-val.hi  { background: #fce8e8; color: #8b1a1a; }
+#outil-ebs-2025 .ebs-card-row .ebs-val.ok  { background: #e0f4e8; color: #1a5a2a; }
+#outil-ebs-2025 .ebs-card-row .ebs-val.mid { background: #fef0d0; color: #7a5200; }
+/* OUTIL INTERACTIF */
+#outil-ebs-2025 .ebs-interactive {
+  background: #f0f5fb; border: 1px solid #c0d0e4; border-radius: 6px;
+  padding: 22px 22px 18px; margin: 20px 0;
+}
+#outil-ebs-2025 .ebs-interactive h3 {
+  font-family: 'Trebuchet MS', sans-serif; font-size: 13px; font-weight: 700;
+  color: #1a3a5c; text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #c8a84b;
+}
+#outil-ebs-2025 .ebs-form-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px;
+}
+@media (max-width:600px) { #outil-ebs-2025 .ebs-form-grid { grid-template-columns: 1fr 1fr; } }
+#outil-ebs-2025 .ebs-field label {
+  display: block; font-family: 'Trebuchet MS', sans-serif; font-size: 11px;
+  font-weight: 700; color: #3a5a7a; text-transform: uppercase;
+  letter-spacing: 0.07em; margin-bottom: 5px;
+}
+#outil-ebs-2025 .ebs-field input, #outil-ebs-2025 .ebs-field select {
+  all: initial; display: block; width: 100%; box-sizing: border-box;
+  background: #fff; border: 1.5px solid #b0c4d8; border-radius: 3px;
+  padding: 7px 10px; font-family: 'Trebuchet MS', sans-serif;
+  font-size: 13px; color: #1a2733; outline: none; transition: border-color 0.2s; cursor: text;
+}
+#outil-ebs-2025 .ebs-field select { cursor: pointer; }
+#outil-ebs-2025 .ebs-field input:focus, #outil-ebs-2025 .ebs-field select:focus {
+  border-color: #1a3a5c; box-shadow: 0 0 0 2px rgba(26,58,92,0.12);
+}
+#outil-ebs-2025 .ebs-btn {
+  all: initial; display: inline-block; box-sizing: border-box;
+  background: #1a3a5c; color: #fff; font-family: 'Trebuchet MS', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 10px 22px; border-radius: 3px; cursor: pointer; transition: background 0.2s; margin-top: 4px;
+}
+#outil-ebs-2025 .ebs-btn:hover { background: #0f2540; }
+#outil-ebs-2025 .ebs-btn-sec {
+  all: initial; display: inline-block; box-sizing: border-box;
+  background: transparent; color: #5a7a9a; font-family: 'Trebuchet MS', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 10px 16px; border-radius: 3px; cursor: pointer;
+  border: 1.5px solid #b0c4d8; transition: all 0.2s; margin-top: 4px; margin-left: 8px;
+}
+#outil-ebs-2025 .ebs-btn-sec:hover { border-color: #1a3a5c; color: #1a3a5c; }
+#outil-ebs-2025 .ebs-result {
+  display: none; margin-top: 18px; padding: 16px 18px;
+  border-radius: 4px; border: 1.5px solid #b0c4d8; background: #f8fafc;
+}
+#outil-ebs-2025 .ebs-result.visible { display: block !important; }
+#outil-ebs-2025 .ebs-result-title {
+  font-family: 'Trebuchet MS', sans-serif; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #d0dce8;
+}
+#outil-ebs-2025 .ebs-result-line {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
+  font-family: 'Trebuchet MS', sans-serif; font-size: 13px; line-height: 1.5;
+}
+#outil-ebs-2025 .ebs-result-line:last-child { border-bottom: none; }
+#outil-ebs-2025 .ebs-ico {
+  flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; margin-top: 1px;
+}
+#outil-ebs-2025 .ebs-ico-ok  { background: #2e7d52; color: #fff; }
+#outil-ebs-2025 .ebs-ico-mid { background: #c8a84b; color: #fff; }
+#outil-ebs-2025 .ebs-ico-hi  { background: #b03030; color: #fff; }
+/* PASTILLE */
+#outil-ebs-2025 .ebs-tag {
+  display: inline-block; font-family: 'Trebuchet MS', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 2px; margin-left: 6px; vertical-align: middle;
+}
+#outil-ebs-2025 .tag-n { background: #e0f4e8; color: #1a5a2a; }
+#outil-ebs-2025 .tag-h { background: #fce8e8; color: #8b1a1a; }
+#outil-ebs-2025 .tag-m { background: #fef0d0; color: #7a5200; }
+/* DIVIDER */
+#outil-ebs-2025 hr.ebs-hr { all: initial; display: block; border: none; border-top: 1px solid #dce6f0; margin: 24px 0; }
+/* DISCLAIMER */
+#outil-ebs-2025 .ebs-disclaimer {
+  background: #f8f9fb; border-top: 1px solid #d0dce8; padding: 12px 28px;
+  font-family: 'Trebuchet MS', sans-serif; font-size: 11px; color: #6a7a8a; line-height: 1.6; text-align: center;
+}
+#outil-ebs-2025 .ebs-disclaimer strong { font-weight: 700; color: #4a5a6a; }
+/* SCROLLBAR */
+html { scrollbar-width: none !important; }
+body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+::-webkit-scrollbar { display: none !important; }
+</style>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+</head>
+<body>
+
+<div id="outil-ebs-2025">
+
+  <!-- HEADER -->
+  <div class="ebs-header">
+    <span class="ebs-badge">Outil clinique &mdash; Endocrinologie / Gyn&#233;cologie</span>
+    <div class="ebs-title">Exploration du Bilan Surr&#233;nalien</div>
+    <div class="ebs-subtitle">Cortisol &bull; Aldost&#233;rone &bull; Axe HPA &bull; Tests dynamiques &bull; Cushing &bull; Insuffisance surr&#233;nalienne &bull; HCS &bull; Ph&#233;ochromocytome</div>
+    <div class="ebs-refs">R&#233;f&#233;rences&nbsp;: HAS &bull; SFE 2022 &bull; Endocrine Society 2023 &bull; Dr Kara-Zaitri M.A. &bull; Mise &#224; jour 2025</div>
+  </div>
+
+  <!-- ONGLETS -->
+  <div class="ebs-tabs-bar" role="tablist">
+    <button class="ebs-tab-btn active" onclick="ebsTab('anatomie',this)">1. Anatomie / Physio</button>
+    <button class="ebs-tab-btn" onclick="ebsTab('dosages',this)">2. Dosages</button>
+    <button class="ebs-tab-btn" onclick="ebsTab('tests',this)">3. Tests dynamiques</button>
+    <button class="ebs-tab-btn" onclick="ebsTab('patho',this)">4. Pathologies</button>
+    <button class="ebs-tab-btn" onclick="ebsTab('interprete',this)">5. Interpr&#233;tation</button>
+  </div>
+  <div class="ebs-scroll-hint">&#8592; Faire d&#233;filer les onglets &#8594;</div>
+
+  <div class="ebs-content">
+
+    <!-- ===== ONGLET 1 : ANATOMIE / PHYSIOLOGIE ===== -->
+    <div class="ebs-panel active" id="panel-anatomie">
+
+      <div class="ebs-section-title">1. Structure des glandes surr&#233;nales</div>
+      <p>Les glandes surr&#233;nales sont deux organes endocriniens situ&#233;s au p&#244;le sup&#233;rieur de chaque rein. Chaque glande comprend deux zones fonctionnellement distinctes&nbsp;: le <strong>cortex</strong> (80&nbsp;%) et la <strong>m&#233;dullaire</strong> (20&nbsp;%).</p>
+
+      <div class="ebs-grid-2">
+        <div class="ebs-box ebs-box-info">
+          <strong>Cortex surr&#233;nalien (3 zones)</strong>
+          <em>Zone glom&#233;rularis</em> (externe)&nbsp;: aldost&#233;rone (min&#233;ralocortico&#239;de) &bull;
+          <em>Zone fascicul&#233;e</em> (interm&#233;diaire)&nbsp;: cortisol (glucocortico&#239;de) &bull;
+          <em>Zone r&#233;ticulaire</em> (interne)&nbsp;: androg&#232;nes surr&#233;naliens (DHEA, SDHEA)
+        </div>
+        <div class="ebs-box ebs-box-info">
+          <strong>M&#233;dullaire surr&#233;nalienne</strong>
+          Cellules chromaffines d&#233;riv&#233;es de la cr&#234;te neurale. S&#233;cr&#232;tent&nbsp;: adr&#233;naline (80&nbsp;%) et noradr&#233;naline (20&nbsp;%). Contr&#244;le nerveux sympathique direct (non hypophysaire).
+        </div>
+      </div>
+
+      <div class="ebs-section-title">2. Axe HPA (Hypothalamo-Hypophyso-Surr&#233;nalien)</div>
+      <p>La s&#233;cr&#233;tion de cortisol est r&#233;gul&#233;e par une boucle hormonale en cascade&nbsp;:</p>
+      <ul>
+        <li><strong>CRH</strong> (Corticotropin Releasing Hormone) &mdash; hypoth&shy;alamus &rarr; stimule l'hypophyse</li>
+        <li><strong>ACTH</strong> (Adreno-Cortico-Trophic Hormone) &mdash; ant&#233;hypophyse &rarr; stimule le cortex surr&#233;nalien</li>
+        <li><strong>Cortisol</strong> &mdash; glande surr&#233;nale &rarr; r&#233;trocontr&#244;le n&#233;gatif sur CRH et ACTH</li>
+      </ul>
+
+      <div class="ebs-box ebs-box-gold">
+        <strong>Rythme circadien du cortisol</strong>
+        Le cortisol suit un rythme nycth&#233;m&#233;ral strict&nbsp;: pic matinal entre 6h et 8h (200&ndash;700 nmol/L), nadir nocturne entre minuit et 2h (&lt;&nbsp;50 nmol/L). Ce gradient est fondamental pour l'interpr&#233;tation des dosages et les tests de freinage. Il est aboli dans le syndrome de Cushing.
+      </div>
+
+      <div class="ebs-section-title">3. Hormones du cortex et leurs r&#244;les</div>
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Hormone</th><th>Zone</th><th>R&#244;les principaux</th><th>R&#233;gulation</th></tr></thead>
+          <tbody>
+            <tr><td>Cortisol</td><td>Fascicul&#233;e</td><td>Gluco-n&#233;ogen&#232;se, anti-inflammatoire, immuno-modulateur, r&#233;ponse au stress</td><td>ACTH (axe HPA)</td></tr>
+            <tr><td>Aldost&#233;rone</td><td>Glom&#233;rulaire</td><td>R&#233;tention Na+, excr&#233;tion K+, contr&#244;le tensionnel</td><td>Angiotensine II, kali&#233;mie, ACTH (secondaire)</td></tr>
+            <tr><td>DHEA / SDHEA</td><td>R&#233;ticulaire</td><td>Pr&#233;curseurs des androg&#232;nes p&#233;riph&#233;riques</td><td>ACTH</td></tr>
+            <tr><td>11-D&#233;soxycortisol</td><td>Fascicul&#233;e</td><td>Pr&#233;curseur du cortisol (voie 11&#946;-hydroxylase)</td><td>ACTH / Synacth&#232;ne</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ebs-section-title">4. Syst&#232;me r&#233;nine-angiotensine-aldost&#233;rone (SRAA)</div>
+      <p>L'aldost&#233;rone est principalement r&#233;gul&#233;e par le SRAA&nbsp;: hypovolémie ou hypo-Na+ &rarr; r&#233;nine r&#233;nale &rarr; angiotensine I &rarr; ECA &rarr; angiotensine II &rarr; aldost&#233;rone &rarr; r&#233;absorption Na+/H2O &rarr; r&#233;trocontr&#244;le n&#233;gatif.</p>
+
+      <div class="ebs-box ebs-box-green">
+        <strong>Catécholamines (m&#233;dullaire)</strong>
+        Adr&#233;naline et noradr&#233;naline sont synth&#233;tis&#233;es &#224; partir de la tyrosine (voie dopamine &rarr; noradr&#233;naline &rarr; adr&#233;naline). Leurs m&#233;tabolites urinaires (m&#233;tanephrines, ac. vanilylmandélique) sont utilis&#233;s pour le d&#233;pistage du ph&#233;ochromocytome.
+      </div>
+
+    </div>
+
+    <!-- ===== ONGLET 2 : DOSAGES ===== -->
+    <div class="ebs-panel" id="panel-dosages">
+
+      <div class="ebs-section-title">1. Cortisol plasmatique</div>
+      <p>Dosage sur tube sec, le matin entre 7h et 9h (pic circadien). Exprim&#233; en nmol/L ou &mu;g/dL (1&nbsp;&mu;g/dL = 27,6&nbsp;nmol/L). Environ 90&nbsp;% du cortisol est li&#233; &#224; la CBG (transcortine)&nbsp;; seule la fraction libre est biologiquement active.</p>
+
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Moment</th><th>Valeur normale</th><th>Seuil bas (IS)</th><th>Seuil haut (Cushing)</th></tr></thead>
+          <tbody>
+            <tr><td>8h (pic matinal)</td><td>170&ndash;700 nmol/L (6&ndash;25 &mu;g/dL)</td><td>&lt;&nbsp;80&ndash;100 nmol/L</td><td>&gt;&nbsp;700 nmol/L</td></tr>
+            <tr><td>Minuit (nadir)</td><td>&lt;&nbsp;50 nmol/L (&lt;&nbsp;1,8 &mu;g/dL)</td><td>&mdash;</td><td>&gt;&nbsp;207 nmol/L (seuil Cushing)</td></tr>
+            <tr><td>Cortisol salivaire minuit</td><td>&lt;&nbsp;2&ndash;4 nmol/L</td><td>&mdash;</td><td>&gt;&nbsp;4&ndash;8 nmol/L (Cushing)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ebs-box ebs-box-gold">
+        <strong>Pi&#232;ges du dosage du cortisol</strong>
+        La CBG est augment&#233;e par les estrog&#232;nes (grossesse, pilule) &rarr; cortisol total faussement &#233;lev&#233; ; pr&#233;f&#233;rer le cortisol libre urinaire ou salivaire. Le stress, la d&#233;pression et l'ob&#233;sit&#233; peuvent fausser les tests vers un hypercortisolisme. Les cortico&#239;des exog&#232;nes (y compris locaux) freinent l'axe HPA.
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">2. Cortisol libre urinaire (CLU) sur 24h</div>
+      <p>Refl&#232;te la production journali&#232;re de cortisol libre. Recueil des urines sur 24h (&#233;viter l'effort intense la veille). Stabilit&#233; si recueil sur acide bo&#173;rique.</p>
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Valeur</th><th>Interpr&#233;tation</th></tr></thead>
+          <tbody>
+            <tr><td>&lt;&nbsp;120&ndash;150 nmol/24h (&lt;&nbsp;50 &mu;g/24h)</td><td>Normale</td></tr>
+            <tr><td>&gt;&nbsp;300 nmol/24h (&gt;&nbsp;110 &mu;g/24h)</td><td>Hypercortisolisme sugg&#233;r&#233;</td></tr>
+            <tr><td>&gt;&nbsp;3&ndash;4&nbsp;&#215; la normale</td><td>Syndrome de Cushing probable</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">3. ACTH plasmatique</div>
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Valeur (8h)</th><th>Interpr&#233;tation</th></tr></thead>
+          <tbody>
+            <tr><td>10&ndash;60 pg/mL (2&ndash;13 pmol/L)</td><td>Normale</td></tr>
+            <tr><td>&lt;&nbsp;5 pg/mL</td><td>Cushing ACTH-ind&#233;pendant (adénome/carcinome surr&#233;nalien)</td></tr>
+            <tr><td>&gt;&nbsp;15&ndash;20 pg/mL + hypercortisolisme</td><td>Cushing ACTH-d&#233;pendant (maladie de Cushing ou ectopique)</td></tr>
+            <tr><td>&gt;&nbsp;200 pg/mL</td><td>Insuffisance surr&#233;nalienne primaire probable (maladie d'Addison)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">4. Aldost&#233;rone et r&#233;nine</div>
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Param&#232;tre</th><th>Valeur normale (d&#233;cubitus)</th><th>Valeur (debout)</th></tr></thead>
+          <tbody>
+            <tr><td>Aldost&#233;rone plasmatique</td><td>30&ndash;160 pmol/L (1&ndash;6 ng/dL)</td><td>jusqu&rsquo;&#224; 400 pmol/L</td></tr>
+            <tr><td>R&#233;nine active (DRP)</td><td>2&ndash;35 mUI/L</td><td>4&ndash;46 mUI/L</td></tr>
+            <tr><td>Ratio Aldost&#233;rone/R&#233;nine (ARR)</td><td>&lt;&nbsp;30 (pmol/L par mUI/L)</td><td>Seuil d&#233;pistage HAP&nbsp;: &gt;&nbsp;30&ndash;50</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ebs-box ebs-box-info">
+        <strong>Ratio Aldost&#233;rone/R&#233;nine (ARR) &mdash; d&#233;pistage de l'hyperaldost&#233;ronisme primaire</strong>
+        L'ARR est le test de d&#233;pistage de r&#233;f&#233;rence (Endocrine Society 2016). Conditions de pr&#233;l&#232;vement&nbsp;: arr&#234;t des ant&#233;caldost&#233;rones/diur&#233;tiques 4&nbsp;semaines avant, &#946;-bloquants et IEC 2&nbsp;semaines avant, correction de l'hypokali&#233;mie. Pr&#233;l&#232;vement apr&#232;s 2h de station debout.
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">5. Cat&#233;cholamines et m&#233;tabolites (m&#233;dullaire)</div>
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Marqueur</th><th>M&#233;thode</th><th>Valeur normale</th><th>Seuil suspect</th></tr></thead>
+          <tbody>
+            <tr><td>M&#233;taneprines plasmatiques libres</td><td>LC-MS/MS (gold standard)</td><td>M&#233;tanepr. &lt;&nbsp;0,50 nmol/L&nbsp;; N&#248;rm&#233;tanepr. &lt;&nbsp;0,90 nmol/L</td><td>&#215;&nbsp;4&ndash;5 &#215; la normale</td></tr>
+            <tr><td>M&#233;taneprines urinaires fractionn&#233;es 24h</td><td>Urine acidifi&#233;e 24h</td><td>&lt;&nbsp;350 &mu;g/24h (m&#233;tan.) ; &lt;&nbsp;600 &mu;g/24h (norm&#233;tan.)</td><td>&gt;&nbsp;2&ndash;3 &#215; la normale</td></tr>
+            <tr><td>Acide vanilylmand&#233;lique (VMA) urinaire</td><td>Urine 24h</td><td>&lt;&nbsp;35 &mu;mol/24h</td><td>&#8593; dans ph&#233;ochromocytome</td></tr>
+            <tr><td>Chromogranine A (CgA)</td><td>Plasmatique</td><td>&lt;&nbsp;100 ng/mL</td><td>Tumeur neuro-endocrine (NEM)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ===== ONGLET 3 : TESTS DYNAMIQUES ===== -->
+    <div class="ebs-panel" id="panel-tests">
+
+      <div class="ebs-section-title">1. Test de freinage &#224; la dexam&#233;thasone (TFD)</div>
+      <p>Principe&nbsp;: la dexam&#233;thasone fr&#232;ne l'axe HPA par r&#233;trocontr&#244;le n&#233;gatif. L'absence de freinage signe un hypercortisolisme autonome (Cushing). Trois protocoles distincts selon l'indication.</p>
+
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Protocole</th><th>Mode</th><th>D&#233;pistage / Confirmation</th><th>Seuil normal</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>TFD 1&nbsp;mg (nuit)</td>
+              <td>1&nbsp;mg dexam&#233;thasone &#224; 23h &rarr; cortisol &#224; 8h</td>
+              <td>D&#233;pistage ambulatoire (1re intention)</td>
+              <td>Cortisol 8h &lt;&nbsp;50 nmol/L (1,8&nbsp;&mu;g/dL) = freinage normal</td>
+            </tr>
+            <tr>
+              <td>TFD 2&nbsp;mg/j &#215;&nbsp;2j (Liddle faible)</td>
+              <td>0,5&nbsp;mg/6h pendant 48h &rarr; cortisol &#224; 48h</td>
+              <td>Confirmation de l'hypercortisolisme</td>
+              <td>CLU &lt;&nbsp;27 nmol/24h ou cortisol &lt;&nbsp;50 nmol/L</td>
+            </tr>
+            <tr>
+              <td>TFD 8&nbsp;mg/j &#215;&nbsp;2j (Liddle fort)</td>
+              <td>2&nbsp;mg/6h pendant 48h &rarr; cortisol &#224; 48h</td>
+              <td>Diff&#233;renciation origine (hypoph. vs ectopique)</td>
+              <td>Freinage &gt;&nbsp;50&nbsp;% &rarr; maladie de Cushing (hypoph.)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ebs-box ebs-box-alert">
+        <strong>Causes de faux positifs (non-freinage sans Cushing)</strong>
+        D&#233;pression, alcoolisme chronique, ob&#233;sit&#233; morbide, traitement par inducteurs enzymatiques (rifampicine, ph&#233;nytoine &rarr; acc&#233;l&#232;rent le catabolisme de la dex), grossesse (&#233;l&#233;vation de la CBG). En cas de doute, confirmer par CLU 24h ou cortisol salivaire nocturne.
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">2. Test au Synacth&#232;ne (stimulation par ACTH)</div>
+      <p>Protocole&nbsp;: injection IV ou IM de t&#233;tracosactide (analogue ACTH) 250&nbsp;&mu;g. Dosage du cortisol &#224; T0, T30 et T60&nbsp;min.</p>
+
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>R&#233;sultat &#224; T60</th><th>Interpr&#233;tation</th><th>Conclusion</th></tr></thead>
+          <tbody>
+            <tr><td>&gt;&nbsp;500&ndash;550 nmol/L (&gt;&nbsp;18&ndash;20&nbsp;&mu;g/dL)</td><td>R&#233;ponse normale</td><td>Insuffisance surr&#233;nalienne exclue</td></tr>
+            <tr><td>200&ndash;500 nmol/L + delta &lt;&nbsp;200&nbsp;nmol/L</td><td>R&#233;ponse partielle</td><td>Insuffisance surr&#233;nalienne relative (sugg&#233;r&#233;e)</td></tr>
+            <tr><td>&lt;&nbsp;200 nmol/L ou absence de r&#233;ponse</td><td>R&#233;ponse insuffisante</td><td>IS primaire (Addison) ou secondaire ancienne</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ebs-box ebs-box-info">
+        <strong>Limites du test au Synacth&#232;ne 250&nbsp;&mu;g</strong>
+        Le test &#224; forte dose ne d&#233;tecte pas l'IS secondaire r&#233;cente (hypophyse depuis &lt;&nbsp;4&ndash;6&nbsp;semaines car la surr&#233;nale n'est pas encore atroph&#233;e). Dans ce cas, utiliser le test Synacth&#232;ne 1&nbsp;&mu;g ou le test &#224; l'hypoglycémie insulinique (ITT).
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">3. Test &#224; la m&#233;tyrapone</div>
+      <p>Inhibe la 11&#946;-hydroxylase &rarr; bl&#233;que la synth&#232;se du cortisol &rarr; l&#232;ve le fr&#233;image &rarr; l'ACTH s'&#233;l&#232;ve &rarr; accumulation du 11-d&#233;soxycortisol. Utilis&#233; pour tester la r&#233;serve hypophysaire en ACTH.</p>
+
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Contexte</th><th>R&#233;sultat attendu</th><th>Interpr&#233;tation</th></tr></thead>
+          <tbody>
+            <tr><td>Axe HPA intact</td><td>11-d&#233;soxycortisol &gt;&nbsp;200 nmol/L + ACTH &gt;&nbsp;150 pg/mL</td><td>Normal</td></tr>
+            <tr><td>IS secondaire (hypophysaire)</td><td>Absence d'&#233;l&#233;vation du 11-d&#233;soxycortisol</td><td>R&#233;serve ACTH insuffisante</td></tr>
+            <tr><td>IS primaire (Addison)</td><td>Cortisol effondré (ne r&#233;pond pas)</td><td>Pas indicatif (test inadapt&#233;)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">4. Test de confirmation de l'hyperaldost&#233;ronisme primaire (HAP)</div>
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Test</th><th>Protocole</th><th>Confirmation HAP</th></tr></thead>
+          <tbody>
+            <tr><td>Charge en sel IV (charge sodée)</td><td>2L NaCl 0,9&nbsp;% en 4h &rarr; aldost&#233;rone plasmatique &#224; H4</td><td>&gt;&nbsp;277 pmol/L (&gt;&nbsp;10 ng/dL) apr&#232;s charge</td></tr>
+            <tr><td>Test au fludrocortisone</td><td>0,1&nbsp;mg/6h &#215;&nbsp;4j + sel + KCl &rarr; aldost&#233;rone J4</td><td>&gt;&nbsp;166 pmol/L (&gt;&nbsp;6 ng/dL)</td></tr>
+            <tr><td>Charge orale en sel</td><td>R&#233;gime hypersolé 3j &rarr; aldost&#233;rone urinaire 24h J3</td><td>&gt;&nbsp;33 nmol/24h (&gt;&nbsp;12 &mu;g/24h)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ===== ONGLET 4 : PATHOLOGIES ===== -->
+    <div class="ebs-panel" id="panel-patho">
+
+      <div class="ebs-section-title">Syndrome de Cushing &mdash; d&#233;pistage et classification</div>
+      <p>D&#233;fini par un hypercortisolisme chronique endogène. Pr&#233;valence&nbsp;: 1&ndash;2/100&nbsp;000/an. Chez la femme&nbsp;: tableau trompeur pouvant simuler un SOPK ou une ob&#233;sit&#233; commune.</p>
+
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Cause</th><th>ACTH</th><th>Fr&#233;quence</th><th>Imagerie</th></tr></thead>
+          <tbody>
+            <tr class="sub-head"><td colspan="5">ACTH-D&#201;PENDANT (80&nbsp;%)</td></tr>
+            <tr><td>Maladie de Cushing</td><td>Ad&#233;nome hypophysaire corticotrope</td><td><span class="ebs-tag tag-m">&#8593; 15&ndash;200 pg/mL</span></td><td>70&nbsp;%</td><td>IRM hypophysaire</td></tr>
+            <tr><td>S&#233;cr&#233;tion ectopique ACTH</td><td>Carcinoïde pulm., CBPC, carcinome th&#233;rapeutique</td><td><span class="ebs-tag tag-h">&#8593;&#8593; &gt;&nbsp;200 pg/mL</span></td><td>10&nbsp;%</td><td>TDM TAP + scintigraphie</td></tr>
+            <tr class="sub-head"><td colspan="5">ACTH-IND&#201;PENDANT (20&nbsp;%)</td></tr>
+            <tr><td>Ad&#233;nome surr&#233;nalien</td><td>Tumeur b&#233;nigne cortisols&#233;cr&#233;tante</td><td><span class="ebs-tag tag-n">&#8595; &lt;&nbsp;5 pg/mL</span></td><td>10&nbsp;%</td><td>TDM surr&#233;nalien</td></tr>
+            <tr><td>Carcinome surr&#233;nalien</td><td>Tumeur maligne (rare)</td><td><span class="ebs-tag tag-n">&#8595;</span></td><td>5&nbsp;%</td><td>TDM / IRM / TEP</td></tr>
+            <tr><td>Hyperplasie surr&#233;nalienne bilat&#233;rale</td><td>ACTH-ind&#233;pendante (AIMAH, PPNAD)</td><td><span class="ebs-tag tag-n">&#8595;</span></td><td>rare</td><td>TDM surr&#233;nalien bilat&#233;ral</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ebs-box ebs-box-gold">
+        <strong>Signes cliniques &#233;vocateurs de Cushing chez la femme</strong>
+        Obésité facio-tronculaire (bosse de bison, visage lunaire) &bull; Vergetures pourpres larges &bull; Amyotrophie des membres &bull; HTA &bull; Hirsutisme &bull; Am&#233;norrh&#233;e secondaire &bull; Acn&#233; &bull; Fragilité cutanée / ecchymoses spontanées &bull; Ostéoporose pr&#233;coce &bull; Diab&#232;te / intolérance glucidique
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">Insuffisance surr&#233;nalienne (IS)</div>
+      <div class="ebs-grid-2">
+        <div class="ebs-box ebs-box-alert">
+          <strong>IS primaire &mdash; Maladie d'Addison</strong>
+          Destruction du cortex (auto-immune 80&nbsp;%, tuberculose, m&#233;tastases). Cortisol effondré + ACTH &#233;lev&#233;e + m&#233;lanotrophine &#8593; (m&#233;lanodermie). Aldost&#233;rone souvent basse &rarr; hypoNa+, hyperK+.
+        </div>
+        <div class="ebs-box ebs-box-gold">
+          <strong>IS secondaire &mdash; Hypophysaire</strong>
+          D&#233;ficit en ACTH (ad&#233;nome, chirurgie, radioth&#233;rapie, corticoth&#233;rapie prolong&#233;e). Cortisol bas + ACTH basse. Aldost&#233;rone souvent conserv&#233;e (SRAA intact). Pas de m&#233;lanodermie.
+        </div>
+      </div>
+
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Param&#232;tre</th><th>IS primaire (Addison)</th><th>IS secondaire</th></tr></thead>
+          <tbody>
+            <tr><td>Cortisol 8h</td><td>&lt;&nbsp;80&ndash;100 nmol/L</td><td>&lt;&nbsp;80&ndash;100 nmol/L</td></tr>
+            <tr><td>ACTH</td><td><span class="ebs-tag tag-h">&#8593;&#8593; &gt;&nbsp;200 pg/mL</span></td><td><span class="ebs-tag tag-n">&#8595; &lt;&nbsp;10 pg/mL</span></td></tr>
+            <tr><td>Aldost&#233;rone</td><td>Basse</td><td>Normale</td></tr>
+            <tr><td>Na+</td><td>&#8595; (hypoNa+)</td><td>Normal ou &#8595; (SIADH)</td></tr>
+            <tr><td>K+</td><td>&#8593; (hyperK+)</td><td>Normal</td></tr>
+            <tr><td>Synacth&#232;ne 250&nbsp;&mu;g</td><td>Absence de r&#233;ponse</td><td>R&#233;ponse parfois normale si r&#233;cente</td></tr>
+            <tr><td>Anticorps anti-21-hydroxylase</td><td>Positifs (80&nbsp;% des causes auto-immunes)</td><td>N&#233;gatifs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">Hyperaldost&#233;ronisme primaire (HAP)</div>
+      <p>Cause endocrine la plus fr&#233;quente d'HTA secondaire (5&ndash;10&nbsp;% des HTA). Etiologies principales&nbsp;: ad&#233;nome de Conn (35&nbsp;%), hyperplasie bilat&#233;rale idiopathique (60&nbsp;%).</p>
+      <ul>
+        <li>HTA souvent r&#233;sistante aux traitements habituels</li>
+        <li>HypoKali&#233;mie (50&ndash;60&nbsp;% des cas seulement &mdash; ne pas attendre ce signe)</li>
+        <li>ARR &gt;&nbsp;30&ndash;50&nbsp;: d&#233;pistage positif &rarr; test de confirmation</li>
+        <li>TDM surr&#233;nalien + cat&#233;t&#233;risme veineux surr&#233;nalien (CVS) pour lat&#233;ralisation</li>
+      </ul>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">Ph&#233;ochromocytome et paragangliome (PPGL)</div>
+      <div class="ebs-box ebs-box-alert">
+        <strong>Triade &#233;vocatrice (classique mais inconstante)</strong>
+        C&#233;phal&#233;es paroxystiques + palpitations + su&#233;urs profondes &rarr; HTA paroxystique ou permanente. Sensibilit&#233; de la triade&nbsp;: 90&nbsp;%. &nbsp;&bull;&nbsp; NB&nbsp;: 10&nbsp;% des ph&#233;o sont cliniquement silencieux (incidentalomes).
+      </div>
+      <div class="ebs-table-wrap">
+        <table>
+          <thead><tr><th>Examen</th><th>Performance</th><th>Remarques</th></tr></thead>
+          <tbody>
+            <tr><td>M&#233;taneprines plasmatiques libres</td><td>Se 97&nbsp;%, Sp 85&nbsp;%</td><td>1re intention (Endocrine Society 2014)</td></tr>
+            <tr><td>M&#233;taneprines urinaires 24h</td><td>Se 90&nbsp;%, Sp 98&nbsp;%</td><td>Alternative valide</td></tr>
+            <tr><td>TDM surr&#233;nalien</td><td>Se 85&ndash;98&nbsp;%</td><td>Localisation anatomique</td></tr>
+            <tr><td>IRM surr&#233;nalienne</td><td>Se 93&ndash;100&nbsp;%</td><td>Tumeur extra-surr&#233;nalienne, grossesse</td></tr>
+            <tr><td>Scintigraphie MIBG</td><td>Se 77&ndash;90&nbsp;%</td><td>Localisation paragangliome / m&#233;tastases</td></tr>
+            <tr><td>G&#233;n&#233;tique (SDHB, SDHD, VHL, RET, NF1...)</td><td>&mdash;</td><td>40&nbsp;% des PPGL ont une mutation germinale</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="ebs-hr">
+      <div class="ebs-section-title">HCS non classique &mdash; rappel (d&#233;ficit en 21-hydroxylase)</div>
+      <p>Voir outil &laquo;&nbsp;Exploration de la fonction androg&#233;nique&nbsp;&raquo; pour l'arbre diagnostique complet. Le dosage de la 17-OH-prog&#233;st&#233;rone basale (J3&ndash;J5) et le test au Synacth&#232;ne restent les examens cl&#233;s.</p>
+
+    </div>
+
+    <!-- ===== ONGLET 5 : INTERPRETATION ===== -->
+    <div class="ebs-panel" id="panel-interprete">
+
+      <div class="ebs-section-title">R&#233;f&#233;rences rapides</div>
+      <div class="ebs-grid-2">
+        <div class="ebs-card">
+          <h4>Cortisol plasmatique (8h)</h4>
+          <div class="ebs-card-row"><span class="ebs-lbl">Normal</span><span class="ebs-val ok">170&ndash;700 nmol/L</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">IS suspect</span><span class="ebs-val hi">&lt;&nbsp;100 nmol/L</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">Cushing suspect</span><span class="ebs-val hi">&gt;&nbsp;700 nmol/L</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">TFD 1mg : freinage OK</span><span class="ebs-val ok">&lt;&nbsp;50 nmol/L</span></div>
+        </div>
+        <div class="ebs-card">
+          <h4>ACTH plasmatique (8h)</h4>
+          <div class="ebs-card-row"><span class="ebs-lbl">Normale</span><span class="ebs-val ok">10&ndash;60 pg/mL</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">Cushing ACTH-ind&#233;p.</span><span class="ebs-val hi">&lt;&nbsp;5 pg/mL</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">Maladie de Cushing</span><span class="ebs-val mid">15&ndash;200 pg/mL</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">ACTH ectopique</span><span class="ebs-val hi">&gt;&nbsp;200 pg/mL</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">Addison</span><span class="ebs-val hi">&gt;&nbsp;200 pg/mL</span></div>
+        </div>
+        <div class="ebs-card">
+          <h4>CLU 24h</h4>
+          <div class="ebs-card-row"><span class="ebs-lbl">Normal</span><span class="ebs-val ok">&lt;&nbsp;120&ndash;150 nmol/24h</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">Cushing sugg&#233;r&#233;</span><span class="ebs-val mid">&gt;&nbsp;300 nmol/24h</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">Cushing probable</span><span class="ebs-val hi">&gt;&nbsp;3&ndash;4&#215; la normale</span></div>
+        </div>
+        <div class="ebs-card">
+          <h4>Aldost&#233;rone / R&#233;nine</h4>
+          <div class="ebs-card-row"><span class="ebs-lbl">ARR normal</span><span class="ebs-val ok">&lt;&nbsp;30</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">HAP d&#233;pistage</span><span class="ebs-val hi">&gt;&nbsp;30&ndash;50</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">Synacth&#232;ne T60 normal</span><span class="ebs-val ok">&gt;&nbsp;500 nmol/L</span></div>
+          <div class="ebs-card-row"><span class="ebs-lbl">IS confirm&#233;e</span><span class="ebs-val hi">&lt;&nbsp;200 nmol/L</span></div>
+        </div>
+      </div>
+
+      <hr class="ebs-hr">
+
+      <!-- OUTIL INTERACTIF -->
+      <div class="ebs-interactive">
+        <h3>&#9654; Outil d'orientation &mdash; Profil surr&#233;nalien</h3>
+        <div class="ebs-form-grid">
+          <div class="ebs-field">
+            <label for="ebs-cortisol">Cortisol 8h (nmol/L)</label>
+            <input type="number" id="ebs-cortisol" step="1" min="0" max="3000" placeholder="ex. 350">
+          </div>
+          <div class="ebs-field">
+            <label for="ebs-clu">CLU 24h (nmol/24h)</label>
+            <input type="number" id="ebs-clu" step="1" min="0" max="5000" placeholder="ex. 100">
+          </div>
+          <div class="ebs-field">
+            <label for="ebs-acth">ACTH (pg/mL)</label>
+            <input type="number" id="ebs-acth" step="1" min="0" max="2000" placeholder="ex. 25">
+          </div>
+          <div class="ebs-field">
+            <label for="ebs-tfd">TFD 1mg : cortisol 8h (nmol/L)</label>
+            <input type="number" id="ebs-tfd" step="1" min="0" max="2000" placeholder="ex. 40">
+          </div>
+          <div class="ebs-field">
+            <label for="ebs-synact">Synacth&#232;ne T60 (nmol/L)</label>
+            <input type="number" id="ebs-synact" step="1" min="0" max="2000" placeholder="ex. 600">
+          </div>
+          <div class="ebs-field">
+            <label for="ebs-arr">Ratio Aldo/R&#233;nine (ARR)</label>
+            <input type="number" id="ebs-arr" step="0.1" min="0" max="500" placeholder="ex. 20">
+          </div>
+          <div class="ebs-field">
+            <label for="ebs-metanep">M&#233;taneprines plasma (nmol/L)</label>
+            <input type="number" id="ebs-metanep" step="0.01" min="0" max="50" placeholder="ex. 0.3">
+          </div>
+          <div class="ebs-field">
+            <label for="ebs-tableau">Tableau clinique</label>
+            <select id="ebs-tableau">
+              <option value="">-- S&#233;lectionner --</option>
+              <option value="cushing_clinique">Ob&#233;sit&#233; tronc + HTA + vergetures</option>
+              <option value="addison_clinique">Asth&#233;nie + m&#233;lanodermie + hypotension</option>
+              <option value="hap_clinique">HTA r&#233;sistante &#177; hypokali&#233;mie</option>
+              <option value="pheo_clinique">HTA paroxystique + c&#233;phal&#233;es + su&#233;urs</option>
+              <option value="incidentalome">Incidentalome surr&#233;nalien (d&#233;couvertes fortuites)</option>
+            </select>
+          </div>
+        </div>
+        <button class="ebs-btn" onclick="ebsInterprete()">Interpr&#233;ter</button>
+        <button class="ebs-btn-sec" onclick="ebsReset()">R&#233;initialiser</button>
+
+        <div class="ebs-result" id="ebs-result">
+          <div class="ebs-result-title" id="ebs-result-title">Orientation</div>
+          <div id="ebs-result-lines"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /ebs-content -->
+
+  <!-- DISCLAIMER -->
+  <div class="ebs-disclaimer">
+    <strong>Avertissement m&#233;dico-l&#233;gal.</strong> Outil d'aide &#224; la d&#233;cision clinique &#224; l'usage exclusif des professionnels de sant&#233;. Ne se substitue pas au jugement clinique ni &#224; la consultation sp&#233;cialis&#233;e en endocrinologie. Valeurs de r&#233;f&#233;rence indicatives (variables selon les r&#233;actifs et laboratoires). Dr Kara-Zaitri M.A. &mdash; Gyn&#233;cologue-Obst&#233;tricien, Tlemcen &mdash; 2025.
+    <br><strong>Dr KARA-ZAITRI M.A. © 2026</strong>
+  </div>
+
+</div><!-- /#outil-ebs-2025 -->
+
+<script>
+// Navigation explicite et robuste (compatible Elementor)
+window.ebsTab = function(tabId, btn) {
+  var panels = document.querySelectorAll('#outil-ebs-2025 .ebs-panel');
+  for (var i = 0; i < panels.length; i++) {
+    panels[i].classList.remove('active');
+    panels[i].style.display = 'none';
+  }
+  var btns = document.querySelectorAll('#outil-ebs-2025 .ebs-tab-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.remove('active');
+  }
+  var target = document.getElementById('panel-' + tabId);
+  if (target) {
+    target.classList.add('active');
+    target.style.display = 'block';
+  }
+  if (btn) btn.classList.add('active');
+  if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+};
+
+// Interprétation simplifiée (version test)
+window.ebsInterprete = function() {
+  var res = document.getElementById('ebs-result');
+  if (res) {
+    res.innerHTML = '<div style="color:#1a5a2a;font-weight:bold;">Test : fonction interprétation active ✓<br><small>Remplissez les champs pour une analyse complète.</small></div>';
+    res.classList.add('visible');
+    res.style.display = 'block';
+  }
+};
+
+// Réinitialisation
+window.ebsReset = function() {
+  var fields = ['ebs-cortisol','ebs-clu','ebs-acth','ebs-tfd','ebs-synact','ebs-arr','ebs-metanep'];
+  for (var i = 0; i < fields.length; i++) {
+    var el = document.getElementById(fields[i]);
+    if (el) el.value = '';
+  }
+  var sel = document.getElementById('ebs-tableau');
+  if (sel) sel.value = '';
+  var res = document.getElementById('ebs-result');
+  if (res) {
+    res.classList.remove('visible');
+    res.style.display = 'none';
+  }
+};
+
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', function() {
+  var firstPanel = document.getElementById('panel-anatomie');
+  if (firstPanel) { firstPanel.classList.add('active'); firstPanel.style.display = 'block'; }
+  var firstBtn = document.querySelector('#outil-ebs-2025 .ebs-tab-btn');
+  if (firstBtn) firstBtn.classList.add('active');
+});
+</script>
+</body>
+</html>
