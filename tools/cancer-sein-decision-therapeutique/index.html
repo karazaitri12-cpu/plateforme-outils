@@ -368,8 +368,8 @@ body{-ms-overflow-style:none!important;overflow-y:auto!important;}
           <div class="cs-err" id="csm-err-prenom">Champ obligatoire.</div>
         </div>
         <div class="cs-field">
-          <label for="csm-ddn">Date de naissance</label>
-          <input type="text" id="csm-ddn" placeholder="JJ/MM/AAAA"/>
+          <label for="csm-age-ro">&#194;ge <span style="font-size:10px;font-weight:400;color:var(--cs-muted)">(issu du formulaire)</span></label>
+          <input type="text" id="csm-age-ro" readonly style="background:#f0f4fb;color:var(--cs-muted);cursor:default;" placeholder="&#8212;"/>
         </div>
         <div class="cs-field">
           <label for="csm-ref">N° dossier / Réf.</label>
@@ -916,10 +916,9 @@ window.csReset = csReset;
    ====================================================== */
 function csAnalyze(){
   var out=g('cs-output');
+  try{ _doAnalyze(out); }catch(e){ out.innerHTML='<strong>Erreur :</strong> '+e.message; }
   out.style.display='block';
   out.className='cs-result';
-  out.innerHTML='<em style="font-size:12px;color:var(--cs-muted)">Analyse en cours\u2026</em>';
-  setTimeout(function(){ try{ _doAnalyze(out); }catch(e){ out.innerHTML='<strong>Erreur :</strong> '+e.message; } },80);
 }
 window.csAnalyze = csAnalyze;
 
@@ -1128,6 +1127,10 @@ function csOpenModal(){
   var prat=gv('cs-practitioner').trim();
   var mPrat=g('csm-praticien');
   if(prat&&mPrat&&!mPrat.value.trim()) mPrat.value=prat;
+  // Pré-remplir l'âge en lecture seule
+  var ageVal=gv('cs-age');
+  var ageRo=g('csm-age-ro');
+  if(ageRo) ageRo.value=ageVal?(ageVal+' ans'):'—';
   csMdClearErrors();
   g('cs-modal-identite').classList.add('cs-active');
   setTimeout(function(){ g('csm-nom')&&g('csm-nom').focus(); },200);
@@ -1163,7 +1166,7 @@ function csMdValider(){
   csMdClose();
   csGenerateA5({
     nomPatiente:esc(nom),prenomPatiente:esc(prenom),
-    ddnPatiente:esc(g('csm-ddn').value.trim()),
+    agePatiente:esc(gv('cs-age')),
     refDossier:esc(g('csm-ref').value.trim()),
     praticien:esc(prat)
   });
@@ -1265,10 +1268,10 @@ function csGenerateA5(id){
     c+='<div class="bloc-patient">';
     c+='<div class="patient-name">'+id.nomPatiente+' '+id.prenomPatiente+'</div>';
     c+='<div class="kv">';
-    if(id.ddnPatiente) c+='<span><strong>DDN :</strong> '+id.ddnPatiente+'</span>';
+    if(id.agePatiente) c+='<span><strong>\u00c2ge :</strong> '+id.agePatiente+' ans</span>';
     if(id.refDossier)  c+='<span><strong>N\u00b0 dossier :</strong> '+id.refDossier+'</span>';
     c+='<span><strong>Sexe :</strong> '+sex+'</span>';
-    c+='<span><strong>\u00c2ge :</strong> '+(age||'\u2013')+' ans</span>';
+
     c+='<span><strong>M\u00e9no :</strong> '+menoText+'</span>';
     c+='<span><strong>Grossesse :</strong> '+(preg?'<strong style="color:#b0322a">OUI</strong>':'Non')+'</span>';
     c+='<span><strong>Op\u00e9rable :</strong> '+(operable?'Oui':'Non / Borderline')+'</span>';
