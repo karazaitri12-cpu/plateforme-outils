@@ -1002,6 +1002,28 @@ function _doAnalyze(out){
 
   html += '<h3 style="margin-top:18px">Proposition th\u00e9rapeutique (à valider en RCP)</h3>';
 
+  /* ---- ÉTAPE 0 : Bilan d'extension ---- */
+  if (m !== 'M1' && histo !== 'in_situ') {
+    var needsStaging = false;
+    var stagingReasons = [];
+    if (t === 'T3' || t === 'T4' || pev === '2' || pev === '3') { needsStaging = true; stagingReasons.push('\u2265 T3 ou PEV'); }
+    if (n === 'N1' || n === 'N2' || n === 'N3') { needsStaging = true; stagingReasons.push('N+ clinique'); }
+    if (isTNBC) { needsStaging = true; stagingReasons.push('Triple N\u00e9gatif (TNBC)'); }
+    if (her2p) { needsStaging = true; stagingReasons.push('HER2+'); }
+    
+    if (needsStaging) {
+      html += '<div class="cs-thera-block" style="border-left-color:#8e44ad; background:#fbf9fc;"><strong class="cs-step" style="color:#8e44ad;">0. Bilan d\'extension (Avant tout traitement)</strong>';
+      html += '<p>Indication(s) : ' + stagingReasons.join(', ') + '.</p>';
+      html += '<ul class="cs-targeted-list">';
+      html += '<li>TEP-TDM au 18F-FDG (PET-Scan) <em style="color:#8e44ad">ou</em> TDM Thoraco-Abdomino-Pelvienne + Scintigraphie osseuse.</li>';
+      html += '<li>IRM c\u00e9r\u00e9brale uniquement si point d\'appel clinique (neurologique).</li>';
+      html += '</ul></div>';
+    } else {
+      html += '<div class="cs-thera-block" style="border-left-color:#a0aabf;"><strong class="cs-step" style="color:#5a6478;">0. Bilan d\'extension</strong>';
+      html += '<p>Non syst\u00e9matique (stade pr\u00e9coce asymptomatique). Imagerie \u00e0 r\u00e9server en cas de point d\'appel clinique ou anomalie biologique.</p></div>';
+    }
+  }
+
   /* ---- Stade IV ---- */
   if(m==='M1'){
     html += '<div class="cs-thera-block"><strong class="cs-step">Stade IV m\u00e9tastatique</strong><p>Traitement syst\u00e9mique de premi\u00e8re ligne selon sous-type. Pas de chirurgie premi\u00e8re sauf urgence. Avis oncologique urgent.</p></div>';
