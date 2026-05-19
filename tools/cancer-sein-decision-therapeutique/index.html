@@ -1321,6 +1321,20 @@ function csGenerateA5(id){
     c+='</div>';
 
     c+='<h2>Proposition Th\u00e9rapeutique</h2>';
+    
+    /* Bilan extension sur rapport PDF */
+    if(m !== 'M1' && histo !== 'in_situ'){
+      var needsStaging = false;
+      var stagingReasons = [];
+      if(t === 'T3' || t === 'T4' || pev === '2' || pev === '3') stagingReasons.push('\u2265 T3');
+      if(n === 'N1' || n === 'N2' || n === 'N3') stagingReasons.push('N+');
+      if(isTNBC) stagingReasons.push('TNBC');
+      if(her2p) stagingReasons.push('HER2+');
+      
+      if(needsStaging){
+        c += '<div class="decision" style="border-left-color:#8e44ad; background:#fbf9fc; margin-bottom:8px;"><strong>0. Bilan d\'extension :</strong> TEP-TDM 18F-FDG ou TDM TAP + Scinti osseuse. <br><span style="font-size:10px;color:#666;">Indication : ' + stagingReasons.join(', ') + '.</span></div>';
+      }
+    }
     if(m==='M1'){
       c+='<div class="decision"><strong>Stade IV m\u00e9tastatique</strong> \u2014 Traitement syst\u00e9mique premi\u00e8re ligne. Avis oncologique.</div>';
     } else if(histo==='in_situ'){
