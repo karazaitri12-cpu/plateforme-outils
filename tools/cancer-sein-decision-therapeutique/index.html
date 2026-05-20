@@ -1062,83 +1062,74 @@ function _doAnalyze(out){
     if(cas==='squirrhe'){neo=true;reasNeo.push('Squirrhe ulc\u00e9r\u00e9');}
   }
 
-  if(neo){
+ if(neo){
     /* =====================================================
-       BLOC NÉOADJUVANT — nomenclature corrigée
+       ÉTAPE 1 : NÉOADJUVANT
        ===================================================== */
     html+='<div class="cs-thera-block cs-neo">';
 
-    // --- Titre du bloc : distingue selon sous-type ---
     if(isTNBC){
-      html+='<strong class="cs-step">1. Traitement n\u00e9oadjuvant — <span class="cs-badge-class cs-badge-chemo">Chimio</span> + <span class="cs-badge-class cs-badge-immuno">Immuno</span> — puis Chirurgie</strong>';
+      html+='<strong class="cs-step">1. Traitement n\u00e9oadjuvant <span class="cs-badge-class cs-badge-chemo">Chimio</span> + <span class="cs-badge-class cs-badge-immuno">Immuno</span></strong>';
     } else if(her2p){
-      html+='<strong class="cs-step">1. Traitement n\u00e9oadjuvant — <span class="cs-badge-class cs-badge-chemo">Chimio</span> + <span class="cs-badge-class cs-badge-targeted">Th\u00e9rapies cibl\u00e9es anti-HER2</span> — puis Chirurgie</strong>';
+      html+='<strong class="cs-step">1. Traitement n\u00e9oadjuvant <span class="cs-badge-class cs-badge-chemo">Chimio</span> + <span class="cs-badge-class cs-badge-targeted">Th. Cibl\u00e9e</span></strong>';
     } else {
-      html+='<strong class="cs-step">1. Chimioth\u00e9rapie n\u00e9oadjuvante <span class="cs-badge-class cs-badge-chemo">Chimio</span> puis Chirurgie</strong>';
+      html+='<strong class="cs-step">1. Chimioth\u00e9rapie n\u00e9oadjuvante <span class="cs-badge-class cs-badge-chemo">Chimio</span></strong>';
     }
 
     html+='<p>Indication(s) : '+reasNeo.join(', ')+'.</p>';
     html+='<ul class="cs-targeted-list">';
 
     if(isTNBC){
-      html+='<li>';
-      html+='<strong>Chimioth\u00e9rapie <span class="cs-badge-class cs-badge-chemo">Chimio</span> :</strong> ';
-      html+='Protocole AC-T (Anthracyclines + Cyclophosphamide, puis Taxane).';
-      html+='</li>';
-      html+='<li>';
-      html+='<strong>Immunoth\u00e9rapie <span class="cs-badge-class cs-badge-immuno">Immuno</span> :</strong> ';
-      html+='Ajouter <strong>Pembrolizumab</strong> (anticorps anti-PD-1) si PD-L1+ — \u00e9tude KEYNOTE-522 (stade\u00a0II-III).';
-      html+='</li>';
+      html+='<li><strong>Chimioth\u00e9rapie <span class="cs-badge-class cs-badge-chemo">Chimio</span> :</strong> Protocole AC-T (Anthracyclines + Cyclophosphamide, puis Taxane).</li>';
+      html+='<li><strong>Immunoth\u00e9rapie <span class="cs-badge-class cs-badge-immuno">Immuno</span> :</strong> Ajouter <strong>Pembrolizumab</strong> (anticorps anti-PD-1) si PD-L1+ — \u00e9tude KEYNOTE-522.</li>';
     }
 
     if(her2p&&!isTNBC){
-      html+='<li>';
-      html+='<strong>Chimioth\u00e9rapie <span class="cs-badge-class cs-badge-chemo">Chimio</span> :</strong> ';
-      html+='Protocole AC-T (Anthracyclines + Cyclophosphamide, puis Taxane).';
-      html+='</li>';
-      html+='<li>';
-      html+='<strong>Th\u00e9rapies cibl\u00e9es anti-HER2 <span class="cs-badge-class cs-badge-targeted">Th. Cibl\u00e9e</span> :</strong> ';
-      html+='<strong>Trastuzumab</strong> (anticorps monoclonal anti-HER2) + <strong>Pertuzumab</strong> (anticorps monoclonal anti-HER2, autre site de fixation) \u2014 double blocage HER2 simultan\u00e9. \u00c9tudes NEOSPHERE / TRYPHAENA. \u00c9valuation r\u00e9ponse pathologique compl\u00e8te (pCR) en fin de traitement.';
-      html+='</li>';
+      html+='<li><strong>Chimioth\u00e9rapie <span class="cs-badge-class cs-badge-chemo">Chimio</span> :</strong> Protocole AC-T.</li>';
+      html+='<li><strong>Th\u00e9rapies cibl\u00e9es anti-HER2 <span class="cs-badge-class cs-badge-targeted">Th. Cibl\u00e9e</span> :</strong> <strong>Trastuzumab</strong> + <strong>Pertuzumab</strong> (double blocage HER2 simultan\u00e9). \u00c9tudes NEOSPHERE / TRYPHAENA.</li>';
     }
 
     if(sub==='Luminal_HER2'){
-      html+='<li>';
-      html+='<strong>Hormonoth\u00e9rapie concomitante <span class="cs-badge-class cs-badge-hormono">Hormono</span> :</strong> ';
-      html+='Luminal HER2+ : discuter hormonoth\u00e9rapie concomitante (selon \u00e2ge / statut m\u00e9nopausique).';
-      html+='</li>';
+      html+='<li><strong>Hormonoth\u00e9rapie concomitante <span class="cs-badge-class cs-badge-hormono">Hormono</span> :</strong> Discuter selon l\'\u00e2ge et le statut m\u00e9nopausique.</li>';
     }
 
     if(!isTNBC&&!her2p){
-      html+='<li>';
-      html+='<strong>Chimioth\u00e9rapie seule <span class="cs-badge-class cs-badge-chemo">Chimio</span> :</strong> ';
-      html+='Protocole EC-T ou TAC (selon grade et Ki-67). Pas de th\u00e9rapie cibl\u00e9e (HER2 n\u00e9gatif).';
-      html+='</li>';
+      html+='<li><strong>Chimioth\u00e9rapie seule <span class="cs-badge-class cs-badge-chemo">Chimio</span> :</strong> Protocole EC-T ou TAC. Pas de th\u00e9rapie cibl\u00e9e (HER2 n\u00e9gatif).</li>';
     }
-
-    html+='<li>Bilan d\'extension complet obligatoire avant tout traitement.</li>';
-    html+='</ul>';
-
-    /* Post-CNA */
-    html+='<p style="margin-top:10px;font-size:12px;font-weight:700;color:var(--cs-primary);">Post-CNA \u2014 Conduite selon r\u00e9sidu tumoral (ypT, ypN) :</p>';
-    html+='<ul class="cs-targeted-list">';
-    if(isTNBC){
-      html+='<li>';
-      html+='R\u00e9sidu invasif TNBC (non-pCR) : <strong>Cap\u00e9citabine</strong> <span class="cs-badge-class cs-badge-chemo">Chimio</span> ';
-      html+='(chimioth\u00e9rapie orale, fluoropyrimidine) adjuvante \u2014 8\u00a0cycles. \u00c9tude CREATE-X.';
-      html+='</li>';
-    }
-    if(her2p){
-      html+='<li>';
-      html+='R\u00e9sidu HER2+ (non-pCR) : <strong>T-DM1</strong> (Trastuzumab Emtansine) ';
-      html+='<span class="cs-badge-class cs-badge-targeted">Th. Cibl\u00e9e</span> ';
-      html+='\u2014 conjugu\u00e9 anticorps\u2011drogue (anticorps anti-HER2 + chimioth\u00e9rapie coupl\u00e9e) \u2014 14\u00a0cycles. \u00c9tude KATHERINE.';
-      html+='</li>';
-      html+='<li>';
-      html+='Si pCR obtenue : poursuite du Trastuzumab en adjuvant (1\u00a0an au total).';
-      html+='</li>';
-    }
+    html+='<li>Bilan d\'extension complet obligatoire avant de d\u00e9buter.</li>';
     html+='</ul></div>';
+
+    /* =====================================================
+       ÉTAPE 2 : CHIRURGIE POST-NÉO
+       ===================================================== */
+    html+='<div class="cs-thera-block">';
+    html+='<strong class="cs-step">2. Chirurgie (Post-N\u00e9oadjuvant)</strong>';
+    html+='<p>Tumorectomie (si la r\u00e9ponse tumorale et le rapport volume sein/tumeur le permettent) ou Mastectomie. \u00c9valuation anatomopathologique stricte du r\u00e9sidu tumoral (ypT, ypN).</p>';
+    html+='</div>';
+
+    /* =====================================================
+       ÉTAPE 3 : ADJUVANT POST-OP (remplace le terme "Post-CNA")
+       ===================================================== */
+    if(isTNBC || her2p){
+      html+='<div class="cs-thera-block cs-adjuvant">';
+      html+='<strong class="cs-step">3. Traitement adjuvant post-op\u00e9ratoire</strong>';
+      html+='<p>Conduite syst\u00e9mique selon la r\u00e9ponse histologique \u00e0 la chirurgie :</p>';
+      html+='<ul class="cs-targeted-list">';
+      if(isTNBC){
+        html+='<li>Si r\u00e9sidu invasif (non-pCR) : <strong>Cap\u00e9citabine</strong> <span class="cs-badge-class cs-badge-chemo">Chimio</span> (chimioth\u00e9rapie orale) \u2014 8 cycles. \u00c9tude CREATE-X.</li>';
+      }
+      if(her2p){
+        html+='<li>Si r\u00e9sidu HER2+ (non-pCR) : <strong>T-DM1</strong> (Trastuzumab Emtansine) <span class="cs-badge-class cs-badge-targeted">Th. Cibl\u00e9e</span> \u2014 14 cycles. \u00c9tude KATHERINE.</li>';
+        html+='<li>Si r\u00e9ponse compl\u00e8te (pCR) : Poursuite du Trastuzumab en adjuvant (pour atteindre 1 an au total).</li>';
+      }
+      html+='</ul></div>';
+    } else {
+      // Pour les cas luminaux sans thérapie ciblée spécifique en post-néo
+      html+='<div class="cs-thera-block cs-adjuvant">';
+      html+='<strong class="cs-step">3. Traitement adjuvant post-op\u00e9ratoire</strong>';
+      html+='<p>Pas de chimioth\u00e9rapie adjuvante suppl\u00e9mentaire recommand\u00e9e en standard. Passage direct aux traitements locaux (Radioth\u00e9rapie) et \u00e0 l\'Hormonoth\u00e9rapie.</p>';
+      html+='</div>';
+    }
 
   } else {
     /* =====================================================
