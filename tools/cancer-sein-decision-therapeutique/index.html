@@ -1007,7 +1007,7 @@ function _doAnalyze(out){
     html+='<div class="cs-thera-block"><strong class="cs-step">1. Chirurgie</strong><p>Tumorectomie (marges \u22652\u00a0mm) ou mastectomie selon taille/multifocalit\u00e9. Pas de chimio sauf micro-invasion. Ganglion sentinelle si mastectomie ou tumeur \u22652\u00a0cm.</p></div>';
     html+='<div class="cs-thera-block"><strong class="cs-step">2. Radioth\u00e9rapie (RT)</strong><p>Syst\u00e9matique apr\u00e8s traitement conservateur.</p></div>';
     html+='<div class="cs-thera-block"><strong class="cs-step">3. Hormonoth\u00e9rapie <span class="cs-badge-class cs-badge-hormono">Hormono</span></strong><p>'+getHormonoReason(rh, meno, age)+'</p></div>';
-    html+='<div class="cs-rcp-warn">Document d\'aide \u00e0 la d\u00e9cision uniquement. D\u00e9cision finale en RCP pluridisciplinaire.</div>';
+    html+='<div class="cs-rcp-warn">Outil d\'aide \u00e0 la d\u00e9cision uniquement. D\u00e9cision finale en RCP pluridisciplinaire.</div>';
     out.innerHTML=html; return;
   }
 
@@ -1077,7 +1077,7 @@ function _doAnalyze(out){
       html+='</li>';
     }
 
-    html+='<li>Bilan d\'\u00e9tension complet obligatoire avant tout traitement.</li>';
+    html+='<li>Bilan d\'extension complet obligatoire avant tout traitement.</li>';
     html+='</ul>';
 
     /* Post-CNA */
@@ -1235,7 +1235,7 @@ g('cs-modal-identite').addEventListener('click',function(e){if(e.target===this)c
 document.addEventListener('keydown',function(e){if(e.key==='Escape')csMdClose();});
 
 /* ======================================================
-   GÉNÉRATION RAPPORT A5
+   GÉNÉRATION RAPPORT A5 (Totalement sécurisée)
    ====================================================== */
 function csGenerateA5(id){
   try{
@@ -1251,6 +1251,7 @@ function csGenerateA5(id){
     var meno=menoEl?menoEl.value:'unknown';
     var menoText=menoEl?(menoEl.value==='pre'?'Pr\u00e9-m\u00e9nopaus\u00e9e':(menoEl.value==='post'?'Post-m\u00e9nopaus\u00e9e':'Ind\u00e9termin\u00e9')):'Ind\u00e9termin\u00e9';
     var operable=gv('cs-operable')==='yes', preg=gv('cs-preg')==='yes';
+    var ps=parseInt(gv('cs-ps'));
     var her2p=isHer2Pos(her2);
     var sub=getMolecularSubtype(rh,her2,ki67,grade);
     var isTNBC=(sub==='TNBC');
@@ -1272,67 +1273,173 @@ function csGenerateA5(id){
     }
     var dateStr=new Date().toLocaleDateString('fr-FR');
 
-    var c='<!doctype html><html lang="fr"><head><meta charset="utf-8">';
-    c+='<title>Rapport \u2013 '+id.nomPatiente+' '+id.prenomPatiente+'</title>';
-    c+='<style>';
-    c+='@page{size:A5 portrait;margin:14mm}';
-    c+='body{font-family:Arial,sans-serif;font-size:11.5px;color:#1a2030;margin:0;padding:0}';
-    c+='h1{font-size:14px;margin:0;color:#1a3a6b}';
-    c+='.meta{font-size:10.5px;color:#5a6478;margin-top:3px}';
-    c+='.header{border-bottom:3px solid #c8a951;padding-bottom:8px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}';
-    c+='.logo{width:42px;height:42px;object-fit:contain;flex-shrink:0}';
-    c+='h2{font-size:11px;color:#1a3a6b;border-bottom:1px solid #d8dfe8;padding-bottom:2px;margin:10px 0 5px;text-transform:uppercase;letter-spacing:0.4px}';
-    c+='.kv{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:4px}';
-    c+='.kv span{font-size:11px}';
-    c+='.bloc-patient{background:#f0f4fb;border:1px solid #c6d8f5;border-radius:5px;padding:8px 11px;margin-bottom:8px}';
-    c+='.patient-name{font-size:15px;font-weight:700;color:#1a2030;margin-bottom:4px}';
-    c+='table{width:100%;border-collapse:collapse;margin:5px 0 8px}';
-    c+='td,th{padding:4px 7px;border:1px solid #e0e5ef;font-size:10.5px}';
-    c+='th{background:#f0f4fb;font-weight:700;color:#1a3a6b}';
-    c+='.tnm-stage-badge{display:inline-block;background:#1a3a6b;color:#fff;font-weight:700;font-size:13px;padding:4px 14px;border-radius:14px;border-bottom:3px solid #c8a951;margin-bottom:6px;letter-spacing:0.5px}';
-    c+='.decision{background:#f9f7e8;border-left:3px solid #c8a951;padding:6px 9px;margin:5px 0;font-size:11px}';
-    c+='.targeted{margin:4px 0 0;padding:0 0 0 14px;font-size:10.5px}';
-    c+='.targeted li{margin-bottom:3px}';
-    c+='.badge-class{display:inline-block;font-size:8.5px;font-weight:700;border-radius:3px;padding:1px 5px;margin-left:3px;vertical-align:middle;letter-spacing:0.3px}';
-    c+='.badge-chemo{background:#fff3e0;color:#d4860a;border:1px solid #f5c98a}';
-    c+='.badge-targeted{background:#e8f0fe;color:#1a3a6b;border:1px solid #a8c0f0}';
-    c+='.badge-immuno{background:#f3e8ff;color:#6a1ba0;border:1px solid #d0a8f0}';
-    c+='.badge-hormono{background:#e8f5ee;color:#2a7a4b;border:1px solid #b8dfc8}';
-    c+='.badge-parp{background:#fce8e8;color:#b0322a;border:1px solid #f5b8b8}';
-    c+='.badge-cdk{background:#e8faf0;color:#1a6b4a;border:1px solid #a8dfc0}';
-    c+='.warn{background:#fff8f8;border-left:3px solid #b0322a;padding:5px 8px;font-size:10.5px;margin-top:6px}';
-    c+='.footer-note{margin-top:12px;font-size:9.5px;color:#888;border-top:1px dotted #ccc;padding-top:4px}';
-    c+='.footer-bar{position:fixed;bottom:10mm;left:14mm;right:14mm;font-size:9.5px;color:#888;border-top:1px solid #eee;padding-top:3px;display:flex;justify-content:space-between}';
-    c+='</style></head><body>';
+    // On utilise ici les doubles quotes pour englober la string, ce qui évite le conflit avec les apostrophes simples du français.
+    var c = "<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\">";
+    c += "<title>Rapport \u2013 " + id.nomPatiente + " " + id.prenomPatiente + "</title>";
+    c += "<style>";
+    c += "@page{size:A5 portrait;margin:14mm}";
+    c += "body{font-family:Arial,sans-serif;font-size:11.5px;color:#1a2030;margin:0;padding:0}";
+    c += "h1{font-size:14px;margin:0;color:#1a3a6b}";
+    c += ".meta{font-size:10.5px;color:#5a6478;margin-top:3px}";
+    c += ".header{border-bottom:3px solid #c8a951;padding-bottom:8px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}";
+    c += ".logo{width:42px;height:42px;object-fit:contain;flex-shrink:0}";
+    c += "h2{font-size:11px;color:#1a3a6b;border-bottom:1px solid #d8dfe8;padding-bottom:2px;margin:10px 0 5px;text-transform:uppercase;letter-spacing:0.4px}";
+    c += ".kv{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:4px}";
+    c += ".kv span{font-size:11px}";
+    c += ".bloc-patient{background:#f0f4fb;border:1px solid #c6d8f5;border-radius:5px;padding:8px 11px;margin-bottom:8px}";
+    c += ".patient-name{font-size:15px;font-weight:700;color:#1a2030;margin-bottom:4px}";
+    c += "table{width:100%;border-collapse:collapse;margin:5px 0 8px}";
+    c += "td,th{padding:4px 7px;border:1px solid #e0e5ef;font-size:10.5px}";
+    c += "th{background:#f0f4fb;font-weight:700;color:#1a3a6b}";
+    c += ".tnm-stage-badge{display:inline-block;background:#1a3a6b;color:#fff;font-weight:700;font-size:13px;padding:4px 14px;border-radius:14px;border-bottom:3px solid #c8a951;margin-bottom:6px;letter-spacing:0.5px}";
+    c += ".decision{background:#f9f7e8;border-left:3px solid #c8a951;padding:6px 9px;margin:5px 0;font-size:11px}";
+    c += ".targeted{margin:4px 0 0;padding:0 0 0 14px;font-size:10.5px}";
+    c += ".targeted li{margin-bottom:3px}";
+    c += ".badge-class{display:inline-block;font-size:8.5px;font-weight:700;border-radius:3px;padding:1px 5px;margin-left:3px;vertical-align:middle;letter-spacing:0.3px}";
+    c += ".warn{background:#fff8f8;border-left:3px solid #b0322a;padding:5px 8px;font-size:10.5px;margin-top:6px}";
+    c += ".footer-note{margin-top:12px;font-size:9.5px;color:#888;border-top:1px dotted #ccc;padding-top:4px}";
+    c += ".footer-bar{position:fixed;bottom:10mm;left:14mm;right:14mm;font-size:9.5px;color:#888;border-top:1px solid #eee;padding-top:3px;display:flex;justify-content:space-between}";
+    c += "</style></head><body>";
 
-    c+='<div class="header">';
-    c+='<img src="https://www.dr-karazaitri-ma.net/wp-content/uploads/2025/06/Logo.jpg" alt="" class="logo" onerror="this.style.display=\'none\'">';
-    c+='<div><h1>Compte rendu \u2013 Aide \u00e0 la D\u00e9cision</h1>';
-    c+='<div class="meta">Cancer du sein &nbsp;&bull;&nbsp; '+dateStr+'</div>';
-    c+='<div class="meta" style="color:#1a3a6b;font-weight:700">'+id.praticien+'</div></div></div>';
+    c += "<div class=\"header\">";
+    c += "<img src=\"https://www.dr-karazaitri-ma.net/wp-content/uploads/2025/06/Logo.jpg\" alt=\"\" class=\"logo\" onerror=\"this.style.display='none'\">";
+    c += "<div><h1>Compte rendu \u2013 Aide \u00e0 la D\u00e9cision</h1>";
+    c += "<div class=\"meta\">Cancer du sein &nbsp;&bull;&nbsp; " + dateStr + "</div>";
+    c += "<div class=\"meta\" style=\"color:#1a3a6b;font-weight:700\">" + id.praticien + "</div></div></div>";
 
-    c+='<div class="bloc-patient">';
-    c+='<div class="patient-name">'+id.nomPatiente+' '+id.prenomPatiente+'</div>';
-    c+='<div class="kv">';
-    if(id.agePatiente) c+='<span><strong>\u00c2ge :</strong> '+id.agePatiente+' ans</span>';
-    if(id.refDossier)  c+='<span><strong>N\u00b0 dossier :</strong> '+id.refDossier+'</span>';
-    c+='<span><strong>Sexe :</strong> '+sex+'</span>';
-    c+='<span><strong>M\u00e9no :</strong> '+menoText+'</span>';
-    c+='<span><strong>Grossesse :</strong> '+(preg?'<strong style="color:#b0322a">OUI</strong>':'Non')+'</span>';
-    c+='<span><strong>Op\u00e9rable :</strong> '+(operable?'Oui':'Non / Borderline')+'</span>';
-    c+='</div></div>';
+    c += "<div class=\"bloc-patient\">";
+    c += "<div class=\"patient-name\">" + id.nomPatiente + " " + id.prenomPatiente + "</div>";
+    c += "<div class=\"kv\">";
+    if(id.agePatiente) c += "<span><strong>\u00c2ge :</strong> " + id.agePatiente + " ans</span>";
+    if(id.refDossier)  c += "<span><strong>N\u00b0 dossier :</strong> " + id.refDossier + "</span>";
+    c += "<span><strong>Sexe :</strong> " + (sex === "female" ? "Femme" : "Homme") + "</span>";
+    c += "<span><strong>M\u00e9no :</strong> " + menoText + "</span>";
+    c += "<span><strong>Grossesse :</strong> " + (preg ? "<strong style=\"color:#b0322a\">OUI</strong>" : "Non") + "</span>";
+    c += "<span><strong>Op\u00e9rable :</strong> " + (operable ? "Oui" : "Non / Borderline") + "</span>";
+    c += "</div></div>";
 
-    c+='<h2>Classification TNM'+(cas!=='standard'?' \u2014 '+casText:'')+'</h2>';
-    if(stage) c+='<div class="tnm-stage-badge">'+stage+'</div><br>';
-    c+='<table><tr><th>T</th><th>N</th><th>M</th><th>PEV</th><th>Taille</th><th>Ki-67</th><th>EVL</th></tr>';
-    c+='<tr><td>'+tFull+'</td><td>'+nFull+'</td><td>'+mFull+'</td><td>PEV'+pev+'</td>';
-    c+='<td>'+(size!==null?size+' cm':'\u2013')+'</td>';
-    c+='<td>'+(ki67!==null?ki67+'%':'\u2013')+'</td>';
-    c+='<td>'+(evl==='yes'?'<strong>Pr\u00e9sents</strong>':'\u2013')+'</td></tr></table>';
+    c += "<h2>Classification TNM" + (cas !== 'standard' ? " \u2014 " + casText : "") + "</h2>";
+    if(stage) c += "<div class=\"tnm-stage-badge\">" + stage + "</div><br>";
+    c += "<table><tr><th>T</th><th>N</th><th>M</th><th>PEV</th><th>Taille</th><th>Ki-67</th><th>EVL</th></tr>";
+    c += "<tr><td>" + tFull + "</td><td>" + nFull + "</td><td>" + mFull + "</td><td>PEV" + pev + "</td>";
+    c += "<td>" + (size !== null ? size + " cm" : "\u2013") + "</td>";
+    c += "<td>" + (ki67 !== null ? ki67 + "%" : "\u2013") + "</td>";
+    c += "<td>" + (evl === "yes" ? "<strong>Pr\u00e9sents</strong>" : "\u2013") + "</td></tr></table>";
 
-    c+='<h2>Biologie tumorale</h2>';
-    c+='<div class="kv">';
-    c+='<span><strong>RH :</strong> '+(rh==='pos'?'Positifs (+)':'N\u00e9gatifs (\u2013)')+'</span>';
-    c+='<span><strong>HER2 :</strong> '+her2+'</span>';
-    c+='<span><strong>Grade :</strong> '+(grade||'\u2013')+'</span>';
-    c+='<spa
+    c += "<h2>Biologie tumorale</h2>";
+    c += "<div class=\"kv\">";
+    c += "<span><strong>RH :</strong> " + (rh === "pos" ? "Positifs (+)" : "N\u00e9gatifs (\u2013)") + "</span>";
+    c += "<span><strong>HER2 :</strong> " + her2 + "</span>";
+    c += "<span><strong>Grade :</strong> " + (grade || "\u2013") + "</span>";
+    c += "<span><strong>Sous-type :</strong> <strong>" + getSubtypeLabel(sub) + "</strong></span>";
+    if(brca === "mut") c += "<span><strong>BRCA :</strong> <span style=\"color:#b0322a;font-weight:700\">Mut\u00e9</span></span>";
+    c += "</div>";
+
+    // Alertes
+    if(ps >= 3) c += "<div class=\"warn\"><strong>Alerte (PS " + ps + ") :</strong> \u00c9valuation oncog\u00e9riatrique indispensable. All\u00e8gement ou modification th\u00e9rapeutique \u00e0 discuter en RCP.</div>";
+    if(preg) c += "<div class=\"warn\"><strong>Grossesse :</strong> Radioth\u00e9rapie et hormonoth\u00e9rapie contre-indiqu\u00e9es. Avis obst\u00e9trical prioritaire.</div>";
+
+    c += "<h2>Proposition Th\u00e9rapeutique (Avis RCP)</h2>";
+
+    // Bilan d'extension
+    if(m !== 'M1' && histo !== 'in_situ') {
+      var needsStaging = false;
+      var stagingReasons = [];
+      if(t==='T3'||t==='T4'||pev==='2'||pev==='3'){needsStaging=true;stagingReasons.push('\u2265 T3 ou PEV');}
+      if(n==='N1'||n==='N2'||n==='N3'){needsStaging=true;stagingReasons.push('N+ clinique');}
+      if(isTNBC){needsStaging=true;stagingReasons.push('TNBC');}
+      if(her2p){needsStaging=true;stagingReasons.push('HER2+');}
+      
+      if(needsStaging){
+        c += "<div class=\"decision\"><strong>0. Bilan d'extension requis :</strong> " + stagingReasons.join(', ') + "<ul class=\"targeted\"><li>TEP-TDM (PET-Scan) ou TDM TAP + Scintigraphie osseuse.</li><li>IRM c\u00e9r\u00e9brale uniquement si point d'appel.</li></ul></div>";
+      } else {
+        c += "<div class=\"decision\"><strong>0. Bilan d'extension :</strong> Non syst\u00e9matique (stade pr\u00e9coce). Imagerie \u00e0 r\u00e9server uniquement en cas de point d'appel clinique.</div>";
+      }
+    }
+
+    if(m === 'M1'){
+      c += "<div class=\"decision\"><strong>Stade IV m\u00e9tastatique :</strong> Traitement syst\u00e9mique de premi\u00e8re ligne selon le sous-type mol\u00e9culaire. Pas de chirurgie premi\u00e8re sauf urgence.</div>";
+      c += "<div class=\"decision\"><strong>Radioth\u00e9rapie :</strong> " + txtRadio + "</div>";
+      c += "<div class=\"decision\"><strong>Hormonoth\u00e9rapie :</strong> " + txtHormono + "</div>";
+    }
+    else if(histo === 'in_situ'){
+      c += "<div class=\"decision\"><strong>1. Chirurgie :</strong> Tumorectomie (marges \u22652 mm) ou mastectomie selon taille/multifocalit\u00e9. Ganglion sentinelle si mastectomie ou tumeur \u22652 cm.</div>";
+      c += "<div class=\"decision\"><strong>2. Radioth\u00e9rapie :</strong> Syst\u00e9matique apr\u00e8s traitement conservateur.</div>";
+      c += "<div class=\"decision\"><strong>3. Hormonoth\u00e9rapie :</strong> " + txtHormono + "</div>";
+    }
+    else {
+      // Neo-adjuvant
+      if(neo){
+         c += "<div class=\"decision\"><strong>1. Traitement n\u00e9oadjuvant (indiqu\u00e9 pour : " + reasNeo.join(', ') + ")</strong><ul class=\"targeted\">";
+         if(isTNBC) {
+           c += "<li>Chimioth\u00e9rapie (AC-T) + Immunoth\u00e9rapie (Pembrolizumab).</li>";
+         } else if(her2p) {
+           c += "<li>Chimioth\u00e9rapie (AC-T) + Double blocage anti-HER2 (Trastuzumab + Pertuzumab).</li>";
+         } else {
+           c += "<li>Chimioth\u00e9rapie (EC-T ou TAC selon grade et Ki-67).</li>";
+         }
+         if(sub === 'Luminal_HER2') c += "<li>Hormonoth\u00e9rapie concomitante \u00e0 discuter.</li>";
+         
+         c += "</ul><br><em>Post-CNA (Conduite selon r\u00e9sidu tumoral) :</em><ul class=\"targeted\">";
+         if(isTNBC) c += "<li>Si r\u00e9sidu invasif (non-pCR) : Cap\u00e9citabine adjuvante (CREATE-X).</li>";
+         if(her2p) c += "<li>Si r\u00e9sidu HER2+ (non-pCR) : T-DM1 adjuvant (KATHERINE).<br>Si pCR : Poursuite Trastuzumab en adjuvant.</li>";
+         c += "</ul></div>";
+      } else {
+         c += "<div class=\"decision\"><strong>1. Chirurgie premi\u00e8re :</strong> Tumorectomie ou mastectomie. " + (margins === 'pos' ? "<strong style=\"color:#b0322a\">Reprise chirurgicale (R1) indispensable !</strong>" : "") + "</div>";
+         
+         var reasAdj=[], adjDec='non_formelle', adjNote='';
+         if(isLuminal && genomic !== 'none'){
+           adjDec = (genomic === 'high') ? 'indiquee' : 'non_indiquee';
+         } else {
+           if(n!=='N0'&&n!=='N1mi') reasAdj.push('N+');
+           if(t==='T3'||t==='T4') reasAdj.push('T3-T4');
+           if(grade==='3') reasAdj.push('Grade 3');
+           if(her2p) reasAdj.push('HER2+');
+           if(isTNBC) reasAdj.push('TNBC');
+           if(ki67!==null&&ki67>=20) reasAdj.push('Ki-67 \u226520%');
+           if(evl==='yes') reasAdj.push('EVL+');
+           if(reasAdj.length>0) adjDec='indiquee';
+         }
+
+         if(adjDec === 'indiquee'){
+           c += "<div class=\"decision\"><strong>2. Chimioth\u00e9rapie adjuvante : Indiqu\u00e9e</strong> (" + reasAdj.join(', ') + ")<ul class=\"targeted\">";
+           if(her2p) c += "<li>Trastuzumab 1 an \u00b1 Pertuzumab si N+ (APHINITY).</li>";
+           if(isTNBC && brca === 'mut') c += "<li>Olaparib adjuvant 1 an (OlympiA).</li>";
+           if(sub === 'Luminal_B' && (n==='N1'||n==='N2'||n==='N3') && !her2p) c += "<li>Ab\u00e9maciclib adjuvant 2 ans (monarchE).</li>";
+           c += "</ul></div>";
+         } else if(adjDec === 'non_indiquee'){
+           c += "<div class=\"decision\"><strong>2. Chimioth\u00e9rapie adjuvante : Non indiqu\u00e9e</strong> (Bas risque g\u00e9nomique / clinique).</div>";
+         } else {
+           c += "<div class=\"decision\"><strong>2. Chimioth\u00e9rapie adjuvante : \u00c0 discuter en RCP coll\u00e9giale</strong></div>";
+         }
+      }
+      
+      c += "<div class=\"decision\"><strong>Radioth\u00e9rapie :</strong> " + txtRadio + "</div>";
+      c += "<div class=\"decision\"><strong>Hormonoth\u00e9rapie :</strong> " + txtHormono + "</div>";
+      
+      if(brca === 'mut'){
+         c += "<div class=\"decision\"><strong>Pr\u00e9disposition BRCA (Mut\u00e9) :</strong> Conseil g\u00e9n\u00e9tique, information \u00e0 la famille (1er degr\u00e9). Discuter mastectomie prophylactique controlat\u00e9rale. " + (isTNBC ? "Olaparib adjuvant \u00e9ligible." : "") + "</div>";
+      }
+    }
+
+    c += "<div class=\"footer-note\">Cet outil d'aide \u00e0 la d\u00e9cision r\u00e9sume les donn\u00e9es cliniques saisies et propose une orientation th\u00e9rapeutique selon les recommandations nationales et internationales en vigueur (INCa, ESMO). Ce document ne se substitue en aucun cas \u00e0 la validation d\u00e9finitive en R\u00e9union de Concertation Pluridisciplinaire (RCP). La d\u00e9cision finale et sa mise en \u0153uvre rel\u00e8vent de l'enti\u00e8re responsabilit\u00e9 du clinicien traitant.</div>";
+    
+    c += "<div class=\"footer-bar\"><span>G\u00e9n\u00e9r\u00e9 par l'outil d'Aide \u00e0 la D\u00e9cision</span><span>Page 1/1</span></div>";
+    c += "</body></html>";
+
+    var w=window.open('','_blank','width=800,height=900');
+    if(!w) { alert("Votre navigateur a bloqu\u00e9 l'ouverture de la fen\u00eatre (pop-up). Veuillez l'autoriser pour imprimer le rapport."); return; }
+    w.document.open();
+    w.document.write(c);
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 500);
+
+  }catch(e){
+    console.error(e);
+    alert("Erreur lors de la g\u00e9n\u00e9ration : " + e.message);
+  }
+}
+})();
+</script>
+</body>
+</html>
