@@ -792,11 +792,16 @@ function updateTnmDisplay(){
 
 document.addEventListener('DOMContentLoaded', function(){
   var szIn=g('cs-size'), tSel=g('cs-t-full'), pevSel=g('cs-pev-full');
+  
+  // 1. Taille exacte -> Modifie le T automatiquement
   if(szIn&&tSel){
     szIn.addEventListener('input', function(){
-      var v=parseFloat(this.value); if(isNaN(v)) return;
+      var v=parseFloat(this.value); 
+      if(isNaN(v)) return;
+      
       var pev=gv('cs-pev-full');
       if(pev==='2'||pev==='3'){ tSel.value=(pev==='3')?'T4d':'T4b'; updateTnmDisplay(); return; }
+      
       if(v<=0.5) tSel.value='T1a';
       else if(v<=1) tSel.value='T1b';
       else if(v<=2) tSel.value='T1c';
@@ -805,16 +810,53 @@ document.addEventListener('DOMContentLoaded', function(){
       updateTnmDisplay();
     });
   }
+
+  // 2. Modif manuelle du T -> Vérifie et efface la taille si contradiction (CORRECTION)
+  if(tSel && szIn){
+    tSel.addEventListener('change', function(){
+      var t = this.value;
+      var v = parseFloat(szIn.value);
+      
+      if(!isNaN(v)){
+         var mismatch = false;
+         // On vérifie les contradictions pures mathématiques
+         if(t==='T1a' && v>0.5) mismatch=true;
+         if(t==='T1b' && (v<=0.5 || v>1)) mismatch=true;
+         if(t==='T1c' && (v<=1 || v>2)) mismatch=true;
+         if(t==='T2' && (v<=2 || v>5)) mismatch=true;
+         if(t==='T3' && v<=5) mismatch=true;
+         if(t==='Tx' || t==='T0' || t==='Tis') mismatch=true;
+
+         // Si le praticien force un stade qui contredit la taille saisie, on vide la taille
+         if(mismatch){
+             szIn.value = ''; 
+             // Feedback visuel (clignotement subtil de la case taille)
+             szIn.style.backgroundColor = '#fff8f8';
+             szIn.style.borderColor = 'var(--cs-danger)';
+             szIn.placeholder = "Effacé (Conflit T)";
+             setTimeout(function(){ 
+                 szIn.style.backgroundColor = '#fff';
+                 szIn.style.borderColor = 'var(--cs-border)';
+                 szIn.placeholder = "2.5";
+             }, 1200);
+         }
+      }
+    });
+  }
+
+  // PEV
   if(pevSel){
     pevSel.addEventListener('change', function(){
       if(this.value==='2'||this.value==='3'){ if(tSel) tSel.value=(this.value==='3')?'T4d':'T4b'; }
       updateTnmDisplay();
     });
   }
+  
+  // Mise à jour de l'encart TNM au moindre changement
   ['cs-t-full','cs-n-full','cs-m-full'].forEach(function(id){ var el=g(id); if(el) el.addEventListener('change',updateTnmDisplay); });
   updateTnmDisplay();
 });
-
+   
 /* ======================================================
    HELPERS MÉDICAUX
    ====================================================== */
