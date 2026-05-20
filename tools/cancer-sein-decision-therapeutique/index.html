@@ -775,7 +775,7 @@ function getStageBadgeClass(stage){
 }
 
 /* ======================================================
-   MISE À JOUR TNM EN TEMPS RÉEL
+   MISE À JOUR TNM EN TEMPS RÉEL (AVEC EFFACEMENT AUTO TAILLE)
    ====================================================== */
 function updateTnmDisplay(){
   var tFull=gv('cs-t-full'), nFull=gv('cs-n-full'), mFull=gv('cs-m-full'), pev=gv('cs-pev-full');
@@ -811,7 +811,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  // 2. Modif manuelle du T -> Vérifie et efface la taille si contradiction (CORRECTION)
+  // 2. Modif manuelle du T -> Vérifie et efface la taille si contradiction
   if(tSel && szIn){
     tSel.addEventListener('change', function(){
       var t = this.value;
@@ -819,7 +819,6 @@ document.addEventListener('DOMContentLoaded', function(){
       
       if(!isNaN(v)){
          var mismatch = false;
-         // On vérifie les contradictions pures mathématiques
          if(t==='T1a' && v>0.5) mismatch=true;
          if(t==='T1b' && (v<=0.5 || v>1)) mismatch=true;
          if(t==='T1c' && (v<=1 || v>2)) mismatch=true;
@@ -827,10 +826,8 @@ document.addEventListener('DOMContentLoaded', function(){
          if(t==='T3' && v<=5) mismatch=true;
          if(t==='Tx' || t==='T0' || t==='Tis') mismatch=true;
 
-         // Si le praticien force un stade qui contredit la taille saisie, on vide la taille
          if(mismatch){
              szIn.value = ''; 
-             // Feedback visuel (clignotement subtil de la case taille)
              szIn.style.backgroundColor = '#fff8f8';
              szIn.style.borderColor = 'var(--cs-danger)';
              szIn.placeholder = "Effacé (Conflit T)";
@@ -844,7 +841,6 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  // PEV
   if(pevSel){
     pevSel.addEventListener('change', function(){
       if(this.value==='2'||this.value==='3'){ if(tSel) tSel.value=(this.value==='3')?'T4d':'T4b'; }
@@ -852,11 +848,10 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
   
-  // Mise à jour de l'encart TNM au moindre changement
   ['cs-t-full','cs-n-full','cs-m-full'].forEach(function(id){ var el=g(id); if(el) el.addEventListener('change',updateTnmDisplay); });
   updateTnmDisplay();
 });
-   
+
 /* ======================================================
    HELPERS MÉDICAUX
    ====================================================== */
@@ -1018,10 +1013,12 @@ function _doAnalyze(out){
   /* ---- ÉTAPE 0 : Bilan d'extension ---- */
   if(m!=='M1'&&histo!=='in_situ'){
     var needsStaging=false, stagingReasons=[];
-    if(t==='T3'||t==='T4'||pev==='2'||pev==='3'){needsStaging=true;stagingReasons.push('\u2265\u00a0T3 ou PEV');}
+    // MODIFICATION ICI : Déclenchement au stade T2
+    if(t==='T2'||t==='T3'||t==='T4'||pev==='2'||pev==='3'){needsStaging=true;stagingReasons.push('\u2265\u00a0T2 ou PEV');}
     if(n==='N1'||n==='N2'||n==='N3'){needsStaging=true;stagingReasons.push('N+ clinique');}
     if(isTNBC){needsStaging=true;stagingReasons.push('Triple N\u00e9gatif (TNBC)');}
     if(her2p){needsStaging=true;stagingReasons.push('HER2+');}
+    
     if(needsStaging){
       html+='<div class="cs-thera-block" style="border:2px solid #8e44ad;border-left:5px solid #8e44ad;background:#faf5ff;border-radius:6px;margin-bottom:16px;box-shadow:0 4px 10px rgba(142,68,173,0.12);">';
       html+='<strong class="cs-step" style="color:#8e44ad;font-size:13.5px;">\uD83D\uDD0D 0. Bilan d\'extension (Avant tout traitement)</strong>';
@@ -1277,7 +1274,7 @@ g('cs-modal-identite').addEventListener('click',function(e){if(e.target===this)c
 document.addEventListener('keydown',function(e){if(e.key==='Escape')csMdClose();});
 
 /* ======================================================
-   GÉNÉRATION RAPPORT A5 (Totalement sécurisée)
+   GÉNÉRATION RAPPORT A5
    ====================================================== */
 function csGenerateA5(id){
   try{
@@ -1315,7 +1312,6 @@ function csGenerateA5(id){
     }
     var dateStr=new Date().toLocaleDateString('fr-FR');
 
-    // On utilise ici les doubles quotes pour englober la string, ce qui évite le conflit avec les apostrophes simples du français.
     var c = "<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\">";
     c += "<title>Rapport \u2013 " + id.nomPatiente + " " + id.prenomPatiente + "</title>";
     c += "<style>";
@@ -1387,6 +1383,7 @@ function csGenerateA5(id){
     if(m !== 'M1' && histo !== 'in_situ') {
       var needsStaging = false;
       var stagingReasons = [];
+      // MODIFICATION ICI POUR LE PDF : Déclenchement au stade T2
       if(t==='T2'||t==='T3'||t==='T4'||pev==='2'||pev==='3'){needsStaging=true;stagingReasons.push('\u2265 T2 ou PEV');}
       if(n==='N1'||n==='N2'||n==='N3'){needsStaging=true;stagingReasons.push('N+ clinique');}
       if(isTNBC){needsStaging=true;stagingReasons.push('TNBC');}
