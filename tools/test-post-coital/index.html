@@ -209,7 +209,7 @@
   left: -14px !important;
 }
 
-/* --- SCORE D'INSLER --- */
+/* --- SCORE D'INSLER & ALGORITHME GRIDS --- */
 #tpc-root .insler-grid {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
@@ -223,7 +223,8 @@
   }
 }
 
-#tpc-root .insler-item label {
+#tpc-root .insler-item label,
+#tpc-root .algo-field label {
   display: block !important;
   font-size: 12px !important;
   font-weight: 700 !important;
@@ -234,11 +235,37 @@
   font-family: 'Arial', sans-serif !important;
 }
 
-#tpc-root .insler-item select {
-  all: unset !important;
+/* --- WRAPPER SELECT (COMBOBOX FIX) --- */
+#tpc-root .tpc-select-wrapper {
+  position: relative !important;
   display: block !important;
   width: 100% !important;
-  padding: 8px 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Flèche SVG custom (triangle via border) pour remplacer l'apparence native */
+#tpc-root .tpc-select-wrapper::after {
+  content: '' !important;
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
+  border-top: 6px solid #4a6070 !important;
+  pointer-events: none !important;
+}
+
+#tpc-root .tpc-select-wrapper select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 30px 8px 12px !important; /* Padding right laisse de la place pour la flèche */
   border: 1.5px solid #c5d3e0 !important;
   border-radius: 4px !important;
   font-size: 13.5px !important;
@@ -246,16 +273,23 @@
   background: #f7f9fb !important;
   cursor: pointer !important;
   font-family: 'Arial', sans-serif !important;
-  -webkit-appearance: auto !important;
-  appearance: auto !important;
-  transition: border-color 0.2s !important;
-}
-
-#tpc-root .insler-item select:focus {
-  border-color: #1a3a5c !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
   outline: none !important;
+  transition: border-color 0.2s !important;
+  line-height: 1.5 !important;
 }
 
+#tpc-root .tpc-select-wrapper select:focus {
+  border-color: #1a3a5c !important;
+}
+
+/* Override spécifique pour l'algo (fond blanc demandé dans le design) */
+#tpc-root .algo-field .tpc-select-wrapper select {
+  background: #fff !important;
+}
+
+/* --- RESULTATS SCORE INSLER --- */
 #tpc-root .insler-result-box {
   background: #f0f5fa !important;
   border: 1.5px solid #c5d3e0 !important;
@@ -446,33 +480,6 @@
 #tpc-root .algo-field {
   flex: 1 !important;
   min-width: 200px !important;
-}
-
-#tpc-root .algo-field label {
-  display: block !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  color: #4a6070 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
-  margin-bottom: 6px !important;
-  font-family: 'Arial', sans-serif !important;
-}
-
-#tpc-root .algo-field select {
-  all: unset !important;
-  display: block !important;
-  width: 100% !important;
-  padding: 8px 12px !important;
-  border: 1.5px solid #c5d3e0 !important;
-  border-radius: 4px !important;
-  font-size: 13.5px !important;
-  color: #1a1a2e !important;
-  background: #fff !important;
-  cursor: pointer !important;
-  font-family: 'Arial', sans-serif !important;
-  -webkit-appearance: auto !important;
-  appearance: auto !important;
 }
 
 #tpc-root .algo-btn {
@@ -760,8 +767,14 @@
 }
 
 #tpc-root .mob-card .mob-icon {
-  font-size: 26px !important;
-  margin-bottom: 6px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-bottom: 8px !important;
+  height: 24px !important;
+}
+
+#tpc-root .mob-card .mob-icon svg {
   display: block !important;
 }
 
@@ -904,39 +917,47 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
       <div class="insler-grid">
         <div class="insler-item">
           <label>Ouverture du col</label>
-          <select id="ins-col" onchange="tpcInsler()">
-            <option value="0">Non cot&eacute; (0)</option>
-            <option value="1">Entrouverte (1)</option>
-            <option value="2" selected>Ouverte (2)</option>
-            <option value="3">B&eacute;ante (3)</option>
-          </select>
+          <div class="tpc-select-wrapper">
+            <select id="ins-col" onchange="tpcInsler()">
+              <option value="0">Non cot&eacute; (0)</option>
+              <option value="1">Entrouverte (1)</option>
+              <option value="2" selected>Ouverte (2)</option>
+              <option value="3">B&eacute;ante (3)</option>
+            </select>
+          </div>
         </div>
         <div class="insler-item">
           <label>Abondance de la glaire</label>
-          <select id="ins-abondance" onchange="tpcInsler()">
-            <option value="0">Non cot&eacute; (0)</option>
-            <option value="1">Faible (1)</option>
-            <option value="2" selected>Moyenne (2)</option>
-            <option value="3">Importante (3)</option>
-          </select>
+          <div class="tpc-select-wrapper">
+            <select id="ins-abondance" onchange="tpcInsler()">
+              <option value="0">Non cot&eacute; (0)</option>
+              <option value="1">Faible (1)</option>
+              <option value="2" selected>Moyenne (2)</option>
+              <option value="3">Importante (3)</option>
+            </select>
+          </div>
         </div>
         <div class="insler-item">
           <label>Limpidité</label>
-          <select id="ins-limpidite" onchange="tpcInsler()">
-            <option value="0">Non cot&eacute; (0)</option>
-            <option value="1">Trouble (1)</option>
-            <option value="2" selected>Opalescente (2)</option>
-            <option value="3">Eau de roche (3)</option>
-          </select>
+          <div class="tpc-select-wrapper">
+            <select id="ins-limpidite" onchange="tpcInsler()">
+              <option value="0">Non cot&eacute; (0)</option>
+              <option value="1">Trouble (1)</option>
+              <option value="2" selected>Opalescente (2)</option>
+              <option value="3">Eau de roche (3)</option>
+            </select>
+          </div>
         </div>
         <div class="insler-item">
           <label>Filance</label>
-          <select id="ins-filance" onchange="tpcInsler()">
-            <option value="0">Non cot&eacute; (0)</option>
-            <option value="1">1 &ndash; 2 cm (1)</option>
-            <option value="2" selected>2 &ndash; 4 cm (2)</option>
-            <option value="3">Col &rarr; Vulve (3)</option>
-          </select>
+          <div class="tpc-select-wrapper">
+            <select id="ins-filance" onchange="tpcInsler()">
+              <option value="0">Non cot&eacute; (0)</option>
+              <option value="1">1 &ndash; 2 cm (1)</option>
+              <option value="2" selected>2 &ndash; 4 cm (2)</option>
+              <option value="3">Col &rarr; Vulve (3)</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -1033,17 +1054,23 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
       <h3>Types de mobilité des spermatozoïdes</h3>
       <div class="mob-grid">
         <div class="mob-card">
-          <span class="mob-icon">&#128308;</span>
+          <span class="mob-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF3B30"/></svg>
+          </span>
           <span class="mob-label">Type A</span>
           <span class="mob-desc">Mobilit&eacute; progressive rapide, rectiligne</span>
         </div>
         <div class="mob-card">
-          <span class="mob-icon">&#128992;</span>
+          <span class="mob-icon">
+             <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FF9500"/></svg>
+          </span>
           <span class="mob-label">Type B</span>
           <span class="mob-desc">Mobilit&eacute; progressive lente, rectiligne</span>
         </div>
         <div class="mob-card">
-          <span class="mob-icon">&#128993;</span>
+          <span class="mob-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFCC00"/></svg>
+          </span>
           <span class="mob-label">Type C</span>
           <span class="mob-desc">Mobilit&eacute; non progressive (sur place, oscillation)</span>
         </div>
@@ -1101,56 +1128,68 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
         <div class="algo-row">
           <div class="algo-field">
             <label>Phase du cycle v&eacute;rifi&eacute;e par &eacute;chographie</label>
-            <select id="algo-echo">
-              <option value="oui">Oui &mdash; Phase ovulatoire confirm&eacute;e</option>
-              <option value="non">Non &mdash; Phase non confirm&eacute;e</option>
-            </select>
+            <div class="tpc-select-wrapper">
+              <select id="algo-echo">
+                <option value="oui">Oui &mdash; Phase ovulatoire confirm&eacute;e</option>
+                <option value="non">Non &mdash; Phase non confirm&eacute;e</option>
+              </select>
+            </div>
           </div>
           <div class="algo-field">
             <label>pH de la glaire</label>
-            <select id="algo-ph">
-              <option value="optimal">Optimal (7,0 &ndash; 8,5)</option>
-              <option value="limite">Limite (6,0 &ndash; 6,9)</option>
-              <option value="acide">Acide (&lt; 6,0)</option>
-            </select>
+            <div class="tpc-select-wrapper">
+              <select id="algo-ph">
+                <option value="optimal">Optimal (7,0 &ndash; 8,5)</option>
+                <option value="limite">Limite (6,0 &ndash; 6,9)</option>
+                <option value="acide">Acide (&lt; 6,0)</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="algo-row">
           <div class="algo-field">
             <label>R&eacute;sultat TPC (SPZ dans la glaire)</label>
-            <select id="algo-tpc">
-              <option value="positif">Positif riche (&gt; 10 SPZ mobiles/champ)</option>
-              <option value="moyen">Positif moyen (5 &ndash; 10 SPZ mobiles/champ)</option>
-              <option value="faible">Positif faible (&lt; 5 SPZ mobiles/champ)</option>
-              <option value="deficient">D&eacute;ficient (SPZ pr&eacute;sents, immobiles/peu mobiles)</option>
-              <option value="negatif">N&eacute;gatif (aucun SPZ)</option>
-            </select>
+            <div class="tpc-select-wrapper">
+              <select id="algo-tpc">
+                <option value="positif">Positif riche (&gt; 10 SPZ mobiles/champ)</option>
+                <option value="moyen">Positif moyen (5 &ndash; 10 SPZ mobiles/champ)</option>
+                <option value="faible">Positif faible (&lt; 5 SPZ mobiles/champ)</option>
+                <option value="deficient">D&eacute;ficient (SPZ pr&eacute;sents, immobiles/peu mobiles)</option>
+                <option value="negatif">N&eacute;gatif (aucun SPZ)</option>
+              </select>
+            </div>
           </div>
           <div class="algo-field">
             <label>Shaking observ&eacute;</label>
-            <select id="algo-shaking">
-              <option value="non">Non</option>
-              <option value="oui">Oui &mdash; SPZ oscillants sur place</option>
-            </select>
+            <div class="tpc-select-wrapper">
+              <select id="algo-shaking">
+                <option value="non">Non</option>
+                <option value="oui">Oui &mdash; SPZ oscillants sur place</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="algo-row">
           <div class="algo-field">
             <label>Score d&rsquo;Insler (glaire)</label>
-            <select id="algo-insler">
-              <option value="excellent">Excellent (11 &ndash; 12)</option>
-              <option value="bon">Bon (8 &ndash; 10)</option>
-              <option value="insuffisant">Insuffisant (4 &ndash; 7)</option>
-              <option value="nul">Nul (0 &ndash; 3)</option>
-            </select>
+            <div class="tpc-select-wrapper">
+              <select id="algo-insler">
+                <option value="excellent">Excellent (11 &ndash; 12)</option>
+                <option value="bon">Bon (8 &ndash; 10)</option>
+                <option value="insuffisant">Insuffisant (4 &ndash; 7)</option>
+                <option value="nul">Nul (0 &ndash; 3)</option>
+              </select>
+            </div>
           </div>
           <div class="algo-field">
             <label>Spermogramme disponible</label>
-            <select id="algo-spermo">
-              <option value="normal">Normal</option>
-              <option value="anormal">Anormal</option>
-              <option value="non">Non r&eacute;alis&eacute;</option>
-            </select>
+            <div class="tpc-select-wrapper">
+              <select id="algo-spermo">
+                <option value="normal">Normal</option>
+                <option value="anormal">Anormal</option>
+                <option value="non">Non r&eacute;alis&eacute;</option>
+              </select>
+            </div>
           </div>
         </div>
         <button class="algo-btn" onclick="tpcAlgo()">Analyser &rarr;</button>
