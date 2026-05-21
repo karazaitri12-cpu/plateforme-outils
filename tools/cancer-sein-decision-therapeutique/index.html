@@ -137,7 +137,7 @@
 /* Badge classe thérapeutique */
 #cs-tool-root .cs-badge-class{
   display:inline-block;font-size:9px;font-weight:700;border-radius:3px;
-  padding:1px 6px;margin-left:5px;vertical-align:middle;letter-spacing:0.3px;
+  padding:1px 6px;vertical-align:middle;letter-spacing:0.3px;
 }
 #cs-tool-root .cs-badge-chemo{background:#fff3e0;color:#d4860a;border:1px solid #f5c98a;}
 #cs-tool-root .cs-badge-targeted{background:#e8f0fe;color:#1a3a6b;border:1px solid #a8c0f0;}
@@ -288,9 +288,9 @@
   content:"\2192";position:absolute;left:0;color:var(--cs-accent);font-weight:700;
 }
 
-/* Légende classes thérapeutiques */
+/* Légende classes thérapeutiques - CORRIGÉ */
 #cs-tool-root .cs-legend-thera{
-  display:flex;flex-wrap:wrap;gap:6px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px; /* Ajout d'un gap horizontal plus large */
   margin:10px 0 4px;
   padding:8px 10px;
   background:#f8f9fb;
@@ -299,7 +299,16 @@
   font-size:10px;
   color:var(--cs-muted);
 }
-#cs-tool-root .cs-legend-thera span{font-weight:700;}
+#cs-tool-root .cs-legend-thera .cs-legend-label{
+  font-weight:700;margin-right:4px;
+}
+#cs-tool-root .cs-legend-thera .cs-legend-item{
+  display:inline-flex;align-items:center;
+  white-space:nowrap; /* Empêche le badge et le texte de se séparer */
+}
+#cs-tool-root .cs-legend-item .cs-badge-class{
+  margin-right:5px; /* Espace entre le badge et sa description */
+}
 
 #cs-tool-root .cs-rcp-warn{
   margin-top:14px;padding:9px 12px;background:#f4f0e8;
@@ -914,17 +923,17 @@ function getHormonoReason(rh, meno, age){
 }
 
 /* ======================================================
-   LÉGENDE CLASSES THÉRAPEUTIQUES
+   LÉGENDE CLASSES THÉRAPEUTIQUES - CORRIGÉ
    ====================================================== */
 function getLegend(){
   return '<div class="cs-legend-thera">'
-    +'<span>L\u00e9gende :</span> '
-    +'<span class="cs-badge-class cs-badge-chemo">Chimio</span> Chimioth\u00e9rapie cytotoxique &nbsp;'
-    +'<span class="cs-badge-class cs-badge-targeted">Th. Cibl\u00e9e</span> Anticorps monoclonal anti-HER2 &nbsp;'
-    +'<span class="cs-badge-class cs-badge-immuno">Immuno</span> Immunoth\u00e9rapie (anti-PD-L1/PD-1) &nbsp;'
-    +'<span class="cs-badge-class cs-badge-hormono">Hormono</span> Hormonoth\u00e9rapie &nbsp;'
-    +'<span class="cs-badge-class cs-badge-parp">Inh. PARP</span> Th\u00e9rapie cibl\u00e9e (BRCA) &nbsp;'
-    +'<span class="cs-badge-class cs-badge-cdk">Inh. CDK4/6</span> Th\u00e9rapie cibl\u00e9e (cycle cellulaire)'
+    +'<span class="cs-legend-label">L\u00e9gende :</span>'
+    +'<span class="cs-legend-item"><span class="cs-badge-class cs-badge-chemo">Chimio</span> Chimioth\u00e9rapie cytotoxique</span>'
+    +'<span class="cs-legend-item"><span class="cs-badge-class cs-badge-targeted">Th. Cibl\u00e9e</span> Anticorps anti-HER2</span>'
+    +'<span class="cs-legend-item"><span class="cs-badge-class cs-badge-immuno">Immuno</span> Immunoth\u00e9rapie</span>'
+    +'<span class="cs-legend-item"><span class="cs-badge-class cs-badge-hormono">Hormono</span> Hormonoth\u00e9rapie</span>'
+    +'<span class="cs-legend-item"><span class="cs-badge-class cs-badge-parp">Inh. PARP</span> Th. cibl\u00e9e (BRCA)</span>'
+    +'<span class="cs-legend-item"><span class="cs-badge-class cs-badge-cdk">Inh. CDK4/6</span> Th. cibl\u00e9e (cycle \u00e7ell.)</span>'
     +'</div>';
 }
 
