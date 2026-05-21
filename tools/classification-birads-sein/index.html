@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classification BI-RADS — Sein</title>
+<style>
+/* ============================================================
+   BIRADS SEIN — Blindage Elementor
+   ID racine : #brd-root
+   ============================================================ */
+#brd-root {
+  all: initial;
+  display: block;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1a2b3c;
+  background: #f7f9fb;
+  box-sizing: border-box;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 0 40px 0;
+}
+#brd-root *, #brd-root *::before, #brd-root *::after {
+  box-sizing: border-box;
+}
+
+/* --- EN-TÊTE --- */
+#brd-root .brd-header {
+  background: linear-gradient(135deg, #1a3a5c 0%, #1e4d7b 100%);
+  color: #fff;
+  padding: 28px 32px 22px;
+  border-bottom: 3px solid #2e6da4;
+}
+#brd-root .brd-header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+#brd-root .brd-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 22px;
+  margin-top: 2px;
+}
+#brd-root .brd-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #fff;
+  line-height: 1.25;
+}
+#brd-root .brd-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: rgba(255,255,255,0.78);
+  font-style: italic;
+  font-family: 'Georgia', serif;
+}
+#brd-root .brd-ref {
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.6);
+  font-family: Arial, sans-serif;
+  letter-spacing: 0.2px;
+}
+
+/* --- ONGLETS MODALITÉ --- */
+#brd-root .brd-tabs {
+  display: flex;
+  background: #1a3a5c;
+  border-bottom: 2px solid #2e6da4;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#brd-root .brd-tabs::-webkit-scrollbar { display: none; }
+#brd-root .brd-tab {
+  flex: 1;
+  min-width: 120px;
+  padding: 13px 18px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  text-align: center;
+}
+#brd-root .brd-tab:hover {
+  color: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.06);
+}
+#brd-root .brd-tab.active {
+  color: #fff;
+  border-bottom: 3px solid #6baed6;
+  background: rgba(255,255,255,0.08);
+}
+
+/* --- INTRO MODALITÉ --- */
+#brd-root .brd-modal-intro {
+  background: #e8f1f8;
+  border-left: 4px solid #2e6da4;
+  padding: 12px 18px;
+  font-size: 13px;
+  color: #1a3a5c;
+  font-family: Arial, sans-serif;
+  display: none;
+}
+#brd-root .brd-modal-intro.visible { display: block; }
+
+/* --- CONTENU --- */
+#brd-root .brd-content {
+  padding: 0 0 0;
+}
+#brd-root .brd-panel { display: none; }
+#brd-root .brd-panel.active { display: block; }
+
+/* --- SECTION CATÉGORIE BI-RADS --- */
+#brd-root .brd-cat {
+  border-bottom: 1px solid #d0dce8;
+  transition: background 0.15s;
+}
+#brd-root .brd-cat:last-child { border-bottom: none; }
+
+#brd-root .brd-cat-header {
+  display: flex;
+  align-items: stretch;
+  cursor: pointer;
+  min-height: 58px;
+  user-select: none;
+}
+#brd-root .brd-cat-header:hover .brd-cat-label {
+  background: rgba(0,0,0,0.03);
+}
+
+#brd-root .brd-badge {
+  min-width: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  flex-shrink: 0;
+  padding: 10px 6px;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+}
+#brd-root .brd-badge small {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  opacity: 0.75;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Couleurs par catégorie */
+#brd-root .cat-0  { background: #6c757d; color: #fff; }
+#brd-root .cat-1  { background: #28a745; color: #fff; }
+#brd-root .cat-2  { background: #5cb85c; color: #fff; }
+#brd-root .cat-3  { background: #f0ad4e; color: #fff; }
+#brd-root .cat-4  { background: #e07020; color: #fff; }
+#brd-root .cat-4a { background: #e07020; color: #fff; }
+#brd-root .cat-4b { background: #c0501a; color: #fff; }
+#brd-root .cat-4c { background: #a03010; color: #fff; }
+#brd-root .cat-5  { background: #c0392b; color: #fff; }
+#brd-root .cat-6  { background: #7b1c1c; color: #fff; }
+
+#brd-root .brd-cat-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px 14px;
+  background: #fff;
+}
+#brd-root .brd-cat-title {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a2b3c;
+  margin: 0 0 2px;
+}
+#brd-root .brd-cat-short {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: #4a6080;
+  margin: 0;
+}
+#brd-root .brd-risk-pill {
+  align-self: center;
+  margin-right: 14px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+#brd-root .risk-benin   { background: #d4edda; color: #155724; }
+#brd-root .risk-faible  { background: #fff3cd; color: #856404; }
+#brd-root .risk-mod     { background: #ffe0cc; color: #7d3000; }
+#brd-root .risk-eleve   { background: #f8d7da; color: #721c24; }
+#brd-root .risk-confirme{ background: #4a0000; color: #fff; }
+#brd-root .risk-incomplet{ background: #e2e8f0; color: #334155; }
+
+#brd-root .brd-chevron {
+  align-self: center;
+  margin-right: 14px;
+  font-size: 13px;
+  color: #6b82a0;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+#brd-root .brd-cat.open .brd-chevron {
+  transform: rotate(90deg);
+}
+
+/* --- DÉTAIL DÉPLOYÉ --- */
+#brd-root .brd-detail {
+  display: none;
+  background: #f0f5fa;
+  border-top: 1px solid #d0dce8;
+  padding: 18px 22px 20px 22px;
+}
+#brd-root .brd-cat.open .brd-detail { display: block; }
+
+#brd-root .brd-detail h4 {
+  margin: 0 0 8px;
+  font-family: Arial, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1a3a5c;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+#brd-root .brd-detail ul {
+  margin: 0 0 14px;
+  padding: 0 0 0 0;
+  list-style: none;
+}
+#brd-root .brd-detail ul li {
+  padding: 3px 0 3px 18px;
+  position: relative;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #1a2b3c;
+  line-height: 1.5;
+}
+#brd-root .brd-detail ul li::before {
+  content: "\2022";
+  position: absolute;
+  left: 4px;
+  color: #2e6da4;
+  font-size: 14px;
+}
+#brd-root .brd-detail p {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #1a2b3c;
+  margin: 0 0 10px;
+  line-height: 1.6;
+}
+#brd-root .brd-detail .brd-cad {
+  background: #fff;
+  border: 1px solid #c5d8ea;
+  border-left: 4px solid #2e6da4;
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #1a3a5c;
+  margin-top: 8px;
+  line-height: 1.55;
+}
+#brd-root .brd-detail .brd-cad strong {
+  display: block;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  color: #2e6da4;
+}
+#brd-root .brd-detail .brd-risk-block {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+#brd-root .brd-detail .brd-subcats {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+#brd-root .brd-detail .brd-subcat {
+  flex: 1;
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #d0dce8;
+  border-radius: 5px;
+  padding: 10px 12px;
+}
+#brd-root .brd-detail .brd-subcat-title {
+  font-family: Arial, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+#brd-root .brd-detail .brd-subcat p {
+  font-size: 12px;
+  margin: 0;
+  color: #334155;
+}
+#brd-root .sc-4a { border-left: 4px solid #e07020; }
+#brd-root .sc-4b { border-left: 4px solid #c0501a; }
+#brd-root .sc-4c { border-left: 4px solid #a03010; }
+#brd-root .brd-detail .brd-subcat-title.t4a { color: #e07020; }
+#brd-root .brd-detail .brd-subcat-title.t4b { color: #c0501a; }
+#brd-root .brd-detail .brd-subcat-title.t4c { color: #a03010; }
+
+/* --- SECTION LEXIQUE --- */
+#brd-root .brd-lex-section {
+  background: #fff;
+  border-top: 2px solid #2e6da4;
+  padding: 20px 22px;
+}
+#brd-root .brd-lex-section h3 {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #1a3a5c;
+  margin: 0 0 12px;
+}
+#brd-root .brd-lex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+#brd-root .brd-lex-item {
+  background: #f0f5fa;
+  border-radius: 4px;
+  padding: 8px 11px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+}
+#brd-root .brd-lex-item strong {
+  display: block;
+  color: #1a3a5c;
+  font-size: 12px;
+  margin-bottom: 1px;
+}
+#brd-root .brd-lex-item span { color: #4a6080; }
+
+/* --- FOOTER DISCLAIMER --- */
+#brd-root .brd-footer {
+  background: #eaeff4;
+  border-top: 1px solid #c5d2de;
+  padding: 12px 20px;
+  font-family: Arial, sans-serif;
+  font-size: 11.5px;
+  color: #5a6a7a;
+  line-height: 1.5;
+}
+#brd-root .brd-footer strong { color: #1a3a5c; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+  #brd-root .brd-header { padding: 18px 16px 14px; }
+  #brd-root .brd-title { font-size: 17px; }
+  #brd-root .brd-badge { min-width: 58px; font-size: 16px; }
+  #brd-root .brd-detail { padding: 14px 14px 16px; }
+  #brd-root .brd-risk-pill { display: none; }
+  #brd-root .brd-lex-grid { grid-template-columns: 1fr; }
+  #brd-root .brd-detail .brd-subcats { flex-direction: column; }
+}
+
+/* =========================================
+   Masque l'ascenseur (style App native)
+   ========================================= */
+html { scrollbar-width: none; }
+body { -ms-overflow-style: none; overflow-y: auto; }
+::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<div id="brd-root">
+
+  <!-- EN-TÊTE -->
+  <div class="brd-header">
+    <div class="brd-header-top">
+      <div class="brd-icon">&#9673;</div>
+      <div>
+        <h1 class="brd-title">Classification BI-RADS — Sein</h1>
+        <p class="brd-subtitle">Breast Imaging Reporting and Data System</p>
+      </div>
+    </div>
+    <p class="brd-ref">ACR BI-RADS Atlas 5<sup>e</sup> édition, 2013 &bull; Mammographie &bull; &Eacute;chographie &bull; IRM</p>
+  </div>
+
+  <!-- ONGLETS -->
+  <div class="brd-tabs" role="tablist">
+    <button class="brd-tab active" onclick="window.brdTab(this,'mammo')" role="tab">&#128247; Mammographie</button>
+    <button class="brd-tab" onclick="window.brdTab(this,'echo')" role="tab">&#9855; &Eacute;chographie</button>
+    <button class="brd-tab" onclick="window.brdTab(this,'irm')" role="tab">&#9711; IRM</button>
+  </div>
+
+  <div class="brd-content">
+
+    <!-- ===================== MAMMOGRAPHIE ===================== -->
+    <div class="brd-panel active" id="panel-mammo">
+      <div class="brd-modal-intro visible">
+        <strong>Mammographie :</strong> Outil de d&eacute;pistage de r&eacute;f&eacute;rence. La classification BI-RADS inclut obligatoirement l&rsquo;&eacute;valuation de la densit&eacute; mammaire (cat&eacute;gories A–D). Chaque rapport doit comporter une cat&eacute;gorie BI-RADS finale et une recommandation de prise en charge.
+      </div>
+
+      <!-- BI-RADS 0 -->
+      <div class="brd-cat" id="mm-0">
+        <div class="brd-cat-header" onclick="window.brdToggle('mm-0')">
+          <div class="brd-badge cat-0"><small>BI-RADS</small>0</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Incomplet — Bilan incomplet</p>
+            <p class="brd-cat-short">Rappel ou comparaison n&eacute;cessaire</p>
+          </div>
+          <span class="brd-risk-pill risk-incomplet">Incomplet</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>D&eacute;finition</h4>
+          <p>Bilan mammographique insuffisant pour conclure. Compl&eacute;ments d&rsquo;imagerie n&eacute;cessaires avant &eacute;mission d&rsquo;une cat&eacute;gorie finale.</p>
+          <h4>Situations concern&eacute;es</h4>
+          <ul>
+            <li>Incidence(s) suppl&eacute;mentaire(s) requise(s) (profil strict, agrandissement, compression localis&eacute;e)</li>
+            <li>Comparaison avec examens ant&eacute;rieurs indispensable</li>
+            <li>&Eacute;chographie de compl&eacute;ment n&eacute;cessaire pour caract&eacute;riser une anomalie</li>
+            <li>Clich&eacute;s de mauvaise qualit&eacute; technique (mouvement, sous-exposition)</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Rappeler la patiente pour bilan compl&eacute;mentaire. La cat&eacute;gorie 0 est r&eacute;serv&eacute;e au d&eacute;pistage ; elle ne doit pas &ecirc;tre utilis&eacute;e en situation diagnostique o&ugrave; le radiologue dispose de l&rsquo;ensemble des incidences.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS 1 -->
+      <div class="brd-cat" id="mm-1">
+        <div class="brd-cat-header" onclick="window.brdToggle('mm-1')">
+          <div class="brd-badge cat-1"><small>BI-RADS</small>1</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">N&eacute;gatif — Examen normal</p>
+            <p class="brd-cat-short">Aucune anomalie d&eacute;tect&eacute;e</p>
+          </div>
+          <span class="brd-risk-pill risk-benin">Malin : ~0 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>D&eacute;finition</h4>
+          <p>Examen mammographique strictement normal : pas de masse, pas de distorsion architecturale, pas de calcification suspecte, pas d&rsquo;asym&eacute;trie pathologique.</p>
+          <h4>Crit&egrave;res</h4>
+          <ul>
+            <li>Seins sym&eacute;triques, pas d&rsquo;opacit&eacute; de contours suspects</li>
+            <li>Calcifications absentes ou clairement b&eacute;nignes</li>
+            <li>Architecture conserv&eacute;e</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Surveillance de routine selon &acirc;ge et facteurs de risque. D&eacute;pistage de masse tous les 2 ans (50–74 ans, programme national).</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS 2 -->
+      <div class="brd-cat" id="mm-2">
+        <div class="brd-cat-header" onclick="window.brdToggle('mm-2')">
+          <div class="brd-badge cat-2"><small>BI-RADS</small>2</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">B&eacute;nin — Anomalie b&eacute;nigne</p>
+            <p class="brd-cat-short">Anomalie identifi&eacute;e, s&ucirc;rement b&eacute;nigne</p>
+          </div>
+          <span class="brd-risk-pill risk-benin">Malin : ~0 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>D&eacute;finition</h4>
+          <p>Anomalie d&eacute;tect&eacute;e mais caract&egrave;res strictement b&eacute;nins. La mention est faite pour la description, elle n&rsquo;influencera pas la prise en charge.</p>
+          <h4>Exemples d&rsquo;anomalies class&eacute;es 2</h4>
+          <ul>
+            <li>Calcifications typiquement b&eacute;nignes : vasculaires, coquilles d&rsquo;&#339;uf, lait de chaux, grossi&egrave;res dystrophiques</li>
+            <li>Nodule r&eacute;gulier, homog&egrave;ne, stable sur plusieurs examens (probable fibroad&eacute;nome)</li>
+            <li>Ganglion intramammaire</li>
+            <li>Hamartome, lipome, kyste huile&ux ; implant stable</li>
+            <li>Cicatrice connue et expliqu&eacute;e</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Surveillance de routine selon &acirc;ge. Pas de bilan compl&eacute;mentaire li&eacute; &agrave; cette anomalie.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS 3 -->
+      <div class="brd-cat" id="mm-3">
+        <div class="brd-cat-header" onclick="window.brdToggle('mm-3')">
+          <div class="brd-badge cat-3"><small>BI-RADS</small>3</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Probablement b&eacute;nin</p>
+            <p class="brd-cat-short">Surveillance &agrave; court terme recommand&eacute;e</p>
+          </div>
+          <span class="brd-risk-pill risk-faible">Malin : &lt; 2 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>D&eacute;finition</h4>
+          <p>Anomalie ayant des caract&egrave;res probablement b&eacute;nins, mais pour laquelle une surveillance &agrave; court terme est pr&eacute;f&eacute;r&eacute;e &agrave; un geste imm&eacute;diat. Risque de malignit&eacute; &lt; 2 %.</p>
+          <h4>Exemples</h4>
+          <ul>
+            <li>Opacit&eacute; ronde ou ovale, &agrave; contours nets, non calcifi&eacute;e, d&eacute;couverte pour la 1re fois</li>
+            <li>Asym&eacute;trie focale stable, sans autre anomalie associ&eacute;e</li>
+            <li>Groupe de calcifications punctiformes rondes &agrave; distribution r&eacute;guli&egrave;re</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Mammographie de contr&ocirc;le &agrave; 6 mois, puis tous les 6 mois pendant 2 ans (total 2 ans). Si stabilit&eacute; : passage en cat&eacute;gorie 2. Si modification : reclassement &agrave; la hausse et bilan adapt&eacute;. La cat&eacute;gorie 3 ne doit pas &ecirc;tre utilis&eacute;e en d&eacute;pistage (uniquement en situation diagnostique).</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS 4 -->
+      <div class="brd-cat" id="mm-4">
+        <div class="brd-cat-header" onclick="window.brdToggle('mm-4')">
+          <div class="brd-badge cat-4"><small>BI-RADS</small>4</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Anomalie suspecte</p>
+            <p class="brd-cat-short">V&eacute;rification histologique recommand&eacute;e</p>
+          </div>
+          <span class="brd-risk-pill risk-mod">Malin : 2–95 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>D&eacute;finition</h4>
+          <p>Anomalie dont les caract&egrave;res n&rsquo;atteignent pas le niveau de suspicion de la cat&eacute;gorie 5, mais pour laquelle une v&eacute;rification histologique est n&eacute;cessaire. Subdivision en trois sous-cat&eacute;gories.</p>
+          <div class="brd-subcats">
+            <div class="brd-subcat sc-4a">
+              <p class="brd-subcat-title t4a">4A — Faiblement suspect</p>
+              <p>Risque : 2–10 %<br>Biopsie recommand&eacute;e ; surveillance acceptable si b&eacute;nin</p>
+            </div>
+            <div class="brd-subcat sc-4b">
+              <p class="brd-subcat-title t4b">4B — Mod&eacute;r&eacute;ment suspect</p>
+              <p>Risque : 10–50 %<br>Biopsie obligatoire ; concordance radio-histo requise</p>
+            </div>
+            <div class="brd-subcat sc-4c">
+              <p class="brd-subcat-title t4c">4C — Fortement suspect</p>
+              <p>Risque : 50–95 %<br>Biopsie urgente ; prise en charge multidisciplinaire</p>
+            </div>
+          </div>
+          <h4>Signes orientant vers le cat&eacute;gorie 4</h4>
+          <ul>
+            <li>Opacit&eacute; &agrave; contours irr&eacute;guliers ou spicul&eacute;s (partiel)</li>
+            <li>Microcalcifications h&eacute;t&eacute;rog&egrave;nes, polymorphes, &agrave; distribution group&eacute;e</li>
+            <li>Asym&eacute;trie nouvelle ou &eacute;volutive</li>
+            <li>Distorsion architecturale sans cicatrice connue</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Biopsie percutan&eacute;e &eacute;choguid&eacute;e ou st&eacute;r&eacute;otaxique. La concordance anatomo-radiologique est obligatoire. En cas de discordance : reprise biopsique ou exer&egrave;se chirurgicale.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS 5 -->
+      <div class="brd-cat" id="mm-5">
+        <div class="brd-cat-header" onclick="window.brdToggle('mm-5')">
+          <div class="brd-badge cat-5"><small>BI-RADS</small>5</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Hautement suspect de malignit&eacute;</p>
+            <p class="brd-cat-short">Prise en charge oncologique</p>
+          </div>
+          <span class="brd-risk-pill risk-eleve">Malin : &gt; 95 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>D&eacute;finition</h4>
+          <p>L&eacute;sion pr&eacute;sentant des caract&egrave;res typiques de malignit&eacute;. Probabilit&eacute; de cancer &gt; 95 %.</p>
+          <h4>Crit&egrave;res</h4>
+          <ul>
+            <li>Opacit&eacute; spicul&eacute;e &agrave; centre dense, irr&eacute;guli&egrave;re</li>
+            <li>Microcalcifications fin&eacute;ment granulaires ou lin&eacute;aires, &agrave; distribution canalaire ou segment&eacute;e</li>
+            <li>Association masse + microcalcifications suspectes</li>
+            <li>Distorsion architecturale sans explication bénigne</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Biopsie percutan&eacute;e pour confirmation histologique avant tout traitement. R&eacute;union de concertation pluridisciplinaire (RCP) obligatoire. Bilan d&rsquo;extension selon r&eacute;sultat.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS 6 -->
+      <div class="brd-cat" id="mm-6">
+        <div class="brd-cat-header" onclick="window.brdToggle('mm-6')">
+          <div class="brd-badge cat-6"><small>BI-RADS</small>6</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Malignit&eacute; prouv&eacute;e</p>
+            <p class="brd-cat-short">Diagnostic histologique confirm&eacute;</p>
+          </div>
+          <span class="brd-risk-pill risk-confirme">Biopsi&eacute; +</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>D&eacute;finition</h4>
+          <p>Cat&eacute;gorie r&eacute;serv&eacute;e aux patientes dont le diagnostic de malignit&eacute; a &eacute;t&eacute; confirm&eacute; par biopsie, et pour lesquelles l&rsquo;imagerie est r&eacute;alis&eacute;e dans le cadre du bilan pr&eacute;th&eacute;rapeutique ou du suivi sous traitement.</p>
+          <h4>Situations typiques</h4>
+          <ul>
+            <li>Bilan d&rsquo;extension local avant chirurgie (chirurgie conservatrice vs. mastectomie)</li>
+            <li>Suivi de r&eacute;ponse &agrave; la chimioth&eacute;rapie n&eacute;oadjuvante</li>
+            <li>Mammographie pr&eacute;-op&eacute;ratoire apr&egrave;s confirmation histologique</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Prise en charge enti&egrave;rement dict&eacute;e par la RCP. L&rsquo;imagerie sert ici de guide th&eacute;rapeutique, non de diagnostic.</div>
+        </div>
+      </div>
+
+      <!-- Densité mammaire -->
+      <div style="background:#fff;border-top:2px solid #2e6da4;padding:18px 22px;">
+        <h3 style="font-family:Arial,sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:#1a3a5c;margin:0 0 12px;">Densit&eacute; mammaire — Composition du sein (ACR)</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;">
+          <div style="background:#f0f5fa;border-radius:4px;padding:9px 12px;">
+            <strong style="font-family:Arial,sans-serif;font-size:12.5px;color:#1a3a5c;">Type A</strong>
+            <p style="font-family:Arial,sans-serif;font-size:12px;margin:3px 0 0;color:#334155;">Sein essentiellement graisseux (&lt; 25 % tissu glandulaire). Sensibilit&eacute; mammographique maximale.</p>
+          </div>
+          <div style="background:#f0f5fa;border-radius:4px;padding:9px 12px;">
+            <strong style="font-family:Arial,sans-serif;font-size:12.5px;color:#1a3a5c;">Type B</strong>
+            <p style="font-family:Arial,sans-serif;font-size:12px;margin:3px 0 0;color:#334155;">Densit&eacute;s fibroglandulaires &eacute;parses (25–50 %). Quelques zones pouvant masquer une l&eacute;sion.</p>
+          </div>
+          <div style="background:#e8f1f8;border-radius:4px;padding:9px 12px;border:1px solid #c5d8ea;">
+            <strong style="font-family:Arial,sans-serif;font-size:12.5px;color:#1a3a5c;">Type C</strong>
+            <p style="font-family:Arial,sans-serif;font-size:12px;margin:3px 0 0;color:#334155;">H&eacute;t&eacute;rog&egrave;nement dense (50–75 %). Sensibilit&eacute; diminu&eacute;e ; &eacute;chographie de compl&eacute;ment souvent utile.</p>
+          </div>
+          <div style="background:#dce8f4;border-radius:4px;padding:9px 12px;border:1px solid #b0c8e0;">
+            <strong style="font-family:Arial,sans-serif;font-size:12.5px;color:#1a3a5c;">Type D</strong>
+            <p style="font-family:Arial,sans-serif;font-size:12px;margin:3px 0 0;color:#334155;">Extr&ecirc;mement dense (&gt; 75 %). Limite importante ; imagerie compl&eacute;mentaire (IRM) &agrave; discuter selon risque.</p>
+          </div>
+        </div>
+      </div>
+    </div><!-- /panel-mammo -->
+
+
+    <!-- ===================== ÉCHOGRAPHIE ===================== -->
+    <div class="brd-panel" id="panel-echo">
+      <div class="brd-modal-intro visible">
+        <strong>&Eacute;chographie :</strong> Outil de 2<sup>e</sup> intention, compl&eacute;mentaire de la mammographie. Particuli&egrave;rement performante chez la femme jeune et en sein dense. La classification s&rsquo;applique &agrave; chaque l&eacute;sion d&eacute;crite ind&eacute;pendamment.
+      </div>
+
+      <!-- BI-RADS Echo 0 -->
+      <div class="brd-cat" id="ec-0">
+        <div class="brd-cat-header" onclick="window.brdToggle('ec-0')">
+          <div class="brd-badge cat-0"><small>BI-RADS</small>0</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Incomplet</p>
+            <p class="brd-cat-short">Compl&eacute;ment d&rsquo;imagerie n&eacute;cessaire</p>
+          </div>
+          <span class="brd-risk-pill risk-incomplet">Incomplet</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <p>Peu utilis&eacute;e en &eacute;chographie de premi&egrave;re intention. Peut &ecirc;tre attribu&eacute;e si la mammographie est n&eacute;cessaire pour conclure sur une anomalie &eacute;chographique non caract&eacute;ris&eacute;e, ou si la qualit&eacute; technique est insuffisante.</p>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Compl&eacute;ter par mammographie et/ou IRM selon contexte.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS Echo 1 -->
+      <div class="brd-cat" id="ec-1">
+        <div class="brd-cat-header" onclick="window.brdToggle('ec-1')">
+          <div class="brd-badge cat-1"><small>BI-RADS</small>1</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">N&eacute;gatif — Examen normal</p>
+            <p class="brd-cat-short">Aucune l&eacute;sion &eacute;chographique</p>
+          </div>
+          <span class="brd-risk-pill risk-benin">Malin : ~0 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <p>Aucune anomalie identifi&eacute;e. Architecture parenchymateuse normale, sans masse ni anomalie &eacute;chotexturale.</p>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Surveillance de routine. Pas de bilan suppl&eacute;mentaire li&eacute; &agrave; l&rsquo;&eacute;chographie.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS Echo 2 -->
+      <div class="brd-cat" id="ec-2">
+        <div class="brd-cat-header" onclick="window.brdToggle('ec-2')">
+          <div class="brd-badge cat-2"><small>BI-RADS</small>2</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">B&eacute;nin</p>
+            <p class="brd-cat-short">Anomalie b&eacute;nigne caract&eacute;ris&eacute;e</p>
+          </div>
+          <span class="brd-risk-pill risk-benin">Malin : ~0 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>Exemples de l&eacute;sions class&eacute;es 2 en &eacute;chographie</h4>
+          <ul>
+            <li><strong>Kyste simple typique :</strong> anéchog&egrave;ne, contours nets, renforcement post&eacute;rieur, parois fines sans cloison</li>
+            <li>Kyste compliqu&eacute; stable (contenu &eacute;chog&egrave;ne, mais sans paroi &eacute;paissie ni vascularisation)</li>
+            <li>Fibroad&eacute;nome typique : ovale, contours nets, parall&egrave;le au plan cutané, homog&egrave;ne, stable</li>
+            <li>Ganglion intramammaire avec hile graisseux conserv&eacute;</li>
+            <li>Lipome, hamartome, kyste s&eacute;bac&eacute;</li>
+            <li>Épanchement post-traumatique ancien r&eacute;solutif</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Surveillance clinique de routine. Pas d&rsquo;examen compl&eacute;mentaire sp&eacute;cifique.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS Echo 3 -->
+      <div class="brd-cat" id="ec-3">
+        <div class="brd-cat-header" onclick="window.brdToggle('ec-3')">
+          <div class="brd-badge cat-3"><small>BI-RADS</small>3</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Probablement b&eacute;nin</p>
+            <p class="brd-cat-short">Contr&ocirc;le &agrave; court terme</p>
+          </div>
+          <span class="brd-risk-pill risk-faible">Malin : &lt; 2 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>Crit&egrave;res &eacute;chographiques</h4>
+          <ul>
+            <li>Masse ovale, &agrave; grand axe parall&egrave;le &agrave; la peau, contours nets ou microlob&eacute;l&eacute;s, homog&egrave;ne</li>
+            <li>Kyste compliqu&eacute; avec d&eacute;bris ou cloisons fines, non vascularis&eacute;</li>
+            <li>Amas de microkystes group&eacute;s (&lt; 5 mm chacun, espac&eacute;s de tissu &eacute;chog&egrave;ne &lt; 5 mm)</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>&Eacute;chographie de contr&ocirc;le &agrave; 6 mois (&#215; 2 sur 1 an, puis &agrave; 2 ans). Stabilit&eacute; : passage en cat&eacute;gorie 2. &Eacute;volution : reclassement. Ne pas utiliser en cas d&rsquo;ant&eacute;c&eacute;dent personnel de cancer du sein.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS Echo 4 -->
+      <div class="brd-cat" id="ec-4">
+        <div class="brd-cat-header" onclick="window.brdToggle('ec-4')">
+          <div class="brd-badge cat-4"><small>BI-RADS</small>4</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Suspect</p>
+            <p class="brd-cat-short">Biopsie recommand&eacute;e</p>
+          </div>
+          <span class="brd-risk-pill risk-mod">Malin : 2–95 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>Signes de suspicion en &eacute;chographie</h4>
+          <ul>
+            <li>Masse non parall&egrave;le au plan cutané (axe vertical dominant — "taller than wide")</li>
+            <li>Contours anguleux, irr&eacute;guliers ou spicul&eacute;s</li>
+            <li>Microcalcifications intral&eacute;sionnelles (hyperéchog&egrave;nes punctiformes)</li>
+            <li>Cloisons &eacute;paisses, vascularisation intral&eacute;sionnelle au Doppler couleur</li>
+            <li>Renforcement post&eacute;rieur atypique ou ombre acoustique interne</li>
+            <li>Extension cutan&eacute;e, r&eacute;traction</li>
+          </ul>
+          <div class="brd-subcats">
+            <div class="brd-subcat sc-4a">
+              <p class="brd-subcat-title t4a">4A — Faiblement suspect</p>
+              <p>1 seul crit&egrave;re suspect mod&eacute;r&eacute; ; risque 2–10 %</p>
+            </div>
+            <div class="brd-subcat sc-4b">
+              <p class="brd-subcat-title t4b">4B — Mod&eacute;r&eacute;ment suspect</p>
+              <p>Association de 2 crit&egrave;res ; risque 10–50 %</p>
+            </div>
+            <div class="brd-subcat sc-4c">
+              <p class="brd-subcat-title t4c">4C — Fortement suspect</p>
+              <p>Multiples crit&egrave;res ; risque 50–95 %</p>
+            </div>
+          </div>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Microbiopsie &eacute;choguid&eacute;e (14–18G). V&eacute;rification de la concordance radio-histo. Clip de rep&eacute;rage recommand&eacute;.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS Echo 5 -->
+      <div class="brd-cat" id="ec-5">
+        <div class="brd-cat-header" onclick="window.brdToggle('ec-5')">
+          <div class="brd-badge cat-5"><small>BI-RADS</small>5</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Hautement suspect</p>
+            <p class="brd-cat-short">Prise en charge oncologique</p>
+          </div>
+          <span class="brd-risk-pill risk-eleve">Malin : &gt; 95 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>Crit&egrave;res</h4>
+          <ul>
+            <li>Masse irr&eacute;guli&egrave;re, spicul&eacute;e, non parall&egrave;le, hypervascularis&eacute;e, avec ombre acoustique centrale</li>
+            <li>Association de tous les crit&egrave;res de malignit&eacute;</li>
+            <li>Ad&eacute;nopathie axillaire suspecte associ&eacute;e (cortex > 3 mm, hile absent)</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Biopsie percutan&eacute;e pour confirmation avant tout traitement. RCP obligatoire. Bilan d&rsquo;extension. Recherche d&rsquo;ad&eacute;nopathie axillaire.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS Echo 6 -->
+      <div class="brd-cat" id="ec-6">
+        <div class="brd-cat-header" onclick="window.brdToggle('ec-6')">
+          <div class="brd-badge cat-6"><small>BI-RADS</small>6</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Malignit&eacute; prouv&eacute;e</p>
+            <p class="brd-cat-short">Diagnostic histologique confirm&eacute;</p>
+          </div>
+          <span class="brd-risk-pill risk-confirme">Biopsi&eacute; +</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <p>L&eacute;sion d&eacute;j&agrave; biopsi&eacute;e et confirm&eacute;e maligne. L&rsquo;&eacute;chographie est r&eacute;alis&eacute;e dans le cadre du bilan pr&eacute;th&eacute;rapeutique (recherche de multifocalit&eacute;, ad&eacute;nopathies axillaires, guidage de marquage pr&eacute;op&eacute;ratoire).</p>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Prise en charge enti&egrave;rement dict&eacute;e par la RCP. &Eacute;chographie axillaire et cytoponction ganglionnaire selon indication.</div>
+        </div>
+      </div>
+
+      <!-- Lexique écho -->
+      <div class="brd-lex-section">
+        <h3>Descripteurs &eacute;chographiques ACR BI-RADS</h3>
+        <div class="brd-lex-grid">
+          <div class="brd-lex-item"><strong>Forme</strong><span>Ronde, ovale, irr&eacute;guli&egrave;re</span></div>
+          <div class="brd-lex-item"><strong>Orientation</strong><span>Parall&egrave;le (b&eacute;nin) / Non parall&egrave;le (suspect)</span></div>
+          <div class="brd-lex-item"><strong>Contours</strong><span>Nets, microlob&eacute;l&eacute;s, anguleux, irr&eacute;guliers, spicul&eacute;s</span></div>
+          <div class="brd-lex-item"><strong>Écho-structure</strong><span>An&eacute;chog&egrave;ne, hypo-, iso-, hyperéchog&egrave;ne, h&eacute;t&eacute;rog&egrave;ne</span></div>
+          <div class="brd-lex-item"><strong>Renforcement</strong><span>Post&eacute;rieur (kyste), ombre acoustique (carcinome), absent</span></div>
+          <div class="brd-lex-item"><strong>Halo</strong><span>Halo &eacute;chog&egrave;ne p&eacute;ril&eacute;sionnel (suspect)</span></div>
+          <div class="brd-lex-item"><strong>Doppler</strong><span>Vascularisation intra/p&eacute;ril&eacute;sionnelle (suspect si intense)</span></div>
+          <div class="brd-lex-item"><strong>Calcifications</strong><span>Macro (b&eacute;nignes) vs. micro intral&eacute;sionnelles (suspectes)</span></div>
+        </div>
+      </div>
+    </div><!-- /panel-echo -->
+
+
+    <!-- ===================== IRM ===================== -->
+    <div class="brd-panel" id="panel-irm">
+      <div class="brd-modal-intro visible">
+        <strong>IRM mammaire :</strong> Examen de 3<sup>e</sup> ligne, &agrave; haute sensibilit&eacute; (90–98 %) et sp&eacute;cificit&eacute; variable (70–90 %). Indiqu&eacute;e dans le bilan de l&eacute;sion probablement maligne, la surveillance &agrave; haut risque, le bilan d&rsquo;extension. N&eacute;cessite injection de gadolinium. Classification bas&eacute;e sur la cin&eacute;tique de rehaussement et la morphologie.
+      </div>
+
+      <!-- BI-RADS IRM 0 -->
+      <div class="brd-cat" id="ir-0">
+        <div class="brd-cat-header" onclick="window.brdToggle('ir-0')">
+          <div class="brd-badge cat-0"><small>BI-RADS</small>0</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Incomplet</p>
+            <p class="brd-cat-short">Qualit&eacute; technique insuffisante</p>
+          </div>
+          <span class="brd-risk-pill risk-incomplet">Incomplet</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <p>IRM non interpr&eacute;table : artefacts de mouvement, d&eacute;faut d&rsquo;injection, bobine inadapt&eacute;e. Examen &agrave; r&eacute;p&eacute;ter ou &agrave; compl&eacute;ter par une autre modalit&eacute;.</p>
+        </div>
+      </div>
+
+      <!-- BI-RADS IRM 1 -->
+      <div class="brd-cat" id="ir-1">
+        <div class="brd-cat-header" onclick="window.brdToggle('ir-1')">
+          <div class="brd-badge cat-1"><small>BI-RADS</small>1</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">N&eacute;gatif</p>
+            <p class="brd-cat-short">Pas de rehaussement suspect</p>
+          </div>
+          <span class="brd-risk-pill risk-benin">Malin : ~0 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <p>Aucun rehaussement anormal. Tissu glandulaire et fond d&rsquo;enhancement physiologique sym&eacute;triques. Pas d&rsquo;anomalie morphologique.</p>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Surveillance selon indication initiale de l&rsquo;IRM.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS IRM 2 -->
+      <div class="brd-cat" id="ir-2">
+        <div class="brd-cat-header" onclick="window.brdToggle('ir-2')">
+          <div class="brd-badge cat-2"><small>BI-RADS</small>2</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">B&eacute;nin</p>
+            <p class="brd-cat-short">Rehaussement b&eacute;nin certain</p>
+          </div>
+          <span class="brd-risk-pill risk-benin">Malin : ~0 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>Exemples</h4>
+          <ul>
+            <li>Kyste : hypersignal T2, absence de rehaussement</li>
+            <li>Fibroad&eacute;nome typique : rehaussement homog&egrave;ne progressif, lobul&eacute;, cloisons internes fines</li>
+            <li>Ad&eacute;nopathie intramammaire avec hile graisseux conserv&eacute;</li>
+            <li>Enhancement du fond (BPE) sym&eacute;trique physiologique</li>
+            <li>Cicatrice connue avec rehaussement lin&eacute;aire stable</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- BI-RADS IRM 3 -->
+      <div class="brd-cat" id="ir-3">
+        <div class="brd-cat-header" onclick="window.brdToggle('ir-3')">
+          <div class="brd-badge cat-3"><small>BI-RADS</small>3</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Probablement b&eacute;nin</p>
+            <p class="brd-cat-short">Contr&ocirc;le IRM &agrave; 6 mois</p>
+          </div>
+          <span class="brd-risk-pill risk-faible">Malin : &lt; 2 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>Crit&egrave;res IRM</h4>
+          <ul>
+            <li>Prise de contraste focale ou nodulaire, &agrave; cin&eacute;tique progressive, morphologie ovale r&eacute;guli&egrave;re</li>
+            <li>Rehaussement r&eacute;ticulaire ou ductal, peu &eacute;tendu, sans crit&egrave;res malins associ&eacute;s</li>
+          </ul>
+          <h4>Cin&eacute;tique de rehaussement</h4>
+          <ul>
+            <li><strong>Phase initiale :</strong> Lente (&lt; 50 %/min) — mod&eacute;r&eacute;e — rapide (&gt; 100 %/min, suspect)</li>
+            <li><strong>Phase tardive :</strong> Progressive (b&eacute;nin) — plateau — d&eacute;croissant/washout (suspect)</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Contr&ocirc;le IRM &agrave; 6 mois. Cat&eacute;gorie peu utilis&eacute;e en IRM (difficile &agrave; maintenir &agrave; 3). Pr&eacute;f&eacute;rer biopsie IRM-guid&eacute;e si doute.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS IRM 4 -->
+      <div class="brd-cat" id="ir-4">
+        <div class="brd-cat-header" onclick="window.brdToggle('ir-4')">
+          <div class="brd-badge cat-4"><small>BI-RADS</small>4</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Suspect</p>
+            <p class="brd-cat-short">V&eacute;rification histologique</p>
+          </div>
+          <span class="brd-risk-pill risk-mod">Malin : 2–95 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>Crit&egrave;res de suspicion IRM</h4>
+          <ul>
+            <li>Prise de contraste nodulaire &agrave; contours irr&eacute;guliers ou spicul&eacute;s</li>
+            <li>Rehaussement annulaire (rim enhancement)</li>
+            <li>Prise de contraste non-masse (NME) : distribution ductal ou segment&eacute;e, pattern grenu ou h&eacute;t&eacute;rog&egrave;ne</li>
+            <li>Cin&eacute;tique : phase initiale rapide + phase tardive washout</li>
+            <li>Restriction de diffusion (ADC abaiss&eacute;)</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Biopsie IRM-guid&eacute;e si anomalie non visible en &eacute;chographie de second look. Second look &eacute;chographique syst&eacute;matique avant de proposer une biopsie sous IRM.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS IRM 5 -->
+      <div class="brd-cat" id="ir-5">
+        <div class="brd-cat-header" onclick="window.brdToggle('ir-5')">
+          <div class="brd-badge cat-5"><small>BI-RADS</small>5</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Hautement suspect</p>
+            <p class="brd-cat-short">Malignit&eacute; quasi certaine</p>
+          </div>
+          <span class="brd-risk-pill risk-eleve">Malin : &gt; 95 %</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <h4>Crit&egrave;res IRM</h4>
+          <ul>
+            <li>Masse spicul&eacute;e, rehaussement annulaire, cin&eacute;tique wash-out</li>
+            <li>Prise de contraste non-masse segment&eacute;e ou canalaire &eacute;tendue avec pattern grenu</li>
+            <li>Restriction de diffusion franche (ADC &lt; 1,0 &#215; 10&#8315;&#179; mm&#178;/s)</li>
+            <li>Ad&eacute;nopathies axillaires suspectes associ&eacute;es</li>
+          </ul>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Biopsie obligatoire. Second look &eacute;chographique pr&eacute;alable. RCP. Bilan d&rsquo;extension. Discussion neoadjuvant.</div>
+        </div>
+      </div>
+
+      <!-- BI-RADS IRM 6 -->
+      <div class="brd-cat" id="ir-6">
+        <div class="brd-cat-header" onclick="window.brdToggle('ir-6')">
+          <div class="brd-badge cat-6"><small>BI-RADS</small>6</div>
+          <div class="brd-cat-label">
+            <p class="brd-cat-title">Malignit&eacute; prouv&eacute;e</p>
+            <p class="brd-cat-short">Bilan pr&eacute;th&eacute;rapeutique ou suivi</p>
+          </div>
+          <span class="brd-risk-pill risk-confirme">Biopsi&eacute; +</span>
+          <span class="brd-chevron">&#9658;</span>
+        </div>
+        <div class="brd-detail">
+          <p>IRM r&eacute;alis&eacute;e apr&egrave;s confirmation histologique pour le bilan d&rsquo;extension local, la recherche de multifocalit&eacute;/multicitricit&eacute;, l&rsquo;&eacute;valuation de la r&eacute;ponse &agrave; la chimioth&eacute;rapie n&eacute;oadjuvante.</p>
+          <div class="brd-cad"><strong>Conduite &agrave; tenir</strong>Prise en charge dict&eacute;e par la RCP. L&rsquo;IRM guide la chirurgie conservatrice (marges) et la r&eacute;ponse au traitement syst&eacute;mique.</div>
+        </div>
+      </div>
+
+      <!-- Lexique IRM -->
+      <div class="brd-lex-section">
+        <h3>Terminologie IRM BI-RADS</h3>
+        <div class="brd-lex-grid">
+          <div class="brd-lex-item"><strong>Masse</strong><span>L&eacute;sion en 3D occupant un espace, avec contours &eacute;valuables</span></div>
+          <div class="brd-lex-item"><strong>NME (Non-Mass Enhancement)</strong><span>Rehaussement sans effet de masse ; distribution et pattern d&eacute;crits s&eacute;par&eacute;ment</span></div>
+          <div class="brd-lex-item"><strong>Rehaussement du fond (BPE)</strong><span>Background Parenchymal Enhancement : minime / l&eacute;ger / mod&eacute;r&eacute; / marqu&eacute;</span></div>
+          <div class="brd-lex-item"><strong>Phase initiale</strong><span>Premi&egrave;re minute post-injection ; lente / mod&eacute;r&eacute;e / rapide</span></div>
+          <div class="brd-lex-item"><strong>Phase tardive</strong><span>Progressive (b&eacute;nin) / Plateau / Washout (suspect)</span></div>
+          <div class="brd-lex-item"><strong>ADC</strong><span>Coefficient de diffusion apparent ; abaiss&eacute; si malignit&eacute; (&lt; 1,0 &#215; 10&#8315;&#179; mm&#178;/s)</span></div>
+          <div class="brd-lex-item"><strong>Rim enhancement</strong><span>Rehaussement p&eacute;riph&eacute;rique annulaire — tr&egrave;s suspect</span></div>
+          <div class="brd-lex-item"><strong>Second look</strong><span>&Eacute;chographie cibl&eacute;e post-IRM pour localisation d&rsquo;une l&eacute;sion IRM seule</span></div>
+        </div>
+      </div>
+    </div><!-- /panel-irm -->
+
+  </div><!-- /brd-content -->
+
+  <!-- FOOTER -->
+  <div class="brd-footer">
+    <strong>Avertissement :</strong> Cet outil est destin&eacute; aux professionnels de sant&eacute;. Il constitue une aide &agrave; la m&eacute;morisation de la classification ACR BI-RADS (Atlas 5<sup>e</sup> &eacute;dition, 2013) et ne se substitue ni &agrave; l&rsquo;avis du radiologue, ni &agrave; la d&eacute;cision clinique individualis&eacute;e. Toute d&eacute;cision th&eacute;rapeutique rel&egrave;ve d&rsquo;une concertation multidisciplinaire. &mdash; <em>Dr Kara-Zaitri M.A., Gyn&eacute;cologie-Obst&eacute;trique, Tlemcen.</em>
+  </div>
+
+</div><!-- /#brd-root -->
+
+<script>
+(function() {
+  'use strict';
+
+  window.brdTab = function(btn, modalId) {
+    // onglets
+    var tabs = document.querySelectorAll('#brd-root .brd-tab');
+    tabs.forEach(function(t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    // panels
+    var panels = document.querySelectorAll('#brd-root .brd-panel');
+    panels.forEach(function(p) { p.classList.remove('active'); });
+    var target = document.getElementById('panel-' + modalId);
+    if (target) target.classList.add('active');
+    // ferme tous les accordéons ouverts lors du changement d'onglet
+    document.querySelectorAll('#brd-root .brd-cat.open').forEach(function(c) {
+      c.classList.remove('open');
+    });
+  };
+
+  window.brdToggle = function(id) {
+    var cat = document.getElementById(id);
+    if (!cat) return;
+    var isOpen = cat.classList.contains('open');
+    // ferme tous les autres dans le même panel
+    var panel = cat.closest('.brd-panel');
+    if (panel) {
+      panel.querySelectorAll('.brd-cat.open').forEach(function(c) {
+        if (c !== cat) c.classList.remove('open');
+      });
+    }
+    cat.classList.toggle('open', !isOpen);
+  };
+
+})();
+</script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+
+</body>
+</html>
