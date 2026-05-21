@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Post-Coïtal (TPC) — Outil clinique interactif</title>
+<style>
+/* ============================================================
+   TPC OUTIL — BLINDAGE ELEMENTOR
+   Root unique : #tpc-root
+   Toutes règles préfixées, !important systématique
+   Unicode CSS dans ::before — pas d'entités HTML
+   ============================================================ */
+
+#tpc-root {
+  all: initial !important;
+  display: block !important;
+  font-family: 'Georgia', 'Times New Roman', serif !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: #1a1a2e !important;
+  background: #f7f8fa !important;
+  max-width: 860px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+#tpc-root *, #tpc-root *::before, #tpc-root *::after {
+  box-sizing: border-box !important;
+  font-family: inherit !important;
+}
+
+/* --- EN-TÊTE --- */
+#tpc-root .tpc-header {
+  background: #1a3a5c !important;
+  color: #fff !important;
+  padding: 24px 28px 20px !important;
+  border-radius: 6px 6px 0 0 !important;
+}
+
+#tpc-root .tpc-header-top {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+}
+
+#tpc-root .tpc-header-icon {
+  width: 48px !important;
+  height: 48px !important;
+  background: rgba(255,255,255,0.12) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 22px !important;
+  flex-shrink: 0 !important;
+  color: #a8d4f5 !important;
+}
+
+#tpc-root .tpc-header-text h1 {
+  margin: 0 0 4px 0 !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  letter-spacing: 0.01em !important;
+  font-family: Georgia, serif !important;
+}
+
+#tpc-root .tpc-header-text .tpc-subtitle {
+  font-size: 13px !important;
+  color: #a8c8e8 !important;
+  font-style: italic !important;
+  margin: 0 !important;
+}
+
+#tpc-root .tpc-header-meta {
+  margin-top: 14px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+#tpc-root .tpc-badge {
+  background: rgba(255,255,255,0.15) !important;
+  color: #d0e8f8 !important;
+  font-size: 11px !important;
+  padding: 3px 10px !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  font-style: normal !important;
+  font-family: 'Arial', sans-serif !important;
+}
+
+/* --- NAVIGATION ONGLETS --- */
+#tpc-root .tpc-nav {
+  display: flex !important;
+  background: #e8edf3 !important;
+  border-bottom: 2px solid #c5d3e0 !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  gap: 0 !important;
+  flex-wrap: nowrap !important;
+}
+
+#tpc-root .tpc-nav-btn {
+  all: unset !important;
+  display: inline-block !important;
+  padding: 11px 16px !important;
+  font-size: 12.5px !important;
+  font-family: 'Arial', sans-serif !important;
+  color: #4a6070 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  border-bottom: 3px solid transparent !important;
+  margin-bottom: -2px !important;
+  transition: all 0.2s !important;
+  font-weight: 500 !important;
+  background: none !important;
+  letter-spacing: 0.01em !important;
+}
+
+#tpc-root .tpc-nav-btn:hover {
+  color: #1a3a5c !important;
+  background: rgba(26,58,92,0.06) !important;
+}
+
+#tpc-root .tpc-nav-btn.active {
+  color: #1a3a5c !important;
+  border-bottom: 3px solid #1a3a5c !important;
+  font-weight: 700 !important;
+  background: #fff !important;
+}
+
+/* --- CORPS --- */
+#tpc-root .tpc-body {
+  background: #fff !important;
+  border: 1px solid #dde3ea !important;
+  border-top: none !important;
+  border-radius: 0 0 6px 6px !important;
+}
+
+#tpc-root .tpc-panel {
+  display: none !important;
+  padding: 24px 28px !important;
+  animation: tpcFadeIn 0.25s ease !important;
+}
+
+#tpc-root .tpc-panel.active {
+  display: block !important;
+}
+
+@keyframes tpcFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- TYPOGRAPHIE GÉNÉRALE --- */
+#tpc-root h2 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  margin: 0 0 16px 0 !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #e0e8f0 !important;
+  font-family: Georgia, serif !important;
+  letter-spacing: 0.01em !important;
+}
+
+#tpc-root h3 {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #2a4a6c !important;
+  margin: 18px 0 8px 0 !important;
+  font-family: 'Arial', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+#tpc-root p {
+  margin: 0 0 10px 0 !important;
+  font-size: 14px !important;
+  color: #2c3e50 !important;
+  line-height: 1.7 !important;
+}
+
+#tpc-root ul {
+  margin: 0 0 12px 0 !important;
+  padding: 0 0 0 18px !important;
+  list-style: none !important;
+}
+
+#tpc-root ul li {
+  font-size: 14px !important;
+  color: #2c3e50 !important;
+  line-height: 1.7 !important;
+  padding-left: 4px !important;
+  margin-bottom: 4px !important;
+  position: relative !important;
+}
+
+#tpc-root ul li::before {
+  content: '\2013' !important;
+  color: #1a3a5c !important;
+  font-weight: 700 !important;
+  margin-right: 6px !important;
+  position: absolute !important;
+  left: -14px !important;
+}
+
+/* --- SCORE D'INSLER --- */
+#tpc-root .insler-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+  margin-bottom: 20px !important;
+}
+
+@media (max-width: 540px) {
+  #tpc-root .insler-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+#tpc-root .insler-item label {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #4a6070 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 6px !important;
+  font-family: 'Arial', sans-serif !important;
+}
+
+#tpc-root .insler-item select {
+  all: unset !important;
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 12px !important;
+  border: 1.5px solid #c5d3e0 !important;
+  border-radius: 4px !important;
+  font-size: 13.5px !important;
+  color: #1a1a2e !important;
+  background: #f7f9fb !important;
+  cursor: pointer !important;
+  font-family: 'Arial', sans-serif !important;
+  -webkit-appearance: auto !important;
+  appearance: auto !important;
+  transition: border-color 0.2s !important;
+}
+
+#tpc-root .insler-item select:focus {
+  border-color: #1a3a5c !important;
+  outline: none !important;
+}
+
+#tpc-root .insler-result-box {
+  background: #f0f5fa !important;
+  border: 1.5px solid #c5d3e0 !important;
+  border-radius: 6px !important;
+  padding: 16px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+#tpc-root .insler-score-circle {
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 50% !important;
+  background: #1a3a5c !important;
+  color: #fff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: Georgia, serif !important;
+  flex-shrink: 0 !important;
+  transition: background 0.3s !important;
+}
+
+#tpc-root .insler-score-num {
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: #fff !important;
+}
+
+#tpc-root .insler-score-label-sm {
+  font-size: 10px !important;
+  color: rgba(255,255,255,0.7) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+#tpc-root .insler-interpretation {
+  flex: 1 !important;
+}
+
+#tpc-root .insler-qual {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  font-family: Georgia, serif !important;
+  margin-bottom: 4px !important;
+}
+
+#tpc-root .insler-range {
+  font-size: 12.5px !important;
+  color: #6a7f90 !important;
+  font-family: 'Arial', sans-serif !important;
+}
+
+/* Barres score */
+#tpc-root .insler-bar-track {
+  height: 8px !important;
+  background: #dde3ea !important;
+  border-radius: 4px !important;
+  margin-top: 8px !important;
+  overflow: hidden !important;
+}
+
+#tpc-root .insler-bar-fill {
+  height: 100% !important;
+  border-radius: 4px !important;
+  background: #1a3a5c !important;
+  transition: width 0.4s ease, background 0.3s !important;
+}
+
+/* --- TABLEAU SCORE D'INSLER --- */
+#tpc-root .insler-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 13px !important;
+  margin-bottom: 16px !important;
+  font-family: 'Arial', sans-serif !important;
+}
+
+#tpc-root .insler-table th {
+  background: #1a3a5c !important;
+  color: #fff !important;
+  padding: 8px 10px !important;
+  text-align: left !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.03em !important;
+}
+
+#tpc-root .insler-table td {
+  padding: 7px 10px !important;
+  border-bottom: 1px solid #e8edf3 !important;
+  color: #2c3e50 !important;
+  vertical-align: top !important;
+}
+
+#tpc-root .insler-table tr:last-child td {
+  border-bottom: none !important;
+}
+
+#tpc-root .insler-table tr:nth-child(even) td {
+  background: #f7f9fb !important;
+}
+
+/* --- INTERPRÉTATION TPC --- */
+#tpc-root .tpc-interp-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr !important;
+  gap: 12px !important;
+  margin-bottom: 20px !important;
+}
+
+@media (max-width: 600px) {
+  #tpc-root .tpc-interp-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+#tpc-root .tpc-interp-card {
+  border-radius: 5px !important;
+  padding: 14px !important;
+  border-left: 4px solid transparent !important;
+}
+
+#tpc-root .tpc-interp-card.negatif {
+  background: #fef2f2 !important;
+  border-left-color: #c0392b !important;
+}
+
+#tpc-root .tpc-interp-card.deficient {
+  background: #fffbea !important;
+  border-left-color: #d68910 !important;
+}
+
+#tpc-root .tpc-interp-card.positif {
+  background: #f0faf4 !important;
+  border-left-color: #1e7e4e !important;
+}
+
+#tpc-root .tpc-interp-card h4 {
+  margin: 0 0 8px 0 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: 'Arial', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+}
+
+#tpc-root .tpc-interp-card.negatif h4 { color: #c0392b !important; }
+#tpc-root .tpc-interp-card.deficient h4 { color: #d68910 !important; }
+#tpc-root .tpc-interp-card.positif h4 { color: #1e7e4e !important; }
+
+#tpc-root .tpc-interp-card ul {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#tpc-root .tpc-interp-card ul li {
+  font-size: 12.5px !important;
+  margin-bottom: 4px !important;
+}
+
+#tpc-root .tpc-interp-card ul li::before {
+  content: '\25B8' !important;
+  color: #888 !important;
+}
+
+/* --- ALGORITHME DÉCISIONNEL --- */
+#tpc-root .algo-form {
+  background: #f7f9fb !important;
+  border: 1.5px solid #dde3ea !important;
+  border-radius: 6px !important;
+  padding: 18px 20px !important;
+  margin-bottom: 20px !important;
+}
+
+#tpc-root .algo-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 18px !important;
+  margin-bottom: 14px !important;
+}
+
+#tpc-root .algo-field {
+  flex: 1 !important;
+  min-width: 200px !important;
+}
+
+#tpc-root .algo-field label {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #4a6070 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 6px !important;
+  font-family: 'Arial', sans-serif !important;
+}
+
+#tpc-root .algo-field select {
+  all: unset !important;
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 12px !important;
+  border: 1.5px solid #c5d3e0 !important;
+  border-radius: 4px !important;
+  font-size: 13.5px !important;
+  color: #1a1a2e !important;
+  background: #fff !important;
+  cursor: pointer !important;
+  font-family: 'Arial', sans-serif !important;
+  -webkit-appearance: auto !important;
+  appearance: auto !important;
+}
+
+#tpc-root .algo-btn {
+  all: unset !important;
+  display: inline-block !important;
+  background: #1a3a5c !important;
+  color: #fff !important;
+  padding: 10px 24px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: 'Arial', sans-serif !important;
+  cursor: pointer !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  transition: background 0.2s !important;
+  margin-top: 4px !important;
+}
+
+#tpc-root .algo-btn:hover {
+  background: #0e2640 !important;
+}
+
+#tpc-root .algo-result {
+  border-radius: 6px !important;
+  padding: 16px 20px !important;
+  margin-top: 16px !important;
+  display: none !important;
+  border-left: 5px solid #1a3a5c !important;
+  background: #eef3f8 !important;
+  animation: tpcFadeIn 0.25s ease !important;
+}
+
+#tpc-root .algo-result.visible {
+  display: block !important;
+}
+
+#tpc-root .algo-result-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  margin: 0 0 10px 0 !important;
+  font-family: Georgia, serif !important;
+}
+
+#tpc-root .algo-result ul {
+  margin: 0 !important;
+  padding: 0 0 0 16px !important;
+}
+
+#tpc-root .algo-result ul li {
+  font-size: 13.5px !important;
+  margin-bottom: 6px !important;
+  color: #2c3e50 !important;
+}
+
+#tpc-root .algo-result ul li::before {
+  content: '\2192' !important;
+  color: #1a3a5c !important;
+  font-weight: 700 !important;
+  left: -14px !important;
+}
+
+/* --- SHAKING --- */
+#tpc-root .shaking-banner {
+  background: #f0f5fa !important;
+  border: 1.5px solid #c5d3e0 !important;
+  border-left: 5px solid #2874a6 !important;
+  border-radius: 5px !important;
+  padding: 14px 18px !important;
+  margin-bottom: 18px !important;
+}
+
+#tpc-root .shaking-banner p {
+  margin: 0 !important;
+  font-size: 13.5px !important;
+}
+
+#tpc-root .shaking-schema {
+  display: flex !important;
+  gap: 14px !important;
+  margin: 18px 0 !important;
+  flex-wrap: wrap !important;
+}
+
+#tpc-root .shaking-box {
+  flex: 1 !important;
+  min-width: 200px !important;
+  background: #f7f9fb !important;
+  border: 1px solid #dde3ea !important;
+  border-radius: 5px !important;
+  padding: 14px !important;
+}
+
+#tpc-root .shaking-box h4 {
+  margin: 0 0 8px 0 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: #4a6070 !important;
+  font-family: 'Arial', sans-serif !important;
+}
+
+#tpc-root .shaking-spz-container {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 4px !important;
+  margin: 10px 0 !important;
+  overflow: hidden !important;
+  align-items: center !important;
+  min-height: 32px !important;
+}
+
+#tpc-root .spz {
+  display: inline-block !important;
+  transition: transform 0.3s !important;
+  line-height: 0 !important;
+}
+
+#tpc-root .spz.shaking {
+  animation: spzShake 0.45s ease-in-out infinite alternate !important;
+}
+
+@keyframes spzShake {
+  0%   { transform: rotate(-12deg) translateY(-2px); }
+  50%  { transform: rotate(0deg)   translateY(0px);  }
+  100% { transform: rotate(12deg)  translateY(-2px); }
+}
+
+#tpc-root .spz.normal {
+  animation: spzMove 1.8s linear infinite !important;
+}
+
+@keyframes spzMove {
+  0%   { transform: translateX(-10px); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(28px);  opacity: 0; }
+}
+
+/* --- INFO BOX --- */
+#tpc-root .info-box {
+  background: #edf3f8 !important;
+  border-left: 4px solid #2874a6 !important;
+  border-radius: 0 4px 4px 0 !important;
+  padding: 12px 16px !important;
+  margin: 12px 0 !important;
+}
+
+#tpc-root .info-box p {
+  margin: 0 !important;
+  font-size: 13.5px !important;
+  color: #1a3a5c !important;
+}
+
+/* --- MENTION LÉGALE --- */
+#tpc-root .tpc-legal {
+  background: #f7f8fa !important;
+  border-top: 1px solid #e0e8f0 !important;
+  padding: 10px 20px !important;
+  font-size: 11px !important;
+  color: #8899aa !important;
+  font-family: 'Arial', sans-serif !important;
+  text-align: center !important;
+  line-height: 1.5 !important;
+  border-radius: 0 0 6px 6px !important;
+}
+
+/* --- CONDITIONS / ÉTAPES --- */
+#tpc-root .steps-list {
+  counter-reset: tpc-step !important;
+  margin: 0 0 16px 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+#tpc-root .steps-list li {
+  counter-increment: tpc-step !important;
+  padding: 10px 12px 10px 48px !important;
+  margin-bottom: 8px !important;
+  background: #f7f9fb !important;
+  border-radius: 4px !important;
+  border: 1px solid #e0e8f0 !important;
+  position: relative !important;
+  font-size: 13.5px !important;
+  color: #2c3e50 !important;
+}
+
+#tpc-root .steps-list li::before {
+  content: counter(tpc-step) !important;
+  position: absolute !important;
+  left: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 26px !important;
+  height: 26px !important;
+  background: #1a3a5c !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  font-family: 'Arial', sans-serif !important;
+  line-height: 26px !important;
+  text-align: center !important;
+}
+
+/* --- pH SLIDER --- */
+#tpc-root .ph-container {
+  margin: 14px 0 !important;
+}
+
+#tpc-root .ph-slider-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-bottom: 8px !important;
+}
+
+#tpc-root .ph-slider-wrap input[type=range] {
+  flex: 1 !important;
+  accent-color: #1a3a5c !important;
+  height: 6px !important;
+}
+
+#tpc-root .ph-val {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #1a3a5c !important;
+  font-family: Georgia, serif !important;
+  min-width: 46px !important;
+  text-align: center !important;
+}
+
+#tpc-root .ph-interp {
+  font-size: 13px !important;
+  padding: 8px 14px !important;
+  border-radius: 4px !important;
+  font-family: 'Arial', sans-serif !important;
+  margin-top: 6px !important;
+  font-weight: 600 !important;
+}
+
+#tpc-root .ph-acide {
+  background: #fef2f2 !important;
+  color: #c0392b !important;
+  border-left: 4px solid #c0392b !important;
+}
+
+#tpc-root .ph-limite {
+  background: #fffbea !important;
+  color: #d68910 !important;
+  border-left: 4px solid #d68910 !important;
+}
+
+#tpc-root .ph-optimal {
+  background: #f0faf4 !important;
+  color: #1e7e4e !important;
+  border-left: 4px solid #1e7e4e !important;
+}
+
+/* --- MOBILITÉ SPZ (SECTION RÉSULTATS) --- */
+#tpc-root .mob-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  margin: 14px 0 !important;
+}
+
+@media (max-width: 540px) {
+  #tpc-root .mob-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+#tpc-root .mob-card {
+  background: #f7f9fb !important;
+  border: 1px solid #dde3ea !important;
+  border-radius: 5px !important;
+  padding: 12px !important;
+  text-align: center !important;
+}
+
+#tpc-root .mob-card .mob-icon {
+  font-size: 26px !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+#tpc-root .mob-card .mob-label {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: #6a7f90 !important;
+  font-family: 'Arial', sans-serif !important;
+  font-weight: 700 !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+}
+
+#tpc-root .mob-card .mob-desc {
+  font-size: 12.5px !important;
+  color: #2c3e50 !important;
+  font-family: 'Arial', sans-serif !important;
+}
+
+/* =========================================
+   PRO : Masque l'ascenseur (style App native)
+   ========================================= */
+html { scrollbar-width: none !important; }
+body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+::-webkit-scrollbar { display: none !important; }
+</style>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+</head>
+<body>
+
+<div id="tpc-root">
+
+  <!-- EN-TÊTE -->
+  <div class="tpc-header">
+    <div class="tpc-header-top">
+      <div class="tpc-header-icon">&#128300;</div>
+      <div class="tpc-header-text">
+        <h1>Test Post-Coïtal (TPC) &mdash; Test de H&uuml;hner</h1>
+        <p class="tpc-subtitle">Outil clinique interactif &bull; Exploration de l&rsquo;infertilité du couple</p>
+      </div>
+    </div>
+    <div class="tpc-header-meta">
+      <span class="tpc-badge">Gynécologie-Obstétrique</span>
+      <span class="tpc-badge">Infertilité du couple</span>
+      <span class="tpc-badge">Score d'Insler</span>
+      <span class="tpc-badge">Algorithme décisionnel</span>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="tpc-nav" role="tablist">
+    <button class="tpc-nav-btn active" onclick="tpcTab(this,'definition')" role="tab">Définition</button>
+    <button class="tpc-nav-btn" onclick="tpcTab(this,'conditions')" role="tab">Conditions &amp; Technique</button>
+    <button class="tpc-nav-btn" onclick="tpcTab(this,'insler')" role="tab">Score d'Insler</button>
+    <button class="tpc-nav-btn" onclick="tpcTab(this,'interpretation')" role="tab">Interprétation</button>
+    <button class="tpc-nav-btn" onclick="tpcTab(this,'algorithme')" role="tab">Algorithme décisionnel</button>
+    <button class="tpc-nav-btn" onclick="tpcTab(this,'shaking')" role="tab">Shaking</button>
+  </div>
+
+  <!-- CORPS -->
+  <div class="tpc-body">
+
+    <!-- PANEL 1 : DÉFINITION -->
+    <div id="tpc-definition" class="tpc-panel active">
+      <h2>Définition &amp; R&ocirc;le du test</h2>
+      <p>Le <strong>Test Post-Co&iuml;tal (TPC)</strong> ou <strong>test de H&uuml;hner</strong> (d&eacute;crit en 1913) consiste en l&rsquo;examen au microscope des spermatozo&iuml;des (SPZ) dans la glaire cervicale quelques heures apr&egrave;s un rapport sexuel. C&rsquo;est l&rsquo;examen de <strong>premi&egrave;re intention</strong> dans le bilan d&rsquo;infertilité du couple (&agrave; partir de 6 mois de mariage sans grossesse).</p>
+
+      <h3>Objectifs</h3>
+      <ul>
+        <li>V&eacute;rifier que le rapport sexuel est complet et a eu lieu dans les conditions requises</li>
+        <li>&Eacute;valuer la <strong>quantit&eacute;</strong> et la <strong>qualit&eacute;</strong> de la glaire cervicale (score d&rsquo;Insler)</li>
+        <li>S&rsquo;assurer de l&rsquo;absence d&rsquo;acidit&eacute; de la glaire (pH optimal : 7,0 &ndash; 8,5)</li>
+        <li>&Eacute;valuer la <strong>capacit&eacute; de p&eacute;n&eacute;tration</strong> des SPZ dans la glaire en p&eacute;riode pr&eacute;ovulatoire</li>
+        <li>V&eacute;rifier la <strong>compatibilit&eacute; glaire/spermatozo&iuml;des</strong> (&laquo; shaking &raquo;)</li>
+      </ul>
+
+      <h3>La glaire cervicale</h3>
+      <p>La glaire cervicale est le mucus de l&rsquo;exocol. En phase pr&eacute;ovulatoire (sous l&rsquo;effet des œstrog&egrave;nes), elle devient filante, limpide, et perméable aux SPZ. D&egrave;s l&rsquo;ovulation, la mont&eacute;e de la prog&eacute;st&eacute;rone la rend visqueuse et imperm&eacute;able.</p>
+
+      <div class="info-box">
+        <p><strong>Principe essentiel :</strong> Le TPC évalue l'&laquo; hospitalit&eacute; &raquo; de la glaire cervicale vis-&agrave;-vis des SPZ du conjoint. Il est toujours coupl&eacute; &agrave; l&rsquo;&eacute;chographie pour confirmer la phase p&eacute;r&iuml;ovulatoire. Il ne remplace pas le spermogramme.</p>
+      </div>
+
+      <h3>Indication</h3>
+      <ul>
+        <li>Bilan d&rsquo;infertilité de premi&egrave;re intention</li>
+        <li>À r&eacute;p&eacute;ter sur plusieurs cycles en cas de stérilité persistante</li>
+        <li>On ne peut parler d&rsquo;<strong>infertilité inexpliquée</strong> avant la r&eacute;alisation d&rsquo;un TPC</li>
+      </ul>
+    </div>
+
+    <!-- PANEL 2 : CONDITIONS & TECHNIQUE -->
+    <div id="tpc-conditions" class="tpc-panel">
+      <h2>Conditions du test &amp; Technique de r&eacute;alisation</h2>
+
+      <h3>Conditions préalables</h3>
+      <ul>
+        <li><strong>Pour la femme :</strong> p&eacute;riode pr&eacute;ovulatoire (J13), 1 &agrave; 2 jours avant l&rsquo;ovulation pr&eacute;vue</li>
+        <li><strong>Pour l&rsquo;homme :</strong> abstinence sexuelle de 2 &agrave; 3 jours avant le rapport</li>
+        <li>Le rapport : 4 &agrave; 8 heures avant le test (pratiquement entre 3h et 6h du matin), sans lubrifiant</li>
+        <li>Repos all&ocirc;ng&eacute; de la femme &ge; 30 minutes apr&egrave;s le rapport</li>
+        <li>Aucune toilette vaginale avant le recueil (toilette externe eau + savon uniquement)</li>
+      </ul>
+
+      <h3>Étapes de réalisation</h3>
+      <ol class="steps-list">
+        <li><strong>Étape 1 &mdash; &Eacute;chographie endovaginale</strong> : confirmation de la phase ovulatoire (bon follicule ou corps jaune avec &eacute;panchement pelvien). Si l&rsquo;une des 2 conditions n&rsquo;est pas satisfaite : TPC report&eacute;.</li>
+        <li><strong>Étape 2 &mdash; Mesure du pH</strong> : &eacute;talement sur lame, papier pH calibr&eacute; (6,4 &ndash; 8,0) ou bandelette urinaire. Si pH anormal : TPC report&eacute; ou toilette bicarbonat&eacute;e.</li>
+        <li><strong>Étape 3 &mdash; Recueil de glaire</strong> : mise en place du sp&eacute;culum, nettoyage de l&rsquo;exocol, aspiration de la glaire endocervicale (Aspiglaire, pipette de Braun, cathéter st&eacute;rile, seringue &agrave; insuline/tuberculine sans aiguille).</li>
+        <li><strong>Étape 4 &mdash; Examen macroscopique</strong> : cotation de l&rsquo;ouverture du col, abondance, limpidité, filance &rarr; Score d&rsquo;Insler.</li>
+        <li><strong>Étape 5 &mdash; Examen microscopique</strong> : recherche de germes, cellules, polynucl&eacute;aires ; pr&eacute;sence et mobilit&eacute; des SPZ ; ph&eacute;nom&egrave;ne de shaking.</li>
+      </ol>
+
+      <h3>Évaluation du pH &mdash; Simulateur interactif</h3>
+      <div class="ph-container">
+        <div class="ph-slider-wrap">
+          <span style="font-size:12px;color:#6a7f90;font-family:Arial,sans-serif;font-weight:700;">pH 5,0</span>
+          <input type="range" id="tpc-ph-slider" min="50" max="90" value="72" step="1" oninput="tpcUpdatePh(this.value)">
+          <span style="font-size:12px;color:#6a7f90;font-family:Arial,sans-serif;font-weight:700;">pH 9,0</span>
+          <div class="ph-val" id="tpc-ph-val">7,2</div>
+        </div>
+        <div class="ph-interp ph-optimal" id="tpc-ph-interp">
+          &#9989; pH optimal (7,0 &ndash; 8,5) : conditions favorables &agrave; la migration et survie des SPZ.
+        </div>
+      </div>
+
+      <div class="info-box">
+        <p><strong>Transport de la glaire :</strong> Si r&eacute;alis&eacute; en laboratoire, obturer l&rsquo;extr&eacute;mit&eacute; du dispositif (Aspiglaire) pour &eacute;viter la d&eacute;shydratation. R&eacute;duire la quantit&eacute; d&rsquo;air dans le dispositif. La lecture microscopique prend quelques secondes (max. 1 min) &mdash; r&eacute;sultat instantan&eacute;.</p>
+      </div>
+    </div>
+
+    <!-- PANEL 3 : SCORE D'INSLER -->
+    <div id="tpc-insler" class="tpc-panel">
+      <h2>Score d&rsquo;Insler &mdash; Calculateur interactif</h2>
+      <p>Le score d&rsquo;Insler &eacute;value la qualit&eacute; macroscopique de la glaire cervicale sur 4 crit&egrave;res cot&eacute;s de 0 &agrave; 3. Sélectionner les valeurs observées pour calculer le score automatiquement.</p>
+
+      <div class="insler-grid">
+        <div class="insler-item">
+          <label>Ouverture du col</label>
+          <select id="ins-col" onchange="tpcInsler()">
+            <option value="0">Non cot&eacute; (0)</option>
+            <option value="1">Entrouverte (1)</option>
+            <option value="2" selected>Ouverte (2)</option>
+            <option value="3">B&eacute;ante (3)</option>
+          </select>
+        </div>
+        <div class="insler-item">
+          <label>Abondance de la glaire</label>
+          <select id="ins-abondance" onchange="tpcInsler()">
+            <option value="0">Non cot&eacute; (0)</option>
+            <option value="1">Faible (1)</option>
+            <option value="2" selected>Moyenne (2)</option>
+            <option value="3">Importante (3)</option>
+          </select>
+        </div>
+        <div class="insler-item">
+          <label>Limpidité</label>
+          <select id="ins-limpidite" onchange="tpcInsler()">
+            <option value="0">Non cot&eacute; (0)</option>
+            <option value="1">Trouble (1)</option>
+            <option value="2" selected>Opalescente (2)</option>
+            <option value="3">Eau de roche (3)</option>
+          </select>
+        </div>
+        <div class="insler-item">
+          <label>Filance</label>
+          <select id="ins-filance" onchange="tpcInsler()">
+            <option value="0">Non cot&eacute; (0)</option>
+            <option value="1">1 &ndash; 2 cm (1)</option>
+            <option value="2" selected>2 &ndash; 4 cm (2)</option>
+            <option value="3">Col &rarr; Vulve (3)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="insler-result-box">
+        <div class="insler-score-circle" id="ins-circle">
+          <span class="insler-score-num" id="ins-score-num">8</span>
+          <span class="insler-score-label-sm">/ 12</span>
+        </div>
+        <div class="insler-interpretation">
+          <div class="insler-qual" id="ins-qual">Bon</div>
+          <div class="insler-range" id="ins-range">Score 8 &ndash; 10</div>
+          <div class="insler-bar-track">
+            <div class="insler-bar-fill" id="ins-bar" style="width:66.7%;background:#1e7e4e;"></div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Grille de référence</h3>
+      <table class="insler-table">
+        <thead>
+          <tr>
+            <th>Score total</th>
+            <th>Interprétation</th>
+            <th>Signification clinique</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>0 &ndash; 3</strong></td>
+            <td style="color:#c0392b;font-weight:700;">Nul</td>
+            <td>Glaire absente ou inexploitable &mdash; conditions défavorables</td>
+          </tr>
+          <tr>
+            <td><strong>4 &ndash; 7</strong></td>
+            <td style="color:#d68910;font-weight:700;">Insuffisant</td>
+            <td>Glaire de qualit&eacute; m&eacute;diocre &mdash; prise en charge nécessaire</td>
+          </tr>
+          <tr>
+            <td><strong>8 &ndash; 10</strong></td>
+            <td style="color:#1e7e4e;font-weight:700;">Bon</td>
+            <td>Glaire satisfaisante &mdash; conditions de pénétration ad&eacute;quates</td>
+          </tr>
+          <tr>
+            <td><strong>11 &ndash; 12</strong></td>
+            <td style="color:#155724;font-weight:700;">Excellent</td>
+            <td>Glaire de qualit&eacute; optimale &mdash; conditions id&eacute;ales</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box">
+        <p><strong>Rappel :</strong> Un score d&rsquo;Insler insuffisant n&rsquo;invalide pas le TPC mais oriente vers une cause cervicale. Un traitement œstrog&eacute;nique peut am&eacute;liorer la qualité de la glaire lors du cycle suivant.</p>
+      </div>
+    </div>
+
+    <!-- PANEL 4 : INTERPRÉTATION -->
+    <div id="tpc-interpretation" class="tpc-panel">
+      <h2>Interprétation du TPC</h2>
+      <p>Le r&eacute;sultat doit comporter : jour du cycle, d&eacute;lai depuis le co&iuml;t, score d&rsquo;Insler, densit&eacute; de SPZ/champ, pourcentage de SPZ mobiles progressifs/non progressifs/immobiles, pH.</p>
+
+      <div class="tpc-interp-grid">
+        <div class="tpc-interp-card negatif">
+          <h4>TPC N&eacute;gatif</h4>
+          <ul>
+            <li>Absence totale de SPZ dans la glaire</li>
+            <li>V&eacute;rifier la r&eacute;alit&eacute; du rapport sexuel</li>
+            <li>Contr&ocirc;ler le spermogramme</li>
+            <li>Si SPZ normal : glaire ou interaction en cause</li>
+            <li>Glaire acide &rarr; toilette bicarbonat&eacute;e</li>
+            <li>Sans acidit&eacute; &rarr; test crois&eacute; in vitro</li>
+          </ul>
+        </div>
+        <div class="tpc-interp-card deficient">
+          <h4>TPC D&eacute;ficient</h4>
+          <ul>
+            <li>SPZ pr&eacute;sents en quantit&eacute; normale ou diminuée</li>
+            <li>SPZ immobiles ou peu mobiles</li>
+            <li>Rechercher une cause (spermogramme, glaire, anticorps)</li>
+            <li>Shaking possible &rarr; voir onglet d&eacute;di&eacute;</li>
+          </ul>
+        </div>
+        <div class="tpc-interp-card positif">
+          <h4>TPC Positif</h4>
+          <ul>
+            <li>SPZ vivants, mobiles progressifs en ligne droite</li>
+            <li><strong>Faible :</strong> &lt; 5 SPZ mobiles/champ</li>
+            <li><strong>Moyen :</strong> 5 &ndash; 10 SPZ mobiles/champ</li>
+            <li><strong>Riche :</strong> &gt; 10 SPZ mobiles/champ</li>
+            <li>Glaire innocentée, non hostile aux SPZ</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Types de mobilité des spermatozoïdes</h3>
+      <div class="mob-grid">
+        <div class="mob-card">
+          <span class="mob-icon">&#128308;</span>
+          <span class="mob-label">Type A</span>
+          <span class="mob-desc">Mobilit&eacute; progressive rapide, rectiligne</span>
+        </div>
+        <div class="mob-card">
+          <span class="mob-icon">&#128992;</span>
+          <span class="mob-label">Type B</span>
+          <span class="mob-desc">Mobilit&eacute; progressive lente, rectiligne</span>
+        </div>
+        <div class="mob-card">
+          <span class="mob-icon">&#128993;</span>
+          <span class="mob-label">Type C</span>
+          <span class="mob-desc">Mobilit&eacute; non progressive (sur place, oscillation)</span>
+        </div>
+      </div>
+
+      <h3>Conclusions possibles selon le résultat</h3>
+      <table class="insler-table">
+        <thead>
+          <tr>
+            <th>TPC</th>
+            <th>Glaire</th>
+            <th>Spermogramme</th>
+            <th>Conclusion / Attitude</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Normal</td>
+            <td>Satisfaisante</td>
+            <td>&mdash;</td>
+            <td>Stérilité non cervicale &bull; Ovulation non pr&eacute;jug&eacute;e</td>
+          </tr>
+          <tr>
+            <td>Anormal</td>
+            <td>Satisfaisante</td>
+            <td>Anormal</td>
+            <td>Demander spermogramme complet</td>
+          </tr>
+          <tr>
+            <td>Anormal</td>
+            <td>Mauvaise</td>
+            <td>&mdash;</td>
+            <td>R&eacute;p&eacute;ter TPC sous œstrog&egrave;nes</td>
+          </tr>
+          <tr>
+            <td>Anormal</td>
+            <td>Normale</td>
+            <td>Normal</td>
+            <td>Tests de p&eacute;n&eacute;tration in vitro (laboratoire sp&eacute;cialis&eacute;)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box">
+        <p><strong>Règle pratique :</strong> Si une anomalie est d&eacute;tect&eacute;e (acidit&eacute;, shaking, glaire insuffisante) &rarr; traiter ET refaire le TPC le cycle suivant. Un TPC positif riche permet d&rsquo;affirmer que la glaire n&rsquo;est pas hostile.</p>
+      </div>
+    </div>
+
+    <!-- PANEL 5 : ALGORITHME -->
+    <div id="tpc-algorithme" class="tpc-panel">
+      <h2>Algorithme d&eacute;cisionnel interactif</h2>
+      <p>Renseignez les param&egrave;tres observ&eacute;s pour obtenir une conduite &agrave; tenir adapt&eacute;e.</p>
+
+      <div class="algo-form">
+        <div class="algo-row">
+          <div class="algo-field">
+            <label>Phase du cycle v&eacute;rifi&eacute;e par &eacute;chographie</label>
+            <select id="algo-echo">
+              <option value="oui">Oui &mdash; Phase ovulatoire confirm&eacute;e</option>
+              <option value="non">Non &mdash; Phase non confirm&eacute;e</option>
+            </select>
+          </div>
+          <div class="algo-field">
+            <label>pH de la glaire</label>
+            <select id="algo-ph">
+              <option value="optimal">Optimal (7,0 &ndash; 8,5)</option>
+              <option value="limite">Limite (6,0 &ndash; 6,9)</option>
+              <option value="acide">Acide (&lt; 6,0)</option>
+            </select>
+          </div>
+        </div>
+        <div class="algo-row">
+          <div class="algo-field">
+            <label>R&eacute;sultat TPC (SPZ dans la glaire)</label>
+            <select id="algo-tpc">
+              <option value="positif">Positif riche (&gt; 10 SPZ mobiles/champ)</option>
+              <option value="moyen">Positif moyen (5 &ndash; 10 SPZ mobiles/champ)</option>
+              <option value="faible">Positif faible (&lt; 5 SPZ mobiles/champ)</option>
+              <option value="deficient">D&eacute;ficient (SPZ pr&eacute;sents, immobiles/peu mobiles)</option>
+              <option value="negatif">N&eacute;gatif (aucun SPZ)</option>
+            </select>
+          </div>
+          <div class="algo-field">
+            <label>Shaking observ&eacute;</label>
+            <select id="algo-shaking">
+              <option value="non">Non</option>
+              <option value="oui">Oui &mdash; SPZ oscillants sur place</option>
+            </select>
+          </div>
+        </div>
+        <div class="algo-row">
+          <div class="algo-field">
+            <label>Score d&rsquo;Insler (glaire)</label>
+            <select id="algo-insler">
+              <option value="excellent">Excellent (11 &ndash; 12)</option>
+              <option value="bon">Bon (8 &ndash; 10)</option>
+              <option value="insuffisant">Insuffisant (4 &ndash; 7)</option>
+              <option value="nul">Nul (0 &ndash; 3)</option>
+            </select>
+          </div>
+          <div class="algo-field">
+            <label>Spermogramme disponible</label>
+            <select id="algo-spermo">
+              <option value="normal">Normal</option>
+              <option value="anormal">Anormal</option>
+              <option value="non">Non r&eacute;alis&eacute;</option>
+            </select>
+          </div>
+        </div>
+        <button class="algo-btn" onclick="tpcAlgo()">Analyser &rarr;</button>
+
+        <div class="algo-result" id="algo-result">
+          <div class="algo-result-title" id="algo-result-title"></div>
+          <ul id="algo-result-list"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 6 : SHAKING -->
+    <div id="tpc-shaking" class="tpc-panel">
+      <h2>Ph&eacute;nom&egrave;ne de &laquo; Shaking &raquo;</h2>
+
+      <div class="shaking-banner">
+        <p><strong>D&eacute;finition :</strong> Le <em>shaking</em> (angl. : tremblements) d&eacute;signe des spermatozo&iuml;des qui &laquo; tremblent &raquo; ou oscillent sur place dans la glaire cervicale sans progression rectiligne. Il est &eacute;vocateur d&rsquo;une <strong>immunisation anti-spermatozo&iuml;des</strong> (anticorps bloquants) dans la glaire ou le sperme.</p>
+      </div>
+
+      <div class="shaking-schema">
+
+        <!-- SPZ NORMAUX : avancent gauche→droite en boucle, sans retour -->
+        <div class="shaking-box">
+          <h4>SPZ normaux (sans shaking)</h4>
+          <svg viewBox="0 0 300 80" width="100%" height="80" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:hidden;background:#f7f9fb;border-radius:4px;">
+            <defs>
+              <g id="spzN">
+                <!-- queue sinusoïdale vers la GAUCHE -->
+                <path d="M0,0 Q-8,7 -16,0 Q-24,-7 -32,0" stroke="#5b8dd9" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <!-- tête ovale à DROITE = direction de déplacement -->
+                <ellipse cx="5" cy="0" rx="5.5" ry="7" fill="#1a3a5c"/>
+                <!-- acrosome (capuchon) sur le dessus de la tête -->
+                <ellipse cx="6.5" cy="-3.5" rx="2.8" ry="2.2" fill="rgba(255,255,255,0.32)"/>
+              </g>
+            </defs>
+            <use href="#spzN"><animateTransform attributeName="transform" type="translate" values="-50,18; 340,18" dur="5s" begin="0s" repeatCount="indefinite" calcMode="linear"/></use>
+            <use href="#spzN"><animateTransform attributeName="transform" type="translate" values="-50,40; 340,40" dur="5s" begin="1.25s" repeatCount="indefinite" calcMode="linear"/></use>
+            <use href="#spzN"><animateTransform attributeName="transform" type="translate" values="-50,62; 340,62" dur="5s" begin="2.5s" repeatCount="indefinite" calcMode="linear"/></use>
+            <use href="#spzN"><animateTransform attributeName="transform" type="translate" values="-50,28; 340,28" dur="5s" begin="3.75s" repeatCount="indefinite" calcMode="linear"/></use>
+          </svg>
+          <p style="font-size:12px;color:#1e7e4e;font-family:Arial,sans-serif;margin:5px 0 0;font-weight:700;">&#8594; Progression rectiligne, sans retour</p>
+        </div>
+
+        <!-- SPZ SHAKING : oscillent sur place uniquement -->
+        <div class="shaking-box">
+          <h4>SPZ avec shaking</h4>
+          <svg viewBox="0 0 300 80" width="100%" height="80" xmlns="http://www.w3.org/2000/svg" style="display:block;background:#fff5f5;border-radius:4px;">
+            <defs>
+              <g id="spzS">
+                <path d="M0,0 Q-8,7 -16,0 Q-24,-7 -32,0" stroke="#e07070" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <ellipse cx="5" cy="0" rx="5.5" ry="7" fill="#c0392b"/>
+                <ellipse cx="6.5" cy="-3.5" rx="2.8" ry="2.2" fill="rgba(255,255,255,0.32)"/>
+              </g>
+            </defs>
+            <!-- Chaque SPZ est positionné fixe, seule la rotation change -->
+            <g transform="translate(40,20)"><use href="#spzS"><animateTransform attributeName="transform" type="rotate" values="0 0 0;15 0 0;0 0 0;-15 0 0;0 0 0" dur="0.48s" begin="0s" repeatCount="indefinite"/></use></g>
+            <g transform="translate(110,55)"><use href="#spzS"><animateTransform attributeName="transform" type="rotate" values="0 0 0;-15 0 0;0 0 0;15 0 0;0 0 0" dur="0.48s" begin="0.12s" repeatCount="indefinite"/></use></g>
+            <g transform="translate(180,25)"><use href="#spzS"><animateTransform attributeName="transform" type="rotate" values="0 0 0;15 0 0;0 0 0;-15 0 0;0 0 0" dur="0.48s" begin="0.24s" repeatCount="indefinite"/></use></g>
+            <g transform="translate(248,58)"><use href="#spzS"><animateTransform attributeName="transform" type="rotate" values="0 0 0;-15 0 0;0 0 0;15 0 0;0 0 0" dur="0.48s" begin="0.36s" repeatCount="indefinite"/></use></g>
+          </svg>
+          <p style="font-size:12px;color:#c0392b;font-family:Arial,sans-serif;margin:5px 0 0;font-weight:700;">&#10005; Oscillation sur place, aucune progression</p>
+        </div>
+
+      </div>
+
+      <h3>Mécanisme</h3>
+      <p>Les anticorps anti-spermatozo&iuml;des (IgA, IgG) se fixent sur la t&ecirc;te ou le flagelle du SPZ. Ils bloquent ou perturbent la progression dans la glaire. Ils peuvent survenir apr&egrave;s un rapport sexuel durant une p&eacute;riode hmorragique (r&egrave;gles, saignement de milieu de cycle).</p>
+
+      <h3>Conduite à tenir</h3>
+      <ul>
+        <li>Suspecter une immunisation anti-SPZ dans la glaire ou le sperme</li>
+        <li>Prescrire un <strong>test crois&eacute;</strong> in vitro (laboratoire sp&eacute;cialis&eacute;)</li>
+        <li>Recherche d&rsquo;anticorps anti-SPZ par tests immuno-enzymatiques (MAR test, IBT test)</li>
+        <li><strong>Traitement :</strong> Cortico&iuml;des &agrave; faibles doses &mdash; B&eacute;tam&eacute;thasone (C&eacute;lest&egrave;ne&reg;) 7 gouttes 2 fois/jour, parfois davantage</li>
+        <li>Poursuivre jusqu&rsquo;&agrave; la survenue de la grossesse</li>
+        <li>Refaire le TPC sous traitement pour confirmer la disparition du shaking</li>
+      </ul>
+
+      <div class="info-box">
+        <p><strong>Contrôle sous traitement :</strong> Le TPC doit &ecirc;tre refait sous corticoth&eacute;rapie pour confirmer que les oscillations ont disparu et que les SPZ progressent en ligne droite. Le traitement est maintenu jusqu&rsquo;&agrave; la grossesse.</p>
+      </div>
+    </div>
+
+  </div><!-- /.tpc-body -->
+
+  <!-- MENTION LÉGALE -->
+  <div class="tpc-legal">
+    Outil clinique interactif &bull; Usage professionnel &bull; Dr KARA-ZAITRI M.A. &mdash; Gyn&eacute;cologue-Obst&eacute;tricien, Tlemcen &bull;
+    Ne se substitue pas au jugement clinique ni aux recommandations des soci&eacute;t&eacute;s savantes (CNGOF, ESHRE).
+    <br><strong>Dr KARA-ZAITRI M.A. © 2026</strong>
+  </div>
+
+</div><!-- /#tpc-root -->
+
+<script>
+(function() {
+  'use strict';
+
+  /* === ONGLETS === */
+  window.tpcTab = function(btn, panelId) {
+    var root = document.getElementById('tpc-root');
+    var btns = root.querySelectorAll('.tpc-nav-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.remove('active');
+    }
+    var panels = root.querySelectorAll('.tpc-panel');
+    for (var i = 0; i < panels.length; i++) {
+      panels[i].classList.remove('active');
+    }
+    btn.classList.add('active');
+    var target = document.getElementById('tpc-' + panelId);
+    if (target) {
+      target.classList.add('active');
+    }
+  };
+
+  /* === pH SLIDER === */
+  window.tpcUpdatePh = function(val) {
+    var ph = val / 10;
+    document.getElementById('tpc-ph-val').textContent = ph.toFixed(1).replace('.', ',');
+    var el = document.getElementById('tpc-ph-interp');
+    el.className = 'ph-interp';
+    if (ph < 6.0) {
+      el.classList.add('ph-acide');
+      el.innerHTML = '\u26A0\uFE0F pH acide (\u003C 6,0)\u00A0: immobilisation des SPZ \u2014 TPC non interpr\u00E9table. R\u00E9aliser une toilette bicarbonat\u00E9e.';
+    } else if (ph < 7.0) {
+      el.classList.add('ph-limite');
+      el.innerHTML = '\u26A0\uFE0F pH limite (6,0 \u2013 6,9)\u00A0: n\u2019emp\u00EAche pas forc\u00E9ment la p\u00E9n\u00E9tration. Interpr\u00E9ter avec prudence.';
+    } else if (ph <= 8.5) {
+      el.classList.add('ph-optimal');
+      el.innerHTML = '\u2705 pH optimal (7,0 \u2013 8,5)\u00A0: conditions favorables \u00E0 la migration et survie des SPZ.';
+    } else {
+      el.classList.add('ph-limite');
+      el.innerHTML = '\u26A0\uFE0F pH alcalin (\u003E 8,5)\u00A0: inhabituel. Contr\u00F4ler les conditions du pr\u00E9l\u00E8vement.';
+    }
+  };
+
+  /* === SCORE D'INSLER === */
+  window.tpcInsler = function() {
+    var col = parseInt(document.getElementById('ins-col').value, 10);
+    var ab  = parseInt(document.getElementById('ins-abondance').value, 10);
+    var li  = parseInt(document.getElementById('ins-limpidite').value, 10);
+    var fi  = parseInt(document.getElementById('ins-filance').value, 10);
+    var score = col + ab + li + fi;
+
+    document.getElementById('ins-score-num').textContent = score;
+
+    var qual, range, color;
+    if (score <= 3)       { qual = 'Nul';        range = 'Score 0 \u2013 3';   color = '#c0392b'; }
+    else if (score <= 7)  { qual = 'Insuffisant'; range = 'Score 4 \u2013 7';   color = '#d68910'; }
+    else if (score <= 10) { qual = 'Bon';         range = 'Score 8 \u2013 10';  color = '#1e7e4e'; }
+    else                  { qual = 'Excellent';   range = 'Score 11 \u2013 12'; color = '#155724'; }
+
+    document.getElementById('ins-qual').textContent = qual;
+    document.getElementById('ins-range').textContent = range;
+    document.getElementById('ins-circle').style.background = color;
+    var bar = document.getElementById('ins-bar');
+    bar.style.width = ((score / 12) * 100) + '%';
+    bar.style.background = color;
+  };
+
+  /* === ALGORITHME === */
+  window.tpcAlgo = function() {
+    var echo    = document.getElementById('algo-echo').value;
+    var ph      = document.getElementById('algo-ph').value;
+    var tpc     = document.getElementById('algo-tpc').value;
+    var shaking = document.getElementById('algo-shaking').value;
+    var insler  = document.getElementById('algo-insler').value;
+    var spermo  = document.getElementById('algo-spermo').value;
+
+    var title = '';
+    var items = [];
+
+    if (echo === 'non') {
+      title = '\u23F8 TPC \u00E0 reporter';
+      items = [
+        'La phase ovulatoire n\u2019est pas confirm\u00E9e \u2014 TPC non interpr\u00E9table.',
+        'R\u00E9aliser une surveillance folliculaire (\u00E9chographie) et reporter au bon moment (J12\u2013J14).',
+        'S\u2019aider de la courbe de temp\u00E9rature ou des tests d\u2019ovulation urinaires.'
+      ];
+    } else if (ph === 'acide') {
+      title = '\u26A0\uFE0F TPC \u00E0 reporter \u2014 pH acide';
+      items = [
+        'Le pH acide immobilise les SPZ : le TPC est non interpr\u00E9table en l\u2019\u00E9tat.',
+        'Proposer une toilette vaginale bicarbonat\u00E9e avant le prochain rapport test.',
+        'Refaire le TPC le cycle suivant apr\u00E8s neutralisation du pH.'
+      ];
+    } else if (shaking === 'oui') {
+      title = '\u26D4 TPC avec shaking \u2014 \u00C9voquer immunisation anti-SPZ';
+      items = [
+        'Shaking observ\u00E9 : suspecter des anticorps anti-spermatozo\u00EFdes.',
+        'Prescrire un test crois\u00E9 in vitro en laboratoire sp\u00E9cialis\u00E9.',
+        'Rechercher les anticorps anti-SPZ (MAR test, IBT test).',
+        'Traitement : b\u00E9tam\u00E9thasone (C\u00E9lest\u00E8ne\u00AE) faibles doses jusqu\u2019\u00E0 la grossesse.',
+        'Refaire le TPC sous traitement pour confirmer la disparition du shaking.'
+      ];
+    } else if (tpc === 'positif') {
+      title = '\u2705 TPC positif riche \u2014 Glaire innocent\u00E9e';
+      items = [
+        'Plus de 10 SPZ mobiles progressifs/champ : glaire non hostile.',
+        'La st\u00E9rilit\u00E9 n\u2019est pas d\u2019origine cervicale.',
+        'Le taux d\u2019\u0153strog\u00E8nes est satisfaisant (sans pr\u00E9juger de la qualit\u00E9 de l\u2019ovulation).',
+        'Poursuivre le bilan : contr\u00F4le de l\u2019ovulation (courbe thermique, dosages hormonaux), bilan tubo-pelvien si n\u00E9cessaire.'
+      ];
+    } else if (tpc === 'moyen' || tpc === 'faible') {
+      title = '\u26A0\uFE0F TPC positif ' + (tpc === 'moyen' ? 'moyen' : 'faible') + ' \u2014 \u00C0 surveiller';
+      items = [
+        tpc === 'moyen' ? '5\u201310 SPZ mobiles/champ : r\u00E9sultat interm\u00E9diaire.' : 'Moins de 5 SPZ mobiles/champ : r\u00E9sultat limit\u00E9.',
+        insler === 'insuffisant' || insler === 'nul' ? 'Glaire de qualit\u00E9 insuffisante (score d\u2019Insler) : envisager un traitement \u0153strog\u00E9nique pour am\u00E9liorer la glaire.' : 'Glaire de bonne qualit\u00E9 : rechercher une cause spermatique.',
+        spermo === 'non' ? 'Spermogramme non r\u00E9alis\u00E9 : le prescrire en priorit\u00E9.' : spermo === 'anormal' ? 'Spermogramme anormal : bilan andr\u00E9ologique complet.' : 'Spermogramme normal : test de p\u00E9n\u00E9tration crois\u00E9 in vitro \u00E0 envisager.',
+        'Refaire le TPC le cycle suivant.'
+      ];
+    } else if (tpc === 'deficient') {
+      title = '\u26A0\uFE0F TPC d\u00E9ficient \u2014 SPZ pr\u00E9sents mais peu mobiles';
+      items = [
+        'SPZ pr\u00E9sents mais immobiles ou peu mobiles.',
+        spermo === 'anormal' ? 'Spermogramme anormal associ\u00E9 : bilan andr\u00E9ologique complet.' : 'V\u00E9rifier le spermogramme si non fait.',
+        insler === 'insuffisant' || insler === 'nul' ? 'Glaire de mauvaise qualit\u00E9 (Insler) : traiter par \u0153strog\u00E8nes et refaire.' : 'Glaire satisfaisante : \u00E9voquer anticorps anti-SPZ ou cause spermatique.',
+        'Rechercher un shaking discret \u2014 prescrire un test crois\u00E9 in vitro si doute.'
+      ];
+    } else if (tpc === 'negatif') {
+      title = '\u274C TPC n\u00E9gatif \u2014 Absence de SPZ';
+      items = [
+        'V\u00E9rifier la r\u00E9alit\u00E9 et les conditions du rapport sexuel (d\u00E9lai, lubrifiant, toilette vaginale).',
+        spermo === 'non' ? 'Spermogramme absent : le prescrire en urgence.' : spermo === 'anormal' ? 'Spermogramme anormal : bilan andr\u00E9ologique complet.' : '',
+        insler === 'insuffisant' || insler === 'nul' ? 'Glaire de tr\u00E8s mauvaise qualit\u00E9 : traitement \u0153strog\u00E9nique et refaire le TPC.' : '',
+        ph === 'limite' ? 'pH limite : essayer la toilette bicarbonat\u00E9e.' : '',
+        'Si SPZ normal et glaire optimale sans acidit\u00E9 : test de p\u00E9n\u00E9tration crois\u00E9 in vitro (laboratoire sp\u00E9cialis\u00E9).'
+      ].filter(Boolean);
+    }
+
+    document.getElementById('algo-result-title').textContent = title;
+    var list = document.getElementById('algo-result-list');
+    list.innerHTML = '';
+    items.forEach(function(item) {
+      var li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+    document.getElementById('algo-result').classList.add('visible');
+  };
+
+  /* INIT au chargement */
+  document.addEventListener('DOMContentLoaded', function() {
+    window.tpcInsler();
+    window.tpcUpdatePh(72);
+  });
+
+})();
+</script>
+</body>
+</html>
