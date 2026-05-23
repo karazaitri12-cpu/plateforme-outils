@@ -33,7 +33,7 @@
 #geu-root p  { margin: 0 0 8px !important; font-size: 13px !important; }
 #geu-root ul, #geu-root ol { margin: 0 0 8px !important; padding-left: 18px !important; }
 #geu-root li { font-size: 13px !important; margin-bottom: 4px !important; line-height: 1.5 !important; }
-   #geu-root .geu-header h1 { color: #ffffff !important; }
+#geu-root .geu-header h1 { color: #ffffff !important; }
 
 /* Mise en page principale */
 #geu-root .geu-wrap {
@@ -238,22 +238,6 @@
 #geu-root .dt-blue  { color: #1a3a6c !important; font-weight: 600 !important; }
 #geu-root .dt-amber { color: #7a5c12 !important; font-weight: 600 !important; }
 
-/* Badge inline */
-#geu-root .badge {
-  display: inline-block !important;
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  padding: 2px 6px !important;
-  border-radius: 3px !important;
-  margin-left: 4px !important;
-  vertical-align: middle !important;
-  letter-spacing: 0.2px !important;
-}
-#geu-root .badge-green  { background: #d4edda !important; color: #1d6b36 !important; }
-#geu-root .badge-blue   { background: #dbeafe !important; color: #1a3a6c !important; }
-#geu-root .badge-amber  { background: #fef3cd !important; color: #7a5c12 !important; }
-#geu-root .badge-red    { background: #fde8e6 !important; color: #9b2c22 !important; }
-
 /* Section 2 colonnes */
 #geu-root .two-col {
   display: grid !important;
@@ -307,20 +291,22 @@
   text-align: center !important;
 }
 
-/* Puce CSS Unicode (pour Elementor) */
+/* Puce CSS Unicode */
 #geu-root .ul-check li::marker { content: '\2713\0020' !important; color: #1d6b36 !important; font-weight: 700 !important; }
 #geu-root .ul-arrow li::marker { content: '\25BA\0020' !important; color: #1a3a5c !important; font-size: 10px !important; }
 #geu-root .ul-dash  li::marker { content: '\2013\0020' !important; color: #5a7a9a !important; }
 
 /* =========================================
-   Masque l'ascenseur (style App native)
+   MODIFICATION : Masque l'ascenseur sur mobile uniquement (UX desktop préservé)
    ========================================= */
-html { scrollbar-width: none !important; }
-body { -ms-overflow-style: none !important; overflow-y: auto !important; }
-::-webkit-scrollbar { display: none !important; }
+@media (max-width: 768px) {
+  html { scrollbar-width: none !important; }
+  body { -ms-overflow-style: none !important; }
+  ::-webkit-scrollbar { display: none !important; }
+}
 </style>
 
-<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<!-- TRACKING UMAMI -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </head>
 <body>
@@ -339,21 +325,21 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     </div>
   </div>
 
-  <!-- NAVIGATION ONGLETS -->
-  <div class="geu-tabs" id="geuTabs">
-    <button class="geu-tab active" onclick="showTab('strat', this)">Strat&#233;gies</button>
-    <button class="geu-tab" onclick="showTab('mtx', this)">MTX</button>
-    <button class="geu-tab" onclick="showTab('chir', this)">Chirurgie</button>
-    <button class="geu-tab" onclick="showTab('obs', this)">Abstention</button>
-    <button class="geu-tab" onclick="showTab('decision', this)">D&#233;cision</button>
-    <button class="geu-tab" onclick="showTab('suivi', this)">Suivi post-th&#233;rapeutique</button>
+  <!-- NAVIGATION ONGLETS (MODIFICATION : Ajout des attributs d'accessibilité ARIA) -->
+  <div class="geu-tabs" id="geuTabs" role="tablist">
+    <button class="geu-tab active" role="tab" aria-selected="true" aria-controls="panel-strat" onclick="showTab('strat', this)">Strat&#233;gies</button>
+    <button class="geu-tab" role="tab" aria-selected="false" aria-controls="panel-mtx" onclick="showTab('mtx', this)">MTX</button>
+    <button class="geu-tab" role="tab" aria-selected="false" aria-controls="panel-chir" onclick="showTab('chir', this)">Chirurgie</button>
+    <button class="geu-tab" role="tab" aria-selected="false" aria-controls="panel-obs" onclick="showTab('obs', this)">Abstention</button>
+    <button class="geu-tab" role="tab" aria-selected="false" aria-controls="panel-decision" onclick="showTab('decision', this)">D&#233;cision</button>
+    <button class="geu-tab" role="tab" aria-selected="false" aria-controls="panel-suivi" onclick="showTab('suivi', this)">Suivi post-th&#233;rapeutique</button>
   </div>
 
   <!-- PANNEAUX -->
   <div class="geu-panels">
 
     <!-- ========== PANNEAU 1 : STRATÉGIES ========== -->
-    <div class="geu-panel active" id="panel-strat">
+    <div class="geu-panel active" id="panel-strat" role="tabpanel">
       <h2>Vue d&#8217;ensemble des trois strat&#233;gies</h2>
       <div class="strat-grid">
         <div class="strat-card sc-med">
@@ -403,18 +389,25 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 
       <div class="alert-box info">
         <span class="alert-ico">&#9432;</span>
-        <div><strong>Immunoglobulines anti-D.</strong> &#192; administrer syst&#233;matiquement chez toute patiente de groupe Rh n&#233;gatif, quel que soit le traitement choisi.</div>
+        <!-- MODIFICATION : Ajout de la dose usuelle d'Anti-D -->
+        <div><strong>Immunoglobulines anti-D.</strong> &#192; administrer syst&#233;matiquement chez toute patiente de groupe Rh n&#233;gatif, quel que soit le traitement choisi <em>(Dose usuelle : 200 µg)</em>.</div>
       </div>
     </div>
 
     <!-- ========== PANNEAU 2 : MTX ========== -->
-    <div class="geu-panel" id="panel-mtx">
+    <div class="geu-panel" id="panel-mtx" role="tabpanel">
       <h2>Traitement m&#233;dical par M&#233;thotrexate (MTX)</h2>
 
       <div class="posologie-box">
         <div class="poso-label">Posologie de r&#233;f&#233;rence &#8211; CNGOF 2023</div>
         <div class="poso-val">50 mg / m&#178; SC <span style="font-size:13px;font-weight:400;">&#8211; dose unique, voie IM</span></div>
-        <div class="poso-alt">Alternative historique encore utilis&#233;e : 1 mg/kg IM &#8211; protocole &#224; dose variable selon les centres. Injection locale &#233;cho-guid&#233;e possible si la GEU est visualis&#233;e par &#233;chographie endovaginale (m&#234;me posologie).</div>
+        <div class="poso-alt">Alternative historique encore utilis&#233;e : 1 mg/kg IM &#8211; protocole &#224; dose variable selon les centres. Injection locale &#233;cho-guid&#233;e possible si la GEU est visualis&#233;e par &#233;chographie endovaginale.</div>
+        
+        <!-- MODIFICATION : Ajout de la formule de surface corporelle -->
+        <div class="poso-alt" style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 8px;">
+          <strong>Calcul de la Surface Corporelle (Mosteller) :</strong> &radic; [ (Taille <em>cm</em> &times; Poids <em>kg</em>) / 3600 ]<br>
+          <span style="font-size:11px;">Exemple : 165 cm, 60 kg = 1,65 m&sup2; &rarr; Soit environ <strong>82,5 mg</strong> de MTX.</span>
+        </div>
       </div>
 
       <div class="two-col">
@@ -431,14 +424,16 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
         </div>
         <div class="criteria-block" style="border-left-color:#c0392b;">
           <h3 style="color:#c0392b;">Contre-indications (&#224; &#233;liminer)</h3>
+          
+          <!-- MODIFICATION : Précision des seuils d'alerte pour le MTX -->
           <ul class="ul-dash">
-            <li>Thrombop&#233;nie</li>
-            <li>Insuffisance h&#233;patique</li>
-            <li>Insuffisance r&#233;nale</li>
+            <li>Thrombop&#233;nie <span style="font-size:11px;">(&lt; 100 G/L)</span></li>
+            <li>Insuffisance h&#233;patique <span style="font-size:11px;">(ASAT/ALAT &gt; 2N)</span></li>
+            <li>Insuffisance r&#233;nale <span style="font-size:11px;">(Clairance &lt; 30 mL/min)</span></li>
             <li>Troubles de la coagulation</li>
             <li>Grossesse &#233;volutive intra-ut&#233;rine souhait&#233;e</li>
           </ul>
-          <p style="font-size:11px;color:#4a6a8a;margin-top:8px;margin-bottom:0;"><strong>Bilan pr&#233;th&#233;rapeutique :</strong> NFS-plaquettes, coagulation, bilan h&#233;patique, cr&#233;atinin&#233;mie</p>
+          <p style="font-size:11px;color:#4a6a8a;margin-top:8px;margin-bottom:0;"><strong>Bilan pr&#233;th&#233;rapeutique :</strong> NFS-plaquettes, TP/TCA, Bilan h&#233;patique, Cr&#233;atinin&#233;mie</p>
         </div>
       </div>
 
@@ -491,7 +486,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     </div>
 
     <!-- ========== PANNEAU 3 : CHIRURGIE ========== -->
-    <div class="geu-panel" id="panel-chir">
+    <div class="geu-panel" id="panel-chir" role="tabpanel">
       <h2>Traitement chirurgical</h2>
 
       <div class="alert-box info">
@@ -561,7 +556,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     </div>
 
     <!-- ========== PANNEAU 4 : ABSTENTION ========== -->
-    <div class="geu-panel" id="panel-obs">
+    <div class="geu-panel" id="panel-obs" role="tabpanel">
       <h2>Abstention th&#233;rapeutique (expectative)</h2>
 
       <div class="alert-box warn">
@@ -622,7 +617,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     </div>
 
     <!-- ========== PANNEAU 5 : DÉCISION ========== -->
-    <div class="geu-panel" id="panel-decision">
+    <div class="geu-panel" id="panel-decision" role="tabpanel">
       <h2>Tableau de d&#233;cision th&#233;rapeutique</h2>
 
       <table class="decision-table">
@@ -695,7 +690,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     </div>
 
     <!-- ========== PANNEAU 6 : SUIVI ========== -->
-    <div class="geu-panel" id="panel-suivi">
+    <div class="geu-panel" id="panel-suivi" role="tabpanel">
       <h2>Suivi post-th&#233;rapeutique</h2>
 
       <div class="sub-block" style="margin-bottom:14px;">
@@ -757,19 +752,31 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 </div><!-- /geu-root -->
 
 <script>
-// Navigation explicite et robuste (compatible Elementor)
+// MODIFICATION : Mise à jour du script pour gérer l'accessibilité ARIA (aria-selected)
 window.showTab = function(id, btn) {
   var panels = document.querySelectorAll('#geu-root .geu-panel');
   var tabs = document.querySelectorAll('#geu-root .geu-tab');
+  
+  // Masquer tous les panneaux
   for (var i = 0; i < panels.length; i++) {
     panels[i].classList.remove('active');
   }
+  
+  // Réinitialiser les états de tous les onglets
   for (var i = 0; i < tabs.length; i++) {
     tabs[i].classList.remove('active');
+    tabs[i].setAttribute('aria-selected', 'false');
   }
+  
+  // Afficher le panneau ciblé
   var panel = document.getElementById('panel-' + id);
   if (panel) panel.classList.add('active');
-  if (btn) btn.classList.add('active');
+  
+  // Activer l'onglet cliqué
+  if (btn) {
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+  }
 };
 
 // Initialisation au chargement
@@ -777,7 +784,10 @@ document.addEventListener('DOMContentLoaded', function() {
   var firstPanel = document.getElementById('panel-strat');
   if (firstPanel) firstPanel.classList.add('active');
   var firstBtn = document.querySelector('#geu-root .geu-tab');
-  if (firstBtn) firstBtn.classList.add('active');
+  if (firstBtn) {
+    firstBtn.classList.add('active');
+    firstBtn.setAttribute('aria-selected', 'true');
+  }
 });
 </script>
 </body>
