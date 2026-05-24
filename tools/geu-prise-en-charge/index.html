@@ -167,6 +167,7 @@
 #geu-root .alert-box.danger { background: #fdf0ef !important; border: 1px solid #e0847a !important; color: #9b2c22 !important; }
 #geu-root .alert-box.info  { background: #edf5fd !important; border: 1px solid #90bde0 !important; color: #1a3a6c !important; }
 #geu-root .alert-box.success { background: #eef7f1 !important; border: 1px solid #82c89a !important; color: #1d6b36 !important; }
+#geu-root .alert-box.critical { background: #fce8e6 !important; border: 2px solid #c0392b !important; color: #a93226 !important; font-weight: 700 !important; }
 #geu-root .alert-ico { font-size: 15px !important; line-height: 1 !important; flex-shrink: 0 !important; margin-top: 1px !important; }
 
 /* Sections 2 colonnes & Sous-blocs */
@@ -218,6 +219,7 @@
 #geu-root .geu-btn-primary { background: #1a3a6c !important; color: #fff !important; }
 #geu-root .geu-btn-secondary { background: #6c7a89 !important; color: #fff !important; }
 #geu-root .geu-btn-accent { background: #c0832a !important; color: #fff !important; }
+#geu-root .geu-btn-critical { background: #c0392b !important; color: #fff !important; }
 #geu-root .diag-grid { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important; gap: 12px !important; margin-bottom: 12px !important; background: #fff !important; padding: 12px !important; border-radius: 4px !important; border: 1px solid #d6e3f0 !important; }
 
 /* Disclaimer & Puces */
@@ -277,13 +279,19 @@
           </ul>
         </div>
         <div class="sub-block" style="background:#fef9ec; border-color:#e8c84a;">
-          <h3 style="color:#7a5c12;">La Zone Discriminatoire</h3>
-          <p style="font-size:12px; margin-bottom:6px;">C'est le seuil de β-hCG au-delà duquel un sac intra-utérin normal DOIT être visible à l'échographie endovaginale.</p>
-          <ul class="ul-check" style="color:#7a5c12; font-weight:600;">
-            <li>Seuil classique : 1 500 mUI/mL</li>
-            <li>Seuil de sécurité (grossesses multiples) : 2 000 mUI/mL</li>
+          <h3 style="color:#7a5c12;">Recommandation CNGOF 2023 sur la zone discriminatoire</h3>
+          <p style="font-size:12px; margin-bottom:6px;">Ne pas utiliser de seuil fixe de β-hCG de manière isolée. La décision repose sur la <strong>cinétique des β-hCG (48h)</strong> associée à une échographie endovaginale de qualité.</p>
+          <ul class="ul-check" style="color:#7a5c12;">
+            <li>Un utérus vide à 1 500 UI/L n'est pas une urgence en soi</li>
+            <li>Priorité : contrôle β-hCG à 48h + clinique</li>
           </ul>
         </div>
+      </div>
+
+      <!-- ALERTE GROSSESSE HÉTÉROTOPIQUE -->
+      <div class="alert-box critical">
+        <span class="alert-ico">⚠️</span>
+        <div><strong>Grossesse hétérotopique (GIU + GEU) :</strong> À évoquer systématiquement en cas de douleur pelvienne persistante malgré un sac intra-utérin visible, ou après FIV / transfert multiple.</div>
       </div>
 
       <!-- SIMULATEUR DIAGNOSTIQUE -->
@@ -315,6 +323,14 @@
             <label style="display:block; font-size:11px; font-weight:700; color:#1a3a5c; margin-bottom:4px;">4. Aménorrhée (SA) <span style="font-weight:400; color:#5a7a9a;">- Optionnel</span></label>
             <input type="number" step="0.1" id="diag-sa" placeholder="Ex: 5 ou 6.5" class="geu-input">
           </div>
+          <div>
+            <label style="display:block; font-size:11px; font-weight:700; color:#1a3a5c; margin-bottom:4px;">5. Douleur pelvienne</label>
+            <select id="diag-douleur" class="geu-select">
+              <option value="aucune">Aucune</option>
+              <option value="moderee">Modérée / supportable</option>
+              <option value="severe">Sévère / rebelle aux antalgiques simples</option>
+            </select>
+          </div>
         </div>
         
         <button onclick="calcDiag()" class="geu-btn geu-btn-primary" style="width:100%;">Générer l'orientation et la Conduite à Tenir</button>
@@ -331,7 +347,7 @@
           <div class="sc-title"><span class="sc-ico">M</span> Traitement m&#233;dical (MTX)</div>
           <ul class="ul-check">
             <li>Patiente asymptomatique</li>
-            <li>&#946;-hCG &lt; 5 000 mUI/mL</li>
+            <li>&#946;-hCG &lt; 5 000 mUI/mL (seuil de sécurité)</li>
             <li>H&#233;matosalpinx &lt; 4 cm</li>
             <li>Sans activit&#233; cardiaque</li>
             <li>Bilan h&#233;patique/r&#233;nal normal</li>
@@ -341,7 +357,7 @@
           <div class="sc-title"><span class="sc-ico">C</span> Traitement chirurgical</div>
           <ul class="ul-check">
             <li>Formes compliqu&#233;es ou &#233;volu&#233;es</li>
-            <li>&#946;-hCG &gt; 5 000&#8211;10 000 mUI/mL</li>
+            <li>&#946;-hCG &gt; 5 000 mUI/mL</li>
             <li>Instabilit&#233; h&#233;modynamique</li>
             <li>Rupture tubaire suspect&#233;e ou confirmée</li>
             <li>&#201;chec ou CI au MTX</li>
@@ -350,22 +366,29 @@
         <div class="strat-card sc-obs">
           <div class="sc-title"><span class="sc-ico">A</span> Abstention / Expectative</div>
           <ul class="ul-check">
-            <li>&#946;-hCG &lt; 1 000&#8211;1 500 mUI/mL</li>
+            <li>&#946;-hCG &lt; 1 000 mUI/mL</li>
             <li>D&#233;croissance spontan&#233;e confirm&#233;e (&#8722;15 % / 48 h)</li>
             <li>Absence d&#8217;h&#233;matosalpinx</li>
+            <li><strong>Absence TOTALE de douleur</strong></li>
             <li>Surveillance ambulatoire rigoureuse possible</li>
           </ul>
         </div>
       </div>
 
+      <!-- ALERTE AINS CRITIQUE -->
+      <div class="alert-box critical">
+        <span class="alert-ico">⛔</span>
+        <div><strong>CONTRE-INDICATION FORMELLE : AINS (aspirine, ibuprofène, kétoprofène, etc.)</strong><br>Risque d'insuffisance rénale aiguë avec le Méthotrexate. Paracétamol uniquement.</div>
+      </div>
+
       <div class="alert-box warn">
-        <span class="alert-ico">&#9888;</span>
+        <span class="alert-ico">⚠️</span>
         <div><strong>Urgence m&#233;dicale.</strong> Toute GEU doit &#234;tre prise en charge en milieu chirurgical (pour la décision et le suivi). La rupture tubaire est un risque constant quelle que soit la strat&#233;gie initiale.</div>
       </div>
 
       <div class="alert-box info">
-        <span class="alert-ico">&#9432;</span>
-        <div><strong>Immunoglobulines anti-D.</strong> &#192; administrer syst&#233;matiquement chez toute patiente de groupe Rh n&#233;gatif, quel que soit le traitement choisi.</div>
+        <span class="alert-ico">🩸</span>
+        <div><strong>Immunoglobulines anti-D.</strong> À administrer systématiquement chez toute patiente de groupe Rh négatif, quel que soit le traitement choisi (dans les 72h).</div>
       </div>
     </div>
 
@@ -373,10 +396,16 @@
     <div class="geu-panel" id="panel-mtx" role="tabpanel">
       <h2>Traitement m&#233;dical par M&#233;thotrexate (MTX)</h2>
 
+      <!-- RAPPEL AINS CRITIQUE -->
+      <div class="alert-box critical">
+        <span class="alert-ico">⛔</span>
+        <div><strong>⚠️ CONTRE-INDICATION FORMELLE : AINS (aspirine, ibuprofène, kétoprofène, diclofénac...).</strong> Risque d'insuffisance rénale aiguë avec le MTX. Utiliser exclusivement le paracétamol si nécessaire.</div>
+      </div>
+
       <div class="posologie-box">
         <div style="font-size: 11px; color: #93b4d4; margin-bottom: 4px;">Posologie de r&#233;f&#233;rence &#8211; CNGOF 2023</div>
         <div style="font-size: 18px; font-weight: 700; color: #ffffff;">50 mg / m&#178; SC <span style="font-size:13px;font-weight:400;">&#8211; dose unique, voie IM</span></div>
-        <div style="font-size: 11px; color: #a8c8e8; margin-top: 4px;">Alternative historique encore utilis&#233;e : 1 mg/kg IM. Injection locale &#233;cho-guid&#233;e possible si la GEU est visuellement accessible.</div>
+        <div style="font-size: 11px; color: #a8c8e8; margin-top: 4px;">Seuil de sécurité : β-hCG &lt; 5 000 mUI/mL. Au-delà, l'efficacité diminue significativement et le risque chirurgical augmente.</div>
         
         <!-- Calculateur BSA Intégré -->
         <div style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px;">
@@ -396,12 +425,12 @@
           <ul class="ul-check">
             <li>Patiente asymptomatique ou peu symptomatique</li>
             <li>&#201;tat h&#233;modynamique stable</li>
-            <li>&#946;-hCG &lt; 5 000 mUI/mL (parfois jusqu'à 10 000)</li>
+            <li>&#946;-hCG &lt; 5 000 mUI/mL (seuil de sécurité)</li>
             <li>H&#233;matosalpinx &lt; 4 cm, sans activit&#233; cardiaque</li>
             <li>&#201;panchement p&#233;riton&#233;al &lt; 100 cc</li>
             <li>Patiente coop&#233;rante, informée du risque d'intervention secondaire</li>
           </ul>
-          <p style="font-size:11px; color:#4a6a8a; margin-top:8px; margin-bottom:0;"><strong>Efficacité :</strong> Le taux de succès avoisine 85 à 87,5 %. Environ 20 à 45 % des GEU bénéficient de ce traitement.</p>
+          <p style="font-size:11px; color:#4a6a8a; margin-top:8px; margin-bottom:0;"><strong>Efficacité :</strong> Le taux de succès avoisine 85 % pour hCG &lt; 5 000.</p>
         </div>
         <div class="criteria-block" style="border-left-color:#c0392b;">
           <h3 style="color:#c0392b;">Contre-indications</h3>
@@ -412,7 +441,19 @@
             <li>Troubles de la coagulation</li>
             <li>Grossesse &#233;volutive intra-ut&#233;rine souhait&#233;e</li>
           </ul>
-          <p style="font-size:11px; color:#4a6a8a; margin-top:8px; margin-bottom:0;"><strong>Bilan pré-thérapeutique obligatoire :</strong> NFS-plaquettes, bilan de coagulation, bilan h&#233;patique, cr&#233;atinin&#233;mie.</p>
+          <p style="font-size:11px; color:#4a6a8a; margin-top:8px; margin-bottom:0;"><strong>Bilan pré-thérapeutique obligatoire :</strong> NFS-plaquettes, bilan de coagulation, bilan h&#233;patique, cr&#233;atinin&#233;mie, groupe Rh.</p>
+        </div>
+      </div>
+
+      <!-- CONSIGNES PATIENTE -->
+      <div class="alert-box info">
+        <span class="alert-ico">📋</span>
+        <div>
+          <strong>🧾 À donner à la patiente après injection de MTX :</strong><br>
+          • Pas de rapport sexuel pendant 4 semaines<br>
+          • Pas d'AINS, pas d'alcool, pas d'acide folique/folates<br>
+          • Consulter en urgence si douleur brutale, malaise, saignement abondant<br>
+          • Ne pas tomber enceinte avant 3 mois
         </div>
       </div>
 
@@ -433,14 +474,11 @@
           </div>
         </div>
         <div class="tl-item">
-          <div class="tl-day">J6 &#8211; Bilan biologique</div>
-          <div class="tl-content">Contrôle de la tolérance : NFS, transaminases, cr&#233;atinine.</div>
-        </div>
-        <div class="tl-item tl-success">
           <div class="tl-day">J7 &#8211; Crit&#232;re de succ&#232;s</div>
           <div class="tl-content">
             <strong>Baisse &#8805; 15 % entre J4 et J7 = Succ&#232;s thérapeutique.</strong><br>
-            Puis dosage hebdomadaire jusqu&#8217;&#224; négativation (&lt; 5 mUI/mL). La durée totale est en moyenne de 4 à 8 semaines.
+            Puis dosage hebdomadaire jusqu&#8217;&#224; négativation (&lt; 5 mUI/mL). La durée totale est en moyenne de 4 à 8 semaines.<br>
+            <em>Contrôle biologique (NFS, créatinine, ASAT/ALAT) uniquement si signes d'appel ou avant une 2ème dose.</em>
           </div>
         </div>
         <div class="tl-item tl-danger">
@@ -470,11 +508,12 @@
         <div id="hcg-result" style="display:none; margin-top:14px;"></div>
       </div>
     </div>
+
     <!-- ========== ONGLET 4 : CHIRURGIE ========== -->
     <div class="geu-panel" id="panel-chir" role="tabpanel">
       <h2>Traitement chirurgical</h2>
       <div class="alert-box info">
-        <span class="alert-ico">&#9432;</span>
+        <span class="alert-ico">🔬</span>
         <div>La <strong>c&#339;lioscopie est la technique de choix</strong> (réalisée dans 85 % des cas). Elle est réalisée à visée diagnostique et thérapeutique et offre l’avantage d’une récupération plus rapide et d’une morbidité réduite.</div>
       </div>
 
@@ -483,10 +522,11 @@
         <p style="font-size:12px; margin-bottom:6px;">Le traitement chirurgical s’impose dans les situations suivantes :</p>
         <ul class="ul-arrow">
           <li>Forme moyenne ou grave de GEU</li>
-          <li>&#946;-hCG plasmatiques &gt; 5 000 à 10 000 mUI/ml</li>
+          <li>&#946;-hCG plasmatiques &gt; 5 000 mUI/ml</li>
           <li>&#201;chec ou contre-indication absolue du traitement m&#233;dical</li>
           <li>Instabilit&#233; h&#233;modynamique</li>
           <li>Rupture tubaire suspect&#233;e ou confirm&#233;e</li>
+          <li>Douleur pelvienne sévère</li>
           <li>Impossibilit&#233; d&#8217;un suivi ambulatoire rigoureux</li>
         </ul>
       </div>
@@ -499,20 +539,17 @@
           <h3 style="color:#1a3a6c;">Traitement conservateur</h3>
           <p style="font-size:12px; margin-bottom:6px;">Il n’est possible qu’en cas de lésions peu étendues.</p>
           
-          <p style="font-size:12px; font-weight:600; margin-bottom:2px;">1. Salpingotomie (ou &#171; c&#233;sarienne tubaire &#187;)</p>
+          <p style="font-size:12px; font-weight:600; margin-bottom:2px;">Salpingotomie (ou « césarienne tubaire »)</p>
           <p style="font-size:11px; margin-bottom:4px;">Elle doit toujours être privilégiée (notamment si désir de grossesse ou trompe controlatérale altérée).</p>
           <ul class="ul-dash">
             <li style="font-size:12px;">Incision longitudinale du faite de la trompe (10 à 30 mm).</li>
             <li style="font-size:12px;">« Accouchement » de l'œuf par pression douce et toilette péritonéale.</li>
-            <li style="font-size:12px;">Suture avec fil fin résorbable ou cicatrisation ouverte.</li>
+            <li style="font-size:12px;"><strong>La trompe est laissée ouverte (pas de suture)</strong> pour permettre la cicatrisation naturelle et éviter la sténose.</li>
           </ul>
           <div class="alert-box warn" style="margin-top:8px;margin-bottom:10px;">
-            <span class="alert-ico" style="font-size:13px;">&#9888;</span>
+            <span class="alert-ico" style="font-size:13px;">⚠️</span>
             <div style="font-size:11px;"><strong>GEU persistante :</strong> Le taux d'échec est de 6 % (persistance de tissu trophoblastique). D&#233;pist&#233; par surveillance des &#946;-hCG systématique &#224; 48 h post-op.</div>
           </div>
-
-          <p style="font-size:12px; font-weight:600; margin-bottom:2px;">2. Expression par le pavillon</p>
-          <p style="font-size:11px; margin-bottom:0;">(Avortement tubo-abdominal). R&#233;serv&#233;e uniquement aux grossesses les plus distales (termino et médio-ampullaires).</p>
         </div>
 
         <!-- TRAITEMENT RADICAL -->
@@ -537,7 +574,7 @@
       <ul class="ul-arrow">
         <li>H&#233;mop&#233;ritoine massif avec &#233;tat h&#233;modynamique instable.</li>
         <li>Contre-indications &#224; la c&#339;lioscopie (ob&#233;sit&#233; extr&#234;me, patientes multiopérées, pelvis bloqu&#233;, antécédent de syndrome adh&#233;rentiel majeur).</li>
-        <li>Op&#233;rateur non exp&#233;riment&#233; ou mat&#233;riel cœlioscopique insuffisant.</li>
+        <li>Conversion peropératoire devant des difficultés techniques.</li>
         <li>Localisations inhabituelles (interstitielle, ovarienne, abdominale après échec du traitement médical).</li>
       </ul>
     </div>
@@ -546,7 +583,7 @@
     <div class="geu-panel" id="panel-obs" role="tabpanel">
       <h2>Abstention th&#233;rapeutique (Surveillance expectative)</h2>
       <div class="alert-box info">
-        <span class="alert-ico">&#9432;</span>
+        <span class="alert-ico">📊</span>
         <div>Basée sur le fait qu'environ 1 GEU sur 5 involue spontanément. Elle n'est envisageable que si <strong>tous les crit&#232;res</strong> ci-dessous sont r&#233;unis. Elle évite une escalade thérapeutique et préserve l'anatomie tubaire.</div>
       </div>
 
@@ -555,19 +592,19 @@
           <h3>Crit&#232;res d&#8217;&#233;ligibilit&#233; (Toutes requises)</h3>
           <p style="font-size:11px; font-weight:600; color:#1a3a5c; margin-bottom:4px;">1. Critères Cliniques :</p>
           <ul class="ul-check">
-            <li>Patiente asymptomatique ou pauci-symptomatique (douleurs pelviennes minimes, pas de signes péritonéaux).</li>
-            <li>Absence de signes de rupture tubaire (stabilité).</li>
+            <li>Patiente <strong>asymptomatique (absence TOTALE de douleur)</strong></li>
+            <li>Absence de signes de rupture tubaire (stabilité hémodynamique)</li>
           </ul>
           <p style="font-size:11px; font-weight:600; color:#1a3a5c; margin-top:8px; margin-bottom:4px;">2. Critères Biologiques :</p>
           <ul class="ul-check">
-            <li>&#946;-hCG &lt; 1 000 mUI/mL (1 500 dans certains protocoles).</li>
-            <li>D&#233;croissance significative (baisse &#8805; 15 % sur 48 h).</li>
+            <li>&#946;-hCG &lt; 1 000 mUI/mL</li>
+            <li>D&#233;croissance significative (baisse &#8805; 15 % sur 48 h)</li>
           </ul>
           <p style="font-size:11px; font-weight:600; color:#1a3a5c; margin-top:8px; margin-bottom:4px;">3. Critères Échographiques :</p>
           <ul class="ul-check">
-            <li>H&#233;matosalpinx &lt; 3 cm.</li>
-            <li>Absence d'activité cardiaque embryonnaire.</li>
-            <li>Absence d&#8217;h&#233;mop&#233;ritoine.</li>
+            <li>H&#233;matosalpinx &lt; 3 cm</li>
+            <li>Absence d'activité cardiaque embryonnaire</li>
+            <li>Absence d&#8217;h&#233;mop&#233;ritoine</li>
           </ul>
         </div>
         <div class="criteria-block" style="border-left-color:#e0847a;">
@@ -582,7 +619,6 @@
           </ul>
           <hr class="sep" style="margin:10px 0;">
           <div style="font-size:12px; color:#c0392b;"><strong>Abandon immédiat si :</strong> Stagnation ou ascension des hCG, apparition de douleurs/saignements, ou signes écho de rupture &rarr; Switch vers MTX ou Chirurgie.</div>
-          <div style="font-size:11px; margin-top:8px;"><em>Contre-indication relative : désir de grossesse ultérieur (l'abstinence réduit la fertilité immédiate, préférer le MTX).</em></div>
         </div>
       </div>
       
@@ -593,6 +629,19 @@
     <div class="geu-panel" id="panel-decision" role="tabpanel">
       <h2>Critères de choix thérapeutique</h2>
       <p style="font-size:13px; margin-bottom:14px;">La prise en charge des GEU s'oriente vers une personnalisation du traitement. L'objectif principal demeure la préservation de la vie de la patiente tout en optimisant ses chances de fertilité future.</p>
+      
+      <!-- SCORE SIMPLIFIÉ -->
+      <div class="alert-box info">
+        <span class="alert-ico">📊</span>
+        <div>
+          <strong>Score pronostique simplifié (inspiré du score de Fernandez) :</strong><br>
+          • hCG &lt; 1 500 = 0 pt | 1 500–5 000 = 1 pt | &gt; 5 000 = 2 pts<br>
+          • Masse &lt; 3 cm = 0 pt | ≥ 3 cm = 1 pt<br>
+          • Activité cardiaque = 2 pts<br>
+          <strong>→ Score 0-1 : Abstention possible | Score 2-3 : MTX | Score ≥ 4 : Chirurgie</strong>
+        </div>
+      </div>
+
       <table class="decision-table">
         <thead>
           <tr>
@@ -605,14 +654,14 @@
         <tbody>
           <tr>
             <td><strong>&#946;-hCG (mUI/mL)</strong></td>
-            <td class="dt-amber">&lt; 1 000 - 1 500<br>+ Décroissance confirmée</td>
-            <td class="dt-green">&lt; 1 000 (Préférable)<br>&lt; 5 000 - 10 000 (Possible)</td>
-            <td class="dt-blue">&gt; 10 000</td>
+            <td class="dt-amber">&lt; 1 000<br>+ Décroissance confirmée</td>
+            <td class="dt-green">&lt; 5 000 (seuil de sécurité)</td>
+            <td class="dt-blue">&gt; 5 000</td>
           </tr>
           <tr>
             <td><strong>Échographie (Masse)</strong></td>
             <td class="dt-amber">&lt; 3 cm</td>
-            <td class="dt-green">Non visible (Préférable)<br>&lt; 4 cm (Possible)</td>
+            <td class="dt-green">&lt; 4 cm</td>
             <td class="dt-blue">&#8805; 4 cm</td>
           </tr>
           <tr>
@@ -628,10 +677,10 @@
             <td class="dt-blue">Instable / Hémopéritoine</td>
           </tr>
           <tr>
-            <td><strong>Sympt&#244;mes</strong></td>
-            <td class="dt-amber">Asymptomatique</td>
-            <td class="dt-green">Pauci / Asymptomatique</td>
-            <td class="dt-blue">Douloureuse / Grave</td>
+            <td><strong>Sympt&#244;mes / Douleur</strong></td>
+            <td class="dt-amber">Absence TOTALE</td>
+            <td class="dt-green">Absente ou minime</td>
+            <td class="dt-blue">Sévère / Instable</td>
           </tr>
         </tbody>
       </table>
@@ -647,7 +696,7 @@
         <ul class="ul-arrow">
           <li><strong>Dosage quantitatif :</strong> Suivi régulier des &#946;-hCG jusqu&#8217;&#224; négativation compl&#232;te (&lt; 5 mUI/mL).</li>
           <li><strong>En cas de chirurgie conservatrice (Salpingotomie) :</strong> Une surveillance particulière est nécessaire pour détecter une GEU persistante. Dosage systématique à 48h post-op.</li>
-          <li><strong>Immunisation Rh(D) :</strong> Toutes les patientes de groupe sanguin Rh négatif doivent recevoir une injection d’immunoglobulines anti-D.</li>
+          <li><strong>Immunisation Rh(D) :</strong> Toutes les patientes de groupe sanguin Rh négatif doivent recevoir une injection d’immunoglobulines anti-D dans les 72h.</li>
         </ul>
       </div>
       
@@ -657,13 +706,13 @@
           <p style="font-size:12px; margin-bottom:6px;">Les études récentes montrent que la fertilité ultérieure <strong>n’est pas significativement liée au type de traitement</strong> (notamment à la conservation ou non de la trompe de Fallope). Cette donnée importante doit être prise en compte dans la discussion.</p>
           <ul class="ul-check">
             <li><strong>HSG (Hystérosalpingographie) :</strong> A prescrire 3 &#224; 6 mois apr&#232;s l&#8217;intervention pour vérifier la perméabilité (aussi bien pour étudier la trompe restante en cas de chirurgie radicale, qu'en cas de chirurgie conservatrice).</li>
-            <li><strong>Délai de conception :</strong> Grossesse possible après contrôle HSG satisfaisant.</li>
+            <li><strong>Délai de conception :</strong> Une contraception n'est pas obligatoire. Un délai de 3 à 6 mois avant une nouvelle grossesse permet de réaliser le bilan et de laisser cicatriser. La décision est partagée avec la patiente.</li>
           </ul>
         </div>
         <div class="sub-block">
           <h3>Conseils à prodiguer après une GEU</h3>
           <ul class="ul-dash" style="margin-bottom:14px;">
-            <li><strong>Contraception efficace :</strong> Prescription d'estroprogestatifs pendant 4 à 6 mois.</li>
+            <li><strong>Contraception :</strong> Peut être discutée selon le souhait de la patiente.</li>
             <li><strong>Grossesse ultérieure :</strong> Échographie précoce systématique lors d'une nouvelle grossesse à la recherche d'une récidive.</li>
             <li><strong>Alerte :</strong> Consulter en urgence en cas de douleur pelvienne, saignements anormaux ou malaise durant le suivi.</li>
           </ul>
@@ -710,6 +759,7 @@ window.calcDiag = function() {
   var a = document.getElementById('diag-annexes').value;
   var hcg = parseFloat(document.getElementById('diag-hcg').value);
   var sa = parseFloat(document.getElementById('diag-sa').value);
+  var douleur = document.getElementById('diag-douleur').value;
   var resBox = document.getElementById('diag-result');
   
   if (isNaN(hcg) || hcg <= 0) {
@@ -721,18 +771,27 @@ window.calcDiag = function() {
   var html = "";
   var cat = "";
 
+  // Gestion de la douleur sévère prioritaire
+  if (douleur === "severe") {
+    resBox.className = "alert-box critical";
+    html = "<span class='alert-ico'>🚨</span><div><strong>URGENCE CHIRURGICALE PRIORITAIRE</strong><br>Douleur pelvienne sévère. Ne pas attendre. Évaluation chirurgicale immédiate.</div>";
+    cat = "<li>Ne pas administrer de MTX.</li><li>Bilan pré-opératoire urgent.</li><li>Consultation chirurgicale en urgence.</li>";
+    resBox.innerHTML = html + "<hr style='border:none; border-top:1px solid rgba(0,0,0,0.1); margin:12px 0;'><div style='font-size:12px;'><strong style='display:block; margin-bottom:8px; color:#1a3a5c;'>📋 Conduite à tenir :</strong><ul style='margin:0; padding-left:18px;'>" + cat + "</ul></div>";
+    return;
+  }
+
   // 1. GIU certaine
   if (u === "sac") {
     resBox.className = "alert-box success";
-    html = "<span class='alert-ico'>&#10003;</span><div><strong>Grossesse Intra-Utérine (GIU).</strong><br>Présence d'un sac gestationnel intra-utérin. Le diagnostic de GEU est écarté.</div>";
-    cat = "<li>Échographie de datation/vitalité vers 7-8 SA (vérifier la vésicule vitelline/embryon).</li><li>Arrêt de la surveillance systématique des β-hCG (inutile si sac visible et grossesse évolutive).</li><li>Si contexte de PMA : garder à l'esprit le risque rare (1/100) de grossesse hétérotopique.</li>";
+    html = "<span class='alert-ico'>✓</span><div><strong>Grossesse Intra-Utérine (GIU).</strong><br>Présence d'un sac gestationnel intra-utérin. Le diagnostic de GEU est écarté.</div>";
+    cat = "<li>Échographie de datation/vitalité vers 7-8 SA (vérifier la vésicule vitelline/embryon).</li><li>Arrêt de la surveillance systématique des β-hCG (inutile si sac visible et grossesse évolutive).</li><li><strong>Attention :</strong> En cas de douleur persistante malgré GIU visible, évoquer une grossesse hétérotopique (rare mais grave).</li>";
   } 
   
   // 2. GEU tubaire certaine/très suspecte (Masse distincte = diagnostic positif)
   else if (a === "distinct") {
     resBox.className = "alert-box danger";
-    html = "<span class='alert-ico'>&#9940;</span><div><strong>Forte suspicion de GEU tubaire.</strong><br>L'échographie dynamique retrouve une masse distincte de l'ovaire (Sliding sign positif). Le diagnostic de GEU est posé, <strong>quel que soit le taux d'hCG (" + hcg + ") ou les SA</strong>.</div>";
-    cat = "<li>Le diagnostic précoce permet souvent de tenter un <strong>traitement conservateur</strong>.</li><li>Bilan pré-thérapeutique : NFS, plaquettes, bilan de coagulation, bilan hépatique, créatininémie.</li><li>Vérifier le Groupe/Rhésus : Injection d'Immunoglobulines anti-D si la patiente est Rh négatif.</li><li>Discuter l'option thérapeutique (MTX ou Chirurgie) selon l'état clinique de la patiente, la taille de la masse et le taux d'hCG (Voir l'onglet Décision).</li><li><em>L'abstention n'est généralement plus privilégiée si une masse distincte est déjà visible, en faveur du traitement médical si la patiente est asymptomatique.</em></li>";
+    html = "<span class='alert-ico'>⚠️</span><div><strong>Forte suspicion de GEU tubaire.</strong><br>L'échographie dynamique retrouve une masse distincte de l'ovaire (Sliding sign positif). Le diagnostic de GEU est posé.</div>";
+    cat = "<li>Le diagnostic précoce permet souvent de tenter un <strong>traitement conservateur</strong>.</li><li>Bilan pré-thérapeutique : NFS, plaquettes, bilan de coagulation, bilan hépatique, créatininémie, groupe Rh.</li><li>Vérifier le Groupe/Rhésus : Injection d'Immunoglobulines anti-D si la patiente est Rh négatif (dans les 72h).</li><li>Discuter l'option thérapeutique (MTX si hCG &lt; 5000 et asymptomatique, sinon chirurgie).</li><li><em>L'abstention n'est pas indiquée si une masse distincte est visible.</em></li>";
   }
   
   // 3. Cas complexes (Utérus vide ou Pseudo-sac)
@@ -742,24 +801,24 @@ window.calcDiag = function() {
 
     if (isPseudo) {
       resBox.className = "alert-box warn";
-      html = "<span class='alert-ico'>&#9888;</span><div><strong>Forte probabilité de GEU.</strong><br>La présence d'un pseudo-sac liquidien central (sans Vésicule Vitelline) est très suspecte de GEU, même sans masse annexielle évidente à ce stade.</div>";
-      cat = "<li>Considérer la patiente comme porteuse d'une GEU jusqu'à preuve du contraire.</li><li>Bilan pré-thérapeutique complet (NFS, hépato-rénal, hémostase).</li><li>Prévention anti-D si Rh négatif.</li><li>Surveillance clinique rapprochée ou initiation du traitement médical si critères réunis.</li>";
+      html = "<span class='alert-ico'>⚠️</span><div><strong>Forte probabilité de GEU.</strong><br>La présence d'un pseudo-sac liquidien central (sans Vésicule Vitelline) est très suspecte de GEU, même sans masse annexielle évidente à ce stade.</div>";
+      cat = "<li>Considérer la patiente comme porteuse d'une GEU jusqu'à preuve du contraire.</li><li>Bilan pré-thérapeutique complet (NFS, hépato-rénal, hémostase, groupe Rh).</li><li>Prévention anti-D si Rh négatif.</li><li>Surveillance clinique rapprochée ou initiation du traitement médical si critères réunis.</li>";
     } 
     else if (hcg >= 1500) {
       resBox.className = "alert-box warn";
-      html = "<span class='alert-ico'>&#9888;</span><div><strong>Évolution anormale : Suspicion GEU ou Fausse Couche.</strong><br>Le taux d'hCG (" + hcg + " mUI/mL) a dépassé la zone discriminatoire (> 1500), or l'utérus est vide. C'est une anomalie confirmée.</div>";
+      html = "<span class='alert-ico'>⚠️</span><div><strong>Évolution anormale : Suspicion GEU ou Fausse Couche.</strong><br>Le taux d'hCG (" + hcg + " mUI/mL) dépasse 1500, or l'utérus est vide. Anomalie confirmée.</div>";
       cat = "<li>Échographie de 2ème intention (recherche experte d'une masse annexielle).</li><li>Contrôle quantitatif des β-hCG à 48h (on attend une chute franche en cas de Fausse Couche spontanée).</li><li><strong>Ne pas traiter par Méthotrexate à l'aveugle</strong> sans avoir écarté une fausse couche.</li>";
     }
     else if (hasSA && sa >= 5.5) {
       resBox.className = "alert-box warn";
-      html = "<span class='alert-ico'>&#9888;</span><div><strong>Discordance Écho / Aménorrhée (GLI Haut risque).</strong><br>Le taux d'hCG est sous la zone discriminatoire, MAIS à <strong>" + sa + " SA</strong>, un sac devrait habituellement être visible. Le tableau s'oriente vers une GEU ou une Fausse couche en cours.</div>";
+      html = "<span class='alert-ico'>⚠️</span><div><strong>Discordance Écho / Aménorrhée (GLI Haut risque).</strong><br>À <strong>" + sa + " SA</strong>, un sac devrait habituellement être visible. Évoquer GEU ou fausse couche.</div>";
       cat = "<li>Contrôle quantitatif des β-hCG à 48h dans le même laboratoire (évaluation de la cinétique).</li><li>Consignes strictes de retour aux urgences si apparition de douleurs pelviennes ou saignements.</li><li>Nouvelle échographie de contrôle prévue dans 48h à 72h.</li>";
     }
     else {
       var saText = hasSA ? (" (à " + sa + " SA)") : "";
       resBox.className = "alert-box info";
-      html = "<span class='alert-ico'>&#9432;</span><div><strong>Grossesse de Localisation Indéterminée (GLI / PUL).</strong><br>Le taux d'hCG (" + hcg + " mUI/mL) est < 1500 et l'âge gestationnel est très précoce" + saText + ". Un utérus vide est normal à ce stade.</div>";
-      cat = "<li>Rassurer la patiente : il s'agit possiblement d'une grossesse très précoce et d'évolution normale.</li><li>Contrôle des β-hCG à 48h pour vérifier la cinétique (une hausse d'environ 66% est attendue pour une GIU évolutive).</li><li>Échographie de contrôle à distance (J7-J10).</li>";
+      html = "<span class='alert-ico'>ℹ️</span><div><strong>Grossesse de Localisation Indéterminée (GLI / PUL).</strong><br>Taux d'hCG (" + hcg + " mUI/mL) < 1500" + saText + ". Un utérus vide est normal à ce stade précoce.</div>";
+      cat = "<li>Rassurer la patiente : évolution possiblement normale.</li><li>Contrôle des β-hCG à 48h pour vérifier la cinétique (hausse de 66% attendue pour une GIU évolutive).</li><li>Consignes de retour si douleur ou saignement.</li>";
     }
   }
   
@@ -778,7 +837,7 @@ window.calcBSA = function() {
   if(t > 0 && p > 0) {
     var bsa = Math.sqrt((t * p) / 3600);
     var dose = bsa * 50;
-    resBox.innerHTML = "Surface : <strong>" + bsa.toFixed(2) + " m&sup2;</strong> &rarr; Dose cible (50 mg/m&sup2;) : <strong style='color:#a8d5b0; font-size:15px;'>" + Math.round(dose) + " mg</strong>";
+    resBox.innerHTML = "Surface : <strong>" + bsa.toFixed(2) + " m²</strong> → Dose cible (50 mg/m²) : <strong style='color:#a8d5b0; font-size:15px;'>" + Math.round(dose) + " mg</strong>";
     resBox.style.display = "block";
   } else { 
     resBox.style.display = "none"; 
@@ -813,9 +872,9 @@ window.calcHCG = function() {
   
   resDiv.style.display = "block";
   
-  if (h0 > 5000 || (h4 !== null && h4 > 5000)) {
-    resDiv.className = "alert-box warn"; 
-    resDiv.innerHTML = "<span class='alert-ico'>&#9888;</span><div><strong>Taux > 5 000 mUI/mL détecté.</strong><br>Le risque de rupture est élevé. Une prise en charge chirurgicale est recommandée selon les critères de choix thérapeutique.</div>"; 
+  if (h0 > 5000) {
+    resDiv.className = "alert-box critical"; 
+    resDiv.innerHTML = "<span class='alert-ico'>⚠️</span><div><strong>Taux > 5 000 mUI/mL.</strong><br>Le risque de rupture est élevé. Une prise en charge chirurgicale est recommandée selon les critères de choix thérapeutique.</div>"; 
     return;
   }
   
@@ -827,24 +886,24 @@ window.calcHCG = function() {
         
         if (varJ4J7 >= 15) {
             resDiv.className = "alert-box success";
-            resDiv.innerHTML = "<span class='alert-ico'>&#10003;</span><div><strong>Succès thérapeutique !</strong><br>La baisse entre J4 et J7 est de <strong>" + varJ4J7.toFixed(1) + "%</strong> (≥ 15%). Poursuivre le dosage hebdomadaire jusqu'à négativation (< 5 mUI/mL).</div>";
+            resDiv.innerHTML = "<span class='alert-ico'>✓</span><div><strong>Succès thérapeutique !</strong><br>La baisse entre J4 et J7 est de <strong>" + varJ4J7.toFixed(1) + "%</strong> (≥ 15%). Poursuivre le dosage hebdomadaire jusqu'à négativation (< 5 mUI/mL).</div>";
         } else {
             var diffLabel = varJ4J7 > 0 ? "Baisse insuffisante" : "Ascension";
             resDiv.className = "alert-box danger";
-            resDiv.innerHTML = "<span class='alert-ico'>&#9940;</span><div><strong>Échec thérapeutique.</strong><br>" + diffLabel + " entre J4 et J7 : " + varJ4J7.toFixed(1) + "% (attendu ≥ 15%). Il y a indication à une 2ème injection de MTX ou à une intervention chirurgicale.</div>";
+            resDiv.innerHTML = "<span class='alert-ico'>⚠️</span><div><strong>Échec thérapeutique.</strong><br>" + diffLabel + " entre J4 et J7 : " + varJ4J7.toFixed(1) + "% (attendu ≥ 15%). Indication à une 2ème injection de MTX ou à une intervention chirurgicale.</div>";
         }
     } else {
         if (varJ0J4 > 20) {
             resDiv.className = "alert-box warn";
-            resDiv.innerHTML = "<span class='alert-ico'>&#9888;</span><div><strong>Hausse anormale entre J0 et J4 (+" + varJ0J4.toFixed(1) + "%).</strong><br>Une hausse > 20% est inhabituelle. Vérifier l'état clinique (recherche de signes de rupture) et attendre le dosage à J7 pour statuer définitivement.</div>";
+            resDiv.innerHTML = "<span class='alert-ico'>⚠️</span><div><strong>Hausse anormale entre J0 et J4 (+" + varJ0J4.toFixed(1) + "%).</strong><br>Une hausse > 20% est inhabituelle. Vérifier l'état clinique (recherche de signes de rupture) et attendre le dosage à J7 pour statuer définitivement.</div>";
         } else {
             resDiv.className = "alert-box info";
-            resDiv.innerHTML = "<span class='alert-ico'>&#9432;</span><div>Évolution J0-J4 : <strong>" + (varJ0J4 > 0 ? "+" : "") + varJ0J4.toFixed(1) + "%</strong>.<br>C'est une évolution normale (lyse cellulaire libérant des β-hCG). Le succès s'évaluera uniquement au dosage de J7.</div>";
+            resDiv.innerHTML = "<span class='alert-ico'>ℹ️</span><div>Évolution J0-J4 : <strong>" + (varJ0J4 > 0 ? "+" : "") + varJ0J4.toFixed(1) + "%</strong>.<br>C'est une évolution normale (lyse cellulaire libérant des β-hCG). Le succès s'évaluera uniquement au dosage de J7.</div>";
         }
     }
   } else {
     resDiv.className = "alert-box info";
-    resDiv.innerHTML = "<span class='alert-ico'>&#9432;</span><div>Dosage à J0 : <strong>" + h0 + " mUI/mL</strong>.<br><em>Prochain dosage prévu à J4. N'oubliez pas d'informer la patiente de la hausse possible et normale à J4.</em></div>";
+    resDiv.innerHTML = "<span class='alert-ico'>ℹ️</span><div>Dosage à J0 : <strong>" + h0 + " mUI/mL</strong>.<br><em>Prochain dosage prévu à J4. N'oubliez pas d'informer la patiente de la hausse possible et normale à J4.</em></div>";
   }
 };
 
