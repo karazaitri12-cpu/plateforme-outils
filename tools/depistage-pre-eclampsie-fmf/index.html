@@ -212,7 +212,7 @@
 #fmf-root input[type="number"],
 #fmf-root input[type="text"] {
   all: unset;
-  box-sizing: border-box; /* CORRECTION ICI */
+  box-sizing: border-box;
   display: block;
   width: 100%;
   border: 1px solid #b8c7d9;
@@ -258,7 +258,7 @@
 }
 #fmf-root select {
   all: unset;
-  box-sizing: border-box; /* CORRECTION ICI */
+  box-sizing: border-box;
   display: block;
   width: 100%;
   border: 1px solid #b8c7d9;
@@ -317,6 +317,9 @@
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 6px 14px;
 }
+
+/* FIX : le label checkbox n'a plus d'onclick ; le JS gère tout via addEventListener.
+   cursor:pointer reste pour l'UX. */
 #fmf-root .fmf-checkbox-row {
   display: flex;
   align-items: flex-start;
@@ -327,7 +330,9 @@
   cursor: pointer;
   padding: 4px 0;
   line-height: 1.4;
+  user-select: none;
 }
+/* L'input natif est masqué mais reste accessible */
 #fmf-root .fmf-checkbox-row input[type="checkbox"] {
   position: absolute;
   opacity: 0;
@@ -377,7 +382,7 @@
 }
 #fmf-root .fmf-btn {
   all: unset;
-  box-sizing: border-box; /* CORRECTION ICI */
+  box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -589,6 +594,21 @@
 }
 #fmf-root .fmf-score-explain strong { color: var(--navy); }
 
+/* ---- Bandeau d'avertissement approximation — NOUVEAU ---- */
+#fmf-root .fmf-approx-banner {
+  margin-top: 12px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-left: 3px solid var(--amber);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-family: Arial, sans-serif;
+  font-size: 0.75rem;
+  color: #78350f;
+  line-height: 1.55;
+}
+#fmf-root .fmf-approx-banner strong { color: var(--amber); }
+
 /* Avertissement médico-légal */
 #fmf-root .fmf-disclaimer {
   margin-top: 20px;
@@ -632,7 +652,7 @@
 }
 
 /* =========================================
-   Masque l'ascenseur (style App native)
+   PRO : Masque l'ascenseur (style App native)
    ========================================= */
 html { scrollbar-width: none; }
 body { -ms-overflow-style: none; overflow-y: auto; }
@@ -662,7 +682,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   </div>
 
   <div class="fmf-notice">
-    <strong>Principe :</strong> Le modèle FMF combine le risque a priori (histoire maternelle + facteurs de risque) aux marqueurs biophysiques et biochimiques du 1<sup>er</sup> trimestre pour calculer un risque individuel de pré-éclampsie précoce (&lt; 34 SA) et totale (&lt; 37 SA). Le seuil d'intervention est 1/100 pour l'aspirine prophylactique (ASPRE trial, Rolnik 2017).
+    <strong>Principe :</strong> Le modèle FMF combine le risque a priori (histoire maternelle + facteurs de risque) aux marqueurs biophysiques et biochimiques du 1<sup>er</sup> trimestre pour calculer un risque individuel de pré-éclampsie précoce (&lt; 34 SA). Le seuil d'intervention est 1/100 pour l'aspirine prophylactique (ASPRE trial, Rolnik 2017). <strong>Seul le risque PE précoce (&lt; 34 SA) est calculé ici.</strong>
   </div>
 
   <!-- ========== SECTION 1 ========== -->
@@ -674,31 +694,26 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <div class="fmf-section-body">
 
       <div class="fmf-grid">
-        <!-- Âge -->
         <div class="fmf-field">
           <span class="fmf-label">Âge maternel <span class="fmf-unit">(années)</span> <span class="fmf-required">*</span></span>
           <input type="number" id="fmf-age" min="15" max="55" placeholder="ex : 32">
         </div>
-        <!-- Poids -->
         <div class="fmf-field">
           <span class="fmf-label">Poids <span class="fmf-unit">(kg)</span> <span class="fmf-required">*</span></span>
           <input type="number" id="fmf-poids" min="35" max="200" step="0.1" placeholder="ex : 68.5">
         </div>
-        <!-- Taille -->
         <div class="fmf-field">
           <span class="fmf-label">Taille <span class="fmf-unit">(cm)</span> <span class="fmf-required">*</span></span>
           <input type="number" id="fmf-taille" min="140" max="200" placeholder="ex : 165">
         </div>
-        <!-- Conception -->
         <div class="fmf-field">
           <span class="fmf-label">Méthode de conception <span class="fmf-required">*</span></span>
-          <div class="fmf-radio-group">
-            <label class="fmf-radio-btn active"><input type="radio" name="conception" value="natural">Spontanée</label>
+          <div class="fmf-radio-group" id="rg-conception">
+            <label class="fmf-radio-btn"><input type="radio" name="conception" value="natural">Spontanée</label>
             <label class="fmf-radio-btn"><input type="radio" name="conception" value="ovulation">Induction ovulation</label>
             <label class="fmf-radio-btn"><input type="radio" name="conception" value="ivf">FIV / ICSI</label>
           </div>
         </div>
-        <!-- Ethnie -->
         <div class="fmf-field">
           <span class="fmf-label">Ethnie <span class="fmf-required">*</span></span>
           <div class="fmf-select-wrap">
@@ -711,36 +726,31 @@ body { -ms-overflow-style: none; overflow-y: auto; }
             </select>
           </div>
         </div>
-        <!-- Tabac -->
         <div class="fmf-field">
           <span class="fmf-label">Tabagisme actif <span class="fmf-required">*</span></span>
-          <div class="fmf-radio-group">
-            <label class="fmf-radio-btn active"><input type="radio" name="tabac" value="non">Non</label>
+          <div class="fmf-radio-group" id="rg-tabac">
+            <label class="fmf-radio-btn"><input type="radio" name="tabac" value="non">Non</label>
             <label class="fmf-radio-btn"><input type="radio" name="tabac" value="oui">Oui</label>
           </div>
         </div>
       </div>
 
-      <!-- Antécédents obstétricaux -->
       <div class="fmf-sub-title">Antécédents obstétricaux</div>
       <div class="fmf-grid">
-        <!-- Parité -->
         <div class="fmf-field">
           <span class="fmf-label">Parité (sans PE antérieure) <span class="fmf-required">*</span></span>
-          <div class="fmf-radio-group">
-            <label class="fmf-radio-btn active"><input type="radio" name="parite" value="nullipare">Nullipare</label>
+          <div class="fmf-radio-group" id="rg-parite">
+            <label class="fmf-radio-btn"><input type="radio" name="parite" value="nullipare">Nullipare</label>
             <label class="fmf-radio-btn"><input type="radio" name="parite" value="multipare">Multipare sans ATCD PE</label>
           </div>
         </div>
-        <!-- ATCD PE -->
         <div class="fmf-field">
           <span class="fmf-label">ATCD de pré-éclampsie</span>
-          <div class="fmf-radio-group">
-            <label class="fmf-radio-btn active"><input type="radio" name="atcd_pe" value="non">Non</label>
+          <div class="fmf-radio-group" id="rg-atcd_pe">
+            <label class="fmf-radio-btn"><input type="radio" name="atcd_pe" value="non">Non</label>
             <label class="fmf-radio-btn"><input type="radio" name="atcd_pe" value="oui">Oui</label>
           </div>
         </div>
-        <!-- Intervalle -->
         <div class="fmf-field">
           <span class="fmf-label">Intervalle inter-gestationnel <span class="fmf-unit">(années)</span> <span class="fmf-optional">optionnel</span></span>
           <input type="number" id="fmf-interval" min="0" max="30" step="0.5" placeholder="ex : 3">
@@ -758,33 +768,34 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       Facteurs de risque cliniques
     </div>
     <div class="fmf-section-body">
-      <div class="fmf-check-grid">
-        <label class="fmf-checkbox-row" onclick="fmfToggleCheck(this)">
+      <!-- FIX : suppression des onclick inline — les listeners sont attachés en JS via addEventListener -->
+      <div class="fmf-check-grid" id="fmf-check-grid">
+        <label class="fmf-checkbox-row" data-cb="fmf-hta">
           <input type="checkbox" id="fmf-hta">
           <span class="fmf-cb-box"></span>
           <span>HTA chronique (diagnostiquée avant la grossesse)</span>
         </label>
-        <label class="fmf-checkbox-row" onclick="fmfToggleCheck(this)">
+        <label class="fmf-checkbox-row" data-cb="fmf-diabete">
           <input type="checkbox" id="fmf-diabete">
           <span class="fmf-cb-box"></span>
           <span>Diabète de type 1 ou 2 préexistant</span>
         </label>
-        <label class="fmf-checkbox-row" onclick="fmfToggleCheck(this)">
+        <label class="fmf-checkbox-row" data-cb="fmf-sle">
           <input type="checkbox" id="fmf-sle">
           <span class="fmf-cb-box"></span>
           <span>Lupus érythémateux systémique / SAPL</span>
         </label>
-        <label class="fmf-checkbox-row" onclick="fmfToggleCheck(this)">
+        <label class="fmf-checkbox-row" data-cb="fmf-nephro">
           <input type="checkbox" id="fmf-nephro">
           <span class="fmf-cb-box"></span>
           <span>Néphropathie chronique</span>
         </label>
-        <label class="fmf-checkbox-row" onclick="fmfToggleCheck(this)">
+        <label class="fmf-checkbox-row" data-cb="fmf-gemellaire">
           <input type="checkbox" id="fmf-gemellaire">
           <span class="fmf-cb-box"></span>
           <span>Grossesse gémellaire</span>
         </label>
-        <label class="fmf-checkbox-row" onclick="fmfToggleCheck(this)">
+        <label class="fmf-checkbox-row" data-cb="fmf-atcd-fam">
           <input type="checkbox" id="fmf-atcd-fam">
           <span class="fmf-cb-box"></span>
           <span>ATCD familial de PE (mère / sœur)</span>
@@ -801,33 +812,27 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="fmf-section-body">
       <div class="fmf-grid">
-        <!-- LCC -->
         <div class="fmf-field">
           <span class="fmf-label">LCC <span class="fmf-unit">(mm)</span> <span class="fmf-required">*</span></span>
           <input type="number" id="fmf-lcc" min="45" max="84" step="0.1" placeholder="45 – 84 mm">
-          <span class="fmf-hint">Détermine l'âge gestationnel FMF</span>
+          <span class="fmf-hint">Détermine la médiane de l'IP utérin (Plasencia 2008)</span>
         </div>
-        <!-- TAS bras droit -->
         <div class="fmf-field">
           <span class="fmf-label">TA systolique — bras droit <span class="fmf-unit">(mmHg)</span> <span class="fmf-required">*</span></span>
           <input type="number" id="fmf-tas1" min="80" max="200" placeholder="ex : 115">
         </div>
-        <!-- TAD bras droit -->
         <div class="fmf-field">
           <span class="fmf-label">TA diastolique — bras droit <span class="fmf-unit">(mmHg)</span> <span class="fmf-required">*</span></span>
           <input type="number" id="fmf-tad1" min="40" max="130" placeholder="ex : 75">
         </div>
-        <!-- TAS bras gauche -->
         <div class="fmf-field">
           <span class="fmf-label">TA systolique — bras gauche <span class="fmf-unit">(mmHg)</span> <span class="fmf-optional">optionnel</span></span>
           <input type="number" id="fmf-tas2" min="80" max="200" placeholder="ex : 113">
         </div>
-        <!-- TAD bras gauche -->
         <div class="fmf-field">
           <span class="fmf-label">TA diastolique — bras gauche <span class="fmf-unit">(mmHg)</span> <span class="fmf-optional">optionnel</span></span>
           <input type="number" id="fmf-tad2" min="40" max="130" placeholder="ex : 73">
         </div>
-        <!-- IP utérin -->
         <div class="fmf-field">
           <span class="fmf-label">IP artères utérines (moyen) <span class="fmf-unit">(Doppler bilat.)</span> <span class="fmf-required">*</span></span>
           <input type="number" id="fmf-ipu" min="0.5" max="5.0" step="0.01" placeholder="ex : 1.45">
@@ -846,13 +851,11 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="fmf-section-body">
       <div class="fmf-grid">
-        <!-- PAPP-A -->
         <div class="fmf-field">
           <span class="fmf-label">PAPP-A <span class="fmf-unit">(MoM)</span> <span class="fmf-required">*</span></span>
           <input type="number" id="fmf-pappa" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.85">
           <span class="fmf-hint">Valeur MoM corrigée fournie par le laboratoire</span>
         </div>
-        <!-- PlGF -->
         <div class="fmf-field">
           <span class="fmf-label">PlGF <span class="fmf-unit">(MoM)</span> <span class="fmf-optional">optionnel — améliore la DR</span></span>
           <input type="number" id="fmf-plgf" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.92">
@@ -864,10 +867,10 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 
   <!-- BOUTONS -->
   <div class="fmf-btn-bar">
-    <button class="fmf-btn fmf-btn-primary" onclick="fmfCalculer()">
+    <button class="fmf-btn fmf-btn-primary" id="btn-calculer">
       &#9654; Calculer le risque FMF
     </button>
-    <button class="fmf-btn fmf-btn-reset" onclick="fmfReset()">
+    <button class="fmf-btn fmf-btn-reset" id="btn-reset">
       &#8635; Réinitialiser
     </button>
   </div>
@@ -884,10 +887,14 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <div class="fmf-result-body" id="fmf-result-body"></div>
   </div>
 
-  <!-- Avertissement -->
+  <!-- Avertissement médico-légal renforcé -->
   <div class="fmf-disclaimer">
     <strong>Avertissement médico-légal ·</strong>
-    Cet outil est un calculateur de risque basé sur la méthodologie FMF publiée (Nicolaides KH, Ultrasound Obstet Gynecol 2018 ; Wright D et al. UOG 2015). Il ne se substitue pas au logiciel FMF certifié, ni au jugement clinique. Les valeurs MoM doivent être issues d'un laboratoire accrédité FMF. La prescription d'acide acétylsalicylique (150 mg/j, 12–36 SA) relève de la responsabilité médicale individuelle. Références : ASPRE Trial (Rolnik DL, NEJM 2017) · CNGOF 2020 · ISUOG Practice Guidelines 2020.
+    Cet outil est un calculateur de risque éducatif basé sur la méthodologie FMF publiée (Nicolaides KH, <em>Ultrasound Obstet Gynecol</em> 2018 ; Wright D et al. <em>UOG</em> 2015 ; Plasencia W et al. <em>UOG</em> 2008).
+    <strong>Il calcule uniquement le risque de PE précoce (&lt; 34 SA)</strong>, seul modèle validé dans la littérature pour le dépistage T1. Aucune estimation du risque de PE tardive (&lt; 37 SA ou à terme) n'est proposée, car un tel calcul nécessiterait un modèle distinct, non implémenté ici.
+    La médiane de MAP utilisée est une approximation simplifiée (Wright UOG 2015) ne tenant pas compte de la parité ni de l'ethnie de façon complète. Les paramètres log-normaux des LR sont des valeurs uniques (non stratifiées par parité). Ces simplifications sont acceptables pour une aide à la décision, mais <strong>ne se substituent pas au logiciel FMF certifié</strong>.
+    Les valeurs MoM doivent être issues d'un laboratoire accrédité FMF. La prescription d'acide acétylsalicylique (150 mg/j, 12–36 SA) relève de la responsabilité médicale individuelle.
+    Références : ASPRE Trial (Rolnik DL, <em>NEJM</em> 2017) · CNGOF 2020 · ISUOG Practice Guidelines 2020.
   </div>
 
 </div>
@@ -909,42 +916,78 @@ function radio(name) {
 function isChecked(id) { var el = $id(id); return el ? el.checked : false; }
 
 /* ================================================================
-   TOGGLE CHECKBOX (évite double-trigger label + input)
+   FIX CRITIQUE — CHECKBOXES
+   Problème original : onclick inline sur le label déclenchait
+   fmfToggleCheck() ET le comportement natif du label → double toggle.
+   Solution : addEventListener avec preventDefault() pour court-circuiter
+   le comportement natif du label, puis toggle manuel de l'état.
    ================================================================ */
-window.fmfToggleCheck = function (labelEl) {
-  var inp = labelEl.querySelector('input[type="checkbox"]');
-  if (!inp) return;
-  inp.checked = !inp.checked;
-  labelEl.classList.toggle('checked', inp.checked);
-};
+document.querySelectorAll('#fmf-root .fmf-checkbox-row').forEach(function (labelEl) {
+  labelEl.addEventListener('click', function (e) {
+    e.preventDefault(); /* Bloque le clic natif sur l'<input> caché */
+    var inp = labelEl.querySelector('input[type="checkbox"]');
+    if (!inp) return;
+    inp.checked = !inp.checked;
+    labelEl.classList.toggle('checked', inp.checked);
+  });
+});
+
+/* ================================================================
+   RADIOS — toggle visuel (via addEventListener, pas d'onclick inline)
+   ================================================================ */
+document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var inp = btn.querySelector('input[type="radio"]');
+    if (!inp) return;
+    document.querySelectorAll('#fmf-root input[name="' + inp.name + '"]')
+      .forEach(function (r) { r.closest('.fmf-radio-btn').classList.remove('active'); });
+    btn.classList.add('active');
+    inp.checked = true;
+  });
+});
+
+/* Init : activer le premier radio de chaque groupe */
+['conception', 'tabac', 'parite', 'atcd_pe'].forEach(function (name) {
+  var first = document.querySelector('#fmf-root input[name="' + name + '"]');
+  if (first) {
+    first.checked = true;
+    first.closest('.fmf-radio-btn').classList.add('active');
+  }
+});
 
 /* ================================================================
    MODÈLE MATHÉMATIQUE FMF
-   Source principale : Wright D et al., UOG 2015
-                      Nicolaides KH, UOG 2018
+   Sources : Wright D et al., UOG 2015
+             Nicolaides KH, UOG 2018
+             Plasencia W et al., UOG 2008 (médiane IPU)
    ================================================================ */
 
 function calcBMI(poids, taille) {
   return poids / Math.pow(taille / 100, 2);
 }
 
-/* --- Médiane IP utérin en fonction LCC (Plasencia UOG 2008) --- */
+/* Médiane IP utérin en fonction LCC (Plasencia UOG 2008) */
 function medianeIPU(lcc) {
   return 2.434 - 0.02221 * lcc + 0.000101 * lcc * lcc;
 }
 
-/* --- Médiane MAP en fonction âge + IMC (Wright UOG 2015) --- */
+/*
+ * Médiane MAP (Wright UOG 2015) — modèle simplifié.
+ * Note : le modèle publié complet inclut la parité et l'ethnie.
+ * Cette équation est une approximation à deux covariables (âge, IMC).
+ * Valeur indicative ; le logiciel FMF certifié utilise le modèle complet.
+ */
 function medianeMAP(age, bmi) {
   return 73.3 + 0.062 * age + 0.285 * bmi;
 }
 
-/* --- Densité gaussienne --- */
+/* Densité gaussienne */
 function gpdf(x, mu, sigma) {
   return (1 / (sigma * Math.sqrt(2 * Math.PI))) *
          Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
 }
 
-/* --- LR par rapport de densités log-normales --- */
+/* LR par rapport de densités log-normales */
 function lrLogNormal(mom, mu_PE, sig_PE, mu_bg, sig_bg) {
   if (isNaN(mom) || mom <= 0) return 1.0;
   var logM = Math.log(mom);
@@ -958,30 +1001,30 @@ function lrMAP(mom)   { return lrLogNormal(mom,  0.137, 0.085,  0.046, 0.073); }
 function lrPAPPA(mom) { return lrLogNormal(mom, -0.356, 0.548,  0.000, 0.450); }
 function lrPLGF(mom)  { return lrLogNormal(mom, -0.416, 0.494,  0.000, 0.380); }
 
-/* --- Risque a priori (logit) --- */
+/* Risque a priori (logit) — Wright UOG 2015 */
 function apriori(p) {
   var logit = -8.823;
-  if (p.ethnie === 'afro')           logit += 0.756;
-  else if (p.ethnie === 'asiatique') logit += 0.310;
-  else if (p.ethnie === 'est-asiatique') logit += -0.282;
-  else if (p.ethnie === 'mixte')     logit += 0.310;
-  if (p.parite === 'nullipare')      logit += 0.472;
-  if (p.atcd_pe === 'oui')           logit += 1.246;
-  if (p.hta)     logit += 0.782;
-  if (p.diabete) logit += 0.625;
-  if (p.sle)     logit += 0.712;
-  if (p.nephro)  logit += 0.865;
-  if (p.gemellaire) logit += 0.410;
-  if (p.atcd_fam)   logit += 0.382;
-  if (p.tabac === 'oui')   logit += -0.198;
-  if (p.conception === 'ivf') logit += 0.310;
+  if (p.ethnie === 'afro')               logit += 0.756;
+  else if (p.ethnie === 'asiatique')     logit += 0.310;
+  else if (p.ethnie === 'est-asiatique') logit -= 0.282;
+  else if (p.ethnie === 'mixte')         logit += 0.310;
+  if (p.parite === 'nullipare')          logit += 0.472;
+  if (p.atcd_pe === 'oui')               logit += 1.246;
+  if (p.hta)                             logit += 0.782;
+  if (p.diabete)                         logit += 0.625;
+  if (p.sle)                             logit += 0.712;
+  if (p.nephro)                          logit += 0.865;
+  if (p.gemellaire)                      logit += 0.410;
+  if (p.atcd_fam)                        logit += 0.382;
+  if (p.tabac === 'oui')                 logit -= 0.198;
+  if (p.conception === 'ivf')            logit += 0.310;
   logit += 0.038 * (p.bmi - 22);
   logit += 0.014 * (p.age - 30);
   if (!isNaN(p.interval) && p.interval > 5) logit += 0.282;
   return 1 / (1 + Math.exp(-logit));
 }
 
-/* --- Combinaison bayésienne --- */
+/* Combinaison bayésienne */
 function combiner(prior, lr1, lr2, lr3, lr4) {
   var odds = (prior / (1 - prior)) * lr1 * lr2 * lr3 * lr4;
   return odds / (1 + odds);
@@ -1004,16 +1047,15 @@ function classify(r) {
 }
 
 function statutMOM(mom, seuilBas, seuilHaut, inv) {
-  // inv=true : bas = anormal (PAPP-A, PlGF) ; inv=false : haut = anormal (IPU, MAP)
   var cls, txt;
   if (inv) {
-    if (mom < seuilBas)  { cls='fmf-val-alert'; txt='\u2193\u00a0bas\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
-    else if (mom < seuilHaut) { cls='fmf-val-amber'; txt='\u2193\u00a0mod.\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
-    else { cls='fmf-val-normal'; txt='\u2713\u00a0normal\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
+    if (mom < seuilBas)       { cls = 'fmf-val-alert'; txt = '\u2193\u00a0bas\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
+    else if (mom < seuilHaut) { cls = 'fmf-val-amber'; txt = '\u2193\u00a0mod.\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
+    else                      { cls = 'fmf-val-normal'; txt = '\u2713\u00a0normal\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
   } else {
-    if (mom > seuilHaut) { cls='fmf-val-alert'; txt='\u2191\u00a0\u00e9lev\u00e9\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
-    else if (mom > seuilBas)  { cls='fmf-val-amber'; txt='\u2191\u00a0mod.\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
-    else { cls='fmf-val-normal'; txt='\u2713\u00a0normal\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
+    if (mom > seuilHaut)      { cls = 'fmf-val-alert'; txt = '\u2191\u00a0\u00e9lev\u00e9\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
+    else if (mom > seuilBas)  { cls = 'fmf-val-amber'; txt = '\u2191\u00a0mod.\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
+    else                      { cls = 'fmf-val-normal'; txt = '\u2713\u00a0normal\u00a0(' + mom.toFixed(2) + '\u00a0MoM)'; }
   }
   return '<span class="' + cls + '">' + txt + '</span>';
 }
@@ -1024,7 +1066,8 @@ function momBar(mom, inv) {
   if (inv) cls = mom < 0.5 ? 'alert' : mom < 0.7 ? 'amber' : 'normal';
   else     cls = mom > 2.0 ? 'alert' : mom > 1.5 ? 'amber' : 'normal';
   return '<div class="fmf-mom-bar-wrap">'
-    + '<div class="fmf-mom-bar"><div class="fmf-mom-bar-fill ' + cls + '" style="width:' + pct.toFixed(0) + '%"></div></div>'
+    + '<div class="fmf-mom-bar"><div class="fmf-mom-bar-fill ' + cls
+    + '" style="width:' + pct.toFixed(0) + '%"></div></div>'
     + '</div>';
 }
 
@@ -1034,14 +1077,14 @@ function momBar(mom, inv) {
 function valider() {
   var err = [];
   var champs = [
-    { id:'fmf-age',   label:'Âge maternel',           min:15,   max:55   },
-    { id:'fmf-poids', label:'Poids',                  min:35,   max:200  },
-    { id:'fmf-taille',label:'Taille',                 min:140,  max:200  },
-    { id:'fmf-lcc',   label:'LCC',                    min:45,   max:84   },
-    { id:'fmf-tas1',  label:'TA systolique (bras D)',  min:80,   max:200  },
-    { id:'fmf-tad1',  label:'TA diastolique (bras D)', min:40,  max:130  },
-    { id:'fmf-ipu',   label:'IP artères utérines',    min:0.5,  max:5.0  },
-    { id:'fmf-pappa', label:'PAPP-A (MoM)',            min:0.05, max:5.0  }
+    { id: 'fmf-age',   label: '\u00c2ge maternel',              min: 15,   max: 55   },
+    { id: 'fmf-poids', label: 'Poids',                         min: 35,   max: 200  },
+    { id: 'fmf-taille',label: 'Taille',                        min: 140,  max: 200  },
+    { id: 'fmf-lcc',   label: 'LCC',                           min: 45,   max: 84   },
+    { id: 'fmf-tas1',  label: 'TA systolique (bras D)',         min: 80,   max: 200  },
+    { id: 'fmf-tad1',  label: 'TA diastolique (bras D)',        min: 40,   max: 130  },
+    { id: 'fmf-ipu',   label: 'IP art\u00e8res ut\u00e9rines', min: 0.5,  max: 5.0  },
+    { id: 'fmf-pappa', label: 'PAPP-A (MoM)',                  min: 0.05, max: 5.0  }
   ];
   champs.forEach(function (c) {
     var el = $id(c.id);
@@ -1059,9 +1102,9 @@ function valider() {
 /* ================================================================
    CALCUL PRINCIPAL
    ================================================================ */
-window.fmfCalculer = function () {
+function fmfCalculer() {
   var err = valider();
-  var errBox = $id('fmf-errors');
+  var errBox  = $id('fmf-errors');
   var errList = $id('fmf-error-list');
   if (err.length > 0) {
     errList.innerHTML = err.map(function (e) { return '<li>' + e + '</li>'; }).join('');
@@ -1071,65 +1114,60 @@ window.fmfCalculer = function () {
   }
   errBox.classList.remove('visible');
 
-  /* Lecture */
-  var age   = getNum('fmf-age');
-  var poids = getNum('fmf-poids');
-  var taille= getNum('fmf-taille');
-  var bmi   = calcBMI(poids, taille);
-  var lcc   = getNum('fmf-lcc');
-  var tas1  = getNum('fmf-tas1');
-  var tad1  = getNum('fmf-tad1');
-  var tas2  = getNum('fmf-tas2');
-  var tad2  = getNum('fmf-tad2');
-  var ipu   = getNum('fmf-ipu');
-  var pappa = getNum('fmf-pappa');
-  var plgf  = getNum('fmf-plgf');
+  var age    = getNum('fmf-age');
+  var poids  = getNum('fmf-poids');
+  var taille = getNum('fmf-taille');
+  var bmi    = calcBMI(poids, taille);
+  var lcc    = getNum('fmf-lcc');
+  var tas1   = getNum('fmf-tas1');
+  var tad1   = getNum('fmf-tad1');
+  var tas2   = getNum('fmf-tas2');
+  var tad2   = getNum('fmf-tad2');
+  var ipu    = getNum('fmf-ipu');
+  var pappa  = getNum('fmf-pappa');
+  var plgf   = getNum('fmf-plgf');
 
-  /* MAP (on prend la valeur max des deux bras) */
+  /* MAP : on retient la valeur maximale des deux bras (Wright 2015) */
   var map1 = (tas1 + 2 * tad1) / 3;
   var map2 = (!isNaN(tas2) && !isNaN(tad2)) ? (tas2 + 2 * tad2) / 3 : map1;
   var mapVal = Math.max(map1, map2);
   var mapMed = medianeMAP(age, bmi);
   var mapMom = mapVal / mapMed;
 
-  /* IPU MoM */
   var ipuMom = ipu / medianeIPU(lcc);
 
-  /* Paramètres a priori */
   var p = {
     age: age, bmi: bmi, interval: getNum('fmf-interval'),
-    ethnie:    $id('fmf-ethnie').value,
-    conception:radio('conception'),
-    tabac:     radio('tabac'),
-    parite:    radio('parite'),
-    atcd_pe:   radio('atcd_pe'),
-    hta:       isChecked('fmf-hta'),
-    diabete:   isChecked('fmf-diabete'),
-    sle:       isChecked('fmf-sle'),
-    nephro:    isChecked('fmf-nephro'),
-    gemellaire:isChecked('fmf-gemellaire'),
-    atcd_fam:  isChecked('fmf-atcd-fam')
+    ethnie:     $id('fmf-ethnie').value,
+    conception: radio('conception'),
+    tabac:      radio('tabac'),
+    parite:     radio('parite'),
+    atcd_pe:    radio('atcd_pe'),
+    hta:        isChecked('fmf-hta'),
+    diabete:    isChecked('fmf-diabete'),
+    sle:        isChecked('fmf-sle'),
+    nephro:     isChecked('fmf-nephro'),
+    gemellaire: isChecked('fmf-gemellaire'),
+    atcd_fam:   isChecked('fmf-atcd-fam')
   };
 
-  var prior   = apriori(p);
-  var LR_map  = lrMAP(mapMom);
-  var LR_ipu  = lrIPU(ipuMom);
-  var LR_papp = lrPAPPA(pappa);
-  var LR_plgf = isNaN(plgf) ? 1.0 : lrPLGF(plgf);
+  var prior    = apriori(p);
+  var LR_map   = lrMAP(mapMom);
+  var LR_ipu   = lrIPU(ipuMom);
+  var LR_papp  = lrPAPPA(pappa);
+  var LR_plgf  = isNaN(plgf) ? 1.0 : lrPLGF(plgf);
 
   var rPrecoce = combiner(prior, LR_map, LR_ipu, LR_papp, LR_plgf);
-  var rTotal   = Math.min(0.95, rPrecoce * 2.8 * (1 - rPrecoce * 0.5));
   var classif  = classify(rPrecoce);
 
-  /* --- Textes conduite --- */
   var conduites = {
     high: {
       titre: 'RISQUE \u00c9LEV\u00c9 \u2014 seuil \u2265 1/100 (ASPRE)',
-      icon: '\u26a0\ufe0f',
+      icon: '\u26a0',
       items: [
-        'Aspirine prophylactique : 150\u00a0mg/j le soir, d\u00e8s 12\u00a0SA jusqu\u2019\u00e0 36\u00a0SA (ASPRE Trial, Rolnik 2017)',
-        'Consultation sp\u00e9cialis\u00e9e (obst\u00e9tricien\u00a0/ MFM) d\u00e8s le 1<sup>er</sup> trimestre',
-        'Surveillance rapproch\u00e9e\u00a0: TA bimensuelle, \u00e9cho biom\u00e9trie\u00a0+ Doppler \u00e0 20, 24, 28, 32, 36\u00a0SA',
+        'Aspirine prophylactique\u00a0: 150\u00a0mg/j le soir, d\u00e8s 12\u00a0SA jusqu\u2019\u00e0 36\u00a0SA (ASPRE Trial, Rolnik 2017)',
+        'Consultation sp\u00e9cialis\u00e9e (obst\u00e9tricien / MFM) d\u00e8s le 1<sup>er</sup> trimestre',
+        'Surveillance rapproch\u00e9e\u00a0: TA bimensuelle, \u00e9cho biom\u00e9trie + Doppler \u00e0 20, 24, 28, 32, 36\u00a0SA',
         'Dosage PlGF si non r\u00e9alis\u00e9\u00a0; bilan \u00e0 20\u201322\u00a0SA (PAPP-A + PlGF + \u00e9cho Doppler)',
         'Information sur signes d\u2019alerte (c\u00e9phal\u00e9es, troubles visuels, douleurs \u00e9pigastriques, \u0153d\u00e8mes)',
         'Consultation anesth\u00e9siologique ant\u00e9natale \u00e0 programmer'
@@ -1137,10 +1175,10 @@ window.fmfCalculer = function () {
     },
     intermediate: {
       titre: 'RISQUE INTERM\u00c9DIAIRE \u2014 surveillance renforc\u00e9e',
-      icon: '\u26a0',
+      icon: '\u25b2',
       items: [
         'Aspirine discutable selon contexte clinique global et facteurs de risque associ\u00e9s',
-        'R\u00e9\u00e9valuation \u00e0 20\u201322\u00a0SA\u00a0: Doppler ut\u00e9rin bilateral + PlGF si disponible',
+        'R\u00e9\u00e9valuation \u00e0 20\u201322\u00a0SA\u00a0: Doppler ut\u00e9rin bilat\u00e9ral + PlGF si disponible',
         'Surveillance TA mensuelle jusqu\u2019\u00e0 20\u00a0SA, puis bimensuelle',
         'Consultation sp\u00e9cialis\u00e9e \u00e0 discuter selon profil (HTA chronique, SAPL\u2026)',
         '\u00c9ducation sur les signes d\u2019alerte'
@@ -1164,27 +1202,33 @@ window.fmfCalculer = function () {
     low:          'RISQUE FAIBLE'
   };
   var risqueSublabels = {
-    high:         'Pr\u00e9-\u00e9clampsie pr\u00e9coce (&lt;\u202034\u00a0SA) \u2265 1/100',
-    intermediate: 'Pr\u00e9-\u00e9clampsie pr\u00e9coce entre 1/500 et 1/100',
-    low:          'Pr\u00e9-\u00e9clampsie pr\u00e9coce &lt;\u00a01/500'
+    high:         'PE pr\u00e9coce (&lt;\u202034\u00a0SA) \u2265 1/100 \u2014 indication aspirine ASPRE',
+    intermediate: 'PE pr\u00e9coce entre 1/500 et 1/100',
+    low:          'PE pr\u00e9coce &lt;\u00a01/500'
   };
 
   var c = conduites[classif];
 
   var html =
-    /* Risque global */
     '<div class="fmf-risk-global ' + classif + '">'
     + '<div class="fmf-risk-badge">' + fmtRisk(rPrecoce) + '</div>'
     + '<div>'
     + '<div class="fmf-risk-label">' + classLabels[classif] + '</div>'
     + '<div class="fmf-risk-sublabel">' + risqueSublabels[classif] + '</div>'
-    + '<div class="fmf-risk-sublabel" style="margin-top:3px;">PE avant 37\u00a0SA (estimation)\u00a0: ' + fmtRisk(rTotal) + '</div>'
     + '</div></div>'
+
+    /* Bandeau rappel modèle */
+    + '<div class="fmf-approx-banner">'
+    + '<strong>Rappel m\u00e9thodologique\u00a0:</strong> Ce risque correspond uniquement \u00e0 la <strong>PE pr\u00e9coce (&lt; 34 SA)</strong>. '
+    + 'Le risque de PE tardive (\u2265 34 SA) n\u2019est pas calcul\u00e9 ici\u00a0: il n\u00e9cessite un mod\u00e8le distinct (Wright UOG 2015, mod\u00e8le &lt; 37\u00a0SA ou \u00e0 terme). '
+    + 'La m\u00e9diane MAP utilis\u00e9e est une approximation (2 covariables vs mod\u00e8le complet). '
+    + 'Pour une d\u00e9cision clinique, conf\u00e9rer le logiciel FMF certifi\u00e9.'
+    + '</div>'
 
     /* Tableau marqueurs */
     + '<div class="fmf-markers-title">D\u00e9tail des marqueurs</div>'
     + '<table class="fmf-markers-table"><thead><tr>'
-    + '<th>Marqueur</th><th>Valeur</th><th>Statut</th><th>LR\u00a0(PE pr\u00e9coce)</th>'
+    + '<th>Marqueur</th><th>Valeur</th><th>Statut</th><th>LR (PE pr\u00e9coce)</th>'
     + '</tr></thead><tbody>'
     + '<tr><td>Risque a priori</td><td colspan="2">Histoire maternelle</td><td>' + fmtRisk(prior) + '</td></tr>'
     + '<tr><td>MAP (pression art. moyenne)</td><td>' + mapVal.toFixed(1) + '\u00a0mmHg</td><td>' + statutMOM(mapMom, 1.08, 1.15, false) + momBar(mapMom, false) + '</td><td>' + LR_map.toFixed(2) + '</td></tr>'
@@ -1195,35 +1239,35 @@ window.fmfCalculer = function () {
 
     /* Conduite */
     + '<div class="fmf-conduct ' + classif + '">'
-    + '<div class="fmf-conduct-title">' + c.icon + ' ' + c.titre + '</div>'
+    + '<div class="fmf-conduct-title">' + c.icon + '\u00a0' + c.titre + '</div>'
     + '<ul>' + c.items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + '</ul>'
     + '</div>'
 
-    /* Explication */
+    /* Explication technique */
     + '<div class="fmf-score-explain">'
-    + '<strong>M\u00e9thodologie\u00a0:</strong> Combinaison bay\u00e9sienne du risque a priori (histoire maternelle) et des rapports de vraisemblance (LR) de chaque marqueur (distribution log-normale PE vs contr\u00f4les). '
+    + '<strong>M\u00e9thodologie\u00a0:</strong> Combinaison bay\u00e9sienne du risque a priori (histoire maternelle, logit Wright 2015) '
+    + 'et des rapports de vraisemblance (LR) de chaque marqueur (distributions log-normales PE vs t\u00e9moins, param\u00e8tres uniques non stratifi\u00e9s). '
     + 'IMC calcul\u00e9\u00a0: <strong>' + bmi.toFixed(1) + '\u00a0kg/m\u00b2</strong> \u00b7 '
-    + 'LCC saisie\u00a0: <strong>' + lcc + '\u00a0mm</strong> \u00b7 '
-    + 'MAP utilis\u00e9e\u00a0: <strong>' + mapVal.toFixed(1) + '\u00a0mmHg</strong>. '
-    + 'Ce calcul est une <em>estimation</em> et ne se substitue pas au logiciel certifi\u00e9 FMF.'
+    + 'LCC\u00a0: <strong>' + lcc + '\u00a0mm</strong> \u00b7 '
+    + 'MAP retenue\u00a0: <strong>' + mapVal.toFixed(1) + '\u00a0mmHg</strong> (bras ' + (map2 >= map1 ? 'gauche' : 'droit') + ').'
     + '</div>';
 
   $id('fmf-result-body').innerHTML = html;
   $id('fmf-result').classList.add('visible');
   $id('fmf-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-};
+}
 
 /* ================================================================
    RESET
    ================================================================ */
-window.fmfReset = function () {
+function fmfReset() {
   ['fmf-age','fmf-poids','fmf-taille','fmf-lcc','fmf-tas1','fmf-tad1',
    'fmf-tas2','fmf-tad2','fmf-ipu','fmf-pappa','fmf-plgf','fmf-interval']
     .forEach(function (id) {
       var el = $id(id);
       if (el) { el.value = ''; el.classList.remove('fmf-error'); }
     });
-  /* Checkboxes */
+
   ['fmf-hta','fmf-diabete','fmf-sle','fmf-nephro','fmf-gemellaire','fmf-atcd-fam']
     .forEach(function (id) {
       var el = $id(id);
@@ -1232,7 +1276,7 @@ window.fmfReset = function () {
       var row = el.closest('.fmf-checkbox-row');
       if (row) row.classList.remove('checked');
     });
-  /* Radios — remettre le premier de chaque groupe */
+
   ['conception','tabac','parite','atcd_pe'].forEach(function (name) {
     document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (b) {
       var inp = b.querySelector('input[name="' + name + '"]');
@@ -1244,32 +1288,16 @@ window.fmfReset = function () {
       first.closest('.fmf-radio-btn').classList.add('active');
     }
   });
+
   $id('fmf-result').classList.remove('visible');
   $id('fmf-errors').classList.remove('visible');
-};
+}
 
 /* ================================================================
-   RADIOS — toggle visuel
+   ATTACHER LES BOUTONS (pas d'onclick inline)
    ================================================================ */
-document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    var inp = btn.querySelector('input[type="radio"]');
-    if (!inp) return;
-    document.querySelectorAll('#fmf-root input[name="' + inp.name + '"]')
-      .forEach(function (r) { r.closest('.fmf-radio-btn').classList.remove('active'); });
-    btn.classList.add('active');
-    inp.checked = true;
-  });
-});
-
-/* Init : activer le premier radio de chaque groupe */
-['conception','tabac','parite','atcd_pe'].forEach(function (name) {
-  var first = document.querySelector('#fmf-root input[name="' + name + '"]');
-  if (first) {
-    first.checked = true;
-    first.closest('.fmf-radio-btn').classList.add('active');
-  }
-});
+$id('btn-calculer').addEventListener('click', fmfCalculer);
+$id('btn-reset').addEventListener('click', fmfReset);
 
 }());
 </script>
