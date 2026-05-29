@@ -119,6 +119,7 @@
   line-height: 1.5;
 }
 #fmf-root .fmf-notice strong { color: var(--navy); }
+#fmf-root .fmf-notice-alert { color: var(--accent); font-weight: bold; margin-top: 6px; display: block; }
 
 /* ---- Sections ---- */
 #fmf-root .fmf-section {
@@ -318,8 +319,6 @@
   gap: 6px 14px;
 }
 
-/* FIX : le label checkbox n'a plus d'onclick ; le JS gère tout via addEventListener.
-   cursor:pointer reste pour l'UX. */
 #fmf-root .fmf-checkbox-row {
   display: flex;
   align-items: flex-start;
@@ -332,7 +331,6 @@
   line-height: 1.4;
   user-select: none;
 }
-/* L'input natif est masqué mais reste accessible */
 #fmf-root .fmf-checkbox-row input[type="checkbox"] {
   position: absolute;
   opacity: 0;
@@ -594,7 +592,7 @@
 }
 #fmf-root .fmf-score-explain strong { color: var(--navy); }
 
-/* ---- Bandeau d'avertissement approximation — NOUVEAU ---- */
+/* ---- Bandeau d'avertissement approximation ---- */
 #fmf-root .fmf-approx-banner {
   margin-top: 12px;
   background: #fffbeb;
@@ -673,16 +671,16 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       </div>
     </div>
     <div class="fmf-ref-tags">
-      <span class="fmf-tag">ISUOG 2020</span>
-      <span class="fmf-tag">CNGOF 2020</span>
+      <span class="fmf-tag">CNGOF 2025</span>
+      <span class="fmf-tag">ISUOG 2023</span>
       <span class="fmf-tag">Nicolaides KH 2018</span>
-      <span class="fmf-tag">Ultrasound Obstet Gynecol</span>
       <span class="fmf-tag">SA 11–13+6</span>
     </div>
   </div>
 
   <div class="fmf-notice">
-    <strong>Principe :</strong> Le modèle FMF combine le risque a priori (histoire maternelle + facteurs de risque) aux marqueurs biophysiques et biochimiques du 1<sup>er</sup> trimestre pour calculer un risque individuel de pré-éclampsie précoce (&lt; 34 SA). Le seuil d'intervention est 1/100 pour l'aspirine prophylactique (ASPRE trial, Rolnik 2017). <strong>Seul le risque PE précoce (&lt; 34 SA) est calculé ici.</strong>
+    <strong>Principe :</strong> Le modèle FMF combine le risque a priori aux marqueurs biophysiques et biochimiques du 1<sup>er</sup> trimestre pour calculer un risque de pré-éclampsie précoce (&lt; 34 SA). Le seuil d'intervention est 1/100 pour l'aspirine prophylactique (Rolnik 2017).<br>
+    <span class="fmf-notice-alert">⚠️ INDICATION : Selon les recommandations, ce dépistage est réservé aux patientes présentant au moins un facteur de risque clinique (élevé ou modéré) identifié lors de la 1ère consultation. Il n'est pas recommandé en population générale à bas risque.</span>
   </div>
 
   <!-- ========== SECTION 1 ========== -->
@@ -754,7 +752,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         <div class="fmf-field">
           <span class="fmf-label">Intervalle inter-gestationnel <span class="fmf-unit">(années)</span> <span class="fmf-optional">optionnel</span></span>
           <input type="number" id="fmf-interval" min="0" max="30" step="0.5" placeholder="ex : 3">
-          <span class="fmf-hint">Risque augmente si &gt; 5 ans (si multipare)</span>
+          <span class="fmf-hint">Risque clinique augmenté si &gt; 10 ans</span>
         </div>
       </div>
 
@@ -768,7 +766,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       Facteurs de risque cliniques
     </div>
     <div class="fmf-section-body">
-      <!-- FIX : suppression des onclick inline — les listeners sont attachés en JS via addEventListener -->
       <div class="fmf-check-grid" id="fmf-check-grid">
         <label class="fmf-checkbox-row" data-cb="fmf-hta">
           <input type="checkbox" id="fmf-hta">
@@ -846,20 +843,19 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   <div class="fmf-section">
     <div class="fmf-section-head">
       <span class="fmf-step-num">4</span>
-      Marqueurs biochimiques
-      <span style="font-weight:400; text-transform:none; letter-spacing:0; font-size:0.74rem; margin-left:6px;">(au moins PAPP-A recommandé)</span>
+      Marqueurs biochimiques — Standard (PlGF)
     </div>
     <div class="fmf-section-body">
       <div class="fmf-grid">
         <div class="fmf-field">
-          <span class="fmf-label">PAPP-A <span class="fmf-unit">(MoM)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-pappa" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.85">
-          <span class="fmf-hint">Valeur MoM corrigée fournie par le laboratoire</span>
+          <span class="fmf-label">PlGF <span class="fmf-unit">(MoM)</span> <span class="fmf-required">*</span></span>
+          <input type="number" id="fmf-plgf" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.92">
+          <span class="fmf-hint">Marqueur de référence (Paradigme 2023-2026)</span>
         </div>
         <div class="fmf-field">
-          <span class="fmf-label">PlGF <span class="fmf-unit">(MoM)</span> <span class="fmf-optional">optionnel — améliore la DR</span></span>
-          <input type="number" id="fmf-plgf" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.92">
-          <span class="fmf-hint">Facteur de croissance placentaire — non systématique en France</span>
+          <span class="fmf-label">PAPP-A <span class="fmf-unit">(MoM)</span> <span class="fmf-optional">optionnel</span></span>
+          <input type="number" id="fmf-pappa" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.85">
+          <span class="fmf-hint">Saisi si PlGF non disponible (ancien standard)</span>
         </div>
       </div>
     </div>
@@ -894,7 +890,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <strong>Il calcule uniquement le risque de PE précoce (&lt; 34 SA)</strong>, seul modèle validé dans la littérature pour le dépistage T1. Aucune estimation du risque de PE tardive (&lt; 37 SA ou à terme) n'est proposée, car un tel calcul nécessiterait un modèle distinct, non implémenté ici.
     La médiane de MAP utilisée est une approximation simplifiée (Wright UOG 2015) ne tenant pas compte de la parité ni de l'ethnie de façon complète. Les paramètres log-normaux des LR sont des valeurs uniques (non stratifiées par parité). Ces simplifications sont acceptables pour une aide à la décision, mais <strong>ne se substituent pas au logiciel FMF certifié</strong>.
     Les valeurs MoM doivent être issues d'un laboratoire accrédité FMF. La prescription d'acide acétylsalicylique (150 mg/j, 12–36 SA) relève de la responsabilité médicale individuelle.
-    Références : ASPRE Trial (Rolnik DL, <em>NEJM</em> 2017) · CNGOF 2020 · ISUOG Practice Guidelines 2020.
+    Références : ASPRE Trial (Rolnik DL, <em>NEJM</em> 2017) · CNGOF 2025 · ISUOG Practice Guidelines 2023.
   </div>
 
 </div>
@@ -916,15 +912,11 @@ function radio(name) {
 function isChecked(id) { var el = $id(id); return el ? el.checked : false; }
 
 /* ================================================================
-   FIX CRITIQUE — CHECKBOXES
-   Problème original : onclick inline sur le label déclenchait
-   fmfToggleCheck() ET le comportement natif du label → double toggle.
-   Solution : addEventListener avec preventDefault() pour court-circuiter
-   le comportement natif du label, puis toggle manuel de l'état.
+   CHECKBOXES & RADIOS
    ================================================================ */
 document.querySelectorAll('#fmf-root .fmf-checkbox-row').forEach(function (labelEl) {
   labelEl.addEventListener('click', function (e) {
-    e.preventDefault(); /* Bloque le clic natif sur l'<input> caché */
+    e.preventDefault(); 
     var inp = labelEl.querySelector('input[type="checkbox"]');
     if (!inp) return;
     inp.checked = !inp.checked;
@@ -932,9 +924,6 @@ document.querySelectorAll('#fmf-root .fmf-checkbox-row').forEach(function (label
   });
 });
 
-/* ================================================================
-   RADIOS — toggle visuel (via addEventListener, pas d'onclick inline)
-   ================================================================ */
 document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (btn) {
   btn.addEventListener('click', function () {
     var inp = btn.querySelector('input[type="radio"]');
@@ -946,7 +935,6 @@ document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (btn) {
   });
 });
 
-/* Init : activer le premier radio de chaque groupe */
 ['conception', 'tabac', 'parite', 'atcd_pe'].forEach(function (name) {
   var first = document.querySelector('#fmf-root input[name="' + name + '"]');
   if (first) {
@@ -957,37 +945,25 @@ document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (btn) {
 
 /* ================================================================
    MODÈLE MATHÉMATIQUE FMF
-   Sources : Wright D et al., UOG 2015
-             Nicolaides KH, UOG 2018
-             Plasencia W et al., UOG 2008 (médiane IPU)
    ================================================================ */
 
 function calcBMI(poids, taille) {
   return poids / Math.pow(taille / 100, 2);
 }
 
-/* Médiane IP utérin en fonction LCC (Plasencia UOG 2008) */
 function medianeIPU(lcc) {
   return 2.434 - 0.02221 * lcc + 0.000101 * lcc * lcc;
 }
 
-/*
- * Médiane MAP (Wright UOG 2015) — modèle simplifié.
- * Note : le modèle publié complet inclut la parité et l'ethnie.
- * Cette équation est une approximation à deux covariables (âge, IMC).
- * Valeur indicative ; le logiciel FMF certifié utilise le modèle complet.
- */
 function medianeMAP(age, bmi) {
   return 73.3 + 0.062 * age + 0.285 * bmi;
 }
 
-/* Densité gaussienne */
 function gpdf(x, mu, sigma) {
   return (1 / (sigma * Math.sqrt(2 * Math.PI))) *
          Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
 }
 
-/* LR par rapport de densités log-normales */
 function lrLogNormal(mom, mu_PE, sig_PE, mu_bg, sig_bg) {
   if (isNaN(mom) || mom <= 0) return 1.0;
   var logM = Math.log(mom);
@@ -1001,7 +977,6 @@ function lrMAP(mom)   { return lrLogNormal(mom,  0.137, 0.085,  0.046, 0.073); }
 function lrPAPPA(mom) { return lrLogNormal(mom, -0.356, 0.548,  0.000, 0.450); }
 function lrPLGF(mom)  { return lrLogNormal(mom, -0.416, 0.494,  0.000, 0.380); }
 
-/* Risque a priori (logit) — Wright UOG 2015 */
 function apriori(p) {
   var logit = -8.823;
   if (p.ethnie === 'afro')               logit += 0.756;
@@ -1024,7 +999,6 @@ function apriori(p) {
   return 1 / (1 + Math.exp(-logit));
 }
 
-/* Combinaison bayésienne */
 function combiner(prior, lr1, lr2, lr3, lr4) {
   var odds = (prior / (1 - prior)) * lr1 * lr2 * lr3 * lr4;
   return odds / (1 + odds);
@@ -1072,7 +1046,7 @@ function momBar(mom, inv) {
 }
 
 /* ================================================================
-   VALIDATION
+   VALIDATION (Désormais PlGF obligatoire)
    ================================================================ */
 function valider() {
   var err = [];
@@ -1084,7 +1058,7 @@ function valider() {
     { id: 'fmf-tas1',  label: 'TA systolique (bras D)',         min: 80,   max: 200  },
     { id: 'fmf-tad1',  label: 'TA diastolique (bras D)',        min: 40,   max: 130  },
     { id: 'fmf-ipu',   label: 'IP art\u00e8res ut\u00e9rines', min: 0.5,  max: 5.0  },
-    { id: 'fmf-pappa', label: 'PAPP-A (MoM)',                  min: 0.05, max: 5.0  }
+    { id: 'fmf-plgf',  label: 'PlGF (MoM)',                    min: 0.05, max: 5.0  }
   ];
   champs.forEach(function (c) {
     var el = $id(c.id);
@@ -1127,7 +1101,6 @@ function fmfCalculer() {
   var pappa  = getNum('fmf-pappa');
   var plgf   = getNum('fmf-plgf');
 
-  /* MAP : on retient la valeur maximale des deux bras (Wright 2015) */
   var map1 = (tas1 + 2 * tad1) / 3;
   var map2 = (!isNaN(tas2) && !isNaN(tad2)) ? (tas2 + 2 * tad2) / 3 : map1;
   var mapVal = Math.max(map1, map2);
@@ -1154,7 +1127,7 @@ function fmfCalculer() {
   var prior    = apriori(p);
   var LR_map   = lrMAP(mapMom);
   var LR_ipu   = lrIPU(ipuMom);
-  var LR_papp  = lrPAPPA(pappa);
+  var LR_papp  = isNaN(pappa) ? 1.0 : lrPAPPA(pappa);
   var LR_plgf  = isNaN(plgf) ? 1.0 : lrPLGF(plgf);
 
   var rPrecoce = combiner(prior, LR_map, LR_ipu, LR_papp, LR_plgf);
@@ -1165,22 +1138,20 @@ function fmfCalculer() {
       titre: 'RISQUE \u00c9LEV\u00c9 \u2014 seuil \u2265 1/100 (ASPRE)',
       icon: '\u26a0',
       items: [
-        'Aspirine prophylactique\u00a0: 150\u00a0mg/j le soir, d\u00e8s 12\u00a0SA jusqu\u2019\u00e0 36\u00a0SA (ASPRE Trial, Rolnik 2017)',
+        'Aspirine prophylactique\u00a0: 150\u00a0mg/j (Asp\u00e9gic\u00ae) le soir, d\u00e8s 12\u00a0SA jusqu\u2019\u00e0 36-37\u00a0SA',
         'Consultation sp\u00e9cialis\u00e9e (obst\u00e9tricien / MFM) d\u00e8s le 1<sup>er</sup> trimestre',
         'Surveillance rapproch\u00e9e\u00a0: TA bimensuelle, \u00e9cho biom\u00e9trie + Doppler \u00e0 20, 24, 28, 32, 36\u00a0SA',
-        'Dosage PlGF si non r\u00e9alis\u00e9\u00a0; bilan \u00e0 20\u201322\u00a0SA (PAPP-A + PlGF + \u00e9cho Doppler)',
-        'Information sur signes d\u2019alerte (c\u00e9phal\u00e9es, troubles visuels, douleurs \u00e9pigastriques, \u0153d\u00e8mes)',
-        'Consultation anesth\u00e9siologique ant\u00e9natale \u00e0 programmer'
+        'Information sur signes d\u2019alerte (c\u00e9phal\u00e9es, troubles visuels, douleurs \u00e9pigastriques, \u0153d\u00e8mes)'
       ]
     },
     intermediate: {
       titre: 'RISQUE INTERM\u00c9DIAIRE \u2014 surveillance renforc\u00e9e',
       icon: '\u25b2',
       items: [
-        'Aspirine discutable selon contexte clinique global et facteurs de risque associ\u00e9s',
-        'R\u00e9\u00e9valuation \u00e0 20\u201322\u00a0SA\u00a0: Doppler ut\u00e9rin bilat\u00e9ral + PlGF si disponible',
+        'Aspirine \u00e0 discuter selon contexte clinique global et facteurs de risque associ\u00e9s',
+        'R\u00e9\u00e9valuation \u00e0 20\u201322\u00a0SA\u00a0: Doppler ut\u00e9rin bilat\u00e9ral',
         'Surveillance TA mensuelle jusqu\u2019\u00e0 20\u00a0SA, puis bimensuelle',
-        'Consultation sp\u00e9cialis\u00e9e \u00e0 discuter selon profil (HTA chronique, SAPL\u2026)',
+        'Consultation sp\u00e9cialis\u00e9e \u00e0 discuter selon profil maternel',
         '\u00c9ducation sur les signes d\u2019alerte'
       ]
     },
@@ -1190,7 +1161,6 @@ function fmfCalculer() {
       items: [
         'Pas d\u2019indication \u00e0 l\u2019aspirine en l\u2019absence d\u2019autre facteur de risque majeur',
         'Suivi de grossesse standard (CNGOF)',
-        'R\u00e9\u00e9valuation \u00e0 20\u201322\u00a0SA (morphologie + Doppler si indication)',
         'R\u00e9\u00e9valuation du risque si nouveau facteur de risque ou sympt\u00f4me'
       ]
     }
@@ -1217,15 +1187,13 @@ function fmfCalculer() {
     + '<div class="fmf-risk-sublabel">' + risqueSublabels[classif] + '</div>'
     + '</div></div>'
 
-    /* Bandeau rappel modèle */
     + '<div class="fmf-approx-banner">'
     + '<strong>Rappel m\u00e9thodologique\u00a0:</strong> Ce risque correspond uniquement \u00e0 la <strong>PE pr\u00e9coce (&lt; 34 SA)</strong>. '
-    + 'Le risque de PE tardive (\u2265 34 SA) n\u2019est pas calcul\u00e9 ici\u00a0: il n\u00e9cessite un mod\u00e8le distinct (Wright UOG 2015, mod\u00e8le &lt; 37\u00a0SA ou \u00e0 terme). '
-    + 'La m\u00e9diane MAP utilis\u00e9e est une approximation (2 covariables vs mod\u00e8le complet). '
-    + 'Pour une d\u00e9cision clinique, conf\u00e9rer le logiciel FMF certifi\u00e9.'
+    + 'Le risque de PE tardive n\u2019est pas calcul\u00e9 ici (mod\u00e8le distinct). '
+    + 'La m\u00e9diane MAP utilis\u00e9e est une approximation \u00e0 2 covariables. '
+    + 'Pour une d\u00e9cision clinique stricte, utilisez le logiciel FMF certifi\u00e9.'
     + '</div>'
 
-    /* Tableau marqueurs */
     + '<div class="fmf-markers-title">D\u00e9tail des marqueurs</div>'
     + '<table class="fmf-markers-table"><thead><tr>'
     + '<th>Marqueur</th><th>Valeur</th><th>Statut</th><th>LR (PE pr\u00e9coce)</th>'
@@ -1233,17 +1201,15 @@ function fmfCalculer() {
     + '<tr><td>Risque a priori</td><td colspan="2">Histoire maternelle</td><td>' + fmtRisk(prior) + '</td></tr>'
     + '<tr><td>MAP (pression art. moyenne)</td><td>' + mapVal.toFixed(1) + '\u00a0mmHg</td><td>' + statutMOM(mapMom, 1.08, 1.15, false) + momBar(mapMom, false) + '</td><td>' + LR_map.toFixed(2) + '</td></tr>'
     + '<tr><td>IP art. ut\u00e9rines (moyen)</td><td>' + ipu.toFixed(2) + '</td><td>' + statutMOM(ipuMom, 1.5, 2.0, false) + momBar(ipuMom, false) + '</td><td>' + LR_ipu.toFixed(2) + '</td></tr>'
-    + '<tr><td>PAPP-A</td><td>' + pappa.toFixed(2) + '\u00a0MoM</td><td>' + statutMOM(pappa, 0.4, 0.6, true) + momBar(pappa, true) + '</td><td>' + LR_papp.toFixed(2) + '</td></tr>'
-    + '<tr><td>PlGF</td><td>' + (isNaN(plgf) ? '<span class="fmf-val-na">Non saisi</span>' : plgf.toFixed(2) + '\u00a0MoM') + '</td><td>' + (isNaN(plgf) ? '<span class="fmf-val-na">LR\u00a0=\u00a01.00 (neutre)</span>' : statutMOM(plgf, 0.4, 0.6, true) + momBar(plgf, true)) + '</td><td>' + LR_plgf.toFixed(2) + '</td></tr>'
+    + '<tr><td>PlGF</td><td>' + plgf.toFixed(2) + '\u00a0MoM</td><td>' + statutMOM(plgf, 0.4, 0.6, true) + momBar(plgf, true) + '</td><td>' + LR_plgf.toFixed(2) + '</td></tr>'
+    + '<tr><td>PAPP-A</td><td>' + (isNaN(pappa) ? '<span class="fmf-val-na">Non saisi</span>' : pappa.toFixed(2) + '\u00a0MoM') + '</td><td>' + (isNaN(pappa) ? '<span class="fmf-val-na">LR\u00a0=\u00a01.00 (neutre)</span>' : statutMOM(pappa, 0.4, 0.6, true) + momBar(pappa, true)) + '</td><td>' + LR_papp.toFixed(2) + '</td></tr>'
     + '</tbody></table>'
 
-    /* Conduite */
     + '<div class="fmf-conduct ' + classif + '">'
     + '<div class="fmf-conduct-title">' + c.icon + '\u00a0' + c.titre + '</div>'
     + '<ul>' + c.items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + '</ul>'
     + '</div>'
 
-    /* Explication technique */
     + '<div class="fmf-score-explain">'
     + '<strong>M\u00e9thodologie\u00a0:</strong> Combinaison bay\u00e9sienne du risque a priori (histoire maternelle, logit Wright 2015) '
     + 'et des rapports de vraisemblance (LR) de chaque marqueur (distributions log-normales PE vs t\u00e9moins, param\u00e8tres uniques non stratifi\u00e9s). '
@@ -1294,7 +1260,7 @@ function fmfReset() {
 }
 
 /* ================================================================
-   ATTACHER LES BOUTONS (pas d'onclick inline)
+   ATTACHER LES BOUTONS
    ================================================================ */
 $id('btn-calculer').addEventListener('click', fmfCalculer);
 $id('btn-reset').addEventListener('click', fmfReset);
