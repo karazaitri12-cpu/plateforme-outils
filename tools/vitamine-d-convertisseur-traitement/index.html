@@ -193,7 +193,7 @@
   padding: 13px 14px;
   border: 2px solid var(--border);
   border-radius: 5px;
-  font-size: 1.4rem;
+  font-size: 22px; 
   font-family: Arial, sans-serif;
   font-weight: 700;
   color: var(--navy);
@@ -209,6 +209,13 @@
   box-shadow: 0 0 0 3px rgba(26,80,128,0.10);
   outline: none;
   background: var(--white);
+}
+
+#vitd-root .vd-conv-swap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 22px; 
 }
 #vitd-root .vd-arrow-btn {
   all: unset;
@@ -244,12 +251,18 @@
 #vitd-root .vd-status.s4  { background:var(--blue-bg); border-left:4px solid var(--blue); color:#1e3a8a; }
 #vitd-root .vd-status .vd-status-title { font-weight:700; font-size:0.90rem; margin-bottom:3px; }
 
-/* ── Table de référence des seuils ── */
+/* ── Tables responsives ── */
+#vitd-root .vd-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 #vitd-root .vd-seuils-table {
   width: 100%;
   border-collapse: collapse;
   font-family: Arial, sans-serif;
   font-size: 0.80rem;
+  min-width: 500px; 
 }
 #vitd-root .vd-seuils-table th {
   background: var(--navy);
@@ -273,6 +286,7 @@
   border-radius: 50%;
   margin-right: 6px;
   vertical-align: middle;
+  flex-shrink: 0;
 }
 
 /* ── Traitement : sélecteur ── */
@@ -301,7 +315,7 @@
   border: 1.5px solid #b8c7d9;
   border-radius: 4px;
   padding: 9px 12px;
-  font-size: 0.88rem;
+  font-size: 16px; 
   font-family: Arial, sans-serif;
   color: #1a2535;
   background: #fff;
@@ -329,12 +343,18 @@
 #vitd-root input[type="number"]::-webkit-outer-spin-button { -webkit-appearance:none; }
 #vitd-root input[type="number"] { -moz-appearance: textfield; }
 
-/* ── Bouton ── */
+/* ── Boutons d'actions ── */
+#vitd-root .vd-trt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 #vitd-root .vd-btn {
   all: unset;
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
   font-family: Arial, sans-serif;
   font-size: 0.88rem;
@@ -347,7 +367,6 @@
   color: #fff;
   border: 2px solid var(--navy-dk);
   transition: background 0.14s, transform 0.1s;
-  margin-top: 4px;
 }
 #vitd-root .vd-btn:hover { background: var(--navy-lt); }
 #vitd-root .vd-btn:active { transform: scale(0.98); }
@@ -356,7 +375,6 @@
   color: var(--slate);
   border: 1px solid var(--border);
   font-weight: 400;
-  margin-left: 8px;
 }
 #vitd-root .vd-btn-reset:hover { background: var(--light); }
 
@@ -411,6 +429,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
 }
 #vitd-root .vd-phase-head.attack  { background: var(--red-bg); color: var(--accent); border-bottom: 1px solid #fca5a5; }
 #vitd-root .vd-phase-head.maintain{ background: var(--green-bg); color: var(--green); border-bottom: 1px solid #86efac; }
@@ -491,13 +510,24 @@
 }
 #vitd-root .vd-disclaimer strong { color: var(--slate); }
 
-/* Responsive */
+/* ============================================================
+   RESPONSIVE DESIGN (Mobiles & Petits écrans)
+   ============================================================ */
 @media (max-width: 600px) {
   #vitd-root .vd-header { padding: 16px 14px 14px; }
+  #vitd-root .vd-title { font-size: 1.15rem; }
   #vitd-root .vd-panel { padding: 18px 14px 22px; }
+  #vitd-root .vd-section-body { padding: 14px 14px; }
+  
   #vitd-root .vd-conv-grid { grid-template-columns: 1fr; gap: 12px; }
   #vitd-root .vd-trt-grid { grid-template-columns: 1fr; }
-  #vitd-root .vd-arrow-btn { justify-self: center; }
+  
+  #vitd-root .vd-conv-swap { padding-top: 0; }
+  #vitd-root .vd-arrow-btn { transform: rotate(90deg); }
+  #vitd-root .vd-arrow-btn:hover { transform: rotate(270deg); }
+  
+  #vitd-root .vd-btn { width: 100%; justify-content: center; }
+  #vitd-root .vd-result-head { flex-direction: column; align-items: flex-start; }
 }
 
 /* ── Masque scrollbar ── */
@@ -541,7 +571,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
           <label>Concentration <span>ng/mL</span></label>
           <input type="number" id="vd-ngml" class="vd-conv-input" placeholder="0.0" step="0.1" min="0">
         </div>
-        <div style="display:flex; align-items:center; justify-content:center; padding-top:22px;">
+        <div class="vd-conv-swap">
           <button class="vd-arrow-btn" onclick="vdClearConv()" title="Effacer">&#8644;</button>
         </div>
         <div class="vd-conv-field">
@@ -563,69 +593,63 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
   </div>
 
-  <!-- Tableau des seuils -->
   <div class="vd-section">
     <div class="vd-section-head">&#9660; Seuils d'interprétation (consensus actuel)</div>
     <div class="vd-section-body" style="padding:0;">
-      <table class="vd-seuils-table">
-        <thead>
-          <tr>
-            <th>Statut</th>
-            <th>ng/mL</th>
-            <th>nmol/L</th>
-            <th>Conséquences / Conduite</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="vd-dot" style="background:#c8102e;"></span><strong>Carence sévère</strong></td>
-            <td>&lt; 10 ng/mL</td>
-            <td>&lt; 25 nmol/L</td>
-            <td>Rachitisme, ostéomalacie, myopathie. Traitement curatif urgent (dose de charge ×2).</td>
-          </tr>
-          <tr>
-            <td><span class="vd-dot" style="background:#ea580c;"></span><strong>Carence modérée</strong></td>
-            <td>10–20 ng/mL</td>
-            <td>25–50 nmol/L</td>
-            <td>Risque osseux et immunitaire. Traitement curatif standard.</td>
-          </tr>
-          <tr>
-            <td><span class="vd-dot" style="background:#b45309;"></span><strong>Insuffisance</strong></td>
-            <td>20–30 ng/mL</td>
-            <td>50–75 nmol/L</td>
-            <td>Taux suboptimal. Supplémentation curative recommandée.</td>
-          </tr>
-          <tr>
-            <td><span class="vd-dot" style="background:#166534;"></span><strong>Suffisant</strong></td>
-            <td>30–50 ng/mL</td>
-            <td>75–125 nmol/L</td>
-            <td>Taux correct pour population générale.</td>
-          </tr>
-          <tr>
-            <td><span class="vd-dot" style="background:#1d4ed8;"></span><strong>Optimal</strong></td>
-            <td>40–60 ng/mL</td>
-            <td>100–150 nmol/L</td>
-            <td>Objectif recommandé en grossesse et pathologies chroniques.</td>
-          </tr>
-          <tr>
-            <td><span class="vd-dot" style="background:#7c3aed;"></span><strong>Élevé</strong></td>
-            <td>50–100 ng/mL</td>
-            <td>125–250 nmol/L</td>
-            <td>Toléré, surveiller. Pas d'indication à augmenter les doses.</td>
-          </tr>
-          <tr>
-            <td><span class="vd-dot" style="background:#6b7280;"></span><strong>Toxique</strong></td>
-            <td>&gt; 100 ng/mL</td>
-            <td>&gt; 250 nmol/L</td>
-            <td>Hypercalcémie possible. Arrêt immédiat. Contrôle calcémie.</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="vd-table-scroll">
+        <table class="vd-seuils-table">
+          <thead>
+            <tr>
+              <th>Statut</th>
+              <th>ng/mL</th>
+              <th>nmol/L</th>
+              <th>Conséquences / Conduite</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="vd-dot" style="background:#c8102e;"></span><strong>Carence sévère</strong></td>
+              <td>&lt; 10 ng/mL</td>
+              <td>&lt; 25 nmol/L</td>
+              <td>Rachitisme, ostéomalacie, myopathie. Traitement curatif urgent.</td>
+            </tr>
+            <tr>
+              <td><span class="vd-dot" style="background:#ea580c;"></span><strong>Carence modérée</strong></td>
+              <td>10–20 ng/mL</td>
+              <td>25–50 nmol/L</td>
+              <td>Risque osseux et immunitaire. Traitement curatif standard.</td>
+            </tr>
+            <tr>
+              <td><span class="vd-dot" style="background:#b45309;"></span><strong>Insuffisance</strong></td>
+              <td>20–30 ng/mL</td>
+              <td>50–75 nmol/L</td>
+              <td>Taux suboptimal. Supplémentation curative recommandée.</td>
+            </tr>
+            <tr>
+              <td><span class="vd-dot" style="background:#166534;"></span><strong>Suffisant</strong></td>
+              <td>30–50 ng/mL</td>
+              <td>75–125 nmol/L</td>
+              <td>Taux correct. Entretien classique recommandé.</td>
+            </tr>
+            <tr>
+              <td><span class="vd-dot" style="background:#1d4ed8;"></span><strong>Optimal / Élevé</strong></td>
+              <td>50–100 ng/mL</td>
+              <td>125–250 nmol/L</td>
+              <td>Excellentes réserves. Pas d'indication à re-supplémenter par bolus.</td>
+            </tr>
+            <tr>
+              <td><span class="vd-dot" style="background:#6b7280;"></span><strong>Toxique</strong></td>
+              <td>&gt; 100 ng/mL</td>
+              <td>&gt; 250 nmol/L</td>
+              <td>Hypercalcémie possible. Arrêt immédiat. Contrôle calcémie.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-</div><!-- fin panel conv -->
-
+</div>
 
 <!-- ══════════════════════════════════════════════
      PANEL 2 : TRAITEMENT CURATIF
@@ -665,7 +689,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
             <select id="vd-cond">
               <option value="200">Ampoules 200 000 UI</option>
               <option value="100">Ampoules 100 000 UI</option>
-              <option value="50">Ampoules 50 000 UI</option>
+              <option value="50">Capsules ou Ampoules 50 000 UI</option>
             </select>
           </div>
         </div>
@@ -677,7 +701,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 
       </div>
 
-      <div>
+      <div class="vd-trt-actions">
         <button class="vd-btn" onclick="vdTraitement()">&#9654; Générer le schéma thérapeutique</button>
         <button class="vd-btn vd-btn-reset" onclick="vdResetTrt()">&#8635; Réinitialiser</button>
       </div>
@@ -685,7 +709,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
   </div>
 
-  <!-- Résultats -->
   <div id="vd-trt-result" class="vd-result-box">
     <div class="vd-result-head">
       <span id="vd-trt-title">Schéma thérapeutique personnalisé</span>
@@ -694,8 +717,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <div class="vd-result-body" id="vd-trt-body"></div>
   </div>
 
-</div><!-- fin panel trt -->
-
+</div>
 
 <!-- ══════════════════════════════════════════════
      PANEL 3 : RÉFÉRENTIEL
@@ -706,51 +728,46 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 
   <div class="vd-section">
     <div class="vd-section-head">&#9660; Synergies et cofacteurs (par priorité)</div>
-    <div class="vd-section-body">
-
-      <table class="vd-seuils-table">
-        <thead>
-          <tr><th>Cofacteur</th><th>Rôle</th><th>Apport recommandé</th><th>Priorité</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Magnésium</strong></td>
-            <td>Active les enzymes d'hydroxylation (D inactive → D active). Sans Mg, la D reste inactive même si le taux est normalisé.</td>
-            <td>300–400 mg/j (grossesse : 350–400)</td>
-            <td style="color:var(--accent);font-weight:700;">Indispensable</td>
-          </tr>
-          <tr>
-            <td><strong>Graisses alimentaires</strong></td>
-            <td>La vitamine D est liposoluble. Absorption réduite de 30–50 % si prise à jeun ou sans matières grasses.</td>
-            <td>Prendre l'ampoule au cours d'un repas gras</td>
-            <td style="color:var(--accent);font-weight:700;">Indispensable</td>
-          </tr>
-          <tr>
-            <td><strong>Calcium</strong></td>
-            <td>Cible principale de la vitamine D active. Absorption ×2 à ×4 sous vitamine D.</td>
-            <td>800–1200 mg/j (alimentaire ou médicamenteux)</td>
-            <td style="color:var(--gold);font-weight:700;">Important</td>
-          </tr>
-          <tr>
-            <td><strong>Vitamine K2 (MK-7)</strong></td>
-            <td>Oriente le calcium vers l'os (ostéocalcine) et prévient la calcification artérielle (MGP). Sans K2, le calcium capté par la D peut se déposer dans les vaisseaux.</td>
-            <td>90–200 µg/j selon indication</td>
-            <td style="color:var(--gold);font-weight:700;">Important</td>
-          </tr>
-          <tr>
-            <td><strong>Zinc</strong></td>
-            <td>Nécessaire à la synthèse des récepteurs VDR de la vitamine D. Sans zinc, la D active ne peut exercer son action cellulaire.</td>
-            <td>8–13 mg/j</td>
-            <td style="color:var(--slate);">Utile</td>
-          </tr>
-          <tr>
-            <td><strong>Fer</strong></td>
-            <td>Influence indirecte via les fonctions enzymatiques hépatiques et rénales d'hydroxylation.</td>
-            <td>Corriger une anémie ferriprive associée</td>
-            <td style="color:var(--slate);">Indirect</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="vd-section-body" style="padding:0;">
+      <div class="vd-table-scroll">
+        <table class="vd-seuils-table">
+          <thead>
+            <tr><th>Cofacteur</th><th>Rôle</th><th>Apport recommandé</th><th>Priorité</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Magnésium</strong></td>
+              <td>Active les enzymes d'hydroxylation. Sans Mg, la Vit. D reste inactive même si le taux sanguin s'élève.</td>
+              <td>300–400 mg/j</td>
+              <td style="color:var(--accent);font-weight:700;">Indispensable</td>
+            </tr>
+            <tr>
+              <td><strong>Graisses alimentaires</strong></td>
+              <td>Vitamine liposoluble. L'absorption baisse de 30-50% si prise à jeun.</td>
+              <td>Prise au cours d'un repas gras</td>
+              <td style="color:var(--accent);font-weight:700;">Indispensable</td>
+            </tr>
+            <tr>
+              <td><strong>Calcium</strong></td>
+              <td>Cible principale. Absorption doublée sous vitamine D.</td>
+              <td>800–1200 mg/j (laitages ou médicamenteux)</td>
+              <td style="color:var(--gold);font-weight:700;">Important</td>
+            </tr>
+            <tr>
+              <td><strong>Vitamine K2 (MK-7)</strong></td>
+              <td>Oriente le calcium vers l'os et prévient la calcification des artères.</td>
+              <td>90–200 µg/j</td>
+              <td style="color:var(--gold);font-weight:700;">Important</td>
+            </tr>
+            <tr>
+              <td><strong>Zinc</strong></td>
+              <td>Nécessaire à la synthèse des récepteurs VDR cellulaires.</td>
+              <td>8–13 mg/j</td>
+              <td style="color:var(--slate);">Utile</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -761,42 +778,22 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <div class="vd-section-body">
       <div class="vd-alert orange">
         <span class="vd-alert-icon">&#9888;</span>
-        <span>La vitamine D est <strong>liposoluble</strong> et s'accumule dans l'organisme. Un surdosage peut provoquer des effets indésirables persistant plusieurs semaines après l'arrêt.</span>
+        <span>La vitamine D <strong>s'accumule</strong> dans l'organisme. Un surdosage (> 100 ng/mL) provoque des effets persistants (hypercalcémie).</span>
       </div>
       <ul class="vd-rlist warn" style="margin-top:12px;">
-        <li><strong>Effets indésirables possibles dès 10 000 UI/jour</strong> au long cours chez l'adulte : hypercalcémie, lithiase rénale.</li>
-        <li><strong>Toxicité avérée &gt; 50 000 UI/jour</strong> de façon prolongée : anorexie, nausées, céphalées, constipation, troubles du rythme cardiaque, calcifications vasculaires.</li>
-        <li><strong>Seuil biologique de toxicité</strong> : taux 25(OH)D &gt; 100 ng/mL (250 nmol/L).</li>
-        <li><strong>Patients sous digitaliques</strong> : risque d'arythmie potentialisé — éviter la supplémentation sans avis médical.</li>
-        <li><strong>Insuffisance rénale sévère</strong> : préférer le calcitriol (forme active) — la conversion rénale est défaillante.</li>
+        <li><strong>Symptômes de toxicité</strong> : anorexie, nausées, céphalées, constipation, troubles du rythme cardiaque, calcifications.</li>
+        <li><strong>Patients sous digitaliques</strong> : arythmie potentialisée par le calcium — avis médical requis.</li>
+        <li><strong>Grossesse</strong> : pas de bolus > 100 000 UI en prévention de routine. Risque de pic calcique fœtal.</li>
       </ul>
     </div>
   </div>
 
-  <div class="vd-sub">Rappel ANC selon la population (ANSES 2021)</div>
-
-  <div class="vd-section">
-    <div class="vd-section-head">&#9660; Apports Nutritionnels Conseillés</div>
-    <div class="vd-section-body" style="padding:0;">
-      <table class="vd-seuils-table">
-        <thead><tr><th>Population</th><th>ANC UI/jour</th><th>ANC µg/jour</th><th>Remarque</th></tr></thead>
-        <tbody>
-          <tr><td>Nourrissons</td><td>400 UI</td><td>10 µg</td><td>Supplémentation systématique (lait maternel pauvre en D)</td></tr>
-          <tr><td>Enfants &amp; adultes</td><td>600 UI</td><td>15 µg</td><td>Insuffisant en cas de carence — valeur minimale</td></tr>
-          <tr><td>Femme enceinte / allaitante</td><td>600–800 UI</td><td>15–20 µg</td><td>Insuffisant en cas de carence documentée — schéma curatif requis</td></tr>
-          <tr><td>Personnes âgées &gt; 70 ans</td><td>800 UI</td><td>20 µg</td><td>Valeur préventive — insuffisante en cas de carence</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</div><!-- fin panel ref -->
-
+</div>
 
 <!-- Disclaimer -->
 <div class="vd-disclaimer">
   <strong>Avertissement médico-légal ·</strong>
-  Outil d'aide à la décision basé sur les recommandations HAS, CNGOF, Endocrine Society et SFE. Les schémas thérapeutiques sont indicatifs et doivent être adaptés selon le taux initial, la réponse au traitement, les comorbidités et le conditionnement disponible. La supplémentation en vitamine D doit toujours s'accompagner d'un apport calcique suffisant et d'un contrôle biologique (25(OH)D + calcémie). Dosages adaptés aux ampoules de cholécalciférol D3. Le calcitriol et l'alfacalcidol relèvent d'une prescription spécialisée.
+  Outil d'aide à la décision basé sur les recommandations HAS, CNGOF, Endocrine Society et SFE (2023). Les posologies prennent en compte l'usage fréquent en pratique clinique des ampoules (100k, 200k UI) et des capsules/ampoules (50k UI). Un contrôle biologique et des apports adéquats en cofacteurs (Magnésium, Calcium) demeurent de la responsabilité du praticien. Le calcitriol relève d'une prescription spécialisée.
   Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique — Tlemcen.
 </div>
 
@@ -829,21 +826,21 @@ function interprete(val) {
   var cls, title, txt;
   if (val < 10) {
     cls = 's0'; title = '\u26A0 CARENCE SÉVÈRE — < 10 ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
-    txt = 'Risque de rachitisme / ostéomalacie. Traitement curatif urgent requis (dose de charge doublée). Contrôle calcémie avant traitement.';
+    txt = 'Risque de rachitisme / ostéomalacie. Traitement curatif urgent requis. Contrôle calcémie conseillé.';
   } else if (val < 20) {
     cls = 's1'; title = '⚡ CARENCE MODÉRÉE — ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
-    txt = 'Supplémentation curative nécessaire. Schéma selon situation clinique (voir onglet Traitement).';
+    txt = 'Supplémentation curative nécessaire par doses de charge. Schéma selon situation clinique.';
   } else if (val < 30) {
     cls = 's2'; title = '\u25B2 INSUFFISANCE — ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
-    txt = 'Taux suboptimal. Supplémentation curative recommandée. Objectif : ≥ 30 ng/mL (40–60 en grossesse).';
+    txt = 'Taux suboptimal. Supplémentation d\'attaque légère recommandée pour normaliser les stocks.';
   } else if (val <= 100) {
     cls = 's3'; title = '\u2713 SUFFISANT — ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
-    txt = val >= 40
-      ? 'Taux optimal. Maintenir par entretien trimestriel ou alimentation enrichie.'
-      : 'Taux correct pour la population générale. Entretien recommandé selon les facteurs de risque.';
+    txt = val >= 50
+      ? 'Taux optimal à élevé. Arrêter temporairement les bolus de charge/entretien lourds pour éviter le surdosage.'
+      : 'Taux correct. L\'entretien régulier préventif est recommandé pour maintenir ce statut.';
   } else {
-    cls = 's4'; title = '\u26A0 TAUX ÉLEVÉ / POTENTIELLEMENT TOXIQUE — ' + val.toFixed(1) + ' ng/mL';
-    txt = 'Taux > 100 ng/mL. Arrêter la supplémentation. Contrôler la calcémie. Reprendre à dose réduite après normalisation.';
+    cls = 's4'; title = '\u26A0 TAUX TOXIQUE — ' + val.toFixed(1) + ' ng/mL';
+    txt = 'Taux > 100 ng/mL. Arrêt immédiat de la supplémentation. Contrôle urgent de la calcémie.';
   }
   statusEl.className = 'vd-status visible ' + cls;
   statusTitle.textContent = title;
@@ -867,162 +864,129 @@ window.vdClearConv = function(){
 
 /* ══ TRAITEMENT CURATIF ═════════════════════════════════════════ */
 
-/* Données thérapeutiques par situation */
+/* Données thérapeutiques (révisées et sécurisées) */
 var DATA = {
 
   adulte: {
     label: 'Adulte (hors situation particulière)',
     objectif: '30–50 ng/mL',
     attaque: {
-      severe:  { dose200: '2 ampoules de 200\u202f000\u202fUI à J0 (400\u202f000\u202fUI)', dose100: '3 à 4 ampoules de 100\u202f000\u202fUI espacées de 2 semaines', dose50: '50\u202f000\u202fUI/semaine × 8 semaines' },
-      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '2 ampoules de 100\u202f000\u202fUI à J0 et à 1 mois', dose50: '50\u202f000\u202fUI/semaine × 6 semaines' },
-      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '1 ampoule de 100\u202f000\u202fUI à J0', dose50: '50\u202f000\u202fUI/semaine × 4 semaines' }
+      severe:  { dose200: '1 ampoule de 200\u202f000\u202fUI à J0 et 1 ampoule à J15', dose100: '4 ampoules de 100\u202f000\u202fUI (1 par semaine ou tous les 15 jours)', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 8 semaines' },
+      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J15)', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 6 semaines' },
+      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '1 ampoule de 100\u202f000\u202fUI à J0', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 4 semaines' }
     },
     entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 mois',
-      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 mois',
-      dose50: '50\u202f000\u202fUI/mois ou 800–2\u202f000\u202fUI/jour'
+      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 à 4 mois',
+      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 à 3 mois',
+      dose50: '1 caps/amp de 50\u202f000\u202fUI par mois (ou 800-1000 UI/j)'
     },
-    controle: '3 mois après début du traitement',
-    notes: ['Prendre l\'ampoule au cours d\'un repas gras (liposoluble)', 'Associer magnésium 300 mg/jour (cofacteur enzymatique)', 'Vérifier apport calcique alimentaire suffisant (≥ 800 mg/j)']
+    controle: '3 mois après la fin de la cure',
+    notes: ['Prendre au cours d\'un repas contenant des graisses (liposoluble)', 'Associer magnésium 300 mg/jour (cofacteur enzymatique indispensable)']
   },
 
   grossesse: {
     label: 'Grossesse',
     objectif: '40–60 ng/mL',
     attaque: {
-      severe:  { dose200: '2 ampoules de 200\u202f000\u202fUI à J0 (400\u202f000\u202fUI)', dose100: '2 ampoules de 100\u202f000\u202fUI à J0, puis 1 ampoule à 1 mois', dose50: '50\u202f000\u202fUI/semaine × 8 semaines' },
-      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '2 ampoules de 100\u202f000\u202fUI espacées de 2 semaines', dose50: '50\u202f000\u202fUI/semaine × 6 semaines' },
-      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '1 ampoule de 100\u202f000\u202fUI à J0', dose50: '50\u202f000\u202fUI/semaine × 4 semaines' }
+      severe:  { dose200: '1 amp. de 200\u202f000\u202fUI à J0 et 1 à J30 (pas le même jour)', dose100: '3 ampoules de 100\u202f000\u202fUI (ex: J0, J15, J30)', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 6 à 8 semaines' },
+      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '2 ampoules de 100\u202f000\u202fUI espacées de 15 jours', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 5 semaines' },
+      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '1 ampoule de 100\u202f000\u202fUI à J0', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 3 semaines' }
     },
     entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 mois jusqu\'à l\'accouchement',
-      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 mois jusqu\'à l\'accouchement',
-      dose50: '800–1\u202f000\u202fUI/jour jusqu\'à l\'accouchement'
+      dose200: '\u26A0 Bolus de 200 000 UI déconseillé en routine (risque de pic calcique fœtal). Préférer les apports fractionnés.',
+      dose100: '1 ampoule de 100\u202f000\u202fUI au début du 3ème trimestre (idéalement vers 28 SA)',
+      dose50: '1 caps/amp de 50\u202f000\u202fUI toutes les 6 à 8 semaines jusqu\'à l\'accouchement, ou gouttes (400-800 UI/j)'
     },
-    controle: '6 semaines après la première ampoule (impact fœtal — priorité)',
+    controle: '6 semaines après l\'attaque, ou avant l\'accouchement (selon terme)',
     notes: [
-      'Objectif plus élevé qu\'en population générale : 40–60 ng/mL (impact sur minéralisation fœtale, risque PE, développement immunitaire)',
       'Maximum recommandé sur toute la grossesse : 600\u202f000\u202fUI au total',
-      'Associer magnésium 350–400 mg/j (cofacteur indispensable)',
-      'Calcium alimentaire renforcé : 3 portions de produits laitiers/jour',
-      'Le nouveau-né devra être supplémenté dès la naissance (400–800 UI/j)',
-      'Prendre au cours d\'un repas contenant des graisses'
+      'Le nouveau-né devra de toute façon être supplémenté dès la naissance (gouttes journalières)'
     ]
   },
 
   age: {
     label: 'Personne âgée (> 70 ans)',
-    objectif: '40–60 ng/mL (prévention chutes et fractures)',
+    objectif: '40–60 ng/mL (prévention chutes)',
     attaque: {
-      severe:  { dose200: '2 ampoules de 200\u202f000\u202fUI à J0', dose100: '3 ampoules de 100\u202f000\u202fUI (J0, J14, J28)', dose50: '50\u202f000\u202fUI/semaine × 8 semaines' },
-      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J30)', dose50: '50\u202f000\u202fUI/semaine × 6 semaines' },
-      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '1 ampoule de 100\u202f000\u202fUI', dose50: '50\u202f000\u202fUI/semaine × 4 semaines' }
+      severe:  { dose200: '1 ampoule de 200\u202f000\u202fUI à J0 et 1 à J15', dose100: '4 ampoules de 100\u202f000\u202fUI réparties sur 4 semaines', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 8 semaines' },
+      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J15)', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 6 semaines' },
+      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '1 ampoule de 100\u202f000\u202fUI', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 4 semaines' }
     },
     entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 2 à 3 mois (à vie)',
-      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 mois (à vie)',
-      dose50: '800–2\u202f000\u202fUI/jour (à vie)'
+      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 à 4 mois',
+      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 à 3 mois',
+      dose50: '1 caps/amp de 50\u202f000\u202fUI par mois (ou apports journaliers continus)'
     },
-    controle: '3 mois, puis annuellement',
-    notes: [
-      'Synthèse cutanée divisée par 4 après 70 ans → supplémentation souvent à vie',
-      'Associer calcium 1000–1200 mg/j (alimentaire ± médicamenteux) pour la prévention fracturaire',
-      'Associer vitamine K2 MK-7 100–200 µg/j pour prévenir calcification vasculaire',
-      'Surveillance calcémie annuelle en cas de traitement prolongé',
-      'Réduction démontrée du risque de chutes et de fractures avec taux ≥ 40 ng/mL'
-    ]
+    controle: 'Annuel après normalisation',
+    notes: ['Associer calcium 1000 mg/j (alimentaire) et K2 pour orienter le calcium vers l\'os et protéger les vaisseaux.']
   },
 
   obesite: {
     label: 'Obésité (IMC ≥ 30)',
-    objectif: '40–60 ng/mL (doses 50–100 % plus élevées que standard)',
+    objectif: '40–60 ng/mL (besoins doublés)',
     attaque: {
-      severe:  { dose200: '3 ampoules de 200\u202f000\u202fUI à J0 (600\u202f000\u202fUI) — dose unique maximale', dose100: '4 à 6 ampoules de 100\u202f000\u202fUI sur 6 semaines', dose50: '50\u202f000\u202fUI/semaine × 10 à 12 semaines' },
-      moderate:{ dose200: '2 ampoules de 200\u202f000\u202fUI à J0 (400\u202f000\u202fUI)', dose100: '3 ampoules de 100\u202f000\u202fUI (J0, J14, J28)', dose50: '50\u202f000\u202fUI/semaine × 8 semaines' },
-      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0, renouvelée à 1 mois', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J30)', dose50: '50\u202f000\u202fUI/semaine × 6 semaines' }
+      severe:  { dose200: '3 ampoules de 200\u202f000\u202fUI espacées de 15 jours', dose100: '6 ampoules de 100\u202f000\u202fUI sur 6 semaines', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 12 semaines' },
+      moderate:{ dose200: '2 ampoules de 200\u202f000\u202fUI espacées d\'un mois', dose100: '4 ampoules de 100\u202f000\u202fUI sur 4 semaines', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 8 semaines' },
+      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0, renouvelée à 1 mois', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J15)', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 6 semaines' }
     },
     entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 2 mois (dose renforcée)',
-      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 5 à 6 semaines',
-      dose50: '1\u202f500–3\u202f000\u202fUI/jour ou 50\u202f000\u202fUI/mois'
+      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 2 mois',
+      dose100: '1 ampoule de 100\u202f000\u202fUI tous les mois ou 6 semaines',
+      dose50: '1 caps/amp de 50\u202f000\u202fUI toutes les 2 à 3 semaines'
     },
-    controle: '6 semaines après la dose de charge, puis tous les 3 mois',
-    notes: [
-      'La vitamine D est séquestrée dans le tissu adipeux → biodisponibilité réduite → doses 50–100 % plus élevées',
-      'Contrôles biologiques plus fréquents — réponse souvent partielle à dose standard',
-      'Associer magnésium en priorité (souvent carencé en cas d\'obésité)',
-      'Calcémie à contrôler avant chaque cure d\'attaque (doses élevées)'
-    ]
+    controle: '3 mois (la vitamine est séquestrée dans les graisses, taux lents à remonter)',
+    notes: ['Calcémie à contrôler avant chaque cure d\'attaque (doses cumulées importantes).']
   },
 
   irc: {
     label: 'Insuffisance rénale chronique',
-    objectif: '30–50 ng/mL en 25(OH)D — mais forme active (calcitriol) souvent requise',
+    objectif: '30–50 ng/mL en 25(OH)D',
     attaque: {
-      severe:  { dose200: '1 ampoule de 200\u202f000\u202fUI puis adaptation selon calcémie et phosphatémie', dose100: '50\u202f000\u202fUI/semaine × 8 semaines puis bilan', dose50: '50\u202f000\u202fUI/semaine × 8 semaines' },
-      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '1 ampoule de 100\u202f000\u202fUI, renouveler selon bilan', dose50: '50\u202f000\u202fUI/semaine × 6 semaines' },
-      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '1 ampoule de 100\u202f000\u202fUI', dose50: '50\u202f000\u202fUI/semaine × 4 semaines' }
+      severe:  { dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J15)', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 4 semaines' },
+      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '1 ampoule de 100\u202f000\u202fUI', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 3 semaines' },
+      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '1 ampoule de 100\u202f000\u202fUI', dose50: '1 caps/amp de 50\u202f000\u202fUI / quinzaine × 2' }
     },
     entretien: {
-      dose200: '1 ampoule tous les 3 mois + adaptation selon bilan',
-      dose100: '1 ampoule tous les 2 mois + adaptation',
-      dose50: '800–2\u202f000\u202fUI/jour — adaptation selon DFG'
+      dose200: '1 ampoule tous les 3 à 4 mois + adaptation selon bilan',
+      dose100: '1 ampoule tous les 2 à 3 mois',
+      dose50: '1 caps/amp de 50\u202f000\u202fUI par mois'
     },
-    controle: 'Avant et après cure d\'attaque. Calcémie + phosphatémie + PTH tous les 3 mois.',
-    notes: [
-      'ATTENTION : si DFG < 30 mL/min, la conversion rénale 25(OH)D → 1,25(OH)₂D est défaillante',
-      'Préférer le CALCITRIOL (Rocaltrol® 0,25–0,5 µg/j) ou l\'ALFACALCIDOL si IRC sévère (stades 4–5)',
-      'Le cholécalciférol reste utile pour corriger la carence en 25(OH)D (substrat)',
-      'Surveiller la calcémie et la phosphatémie très attentivement (risque de calcifications vasculaires)',
-      'Prescription en concertation avec le néphrologue'
-    ]
+    controle: 'Avant cure + dosage trimestriel strict',
+    notes: ['ATTENTION : si DFG < 30 mL/min, préférer le CALCITRIOL (forme active) car conversion rénale HS.', 'Prescription prudente avec surveillance phosphocalcique stricte (risque calcifications vasculaires).']
   },
 
   malabsorption: {
-    label: 'Malabsorption digestive (cœliaque, Crohn, résection, bariatrique)',
-    objectif: '40–60 ng/mL (réponse souvent incomplète per os)',
+    label: 'Malabsorption / Bypass / Crohn',
+    objectif: '40–60 ng/mL',
     attaque: {
-      severe:  { dose200: '2 ampoules de 200\u202f000\u202fUI à J0, renouvelées à J30', dose100: '50\u202f000\u202fUI/semaine × 12 semaines', dose50: '50\u202f000\u202fUI/semaine × 12 semaines' },
-      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI à J0, renouvelée à J30', dose100: '50\u202f000\u202fUI/semaine × 8 à 10 semaines', dose50: '50\u202f000\u202fUI/semaine × 8 semaines' },
-      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J30)', dose50: '50\u202f000\u202fUI/semaine × 6 semaines' }
+      severe:  { dose200: '1 ampoule de 200\u202f000\u202fUI à J0, J15 et J30', dose100: '1 ampoule de 100\u202f000\u202fUI par semaine x 6', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 12 semaines' },
+      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI à J0 et J30', dose100: '1 ampoule de 100\u202f000\u202fUI tous les 15j x 4', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 8 semaines' },
+      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI à J0', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J15)', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 6 semaines' }
     },
     entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 1 à 2 mois (absorption réduite)',
-      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 5 à 6 semaines',
-      dose50: '1\u202f000–3\u202f000\u202fUI/jour ou 50\u202f000\u202fUI/mois'
+      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 1 à 2 mois',
+      dose100: '1 ampoule de 100\u202f000\u202fUI toutes les 3 à 4 semaines',
+      dose50: '1 caps/amp de 50\u202f000\u202fUI toutes les 2 semaines'
     },
-    controle: 'Tous les 3 mois (réponse imprévisible)',
-    notes: [
-      'Absorption intestinale des graisses réduite → absorption de la vitamine D réduite',
-      'Post-bariatrique (bypass) : doses d\'entretien souvent doublées voire triplées',
-      'Traiter en priorité la pathologie intestinale sous-jacente (contrôle de la maladie cœliaque, Crohn)',
-      'Associer magnésium systématiquement (très fréquemment carencé en cas de malabsorption)',
-      'Associer vitamine K2 (absorption des vitamines liposolubles globalement altérée)'
-    ]
+    controle: 'Tous les 3 mois (absorption très aléatoire)',
+    notes: ['En post-bariatrique, associer systématiquement Mg, Zn, et K2.']
   },
 
   cortico: {
-    label: 'Corticothérapie au long cours',
-    objectif: '40–60 ng/mL (les corticoïdes réduisent l\'absorption intestinale du calcium)',
+    label: 'Corticothérapie longue durée',
+    objectif: '40–60 ng/mL',
     attaque: {
-      severe:  { dose200: '2 ampoules de 200\u202f000\u202fUI à J0', dose100: '3 ampoules de 100\u202f000\u202fUI sur 4 semaines', dose50: '50\u202f000\u202fUI/semaine × 8 semaines' },
-      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J30)', dose50: '50\u202f000\u202fUI/semaine × 6 semaines' },
-      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '1 ampoule de 100\u202f000\u202fUI', dose50: '50\u202f000\u202fUI/semaine × 4 semaines' }
+      severe:  { dose200: '1 ampoule de 200\u202f000\u202fUI à J0 et J15', dose100: '4 ampoules de 100\u202f000\u202fUI sur 4 semaines', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 8 semaines' },
+      moderate:{ dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '2 ampoules de 100\u202f000\u202fUI (J0 et J15)', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 6 semaines' },
+      insuf:   { dose200: '1 ampoule de 200\u202f000\u202fUI', dose100: '1 ampoule de 100\u202f000\u202fUI', dose50: '1 caps/amp de 50\u202f000\u202fUI / semaine × 4 semaines' }
     },
     entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 mois pendant toute la durée de la corticothérapie',
+      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 mois pendant tout le traitement',
       dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 mois',
-      dose50: '800–2\u202f000\u202fUI/jour pendant toute la durée de la corticothérapie'
+      dose50: '1 caps/amp de 50\u202f000\u202fUI par mois'
     },
-    controle: 'Tous les 3 mois pendant la corticothérapie',
-    notes: [
-      'Les corticoïdes diminuent l\'absorption intestinale du calcium et augmentent la résorption osseuse',
-      'Associer calcium 1000–1500 mg/j (systématique sous corticoïdes prolongés)',
-      'Associer vitamine K2 : prévention des calcifications iatrogènes',
-      'Ne pas attendre le bilan pour initier la supplémentation si corticothérapie > 3 mois prévue',
-      'Densitométrie osseuse recommandée si corticothérapie > 6 mois'
-    ]
+    controle: 'Tous les 3 mois',
+    notes: ['Les corticoïdes diminuent l\'absorption du calcium. Supplémentation calcique à associer systématiquement (1000-1500 mg/j).']
   }
 };
 
@@ -1064,9 +1028,26 @@ window.vdTraitement = function() {
   if (!d) return;
   var st = getStatut(taux);
 
+  /* === SÉCURITÉ ANTI-SURDOSAGE (Gestion intelligente des taux élevés) === */
   if (st === 'suff') {
-    rbody.innerHTML = '<div class="vd-alert green"><span class="vd-alert-icon">\u2713</span><span><strong>Taux suffisant (' + taux.toFixed(1) + ' ng/mL).</strong> Pas de traitement curatif nécessaire. Maintien par entretien trimestriel :<br>' + d.entretien['dose'+cond] + '</span></div>';
-    rtitle.textContent = 'Taux suffisant — Entretien seul';
+    var txtEntretien = d.entretien['dose'+cond];
+
+    if (taux >= 50) {
+      if (situation === 'grossesse') {
+        txtEntretien = "\u26A0 <strong>Taux déjà optimal/élevé.</strong> Aucun bolus de charge ou d'entretien n'est nécessaire ni recommandé. Un simple apport alimentaire régulier (laitages) ou de faibles doses journalières (400-800 UI/j) suffisent amplement jusqu'à l'accouchement.";
+      } else if (situation === 'adulte') {
+        txtEntretien = "\u26A0 <strong>Taux élevé.</strong> Arrêt temporaire des bolus (ampoules ou capsules) recommandé. L'entretien peut se faire par apports alimentaires ou doses purement physiologiques (400-800 UI/j). Reprendre l'entretien trimestriel uniquement si le taux baisse sous 35-40 ng/mL.";
+      } else if (situation === 'age' || situation === 'cortico') {
+        txtEntretien = "Taux optimal/élevé. Privilégier un entretien très allégé (ex: 800 UI/jour, ou espacer fortement les prises) pour éviter la bascule en zone toxique (> 100 ng/mL).";
+      } else if (situation === 'obesite' || situation === 'malabsorption') {
+        txtEntretien = "Taux de confort atteint. Maintenir un entretien régulier prudent (les besoins restent accrus) mais <strong>éviter les bolus de 200 000 UI</strong>. Contrôle impératif dans 3 mois.";
+      } else if (situation === 'irc') {
+        txtEntretien = "\u26A0 <strong>Taux optimal (substrat).</strong> Stopper les bolus de cholécalciférol. Gérer spécifiquement via avis néphrologique (calcitriol si carence active).";
+      }
+    }
+
+    rbody.innerHTML = '<div class="vd-alert green"><span class="vd-alert-icon">\u2713</span><span><strong>Taux suffisant (' + taux.toFixed(1) + ' ng/mL).</strong> Pas de traitement d\'attaque nécessaire.<br><br><strong>\u25B6 Phase de maintien / prévention :</strong><br>' + txtEntretien + '</span></div>';
+    rtitle.textContent = 'Taux suffisant — Prévention / Entretien';
     rtag.textContent = d.label;
     rb.classList.add('visible');
     return;
@@ -1084,10 +1065,10 @@ window.vdTraitement = function() {
   /* ── Note terme si grossesse ── */
   if (situation === 'grossesse' && terme > 0) {
     var termNote = terme < 14
-      ? 'Terme T1 (' + terme + ' SA) \u2014 3 ampoules possibles sur toute la grossesse selon le taux.'
+      ? 'Terme T1 (' + terme + ' SA) \u2014 Temps suffisant pour corriger les réserves.'
       : terme < 28
-      ? 'Terme T2 (' + terme + ' SA) \u2014 2 ampoules possibles avant l\'accouchement.'
-      : 'Terme T3 (' + terme + ' SA) \u2014 1 à 2 ampoules avant l\'accouchement selon l\'urgence.';
+      ? 'Terme T2 (' + terme + ' SA) \u2014 Correction indispensable avant le pic de croissance fœtale du T3.'
+      : 'Terme T3 (' + terme + ' SA) \u2014 Correction urgente prioritaire pour le statut calcique néonatal.';
     html += '<div class="vd-alert blue"><span class="vd-alert-icon">\u2139</span><span>' + termNote + '</span></div>';
   }
 
@@ -1096,12 +1077,12 @@ window.vdTraitement = function() {
     + '<div class="vd-phase-head attack">\u25B6 Phase d\'attaque \u2014 Correction de la carence</div>'
     + '<div class="vd-phase-body">'
     + '<span class="vd-dose">' + getDose(d.attaque[st], cond) + '</span>'
-    + '<span class="vd-dose-detail">Prendre au cours d\'un repas contenant des graisses (liposoluble) \u2014 espacement minimum entre deux ampoules\u00a0: 6 semaines</span>'
+    + '<span class="vd-dose-detail">Prendre au cours d\'un repas contenant des graisses (meilleure absorption).</span>'
     + '</div></div>';
 
   /* ── Phase d'entretien ── */
   html += '<div class="vd-phase">'
-    + '<div class="vd-phase-head maintain">\u25B6 Phase d\'entretien \u2014 Après correction</div>'
+    + '<div class="vd-phase-head maintain">\u25B6 Phase d\'entretien \u2014 Après cure d\'attaque</div>'
     + '<div class="vd-phase-body">'
     + '<span class="vd-dose">' + d.entretien['dose'+cond] + '</span>'
     + '</div></div>';
@@ -1112,8 +1093,7 @@ window.vdTraitement = function() {
     + '<div class="vd-phase-body">'
     + '<ul class="vd-rlist check">'
     + '<li><strong>25(OH)D\u00a0:</strong> ' + d.controle + '</li>'
-    + '<li><strong>Calcémie\u00a0:</strong> avant traitement si carence sévère, puis à 3 mois</li>'
-    + (situation === 'irc' ? '<li><strong>Phosphatémie + PTH\u00a0:</strong> tous les 3 mois</li>' : '')
+    + '<li><strong>Calcémie\u00a0:</strong> utile avant traitement si carence sévère, puis à 3 mois</li>'
     + '</ul></div></div>';
 
   /* ── Précautions et cofacteurs ── */
@@ -1121,11 +1101,6 @@ window.vdTraitement = function() {
   html += '<ul class="vd-rlist warn">';
   d.notes.forEach(function(n){ html += '<li>' + n + '</li>'; });
   html += '</ul>';
-
-  /* ── Alerte IRC ── */
-  if (situation === 'irc') {
-    html += '<div class="vd-alert red"><span class="vd-alert-icon">\u26A0</span><span><strong>IRC sévère (DFG &lt; 30 mL/min)\u00a0:</strong> la conversion rénale est défaillante. Préférer le <strong>calcitriol (Rocaltrol® 0,25–0,5 µg/j)</strong> ou l\'alfacalcidol — prescription en concertation avec le néphrologue.</span></div>';
-  }
 
   rbody.innerHTML = html;
   rtitle.textContent = 'Schéma — ' + d.label;
