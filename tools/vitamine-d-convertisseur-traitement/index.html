@@ -409,6 +409,7 @@
   font-size: 0.68rem;
   padding: 2px 8px;
   border-radius: 20px;
+  transition: background 0.2s;
 }
 #vitd-root .vd-result-body { padding: 20px 22px; background: var(--white); }
 
@@ -664,7 +665,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 
         <div class="vd-field">
           <label>Taux 25(OH)D mesuré <span class="req">*</span> <span style="font-weight:400;color:var(--slate);text-transform:none;letter-spacing:0;">(ng/mL)</span></label>
-          <input type="number" id="vd-taux" min="0" max="200" step="0.1" placeholder="ex : 21.4">
+          <input type="number" id="vd-taux" min="0" step="0.1" placeholder="ex : 21.4">
         </div>
 
         <div class="vd-field">
@@ -864,7 +865,6 @@ window.vdClearConv = function(){
 
 /* ══ TRAITEMENT CURATIF ═════════════════════════════════════════ */
 
-/* Données thérapeutiques (révisées et sécurisées) */
 var DATA = {
 
   adulte: {
@@ -990,15 +990,23 @@ var DATA = {
   }
 };
 
+/* NOUVEAU PLAFOND DE TOXICITÉ AJOUTÉ ICI */
 function getStatut(taux) {
-  if (taux < 10)  return 'severe';
-  if (taux < 20)  return 'moderate';
-  if (taux < 30)  return 'insuf';
-  return 'suff';
+  if (taux < 10)   return 'severe';
+  if (taux < 20)   return 'moderate';
+  if (taux < 30)   return 'insuf';
+  if (taux <= 100) return 'suff';
+  return 'toxique'; /* TOUT CE QUI EST AU-DESSUS DE 100 ng/mL EST TOXIQUE */
 }
 
 function getStatutLabel(st) {
-  var m = { severe:'Carence sévère (< 10 ng/mL)', moderate:'Carence modérée (10–20 ng/mL)', insuf:'Insuffisance (20–30 ng/mL)', suff:'Suffisant (≥ 30 ng/mL)' };
+  var m = { 
+    severe:'Carence sévère (< 10 ng/mL)', 
+    moderate:'Carence modérée (10–20 ng/mL)', 
+    insuf:'Insuffisance (20–30 ng/mL)', 
+    suff:'Suffisant (30–100 ng/mL)',
+    toxique:'Taux toxique (> 100 ng/mL)'
+  };
   return m[st] || '';
 }
 
@@ -1026,53 +1034,79 @@ window.vdTraitement = function() {
 
   var d = DATA[situation];
   if (!d) return;
+  
   var st = getStatut(taux);
 
-  /* === SÉCURITÉ ANTI-SURDOSAGE (Gestion intelligente des taux élevés) === */
+  /* === RESET COULEURS TAG === */
+  rtag.style.background = (st === 'toxique') ? 'var(--accent)' : 'var(--gold)';
+
+  /* =========================================================
+     SÉCURITÉ ANTI-TOXICITÉ (> 100 ng/mL)
+     BLOQUE TOUT TRAITEMENT ET DONNE L'ALERTE ROUGE
+  ========================================================= */
+  if (st === 'toxique') {
+    rbody.innerHTML = '<div class="vd-alert red"><span class="vd-alert-icon">\u26A0</span><span><strong>TAUX TOXIQUE (' + taux.toFixed(1) + ' ng/mL). Risque majeur d\'hypercalcémie.</strong><br><br><strong>\u25B6 Conduite à tenir immédiate :</strong><br>- <strong>Arrêt strict et immédiat</strong> de toute supplémentation en vitamine D et en calcium.<br>- <strong>Contrôle urgent</strong> de la calcémie, de la créatinine et réalisation d\'un ECG (surtout si signes cliniques ou digitaliques).<br>- Hydratation abondante.<br>- Ne reprendre aucune supplémentation avant normalisation complète et avis médical.</span></div>';
+    rtitle.textContent = 'Alerte Rouge — Hypervitaminose D';
+    rtag.textContent = 'Urgence (> 100 ng/mL)';
+    rb.classList.add('visible');
+    return;
+  }
+
+  /* =========================================================
+     SÉCURITÉ ANTI-SURDOSAGE (Taux 50 - 100 ng/mL)
+     PASSE EN ALERTE ORANGE AU LIEU DE VERTE
+  ========================================================= */
   if (st === 'suff') {
     var txtEntretien = d.entretien['dose'+cond];
+    var alertClass = 'green';
+    var alertIcon = '\u2713';
+    var statusLabel = 'Taux suffisant';
 
     if (taux >= 50) {
+      alertClass = 'orange'; // Alerte de prudence
+      alertIcon = '\u26A0';
+      statusLabel = 'Taux élevé / Sur-optimal';
+      
       if (situation === 'grossesse') {
-        txtEntretien = "\u26A0 <strong>Taux déjà optimal/élevé.</strong> Aucun bolus de charge ou d'entretien n'est nécessaire ni recommandé. Un simple apport alimentaire régulier (laitages) ou de faibles doses journalières (400-800 UI/j) suffisent amplement jusqu'à l'accouchement.";
+        txtEntretien = "\u26A0 <strong>Aucun bolus de charge ou d'entretien n'est nécessaire ni recommandé.</strong> Un simple apport alimentaire régulier (laitages) ou de faibles doses journalières (400-800 UI/j) suffisent amplement jusqu'à l'accouchement.";
       } else if (situation === 'adulte') {
-        txtEntretien = "\u26A0 <strong>Taux élevé.</strong> Arrêt temporaire des bolus (ampoules ou capsules) recommandé. L'entretien peut se faire par apports alimentaires ou doses purement physiologiques (400-800 UI/j). Reprendre l'entretien trimestriel uniquement si le taux baisse sous 35-40 ng/mL.";
+        txtEntretien = "\u26A0 <strong>Arrêt temporaire des bolus (ampoules ou capsules) recommandé.</strong> L'entretien peut se faire par apports alimentaires ou doses purement physiologiques (400-800 UI/j). Reprendre l'entretien trimestriel uniquement si le taux baisse sous 35-40 ng/mL.";
       } else if (situation === 'age' || situation === 'cortico') {
-        txtEntretien = "Taux optimal/élevé. Privilégier un entretien très allégé (ex: 800 UI/jour, ou espacer fortement les prises) pour éviter la bascule en zone toxique (> 100 ng/mL).";
+        txtEntretien = "Privilégier un entretien très allégé (ex: 800 UI/jour, ou espacer fortement les prises) pour éviter la bascule en zone toxique (> 100 ng/mL).";
       } else if (situation === 'obesite' || situation === 'malabsorption') {
         txtEntretien = "Taux de confort atteint. Maintenir un entretien régulier prudent (les besoins restent accrus) mais <strong>éviter les bolus de 200 000 UI</strong>. Contrôle impératif dans 3 mois.";
       } else if (situation === 'irc') {
-        txtEntretien = "\u26A0 <strong>Taux optimal (substrat).</strong> Stopper les bolus de cholécalciférol. Gérer spécifiquement via avis néphrologique (calcitriol si carence active).";
+        txtEntretien = "\u26A0 <strong>Stopper les bolus de cholécalciférol.</strong> Gérer spécifiquement via avis néphrologique (calcitriol si carence active).";
       }
     }
 
-    rbody.innerHTML = '<div class="vd-alert green"><span class="vd-alert-icon">\u2713</span><span><strong>Taux suffisant (' + taux.toFixed(1) + ' ng/mL).</strong> Pas de traitement d\'attaque nécessaire.<br><br><strong>\u25B6 Phase de maintien / prévention :</strong><br>' + txtEntretien + '</span></div>';
-    rtitle.textContent = 'Taux suffisant — Prévention / Entretien';
+    rbody.innerHTML = '<div class="vd-alert ' + alertClass + '"><span class="vd-alert-icon">' + alertIcon + '</span><span><strong>' + statusLabel + ' (' + taux.toFixed(1) + ' ng/mL).</strong> Pas de traitement d\'attaque nécessaire.<br><br><strong>\u25B6 Phase de maintien / prévention :</strong><br>' + txtEntretien + '</span></div>';
+    rtitle.textContent = statusLabel + ' — Prévention / Entretien';
     rtag.textContent = d.label;
     rb.classList.add('visible');
     return;
   }
 
+  /* =========================================================
+     TRAITEMENT STANDARD DE LA CARENCE / INSUFFISANCE (< 30 ng/mL)
+  ========================================================= */
   var html = '';
 
-  /* ── En-tête diagnostique ── */
   var stColors = { severe:'var(--accent)', moderate:'#ea580c', insuf:'var(--gold)' };
   html += '<div style="display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--light); border-radius:5px; margin-bottom:16px; font-family:Arial,sans-serif;">'
     + '<div style="font-size:2rem; line-height:1; font-weight:900; color:' + (stColors[st]||'#333') + ';">' + taux.toFixed(1) + '</div>'
     + '<div><div style="font-weight:700; font-size:0.90rem; color:var(--navy);">' + getStatutLabel(st) + '</div>'
     + '<div style="font-size:0.76rem; color:var(--slate); margin-top:2px;">= ' + (taux*2.5).toFixed(1) + ' nmol/L \u2014 Objectif cible\u00a0: ' + d.objectif + '</div></div></div>';
 
-  /* ── Note terme si grossesse ── */
   if (situation === 'grossesse' && terme > 0) {
     var termNote = terme < 14
-      ? 'Terme T1 (' + terme + ' SA) \u2014 Temps suffisant pour corriger les réserves.'
+      ? 'Terme T1 (' + terme + ' SA) \u2014 Temps suffisant pour corriger les réserves de manière étalée.'
       : terme < 28
       ? 'Terme T2 (' + terme + ' SA) \u2014 Correction indispensable avant le pic de croissance fœtale du T3.'
       : 'Terme T3 (' + terme + ' SA) \u2014 Correction urgente prioritaire pour le statut calcique néonatal.';
     html += '<div class="vd-alert blue"><span class="vd-alert-icon">\u2139</span><span>' + termNote + '</span></div>';
   }
 
-  /* ── Phase d'attaque ── */
   html += '<div class="vd-phase">'
     + '<div class="vd-phase-head attack">\u25B6 Phase d\'attaque \u2014 Correction de la carence</div>'
     + '<div class="vd-phase-body">'
@@ -1080,14 +1114,12 @@ window.vdTraitement = function() {
     + '<span class="vd-dose-detail">Prendre au cours d\'un repas contenant des graisses (meilleure absorption).</span>'
     + '</div></div>';
 
-  /* ── Phase d'entretien ── */
   html += '<div class="vd-phase">'
     + '<div class="vd-phase-head maintain">\u25B6 Phase d\'entretien \u2014 Après cure d\'attaque</div>'
     + '<div class="vd-phase-body">'
     + '<span class="vd-dose">' + d.entretien['dose'+cond] + '</span>'
     + '</div></div>';
 
-  /* ── Contrôle biologique ── */
   html += '<div class="vd-phase">'
     + '<div class="vd-phase-head control">\u25B6 Contrôle biologique</div>'
     + '<div class="vd-phase-body">'
@@ -1096,7 +1128,6 @@ window.vdTraitement = function() {
     + '<li><strong>Calcémie\u00a0:</strong> utile avant traitement si carence sévère, puis à 3 mois</li>'
     + '</ul></div></div>';
 
-  /* ── Précautions et cofacteurs ── */
   html += '<div class="vd-sub">Précautions et cofacteurs associés</div>';
   html += '<ul class="vd-rlist warn">';
   d.notes.forEach(function(n){ html += '<li>' + n + '</li>'; });
