@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bandelette Urinaire &mdash; Lecture Interactive v2</title>
+<title>Bandelette Urinaire — Lecture Interactive v2.1</title>
 <style>
 /* ============================================================
    ROOT & RESET — Isolé pour Elementor
@@ -192,7 +192,7 @@
   border: 1.5px solid var(--c-border);
   border-radius: 12px;
   padding: 13px 15px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease; /* Fluidité ajoutée pour l'effet de highlight */
 }
 #bandu-app .ctrl-card:hover {
   border-color: #B0C4D8;
@@ -218,6 +218,7 @@
   color: var(--c-navy);
   flex: 1;
   line-height: 1.3;
+  cursor: pointer; /* Indique que le label est cliquable */
 }
 #bandu-app .ctrl-unit {
   font-weight: 400;
@@ -240,7 +241,7 @@
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 #bandu-app .ctrl-select:focus {
   outline: none;
@@ -269,6 +270,7 @@
   padding: 20px 20px 24px;
   margin-bottom: 22px;
   box-shadow: 0 2px 14px rgba(26,58,92,0.07);
+  scroll-margin-top: 20px; /* Améliore l'auto-scroll */
 }
 #bandu-app .section-title {
   font-size: 0.93rem;
@@ -568,8 +570,8 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   <!-- CONTRÔLES -->
   <div class="controls-grid" id="controlsGrid"><!-- JS --></div>
 
-  <!-- RÉSULTATS -->
-  <div class="result-section">
+  <!-- RÉSULTATS (Avec ancre pour auto-scroll) -->
+  <div class="result-section" id="resultSectionAnchor">
     <div class="section-title">
       <span class="section-icon">&#x1F4CB;</span>
       Synth&#232;se des r&#233;sultats
@@ -747,7 +749,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       id: 'glucose', abbr: 'GLU', name: 'Glucose', unit: 'mmol/L',
       options: [
         { label: 'N\u00E9gatif',        value: 'neg',   color: '#E8E8D8',
-          interp: 'Absence de glycosurie (seuil\u00A0: \u22480,5\u201361\u00A0g/L). Normal.', sev: 0 },
+          interp: 'Absence de glycosurie (seuil\u00A0: \u22480,5\u20131\u00A0g/L). Normal.', sev: 0 },
         { label: 'Traces',            value: 'trace', color: '#FFE08A',
           interp: 'Traces de glucose. Contr\u00F4ler la glyc\u00E9mie veineuse. Seuil r\u00E9nal abaiss\u00E9 possible (grossesse normale).', sev: 1 },
         { label: '+ (5,5\u00A0mmol/L)', value: '1p',    color: '#F6C76A',
@@ -780,14 +782,14 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         { label: '++ (~80\u00A0h\u00E9m/\u00B5L)',  value: '2p', color: '#E05050',
           interp: 'H\u00E9maturie mod\u00E9r\u00E9e (~80\u00A0\u00E9ryth/\u00B5L). Bilan urologique n\u00E9cessaire. <strong>Pi\u00E8ge\u00A0:</strong> si ECBU sans h\u00E9maties \u00E0 la microscopie \u2192 \u00E9voquer myoglobinurie (rhabdomyolyse) ou h\u00E9molyse intravasculaire.', sev: 3 },
         { label: '+++ (\u2265200\u00A0h\u00E9m/\u00B5L)', value: '3p', color: '#8B0000',
-          interp: 'Macroh\u00E9maturie (\u2265200\u00A0\u00E9ryth/\u00B5L). Bilan urologique urgent (ECBU, \u00E9chographie, cystoscopie selon contexte). <strong>Si ECBU n\u00E9gatif\u00A0: \u00E9liminer rhabdomyolyse.</strong>', sev: 4 }
+          interp: 'Macroh\u00E9maturie (\u2265200\u00A0\u00E9ryth/\u00B5L). Bilan urologique urgent. <strong>Si ECBU n\u00E9gatif\u00A0: \u00E9liminer rhabdomyolyse.</strong>', sev: 4 }
       ]
     },
     {
       id: 'densite', abbr: 'DEN', name: 'Densit\u00E9', unit: '',
       options: [
         { label: '1,000',     value: 'v1', color: '#D8EEF8',
-          interp: 'Hyposth\u00E9nurie franche (1,000). Urines tr\u00E8s dilu\u00E9es\u00A0: potomanie, diab\u00E8te insipide, insuffisance r\u00E9nale chronique \u00E0 \u00E9voquer.', sev: 2 },
+          interp: 'Hyposth\u00E9nurie franche (1,000). Urines tr\u00E8s dilu\u00E9es\u00A0: potomanie, diab\u00E8te insipide, insuffisance r\u00E9nale chronique.', sev: 2 },
         { label: '1,010',     value: 'v2', color: '#A8CDE8',
           interp: 'Hyposth\u00E9nurie (1,010). Bonne hydratation. Normale basse.', sev: 0 },
         { label: '1,015',     value: 'v3', color: '#78ACD8',
@@ -797,7 +799,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         { label: '1,025',     value: 'v5', color: '#205888',
           interp: 'Urines concentr\u00E9es (1,025). D\u00E9shydratation possible\u00A0; v\u00E9rifier l\u2019apport hydrique.', sev: 1 },
         { label: '\u22651,030', value: 'v6', color: '#0D3558',
-          interp: 'Hypersth\u00E9nurie (\u22651,030). D\u00E9shydratation significative, glycosurie osmotique (diab\u00E8te d\u00E9compens\u00E9) ou syndrome n\u00E9phrotique.', sev: 2 }
+          interp: 'Hypersth\u00E9nurie (\u22651,030). D\u00E9shydratation significative, glycosurie osmotique (diab\u00E8te) ou syndrome n\u00E9phrotique.', sev: 2 }
       ]
     },
     {
@@ -814,7 +816,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         { label: 'pH 7',   value: 'p7',  color: '#78B830',
           interp: 'pH alcalin (7,0). Alimentation v\u00E9g\u00E9tarienne, alcalose. Limite sup\u00E9rieure de la normale.', sev: 1 },
         { label: 'pH 8',   value: 'p8',  color: '#50A020',
-          interp: 'pH tr\u00E8s alcalin (8,0). Infection \u00E0 germes ur\u00E9asiques (<em>Proteus, Klebsiella</em>) \u00E0 \u00E9voquer. Aussi\u00A0: alcalose m\u00E9tabolique, r\u00E9gime v\u00E9g\u00E9talien strict.', sev: 2 }
+          interp: 'pH tr\u00E8s alcalin (8,0). Infection \u00E0 germes ur\u00E9asiques (<em>Proteus, Klebsiella</em>) \u00E0 \u00E9voquer.', sev: 2 }
       ]
     },
     {
@@ -822,23 +824,23 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       options: [
         { label: 'N\u00E9gatif',      value: 'neg', color: '#E8E8D8', interp: 'Absence de bilirubine. Normal.', sev: 0 },
         { label: '+ (17\u00A0\u00B5mol/L)',  value: '1p',  color: '#F0D060',
-          interp: 'Bilirubinurie l\u00E9g\u00E8re (17\u00A0\u00B5mol/L). Bilan h\u00E9patique recommand\u00E9 (transaminases, gamma-GT).', sev: 2 },
+          interp: 'Bilirubinurie l\u00E9g\u00E8re (17\u00A0\u00B5mol/L). Bilan h\u00E9patique recommand\u00E9.', sev: 2 },
         { label: '++ (51\u00A0\u00B5mol/L)', value: '2p',  color: '#D4A020',
-          interp: 'Bilirubinurie mod\u00E9r\u00E9e (51\u00A0\u00B5mol/L). Ict\u00E8re cholestatique ou h\u00E9patocellulaire. Bilan h\u00E9patobiliaire + \u00E9chographie.', sev: 3 },
+          interp: 'Bilirubinurie mod\u00E9r\u00E9e (51\u00A0\u00B5mol/L). Ict\u00E8re cholestatique ou h\u00E9patocellulaire.', sev: 3 },
         { label: '+++ (103\u00A0\u00B5mol/L)', value: '3p', color: '#8B6000',
-          interp: 'Bilirubinurie importante (103\u00A0\u00B5mol/L). Pathologie h\u00E9patobiliaire probable. Avis gastro-ent\u00E9rologique.', sev: 4 }
+          interp: 'Bilirubinurie importante (103\u00A0\u00B5mol/L). Pathologie h\u00E9patobiliaire probable.', sev: 4 }
       ]
     },
     {
       id: 'urobilinogene', abbr: 'URO', name: 'Urobilinog\u00E8ne', unit: '\u00B5mol/L',
       options: [
-        { label: 'Normal (3,5\u00A0\u00B5mol/L)', value: 'norm', color: '#F0E8C0',
-          interp: 'Urobilinog\u00E8ne normal (3,5\u00A0\u00B5mol/L). M\u00E9tabolisme de la bilirubine intact.', sev: 0 },
-        { label: '+ (17\u00A0\u00B5mol/L)',         value: '1p',   color: '#E0C060',
-          interp: 'Urobilinog\u00E8ne \u00E9lev\u00E9 (17\u00A0\u00B5mol/L). H\u00E9molyse l\u00E9g\u00E8re ou surcharge h\u00E9patique \u00E0 explorer.', sev: 1 },
-        { label: '++ (51\u00A0\u00B5mol/L)',         value: '2p',   color: '#C09020',
-          interp: 'Urobilinog\u00E8ne \u00E9lev\u00E9 (51\u00A0\u00B5mol/L). H\u00E9molyse ou insuffisance h\u00E9patique\u00A0; bilan compl\u00E9mentaire.', sev: 2 },
-        { label: '+++ (\u2265136\u00A0\u00B5mol/L)', value: '3p',  color: '#805500',
+        { label: 'Normal (3,5)', value: 'norm', color: '#F0E8C0',
+          interp: 'Urobilinog\u00E8ne normal (3,5\u00A0\u00B5mol/L). M\u00E9tabolisme intact.', sev: 0 },
+        { label: '+ (17)',       value: '1p',   color: '#E0C060',
+          interp: 'Urobilinog\u00E8ne \u00E9lev\u00E9 (17\u00A0\u00B5mol/L). H\u00E9molyse l\u00E9g\u00E8re ou surcharge h\u00E9patique.', sev: 1 },
+        { label: '++ (51)',       value: '2p',   color: '#C09020',
+          interp: 'Urobilinog\u00E8ne \u00E9lev\u00E9 (51\u00A0\u00B5mol/L). H\u00E9molyse ou insuffisance h\u00E9patique.', sev: 2 },
+        { label: '+++ (\u2265136)', value: '3p',  color: '#805500',
           interp: 'Urobilinog\u00E8ne tr\u00E8s \u00E9lev\u00E9 (\u2265136\u00A0\u00B5mol/L). H\u00E9molyse importante ou h\u00E9patopathie s\u00E9v\u00E8re.', sev: 3 }
       ]
     }
@@ -882,19 +884,43 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   }
 
   /* =========================================================
-     BANDELETTE
+     BANDELETTE VISUELLE (Construction + Interaction)
      ========================================================= */
   function buildStrip() {
     var html = '';
     PARAMS.forEach(function (p, i) {
       var opt = getOpt(p);
       if (i > 0) html += '<div class="strip-stick"></div>';
-      html += '<div class="strip-pad-wrap" id="pad-'+p.id+'" title="'+p.name+'">' +
+      html += '<div class="strip-pad-wrap" id="pad-'+p.id+'" title="Modifier '+p.name+'">' +
               '<div class="pad-square" id="sq-'+p.id+'" style="background:'+opt.color+';"></div>' +
               '<div class="pad-abbr">'+p.abbr+'</div>' +
               '</div>';
     });
     document.getElementById('stripVisual').innerHTML = html;
+
+    // Attache de l'événement clic sur chaque carré pour auto-scroll vers son contrôle
+    PARAMS.forEach(function(p) {
+      var pad = document.getElementById('pad-'+p.id);
+      if(pad) {
+        pad.addEventListener('click', function() {
+          var target = document.getElementById('ctrl-'+p.id);
+          var select = document.getElementById('sel-'+p.id);
+          if(target && select) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Effet visuel (surbrillance)
+            target.style.boxShadow = '0 0 0 4px rgba(42,82,152,0.2)';
+            target.style.borderColor = 'var(--c-navy-lt)';
+            
+            setTimeout(function() {
+              select.focus(); // Ouvre l'accessibilité au clavier directement
+              target.style.boxShadow = '';
+              target.style.borderColor = '';
+            }, 800);
+          }
+        });
+      }
+    });
   }
 
   /* =========================================================
@@ -907,17 +933,20 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       var opts = p.options.map(function (o) {
         return '<option value="'+o.value+'"'+(o.value===state[p.id]?' selected':'')+'>'+o.label+'</option>';
       }).join('');
+      
+      // La balise <label> avec l'attribut 'for' relie le texte au select pour l'accessibilité
       html +=
         '<div class="ctrl-card" id="ctrl-'+p.id+'">' +
           '<div class="ctrl-header">' +
             '<div class="ctrl-dot" id="dot-'+p.id+'" style="background:'+opt.color+';"></div>' +
-            '<div class="ctrl-name">'+p.name+(p.unit ? '<span class="ctrl-unit">('+p.unit+')</span>' : '')+'</div>' +
+            '<label class="ctrl-name" for="sel-'+p.id+'">'+p.name+(p.unit ? '<span class="ctrl-unit">('+p.unit+')</span>' : '')+'</label>' +
           '</div>' +
           '<select class="ctrl-select" id="sel-'+p.id+'" data-param="'+p.id+'">'+opts+'</select>' +
           '<span class="ctrl-badge" id="badge-'+p.id+'" style="background:'+opt.color+';color:'+(isDark(opt.color)?'#fff':'#333')+';">'+opt.label+'</span>' +
         '</div>';
     });
     document.getElementById('controlsGrid').innerHTML = html;
+    
     PARAMS.forEach(function (p) {
       document.getElementById('sel-'+p.id).addEventListener('change', function () {
         state[p.id] = this.value;
@@ -1064,7 +1093,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   }
 
   /* =========================================================
-     PRÉSETS
+     PRÉSETS + AUTO-SCROLL
      ========================================================= */
   function applyPreset(name) {
     var pre = PRESETS[name];
@@ -1075,6 +1104,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       if (sel) sel.value = pre[k];
     });
     updateUI();
+    
+    // Auto-scroll très doux vers les résultats pour UX Mobile optimale
+    setTimeout(function() {
+      var anchor = document.getElementById('resultSectionAnchor');
+      if(anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
   }
 
   document.getElementById('btn-normal').addEventListener('click', function () { applyPreset('normal'); });
