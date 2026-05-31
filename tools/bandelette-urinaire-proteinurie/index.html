@@ -105,11 +105,22 @@ body {
 .section-title i { 
   font-size: 14px; 
 }
+
+/* --- OPTIMISATION DU TABLEAU POUR MOBILE --- */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Défilement fluide sur iOS */
+  margin-bottom: 0.5rem;
+}
 table { 
   width: 100%; 
   border-collapse: collapse; 
   font-size: 0.83rem; 
+  min-width: 600px; /* Force le scroll sur très petits écrans pour garder la lisibilité */
 }
+/* ------------------------------------------- */
+
 thead th { 
   background: var(--navy); 
   color: #fff; 
@@ -144,6 +155,7 @@ tbody td {
   padding: 1px 7px; 
   font-size: 0.72rem; 
   font-weight: 600; 
+  white-space: nowrap;
 }
 .tag-warn { 
   background: #fff7e6; 
@@ -152,6 +164,7 @@ tbody td {
   padding: 1px 7px; 
   font-size: 0.72rem; 
   font-weight: 600; 
+  white-space: nowrap;
 }
 .tag-alert { 
   background: #fdf2f4; 
@@ -160,6 +173,7 @@ tbody td {
   padding: 1px 7px; 
   font-size: 0.72rem; 
   font-weight: 600; 
+  white-space: nowrap;
 }
 .tag-crit { 
   background: #4a0010; 
@@ -168,6 +182,7 @@ tbody td {
   padding: 1px 7px; 
   font-size: 0.72rem; 
   font-weight: 600; 
+  white-space: nowrap;
 }
 .note-fab { 
   background: var(--amber-light); 
@@ -410,6 +425,10 @@ tbody td {
   flex-shrink: 0; 
   margin-top: 1px; 
 }
+
+/* =========================================
+   Mode Responsive (Mobiles)
+   ========================================= */
 @media (max-width: 620px) {
   .body { padding: 1rem; }
   .grid2 { grid-template-columns: 1fr; }
@@ -423,6 +442,24 @@ tbody td {
 html { scrollbar-width: none !important; }
 body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 ::-webkit-scrollbar { display: none !important; }
+
+/* =========================================
+   Optimisation pour l'impression (Print CSS)
+   ========================================= */
+@media print {
+  body { background: #fff !important; }
+  .fiche { border: none !important; box-shadow: none !important; max-width: 100% !important; margin: 0 !important; }
+  .header { background: #f0f0f0 !important; border-bottom: 2px solid #ccc !important; padding: 1rem !important; color: #000 !important; }
+  .header h1 { color: #000 !important; }
+  .header-sub { color: #333 !important; border-left-color: #555 !important; }
+  .header-icon { background: #e0e0e0 !important; }
+  .header-icon i { color: #333 !important; }
+  .meta-badge { background: #e0e0e0 !important; color: #333 !important; border-color: #ccc !important; }
+  .body { padding: 0 !important; margin-top: 1rem; }
+  /* Forcer l'impression des couleurs de fond (tags, alertes) sur Chrome/Safari/Edge */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .section { page-break-inside: avoid; } /* Évite de couper une section sur deux pages */
+}
 </style>
 
 <!-- Icônes Tabler -->
@@ -452,54 +489,58 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 
     <div class="section">
       <div class="section-title"><i class="ti ti-table" aria-hidden="true"></i>Résultats de lecture — correspondances semi-quantitatives</div>
-      <table>
-        <thead>
-          <tr>
-            <th style="width:100px">Résultat</th>
-            <th>Concentration indicative</th>
-            <th>Commentaire clinique</th>
-            <th style="width:100px">Niveau</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="symbol">Négatif</td>
-            <td>&lt; 30 mg/L</td>
-            <td>En dessous du seuil de détection de l'albumine</td>
-            <td><span class="tag-neg">Normal</span></td>
-          </tr>
-          <tr>
-            <td class="symbol">Trace</td>
-            <td>~ 100–150 mg/L</td>
-            <td>À recontrôler sur 2<sup>e</sup> échantillon matineux</td>
-            <td><span class="tag-warn">À surveiller</span></td>
-          </tr>
-          <tr>
-            <td class="symbol">+</td>
-            <td>~ 300 mg/L (0,3 g/L)</td>
-            <td>Protéinurie significative — quantification requise</td>
-            <td><span class="tag-warn">Significatif</span></td>
-          </tr>
-          <tr>
-            <td class="symbol">++</td>
-            <td>~ 1 000 mg/L (1 g/L)</td>
-            <td>Atteinte glomérulaire à évoquer en priorité</td>
-            <td><span class="tag-alert">Élevé</span></td>
-          </tr>
-          <tr>
-            <td class="symbol">+++</td>
-            <td>~ 3 000 mg/L (3 g/L)</td>
-            <td>Syndrome néphrotique possible</td>
-            <td><span class="tag-alert">Très élevé</span></td>
-          </tr>
-          <tr>
-            <td class="symbol">++++</td>
-            <td>&gt; 3 000 mg/L (&gt; 3 g/L)</td>
-            <td>Protéinurie massive — bilan néphrologique urgent</td>
-            <td><span class="tag-crit">Critique</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Wrapper ajouté pour le responsive du tableau -->
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <!-- Attributs scope="col" ajoutés pour l'accessibilité -->
+              <th scope="col" style="width:100px">Résultat</th>
+              <th scope="col">Concentration indicative</th>
+              <th scope="col">Commentaire clinique</th>
+              <th scope="col" style="width:100px">Niveau</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="symbol">Négatif</td>
+              <td>&lt; 30 mg/L</td>
+              <td>En dessous du seuil de détection de l'albumine</td>
+              <td><span class="tag-neg">Normal</span></td>
+            </tr>
+            <tr>
+              <td class="symbol">Trace</td>
+              <td>~ 100–150 mg/L</td>
+              <td>À recontrôler sur 2<sup>e</sup> échantillon matineux</td>
+              <td><span class="tag-warn">À surveiller</span></td>
+            </tr>
+            <tr>
+              <td class="symbol">+</td>
+              <td>~ 300 mg/L (0,3 g/L)</td>
+              <td>Protéinurie significative — quantification requise</td>
+              <td><span class="tag-warn">Significatif</span></td>
+            </tr>
+            <tr>
+              <td class="symbol">++</td>
+              <td>~ 1 000 mg/L (1 g/L)</td>
+              <td>Atteinte glomérulaire à évoquer en priorité</td>
+              <td><span class="tag-alert">Élevé</span></td>
+            </tr>
+            <tr>
+              <td class="symbol">+++</td>
+              <td>~ 3 000 mg/L (3 g/L)</td>
+              <td>Syndrome néphrotique possible</td>
+              <td><span class="tag-alert">Très élevé</span></td>
+            </tr>
+            <tr>
+              <td class="symbol">++++</td>
+              <td>&gt; 3 000 mg/L (&gt; 3 g/L)</td>
+              <td>Protéinurie massive — bilan néphrologique urgent</td>
+              <td><span class="tag-crit">Critique</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="note-fab">
         <i class="ti ti-alert-triangle" aria-hidden="true"></i> Les seuils exacts varient selon le fabricant (Siemens Multistix®, Roche Combur®, etc.). Cette correspondance est indicative — ne pas substituer à la quantification sur 24h ou au ratio albumine/créatinine.
       </div>
