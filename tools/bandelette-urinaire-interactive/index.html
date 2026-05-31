@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bandelette Urinaire &mdash; Lecture Interactive v2</title>
+<style>
+/* ============================================================
+   ROOT & RESET — Isolé pour Elementor
+   ============================================================ */
+#bandu-app {
+  --c-bg:      #F4F6F9;
+  --c-card:    #FFFFFF;
+  --c-border:  #DDE3EA;
+  --c-navy:    #1A3A5C;
+  --c-navy-lt: #2A5298;
+  --c-text:    #1C2B3A;
+  --c-muted:   #6B7280;
+
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  color: var(--c-text);
+  background: var(--c-bg);
+  box-sizing: border-box;
+  line-height: 1.55;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px 16px 52px;
+}
+#bandu-app *, #bandu-app *::before, #bandu-app *::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   EN-TÊTE
+   ============================================================ */
+#bandu-app .bandu-header {
+  text-align: center;
+  margin-bottom: 26px;
+}
+#bandu-app .bandu-badge {
+  display: inline-block;
+  background: var(--c-navy);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+#bandu-app .bandu-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--c-navy);
+  letter-spacing: -0.3px;
+  margin-bottom: 5px;
+}
+#bandu-app .bandu-header p {
+  font-size: 0.85rem;
+  color: var(--c-muted);
+}
+
+/* ============================================================
+   BANDELETTE VISUELLE
+   ============================================================ */
+#bandu-app .strip-wrapper {
+  background: var(--c-card);
+  border: 1.5px solid var(--c-border);
+  border-radius: 16px;
+  padding: 20px 16px 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 14px rgba(26,58,92,0.07);
+}
+#bandu-app .strip-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--c-muted);
+  text-align: center;
+  margin-bottom: 16px;
+}
+#bandu-app .strip-body {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  background: linear-gradient(135deg, #C8A882 0%, #B8956A 40%, #C8A882 100%);
+  border-radius: 14px;
+  padding: 12px 18px;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.14);
+  overflow-x: auto;
+  gap: 5px;
+  user-select: none;
+}
+#bandu-app .strip-stick {
+  width: 7px;
+  background: linear-gradient(to bottom, #D4C0A0, #B09070, #D4C0A0);
+  border-radius: 2px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+#bandu-app .strip-pad-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 58px;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+#bandu-app .strip-pad-wrap:hover { transform: translateY(-5px); }
+#bandu-app .strip-pad-wrap:hover .pad-square {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.38), inset 0 1px 3px rgba(255,255,255,0.3);
+}
+#bandu-app .pad-square {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  border: 2.5px solid rgba(255,255,255,0.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.22), inset 0 1px 2px rgba(255,255,255,0.2);
+  transition: background-color 0.5s ease, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+#bandu-app .pad-square::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 6px;
+  width: 40%; height: 35%;
+  background: rgba(255,255,255,0.22);
+  border-radius: 3px;
+  pointer-events: none;
+}
+#bandu-app .pad-abbr {
+  font-size: 0.59rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.65);
+  margin-top: 5px;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* ============================================================
+   BOUTONS PRÉSETS
+   ============================================================ */
+#bandu-app .btn-row {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+#bandu-app .btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.18s, transform 0.12s, box-shadow 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+#bandu-app .btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.14); }
+#bandu-app .btn:active { transform: translateY(0); }
+#bandu-app .btn-reset   { background: #F1F3F7; color: var(--c-navy); border: 1.5px solid var(--c-border); }
+#bandu-app .btn-iu      { background: #C0392B; color: #fff; }
+#bandu-app .btn-nephro  { background: #8E44AD; color: #fff; }
+#bandu-app .btn-diab    { background: #E67E22; color: #fff; }
+#bandu-app .btn-precla  { background: #1A3A5C; color: #fff; }
+
+/* ============================================================
+   GRILLE CONTRÔLES
+   ============================================================ */
+#bandu-app .controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(252px, 1fr));
+  gap: 11px;
+  margin-bottom: 26px;
+}
+#bandu-app .ctrl-card {
+  background: var(--c-card);
+  border: 1.5px solid var(--c-border);
+  border-radius: 12px;
+  padding: 13px 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+#bandu-app .ctrl-card:hover {
+  border-color: #B0C4D8;
+  box-shadow: 0 2px 10px rgba(26,58,92,0.08);
+}
+#bandu-app .ctrl-header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 9px;
+}
+#bandu-app .ctrl-dot {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  transition: background-color 0.45s;
+  border: 1.5px solid rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+#bandu-app .ctrl-name {
+  font-weight: 700;
+  font-size: 0.83rem;
+  color: var(--c-navy);
+  flex: 1;
+  line-height: 1.3;
+}
+#bandu-app .ctrl-unit {
+  font-weight: 400;
+  color: var(--c-muted);
+  font-size: 0.74rem;
+  display: block;
+}
+#bandu-app .ctrl-select {
+  width: 100%;
+  padding: 7px 30px 7px 10px;
+  border: 1.5px solid var(--c-border);
+  border-radius: 8px;
+  background-color: #FAFBFC;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  font-size: 0.82rem;
+  color: var(--c-text);
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
+}
+#bandu-app .ctrl-select:focus {
+  outline: none;
+  border-color: var(--c-navy-lt);
+  box-shadow: 0 0 0 3px rgba(42,82,152,0.12);
+}
+#bandu-app .ctrl-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 7px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  transition: background-color 0.45s, color 0.3s;
+  border: 1px solid rgba(0,0,0,0.07);
+}
+
+/* ============================================================
+   SECTION RÉSULTATS
+   ============================================================ */
+#bandu-app .result-section {
+  background: var(--c-card);
+  border: 1.5px solid var(--c-border);
+  border-radius: 16px;
+  padding: 20px 20px 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 14px rgba(26,58,92,0.07);
+}
+#bandu-app .section-title {
+  font-size: 0.93rem;
+  font-weight: 700;
+  color: var(--c-navy);
+  margin-bottom: 16px;
+  padding-bottom: 11px;
+  border-bottom: 2px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+#bandu-app .section-icon {
+  width: 28px; height: 28px;
+  background: var(--c-navy);
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+#bandu-app .result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+#bandu-app .result-table th {
+  background: var(--c-navy);
+  color: #fff;
+  padding: 9px 13px;
+  font-weight: 600;
+  text-align: left;
+  font-size: 0.77rem;
+  letter-spacing: 0.4px;
+}
+#bandu-app .result-table th:first-child { border-radius: 8px 0 0 0; }
+#bandu-app .result-table th:last-child  { border-radius: 0 8px 0 0; }
+#bandu-app .result-table td {
+  padding: 8px 13px;
+  border-bottom: 1px solid #EEF1F6;
+  vertical-align: middle;
+  font-size: 0.81rem;
+}
+#bandu-app .result-table tr:nth-child(even) td { background: #F8FAFC; }
+#bandu-app .result-table tr:last-child td { border-bottom: none; }
+#bandu-app .result-table tr:hover td { background: #EEF4FB; transition: background 0.15s; }
+
+#bandu-app .chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Alertes */
+#bandu-app .alert-zone { margin-top: 16px; display: flex; flex-direction: column; gap: 9px; }
+#bandu-app .alert-banner {
+  padding: 11px 15px;
+  border-radius: 10px;
+  font-size: 0.81rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.58;
+  animation: bduSlideIn 0.28s ease;
+}
+@keyframes bduSlideIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#bandu-app .alert-ok     { background: #ECFDF5; border: 1.5px solid #10B981; color: #064E3B; }
+#bandu-app .alert-warn   { background: #FFFBEB; border: 1.5px solid #F59E0B; color: #92400E; }
+#bandu-app .alert-danger { background: #FEF2F2; border: 1.5px solid #EF4444; color: #7F1D1D; }
+#bandu-app .alert-info   { background: #EFF6FF; border: 1.5px solid #3B82F6; color: #1E3A8A; }
+#bandu-app .alert-purple { background: #F5F3FF; border: 1.5px solid #8B5CF6; color: #4C1D95; }
+#bandu-app .alert-icon   { font-size: 1.05rem; flex-shrink: 0; line-height: 1.6; }
+
+/* ============================================================
+   SECTION PIÈGES — ACCORDÉON
+   ============================================================ */
+#bandu-app .traps-section {
+  background: var(--c-card);
+  border: 1.5px solid var(--c-border);
+  border-radius: 16px;
+  margin-bottom: 22px;
+  overflow: hidden;
+  box-shadow: 0 2px 14px rgba(26,58,92,0.07);
+}
+#bandu-app .traps-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 0.93rem;
+  font-weight: 700;
+  color: var(--c-navy);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.18s;
+}
+#bandu-app .traps-toggle:hover { background: #F4F6F9; }
+#bandu-app .traps-arrow {
+  margin-left: auto;
+  font-size: 0.75rem;
+  transition: transform 0.25s;
+  color: var(--c-muted);
+}
+#bandu-app .traps-toggle.open .traps-arrow { transform: rotate(180deg); }
+#bandu-app .traps-body {
+  display: none;
+  padding: 0 20px 20px;
+  border-top: 1.5px solid var(--c-border);
+}
+#bandu-app .traps-body.open { display: block; }
+
+#bandu-app .traps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+#bandu-app .trap-card {
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+#bandu-app .trap-card h4 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#bandu-app .trap-card ul { padding-left: 14px; }
+#bandu-app .trap-card li { margin-bottom: 4px; }
+#bandu-app .trap-fp { background: #FEF2F2; border: 1.5px solid #FCA5A5; color: #7F1D1D; }
+#bandu-app .trap-fn { background: #FFFBEB; border: 1.5px solid #FCD34D; color: #78350F; }
+
+#bandu-app .trap-note {
+  margin-top: 14px;
+  padding: 11px 15px;
+  background: #F5F3FF;
+  border: 1.5px solid #8B5CF6;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: #4C1D95;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   TABLEAU LIMITES
+   ============================================================ */
+#bandu-app .limits-section {
+  background: var(--c-card);
+  border: 1.5px solid var(--c-border);
+  border-radius: 16px;
+  padding: 18px 20px 20px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 14px rgba(26,58,92,0.07);
+}
+#bandu-app .limits-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  margin-top: 14px;
+}
+#bandu-app .limits-table th {
+  background: #1A3A5C;
+  color: #fff;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 0.76rem;
+}
+#bandu-app .limits-table th:first-child { border-radius: 8px 0 0 0; }
+#bandu-app .limits-table th:last-child  { border-radius: 0 8px 0 0; }
+#bandu-app .limits-table td {
+  padding: 7px 12px;
+  border-bottom: 1px solid #EEF1F6;
+  vertical-align: middle;
+}
+#bandu-app .limits-table tr:nth-child(even) td { background: #F8FAFC; }
+#bandu-app .limits-table tr:last-child td { border-bottom: none; }
+#bandu-app .tag-ok  { color: #166534; font-weight: 700; }
+#bandu-app .tag-no  { color: #991B1B; font-weight: 700; }
+#bandu-app .tag-warn { color: #92400E; font-weight: 700; }
+
+/* ============================================================
+   LÉGENDE
+   ============================================================ */
+#bandu-app .legend-section {
+  background: var(--c-card);
+  border: 1.5px solid var(--c-border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+}
+#bandu-app .legend-section h3 {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--c-navy);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+#bandu-app .legend-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+#bandu-app .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.77rem;
+  color: var(--c-text);
+  background: #F7F8FA;
+  border-radius: 7px;
+  padding: 4px 9px;
+  border: 1px solid var(--c-border);
+}
+#bandu-app .legend-swatch {
+  width: 17px; height: 17px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   DISCLAIMER
+   ============================================================ */
+#bandu-app .disclaimer {
+  font-size: 0.72rem;
+  color: #9CA3AF;
+  text-align: center;
+  line-height: 1.7;
+  border-top: 1px solid var(--c-border);
+  padding-top: 14px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 600px) {
+  #bandu-app { padding: 14px 10px 36px; }
+  #bandu-app .controls-grid { grid-template-columns: 1fr; }
+  #bandu-app .traps-grid { grid-template-columns: 1fr; }
+  #bandu-app .strip-pad-wrap { width: 42px; }
+  #bandu-app .pad-square { width: 38px; height: 38px; }
+  #bandu-app .strip-body { padding: 10px 10px; gap: 3px; }
+  #bandu-app .result-table td, #bandu-app .result-table th { padding: 6px 8px; }
+  #bandu-app .result-table { font-size: 0.77rem; }
+  #bandu-app .btn { padding: 7px 11px; font-size: 0.77rem; }
+}
+
+/* ============================================================
+   MASQUE ASCENSEUR (style App native)
+   ============================================================ */
+html { scrollbar-width: none; }
+body { -ms-overflow-style: none; overflow-y: auto; }
+::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<div id="bandu-app">
+
+  <!-- EN-TÊTE -->
+  <div class="bandu-header">
+    <div class="bandu-badge">Outil p&#233;dagogique interactif</div>
+    <h1>Bandelette Urinaire &mdash; Lecture Interactive</h1>
+    <p>S&#233;lectionnez chaque param&#232;tre &bull; La bandelette se colore en temps r&#233;el &bull; Interpr&#233;tation clinique int&#233;gr&#233;e</p>
+  </div>
+
+  <!-- BANDELETTE -->
+  <div class="strip-wrapper">
+    <div class="strip-label">Bandelette r&#233;active &mdash; 10 param&#232;tres</div>
+    <div class="strip-body" id="stripVisual"><!-- JS --></div>
+  </div>
+
+  <!-- PRÉSETS -->
+  <div class="btn-row">
+    <button class="btn btn-reset"  id="btn-normal">&#10227; Tout n&#233;gatif</button>
+    <button class="btn btn-iu"     id="btn-iu">&#x1F9EA; Exemple IU</button>
+    <button class="btn btn-nephro" id="btn-nephro">&#x1F52C; Exemple N&#233;phro</button>
+    <button class="btn btn-diab"   id="btn-diab">&#x1F4CA; Exemple Diab&#232;te</button>
+    <button class="btn btn-precla" id="btn-precla">&#x1FAC0; Pr&#233;&#233;clampsie</button>
+  </div>
+
+  <!-- CONTRÔLES -->
+  <div class="controls-grid" id="controlsGrid"><!-- JS --></div>
+
+  <!-- RÉSULTATS -->
+  <div class="result-section">
+    <div class="section-title">
+      <span class="section-icon">&#x1F4CB;</span>
+      Synth&#232;se des r&#233;sultats
+    </div>
+    <table class="result-table">
+      <thead>
+        <tr>
+          <th>Param&#232;tre</th>
+          <th>Valeur</th>
+          <th>Interpr&#233;tation clinique</th>
+        </tr>
+      </thead>
+      <tbody id="resultBody"></tbody>
+    </table>
+    <div class="alert-zone" id="alertZone"></div>
+  </div>
+
+  <!-- PIÈGES & INTERFÉRENCES — ACCORDÉON -->
+  <div class="traps-section">
+    <button class="traps-toggle" id="trapsToggle">
+      <span>&#x26A0;&#xFE0F;</span>
+      Pi&#232;ges &amp; interf&#233;rences analytiques
+      <span class="traps-arrow" id="trapsArrow">&#9660;</span>
+    </button>
+    <div class="traps-body" id="trapsBody">
+      <div class="traps-grid">
+        <div class="trap-card trap-fp">
+          <h4>&#10060; Faux positifs</h4>
+          <ul>
+            <li><strong>Prot&#233;ines :</strong> urines alcalines (pH&nbsp;&gt;&nbsp;8), chlorhexidine lors de la toilette intime, urines tr&#232;s concentr&#233;es</li>
+            <li><strong>Leucocytes :</strong> leucorrh&#233;es, Trichomonas (contamination vaginale)</li>
+            <li><strong>Sang :</strong> contamination menstruelle, saignements g&#233;nitaux, h&#233;moglobinurie d&#8217;effort</li>
+          </ul>
+        </div>
+        <div class="trap-card trap-fn">
+          <h4>&#10071; Faux n&#233;gatifs</h4>
+          <ul>
+            <li><strong>Vitamine&nbsp;C</strong> (&#8805;&nbsp;500&nbsp;mg/j) : inhibe glucose, nitrites, sang, leucocytes &mdash; puissant r&#233;ducteur</li>
+            <li><strong>Nitrites :</strong> stase v&#233;sicale &lt;&nbsp;4&nbsp;h, germes non r&#233;ducteurs (<em>Strepto&nbsp;B, Entérocoque, Staph. saprophyticus, Pseudomonas</em>), urines tr&#232;s dillu&#233;es</li>
+            <li><strong>Prot&#233;ines :</strong> microalbuminurie (A2 KDIGO&nbsp;: 30&ndash;300&nbsp;mg/g), prot&#233;ine de Bence&nbsp;Jones (my&#233;lome)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="trap-note">
+        <strong>&#x1F4A1; Pi&#232;ge majeur &mdash; My&#233;lome multiple :</strong> un my&#233;lome peut pr&#233;senter une prot&#233;inurie abondante (cha&#238;nes l&#233;g&#232;res d&rsquo;immunoglobulines = prot&#233;ine de Bence&nbsp;Jones) avec une <strong>bandelette n&#233;gative</strong>, car l&rsquo;indicateur est s&#233;lectif de l&rsquo;albumine. Une bandelette n&#233;gative n&rsquo;&#233;limine jamais une n&#233;phropathie d&#233;butante.
+      </div>
+      <div class="trap-note" style="margin-top:10px; background:#EFF6FF; border-color:#3B82F6; color:#1E3A8A;">
+        <strong>&#x1F4CC; Microalbuminurie (A2 KDIGO) :</strong> la bandelette ne d&#233;tecte pas l&rsquo;albuminurie mod&#233;r&#233;ment augment&#233;e (30&ndash;300&nbsp;mg/g cr&#233;atinine). C&rsquo;est le principal d&#233;pistage manqu&#233; chez les patientes diab&#233;tiques ou hypertendues. Le ratio albumine/cr&#233;atinine (ACR) sur miction isol&#233;e est indispensable ind&#233;pendamment du r&#233;sultat de la bandelette.
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLEAU LIMITES DE DÉTECTION -->
+  <div class="limits-section">
+    <div class="section-title" style="margin-bottom:6px; padding-bottom:0; border-bottom:none; font-size:0.88rem;">
+      <span class="section-icon" style="background:#8E44AD;">&#x1F4CA;</span>
+      Ce que la bandelette ne d&#233;tecte PAS
+    </div>
+    <table class="limits-table">
+      <thead>
+        <tr>
+          <th>Situation</th>
+          <th>Bandelette</th>
+          <th>Solution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Prot&#233;inurie physiologique (&lt;&nbsp;150&nbsp;mg/24h)</td>
+          <td><span class="tag-ok">N&#233;gative &#10003;</span></td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>Microalbuminurie A2 (30&ndash;300&nbsp;mg/g) &mdash; n&#233;phropathie diab&#233;tique pr&#233;coce</td>
+          <td><span class="tag-no">N&#233;gative &#9888; (faux rassurant !)</span></td>
+          <td>Ratio ACR urinaire</td>
+        </tr>
+        <tr>
+          <td>Prot&#233;inurie glom&#233;rulaire avanc&#233;e (&gt;&nbsp;300&nbsp;mg/g)</td>
+          <td><span class="tag-ok">Positive &#10003;</span></td>
+          <td>Quantification 24h</td>
+        </tr>
+        <tr>
+          <td>Cha&#238;nes l&#233;g&#232;res d&rsquo;Ig (My&#233;lome &mdash; Bence Jones)</td>
+          <td><span class="tag-no">N&#233;gative &#9888;</span></td>
+          <td>&#201;lectrophor&#232;se prot&#233;ines urinaires</td>
+        </tr>
+        <tr>
+          <td>Prot&#233;inurie tubulaire (faible poids mol&#233;culaire)</td>
+          <td><span class="tag-warn">Faiblement positive ou n&#233;gative</span></td>
+          <td>Dosage sp&#233;cifique (&beta;2-microglobuline)</td>
+        </tr>
+        <tr>
+          <td>IU &#224; germes non r&#233;ducteurs (<em>Entérocoque, Staph. saprophyticus</em>)</td>
+          <td><span class="tag-no">Nitrites n&#233;gatifs &#9888;</span></td>
+          <td>ECBU syst&#233;matique si clinique &#233;vocatrice</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LÉGENDE -->
+  <div class="legend-section">
+    <h3>L&#233;gende des couleurs</h3>
+    <div class="legend-grid">
+      <div class="legend-item"><div class="legend-swatch" style="background:#EAEAE0"></div>N&#233;gatif / Normal</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#FFE08A"></div>Traces</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#A8D5A2"></div>+ faible</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#5BAD6F"></div>++ mod&#233;r&#233;</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#2E7D4F"></div>+++ important</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#C0392B"></div>++++ / Positif</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#8E44AD"></div>Pathologique</div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    Outil p&#233;dagogique d&rsquo;aide &#224; la lecture des bandelettes urinaires. Ne se substitue pas &#224; un ECBU ni &#224; un avis m&#233;dical.<br>
+    Valeurs de r&#233;f&#233;rence variables selon fabricants (Multistix&#174;, Combur&#174;, Uritest&#174;). Sources&nbsp;: KDIGO 2024, HAS.<br>
+    Dr KARA-ZAITRI M.A. &mdash; Gyn&#233;cologie-Obst&#233;trique &mdash; CHU Tlemcen
+  </div>
+
+</div><!-- /#bandu-app -->
+
+<script>
+(function () {
+  'use strict';
+
+  /* =========================================================
+     DONNÉES DES PARAMÈTRES
+     ========================================================= */
+  var PARAMS = [
+    {
+      id: 'leucocytes', abbr: 'LEU', name: 'Leucocytes', unit: 'leuco/\u00B5L',
+      options: [
+        { label: 'N\u00E9gatif',      value: 'neg',   color: '#E8E8D8',
+          interp: 'Absence de leucocyturie (seuil\u00A0: &lt;\u202F10\u00A0leuco/mm\u00B3). Infection urinaire peu probable.', sev: 0 },
+        { label: 'Traces (~10)',     value: 'trace', color: '#FFE08A',
+          interp: 'Traces de leucocytes (~10\u00A0/mm\u00B3). Interpr\u00E9ter selon contexte\u00A0; \u00E9liminer contamination vaginale.', sev: 1 },
+        { label: '+ (~25\u00A0/mm\u00B3)',   value: '1p',  color: '#A8D5A2',
+          interp: 'Leucocyturie l\u00E9g\u00E8re (~25\u00A0leuco/mm\u00B3). Infection d\u00E9butante ou inflammation pelvienne possible. ECBU si clinique.', sev: 2 },
+        { label: '++ (~75\u00A0/mm\u00B3)',  value: '2p',  color: '#5BAD6F',
+          interp: 'Leucocyturie mod\u00E9r\u00E9e (~75\u00A0/mm\u00B3). Infection urinaire probable\u00A0; ECBU recommand\u00E9.', sev: 3 },
+        { label: '+++ (\u2265500\u00A0/mm\u00B3)', value: '3p', color: '#2E7D4F',
+          interp: 'Leucocyturie franche (\u2265500\u00A0/mm\u00B3). Infection urinaire certaine dans ce contexte. ECBU + antibiogramme avant antibioth\u00E9rapie.', sev: 4 }
+      ]
+    },
+    {
+      id: 'nitrites', abbr: 'NIT', name: 'Nitrites', unit: '',
+      options: [
+        { label: 'N\u00E9gatif', value: 'neg', color: '#E8E8D8',
+          interp: 'Nitrites n\u00E9gatifs. <strong>N\u2019exclut pas une IU\u00A0:</strong> sensibilit\u00E9 seulement 40\u201360\u00A0%. Germes non r\u00E9ducteurs non d\u00E9tect\u00E9s\u00A0: <em>Entérocoque, Staph. saprophyticus, Pseudomonas, Strepto\u00A0B</em>. Stase v\u00E9sicale &lt;\u00A04\u00A0h\u00A0: faux n\u00E9gatif fr\u00E9quent.', sev: 0 },
+        { label: 'Positif', value: 'pos', color: '#E74C3C',
+          interp: 'Nitrites positifs. Sp\u00E9cificit\u00E9 &gt;\u202F95\u00A0% pour les ent\u00E9robact\u00E9ries (<em>E.\u00A0coli, Proteus, Klebsiella</em>). Infection bact\u00E9rienne fortement probable.', sev: 4 }
+      ]
+    },
+    {
+      id: 'proteines', abbr: 'PRO', name: 'Prot\u00E9ines', unit: 'g/L',
+      options: [
+        { label: 'N\u00E9gatif',        value: 'neg',   color: '#E8E8D8',
+          interp: 'Absence de prot\u00E9inurie (&lt;\u00A00,15\u00A0g/L). Normal. <em>Attention\u00A0: ne d\u00E9tecte pas la microalbuminurie ni les cha\u00EEnes l\u00E9g\u00E8res.</em>', sev: 0 },
+        { label: 'Traces (0,15\u20130,20)',value:'trace', color: '#FFE08A',
+          interp: 'Traces de prot\u00E9ines (0,15\u20130,20\u00A0g/L). Recontr\u00F4ler sur un 2\u1D49 \u00E9chantillon matineux. Urines concentr\u00E9es ou \u00E9cart de norme.', sev: 1 },
+        { label: '+ (\u22480,3\u00A0g/L)',    value: '1p',   color: '#A8D5A2',
+          interp: 'Prot\u00E9inurie l\u00E9g\u00E8re (\u22480,3\u00A0g/L). Quantification requise (ratio ACR ou prot\u00E9inurie 24h). Surveiller HTA, grossesse.', sev: 2 },
+        { label: '++ (\u22481\u00A0g/L)',      value: '2p',   color: '#5BAD6F',
+          interp: 'Prot\u00E9inurie mod\u00E9r\u00E9e (\u22481\u00A0g/L). \u00C9tiologie glom\u00E9rulaire \u00E0 \u00E9voquer. Avis n\u00E9phrologiste conseill\u00E9. En obst\u00E9trique\u00A0: \u00E9vocatrice de pr\u00E9\u00E9clampsie si HTA \u2265\u00A0140/90.', sev: 3 },
+        { label: '+++ (\u22483\u00A0g/L)',     value: '3p',   color: '#2E7D4F',
+          interp: 'Prot\u00E9inurie importante (\u22483\u00A0g/L). Syndrome n\u00E9phrotique possible. Bilan n\u00E9phrologique urgent.', sev: 4 },
+        { label: '++++ (&gt;3\u00A0g/L)',   value: '4p',   color: '#8E44AD',
+          interp: 'Prot\u00E9inurie critique (&gt;3\u00A0g/L). Syndrome n\u00E9phrotique probable. Bilan n\u00E9phrologique urgent + hospitalisation selon contexte.', sev: 5 }
+      ]
+    },
+    {
+      id: 'glucose', abbr: 'GLU', name: 'Glucose', unit: 'mmol/L',
+      options: [
+        { label: 'N\u00E9gatif',        value: 'neg',   color: '#E8E8D8',
+          interp: 'Absence de glycosurie (seuil\u00A0: \u22480,5\u201361\u00A0g/L). Normal.', sev: 0 },
+        { label: 'Traces',            value: 'trace', color: '#FFE08A',
+          interp: 'Traces de glucose. Contr\u00F4ler la glyc\u00E9mie veineuse. Seuil r\u00E9nal abaiss\u00E9 possible (grossesse normale).', sev: 1 },
+        { label: '+ (5,5\u00A0mmol/L)', value: '1p',    color: '#F6C76A',
+          interp: 'Glycosurie l\u00E9g\u00E8re (5,5\u00A0mmol/L). Diab\u00E8te ou seuil r\u00E9nal bas. Glyc\u00E9mie veineuse n\u00E9cessaire.', sev: 2 },
+        { label: '++ (14\u00A0mmol/L)', value: '2p',    color: '#E8A030',
+          interp: 'Glycosurie mod\u00E9r\u00E9e (14\u00A0mmol/L). Diab\u00E8te probable\u00A0; glyc\u00E9mie veineuse urgente.', sev: 3 },
+        { label: '+++ (\u226555\u00A0mmol/L)', value: '3p', color: '#C0392B',
+          interp: 'Glycosurie massive (\u226555\u00A0mmol/L). Diab\u00E8te d\u00E9s\u00E9quilibr\u00E9 ou acidoc\u00E9tose. Glyc\u00E9mie capillaire imm\u00E9diate.', sev: 4 }
+      ]
+    },
+    {
+      id: 'cetones', abbr: 'CET', name: 'Corps c\u00E9toniques', unit: 'mmol/L',
+      options: [
+        { label: 'N\u00E9gatif',         value: 'neg',   color: '#E8E8D8', interp: 'Absence de c\u00E9tones. Normal.', sev: 0 },
+        { label: 'Traces',             value: 'trace', color: '#FFE08A', interp: 'Traces de c\u00E9tones. J\u00E9\u00FBne prolong\u00E9 ou r\u00E9gime hypoglucidique\u00A0?', sev: 1 },
+        { label: '+ (0,5\u00A0mmol/L)', value: '1p',    color: '#A8D5A2', interp: 'C\u00E9tonurie l\u00E9g\u00E8re (0,5\u00A0mmol/L). Bilan glyc\u00E9mique n\u00E9cessaire.', sev: 2 },
+        { label: '++ (4\u00A0mmol/L)',   value: '2p',    color: '#E8A030', interp: 'C\u00E9tonurie mod\u00E9r\u00E9e (4\u00A0mmol/L). Risque acidoc\u00E9tose\u00A0; glyc\u00E9mie urgente.', sev: 3 },
+        { label: '+++ (\u22658\u00A0mmol/L)', value: '3p', color: '#C0392B', interp: 'C\u00E9tonurie massive (\u22658\u00A0mmol/L). Acidoc\u00E9tose diab\u00E9tique probable\u00A0\u2014 urgence m\u00E9dicale.', sev: 4 }
+      ]
+    },
+    {
+      id: 'sang', abbr: 'SAN', name: 'Sang / H\u00E9maties', unit: '\u00E9ryth/\u00B5L',
+      options: [
+        { label: 'N\u00E9gatif',          value: 'neg',   color: '#E8E8D8',
+          interp: 'Absence d\u2019h\u00E9maturie. Normal.', sev: 0 },
+        { label: 'Traces',              value: 'trace', color: '#FFCCCC',
+          interp: 'Traces de sang (microh\u00E9maturie, &lt;\u202F10\u00A0h\u00E9maties/mm\u00B3). Contamination menstruelle ou g\u00E9nitale \u00E0 \u00E9liminer.', sev: 1 },
+        { label: '+ (~25\u00A0h\u00E9m/\u00B5L)',   value: '1p', color: '#F4A0A0',
+          interp: 'Microh\u00E9maturie (~25\u00A0\u00E9ryth/\u00B5L). Explorer\u00A0: infection, lithiase, traumatisme. ECBU.', sev: 2 },
+        { label: '++ (~80\u00A0h\u00E9m/\u00B5L)',  value: '2p', color: '#E05050',
+          interp: 'H\u00E9maturie mod\u00E9r\u00E9e (~80\u00A0\u00E9ryth/\u00B5L). Bilan urologique n\u00E9cessaire. <strong>Pi\u00E8ge\u00A0:</strong> si ECBU sans h\u00E9maties \u00E0 la microscopie \u2192 \u00E9voquer myoglobinurie (rhabdomyolyse) ou h\u00E9molyse intravasculaire.', sev: 3 },
+        { label: '+++ (\u2265200\u00A0h\u00E9m/\u00B5L)', value: '3p', color: '#8B0000',
+          interp: 'Macroh\u00E9maturie (\u2265200\u00A0\u00E9ryth/\u00B5L). Bilan urologique urgent (ECBU, \u00E9chographie, cystoscopie selon contexte). <strong>Si ECBU n\u00E9gatif\u00A0: \u00E9liminer rhabdomyolyse.</strong>', sev: 4 }
+      ]
+    },
+    {
+      id: 'densite', abbr: 'DEN', name: 'Densit\u00E9', unit: '',
+      options: [
+        { label: '1,000',     value: 'v1', color: '#D8EEF8',
+          interp: 'Hyposth\u00E9nurie franche (1,000). Urines tr\u00E8s dilu\u00E9es\u00A0: potomanie, diab\u00E8te insipide, insuffisance r\u00E9nale chronique \u00E0 \u00E9voquer.', sev: 2 },
+        { label: '1,010',     value: 'v2', color: '#A8CDE8',
+          interp: 'Hyposth\u00E9nurie (1,010). Bonne hydratation. Normale basse.', sev: 0 },
+        { label: '1,015',     value: 'v3', color: '#78ACD8',
+          interp: 'Densit\u00E9 normale (1,015\u20131,025)\u00A0: capacit\u00E9 de concentration tubulaire conserv\u00E9e.', sev: 0 },
+        { label: '1,020',     value: 'v4', color: '#4080B0',
+          interp: 'Densit\u00E9 normale haute (1,020). Hydratation correcte.', sev: 0 },
+        { label: '1,025',     value: 'v5', color: '#205888',
+          interp: 'Urines concentr\u00E9es (1,025). D\u00E9shydratation possible\u00A0; v\u00E9rifier l\u2019apport hydrique.', sev: 1 },
+        { label: '\u22651,030', value: 'v6', color: '#0D3558',
+          interp: 'Hypersth\u00E9nurie (\u22651,030). D\u00E9shydratation significative, glycosurie osmotique (diab\u00E8te d\u00E9compens\u00E9) ou syndrome n\u00E9phrotique.', sev: 2 }
+      ]
+    },
+    {
+      id: 'ph', abbr: 'pH', name: 'pH urinaire', unit: '',
+      options: [
+        { label: 'pH 5',   value: 'p5',  color: '#F9D080',
+          interp: 'Urines tr\u00E8s acides (pH\u00A05). R\u00E9gime carn\u00E9, acidose m\u00E9tabolique, d\u00E9shydratation.', sev: 1 },
+        { label: 'pH 5,5', value: 'p55', color: '#E8E070',
+          interp: 'pH l\u00E9g\u00E8rement acide (5,5). Dans la normale basse (pH normal\u00A0: 5,5\u20137,0).', sev: 0 },
+        { label: 'pH 6',   value: 'p6',  color: '#C8D850',
+          interp: 'pH normal (6,0). Dans la plage physiologique (5,5\u20137,0).', sev: 0 },
+        { label: 'pH 6,5', value: 'p65', color: '#A0C840',
+          interp: 'pH normal (6,5). Dans la plage physiologique (5,5\u20137,0).', sev: 0 },
+        { label: 'pH 7',   value: 'p7',  color: '#78B830',
+          interp: 'pH alcalin (7,0). Alimentation v\u00E9g\u00E9tarienne, alcalose. Limite sup\u00E9rieure de la normale.', sev: 1 },
+        { label: 'pH 8',   value: 'p8',  color: '#50A020',
+          interp: 'pH tr\u00E8s alcalin (8,0). Infection \u00E0 germes ur\u00E9asiques (<em>Proteus, Klebsiella</em>) \u00E0 \u00E9voquer. Aussi\u00A0: alcalose m\u00E9tabolique, r\u00E9gime v\u00E9g\u00E9talien strict.', sev: 2 }
+      ]
+    },
+    {
+      id: 'bilirubine', abbr: 'BIL', name: 'Bilirubine', unit: '\u00B5mol/L',
+      options: [
+        { label: 'N\u00E9gatif',      value: 'neg', color: '#E8E8D8', interp: 'Absence de bilirubine. Normal.', sev: 0 },
+        { label: '+ (17\u00A0\u00B5mol/L)',  value: '1p',  color: '#F0D060',
+          interp: 'Bilirubinurie l\u00E9g\u00E8re (17\u00A0\u00B5mol/L). Bilan h\u00E9patique recommand\u00E9 (transaminases, gamma-GT).', sev: 2 },
+        { label: '++ (51\u00A0\u00B5mol/L)', value: '2p',  color: '#D4A020',
+          interp: 'Bilirubinurie mod\u00E9r\u00E9e (51\u00A0\u00B5mol/L). Ict\u00E8re cholestatique ou h\u00E9patocellulaire. Bilan h\u00E9patobiliaire + \u00E9chographie.', sev: 3 },
+        { label: '+++ (103\u00A0\u00B5mol/L)', value: '3p', color: '#8B6000',
+          interp: 'Bilirubinurie importante (103\u00A0\u00B5mol/L). Pathologie h\u00E9patobiliaire probable. Avis gastro-ent\u00E9rologique.', sev: 4 }
+      ]
+    },
+    {
+      id: 'urobilinogene', abbr: 'URO', name: 'Urobilinog\u00E8ne', unit: '\u00B5mol/L',
+      options: [
+        { label: 'Normal (3,5\u00A0\u00B5mol/L)', value: 'norm', color: '#F0E8C0',
+          interp: 'Urobilinog\u00E8ne normal (3,5\u00A0\u00B5mol/L). M\u00E9tabolisme de la bilirubine intact.', sev: 0 },
+        { label: '+ (17\u00A0\u00B5mol/L)',         value: '1p',   color: '#E0C060',
+          interp: 'Urobilinog\u00E8ne \u00E9lev\u00E9 (17\u00A0\u00B5mol/L). H\u00E9molyse l\u00E9g\u00E8re ou surcharge h\u00E9patique \u00E0 explorer.', sev: 1 },
+        { label: '++ (51\u00A0\u00B5mol/L)',         value: '2p',   color: '#C09020',
+          interp: 'Urobilinog\u00E8ne \u00E9lev\u00E9 (51\u00A0\u00B5mol/L). H\u00E9molyse ou insuffisance h\u00E9patique\u00A0; bilan compl\u00E9mentaire.', sev: 2 },
+        { label: '+++ (\u2265136\u00A0\u00B5mol/L)', value: '3p',  color: '#805500',
+          interp: 'Urobilinog\u00E8ne tr\u00E8s \u00E9lev\u00E9 (\u2265136\u00A0\u00B5mol/L). H\u00E9molyse importante ou h\u00E9patopathie s\u00E9v\u00E8re.', sev: 3 }
+      ]
+    }
+  ];
+
+  /* =========================================================
+     PRÉSETS
+     ========================================================= */
+  var PRESETS = {
+    normal:  { leucocytes:'neg',   nitrites:'neg', proteines:'neg',   glucose:'neg',  cetones:'neg',  sang:'neg',   densite:'v3', ph:'p6',  bilirubine:'neg', urobilinogene:'norm' },
+    iu:      { leucocytes:'3p',    nitrites:'pos', proteines:'trace', glucose:'neg',  cetones:'neg',  sang:'2p',    densite:'v4', ph:'p8',  bilirubine:'neg', urobilinogene:'norm' },
+    nephro:  { leucocytes:'trace', nitrites:'neg', proteines:'4p',    glucose:'neg',  cetones:'neg',  sang:'2p',    densite:'v2', ph:'p6',  bilirubine:'neg', urobilinogene:'norm' },
+    diabete: { leucocytes:'neg',   nitrites:'neg', proteines:'trace', glucose:'3p',   cetones:'2p',   sang:'neg',   densite:'v5', ph:'p5',  bilirubine:'neg', urobilinogene:'norm' },
+    precla:  { leucocytes:'trace', nitrites:'neg', proteines:'2p',    glucose:'trace',cetones:'neg',  sang:'trace', densite:'v5', ph:'p65', bilirubine:'neg', urobilinogene:'norm' }
+  };
+
+  /* =========================================================
+     ÉTAT
+     ========================================================= */
+  var state = {};
+  PARAMS.forEach(function (p) { state[p.id] = p.options[0].value; });
+
+  /* =========================================================
+     UTILITAIRES
+     ========================================================= */
+  function getParam(id) {
+    for (var i = 0; i < PARAMS.length; i++) { if (PARAMS[i].id === id) return PARAMS[i]; }
+    return null;
+  }
+  function getOpt(p) {
+    if (typeof p === 'string') p = getParam(p);
+    var v = state[p.id];
+    for (var i = 0; i < p.options.length; i++) { if (p.options[i].value === v) return p.options[i]; }
+    return p.options[0];
+  }
+  function isDark(hex) {
+    var c = hex.replace('#', '');
+    if (c.length === 3) c = c[0]+c[0]+c[1]+c[1]+c[2]+c[2];
+    var r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
+    return (r*299 + g*587 + b*114) / 1000 < 148;
+  }
+
+  /* =========================================================
+     BANDELETTE
+     ========================================================= */
+  function buildStrip() {
+    var html = '';
+    PARAMS.forEach(function (p, i) {
+      var opt = getOpt(p);
+      if (i > 0) html += '<div class="strip-stick"></div>';
+      html += '<div class="strip-pad-wrap" id="pad-'+p.id+'" title="'+p.name+'">' +
+              '<div class="pad-square" id="sq-'+p.id+'" style="background:'+opt.color+';"></div>' +
+              '<div class="pad-abbr">'+p.abbr+'</div>' +
+              '</div>';
+    });
+    document.getElementById('stripVisual').innerHTML = html;
+  }
+
+  /* =========================================================
+     CONTRÔLES
+     ========================================================= */
+  function buildControls() {
+    var html = '';
+    PARAMS.forEach(function (p) {
+      var opt = getOpt(p);
+      var opts = p.options.map(function (o) {
+        return '<option value="'+o.value+'"'+(o.value===state[p.id]?' selected':'')+'>'+o.label+'</option>';
+      }).join('');
+      html +=
+        '<div class="ctrl-card" id="ctrl-'+p.id+'">' +
+          '<div class="ctrl-header">' +
+            '<div class="ctrl-dot" id="dot-'+p.id+'" style="background:'+opt.color+';"></div>' +
+            '<div class="ctrl-name">'+p.name+(p.unit ? '<span class="ctrl-unit">('+p.unit+')</span>' : '')+'</div>' +
+          '</div>' +
+          '<select class="ctrl-select" id="sel-'+p.id+'" data-param="'+p.id+'">'+opts+'</select>' +
+          '<span class="ctrl-badge" id="badge-'+p.id+'" style="background:'+opt.color+';color:'+(isDark(opt.color)?'#fff':'#333')+';">'+opt.label+'</span>' +
+        '</div>';
+    });
+    document.getElementById('controlsGrid').innerHTML = html;
+    PARAMS.forEach(function (p) {
+      document.getElementById('sel-'+p.id).addEventListener('change', function () {
+        state[p.id] = this.value;
+        updateUI();
+      });
+    });
+  }
+
+  /* =========================================================
+     RÉSULTATS
+     ========================================================= */
+  function buildResults() {
+    var tbody = '';
+    PARAMS.forEach(function (p) {
+      var opt = getOpt(p);
+      var dot = '<span style="display:inline-block;width:11px;height:11px;border-radius:3px;background:'+opt.color+';border:1px solid rgba(0,0,0,0.12);vertical-align:middle;margin-right:6px;"></span>';
+      tbody +=
+        '<tr>' +
+          '<td><strong>'+p.name+'</strong></td>' +
+          '<td style="white-space:nowrap;">'+dot+
+            '<span class="chip" style="background:'+opt.color+';color:'+(isDark(opt.color)?'#fff':'#333')+';">'+opt.label+'</span>'+
+          '</td>' +
+          '<td style="color:#374151;font-size:0.80rem;">'+opt.interp+'</td>' +
+        '</tr>';
+    });
+    document.getElementById('resultBody').innerHTML = tbody;
+    buildAlerts();
+  }
+
+  /* =========================================================
+     ALERTES COMBINÉES — enrichies
+     ========================================================= */
+  function buildAlerts() {
+    var zone = document.getElementById('alertZone');
+    var alerts = [];
+
+    var leu  = getOpt(getParam('leucocytes'));
+    var nit  = getOpt(getParam('nitrites'));
+    var pro  = getOpt(getParam('proteines'));
+    var glu  = getOpt(getParam('glucose'));
+    var cet  = getOpt(getParam('cetones'));
+    var san  = getOpt(getParam('sang'));
+    var bil  = getOpt(getParam('bilirubine'));
+    var den  = getOpt(getParam('densite'));
+    var ph   = getOpt(getParam('ph'));
+
+    /* ---- INFECTION URINAIRE ---- */
+    if (leu.sev >= 3 && nit.value === 'pos') {
+      alerts.push({ cls:'alert-danger', icon:'\u26A0\uFE0F',
+        msg:'<strong>Infection urinaire tr\u00E8s probable\u00A0:</strong> leucocyturie franche + nitrites positifs (ent\u00E9robact\u00E9ries). ECBU + antibiogramme avant toute antibioth\u00E9rapie.' });
+    } else if (leu.sev >= 2 || nit.value === 'pos') {
+      alerts.push({ cls:'alert-warn', icon:'\u26A0\uFE0F',
+        msg:'<strong>Anomalie urinaire\u00A0:</strong> leucocyturie et/ou nitrites. Contexte clinique indispensable. ECBU si signes fonctionnels. \u00C9liminer contamination vaginale.' });
+    }
+    if (leu.sev >= 1 && nit.value === 'neg') {
+      alerts.push({ cls:'alert-info', icon:'\u2139\uFE0F',
+        msg:'<strong>Nitrites n\u00E9gatifs isolement\u00A0:</strong> sensibilit\u00E9 de 40\u201360\u00A0% seulement. Ne pas exclure une IU \u00E0 <em>Entérocoque, Staph. saprophyticus</em> ou <em>Pseudomonas</em>\u00A0; ECBU si clinique \u00E9vocatrice.' });
+    }
+
+    /* ---- NÉPHRO / PROTÉINURIE ---- */
+    if (pro.sev >= 5) {
+      alerts.push({ cls:'alert-danger', icon:'\u26A0\uFE0F',
+        msg:'<strong>Prot\u00E9inurie critique (&gt;3\u00A0g/L)\u00A0:</strong> syndrome n\u00E9phrotique probable. Bilan n\u00E9phrologique urgent (prot\u00E9inurie 24h, albumin\u00E9mie, bilan lipidique). Hospitalisation selon contexte.' });
+    } else if (pro.sev >= 3) {
+      alerts.push({ cls:'alert-danger', icon:'\u26A0\uFE0F',
+        msg:'<strong>Prot\u00E9inurie importante (\u22481\u00A0g/L)\u00A0:</strong> \u00E9tiologie glom\u00E9rulaire \u00E0 \u00E9voquer. En obst\u00E9trique\u00A0: suspecter pr\u00E9\u00E9clampsie si HTA\u00A0\u2265\u00A0140/90\u00A0mmHg \u2014 confirmer par ratio prot\u00E9ine/cr\u00E9atinine imm\u00E9diatement.' });
+    } else if (pro.sev >= 2) {
+      alerts.push({ cls:'alert-warn', icon:'\u26A0\uFE0F',
+        msg:'<strong>Prot\u00E9inurie\u00A0:</strong> recontr\u00F4ler sur 2\u1D49 \u00E9chantillon matineux. Si persistante\u00A0: quantifier (ratio ACR ou prot\u00E9inurie 24h).' });
+    }
+    if (pro.sev >= 1) {
+      alerts.push({ cls:'alert-purple', icon:'\uD83D\uDCCC',
+        msg:'<strong>Rappel\u00A0\u2014 limites de la bandelette\u00A0:</strong> ne d\u00E9tecte pas la <strong>microalbuminurie</strong> (A2 KDIGO\u00A0: 30\u2013300\u00A0mg/g cr\u00E9atinine). Chez toute patiente diab\u00E9tique ou hypertendue, prescrire un <strong>ratio albumine/cr\u00E9atinine (ACR)</strong> ind\u00E9pendamment de ce r\u00E9sultat.' });
+    }
+
+    /* ---- DIABÈTE / ACIDOCÉTOSE ---- */
+    if (glu.sev >= 3 && cet.sev >= 3) {
+      alerts.push({ cls:'alert-danger', icon:'\uD83D\uDEA8',
+        msg:'<strong>Urgence diab\u00E9tique\u00A0:</strong> glycosurie massive + c\u00E9tonurie importante. Acidoc\u00E9tose \u00E0 \u00E9liminer imm\u00E9diatement\u00A0\u2014 glyc\u00E9mie capillaire, gaz du sang, ionogramme.' });
+    } else if (glu.sev >= 2) {
+      alerts.push({ cls:'alert-warn', icon:'\u26A0\uFE0F',
+        msg:'<strong>Glycosurie significative\u00A0:</strong> glyc\u00E9mie veineuse n\u00E9cessaire. Le seuil r\u00E9nal est abaiss\u00E9 en cours de grossesse (faux positif possible).' });
+    }
+
+    /* ---- HÉMATURIE ---- */
+    if (san.sev >= 3) {
+      alerts.push({ cls:'alert-danger', icon:'\u26A0\uFE0F',
+        msg:'<strong>Macroh\u00E9maturie\u00A0:</strong> bilan urologique urgent (ECBU, \u00E9chographie r\u00E9nale et v\u00E9sicale, cystoscopie selon contexte). <strong>Si ECBU sans h\u00E9maties\u00A0\u2014 Pi\u00E8ge\u00A0:</strong> \u00E9voquer myoglobinurie (rhabdomyolyse) ou h\u00E9molyse intravasculaire.' });
+    } else if (san.sev >= 2) {
+      alerts.push({ cls:'alert-warn', icon:'\u26A0\uFE0F',
+        msg:'<strong>H\u00E9maturie\u00A0:</strong> ECBU. Si st\u00E9rile et confirm\u00E9e microscopiquement\u00A0: \u00E9chographie r\u00E9nale + avis urologique (lithiase, tumeur ur\u00F3th\u00E9liale).' });
+    }
+
+    /* ---- PIÈGE MYOGLOBINURIE ---- */
+    if (san.sev >= 2 && leu.sev === 0 && nit.value === 'neg') {
+      alerts.push({ cls:'alert-purple', icon:'\uD83E\uDDEA',
+        msg:'<strong>Pi\u00E8ge\u00A0\u2014 Myoglobinurie\u00A0:</strong> sang positif + leucocytes n\u00E9gatifs + nitrites n\u00E9gatifs. Profil compatible avec une rhabdomyolyse ou une h\u00E9molyse intravasculaire. Contr\u00F4ler CPK, LDH, haptoglobine. Examen microscopique des urines indispensable.' });
+    }
+
+    /* ---- PRÉÉCLAMPSIE ---- */
+    if (pro.sev >= 3 && den.sev >= 1) {
+      alerts.push({ cls:'alert-danger', icon:'\uD83E\uDAC0',
+        msg:'<strong>Profil \u00E9vocateur de pr\u00E9\u00E9clampsie\u00A0:</strong> prot\u00E9inurie significative + urines concentr\u00E9es. Si contexte gestationnel avec HTA\u00A0\u2265\u00A0140/90\u00A0mmHg\u00A0: confirmation imm\u00E9diate par ratio prot\u00E9ine/cr\u00E9atinine sur miction isol\u00E9e obligatoire.' });
+    }
+
+    /* ---- BILIRUBINE ---- */
+    if (bil.sev >= 2) {
+      alerts.push({ cls:'alert-warn', icon:'\u26A0\uFE0F',
+        msg:'<strong>Bilirubinurie\u00A0:</strong> bilan h\u00E9patobiliaire recommand\u00E9 (transaminases, gamma-GT, phosphatases alcalines, \u00E9chographie h\u00E9patique).' });
+    }
+
+    /* ---- PH ALCALIN ---- */
+    if (ph.value === 'p8' && nit.value === 'neg' && leu.sev >= 1) {
+      alerts.push({ cls:'alert-info', icon:'\u2139\uFE0F',
+        msg:'<strong>pH tr\u00E8s alcalin + leucocyturie sans nitrites\u00A0:</strong> infection \u00E0 <em>Proteus mirabilis</em> (germe ur\u00E9asique, alcalinisant les urines) \u00E0 \u00E9voquer. ECBU avec antibiogramme.' });
+    }
+
+    /* ---- TOUT NORMAL ---- */
+    if (alerts.length === 0) {
+      alerts.push({ cls:'alert-ok', icon:'\u2714\uFE0F',
+        msg:'<strong>Aucune anomalie majeure identifi\u00E9e</strong> sur la base des param\u00E8tres s\u00E9lectionn\u00E9s. Une bandelette n\u00E9gative n\u2019exclut pas une n\u00E9phropathie d\u00E9butante (microalbuminurie non d\u00E9tect\u00E9e).' });
+    }
+
+    zone.innerHTML = alerts.map(function (a) {
+      return '<div class="alert-banner '+a.cls+'"><span class="alert-icon">'+a.icon+'</span><span>'+a.msg+'</span></div>';
+    }).join('');
+  }
+
+  /* =========================================================
+     UPDATE UI
+     ========================================================= */
+  function updateUI() {
+    PARAMS.forEach(function (p) {
+      var opt = getOpt(p);
+      var dark = isDark(opt.color);
+      var sq = document.getElementById('sq-'+p.id);
+      if (sq) sq.style.background = opt.color;
+      var dot = document.getElementById('dot-'+p.id);
+      if (dot) dot.style.background = opt.color;
+      var badge = document.getElementById('badge-'+p.id);
+      if (badge) { badge.style.background = opt.color; badge.style.color = dark?'#fff':'#333'; badge.textContent = opt.label; }
+    });
+    buildResults();
+  }
+
+  /* =========================================================
+     PRÉSETS
+     ========================================================= */
+  function applyPreset(name) {
+    var pre = PRESETS[name];
+    if (!pre) return;
+    Object.keys(pre).forEach(function (k) {
+      state[k] = pre[k];
+      var sel = document.getElementById('sel-'+k);
+      if (sel) sel.value = pre[k];
+    });
+    updateUI();
+  }
+
+  document.getElementById('btn-normal').addEventListener('click', function () { applyPreset('normal'); });
+  document.getElementById('btn-iu').addEventListener('click',     function () { applyPreset('iu'); });
+  document.getElementById('btn-nephro').addEventListener('click', function () { applyPreset('nephro'); });
+  document.getElementById('btn-diab').addEventListener('click',   function () { applyPreset('diabete'); });
+  document.getElementById('btn-precla').addEventListener('click', function () { applyPreset('precla'); });
+
+  /* =========================================================
+     ACCORDÉON PIÈGES
+     ========================================================= */
+  document.getElementById('trapsToggle').addEventListener('click', function () {
+    var body  = document.getElementById('trapsBody');
+    var arrow = document.getElementById('trapsArrow');
+    var isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    this.classList.toggle('open', !isOpen);
+  });
+
+  /* =========================================================
+     INIT
+     ========================================================= */
+  buildStrip();
+  buildControls();
+  buildResults();
+
+}());
+</script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+
+</body>
+</html>
