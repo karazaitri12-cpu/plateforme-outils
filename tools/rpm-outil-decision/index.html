@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rupture Prématurée des Membranes – Outil de Décision</title>
+    <style>
+/* ============================================================
+   RPM TOOL — Blindage Elementor complet
+   Charte Dr KARA-ZAITRI : Navy #1A3A5C / Bordeaux #8B1A2F
+   ============================================================ */
+#rpm-tool-root *,
+#rpm-tool-root *::before,
+#rpm-tool-root *::after {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#rpm-tool-root {
+    font-family: 'Segoe UI', Arial, sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    color: #1e2a35 !important;
+    background: #f4f6f9 !important;
+    padding: 20px !important;
+    max-width: 900px !important;
+    margin: 0 auto !important;
+    -webkit-text-size-adjust: 100% !important;
+}
+
+/* ---- PALETTE ---- */
+#rpm-tool-root {
+    --rpm-navy:    #1A3A5C !important;
+    --rpm-navy2:   #22487a !important;
+    --rpm-bord:    #8B1A2F !important;
+    --rpm-bord2:   #a82038 !important;
+    --rpm-gold:    #B45309 !important;
+    --rpm-bg:      #f4f6f9 !important;
+    --rpm-white:   #ffffff !important;
+    --rpm-gray:    #6b7a8d !important;
+    --rpm-border:  #d0d8e4 !important;
+    --rpm-success: #166534 !important;
+    --rpm-sbg:     #f0faf4 !important;
+    --rpm-warn:    #B45309 !important;
+    --rpm-wbg:     #fffbeb !important;
+    --rpm-danger:  #991b1b !important;
+    --rpm-dbg:     #fef2f2 !important;
+    --rpm-infobg:  #EEF4FB !important;
+}
+
+/* ---- EN-TÊTE ---- */
+#rpm-tool-root .rpm-header {
+    background: var(--rpm-navy) !important;
+    color: var(--rpm-white) !important;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 22px 28px 18px !important;
+    margin-bottom: 0 !important;
+}
+
+#rpm-tool-root .rpm-header-specialty {
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: rgba(255,255,255,0.65) !important;
+    margin-bottom: 6px !important;
+}
+
+#rpm-tool-root .rpm-header h1 {
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    color: var(--rpm-white) !important;
+    margin: 0 0 4px !important;
+    padding: 0 !important;
+    border: none !important;
+    line-height: 1.3 !important;
+}
+
+#rpm-tool-root .rpm-header-sub {
+    font-size: 0.82rem !important;
+    color: rgba(255,255,255,0.60) !important;
+    margin-top: 6px !important;
+}
+
+#rpm-tool-root .rpm-version-bar {
+    background: var(--rpm-bord) !important;
+    color: var(--rpm-white) !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    text-align: center !important;
+    padding: 6px 12px !important;
+    margin-bottom: 0 !important;
+}
+
+/* ---- CORPS ---- */
+#rpm-tool-root .rpm-body {
+    background: var(--rpm-white) !important;
+    border: 1px solid var(--rpm-border) !important;
+    border-top: none !important;
+    border-radius: 0 0 10px 10px !important;
+    padding: 24px !important;
+}
+
+/* ---- SECTION FORMULAIRE ---- */
+#rpm-tool-root .rpm-section {
+    background: var(--rpm-infobg) !important;
+    border-left: 4px solid var(--rpm-navy) !important;
+    border-radius: 0 6px 6px 0 !important;
+    padding: 16px 18px !important;
+    margin-bottom: 18px !important;
+}
+
+#rpm-tool-root .rpm-section-title {
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: var(--rpm-navy) !important;
+    margin-bottom: 14px !important;
+}
+
+/* ---- LABELS & INPUTS ---- */
+#rpm-tool-root label {
+    display: block !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    color: var(--rpm-navy) !important;
+    margin-bottom: 6px !important;
+}
+
+#rpm-tool-root input[type="number"],
+#rpm-tool-root select {
+    width: 100% !important;
+    padding: 10px 12px !important;
+    border: 1.5px solid var(--rpm-border) !important;
+    border-radius: 6px !important;
+    font-size: 0.95rem !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important;
+    color: #1e2a35 !important;
+    background: var(--rpm-white) !important;
+    appearance: auto !important;
+    -webkit-appearance: auto !important;
+    outline: none !important;
+    transition: border-color 0.2s !important;
+    margin-bottom: 0 !important;
+}
+
+#rpm-tool-root input[type="number"]:focus,
+#rpm-tool-root select:focus {
+    border-color: var(--rpm-navy) !important;
+}
+
+#rpm-tool-root .rpm-form-group {
+    margin-bottom: 14px !important;
+}
+
+/* ---- CHECKBOXES GRILLE ---- */
+#rpm-tool-root .rpm-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+}
+
+#rpm-tool-root .rpm-check-item {
+    background: var(--rpm-white) !important;
+    border: 1.5px solid var(--rpm-border) !important;
+    border-radius: 6px !important;
+    padding: 12px 14px !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    cursor: pointer !important;
+    transition: border-color 0.15s, background 0.15s !important;
+}
+
+#rpm-tool-root .rpm-check-item:hover {
+    border-color: var(--rpm-navy) !important;
+    background: var(--rpm-infobg) !important;
+}
+
+#rpm-tool-root .rpm-check-item input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    margin-right: 10px !important;
+    margin-top: 2px !important;
+    cursor: pointer !important;
+    accent-color: var(--rpm-navy) !important;
+    flex-shrink: 0 !important;
+}
+
+#rpm-tool-root .rpm-check-item label {
+    font-size: 0.88rem !important;
+    font-weight: 500 !important;
+    color: #2c3e50 !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    line-height: 1.4 !important;
+}
+
+#rpm-tool-root .rpm-check-item label em {
+    display: block !important;
+    font-size: 0.78rem !important;
+    color: var(--rpm-gray) !important;
+    font-style: italic !important;
+    margin-top: 2px !important;
+}
+
+/* ---- BOUTON ---- */
+#rpm-tool-root .rpm-btn {
+    display: block !important;
+    width: 100% !important;
+    background: var(--rpm-navy) !important;
+    color: var(--rpm-white) !important;
+    border: none !important;
+    border-radius: 7px !important;
+    padding: 13px 20px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important;
+    letter-spacing: 0.04em !important;
+    cursor: pointer !important;
+    margin-top: 6px !important;
+    transition: background 0.2s !important;
+    text-align: center !important;
+}
+
+#rpm-tool-root .rpm-btn::before {
+    content: "\25B6\0020" !important;
+}
+
+#rpm-tool-root .rpm-btn:hover {
+    background: var(--rpm-navy2) !important;
+}
+
+/* ---- RÉSULTATS ---- */
+#rpm-tool-root .rpm-results {
+    display: none !important;
+    margin-top: 28px !important;
+    border-top: 2px solid var(--rpm-border) !important;
+    padding-top: 24px !important;
+}
+
+#rpm-tool-root .rpm-results-title {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: var(--rpm-navy) !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    margin-bottom: 18px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 2px solid var(--rpm-navy) !important;
+}
+
+/* ---- CARDS RÉSULTAT ---- */
+#rpm-tool-root .rpm-card {
+    border-radius: 6px !important;
+    padding: 16px 18px !important;
+    margin-bottom: 14px !important;
+    border-left-width: 5px !important;
+    border-left-style: solid !important;
+}
+
+#rpm-tool-root .rpm-card h3 {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+    line-height: 1.3 !important;
+}
+
+#rpm-tool-root .rpm-card h4 {
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    margin: 12px 0 6px !important;
+    color: var(--rpm-navy) !important;
+}
+
+#rpm-tool-root .rpm-card ul {
+    margin: 0 !important;
+    padding-left: 0 !important;
+    list-style: none !important;
+}
+
+#rpm-tool-root .rpm-card ul li {
+    font-size: 0.88rem !important;
+    padding: 4px 0 4px 20px !important;
+    position: relative !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0 !important;
+}
+
+#rpm-tool-root .rpm-card ul li::before {
+    content: "\2192" !important;
+    position: absolute !important;
+    left: 0 !important;
+    color: inherit !important;
+    font-weight: 700 !important;
+}
+
+#rpm-tool-root .rpm-card p {
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 6px !important;
+}
+
+/* ---- VARIANTES COULEUR ---- */
+#rpm-tool-root .rpm-danger {
+    background: var(--rpm-dbg) !important;
+    border-left-color: var(--rpm-danger) !important;
+    color: #7f1d1d !important;
+}
+
+#rpm-tool-root .rpm-danger h3 { color: var(--rpm-danger) !important; }
+#rpm-tool-root .rpm-danger h4 { color: var(--rpm-danger) !important; }
+
+#rpm-tool-root .rpm-warning {
+    background: var(--rpm-wbg) !important;
+    border-left-color: var(--rpm-gold) !important;
+    color: #5c3a00 !important;
+}
+
+#rpm-tool-root .rpm-warning h3 { color: var(--rpm-gold) !important; }
+#rpm-tool-root .rpm-warning h4 { color: var(--rpm-gold) !important; }
+
+#rpm-tool-root .rpm-info {
+    background: var(--rpm-infobg) !important;
+    border-left-color: var(--rpm-navy) !important;
+    color: #1e2a35 !important;
+}
+
+#rpm-tool-root .rpm-info h3 { color: var(--rpm-navy) !important; }
+
+#rpm-tool-root .rpm-success {
+    background: var(--rpm-sbg) !important;
+    border-left-color: var(--rpm-success) !important;
+    color: #14532d !important;
+}
+
+#rpm-tool-root .rpm-success h3 { color: var(--rpm-success) !important; }
+
+#rpm-tool-root .rpm-nn {
+    background: #F5F0F8 !important;
+    border-left-color: #6b21a8 !important;
+    color: #3b0764 !important;
+}
+
+#rpm-tool-root .rpm-nn h3 { color: #6b21a8 !important; }
+#rpm-tool-root .rpm-nn h4 { color: #6b21a8 !important; }
+
+/* ---- HIGHLIGHT ---- */
+#rpm-tool-root .rpm-hl {
+    background: #fef9c3 !important;
+    border: 1px solid #fde047 !important;
+    border-radius: 4px !important;
+    padding: 2px 7px !important;
+    font-weight: 700 !important;
+    color: #713f12 !important;
+    display: inline !important;
+    font-size: 0.87rem !important;
+}
+
+/* ---- CONTRE-INDICATION BOX ---- */
+#rpm-tool-root .rpm-ci-box {
+    background: var(--rpm-dbg) !important;
+    border-left: 4px solid var(--rpm-danger) !important;
+    border-radius: 0 5px 5px 0 !important;
+    padding: 9px 13px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    color: var(--rpm-danger) !important;
+    margin-bottom: 10px !important;
+}
+
+#rpm-tool-root .rpm-ci-box::before {
+    content: "\26A0\0020" !important;
+}
+
+/* ---- FOOTER ---- */
+#rpm-tool-root .rpm-footer {
+    margin-top: 28px !important;
+    padding-top: 14px !important;
+    border-top: 1px solid var(--rpm-border) !important;
+    font-size: 0.76rem !important;
+    color: var(--rpm-gray) !important;
+    text-align: center !important;
+    line-height: 1.6 !important;
+}
+
+#rpm-tool-root .rpm-footer strong {
+    color: var(--rpm-navy) !important;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 600px) {
+    #rpm-tool-root { padding: 10px !important; }
+    #rpm-tool-root .rpm-header { padding: 16px 16px 14px !important; }
+    #rpm-tool-root .rpm-header h1 { font-size: 1.1rem !important; }
+    #rpm-tool-root .rpm-body { padding: 16px !important; }
+    #rpm-tool-root .rpm-grid { grid-template-columns: 1fr !important; }
+    #rpm-tool-root .rpm-check-item { padding: 13px 12px !important; }
+}
+
+/* ---- SCROLLBAR MASQUÉE (style App native) ---- */
+html { scrollbar-width: none !important; }
+body { -ms-overflow-style: none !important; overflow-y: auto !important; }
+::-webkit-scrollbar { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="rpm-tool-root">
+
+    <!-- EN-TÊTE -->
+    <div class="rpm-header">
+        <div class="rpm-header-specialty">Obstétrique &mdash; Aide à la décision clinique</div>
+        <h1>Rupture Prématurée des Membranes (RPM)</h1>
+        <div class="rpm-header-sub">Conduite à tenir selon le terme et le contexte clinique</div>
+    </div>
+    <div class="rpm-version-bar">CNGOF &bull; HAS &bull; Version 2024</div>
+
+    <div class="rpm-body">
+
+        <!-- SECTION 1 : TERME -->
+        <div class="rpm-section">
+            <div class="rpm-section-title">Données cliniques principales</div>
+
+            <div class="rpm-form-group">
+                <label for="rpm-sa">Terme de la grossesse (SA)</label>
+                <input type="number" id="rpm-sa" min="15" max="43" placeholder="Ex : 32" inputmode="numeric">
+            </div>
+
+            <div class="rpm-form-group" id="rpm-gbs-div" style="display:none !important;">
+                <label for="rpm-gbs">Statut Streptocoque B (terme &ge; 37 SA)</label>
+                <select id="rpm-gbs">
+                    <option value="inconnu">Inconnu / Non disponible / Négatif</option>
+                    <option value="positif">Positif</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 2 : COMPLICATIONS -->
+        <div class="rpm-section">
+            <div class="rpm-section-title">Complications et Contexte</div>
+            <div class="rpm-grid">
+                <div class="rpm-check-item">
+                    <input type="checkbox" id="rpm-infection">
+                    <label for="rpm-infection">Infection Intra-Utérine (IIU)
+                        <em>Fièvre, LA fétide, tachycardie maternelle/fœtale</em>
+                    </label>
+                </div>
+                <div class="rpm-check-item">
+                    <input type="checkbox" id="rpm-travail">
+                    <label for="rpm-travail">Travail actif en cours</label>
+                </div>
+                <div class="rpm-check-item">
+                    <input type="checkbox" id="rpm-miu">
+                    <label for="rpm-miu">Mort in utero (MIU)</label>
+                </div>
+                <div class="rpm-check-item">
+                    <input type="checkbox" id="rpm-cerclage">
+                    <label for="rpm-cerclage">Cerclage du col en place</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3 : TERRAIN -->
+        <div class="rpm-section">
+            <div class="rpm-section-title">Terrain maternel</div>
+            <div class="rpm-check-item">
+                <input type="checkbox" id="rpm-allergie">
+                <label for="rpm-allergie">Allergie avérée aux Pénicillines</label>
+            </div>
+        </div>
+
+        <button class="rpm-btn" onclick="rpmGenerer()">Générer le protocole de prise en charge</button>
+
+        <!-- ZONE RÉSULTATS -->
+        <div id="rpm-results" class="rpm-results">
+            <div class="rpm-results-title">Protocole de Prise en Charge</div>
+            <div id="rpm-alerts"></div>
+            <div id="rpm-main"></div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="rpm-footer">
+            <strong>Dr KARA-ZAITRI M.A.</strong> &mdash; Gynécologie-Obstétrique, Tlemcen<br>
+            Basé sur les RPC CNGOF &bull; HAS &bull; Usage réservé aux professionnels de santé<br>
+            <em>Cet outil ne se substitue pas au jugement clinique.</em>
+        </div>
+
+    </div><!-- /rpm-body -->
+</div><!-- /rpm-tool-root -->
+
+<script>
+(function() {
+    'use strict';
+
+    var saInput = document.getElementById('rpm-sa');
+    var gbsDiv  = document.getElementById('rpm-gbs-div');
+
+    saInput.addEventListener('input', function() {
+        var sa = parseInt(this.value);
+        gbsDiv.style.setProperty('display', sa >= 37 ? 'block' : 'none', 'important');
+    });
+
+    window.rpmGenerer = function() {
+        var sa         = parseInt(saInput.value);
+        var infection  = document.getElementById('rpm-infection').checked;
+        var travail    = document.getElementById('rpm-travail').checked;
+        var miu        = document.getElementById('rpm-miu').checked;
+        var cerclage   = document.getElementById('rpm-cerclage').checked;
+        var allergie   = document.getElementById('rpm-allergie').checked;
+        var gbs        = document.getElementById('rpm-gbs').value;
+
+        if (isNaN(sa) || sa < 15 || sa > 43) {
+            alert('Veuillez saisir un terme valide (15 – 43 SA).');
+            return;
+        }
+
+        var alertsHTML = '';
+        var mainHTML   = '';
+
+        // ---------- URGENCES IMMÉDIATES ----------
+        if (cerclage) {
+            alertsHTML += card('warning',
+                '\u26A0\uFE0F Cerclage du col – Ablation requise',
+                '<p>Le cerclage doit être <strong>retiré immédiatement</strong>. Bilan infectieux (CRP, NFS) impératif.</p>'
+            );
+        }
+
+        if (miu) {
+            alertsHTML += card('danger',
+                '\u26AB Mort in Utero (MIU)',
+                '<p>Risque infectieux majeur. <strong>Déclenchement du travail sans délai</strong>, quel que soit le terme.</p>'
+            );
+        }
+
+        if (infection) {
+            alertsHTML += card('danger',
+                '\uD83D\uDEA8 Infection Intra-Utérine (IIU) – Urgence absolue',
+                '<ul>' +
+                '<li>Expectative et tocolyse <strong>formellement contre-indiquées</strong></li>' +
+                '<li><strong>Antibiothérapie curative large spectre</strong> à démarrer immédiatement</li>' +
+                '<li><strong>Extraction fœtale en urgence</strong>, quel que soit le terme</li>' +
+                '</ul>'
+            );
+        }
+
+        if (miu || infection) {
+            afficherResultats(alertsHTML, '');
+            return;
+        }
+
+        // ---------- SELON L'ÂGE GESTATIONNEL ----------
+        if (sa < 24) {
+            mainHTML += card('warning',
+                'RPM Pré-viable (< 24 SA)',
+                '<p>Risque majeur d\'hypoplasie pulmonaire et d\'arthrogrypose. Information et discussion du couple indispensables (poursuite / IMG).</p>' +
+                '<h4>Si décision d\'expectative :</h4>' +
+                '<ul>' +
+                '<li>Hospitalisation initiale 48 h, puis surveillance ambulatoire possible</li>' +
+                '<li>Bilan hebdomadaire : NFS, CRP, PV, ECBU</li>' +
+                '<li>Antibiothérapie selon résultats des prélèvements</li>' +
+                '</ul>'
+            );
+        }
+        else if (sa >= 24 && sa < 34) {
+            if (travail) {
+                mainHTML += card('warning',
+                    'Travail actif en cours (' + sa + ' SA)',
+                    '<p><strong>Laisser évoluer vers l\'accouchement par voie basse.</strong> La tocolyse n\'est pas indiquée en dehors d\'une corticothérapie non encore réalisée.</p>'
+                );
+            } else {
+                var atb = allergie
+                    ? '<strong>Érythromycine</strong> 500 mg × 4/j per os'
+                    : '<strong>Amoxicilline</strong> 1 g × 3/j per os';
+
+                var mgso4 = sa < 32
+                    ? '<li><span class="rpm-hl">Neuroprotection fœtale</span> : Si accouchement inéluctable, <strong>Sulfate de Magnésium (MgSO\u2084) IV</strong> selon protocole</li>'
+                    : '';
+
+                mainHTML += card('info',
+                    'RPM Loin du terme (' + sa + ' SA) — Expectative active',
+                    '<h4>Hospitalisation initiale (&ge; 48 h)</h4>' +
+                    '<ul>' +
+                    '<li><strong>Antibioprophylaxie :</strong> ' + atb + ' (arrêt si prélèvements négatifs à 48 h ; si positifs : 7 jours selon antibiogramme)</li>' +
+                    '<li><strong>Corticothérapie de maturation :</strong> Indiquée (Bétaméthasone)</li>' +
+                    mgso4 +
+                    '<li><strong>Tocolyse :</strong> Non systématique — uniquement 48 h max pour permettre la corticothérapie si contractions présentes</li>' +
+                    '</ul>' +
+                    '<h4>Surveillance</h4>' +
+                    '<ul>' +
+                    '<li>Température 3 fois/j &mdash; Pas de toucher vaginal</li>' +
+                    '<li>Monitoring (RCF) : 1 fois/j minimum</li>' +
+                    '<li>Biologie : NFS, CRP 2 fois/semaine &mdash; PV 1 fois/semaine &mdash; ECBU 1 fois/15 j</li>' +
+                    '</ul>'
+                );
+            }
+        }
+        else if (sa >= 34 && sa < 37) {
+            var atb2 = allergie
+                ? '<strong>Érythromycine</strong> 500 mg × 4/j per os'
+                : '<strong>Amoxicilline</strong> 1 g × 3/j per os';
+
+            mainHTML += card('info',
+                'RPM Proche du terme (' + sa + ' SA) — Expectative courte',
+                '<div class="rpm-ci-box">Tocolyse contre-indiquée à ce terme</div>' +
+                '<ul>' +
+                '<li><strong>Antibioprophylaxie :</strong> ' + atb2 + '</li>' +
+                '<li><strong>Surveillance rapprochée :</strong> NFS/CRP + Écho 2–3 fois/semaine &mdash; PV/ECBU 2 fois/semaine &mdash; RCF 2 fois/j</li>' +
+                '<li>Déclenchement si absence de mise en travail spontanée à 37 SA ou si aggravation</li>' +
+                '</ul>'
+            );
+        }
+        else if (sa >= 37) {
+            if (gbs === 'positif') {
+                mainHTML += card('danger',
+                    'RPM à terme (\u2265 37 SA) — Streptocoque B POSITIF',
+                    '<ul>' +
+                    '<li><strong>Antibiothérapie :</strong> Démarrer <strong>dès l\'admission</strong> (Amoxicilline IV ou alternative si allergie)</li>' +
+                    '<li><strong>Déclenchement du travail sans délai</strong></li>' +
+                    '</ul>'
+                );
+            } else {
+                mainHTML += card('success',
+                    'RPM à terme (\u2265 37 SA) — Streptocoque B Négatif / Inconnu',
+                    '<ul>' +
+                    '<li><strong>Expectative :</strong> Jusqu\'à 24 h maximum après la rupture</li>' +
+                    '<li><strong>Antibiothérapie :</strong> Démarrer à <strong>H12</strong> post-rupture</li>' +
+                    '<li><strong>Déclenchement :</strong> À <strong>H24</strong> si travail non déclenché spontanément</li>' +
+                    '</ul>'
+                );
+            }
+        }
+
+        // ---------- ACCUEIL DU NOUVEAU-NÉ ----------
+        mainHTML += card('nn',
+            'Accueil et surveillance du Nouveau-né',
+            '<p><span class="rpm-hl">Abandon des prélèvements périphériques systématiques</span> (recommandation actuelle)</p>' +
+            '<ul>' +
+            '<li><strong>Nouveau-né asymptomatique (\u2265 34 SA) :</strong> Surveillance clinique 48 h &mdash; Pas d\'antibiothérapie ni de bilan biologique systématique</li>' +
+            '<li><strong>Nouveau-né symptomatique ou contexte sévère :</strong> Bilan central (NFS, CRP, Hémoculture) + <strong>Antibiothérapie IV immédiate</strong> (Amoxicilline + Gentamicine)</li>' +
+            '</ul>'
+        );
+
+        afficherResultats(alertsHTML, mainHTML);
+    };
+
+    function card(type, titre, contenu) {
+        return '<div class="rpm-card rpm-' + type + '"><h3>' + titre + '</h3>' + contenu + '</div>';
+    }
+
+    function afficherResultats(alertsHTML, mainHTML) {
+        document.getElementById('rpm-alerts').innerHTML = alertsHTML;
+        document.getElementById('rpm-main').innerHTML   = mainHTML;
+        var zone = document.getElementById('rpm-results');
+        zone.style.setProperty('display', 'block', 'important');
+        zone.scrollIntoView({ behavior: 'smooth' });
+    }
+
+})();
+</script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+
+</body>
+</html>
