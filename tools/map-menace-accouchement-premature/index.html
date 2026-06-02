@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#14532d">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>MAP — Menace d'Accouchement Prématuré</title>
+    <meta name="description" content="Arbre décisionnel complet pour la prise en charge de la Menace d'Accouchement Prématuré (MAP) - CNGOF / HAS">
+    <title>MAP — Arbre Décisionnel Complet | Dr KARA-ZAITRI M.A</title>
     <style>
+        /* ============================================================
+           VARIABLES & RESET
+        ============================================================ */
         :root {
             --vert: #14532d; --vert-vif: #16a34a; --vert-pale: #f0fdf4; --vert-bord: #86efac;
             --rouge: #8b1a1a; --rouge-vif: #b91c1c; --rouge-pale: #fef2f2; --rouge-bord: #fca5a5;
@@ -14,39 +18,110 @@
             --orange: #9a3412; --orange-pale: #fff7ed; --orange-bord: #fdba74;
             --violet: #4c1d95; --violet-pale: #f5f3ff; --violet-bord: #c4b5fd;
             --ambre: #78350f; --ambre-pale: #fffbeb; --ambre-bord: #fcd34d;
+            --or: #b8860b; --or-pale: #fbf5e6; --or-bord: #d4a84b;
             --gris-100: #f8f9fa; --gris-200: #e9ecef; --gris-400: #adb5bd;
             --gris-600: #6c757d; --gris-800: #343a40; --noir: #212529; --blanc: #ffffff;
             --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; --radius: 6px;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { font-family: var(--font); font-size: 15px; color: var(--noir); background: #f1f3f5; -webkit-text-size-adjust: 100%; }
-        body { min-height: 100vh; min-height: -webkit-fill-available; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
-        .tool-wrap { max-width: 720px; margin: 0 auto; }
-        .tool-header { background: var(--vert); padding: 22px 24px 18px; position: relative; overflow: hidden; }
-        .tool-header::after { content: ''; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05); pointer-events: none; }
+
+        /* ============================================================
+           PRO : Masque l'ascenseur (style App native)
+        ============================================================ */
+        html { scrollbar-width: none; }
+        body { -ms-overflow-style: none; overflow-y: auto; }
+        ::-webkit-scrollbar { display: none; }
+
+        html {
+            font-family: var(--font); font-size: 15px; color: var(--noir);
+            background: #f1f3f5; -webkit-text-size-adjust: 100%;
+        }
+        body {
+            min-height: 100vh; min-height: -webkit-fill-available;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right)
+                     env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        /* ============================================================
+           LAYOUT
+        ============================================================ */
+        #map-tool { max-width: 800px; margin: 0 auto; }
+
+        /* ============================================================
+           HEADER
+        ============================================================ */
+        .tool-header {
+            background: linear-gradient(135deg, #14532d 0%, #1e6b3f 100%);
+            padding: 22px 24px 18px; position: relative; overflow: hidden;
+        }
+        .tool-header::after {
+            content: ''; position: absolute; right: -20px; top: -20px;
+            width: 120px; height: 120px; border-radius: 50%;
+            background: rgba(255,255,255,0.05); pointer-events: none;
+        }
         .tool-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-        .tool-header h1 { font-size: clamp(15px, 3vw, 19px); font-weight: 700; color: var(--blanc); line-height: 1.25; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+        .tool-header h1 {
+            font-size: clamp(15px, 3vw, 19px); font-weight: 700; color: var(--blanc);
+            line-height: 1.25; display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+        }
         .tool-header-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 5px; }
         .tool-header-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-        .tool-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.2); padding: 3px 9px; border-radius: 3px; white-space: nowrap; }
+        .tool-badge {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+            color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.25);
+            padding: 3px 9px; border-radius: 3px; white-space: nowrap; background: rgba(255,255,255,0.08);
+        }
         .header-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: flex-start; }
-        .btn-hdr { border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 600; font-family: var(--font); white-space: nowrap; touch-action: manipulation; transition: background 0.2s; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.12); }
+        .btn-hdr {
+            border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 600;
+            font-family: var(--font); white-space: nowrap; touch-action: manipulation;
+            transition: background 0.2s; padding: 8px 14px;
+            border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.12);
+        }
         .btn-hdr:hover { background: rgba(255,255,255,0.25); }
         .btn-retour { background: rgba(255,255,255,0.22); display: none; }
         .btn-retour.visible { display: inline-block; }
-        .tool-progress { background: var(--blanc); border-bottom: 1px solid var(--gris-200); padding: 12px 24px; display: flex; align-items: center; }
+
+        /* ============================================================
+           BARRE DE PROGRESSION
+        ============================================================ */
+        .tool-progress {
+            background: var(--blanc); border-bottom: 1px solid var(--gris-200);
+            padding: 12px 24px; display: flex; align-items: center;
+        }
         .prog-step { display: flex; align-items: center; gap: 8px; flex: 1; }
-        .prog-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; background: var(--gris-200); color: var(--gris-600); transition: all 0.3s; }
+        .prog-circle {
+            width: 28px; height: 28px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+            flex-shrink: 0; background: var(--gris-200); color: var(--gris-600); transition: all 0.3s;
+        }
         .prog-circle.active { background: var(--vert-vif); color: var(--blanc); }
-        .prog-label { font-size: 11px; font-weight: 600; color: var(--gris-600); text-transform: uppercase; letter-spacing: 0.04em; }
+        .prog-label {
+            font-size: 11px; font-weight: 600; color: var(--gris-600);
+            text-transform: uppercase; letter-spacing: 0.04em;
+        }
         .prog-label.active { color: var(--vert-vif); }
         .prog-line { flex: 1; height: 2px; background: var(--gris-200); margin: 0 8px; transition: background 0.3s; }
         .prog-line.active { background: var(--vert-vif); }
+
+        /* ============================================================
+           CORPS PRINCIPAL — ÉTAPES
+        ============================================================ */
         .tool-body { padding: 20px; }
         .step-content { display: none; }
         .step-content.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-        .sec-title { font-size: 15px; font-weight: 700; margin: 0 0 14px 0; padding-bottom: 10px; border-bottom: 2px solid var(--vert-pale); color: var(--vert); display: flex; align-items: center; gap: 8px; }
+
+        .sec-title {
+            font-size: 15px; font-weight: 700; margin: 0 0 14px 0; padding-bottom: 10px;
+            border-bottom: 2px solid var(--vert-pale); color: var(--vert);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* ============================================================
+           ENCADRÉS INFO (ibox)
+        ============================================================ */
         .ibox { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 13px; border-left: 4px solid; }
         .ibox p, .ibox li { font-size: 13px; line-height: 1.5; }
         .ibox strong { font-weight: 700; }
@@ -54,302 +129,645 @@
         .ibox ul { list-style: none; padding: 0; margin: 0; }
         .ibox ul li { padding: 4px 0 4px 16px; position: relative; }
         .ibox ul li::before { content: "\2022"; position: absolute; left: 0; font-weight: bold; }
-        .ibox.green { background: var(--vert-pale); border-left-color: var(--vert); }
-        .ibox.green h3 { color: var(--vert); } .ibox.green ul li { color: #14532d; } .ibox.green ul li::before { color: var(--vert-vif); }
-        .ibox.red   { background: var(--rouge-pale); border-left-color: var(--rouge-vif); }
-        .ibox.red ul li { color: #7f1d1d; } .ibox.red ul li::before { color: var(--rouge-vif); }
-        .ibox.blue  { background: var(--bleu-pale);  border-left-color: var(--bleu); }
-        .ibox.blue h3 { color: var(--bleu); } .ibox.blue ul li { color: var(--bleu); } .ibox.blue ul li::before { color: var(--bleu); }
-        .ibox.yellow{ background: var(--ambre-pale); border-left-color: #d97706; }
-        .ibox.yellow ul li { color: #78350f; } .ibox.yellow ul li::before { color: #d97706; }
+
+        .ibox.green  { background: var(--vert-pale);   border-left-color: var(--vert); }
+        .ibox.green h3 { color: var(--vert); }
+        .ibox.green ul li { color: #14532d; }
+        .ibox.green ul li::before { color: var(--vert-vif); }
+
+        .ibox.red    { background: var(--rouge-pale);  border-left-color: var(--rouge-vif); }
+        .ibox.red ul li { color: #7f1d1d; }
+        .ibox.red ul li::before { color: var(--rouge-vif); }
+
+        .ibox.blue   { background: var(--bleu-pale);   border-left-color: var(--bleu); }
+        .ibox.blue h3 { color: var(--bleu); }
+        .ibox.blue ul li { color: var(--bleu); }
+        .ibox.blue ul li::before { color: var(--bleu); }
+
+        .ibox.yellow { background: var(--ambre-pale);  border-left-color: #d97706; }
+        .ibox.yellow ul li { color: #78350f; }
+        .ibox.yellow ul li::before { color: #d97706; }
+
         .ibox.violet { background: var(--violet-pale); border-left-color: var(--violet); }
-        .ibox.violet h3 { color: var(--violet); } .ibox.violet ul li { color: var(--violet); } .ibox.violet ul li::before { color: var(--violet); }
+        .ibox.violet h3 { color: var(--violet); }
+        .ibox.violet ul li { color: var(--violet); }
+        .ibox.violet ul li::before { color: var(--violet); }
+
         .ibox.orange { background: var(--orange-pale); border-left-color: #ea580c; }
         .ibox.orange h3 { color: var(--orange); }
-        .choice-btn { width: 100%; background: var(--blanc); border: 2px solid var(--vert-vif); color: var(--vert); padding: 12px 15px; border-radius: var(--radius); font-size: 14px; font-weight: 600; font-family: var(--font); cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; margin-bottom: 9px; transition: all 0.2s; touch-action: manipulation; line-height: 1.3; }
-        .choice-btn::before { content: "\25B6"; font-size: 10px; color: var(--vert-vif); flex-shrink: 0; }
-        .choice-btn:hover, .choice-btn:active { background: var(--vert-vif); color: var(--blanc); }
-        .choice-btn:hover::before, .choice-btn:active::before { color: var(--blanc); }
-        .result-box { border-radius: var(--radius); padding: 15px; margin-top: 14px; border: 1px solid; border-top-width: 4px; }
-        .result-box.green { background: var(--vert-pale); border-color: var(--vert-bord); border-top-color: var(--vert); }
-        .result-box.green .rb-title { color: var(--vert); }
-        .result-box.red { background: var(--rouge-pale); border-color: var(--rouge-bord); border-top-color: var(--rouge-vif); }
-        .result-box.red .rb-title { color: var(--rouge-vif); }
+
+        .ibox.or     { background: var(--or-pale);     border-left-color: var(--or); }
+        .ibox.or h3  { color: var(--or); }
+        .ibox.or ul li { color: #5a4205; }
+        .ibox.or ul li::before { color: var(--or); }
+
+        /* ============================================================
+           ALERTE GRAVITÉ — NOUVEAU (FIX #5)
+        ============================================================ */
+        .alert-gravite {
+            background: #fee2e2; border: 2px solid var(--rouge-vif); border-radius: var(--radius);
+            padding: 14px 15px; margin-bottom: 14px;
+        }
+        .alert-gravite .ag-title {
+            font-weight: 700; color: var(--rouge-vif); font-size: 13px;
+            text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .alert-gravite p { font-size: 13px; color: #991b1b; line-height: 1.5; }
+        .alert-gravite ul { list-style: none; padding: 0; margin: 6px 0 0 0; }
+        .alert-gravite ul li {
+            font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px;
+            position: relative; font-weight: 600;
+        }
+        .alert-gravite ul li::before { content: "\26A0"; position: absolute; left: 0; color: var(--rouge-vif); }
+
+        /* ============================================================
+           FORMULAIRE
+        ============================================================ */
+        .form-section {
+            background: var(--blanc); border: 1px solid var(--gris-200);
+            border-radius: var(--radius); padding: 15px; margin-bottom: 14px;
+        }
+        .form-section-title {
+            font-size: 13px; font-weight: 700; color: var(--vert); margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
+            text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .form-section-title::before { content: ""; width: 4px; height: 16px; background: var(--or); border-radius: 2px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+        .form-group { margin-bottom: 10px; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--gris-800); margin-bottom: 5px; }
+
+        .form-group input[type="date"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%; padding: 9px 11px; border: 1px solid var(--gris-200); border-radius: 4px;
+            font-family: var(--font); font-size: 13px; color: var(--noir); background: var(--blanc);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: var(--or); box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.12);
+        }
+        .form-group input[type="number"] { -moz-appearance: textfield; }
+        .form-group input[type="number"]::-webkit-outer-spin-button,
+        .form-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .terme-display {
+            background: linear-gradient(135deg, var(--vert-pale) 0%, #e8f5e9 100%);
+            border: 1px solid var(--vert-bord); border-radius: var(--radius);
+            padding: 10px 13px; margin-top: 10px;
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        }
+        .terme-display .td-label { font-size: 11px; color: var(--vert); text-transform: uppercase; font-weight: 600; letter-spacing: 0.04em; }
+        .terme-display .td-value { font-size: 18px; font-weight: 700; color: var(--vert); }
+
+        /* Indicateur hors limites */
+        .terme-display.hors-limite { background: var(--rouge-pale); border-color: var(--rouge-bord); }
+        .terme-display.hors-limite .td-label,
+        .terme-display.hors-limite .td-value { color: var(--rouge-vif); }
+
+        .radio-group { display: flex; flex-direction: column; gap: 6px; }
+        .radio-item { position: relative; }
+        .radio-item input[type="radio"],
+        .radio-item input[type="checkbox"] { position: absolute; opacity: 0; }
+        .radio-item label {
+            display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+            background: var(--gris-100); border: 1px solid var(--gris-200);
+            border-radius: 4px; cursor: pointer; font-size: 13px; transition: all 0.15s;
+        }
+        .radio-item input[type="radio"]:checked + label,
+        .radio-item input[type="checkbox"]:checked + label {
+            background: var(--or-pale); border-color: var(--or); color: #5a4205; font-weight: 600;
+        }
+        .radio-item label:hover { background: var(--gris-200); }
+
+        /* ============================================================
+           BOUTONS
+        ============================================================ */
+        .btn-primary {
+            width: 100%; background: linear-gradient(135deg, var(--vert) 0%, var(--vert-vif) 100%);
+            color: var(--blanc); border: none; padding: 13px 18px; border-radius: var(--radius);
+            font-size: 14px; font-weight: 700; font-family: var(--font); cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.05em; margin-top: 10px;
+            transition: transform 0.15s, box-shadow 0.15s; touch-action: manipulation;
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20, 83, 45, 0.25); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* ============================================================
+           RÉSULTAT
+        ============================================================ */
+        .result-box {
+            border-radius: var(--radius); padding: 15px; margin-top: 14px;
+            border: 1px solid; border-top-width: 4px;
+        }
+        .result-box.green  { background: var(--vert-pale);   border-color: var(--vert-bord);   border-top-color: var(--vert); }
+        .result-box.green  .rb-title { color: var(--vert); }
+        .result-box.red    { background: var(--rouge-pale);  border-color: var(--rouge-bord);  border-top-color: var(--rouge-vif); }
+        .result-box.red    .rb-title { color: var(--rouge-vif); }
         .result-box.orange { background: var(--orange-pale); border-color: var(--orange-bord); border-top-color: #ea580c; }
         .result-box.orange .rb-title { color: var(--orange); }
-        .result-box.blue { background: var(--bleu-pale); border-color: var(--bleu-bord); border-top-color: var(--bleu); }
-        .result-box.blue .rb-title { color: var(--bleu); }
+        .result-box.blue   { background: var(--bleu-pale);   border-color: var(--bleu-bord);   border-top-color: var(--bleu); }
+        .result-box.blue   .rb-title { color: var(--bleu); }
         .result-box.violet { background: var(--violet-pale); border-color: var(--violet-bord); border-top-color: var(--violet); }
         .result-box.violet .rb-title { color: var(--violet); }
-        .rb-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
-        .exam-list { background: var(--blanc); border: 1px solid var(--gris-200); border-radius: var(--radius); margin: 10px 0; overflow: hidden; }
-        .exam-item { padding: 10px 13px; border-bottom: 1px solid var(--gris-200); font-size: 13px; line-height: 1.45; color: var(--gris-800); }
+
+        .rb-title {
+            font-size: 13px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.04em; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 7px;
+        }
+
+        /* ============================================================
+           LISTES D'EXAMENS / MÉDICAMENTS
+        ============================================================ */
+        .exam-list {
+            background: var(--blanc); border: 1px solid var(--gris-200);
+            border-radius: var(--radius); margin: 10px 0; overflow: hidden;
+        }
+        .exam-item {
+            padding: 10px 13px; border-bottom: 1px solid var(--gris-200);
+            font-size: 13px; line-height: 1.45; color: var(--gris-800);
+        }
         .exam-item:last-child { border-bottom: none; }
         .exam-item strong { color: var(--noir); font-weight: 700; display: block; margin-bottom: 2px; }
         .exam-item p { color: var(--gris-600); font-size: 12px; margin-top: 2px; }
         .exam-item ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
         .exam-item ul li { font-size: 12px; color: var(--gris-600); padding: 2px 0 2px 13px; position: relative; }
         .exam-item ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--gris-400); }
-        .alert-urg { background: #fee2e2; border: 1px solid #fca5a5; border-radius: var(--radius); padding: 13px; margin-bottom: 12px; }
-        .alert-urg .urg-title { font-weight: 700; color: var(--rouge-vif); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 7px; }
+
+        .alert-urg {
+            background: #fee2e2; border: 1px solid #fca5a5;
+            border-radius: var(--radius); padding: 13px; margin-bottom: 12px;
+        }
+        .alert-urg .urg-title {
+            font-weight: 700; color: var(--rouge-vif); font-size: 12px;
+            text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 7px;
+        }
         .alert-urg ul { list-style: none; padding: 0; margin: 0; }
-        .alert-urg ul li { font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px; position: relative; font-weight: 500; }
+        .alert-urg ul li {
+            font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px;
+            position: relative; font-weight: 500;
+        }
         .alert-urg ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--rouge-vif); }
-        .note-ambre { background: var(--ambre-pale); border: 1px solid var(--ambre-bord); border-radius: var(--radius); padding: 11px 13px; margin-top: 11px; }
-        .note-ambre .na-title { font-size: 11px; font-weight: 700; color: var(--ambre); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+
+        .note-ambre {
+            background: var(--ambre-pale); border: 1px solid var(--ambre-bord);
+            border-radius: var(--radius); padding: 11px 13px; margin-top: 11px;
+        }
+        .note-ambre .na-title {
+            font-size: 11px; font-weight: 700; color: var(--ambre);
+            text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;
+        }
         .note-ambre p { font-size: 12px; color: var(--ambre); line-height: 1.4; }
-        /* SCORE COL */
-        .score-table { width: 100%; border-collapse: collapse; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--gris-200); margin: 10px 0; font-size: 12px; }
-        .score-table th { background: var(--vert); color: var(--blanc); padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; }
-        .score-table td { padding: 8px 10px; border-bottom: 1px solid var(--gris-200); vertical-align: middle; }
-        .score-table tr:last-child td { border-bottom: none; }
-        .score-table tr:nth-child(even) td { background: var(--gris-100); }
-        .badge-risque { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; white-space: nowrap; display: inline-block; }
-        .badge-risque.faible  { background: #dcfce7; color: var(--vert); }
-        .badge-risque.modere  { background: var(--ambre-pale); color: var(--ambre); border: 1px solid var(--ambre-bord); }
-        .badge-risque.eleve   { background: var(--rouge-pale); color: var(--rouge-vif); border: 1px solid var(--rouge-bord); }
-        /* TOCOLYSE TABS */
-        .drug-card { background: var(--blanc); border: 1px solid var(--gris-200); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
-        .drug-header { padding: 10px 13px; background: var(--vert-pale); border-bottom: 1px solid var(--vert-bord); font-size: 13px; font-weight: 700; color: var(--vert); display: flex; justify-content: space-between; align-items: center; }
+
+        /* ============================================================
+           MÉDICAMENTS
+        ============================================================ */
+        .drug-card {
+            background: var(--blanc); border: 1px solid var(--gris-200);
+            border-radius: var(--radius); margin-bottom: 8px; overflow: hidden;
+        }
+        .drug-header {
+            padding: 10px 13px; background: var(--vert-pale); border-bottom: 1px solid var(--vert-bord);
+            font-size: 13px; font-weight: 700; color: var(--vert);
+            display: flex; justify-content: space-between; align-items: center;
+        }
         .drug-body { padding: 10px 13px; font-size: 12px; color: var(--gris-800); line-height: 1.5; }
         .drug-body ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
         .drug-body ul li { padding: 2px 0 2px 13px; position: relative; }
         .drug-body ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--vert-vif); }
-        .line-tag { font-size: 10px; background: var(--vert); color: var(--blanc); padding: 1px 6px; border-radius: 3px; }
-        .tool-footer { background: var(--blanc); border-top: 1px dashed var(--gris-200); padding: 13px 20px; text-align: center; }
-        .tool-footer p { font-size: 11px; color: var(--gris-600); line-height: 1.5; }
-        .tool-footer strong { color: var(--gris-800); }
-    
-      /* =========================================
-   PRO : Masque l'ascenseur (style App native)
-A placer en fin de css dans chaque outil
-   ========================================= */
-html { scrollbar-width: none; }               /* Firefox */
-body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
-::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
-      
-      @media (max-width: 480px) {
+        .line-tag {
+            font-size: 10px; background: var(--vert); color: var(--blanc);
+            padding: 1px 6px; border-radius: 3px;
+        }
+
+        /* ============================================================
+           RÉSUMÉ PARAMÈTRES
+        ============================================================ */
+        .summary-box {
+            background: linear-gradient(135deg, var(--or-pale) 0%, #fef9e7 100%);
+            border: 1px solid var(--or-bord); border-radius: var(--radius);
+            padding: 12px 15px; margin-bottom: 15px;
+        }
+        .summary-title {
+            font-size: 11px; font-weight: 700; color: var(--or);
+            text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;
+        }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+        .summary-item { font-size: 12px; }
+        .summary-item .s-label { color: var(--gris-600); font-size: 10px; text-transform: uppercase; }
+        .summary-item .s-value { color: var(--noir); font-weight: 700; }
+
+        /* ============================================================
+           RÈGLES CLINIQUES PAR TERME
+        ============================================================ */
+        .term-rule-box { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 15px; border-left: 4px solid; }
+        .term-rule-box h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+        .term-rule-box ul { list-style: none; padding: 0; margin: 0; }
+        .term-rule-box ul li { font-size: 13px; padding: 4px 0 4px 16px; position: relative; line-height: 1.4; }
+        .term-rule-box ul li::before { content: "\2022"; position: absolute; left: 0; font-weight: bold; }
+
+        .term-rule-box.high-risk  { background: var(--rouge-pale); border-left-color: var(--rouge-vif); }
+        .term-rule-box.high-risk h3 { color: var(--rouge-vif); }
+        .term-rule-box.high-risk ul li { color: #7f1d1d; }
+        .term-rule-box.high-risk ul li::before { color: var(--rouge-vif); }
+
+        .term-rule-box.mid-risk   { background: var(--or-pale); border-left-color: var(--or); }
+        .term-rule-box.mid-risk h3 { color: var(--or); }
+        .term-rule-box.mid-risk ul li { color: #5a4205; }
+        .term-rule-box.mid-risk ul li::before { color: var(--or); }
+
+        .term-rule-box.safe-term  { background: var(--bleu-pale); border-left-color: var(--bleu); }
+        .term-rule-box.safe-term h3 { color: var(--bleu); }
+        .term-rule-box.safe-term ul li { color: var(--bleu); }
+        .term-rule-box.safe-term ul li::before { color: var(--bleu); }
+
+        /* ============================================================
+           PIED DE PAGE
+        ============================================================ */
+        .tool-footer {
+            background: var(--blanc); border-top: 1px solid var(--gris-200); padding: 16px 20px;
+        }
+        .legal-warning {
+            font-size: 11px; color: var(--gris-600); line-height: 1.5; text-align: justify;
+            margin-bottom: 10px; border-top: 1px dashed var(--gris-200); padding-top: 12px;
+        }
+        .legal-warning strong { color: var(--vert); font-weight: 700; }
+        .tool-footer .refs { font-size: 11px; color: var(--gris-600); line-height: 1.5; }
+        .tool-footer .refs strong { color: var(--gris-800); }
+        .copyright { font-size: 11px; color: var(--gris-600); text-align: right; margin-top: 10px; font-style: italic; font-weight: 500; }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 480px) {
             .tool-header { padding: 15px 15px 13px; }
             .tool-header h1 { font-size: 13px; }
             .tool-progress { padding: 10px 15px; }
             .prog-label { display: none; }
             .tool-body { padding: 13px; }
-            .choice-btn { font-size: 13px; padding: 11px 13px; }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-<div class="tool-wrap">
+<div id="map-tool">
 
+    <!-- ============================================================
+         EN-TÊTE
+    ============================================================ -->
     <div class="tool-header">
         <div class="tool-header-top">
             <div>
-                <h1>&#9679; MAP — Menace d'Accouchement Prématuré</h1>
-                <p class="tool-header-sub">Outil de prise en charge — Usage médical professionnel</p>
+                <h1>&#9679; MAP &#8212; Arbre D&#233;cisionnel Complet</h1>
+                <p class="tool-header-sub">Menace d&#8217;Accouchement Pr&#233;matur&#233; &#8212; Usage m&#233;dical professionnel</p>
             </div>
             <div class="header-actions">
-                <button class="btn-hdr btn-retour" id="btn-retour" onclick="goBack()">&#8592; Retour</button>
-                <button class="btn-hdr" onclick="resetTool()">&#8635; Reset</button>
+                <button class="btn-hdr btn-retour" id="btn-retour" onclick="mapTool.goBack()">&#8592; Retour</button>
+                <button class="btn-hdr" onclick="mapTool.reset()">&#8635; Reset</button>
             </div>
         </div>
         <div class="tool-header-badges">
-            <span class="tool-badge">Obstétrique</span>
+            <span class="tool-badge">Obst&#233;trique</span>
             <span class="tool-badge">CNGOF 2016</span>
-            <span class="tool-badge">HAS / CFEF</span>
+            <span class="tool-badge">HAS</span>
+            <span class="tool-badge">CFEF &#8212; LC cervicale</span>
+            <span class="tool-badge">Temps r&#233;el</span>
         </div>
     </div>
 
+    <!-- ============================================================
+         BARRE DE PROGRESSION
+    ============================================================ -->
     <div class="tool-progress" id="progressBar"></div>
 
+    <!-- ============================================================
+         CORPS
+    ============================================================ -->
     <div class="tool-body">
 
-        <!-- ÉTAPE 1 : Évaluation initiale -->
+        <!-- ======================================================
+             ÉTAPE 1 : SAISIE
+        ====================================================== -->
         <div class="step-content active" id="step1">
-            <h2 class="sec-title">&#9654; Évaluation initiale de la MAP</h2>
-
-            <div class="ibox green">
-                <p><strong>Définition :</strong> Contractions utérines régulières (&#8805; 2 CU/10 min) associées à des modifications cervicales, entre 22 SA et 36 SA + 6 jours.</p>
-            </div>
+            <h2 class="sec-title">&#9654; &#201;valuation initiale &#8212; Saisie des param&#232;tres</h2>
 
             <div class="ibox blue">
-                <h3>Bilan de 1ère intention (systématique)</h3>
-                <ul>
-                    <li>Interrogatoire : terme exact, ATCD obstétricaux, facteurs de risque, rupture des membranes ?</li>
-                    <li>Monitoring : tocographie externe, RCF</li>
-                    <li>Examen au speculum : état des membranes, col, leucorrhées</li>
-                    <li>Échographie cervicale endovaginale : longueur du col (LC)</li>
-                    <li>Fibronectine fœtale (FFN) si LC 15–30 mm (valeur prédictive négative élevée)</li>
-                    <li>Prélèvements vaginaux bas (PVB) + ECBU</li>
-                    <li>NFS, CRP, ionogramme, groupe/RAI</li>
-                </ul>
+                <p><strong>D&#233;finition :</strong> Contractions ut&#233;rines r&#233;guli&#232;res (&#8805;&#8239;2 CU/10&#8239;min) associ&#233;es &#224; des modifications cervicales, entre <strong>22&#8239;SA et 36&#8239;SA&#8239;+&#8239;6&#8239;jours</strong>.</p>
+            </div>
+
+            <!-- TERME -->
+            <div class="form-section">
+                <div class="form-section-title">1. D&#233;termination du terme</div>
+                <div class="form-group">
+                    <label>Mode de d&#233;termination du terme</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="mode_ddr" name="mode_terme" value="ddr" checked onchange="mapTool.switchModeTerme()">
+                            <label for="mode_ddr">Calcul automatique depuis les Derni&#232;res R&#232;gles (DDR)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="mode_manual" name="mode_terme" value="manual" onchange="mapTool.switchModeTerme()">
+                            <label for="mode_manual">Saisie manuelle du terme en SA</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="zone_ddr">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ddr">Date des Derni&#232;res R&#232;gles (DDR)</label>
+                            <input type="date" id="ddr" onchange="mapTool.calculerTerme()">
+                        </div>
+                        <div class="form-group">
+                            <label for="date_today">Date du jour (r&#233;f&#233;rence)</label>
+                            <input type="date" id="date_today" onchange="mapTool.calculerTerme()">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="zone_manual" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sa_manual">Semaines d&#8217;am&#233;norrh&#233;e (SA)</label>
+                            <input type="number" id="sa_manual" min="20" max="42" placeholder="ex&#8239;: 32" oninput="mapTool.updateTermeDisplay()">
+                        </div>
+                        <div class="form-group">
+                            <label for="jr_manual">Jours compl&#233;mentaires</label>
+                            <input type="number" id="jr_manual" min="0" max="6" placeholder="ex&#8239;: 3" oninput="mapTool.updateTermeDisplay()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="terme-display" id="terme_display_box">
+                    <span class="td-label">Terme actuel</span>
+                    <span class="td-value" id="terme_display">&#8212; SA</span>
+                </div>
+            </div>
+
+            <!-- MEMBRANES -->
+            <div class="form-section">
+                <div class="form-section-title">2. Membranes</div>
+                <div class="form-group">
+                    <label>Rupture Pr&#233;matur&#233;e des Membranes (RPM)&#8239;?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="rpm_non" name="rpm" value="non" checked>
+                            <label for="rpm_non">Non &#8212; Membranes intactes</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="rpm_oui" name="rpm" value="oui">
+                            <label for="rpm_oui">Oui &#8212; RPM confirm&#233;e</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COL -->
+            <div class="form-section">
+                <div class="form-section-title">3. &#201;tat du col (TV + &#233;chographie endovaginale)</div>
+                <div class="form-group">
+                    <label for="lc">Longueur cervicale (mm) &#8212; si connue (prioritaire sur la classification manuelle)</label>
+                    <input type="number" id="lc" min="0" max="60" placeholder="ex&#8239;: 22" oninput="mapTool.onLcInput()">
+                </div>
+                <div class="form-group">
+                    <label>Classification du col</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="col_long" name="col" value="long" checked>
+                            <label for="col_long">Col long &#8805;&#8239;25&#8239;mm &#8212; Risque faible</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="col_court" name="col" value="court">
+                            <label for="col_court">Col court 15&#8239;&#8211;&#8239;25&#8239;mm &#8212; Risque mod&#233;r&#233;</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="col_tres_court" name="col" value="tres_court">
+                            <label for="col_tres_court">Col tr&#232;s court &lt;&#8239;15&#8239;mm ou dilat&#233; &#8805;&#8239;3&#8239;cm &#8212; Risque &#233;lev&#233;</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIGNES DE GRAVITÉ -->
+            <div class="form-section">
+                <div class="form-section-title">4. Signes de gravit&#233; (cocher si pr&#233;sents)</div>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="checkbox" id="sg_chorio" name="gravite" value="chorio">
+                        <label for="sg_chorio">&#128308; Suspicion de chorioamniotite (fi&#232;vre, CRP &#233;lev&#233;e, ut&#233;rus sensible)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="checkbox" id="sg_hemorr" name="gravite" value="hemorr">
+                        <label for="sg_hemorr">&#128308; M&#233;trorragies associ&#233;es</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="checkbox" id="sg_sff" name="gravite" value="sff">
+                        <label for="sg_sff">&#128308; Souffrance f&#339;tale (RCF pathologique)</label>
+                    </div>
+                </div>
             </div>
 
             <div class="ibox yellow">
-                <p><strong>&#9888; Éliminer avant tout :</strong> Rupture prématurée des membranes (RPM), chorioamniotite (fièvre + tachycardie + leucocytose), placenta praevia hémorragique, décollement placentaire.</p>
+                <p><strong>&#9888; Avant validation :</strong> V&#233;rifier que les urgences ont &#233;t&#233; &#233;limin&#233;es (placenta pr&#230;via, HRPP, chorioamniotite constitu&#233;e). Tout signe de gravit&#233; coch&#233; redirige vers la branche urgence.</p>
             </div>
 
-            <button class="choice-btn" onclick="goTo('col-long')">Col long &#8805; 25 mm — Risque faible</button>
-            <button class="choice-btn" onclick="goTo('col-court')">Col court 15 – 25 mm — Risque modéré</button>
-            <button class="choice-btn" onclick="goTo('col-tres-court')">Col très court &lt; 15 mm ou dilaté — Risque élevé</button>
-            <button class="choice-btn" onclick="goTo('rpm')">Rupture Prématurée des Membranes (RPM)</button>
+            <button class="btn-primary" onclick="mapTool.validerEtOrienter()">&#10148; Valider et orienter la prise en charge</button>
         </div>
 
-        <!-- BRANCHE : Col long - risque faible -->
+        <!-- ======================================================
+             BRANCHE : URGENCE (signes de gravité)
+             FIX #5 : nouvelle branche dédiée
+        ====================================================== -->
+        <div class="step-content" id="step-urgence">
+            <h2 class="sec-title">&#128680; Signe(s) de Gravit&#233; D&#233;tect&#233;(s) &#8212; Prise en charge imm&#233;diate</h2>
+            <div id="summary-urgence"></div>
+
+            <div id="signes-gravite-detail"></div>
+
+            <div class="alert-urg">
+                <div class="urg-title">Mesures imm&#233;diates syst&#233;matiques</div>
+                <ul>
+                    <li>Hospitalisation en urgence &#8212; Maternité de niveau adapt&#233; au terme</li>
+                    <li>Monitoring continu RCF + toco</li>
+                    <li>Voie veineuse + bilan biologique complet (NFS, CRP, h&#233;mocultures si fi&#232;vre)</li>
+                    <li>&#201;chographie obstétricale en urgence (vitalit&#233;, pr&#233;sentation, placenta)</li>
+                    <li>Avis senior / senior obst&#233;tricien imm&#233;diat</li>
+                </ul>
+            </div>
+
+            <div id="term-rules-urgence"></div>
+
+            <div class="note-ambre">
+                <div class="na-title">&#9888; D&#233;cision d&#8217;extraction</div>
+                <p>En cas de chorioamniotite confirm&#233;e : <strong>extraction imm&#233;diate quel que soit le terme</strong>, sans attendre la fin de la corticoth&#233;rapie. La tocolyse est contre-indiqu&#233;e.</p>
+            </div>
+        </div>
+
+        <!-- ======================================================
+             BRANCHE : Col long — risque faible
+        ====================================================== -->
         <div class="step-content" id="step-col-long">
-            <h2 class="sec-title">&#9654; MAP à Risque Faible — Col &#8805; 25 mm</h2>
+            <h2 class="sec-title">&#9654; MAP &#224; Risque Faible &#8212; Col &#8805;&#8239;25&#8239;mm</h2>
+            <div id="summary-col-long"></div>
+            <div id="term-rules-col-long"></div>
 
             <div class="result-box green">
                 <div class="rb-title">&#10003; Prise en charge ambulatoire possible</div>
                 <div class="exam-list">
-                    <div class="exam-item"><strong>Si FFN négative (+ col &#8805; 25 mm)</strong>Valeur prédictive négative &gt; 95% pour accouchement dans les 7 jours. Sortie autorisée.</div>
-                    <div class="exam-item"><strong>Traitement tocolytique</strong>Non recommandé en première intention si risque faible</div>
-                    <div class="exam-item"><strong>Surveillance ambulatoire</strong>Contrôle échographique cervical à 1 semaine + RCF ambulatoire</div>
-                    <div class="exam-item"><strong>Repos relatif</strong>Arrêt de travail + éviction des facteurs déclenchants</div>
+                    <div class="exam-item">
+                        <strong>Si FFN n&#233;gative (+ col &#8805;&#8239;25&#8239;mm)</strong>
+                        <p>Valeur pr&#233;dictive n&#233;gative &gt;&#8239;95&#8239;% pour accouchement dans les 7&#8239;jours. Sortie autoris&#233;e sous r&#233;serve.</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Traitement tocolytique</strong>
+                        <p>Non recommand&#233; en premi&#232;re intention si risque faible</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Surveillance ambulatoire</strong>
+                        <p>Contr&#244;le &#233;chographique cervical &#224; 1&#8239;semaine + RCF ambulatoire</p>
+                    </div>
+                    <div class="exam-item">
+                        <strong>Repos relatif</strong>
+                        <p>Arr&#234;t de travail + &#233;viction des facteurs d&#233;clenchants</p>
+                    </div>
                 </div>
                 <div class="note-ambre">
                     <div class="na-title">Signes de retour en urgence</div>
-                    <p>Recrudescence des CU, perte de liquide, métrorragies, fièvre, diminution des MAF &#8594; Retour immédiat aux urgences</p>
+                    <p>Recrudescence des CU, perte de liquide, m&#233;trorragies, fi&#232;vre, diminution des MAF &#8594; Retour imm&#233;diat aux urgences</p>
                 </div>
             </div>
         </div>
 
-        <!-- BRANCHE : Col court -->
+        <!-- ======================================================
+             BRANCHE : Col court — risque modéré
+        ====================================================== -->
         <div class="step-content" id="step-col-court">
-            <h2 class="sec-title">&#9654; MAP à Risque Modéré — Col 15–25 mm</h2>
+            <h2 class="sec-title">&#9654; MAP &#224; Risque Mod&#233;r&#233; &#8212; Col 15&#8239;&#8211;&#8239;25&#8239;mm</h2>
+            <div id="summary-col-court"></div>
+            <div id="term-rules-col-court"></div>
 
             <div class="ibox yellow">
-                <p><strong>Hospitalisation recommandée</strong> pour surveillance et évaluation complémentaire.</p>
+                <p><strong>Hospitalisation recommand&#233;e</strong> pour surveillance et &#233;valuation compl&#233;mentaire.</p>
             </div>
 
             <div class="result-box orange">
-                <div class="rb-title">&#9888; Prise en charge hospitalière</div>
+                <div class="rb-title">&#9888; Prise en charge hospitali&#232;re</div>
                 <div class="exam-list">
                     <div class="exam-item">
-                        <strong>Corticothérapie de maturation pulmonaire</strong>
-                        <p>Si terme &lt; 34 SA — Bétaméthasone 12 mg IM x2 (à 24h d'intervalle)</p>
-                        <p>Cure unique recommandée. Pas de cure de sauvetage systématique.</p>
+                        <strong>Corticoth&#233;rapie de maturation pulmonaire</strong>
+                        <p>Voir les r&#232;gles sp&#233;cifiques au terme ci-dessus.</p>
                     </div>
                     <div class="exam-item">
-                        <strong>Sulfate de Magnésium — Neuroprotection fœtale</strong>
-                        <p>Si terme &lt; 32 SA, accouchement imminent — 4g IV sur 20 min puis 1g/h</p>
+                        <strong>Sulfate de Magn&#233;sium &#8212; Neuroprotection f&#339;tale</strong>
+                        <p>Voir les r&#232;gles sp&#233;cifiques au terme ci-dessus.</p>
                     </div>
                     <div class="exam-item">
                         <strong>Tocolyse</strong>
-                        <p>Indiquée pour permettre la corticothérapie et/ou le transfert in utero — Durée max 48h</p>
+                        <p>Voir les r&#232;gles sp&#233;cifiques au terme ci-dessus.</p>
                     </div>
                     <div class="exam-item">
                         <strong>Transfert in utero</strong>
-                        <p>Vers maternité de niveau adapté au terme (Niveau III si &lt; 32 SA)</p>
+                        <p>Vers maternit&#233; de niveau adapt&#233; au terme (Niveau III si &lt;&#8239;32&#8239;SA)</p>
                     </div>
                 </div>
             </div>
 
-            <p style="font-size:12px;font-weight:700;color:var(--gris-600);text-transform:uppercase;letter-spacing:0.05em;margin:14px 0 8px;">Tocolytiques disponibles</p>
+            <p style="font-size:12px;font-weight:700;color:var(--gris-600);text-transform:uppercase;letter-spacing:0.05em;margin:14px 0 8px;">Tocolytiques disponibles (si indiqu&#233;s selon le terme)</p>
 
             <div class="drug-card">
-                <div class="drug-header">Atosiban (Tractocile&#174;) <span class="line-tag">1ère ligne</span></div>
+                <div class="drug-header">Atosiban (Tractocile&#174;) <span class="line-tag">1&#232;re ligne</span></div>
                 <div class="drug-body">
-                    Antagoniste de l'ocytocine — Meilleure tolérance maternelle<br>
+                    Antagoniste de l&#8217;ocytocine &#8212; Meilleure tol&#233;rance maternelle<br>
                     <ul>
-                        <li>Bolus : 6,75 mg IV sur 1 min</li>
-                        <li>Entretien : 18 mg/h sur 3h puis 6 mg/h max 45h</li>
-                        <li>CI : terme &lt; 24 SA, souffrance fœtale, RCIU sévère, RPM &gt; 30 SA</li>
+                        <li>Bolus&#8239;: 6,75&#8239;mg IV sur 1&#8239;min</li>
+                        <li>Entretien&#8239;: 18&#8239;mg/h sur 3h puis 6&#8239;mg/h max 45h</li>
+                        <li>CI&#8239;: terme &lt;&#8239;24&#8239;SA, souffrance f&#339;tale, RCIU s&#233;v&#232;re, RPM &gt;&#8239;30&#8239;SA</li>
                     </ul>
                 </div>
             </div>
 
             <div class="drug-card">
-                <div class="drug-header">Nifédipine (Adalate&#174;) <span class="line-tag">Alternative</span></div>
+                <div class="drug-header">Nif&#233;dipine (Adalate&#174;) <span class="line-tag">Alternative</span></div>
                 <div class="drug-body">
-                    Inhibiteur calcique — Efficacité comparable, coût moindre<br>
+                    Inhibiteur calcique &#8212; Efficacit&#233; comparable, co&#251;t moindre<br>
                     <ul>
-                        <li>Dose initiale : 10–20 mg per os toutes les 4–6h</li>
-                        <li>CI : hypotension, insuffisance cardiaque, association aux bêtamimétiques</li>
-                        <li>Surveillance : PA, FC</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="drug-card">
-                <div class="drug-header">Salbutamol (Salbumol&#174;) <span class="line-tag">À éviter si possible</span></div>
-                <div class="drug-body">
-                    Bêtamimétique — Effets secondaires cardiovasculaires maternels significatifs<br>
-                    <ul>
-                        <li>Réservé aux situations sans autre alternative</li>
-                        <li>CI : cardiopathie, diabète non équilibré, hyperthyroïdie</li>
-                        <li>Surveillance stricte : glycémie, kaliémie, FC maternelle</li>
+                        <li>Dose initiale&#8239;: 10&#8211;20&#8239;mg per os toutes les 4&#8211;6h</li>
+                        <li>CI&#8239;: hypotension, insuffisance cardiaque, association aux b&#234;tamim&#233;tiques</li>
+                        <li>Surveillance&#8239;: PA, FC</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- BRANCHE : Col très court -->
+        <!-- ======================================================
+             BRANCHE : Col très court — haut risque
+        ====================================================== -->
         <div class="step-content" id="step-col-tres-court">
-            <h2 class="sec-title">&#128680; MAP à Haut Risque — Col &lt; 15 mm / Dilaté</h2>
+            <h2 class="sec-title">&#128680; MAP &#224; Haut Risque &#8212; Col &lt;&#8239;15&#8239;mm / Dilat&#233;</h2>
+            <div id="summary-col-tres-court"></div>
+            <div id="term-rules-col-tres-court"></div>
 
             <div class="alert-urg">
-                <div class="urg-title">Mesures immédiates</div>
+                <div class="urg-title">Mesures imm&#233;diates</div>
                 <ul>
-                    <li>Hospitalisation en urgence — Maternité de niveau adapté au terme</li>
+                    <li>Hospitalisation en urgence &#8212; Maternit&#233; de niveau adapt&#233; au terme</li>
                     <li>Repos strict au lit</li>
-                    <li>Monitoring continu RCF + tocométrie</li>
-                    <li>Voie veineuse + prélèvements biologiques complets</li>
-                    <li>Transfert in utero si terme &lt; 32 SA vers niveau III</li>
+                    <li>Monitoring continu RCF + toco</li>
+                    <li>Voie veineuse + pr&#233;l&#232;vements biologiques complets</li>
+                    <li>Transfert in utero si terme &lt;&#8239;32&#8239;SA vers niveau III</li>
                 </ul>
             </div>
 
             <div class="result-box red">
-                <div class="rb-title">&#128680; Protocol de neuroprotection et maturation</div>
+                <div class="rb-title">&#128680; Protocole de neuroprotection et maturation</div>
                 <div class="exam-list">
                     <div class="exam-item">
-                        <strong>1. Sulfate de Magnésium — OBLIGATOIRE si &lt; 32 SA</strong>
-                        <p>4g IV sur 20 min + 1g/h jusqu'à l'accouchement ou 24h</p>
+                        <strong>1. Sulfate de Magn&#233;sium</strong>
+                        <p>Voir les r&#232;gles sp&#233;cifiques au terme ci-dessus.</p>
                     </div>
                     <div class="exam-item">
-                        <strong>2. Corticothérapie — si &lt; 34 SA</strong>
-                        <p>Bétaméthasone 12 mg IM x2 à 24h d'intervalle — Priorité absolue</p>
+                        <strong>2. Corticoth&#233;rapie</strong>
+                        <p>Voir les r&#232;gles sp&#233;cifiques au terme ci-dessus.</p>
                     </div>
                     <div class="exam-item">
-                        <strong>3. Tocolyse — 48h pour permettre la maturation</strong>
-                        <p>Atosiban en 1ère intention — Arrêt si col &#8805; 4 cm ou accouchement inévitable</p>
+                        <strong>3. Tocolyse</strong>
+                        <p>48h pour permettre la maturation. Atosiban en 1&#232;re intention &#8212; Arr&#234;t si col &#8805;&#8239;4&#8239;cm ou accouchement in&#233;vitable.</p>
                     </div>
                     <div class="exam-item">
-                        <strong>4. Antibioprophylaxie</strong>
-                        <p>Si RPM associée ou prélèvements positifs — Voir protocole RPM</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>5. Cerclage d'urgence</strong>
-                        <p>À discuter si col &lt; 25 mm entre 16 et 24 SA, membranes intactes, ATCD de fausse couche tardive</p>
+                        <strong>4. Cerclage d&#8217;urgence</strong>
+                        <p>&#192; discuter si col &lt;&#8239;25&#8239;mm entre 16 et 24&#8239;SA, membranes intactes, ATCD de fausse couche tardive.</p>
                     </div>
                 </div>
             </div>
-
-            <table class="score-table">
-                <tr><th>Terme</th><th>Niveau maternité</th><th>Actions prioritaires</th></tr>
-                <tr><td>&lt; 28 SA</td><td><span class="badge-risque eleve">Niveau III obligatoire</span></td><td>MgSO4 + Corticoïdes + Transfert urgent</td></tr>
-                <tr><td>28 – 31 SA</td><td><span class="badge-risque eleve">Niveau III</span></td><td>MgSO4 + Corticoïdes + Tocolyse</td></tr>
-                <tr><td>32 – 33 SA</td><td><span class="badge-risque modere">Niveau II ou III</span></td><td>Corticoïdes + Tocolyse &#177; MgSO4</td></tr>
-                <tr><td>34 – 36 SA</td><td><span class="badge-risque faible">Niveau II</span></td><td>Surveillance — Tocolyse non systématique</td></tr>
-            </table>
         </div>
 
-        <!-- BRANCHE : RPM -->
+        <!-- ======================================================
+             BRANCHE : RPM
+        ====================================================== -->
         <div class="step-content" id="step-rpm">
-            <h2 class="sec-title">&#9888; Rupture Prématurée des Membranes</h2>
+            <h2 class="sec-title">&#9888; Rupture Pr&#233;matur&#233;e des Membranes</h2>
+            <div id="summary-rpm"></div>
+            <div id="term-rules-rpm"></div>
 
             <div class="ibox red">
-                <p><strong>Définition :</strong> Rupture des membranes avant le début du travail, avant 37 SA.<br>
-                <strong>Risque majeur :</strong> Chorioamniotite (10–30%) + procidence du cordon + prématurité.</p>
+                <p><strong>D&#233;finition :</strong> Rupture des membranes avant le d&#233;but du travail, avant 37&#8239;SA.<br>
+                <strong>Risque majeur :</strong> Chorioamniotite (10&#8211;30&#8239;%) + procidence du cordon + pr&#233;maturit&#233;.</p>
             </div>
 
             <div class="ibox blue">
                 <h3>Confirmation diagnostique</h3>
                 <ul>
-                    <li>Speculum : écoulement de liquide amniotique (test à la toux)</li>
+                    <li>Sp&#233;culum&#8239;: &#233;coulement de liquide amniotique (test &#224; la toux)</li>
                     <li>Test AmniSure&#174; ou IGFBP-1 (Actim PROM&#174;) si doute</li>
-                    <li>pH vaginal (liquide amniotique : pH &#8805; 7)</li>
+                    <li>pH vaginal (liquide amniotique&#8239;: pH &#8805;&#8239;7)</li>
                     <li>Pas de TV au doigt sauf accouchement imminent</li>
-                    <li>Échographie : index de liquide amniotique (ILA)</li>
+                    <li>&#201;chographie&#8239;: index de liquide amniotique (ILA)</li>
                 </ul>
             </div>
 
@@ -358,101 +776,464 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
                 <div class="exam-list">
                     <div class="exam-item">
                         <strong>Surveillance infection (bihebdomadaire)</strong>
-                        <p>T°, CRP, NFS, leucocytose, CU, aspect du liquide (louche = infection)</p>
+                        <p>T&#176;, CRP, NFS, leucocytose, CU, aspect du liquide (louche = infection)</p>
                     </div>
                     <div class="exam-item">
-                        <strong>Antibioprophylaxie systématique</strong>
+                        <strong>Antibioprophylaxie syst&#233;matique</strong>
                         <ul>
-                            <li>Amoxicilline 1g x3/j per os pendant 7 jours</li>
-                            <li>Si allergie : Erythromycine 250 mg x4/j per os 10 jours</li>
-                            <li>Pas d'Amoxicilline-Acide clavulanique (risque d'entérocolite néonatale)</li>
+                            <li>Amoxicilline 1&#8239;g &#215;3/j per os pendant 7&#8239;jours</li>
+                            <li>Si allergie&#8239;: Erythromycine 250&#8239;mg &#215;4/j per os 10&#8239;jours</li>
+                            <li>Pas d&#8217;Amoxicilline-Acide clavulanique (risque d&#8217;ent&#233;rocolite n&#233;onatale)</li>
                         </ul>
                     </div>
                     <div class="exam-item">
-                        <strong>Corticothérapie — si &lt; 34 SA</strong>
-                        <p>Bétaméthasone 12 mg IM x2 — À administrer en urgence</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Tocolyse dans la RPM</strong>
-                        <p>Non recommandée en routine — Uniquement pour permettre le transfert ou la corticothérapie, sur courte durée</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Indication d'extraction</strong>
+                        <strong>Indication d&#8217;extraction</strong>
                         <ul>
-                            <li>Chorioamniotite : extraction immédiate quel que soit le terme</li>
-                            <li>&#8805; 34 SA : déclenchement du travail recommandé</li>
-                            <li>34 – 37 SA : attitude expectative sous surveillance vs déclenchement selon contexte</li>
+                            <li>Chorioamniotite&#8239;: extraction imm&#233;diate quel que soit le terme</li>
+                            <li>Attitude selon le terme (voir encadr&#233; sp&#233;cifique ci-dessus)</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div class="note-ambre">
-                <div class="na-title">Signes de chorioamniotite — Extraction immédiate</div>
-                <p>Fièvre maternelle &gt; 38°C + tachycardie fœtale + utérus douloureux + liquide malodorant ou purulent + CRP &gt; 20 mg/L avec ascension rapide</p>
+                <div class="na-title">Signes de chorioamniotite &#8212; Extraction imm&#233;diate</div>
+                <p>Fi&#232;vre maternelle &gt;&#8239;38&#8239;&#176;C + tachycardie f&#339;tale + ut&#233;rus douloureux + liquide malodorant ou purulent + CRP &gt;&#8239;20&#8239;mg/L avec ascension rapide</p>
             </div>
         </div>
 
+    </div><!-- /tool-body -->
+
+    <!-- ============================================================
+         PIED DE PAGE
+    ============================================================ -->
+    <div class="tool-footer">
+        <p class="legal-warning">
+            <strong>&#9888; Avertissement m&#233;dico-l&#233;gal :</strong> Cet outil d&#8217;aide &#224; la d&#233;cision est bas&#233; sur les recommandations du CNGOF (2016) et de la HAS. Le CFEF est r&#233;f&#233;renc&#233; pour les normes de mesure de la longueur cervicale &#233;chographique. Il ne se substitue en aucun cas au jugement clinique du m&#233;decin, &#224; l&#8217;&#233;valuation individualis&#233;e de la patiente, ni aux protocoles sp&#233;cifiques de votre &#233;tablissement. La responsabilit&#233; du diagnostic, de la prescription et de la prise en charge th&#233;rapeutique incombe exclusivement au praticien.
+        </p>
+        <p class="refs"><strong>R&#233;f&#233;rences :</strong> CNGOF 2016, HAS &#8212; Recommandations pour la pratique clinique sur la MAP | CFEF &#8212; Normes de longueur cervicale</p>
+        <p class="copyright">Dr KARA-ZAITRI M.A &#169; 2026</p>
     </div>
 
-    <div class="tool-footer">
-        <p><strong>Références :</strong> CNGOF 2016, HAS, CFEF — Recommandations pour la pratique clinique</p>
-        <p style="margin-top:4px;">Ce contenu ne remplace pas l'évaluation clinique individuelle. En cas de doute, avis spécialisé recommandé.</p>
-    </div>
-</div>
+</div><!-- /#map-tool -->
 
 <script>
-(function() {
-    let navHistory = ['step1'];
-    const allSteps = ['step1','step-col-long','step-col-court','step-col-tres-court','step-rpm'];
+'use strict';
+/* ================================================================
+   MAP TOOL v2 — Dr KARA-ZAITRI M.A
+   Corrections appliquées :
+   FIX 1  : Ordre genererResume() après correction radio LC
+   FIX 2  : lc robuste (null si vide, parseInt sécurisé)
+   FIX 3  : Signes de gravité utilisés dans la logique d'orientation
+   FIX 4  : Seuils RPM affinés (34-36 SA : attitude conservatrice)
+   FIX 5  : Badge CFEF libellé précis (LC cervicale uniquement)
+   FIX 6  : Indicateur terme hors limites MAP
+================================================================ */
+var mapTool = (function () {
 
+    /* ----------------------------------------------------------------
+       ÉTAT
+    ---------------------------------------------------------------- */
+    var navHistory  = ['step1'];
+    var allStepIds  = [
+        'step1', 'step-urgence',
+        'step-col-long', 'step-col-court', 'step-col-tres-court', 'step-rpm'
+    ];
+    var currentTerme = { sa: null, jr: 0 };
+
+    /* ----------------------------------------------------------------
+       INITIALISATION
+    ---------------------------------------------------------------- */
+    function init() {
+        document.getElementById('date_today').valueAsDate = new Date();
+        updateUI();
+    }
+
+    /* ----------------------------------------------------------------
+       UI — BARRE DE PROGRESSION + BOUTON RETOUR
+    ---------------------------------------------------------------- */
     function updateUI() {
-        const bar = document.getElementById('progressBar');
-        const labels = ['Évaluation','Prise en charge'];
-        const cur = navHistory.length;
+        var bar    = document.getElementById('progressBar');
+        var labels = ['Saisie', 'Orientation'];
+        var cur    = navHistory.length;
         bar.innerHTML = '';
-        for (let i = 1; i <= 2; i++) {
-            const s = document.createElement('div'); s.className = 'prog-step';
-            const c = document.createElement('div'); c.className = 'prog-circle' + (cur >= i ? ' active' : ''); c.textContent = i;
-            const l = document.createElement('div'); l.className = 'prog-label' + (cur >= i ? ' active' : ''); l.textContent = labels[i-1];
-            s.appendChild(c); s.appendChild(l);
-            if (i < 2) { const ln = document.createElement('div'); ln.className = 'prog-line' + (cur > i ? ' active' : ''); s.appendChild(ln); }
+
+        for (var i = 1; i <= 2; i++) {
+            var s  = document.createElement('div'); s.className = 'prog-step';
+            var c  = document.createElement('div');
+            c.className = 'prog-circle' + (cur >= i ? ' active' : '');
+            c.textContent = String(i);
+            var l  = document.createElement('div');
+            l.className = 'prog-label' + (cur >= i ? ' active' : '');
+            l.textContent = labels[i - 1];
+            s.appendChild(c);
+            s.appendChild(l);
+            if (i < 2) {
+                var ln = document.createElement('div');
+                ln.className = 'prog-line' + (cur > i ? ' active' : '');
+                s.appendChild(ln);
+            }
             bar.appendChild(s);
         }
-        const btn = document.getElementById('btn-retour');
+
+        var btn = document.getElementById('btn-retour');
         if (btn) btn.classList.toggle('visible', navHistory.length > 1);
     }
 
-    window.goTo = function(branch) {
-        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
-        document.getElementById('step-' + branch).classList.add('active');
-        navHistory.push('step-' + branch);
+    /* ----------------------------------------------------------------
+       CALCUL DU TERME (depuis DDR)
+    ---------------------------------------------------------------- */
+    function calculerTerme() {
+        var ddrVal   = document.getElementById('ddr').value;
+        var todayVal = document.getElementById('date_today').value;
+        var display  = document.getElementById('terme_display');
+        var box      = document.getElementById('terme_display_box');
+
+        if (!ddrVal || !todayVal) {
+            display.textContent = '\u2014 SA';
+            currentTerme = { sa: null, jr: 0 };
+            box.classList.remove('hors-limite');
+            return;
+        }
+
+        var ddrDate   = new Date(ddrVal);
+        var todayDate = new Date(todayVal);
+        var diffDays  = Math.floor((todayDate - ddrDate) / 86400000);
+
+        if (diffDays < 0) {
+            display.textContent = 'DDR future ?';
+            currentTerme = { sa: null, jr: 0 };
+            box.classList.add('hors-limite');
+            return;
+        }
+
+        var sa = Math.floor(diffDays / 7);
+        var jr = diffDays % 7;
+        currentTerme = { sa: sa, jr: jr };
+        display.textContent = sa + ' SA ' + jr + 'j';
+
+        /* FIX 6 : indicateur hors limites MAP */
+        box.classList.toggle('hors-limite', sa < 22 || sa > 36 || (sa === 36 && jr > 6));
+    }
+
+    /* ----------------------------------------------------------------
+       CALCUL DU TERME (saisie manuelle)
+    ---------------------------------------------------------------- */
+    function updateTermeDisplay() {
+        var saInput  = document.getElementById('sa_manual').value;
+        var jrInput  = document.getElementById('jr_manual').value;
+        var display  = document.getElementById('terme_display');
+        var box      = document.getElementById('terme_display_box');
+        var sa       = saInput !== '' ? parseInt(saInput, 10) : NaN;
+        var jr       = jrInput !== '' ? parseInt(jrInput, 10) : 0;
+
+        if (isNaN(sa) || sa < 20) {
+            display.textContent = '\u2014 SA';
+            currentTerme = { sa: null, jr: 0 };
+            box.classList.remove('hors-limite');
+            return;
+        }
+        currentTerme = { sa: sa, jr: jr };
+        display.textContent = sa + ' SA ' + jr + 'j';
+        box.classList.toggle('hors-limite', sa < 22 || sa > 36 || (sa === 36 && jr > 6));
+    }
+
+    /* ----------------------------------------------------------------
+       SWITCH MODE TERME
+    ---------------------------------------------------------------- */
+    function switchModeTerme() {
+        var mode = document.querySelector('input[name="mode_terme"]:checked').value;
+        document.getElementById('zone_ddr').style.display    = (mode === 'ddr')    ? 'block' : 'none';
+        document.getElementById('zone_manual').style.display = (mode === 'manual') ? 'block' : 'none';
+        document.getElementById('terme_display').textContent = '\u2014 SA';
+        document.getElementById('terme_display_box').classList.remove('hors-limite');
+        currentTerme = { sa: null, jr: 0 };
+    }
+
+    /* ----------------------------------------------------------------
+       SYNCHRONISATION LC → radio col (feedback visuel immédiat)
+    ---------------------------------------------------------------- */
+    function onLcInput() {
+        var lcVal = document.getElementById('lc').value;
+        if (lcVal === '') return; /* laisser le radio libre si LC effacée */
+        var lc = parseInt(lcVal, 10);
+        if (isNaN(lc)) return;
+        var target = lc >= 25 ? 'long' : (lc >= 15 ? 'court' : 'tres_court');
+        document.getElementById('col_' + target).checked = true;
+    }
+
+    /* ----------------------------------------------------------------
+       RÉSUMÉ PARAMÈTRES
+       FIX 1 : appelé après colFinal est fixé
+    ---------------------------------------------------------------- */
+    function genererResume(colFinal, rpmVal, lcVal) {
+        var termeStr = currentTerme.sa
+            ? (currentTerme.sa + ' SA ' + currentTerme.jr + 'j')
+            : '\u2014';
+
+        var colStr = {
+            long:       'Long (\u2265\u202525\u202fmm)',
+            court:      'Court (15\u201325\u202fmm)',
+            tres_court: 'Tr\u00e8s court (< 15\u202fmm) / dilat\u00e9'
+        }[colFinal] || '\u2014';
+
+        return '<div class="summary-box">'
+            + '<div class="summary-title">\uD83D\uDCCB Param\u00e8tres \u00e9valu\u00e9s</div>'
+            + '<div class="summary-grid">'
+            + '<div class="summary-item"><div class="s-label">Terme</div><div class="s-value">' + termeStr + '</div></div>'
+            + '<div class="summary-item"><div class="s-label">Membranes</div><div class="s-value">' + (rpmVal === 'oui' ? 'RPM confirm\u00e9e' : 'Intactes') + '</div></div>'
+            + '<div class="summary-item"><div class="s-label">Col</div><div class="s-value">' + colStr + '</div></div>'
+            + '<div class="summary-item"><div class="s-label">LC</div><div class="s-value">' + (lcVal !== null ? lcVal + '\u202fmm' : '\u2014') + '</div></div>'
+            + '</div></div>';
+    }
+
+    /* ----------------------------------------------------------------
+       RÈGLES CLINIQUES PAR TERME
+       FIX 4 : seuils RPM affinés (34–36 SA = attitude conservatrice)
+    ---------------------------------------------------------------- */
+    function genererReglesTerme(sa, isRPM) {
+        /* Grande prématurité : < 32 SA */
+        if (sa < 32) {
+            return '<div class="term-rule-box high-risk">'
+                + '<h3>\uD83D\uDEA8 R\u00e8gles cliniques imp\u00e9ratives (Terme < 32\u202fSA) \u2014 Grande Pr\u00e9maturit\u00e9</h3>'
+                + '<ul>'
+                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E EN URGENCE</span> \u2014 B\u00e9tam\u00e9thasone 12\u202fmg IM \u00d72 \u00e0 24h d\u2019intervalle.</li>'
+                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> si accouchement imminent \u2014 Bolus 4\u202fg IV sur 20\u202fmin puis 1\u202fg/h jusqu\u2019\u00e0 l\u2019accouchement ou 24h.</li>'
+                + '<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour permettre la corticoth\u00e9rapie et le transfert (48h).</li>'
+                + '<li><strong>Transfert (TIU) :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> vers maternit\u00e9 de Niveau III si non sur place.</li>'
+                + '</ul></div>';
+        }
+
+        /* Prématurité modérée : 32–33 SA */
+        if (sa < 34) {
+            return '<div class="term-rule-box mid-risk">'
+                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (Terme 32\u2013\u202f33\u202fSA)</h3>'
+                + '<ul>'
+                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> \u2014 B\u00e9tam\u00e9thasone 12\u202fmg IM \u00d72 \u00e0 24h d\u2019intervalle.</li>'
+                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> pour la neuroprotection (seuil &lt;\u202f32\u202fSA).</li>'
+                + '<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour gagner 48h et assurer l\u2019efficacit\u00e9 de la corticoth\u00e9rapie.</li>'
+                + '<li><strong>Transfert (TIU) :</strong> \u00c0 discuter vers Niveau III selon contexte et protocole local.</li>'
+                + '</ul></div>';
+        }
+
+        /* FIX 4 — RPM 34–36 SA : attitude conservatrice, pas déclenchement systématique */
+        if (isRPM && sa >= 34 && sa <= 36) {
+            return '<div class="term-rule-box mid-risk">'
+                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (RPM \u2014 Terme 34\u201336\u202fSA)</h3>'
+                + '<ul>'
+                + '<li><strong>Attitude obstetricale :</strong> <span style="color:var(--ambre);font-weight:700;">CONSERVATRICE sous surveillance</span> \u2014 Le d\u00e9clenchement syst\u00e9matique n\u2019est pas recommand\u00e9 avant 37\u202fSA en l\u2019absence de chorioamniotite.</li>'
+                + '<li><strong>Corticoth\u00e9rapie :</strong> \u00c0 discuter selon protocole local (certains centres la proposent jusqu\u2019\u00e0 36\u202fSA).</li>'
+                + '<li><strong>Antibioprophylaxie :</strong> <span style="color:var(--vert-vif);font-weight:700;">MAINTENUE</span> (Amoxicilline 1\u202fg \u00d73/j) jusqu\u2019\u00e0 l\u2019accouchement.</li>'
+                + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> en cas de RPM.</li>'
+                + '<li><strong>Extraction :</strong> Imm\u00e9diate si chorioamniotite, souffrance f\u0153tale ou non-progression.</li>'
+                + '</ul></div>';
+        }
+
+        /* ≥ 34 SA sans RPM, ou ≥ 37 SA avec RPM */
+        if (isRPM) {
+            return '<div class="term-rule-box safe-term">'
+                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (RPM \u2014 Terme \u2265\u202f37\u202fSA)</h3>'
+                + '<ul>'
+                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span>.</li>'
+                + '<li><strong>Attitude obstetricale :</strong> <span style="color:var(--vert-vif);font-weight:700;">D\u00c9CLENCHEMENT DU TRAVAIL RECOMMAND\u00c9</span> pour limiter le risque de chorioamniotite.</li>'
+                + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">CONTRE-INDIQU\u00c9E</span>.</li>'
+                + '<li><strong>Antibioprophylaxie :</strong> Maintenue jusqu\u2019\u00e0 l\u2019accouchement.</li>'
+                + '</ul></div>';
+        }
+
+        /* MAP sans RPM, ≥ 34 SA */
+        return '<div class="term-rule-box safe-term">'
+            + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (Terme \u2265\u202f34\u202fSA)</h3>'
+            + '<ul>'
+            + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span>.</li>'
+            + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> (seuil &lt;\u202f32\u202fSA).</li>'
+            + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON RECOMMAND\u00c9E</span> de routine (sauf pour permettre un TIU exceptionnel).</li>'
+            + '<li><strong>Orientation :</strong> Maternit\u00e9 de Niveau II ou I selon protocole local.</li>'
+            + '</ul></div>';
+    }
+
+    /* ----------------------------------------------------------------
+       INJECTION SIGNES DE GRAVITÉ (FIX #5)
+    ---------------------------------------------------------------- */
+    function genererDetailGravite(chorio, hemorr, sff) {
+        var items = [];
+        if (chorio) items.push({
+            titre: 'Suspicion de chorioamniotite',
+            detail: 'Bilan infectieux en urgence (NFS, CRP, h\u00e9mocultures). Extraction imm\u00e9diate si diagnostic confirm\u00e9, quel que soit le terme. Tocolyse CONTRE-INDIQU\u00c9E.'
+        });
+        if (hemorr) items.push({
+            titre: 'M\u00e9trorragies associ\u00e9es',
+            detail: '\u00c9liminer HRPP et placenta pr\u00e6via en urgence (\u00e9chographie). Groupage + RAI + NFS. Surveillance h\u00e9modynamique.'
+        });
+        if (sff) items.push({
+            titre: 'Souffrance f\u0153tale (RCF pathologique)',
+            detail: 'Monitoring continu. Pr\u00e9parer extraction si souffrance persist. Tocolyse CONTRE-INDIQU\u00c9E en cas de souffrance f\u0153tale.'
+        });
+
+        if (!items.length) return '';
+
+        var html = '<div class="alert-gravite">'
+            + '<div class="ag-title">\u26A0 Signes de gravit\u00e9 d\u00e9tect\u00e9s</div>';
+        items.forEach(function (it) {
+            html += '<p><strong>' + it.titre + '</strong><br>' + it.detail + '</p><br>';
+        });
+        html += '</div>';
+        return html;
+    }
+
+    /* ----------------------------------------------------------------
+       NAVIGATION
+    ---------------------------------------------------------------- */
+    function showStep(stepId) {
+        allStepIds.forEach(function (id) {
+            document.getElementById(id).classList.remove('active');
+        });
+        document.getElementById(stepId).classList.add('active');
+    }
+
+    function goTo(stepId) {
+        navHistory.push(stepId);
+        showStep(stepId);
         updateUI();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    }
 
-    window.goBack = function() {
+    function goBack() {
         if (navHistory.length <= 1) return;
         navHistory.pop();
-        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
-        document.getElementById(navHistory[navHistory.length - 1]).classList.add('active');
+        showStep(navHistory[navHistory.length - 1]);
         updateUI();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    }
 
-    window.resetTool = function() {
+    /* ----------------------------------------------------------------
+       VALIDATION & ORIENTATION PRINCIPALE
+    ---------------------------------------------------------------- */
+    function validerEtOrienter() {
+        if (!currentTerme.sa || currentTerme.sa < 20) {
+            alert('Veuillez renseigner le terme (\u2265\u202f20\u202fSA) avant de valider.');
+            return;
+        }
+
+        var rpm    = document.querySelector('input[name="rpm"]:checked').value;
+        var colRad = document.querySelector('input[name="col"]:checked').value;
+
+        /* FIX 2 : lc robuste */
+        var lcInput = document.getElementById('lc').value;
+        var lc      = lcInput !== '' ? parseInt(lcInput, 10) : null;
+        if (lc !== null && isNaN(lc)) lc = null;
+
+        /* FIX 1 : déterminer colFinal D'ABORD */
+        var colFinal = colRad;
+        if (lc !== null) {
+            colFinal = lc >= 25 ? 'long' : (lc >= 15 ? 'court' : 'tres_court');
+            document.getElementById('col_' + colFinal).checked = true;
+        }
+
+        /* FIX 5 : signes de gravité */
+        var chorio = document.getElementById('sg_chorio').checked;
+        var hemorr = document.getElementById('sg_hemorr').checked;
+        var sff    = document.getElementById('sg_sff').checked;
+        var hasGravite = chorio || hemorr || sff;
+
+        /* Générer résumé (FIX 1 : maintenant après colFinal fixé) */
+        var resume = genererResume(colFinal, rpm, lc);
+
+        if (hasGravite) {
+            /* === BRANCHE URGENCE === */
+            var sumEl = document.getElementById('summary-urgence');
+            if (sumEl) sumEl.innerHTML = resume;
+
+            var gravEl = document.getElementById('signes-gravite-detail');
+            if (gravEl) gravEl.innerHTML = genererDetailGravite(chorio, hemorr, sff);
+
+            var trEl = document.getElementById('term-rules-urgence');
+            if (trEl) trEl.innerHTML = genererReglesTerme(currentTerme.sa, rpm === 'oui');
+
+            goTo('step-urgence');
+            return;
+        }
+
+        /* === BRANCHES STANDARD === */
+        var branchMap = {
+            'rpm':        'step-rpm',
+            'col-long':   'step-col-long',
+            'col-court':  'step-col-court',
+            'col-tres-court': 'step-col-tres-court'
+        };
+
+        var branchKey;
+        if (rpm === 'oui') {
+            branchKey = 'rpm';
+        } else if (colFinal === 'long') {
+            branchKey = 'col-long';
+        } else if (colFinal === 'court') {
+            branchKey = 'col-court';
+        } else {
+            branchKey = 'col-tres-court';
+        }
+
+        var stepId   = branchMap[branchKey];
+        var summId   = 'summary-' + branchKey;
+        var termRId  = 'term-rules-' + branchKey;
+
+        var sumEl2 = document.getElementById(summId);
+        if (sumEl2) sumEl2.innerHTML = resume;
+
+        var trEl2 = document.getElementById(termRId);
+        if (trEl2) trEl2.innerHTML = genererReglesTerme(currentTerme.sa, rpm === 'oui');
+
+        goTo(stepId);
+    }
+
+    /* ----------------------------------------------------------------
+       RESET
+    ---------------------------------------------------------------- */
+    function reset() {
         navHistory = ['step1'];
-        allSteps.forEach(id => document.getElementById(id).classList.remove('active'));
-        document.getElementById('step1').classList.add('active');
+        showStep('step1');
+
+        document.getElementById('ddr').value       = '';
+        document.getElementById('sa_manual').value = '';
+        document.getElementById('jr_manual').value = '';
+        document.getElementById('lc').value        = '';
+        document.getElementById('mode_ddr').checked     = true;
+        document.getElementById('zone_ddr').style.display    = 'block';
+        document.getElementById('zone_manual').style.display = 'none';
+        document.getElementById('rpm_non').checked  = true;
+        document.getElementById('col_long').checked = true;
+        document.getElementById('sg_chorio').checked = false;
+        document.getElementById('sg_hemorr').checked = false;
+        document.getElementById('sg_sff').checked    = false;
+        document.getElementById('terme_display').textContent = '\u2014 SA';
+        document.getElementById('terme_display_box').classList.remove('hors-limite');
+        document.getElementById('date_today').valueAsDate = new Date();
+
+        currentTerme = { sa: null, jr: 0 };
         updateUI();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ----------------------------------------------------------------
+       API PUBLIQUE
+    ---------------------------------------------------------------- */
+    return {
+        init:               init,
+        calculerTerme:      calculerTerme,
+        updateTermeDisplay: updateTermeDisplay,
+        switchModeTerme:    switchModeTerme,
+        onLcInput:          onLcInput,
+        validerEtOrienter:  validerEtOrienter,
+        goBack:             goBack,
+        reset:              reset
     };
 
-    updateUI();
 })();
+
+mapTool.init();
 </script>
 
-      <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </body>
 </html>
