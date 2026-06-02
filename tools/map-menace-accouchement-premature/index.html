@@ -992,7 +992,17 @@ var mapTool = (function () {
        FIX 4 : seuils RPM affinés (34–36 SA = attitude conservatrice)
     ---------------------------------------------------------------- */
     function genererReglesTerme(sa, isRPM) {
-        /* Grande prématurité : < 32 SA */
+        /* FIX 2.1 : Hors définition MAP (< 22 SA) — aucune recommandation */
+        if (sa < 22) {
+            return '<div class="term-rule-box high-risk">'
+                + '<h3>\u26D4 Terme hors d\u00e9finition MAP (\u202f' + sa + '\u202fSA\u202f)</h3>'
+                + '<ul>'
+                + '<li>La MAP est d\u00e9finie entre <strong>22\u202fSA et 36\u202fSA\u202f+\u202f6\u202fj</strong>. Aucune recommandation de cet outil n\u2019est applicable \u00e0 ce terme.</li>'
+                + '<li>En dessous de 22\u202fSA, la prise en charge rel\u00e8ve d\u2019une d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e (viabilit\u00e9, CPDPN, soins palliatifs p\u00e9rinataux).</li>'
+                + '<li><strong>Ne pas initier corticoth\u00e9rapie, sulfate de magn\u00e9sium, ni tocolyse sur la base de cet outil.</strong></li>'
+                + '</ul></div>';
+        }
+        /* Grande prématurité : 22–31 SA */
         if (sa < 32) {
             return '<div class="term-rule-box high-risk">'
                 + '<h3>\uD83D\uDEA8 R\u00e8gles cliniques imp\u00e9ratives (Terme < 32\u202fSA) \u2014 Grande Pr\u00e9maturit\u00e9</h3>'
@@ -1112,6 +1122,15 @@ var mapTool = (function () {
     function validerEtOrienter() {
         if (!currentTerme.sa || currentTerme.sa < 20) {
             alert('Veuillez renseigner le terme (\u2265\u202f20\u202fSA) avant de valider.');
+            return;
+        }
+        /* FIX 2.1 : bloquer si terme hors definition MAP (< 22 SA ou > 36+6 SA) */
+        if (currentTerme.sa < 22) {
+            alert('Terme < 22 SA (' + currentTerme.sa + ' SA ' + currentTerme.jr + 'j) : hors d\u00e9finition de la MAP.\n\nCet outil couvre les termes de 22 SA \u00e0 36 SA + 6j.\nLa prise en charge avant 22 SA rel\u00e8ve d\u2019une d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e (viabilit\u00e9, CPDPN).');
+            return;
+        }
+        if (currentTerme.sa > 36 || (currentTerme.sa === 36 && currentTerme.jr > 6)) {
+            alert('Terme \u2265 37 SA (' + currentTerme.sa + ' SA ' + currentTerme.jr + 'j) : hors d\u00e9finition de la MAP.\n\nCet outil couvre les termes de 22 SA \u00e0 36 SA + 6j.');
             return;
         }
 
