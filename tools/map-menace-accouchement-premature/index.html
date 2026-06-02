@@ -162,7 +162,7 @@
         .ibox.or ul li::before { color: var(--or); }
 
         /* ============================================================
-           ALERTE GRAVITÉ
+           ALERTE GRAVITÉ — NOUVEAU (FIX #5)
         ============================================================ */
         .alert-gravite {
             background: #fee2e2; border: 2px solid var(--rouge-vif); border-radius: var(--radius);
@@ -225,6 +225,7 @@
         .terme-display .td-label { font-size: 11px; color: var(--vert); text-transform: uppercase; font-weight: 600; letter-spacing: 0.04em; }
         .terme-display .td-value { font-size: 18px; font-weight: 700; color: var(--vert); }
 
+        /* Indicateur hors limites */
         .terme-display.hors-limite { background: var(--rouge-pale); border-color: var(--rouge-bord); }
         .terme-display.hors-limite .td-label,
         .terme-display.hors-limite .td-value { color: var(--rouge-vif); }
@@ -414,7 +415,7 @@
         }
 
         /* ============================================================
-           MODAL INTERNE
+           MODAL INTERNE (remplace alert natif)
         ============================================================ */
         #map-modal-overlay {
             position: fixed; inset: 0; z-index: 9999;
@@ -618,6 +619,7 @@
 
         <!-- ======================================================
              BRANCHE : URGENCE (signes de gravité)
+             FIX #5 : nouvelle branche dédiée
         ====================================================== -->
         <div class="step-content" id="step-urgence">
             <h2 class="sec-title">&#128680; Signe(s) de Gravit&#233; D&#233;tect&#233;(s) &#8212; Prise en charge imm&#233;diate</h2>
@@ -722,7 +724,7 @@
                     <ul>
                         <li>Bolus&#8239;: 6,75&#8239;mg IV sur 1&#8239;min</li>
                         <li>Entretien&#8239;: 18&#8239;mg/h sur 3h puis 6&#8239;mg/h max 45h</li>
-                        <li>CI&#8239;: terme &lt;&#8239;24&#8239;SA (pas de tocolyse de routine), souffrance f&#339;tale, RCIU s&#233;v&#232;re, RPM &gt;&#8239;30&#8239;SA</li>
+                        <li>CI&#8239;: terme &lt;&#8239;24&#8239;SA (d&#233;cision multidisciplinaire uniquement &#224; ce terme), souffrance f&#339;tale, RCIU s&#233;v&#232;re, RPM &gt;&#8239;30&#8239;SA</li>
                     </ul>
                 </div>
             </div>
@@ -772,11 +774,11 @@
                     </div>
                     <div class="exam-item">
                         <strong>3. Tocolyse</strong>
-                        <p>Si indiqu&#233;e (voir tableau du terme), 48h pour permettre la maturation. Atosiban en 1&#232;re intention &#8212; Arr&#234;t si col &#8805;&#8239;4&#8239;cm ou accouchement in&#233;vitable.</p>
+                        <p>48h pour permettre la maturation. Atosiban en 1&#232;re intention &#8212; Arr&#234;t si col &#8805;&#8239;4&#8239;cm ou accouchement in&#233;vitable.</p>
                     </div>
                     <div class="exam-item">
                         <strong>4. Cerclage d&#8217;urgence</strong>
-                        <p>&#192; discuter si col &lt;&#8239;25&#8239;mm entre 16 et 24&#8239;SA, membranes intactes, ATCD de fausse couche tardive.</p>
+                        <p>&#192; discuter si col &lt;&#8239;25&#8239;mm entre 22 et 24&#8239;SA, membranes intactes, ATCD de fausse couche tardive.</p>
                     </div>
                 </div>
             </div>
@@ -850,6 +852,18 @@
         <p class="copyright">Dr KARA-ZAITRI M.A &#169; 2026</p>
     </div>
 
+
+    <!-- ============================================================
+         MODAL INTERNE — positionné correctement dans #map-tool
+    ============================================================ -->
+    <div id="map-modal-overlay" style="display:none;" aria-modal="true" role="dialog">
+        <div id="map-modal-box">
+            <div id="map-modal-icon"></div>
+            <div id="map-modal-title"></div>
+            <div id="map-modal-body"></div>
+            <button id="map-modal-btn" onclick="mapModal.close()">OK</button>
+        </div>
+    </div>
 </div><!-- /#map-tool -->
 
 <script>
@@ -863,8 +877,6 @@
    FIX 4  : Seuils RPM affinés (34-36 SA : attitude conservatrice)
    FIX 5  : Badge CFEF libellé précis (LC cervicale uniquement)
    FIX 6  : Indicateur terme hors limites MAP
-   FIX 7  : Ajustement strict Cortico/MgSO4/Toco selon paliers SA
-            (22-23 / 24-31 / 32-33 / 34-36)
 ================================================================ */
 var mapTool = (function () {
 
@@ -1026,90 +1038,100 @@ var mapTool = (function () {
 
     /* ----------------------------------------------------------------
        RÈGLES CLINIQUES PAR TERME
-       FIX 7 : Paliers stricts (22-23 / 24-31 / 32-33 / 34-36)
+       FIX 4 : seuils RPM affinés (34–36 SA = attitude conservatrice)
     ---------------------------------------------------------------- */
     function genererReglesTerme(sa, isRPM) {
-        /* < 22 SA : Hors MAP */
+        /*
+         * PALIERS CORTICOTHÉRAPIE / TERME — CNGOF 2016 / HAS
+         * < 22 SA       : hors MAP — hors recommandation
+         * 22–23 SA      : zone de viabilité — décision multidisciplinaire, pas de cortico automatique
+         * 24–31 SA      : grande prématurité — cortico + MgSO4 + tocolyse + TIU niveau III
+         * 32–33 SA      : cortico + tocolyse — MgSO4 NON (seuil < 32 SA)
+         * 34–36 SA      : ni cortico ni MgSO4 ni tocolyse de routine
+         * RPM 34–36 SA  : attitude conservatrice (pas de déclenchement avant 37 SA sauf complication)
+         * RPM ≥ 37 SA   : déclenchement recommandé
+         */
+
+        /* ── Hors MAP < 22 SA ─────────────────────────────────────── */
         if (sa < 22) {
             return '<div class="term-rule-box high-risk">'
-                + '<h3>\u26D4 Terme hors d\u00e9finition MAP (\u202f' + sa + '\u202fSA\u202f)</h3>'
+                + '<h3>\u26D4 Terme hors d\u00e9finition MAP (' + sa + ' SA)</h3>'
                 + '<ul>'
-                + '<li>La MAP est d\u00e9finie entre <strong>22\u202fSA et 36\u202fSA\u202f+\u202f6\u202fj</strong>. Aucune recommandation de cet outil n\u2019est applicable \u00e0 ce terme.</li>'
-                + '<li>En dessous de 22\u202fSA, la prise en charge rel\u00e8ve d\u2019une d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e (viabilit\u00e9, CPDPN, soins palliatifs p\u00e9rinataux).</li>'
-                + '<li><strong>Ne pas initier corticoth\u00e9rapie, sulfate de magn\u00e9sium, ni tocolyse sur la base de cet outil.</strong></li>'
+                + '<li>La MAP est d\u00e9finie entre <strong>22 SA et 36 SA + 6j</strong>. Aucune recommandation de cet outil n\u2019est applicable \u00e0 ce terme.</li>'
+                + '<li>En dessous de 22 SA, la prise en charge rel\u00e8ve d\u2019une <strong>d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e</strong> (viabilit\u00e9, CPDPN, soins palliatifs p\u00e9rinataux).</li>'
+                + '<li><strong>Ne pas initier corticoth\u00e9rapie, sulfate de magn\u00e9sium ni tocolyse sur la base de cet outil.</strong></li>'
                 + '</ul></div>';
         }
 
-        /* 22 - 23 SA : Zone de viabilité / extrême prématurité */
-        if (sa === 22 || sa === 23) {
+        /* ── Zone de viabilité 22–23 SA ──────────────────────────── */
+        if (sa < 24) {
             return '<div class="term-rule-box high-risk">'
-                + '<h3>\uD83D\uDEA8 Extr\u00eame pr\u00e9maturit\u00e9 / Viabilit\u00e9 (' + sa + '\u202fSA)</h3>'
+                + '<h3>\u26A0\uFE0F R\u00e8gles cliniques (Terme 22\u201323 SA) \u2014 Zone de viabilit\u00e9</h3>'
                 + '<ul>'
-                + '<li><strong>D\u00e9cision multidisciplinaire :</strong> Prise en charge au cas par cas avec centre de Niveau III / CPDPN.</li>'
-                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">PAS DE CORTICOTH\u00c9RAPIE AUTOMATIQUE</span>. \u00c0 discuter selon le contexte et la viabilit\u00e9 f\u0153tale.</li>'
-                + '<li><strong>Sulfate de Magn\u00e9sium / Tocolyse :</strong> D\u00e9cision sp\u00e9cialis\u00e9e uniquement.</li>'
-                + '<li><strong>Transfert (TIU) :</strong> Concertation imm\u00e9diate avec r\u00e9animation n\u00e9onatale.</li>'
+                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> avant 24 SA (seuil de l\u2019AMM et des recommandations CNGOF/HAS).</li>'
+                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> \u00e0 ce terme.</li>'
+                + '<li><strong>Tocolyse :</strong> D\u00e9cision individualis\u00e9e selon le projet parental et le contexte clinique.</li>'
+                + '<li><strong>Transfert (TIU) :</strong> \u00c0 discuter selon le projet parental et les possibilit\u00e9s de r\u00e9animation n\u00e9onatale.</li>'
+                + '<li><strong>D\u00e9cision obligatoirement multidisciplinaire</strong> (obst\u00e9tricien senior, n\u00e9onatologiste, parents) \u2014 CPDPN si possible.</li>'
                 + '</ul></div>';
         }
 
-        /* 24 - 31 SA : Grande prématurité */
+        /* ── Grande prématurité 24–31 SA ─────────────────────────── */
         if (sa < 32) {
             return '<div class="term-rule-box high-risk">'
-                + '<h3>\uD83D\uDEA8 Grande Pr\u00e9maturit\u00e9 (24\u201331\u202fSA)</h3>'
+                + '<h3>\uD83D\uDEA8 R\u00e8gles cliniques imp\u00e9ratives (Terme 24\u201331 SA) \u2014 Grande Pr\u00e9maturit\u00e9</h3>'
                 + '<ul>'
-                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E EN URGENCE</span> \u2014 B\u00e9tam\u00e9thasone 12\u202fmg IM \u00d72 \u00e0 24h d\u2019intervalle.</li>'
-                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> si accouchement imminent (neuroprotection).</li>'
-                + '<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour permettre la maturation et le TIU.</li>'
-                + '<li><strong>Transfert (TIU) :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> vers maternit\u00e9 de Niveau III.</li>'
+                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E EN URGENCE</span> \u2014 B\u00e9tam\u00e9thasone 12 mg IM \u00d72 \u00e0 24h d\u2019intervalle.</li>'
+                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> si accouchement imminent \u2014 Bolus 4 g IV sur 20 min puis 1 g/h jusqu\u2019\u00e0 l\u2019accouchement ou 24h.</li>'
+                + '<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour permettre la corticoth\u00e9rapie et le transfert (48h).</li>'
+                + '<li><strong>Transfert (TIU) :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> vers maternit\u00e9 de Niveau III si non sur place.</li>'
                 + '</ul></div>';
         }
 
-        /* 32 - 33 SA : Prématurité modérée */
+        /* ── Prématurité modérée 32–33 SA ────────────────────────── */
         if (sa < 34) {
             return '<div class="term-rule-box mid-risk">'
-                + '<h3>\uD83D\uDCC4 Pr\u00e9maturit\u00e9 mod\u00e9r\u00e9e (32\u201333\u202fSA)</h3>'
+                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (Terme 32\u201333 SA)</h3>'
                 + '<ul>'
-                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> \u2014 B\u00e9tam\u00e9thasone 12\u202fmg IM \u00d72 \u00e0 24h d\u2019intervalle.</li>'
-                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> (seuil &lt;\u202f32\u202fSA).</li>'
-                + '<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour gagner 48h (corticoth\u00e9rapie).</li>'
-                + '<li><strong>Transfert (TIU) :</strong> \u00c0 discuter vers Niveau III ou IIb selon protocole local.</li>'
+                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> \u2014 B\u00e9tam\u00e9thasone 12 mg IM \u00d72 \u00e0 24h d\u2019intervalle.</li>'
+                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> pour la neuroprotection (seuil strict &lt; 32 SA).</li>'
+                + '<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour gagner 48h et assurer l\u2019efficacit\u00e9 de la corticoth\u00e9rapie.</li>'
+                + '<li><strong>Transfert (TIU) :</strong> \u00c0 discuter vers Niveau III selon contexte et protocole local.</li>'
                 + '</ul></div>';
         }
 
-        /* RPM 34 - 36 SA : Prématurité tardive */
+        /* ── RPM 34–36 SA : attitude conservatrice ───────────────── */
         if (isRPM && sa >= 34 && sa <= 36) {
             return '<div class="term-rule-box mid-risk">'
-                + '<h3>\uD83D\uDCC4 RPM \u2014 Pr\u00e9maturit\u00e9 tardive (34\u201336\u202fSA)</h3>'
+                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (RPM \u2014 Terme 34\u201336 SA)</h3>'
                 + '<ul>'
-                + '<li><strong>Attitude obst\u00e9tricale :</strong> <span style="color:var(--ambre);font-weight:700;">CONSERVATRICE sous surveillance</span> \u2014 D\u00e9clenchement non syst\u00e9matique sans chorioamniotite.</li>'
-                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> de routine.</li>'
-                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span>.</li>'
-                + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> (contre-indiqu\u00e9e en cas de RPM ou de routine \u00e0 ce terme).</li>'
-                + '<li><strong>Antibioprophylaxie :</strong> <span style="color:var(--vert-vif);font-weight:700;">MAINTENUE</span> (Amoxicilline 1\u202fg \u00d73/j).</li>'
-                + '<li><strong>Extraction :</strong> Imm\u00e9diate si chorioamniotite, SFF ou non-progression.</li>'
+                + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> \u2014 hors AMM apr\u00e8s 34 SA (sauf protocole local sp\u00e9cifique).</li>'
+                + '<li><strong>Attitude obstetricale :</strong> <span style="color:var(--ambre);font-weight:700;">CONSERVATRICE sous surveillance</span> \u2014 pas de d\u00e9clenchement syst\u00e9matique avant 37 SA en l\u2019absence de chorioamniotite.</li>'
+                + '<li><strong>Antibioprophylaxie :</strong> <span style="color:var(--vert-vif);font-weight:700;">MAINTENUE</span> (Amoxicilline 1 g \u00d73/j) jusqu\u2019\u00e0 l\u2019accouchement.</li>'
+                + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> en cas de RPM.</li>'
+                + '<li><strong>Extraction :</strong> Imm\u00e9diate si chorioamniotite, souffrance f\u0153tale ou non-progression.</li>'
                 + '</ul></div>';
         }
 
-        /* RPM >= 37 SA */
+        /* ── RPM ≥ 37 SA ─────────────────────────────────────────── */
         if (isRPM) {
             return '<div class="term-rule-box safe-term">'
-                + '<h3>\uD83D\uDCC4 RPM \u2014 \u00c0 terme (\u2265\u202f37\u202fSA)</h3>'
+                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (RPM \u2014 Terme \u2265 37 SA)</h3>'
                 + '<ul>'
                 + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span>.</li>'
-                + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span>.</li>'
+                + '<li><strong>Attitude obstetricale :</strong> <span style="color:var(--vert-vif);font-weight:700;">D\u00c9CLENCHEMENT DU TRAVAIL RECOMMAND\u00c9</span> pour limiter le risque de chorioamniotite.</li>'
                 + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">CONTRE-INDIQU\u00c9E</span>.</li>'
-                + '<li><strong>Attitude obst\u00e9tricale :</strong> <span style="color:var(--vert-vif);font-weight:700;">D\u00c9CLENCHEMENT DU TRAVAIL RECOMMAND\u00c9</span>.</li>'
-                + '<li><strong>Antibioprophylaxie :</strong> Maintenue.</li>'
+                + '<li><strong>Antibioprophylaxie :</strong> Maintenue jusqu\u2019\u00e0 l\u2019accouchement.</li>'
                 + '</ul></div>';
         }
 
-        /* MAP sans RPM, >= 34 SA */
+        /* ── MAP sans RPM, 34–36 SA ──────────────────────────────── */
         return '<div class="term-rule-box safe-term">'
-            + '<h3>\uD83D\uDCC4 MAP \u2014 Pr\u00e9maturit\u00e9 tardive / \u00c0 terme (\u2265\u202f34\u202fSA)</h3>'
+            + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (Terme 34\u201336 SA)</h3>'
             + '<ul>'
-            + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span>.</li>'
-            + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span>.</li>'
-            + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON RECOMMAND\u00c9E</span> de routine (sauf TIU exceptionnel).</li>'
+            + '<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> \u2014 hors AMM apr\u00e8s 34 SA selon CNGOF/HAS.</li>'
+            + '<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> (seuil strict &lt; 32 SA).</li>'
+            + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON RECOMMAND\u00c9E</span> de routine (sauf pour permettre un TIU exceptionnel).</li>'
             + '<li><strong>Orientation :</strong> Maternit\u00e9 de Niveau II ou I selon protocole local.</li>'
             + '</ul></div>';
     }
@@ -1172,25 +1194,16 @@ var mapTool = (function () {
        VALIDATION & ORIENTATION PRINCIPALE
     ---------------------------------------------------------------- */
     function validerEtOrienter() {
-        if (!currentTerme.sa || currentTerme.sa < 20) {
+        if (!currentTerme.sa || currentTerme.sa < 22) {
             mapModal.show(
                 '\u26A0\uFE0F',
-                'Terme manquant',
-                'Veuillez renseigner le terme (<strong>\u2265\u202f20\u202fSA</strong>) avant de valider.'
+                'Terme non renseign\u00e9',
+                'Veuillez renseigner le terme (<strong>\u2265\u202f22\u202fSA</strong>) avant de valider.<br><br>'
+                + 'La MAP est d\u00e9finie entre 22 SA et 36 SA + 6j. En dessous de 22 SA, la prise en charge rel\u00e8ve d\u2019une d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e.'
             );
             return;
         }
-        /* FIX 2.1 : bloquer si terme hors definition MAP (< 22 SA ou > 36+6 SA) */
-        if (currentTerme.sa < 22) {
-            mapModal.show(
-                '\u26D4',
-                'Terme hors d\u00e9finition MAP',
-                '<strong>Terme : ' + currentTerme.sa + ' SA ' + currentTerme.jr + 'j</strong> &mdash; ant\u00e9rieur \u00e0 22 SA.<br><br>'
-                + 'Cet outil couvre les termes de <strong>22 SA \u00e0 36 SA + 6j</strong>.<br>'
-                + 'En dessous de 22 SA, la prise en charge rel\u00e8ve d\u2019une <strong>d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e</strong> (viabilit\u00e9, CPDPN, soins palliatifs p\u00e9rinataux).'
-            );
-            return;
-        }
+        /* Guard < 22 SA fusionné dans le premier test ci-dessus */
         if (currentTerme.sa > 36 || (currentTerme.sa === 36 && currentTerme.jr > 6)) {
             mapModal.show(
                 '\u26D4',
@@ -1341,15 +1354,5 @@ mapTool.init();
 
 <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
-
-    <!-- MODAL INTERNE -->
-    <div id="map-modal-overlay" style="display:none;" aria-modal="true" role="dialog">
-        <div id="map-modal-box">
-            <div id="map-modal-icon"></div>
-            <div id="map-modal-title"></div>
-            <div id="map-modal-body"></div>
-            <button id="map-modal-btn" onclick="mapModal.close()">OK</button>
-        </div>
-    </div>
 </body>
 </html>
