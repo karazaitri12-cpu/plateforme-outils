@@ -413,6 +413,43 @@
             .tool-body { padding: 13px; }
             .form-row { grid-template-columns: 1fr; }
         }
+
+        /* ============================================================
+           MODAL INTERNE (remplace alert natif)
+        ============================================================ */
+        #map-modal-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(15, 40, 25, 0.55);
+            backdrop-filter: blur(2px);
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.18s ease;
+        }
+        #map-modal-box {
+            background: var(--blanc); border-radius: 10px;
+            padding: 28px 26px 22px; max-width: 420px; width: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+            border-top: 5px solid var(--rouge-vif);
+            text-align: center;
+        }
+        #map-modal-icon { font-size: 32px; margin-bottom: 10px; }
+        #map-modal-title {
+            font-size: 14px; font-weight: 700; color: var(--rouge-vif);
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+        #map-modal-body {
+            font-size: 13px; color: var(--gris-800); line-height: 1.6;
+            margin-bottom: 20px; text-align: left;
+        }
+        #map-modal-btn {
+            background: linear-gradient(135deg, var(--vert) 0%, var(--vert-vif) 100%);
+            color: var(--blanc); border: none; padding: 10px 32px;
+            border-radius: var(--radius); font-size: 13px; font-weight: 700;
+            font-family: var(--font); cursor: pointer; letter-spacing: 0.04em;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        #map-modal-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20,83,45,0.25); }
     </style>
 </head>
 <body>
@@ -1121,16 +1158,32 @@ var mapTool = (function () {
     ---------------------------------------------------------------- */
     function validerEtOrienter() {
         if (!currentTerme.sa || currentTerme.sa < 20) {
-            alert('Veuillez renseigner le terme (\u2265\u202f20\u202fSA) avant de valider.');
+            mapModal.show(
+                '\u26A0\uFE0F',
+                'Terme manquant',
+                'Veuillez renseigner le terme (<strong>\u2265\u202f20\u202fSA</strong>) avant de valider.'
+            );
             return;
         }
         /* FIX 2.1 : bloquer si terme hors definition MAP (< 22 SA ou > 36+6 SA) */
         if (currentTerme.sa < 22) {
-            alert('Terme < 22 SA (' + currentTerme.sa + ' SA ' + currentTerme.jr + 'j) : hors d\u00e9finition de la MAP.\n\nCet outil couvre les termes de 22 SA \u00e0 36 SA + 6j.\nLa prise en charge avant 22 SA rel\u00e8ve d\u2019une d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e (viabilit\u00e9, CPDPN).');
+            mapModal.show(
+                '\u26D4',
+                'Terme hors d\u00e9finition MAP',
+                '<strong>Terme : ' + currentTerme.sa + ' SA ' + currentTerme.jr + 'j</strong> &mdash; ant\u00e9rieur \u00e0 22 SA.<br><br>'
+                + 'Cet outil couvre les termes de <strong>22 SA \u00e0 36 SA + 6j</strong>.<br>'
+                + 'En dessous de 22 SA, la prise en charge rel\u00e8ve d\u2019une <strong>d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e</strong> (viabilit\u00e9, CPDPN, soins palliatifs p\u00e9rinataux).'
+            );
             return;
         }
         if (currentTerme.sa > 36 || (currentTerme.sa === 36 && currentTerme.jr > 6)) {
-            alert('Terme \u2265 37 SA (' + currentTerme.sa + ' SA ' + currentTerme.jr + 'j) : hors d\u00e9finition de la MAP.\n\nCet outil couvre les termes de 22 SA \u00e0 36 SA + 6j.');
+            mapModal.show(
+                '\u26D4',
+                'Terme hors d\u00e9finition MAP',
+                '<strong>Terme : ' + currentTerme.sa + ' SA ' + currentTerme.jr + 'j</strong> &mdash; \u2265 37 SA.<br><br>'
+                + 'Cet outil couvre les termes de <strong>22 SA \u00e0 36 SA + 6j</strong>.<br>'
+                + '\u00c0 partir de 37 SA, le terme est consid\u00e9r\u00e9 \u00e0 terme et sort du cadre de la MAP.'
+            );
             return;
         }
 
@@ -1249,10 +1302,39 @@ var mapTool = (function () {
 
 })();
 
+
+/* ================================================================
+   MODAL INTERNE — mapModal
+================================================================ */
+var mapModal = (function () {
+    function show(icon, title, bodyHtml) {
+        document.getElementById('map-modal-icon').textContent  = icon;
+        document.getElementById('map-modal-title').textContent = title;
+        document.getElementById('map-modal-body').innerHTML    = bodyHtml;
+        var overlay = document.getElementById('map-modal-overlay');
+        overlay.style.display = 'flex';
+        document.getElementById('map-modal-btn').focus();
+    }
+    function close() {
+        document.getElementById('map-modal-overlay').style.display = 'none';
+    }
+    return { show: show, close: close };
+})();
+
 mapTool.init();
 </script>
 
 <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+
+    <!-- MODAL INTERNE -->
+    <div id="map-modal-overlay" style="display:none;" aria-modal="true" role="dialog">
+        <div id="map-modal-box">
+            <div id="map-modal-icon"></div>
+            <div id="map-modal-title"></div>
+            <div id="map-modal-body"></div>
+            <button id="map-modal-btn" onclick="mapModal.close()">OK</button>
+        </div>
+    </div>
 </body>
 </html>
