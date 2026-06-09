@@ -493,6 +493,77 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 ::-webkit-scrollbar { display: none; }
 
 
+   /* =============================================
+   ANOMALIES (ACCORDÉONS DE L'OUTIL 1)
+   ============================================= */
+#ecf2-root .ecf2-anomaly {
+  background: #fff !important;
+  border: 1px solid #d8dfe8 !important;
+  border-radius: 7px !important;
+  margin-bottom: 10px !important;
+  overflow: hidden !important;
+}
+#ecf2-root .ecf2-anomaly-header {
+  padding: 10px 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+}
+#ecf2-root .ecf2-anomaly-header:hover {
+  background: #f4f6f9 !important;
+}
+#ecf2-root .ecf2-anomaly-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 8px !important;
+  border-radius: 12px !important;
+  font-family: 'Trebuchet MS', Arial, sans-serif !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
+  flex-shrink: 0 !important;
+}
+#ecf2-root .ecf2-anomaly-tag.tag-crit { background: #fef2f2 !important; color: #c8102e !important; border: 1px solid #fca5a5 !important; }
+#ecf2-root .ecf2-anomaly-tag.tag-maj { background: #fff7ed !important; color: #b45309 !important; border: 1px solid #fdba74 !important; }
+#ecf2-root .ecf2-anomaly-name {
+  font-size: 13.5px !important; font-weight: 700 !important; color: #1a3a5c !important; flex: 1 !important;
+}
+#ecf2-root .ecf2-anomaly-toggle {
+  font-size: 16px !important; color: #aab4c0 !important; transition: transform 0.3s !important; margin-left: auto !important;
+}
+#ecf2-root .ecf2-anomaly.open .ecf2-anomaly-toggle { transform: rotate(180deg) !important; }
+#ecf2-root .ecf2-anomaly-body {
+  display: none !important;
+  padding: 12px 16px !important;
+  border-top: 1px solid #e8ecf2 !important;
+  background: #fafbfd !important;
+}
+#ecf2-root .ecf2-anomaly.open .ecf2-anomaly-body { display: block !important; }
+#ecf2-root .ecf2-anomaly-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  gap: 10px !important;
+}
+#ecf2-root .ecf2-anomaly-item {
+  padding: 8px 12px !important;
+  border-radius: 5px !important;
+  border: 1px solid #e0e6ef !important;
+  background: #fff !important;
+}
+#ecf2-root .ecf2-anomaly-item h5 {
+  font-family: 'Trebuchet MS', Arial, sans-serif !important;
+  font-size: 11px !important; font-weight: 700 !important; color: #c8a84b !important;
+  text-transform: uppercase !important; letter-spacing: 0.4px !important; margin-bottom: 5px !important;
+}
+#ecf2-root .ecf2-anomaly-item p,
+#ecf2-root .ecf2-anomaly-item ul { font-size: 12.5px !important; color: #2c3e50 !important; list-style: none !important; padding: 0 !important; margin: 0 !important; line-height: 1.5 !important; }
+#ecf2-root .ecf2-anomaly-item ul li { padding: 2px 0 2px 14px !important; position: relative !important; }
+#ecf2-root .ecf2-anomaly-item ul li::before { content: "\2192" !important; position: absolute !important; left: 0 !important; color: #1a3a5c !important; }
+
+
 /* --- CORRECTION FORCEE DU FOOTER --- */
 #ecf2-root .ecf2-footer {
   background: #f0f2f7 !important;
@@ -545,6 +616,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <button class="ecf2-tab" data-panel="biometrie" role="tab">Biom&#233;trie &amp; Z-Score</button>
     <button class="ecf2-tab" data-panel="doppler" role="tab">Doppler &amp; Rythme</button>
     <button class="ecf2-tab" data-panel="algo" role="tab">Algorithmes</button>
+    <button class="ecf2-tab" data-panel="anomalies" role="tab">Anomalies</button>
     <button class="ecf2-tab" data-panel="cardiopathies" role="tab">Cardiopathies</button>
     <button class="ecf2-tab" data-panel="checklist" role="tab">Checklist &amp; CR</button>
     <button class="ecf2-tab" data-panel="quiz" role="tab">Quiz</button>
@@ -1174,6 +1246,297 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div><!-- fin tree-incomplet -->
 
   </div><!-- fin panel-algo -->
+
+
+   <!-- ============================================================
+       PANEL NOUVEAU : ANOMALIES
+       ============================================================ -->
+  <div class="ecf2-panel" id="panel-anomalies">
+
+    <div class="ecf2-box danger">
+      <span class="ecf2-box-title">&#128680; Classification pronostique</span>
+      Les cardiopathies congénitales sont classées selon leur sévérité fonctionnelle pronostique. Les cardiopathies critiques (ductodépendantes) nécessitent une prise en charge néonatale immédiate par prostaglandines E1 et transfert en centre de cardiologie pédiatrique.
+    </div>
+
+    <div class="ecf2-section-title">Cardiopathies cyanogènes — Ductodépendantes</div>
+
+    <div class="ecf2-anomaly open">
+      <div class="ecf2-anomaly-header">
+        <span class="ecf2-anomaly-tag tag-crit">CRITIQUE</span>
+        <span class="ecf2-anomaly-name">Transposition des gros vaisseaux (TGV)</span>
+        <span class="ecf2-anomaly-toggle">&#9660;</span>
+      </div>
+      <div class="ecf2-anomaly-body">
+        <div class="ecf2-anomaly-grid">
+          <div class="ecf2-anomaly-item">
+            <h5>Définition</h5>
+            <p>Discordance ventriculo-artérielle : Ao naît du VD, AP naît du VG. Coupe 4C souvent normale.</p>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Signes échographiques</h5>
+            <ul>
+              <li>Vaisseaux parallèles (RVOT/LVOT) — signe majeur</li>
+              <li>Absence de croisement des gros vaisseaux</li>
+              <li>Ao antérieure, AP postérieure (TGV D)</li>
+              <li>Coupe 3V : AP &lt; Ao (inversé)</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Pronostic / CAT</h5>
+            <ul>
+              <li>Urgence néonatale — PGE1 immédiate</li>
+              <li>Rashkind en urgence si FO restrictif</li>
+              <li>Switch artériel à J5–J15</li>
+              <li>Mortalité chirurgicale &lt; 5 %</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Anomalies associées</h5>
+            <ul>
+              <li>CIV dans 40 % des cas</li>
+              <li>Sténose pulmonaire (10 %)</li>
+              <li>Anomalies coronaires fréquentes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecf2-anomaly">
+      <div class="ecf2-anomaly-header">
+        <span class="ecf2-anomaly-tag tag-crit">CRITIQUE</span>
+        <span class="ecf2-anomaly-name">Syndrome d'hypoplasie du cœur gauche (SHVG)</span>
+        <span class="ecf2-anomaly-toggle">&#9660;</span>
+      </div>
+      <div class="ecf2-anomaly-body">
+        <div class="ecf2-anomaly-grid">
+          <div class="ecf2-anomaly-item">
+            <h5>Définition</h5>
+            <p>Ensemble d'anomalies avec atrésie ou hypoplasie sévère de la valve mitrale, Ao ascendante, et VG.</p>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Signes échographiques</h5>
+            <ul>
+              <li>VG très hypoplasique (lame ventriculaire)</li>
+              <li>Aorte ascendante hypoplasique (&lt; 3 mm)</li>
+              <li>Arche aortique petite, flux rétrograde (doppler)</li>
+              <li>VD dilaté, AP large</li>
+              <li>Coupe 4C très asymétrique (VD dominant)</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Pronostic / CAT</h5>
+            <ul>
+              <li>Ductodépendant systémique — PGE1 immédiat</li>
+              <li>Stratégie de Norwood (3 temps)</li>
+              <li>Ou transplantation cardiaque</li>
+              <li>Survie à 5 ans &approx; 70 % (centres référents)</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Anomalies associées</h5>
+            <ul>
+              <li>Anomalies chromosomiques (Turner, T18)</li>
+              <li>Foramen ovale restrictif = urgence</li>
+              <li>Retour veineux pulmonaire anormal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecf2-anomaly">
+      <div class="ecf2-anomaly-header">
+        <span class="ecf2-anomaly-tag tag-crit">CRITIQUE</span>
+        <span class="ecf2-anomaly-name">Tétralogie de Fallot (TDF)</span>
+        <span class="ecf2-anomaly-toggle">&#9660;</span>
+      </div>
+      <div class="ecf2-anomaly-body">
+        <div class="ecf2-anomaly-grid">
+          <div class="ecf2-anomaly-item">
+            <h5>Tétrade caractéristique</h5>
+            <ul>
+              <li>CIV périmembraneuse large sous-aortique</li>
+              <li>Sténose pulmonaire infundibulaire</li>
+              <li>Dextroposition aortique (chevauchement &gt; 50 %)</li>
+              <li>Hypertrophie ventriculaire droite (HVD) — tardive</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Signes échographiques</h5>
+            <ul>
+              <li>Axe cardiaque augmenté (dévié à gauche)</li>
+              <li>Aorte large chevauchant le septum (LVOT)</li>
+              <li>AP hypoplasique (plan 3V)</li>
+              <li>CIV sur la coupe 4C</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Pronostic / CAT</h5>
+            <ul>
+              <li>Correction chirurgicale à 3–6 mois</li>
+              <li>PGE1 si formes sévères avec atrésie pulmonaire</li>
+              <li>Survie globale &gt; 95 % après chirurgie</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Associations importantes</h5>
+            <ul>
+              <li>Délétion 22q11 dans 15–20 % des cas</li>
+              <li>Trisomie 21 (5–10 %)</li>
+              <li>Arc aortique droit dans 25 %</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecf2-section-title">Cardiopathies non cyanogènes — Shunts</div>
+
+    <div class="ecf2-anomaly">
+      <div class="ecf2-anomaly-header">
+        <span class="ecf2-anomaly-tag tag-maj">MAJEUR</span>
+        <span class="ecf2-anomaly-name">Communication interventriculaire (CIV)</span>
+        <span class="ecf2-anomaly-toggle">&#9660;</span>
+      </div>
+      <div class="ecf2-anomaly-body">
+        <div class="ecf2-anomaly-grid">
+          <div class="ecf2-anomaly-item">
+            <h5>Types et fréquence</h5>
+            <ul>
+              <li>Périmembraneuse (80 %) — LVOT</li>
+              <li>Trabéculaire musculaire (15 %)</li>
+              <li>Infundibulaire (5 %) — sous-pulmonaire</li>
+              <li>Inlet (canal AV partiel)</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Signes échographiques</h5>
+            <ul>
+              <li>Discontinuité septale en 2D</li>
+              <li>Flux trans-septal au doppler couleur</li>
+              <li>Pas de différence de pression in utero</li>
+              <li>Petites CIV peuvent être manquées</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Pronostic</h5>
+            <ul>
+              <li>Fermeture spontanée dans 30–40 % (petites)</li>
+              <li>Fermeture chirurgicale ou cathéter si grande</li>
+              <li>Risque HTAP si grande non traitée</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecf2-anomaly">
+      <div class="ecf2-anomaly-header">
+        <span class="ecf2-anomaly-tag tag-crit">CRITIQUE</span>
+        <span class="ecf2-anomaly-name">Canal atrioventriculaire complet (CAVC)</span>
+        <span class="ecf2-anomaly-toggle">&#9660;</span>
+      </div>
+      <div class="ecf2-anomaly-body">
+        <div class="ecf2-anomaly-grid">
+          <div class="ecf2-anomaly-item">
+            <h5>Définition</h5>
+            <p>Grande CIA ostium primum + grande CIV inlet + valve AV commune.</p>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Signes échographiques</h5>
+            <ul>
+              <li>Absence de croix cardiaque (signe majeur)</li>
+              <li>Valve commune unique en 4C</li>
+              <li>CIA + CIV contigus (grand défect)</li>
+              <li>Attachement valvulaire équidistant</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>CAT &amp; Associations</h5>
+            <ul>
+              <li>Association majeure : Trisomie 21 (45 %)</li>
+              <li>Caryotype fœtal recommandé systématiquement</li>
+              <li>Correction chirurgicale à 3–6 mois</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecf2-section-title">Anomalies de l'arche aortique</div>
+
+    <div class="ecf2-anomaly">
+      <div class="ecf2-anomaly-header">
+        <span class="ecf2-anomaly-tag tag-maj">MAJEUR</span>
+        <span class="ecf2-anomaly-name">Coarctation de l'aorte (CoAo)</span>
+        <span class="ecf2-anomaly-toggle">&#9660;</span>
+      </div>
+      <div class="ecf2-anomaly-body">
+        <div class="ecf2-anomaly-grid">
+          <div class="ecf2-anomaly-item">
+            <h5>Signes échographiques</h5>
+            <ul>
+              <li>Disproportion VD/VG (VD dominant)</li>
+              <li>Isthme aortique hypoplasique (plan 3VT)</li>
+              <li>AP dilatée — ratio AP/Ao augmenté</li>
+              <li>Flux rétrograde dans l'arche (doppler)</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>Pièges diagnostiques</h5>
+            <ul>
+              <li>Diagnostic difficile en prénatal</li>
+              <li>Faux positifs fréquents (10–30 %)</li>
+              <li>Surveillance mensuelle si suspicion</li>
+              <li>Confirmation néonatale obligatoire</li>
+            </ul>
+          </div>
+          <div class="ecf2-anomaly-item">
+            <h5>CAT</h5>
+            <ul>
+              <li>Ductodépendant systémique — PGE1 si symptomatique</li>
+              <li>Chirurgie à J5–J10 ou cathéter</li>
+              <li>Association Turner (45X), T18 à rechercher</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ecf2-section-title">Arythmies fœtales</div>
+    <div class="ecf2-indic-grid">
+      <div class="ecf2-indic-card danger-top">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#9650;</span> Tachycardies (&gt; 180 bpm)</div>
+        <ul>
+          <li><strong>TSV :</strong> 220–300 bpm, régulière → propranolol / flécaïnide mère</li>
+          <li><strong>Flutter atrial :</strong> OA 400–450 bpm, conduction 2:1 → digoxine mère</li>
+          <li><strong>Fibrillation atriale :</strong> rare, irrégulière</li>
+          <li>Risque d'hydrops si non traitée en 48–72h</li>
+        </ul>
+      </div>
+      <div class="ecf2-indic-card warn-top">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#9660;</span> Bradycardies (&lt; 110 bpm)</div>
+        <ul>
+          <li><strong>BAV complet :</strong> OA normale, OV lente (50–70 bpm) — lupus/anti-Ro</li>
+          <li><strong>BAV 2e degré :</strong> ratio 2:1 — surveillance + dexaméthasone si évolutif</li>
+          <li><strong>Bloc sinusal :</strong> basal, sans dissociation AV</li>
+          <li>PR mécanique &gt; 160 ms : surveillance rapprochée</li>
+        </ul>
+      </div>
+      <div class="ecf2-indic-card green-top">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#9680;</span> Extrasystoles</div>
+        <ul>
+          <li>ESA isolées : variant normal très fréquent</li>
+          <li>ESA bigéminées &gt; 10 % : surveillance</li>
+          <li>ESV : plus rares, à différencier des ESA</li>
+          <li>Disparaissent généralement en postnatal</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- fin panel-anomalies -->
+   
 
   <!-- ============================================================
        PANEL 3 : FICHES CARDIOPATHIES
@@ -2323,6 +2686,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       var cp = document.getElementById('cardio-' + target);
       if (cp) cp.classList.add('active');
     });
+  });
+
+   /* ---- ACCORDÉONS ANOMALIES ---- */
+  document.querySelectorAll('#ecf2-root .ecf2-anomaly').forEach(function(a) {
+    var h = a.querySelector('.ecf2-anomaly-header');
+    if (h) h.addEventListener('click', function() { a.classList.toggle('open'); });
   });
 
 })();
