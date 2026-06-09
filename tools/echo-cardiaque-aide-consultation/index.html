@@ -78,6 +78,7 @@
 #ecf2-root .ecf2-tabs {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
   background: #e9eef5;
   border-bottom: 2px solid #1a3a5c;
   position: sticky;
@@ -85,6 +86,7 @@
   z-index: 100;
 }
 #ecf2-root .ecf2-tab {
+  flex: 0 0 auto;
   padding: 10px 16px;
   font-family: 'Trebuchet MS', Arial, sans-serif;
   font-size: 12px;
@@ -104,6 +106,11 @@
   background: #fff;
   border-bottom: 3px solid #c8a84b;
   color: #1a3a5c;
+}
+
+/* Responsive Tabs pour Outil 2 (Si l'écran est large, on peut utiliser flex: 1 1 auto si souhaité) */
+@media (min-width: 769px) {
+  #ecf2-root .ecf2-tab { flex: 1 1 auto; text-align: center; }
 }
 
 /* =============================================
@@ -211,7 +218,6 @@
 #ecf2-root .ecf2-box.danger  .ecf2-box-title { color: #b03a3a; }
 #ecf2-root .ecf2-box.success .ecf2-box-title { color: #1a6b3a; }
 
-/* Correction du bug du gras qui coupait les phrases */
 #ecf2-root .ecf2-box strong { font-weight: 700 !important; }
 #ecf2-root .ecf2-box > strong:first-child { display: block !important; margin-bottom: 4px !important; }
 
@@ -309,6 +315,59 @@
 #ecf2-root .ecf2-ductodep.non { background: #edf7f0; color: #1a6b3a; border: 1px solid #a8d8b8; }
 
 /* =============================================
+   GRILLE INDICATIONS (Adaptation design Outil 1)
+   ============================================= */
+#ecf2-root .ecf2-indic-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+  gap: 14px; 
+  margin: 14px 0; 
+}
+#ecf2-root .ecf2-indic-card { 
+  background: #f7f8fc; 
+  border: 1px solid #d0dae8; 
+  border-top: 3px solid #1a3a5c; /* Default Blue Top */
+  padding: 14px 16px; 
+  border-radius: 0 0 4px 4px; 
+}
+#ecf2-root .ecf2-indic-card.danger-top { border-top-color: #b03a3a; }
+#ecf2-root .ecf2-indic-card.warn-top   { border-top-color: #c8a84b; }
+#ecf2-root .ecf2-indic-card.green-top  { border-top-color: #1a6b3a; }
+
+#ecf2-root .ecf2-indic-card-title { 
+  font-family: 'Trebuchet MS', Arial, sans-serif; 
+  font-size: 12px; 
+  font-weight: bold; 
+  color: #1a3a5c; 
+  text-transform: uppercase; 
+  letter-spacing: 0.8px; 
+  margin-bottom: 10px; 
+  display: flex; 
+  align-items: center; 
+  gap: 7px; 
+}
+#ecf2-root .ecf2-indic-card-title .ecf2-indic-icon { font-size: 14px; }
+#ecf2-root .ecf2-indic-card ul { list-style: none; padding: 0; margin: 0; }
+#ecf2-root .ecf2-indic-card ul li { 
+  font-family: 'Trebuchet MS', Arial, sans-serif; 
+  font-size: 12.5px; 
+  color: #2d2d3a; 
+  padding: 3px 0 3px 16px; 
+  position: relative; 
+  line-height: 1.5; 
+  border-bottom: 1px solid #eaeef5; 
+}
+#ecf2-root .ecf2-indic-card ul li:last-child { border-bottom: none; }
+#ecf2-root .ecf2-indic-card ul li::before { 
+  content: "\25B6"; 
+  position: absolute; 
+  left: 2px; 
+  color: #c8a84b; 
+  font-size: 8px; 
+  top: 6px; 
+}
+
+/* =============================================
    MARQUEURS T1
    ============================================= */
 #ecf2-root .ecf2-t1-calc { background: #eef4fb; border: 1px solid #c0d0e8; border-radius: 4px; padding: 16px 20px; margin: 14px 0 20px; }
@@ -335,21 +394,6 @@
 #ecf2-root .ecf2-t1-marker-card-body ul { list-style: none; padding: 0; margin: 6px 0; }
 #ecf2-root .ecf2-t1-marker-card-body ul li { padding: 2px 0 2px 14px; position: relative; font-size: 12px; }
 #ecf2-root .ecf2-t1-marker-card-body ul li::before { content: "\00B7"; position: absolute; left: 3px; color: #c8a84b; font-size: 18px; line-height: 0.9; top: 2px; }
-
-/* =============================================
-   GRILLE INDICATIONS
-   ============================================= */
-#ecf2-root .ecf2-indic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
-#ecf2-root .ecf2-indic-card { background: #f7f8fc; border: 1px solid #d0dae8; border-top: 3px solid #1a3a5c; padding: 14px 16px; border-radius: 0 0 4px 4px; }
-#ecf2-root .ecf2-indic-card.danger-top { border-top-color: #b03a3a; }
-#ecf2-root .ecf2-indic-card.warn-top   { border-top-color: #c8a84b; }
-#ecf2-root .ecf2-indic-card.green-top  { border-top-color: #1a6b3a; }
-#ecf2-root .ecf2-indic-card-title { font-family: 'Trebuchet MS', Arial, sans-serif; font-size: 12px; font-weight: bold; color: #1a3a5c; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
-#ecf2-root .ecf2-indic-card-title .ecf2-indic-icon { font-size: 14px; }
-#ecf2-root .ecf2-indic-card ul { list-style: none; padding: 0; margin: 0; }
-#ecf2-root .ecf2-indic-card ul li { font-family: 'Trebuchet MS', Arial, sans-serif; font-size: 12.5px; color: #2d2d3a; padding: 3px 0 3px 16px; position: relative; line-height: 1.5; border-bottom: 1px solid #eaeef5; }
-#ecf2-root .ecf2-indic-card ul li:last-child { border-bottom: none; }
-#ecf2-root .ecf2-indic-card ul li::before { content: "\25B6"; position: absolute; left: 2px; color: #c8a84b; font-size: 8px; top: 6px; }
 
 /* =============================================
    BIOMETRIE & Z-SCORES
@@ -469,13 +513,10 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   font-weight: bold !important;
 }
 
-
-
 @media (max-width: 600px) {
   #ecf2-root .ecf2-header { padding: 18px 16px 14px; }
   #ecf2-root .ecf2-header h1 { font-size: 18px; }
   #ecf2-root .ecf2-panel { padding: 18px 16px; }
-  #ecf2-root .ecf2-tab { padding: 8px 10px; font-size: 10px; }
   #ecf2-root .ecf2-footer { padding: 12px 16px; }
   #ecf2-root .ecf2-fiche-grid { grid-template-columns: 1fr; }
   #ecf2-root .ecf2-fiche-block.full { grid-column: 1; }
@@ -514,59 +555,114 @@ body { -ms-overflow-style: none; overflow-y: auto; }
        ============================================================ -->
   <div class="ecf2-panel active" id="panel-indications">
 
-    <div class="ecf2-section-title">Indications d'échocardiographie fœtale spécialisée</div>
+    <div class="ecf2-section-title">Cadre réglementaire &amp; Timing</div>
     <div class="ecf2-box info">
-      <span class="ecf2-box-title">Définition</span>
-      L'échocardiographie fœtale spécialisée (ECF) est réalisée en <strong>centre de référence de médecine fœtale</strong>, par un opérateur formé, sur prescription motivée. Elle n'est pas synonyme d'anomalie ; elle s'impose dès qu'un facteur de risque est identifié.
+      <span class="ecf2-box-title">&#8505;&#65039; Rappel réglementaire (HAS 2023)</span>
+      L'échocardiographie fœtale spécialisée est réalisée en complément ou en remplacement de l'examen du cœur fœtal effectué lors de l'échographie de dépistage (T2) lorsqu'une anomalie est suspectée ou lorsqu'il existe un facteur de risque identifié.
+    </div>
+    <div class="ecf2-box warning">
+      <span class="ecf2-box-title">&#9888;&#65039; Moment optimal de réalisation</span>
+      L'échocardiographie fœtale spécialisée est optimale entre <strong>22 et 26 SA</strong>. En cas de facteur de risque élevé (ex: LES avec anti-Ro/La, clarté nucale élevée), une surveillance précoce dès 14-16 SA et/ou un suivi spécifique peuvent être recommandés.
     </div>
 
+    <div class="ecf2-section-title">Indications d'échocardiographie fœtale spécialisée</div>
+
+    <!-- Origine Fœtale -->
+    <div class="ecf2-subsection-title">Origine fœtale</div>
     <div class="ecf2-indic-grid">
       <div class="ecf2-indic-card danger-top">
-        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#x26A0;</span> Origine fœtale — Anomalie suspectée</div>
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#9888;&#65039;</span> Anomalies au dépistage</div>
         <ul>
-          <li>Anomalie cardiaque suspectée au dépistage <span class="ecf2-badge urgent">Urgence</span></li>
-          <li>Arythmie fœtale (tachycardie, bradycardie, BAV)</li>
-          <li>Épanchement péricardique</li>
-          <li>Hydrops fœtalis non immun</li>
-          <li>Anomalie chromosomique diagnostiquée (T21, T18, T13, 22q11, 45X)</li>
-          <li>Anomalie extra-cardiaque associée (omphalocèle, HDG, situs inversus…)</li>
-          <li>RCIU sévère précoce</li>
+          <li>Anomalie cardiaque ou du rythme suspectée <span class="ecf2-badge urgent">Urgence</span></li>
+          <li>Situs ambigu — dextrocardie</li>
+          <li>Hydramnios ou anamnios sévère</li>
+          <li>Hydrops fœtal non immun</li>
+          <li>RCIU précoce sévère</li>
         </ul>
       </div>
-
       <div class="ecf2-indic-card warn-top">
-        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#x26A0;</span> Marqueurs T1 positifs</div>
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#x26A0;&#xFE0F;</span> Marqueurs T1 positifs</div>
         <ul>
           <li>Clarté nucale &ge; 3,5 mm <span class="ecf2-badge obligatoire">Obligatoire</span></li>
           <li>Régurgitation tricuspide &ge; 60 cm/s</li>
           <li>Canal artériel : onde a rétrograde</li>
-          <li>IT + CA rétrograde (double marqueur)</li>
-          <li>Anomalie C4C détectée au T1</li>
           <li>Bradycardie soutenue &lt; 110 bpm au T1</li>
         </ul>
       </div>
-
       <div class="ecf2-indic-card warn-top">
-        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#x1F4CB;</span> Origine maternelle — Antécédents</div>
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#9711;</span> Anomalies génétiques</div>
         <ul>
-          <li>Cardiopathie congénitale maternelle (risque 2–10 %)</li>
-          <li>Diabète pré-gestationnel (CMH, cardiopathies structurales)</li>
-          <li>Lupus / Sjögren (Ac anti-Ro/SSA → BAV III)</li>
-          <li>Phénylcétonurie mal contrôlée (Phe &gt; 600 µmol/L au T1)</li>
-          <li>Médicaments tératogènes : lithium, rétinoïdes, AINS T3, ISRS</li>
-          <li>Infections : CMV, rubéole, coxsackie, Lyme (myocardite)</li>
-          <li>Exposition alcool, cocaïne</li>
+          <li>Trisomie 21, 18, 13 suspectée ou confirmée</li>
+          <li>Délétion 22q11 (DiGeorge)</li>
+          <li>Syndrome de Turner (45,X)</li>
+          <li>Syndrome de Noonan suspecté</li>
+          <li>Anomalie du caryotype en cours</li>
         </ul>
       </div>
-
-      <div class="ecf2-indic-card green-top">
-        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#x1F465;</span> Origine familiale / obstétricale</div>
+      <div class="ecf2-indic-card">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#128200;</span> Anomalies extra-cardiaques</div>
         <ul>
-          <li>ATCD cardiopathie congénitale chez enfant précédent (2–5 %)</li>
-          <li>Cardiopathie congénitale paternelle (2–3 %)</li>
-          <li>Syndrome génétique familial : Noonan, DiGeorge, CHARGE, VACTERL, Holt-Oram</li>
-          <li>Grossesse monochoriale (TTTS, TAPS)</li>
-          <li>FIV/ICSI (légère augmentation du risque)</li>
+          <li>Hernie diaphragmatique fœtale</li>
+          <li>Anomalie de la paroi abdominale (omphalocèle)</li>
+          <li>Anomalie du SNC (agénésie corps calleux…)</li>
+          <li>Fistule trachéo-œsophagienne</li>
+          <li>Anomalies rénales bilatérales ou squelettiques</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Origine Maternelle -->
+    <div class="ecf2-subsection-title">Origine maternelle</div>
+    <div class="ecf2-indic-grid">
+      <div class="ecf2-indic-card danger-top">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#128138;</span> Pathologies cardio-vasculaires</div>
+        <ul>
+          <li>Cardiopathie maternelle (risque 2–10 %)</li>
+          <li>Lupus / Sjögren (Ac anti-Ro/SSA → BAV III)</li>
+          <li>SAPL avec anti-phospholipides</li>
+          <li>Connectivites avec auto-anticorps</li>
+        </ul>
+      </div>
+      <div class="ecf2-indic-card warn-top">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#128138;</span> Métabolique &amp; Infectieux</div>
+        <ul>
+          <li>Diabète pré-gestationnel (CMH, malformations)</li>
+          <li>Phénylcétonurie mal contrôlée (Phe &gt; 600 µmol/L)</li>
+          <li>Infections : CMV, rubéole, coxsackie, parvovirus B19</li>
+        </ul>
+      </div>
+      <div class="ecf2-indic-card warn-top">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#128138;</span> Expositions tératogènes</div>
+        <ul>
+          <li>Antiépileptiques (valproate, phénytoïne...)</li>
+          <li>Lithium (maladie d'Ebstein)</li>
+          <li>AINS avant 26 SA (fermeture prématurée CA)</li>
+          <li>ISRS (Inhibiteurs de la recapture de la sérotonine)</li>
+          <li>Rétinoïdes, Alcool, Cocaïne</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Origine Familiale -->
+    <div class="ecf2-subsection-title">Origine familiale &amp; Situations techniques</div>
+    <div class="ecf2-indic-grid">
+      <div class="ecf2-indic-card green-top">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#128106;</span> Antécédents familiaux</div>
+        <ul>
+          <li>ATCD enfant porteur de cardiopathie (2–5 %)</li>
+          <li>Père porteur d'une cardiopathie (2–3 %)</li>
+          <li>Mère porteuse d'une cardiopathie (4–6 %)</li>
+          <li>Cardiopathie chez un germain (3 %)</li>
+          <li>Syndrome de Marfan, LVNC familiale</li>
+        </ul>
+      </div>
+      <div class="ecf2-indic-card">
+        <div class="ecf2-indic-card-title"><span class="ecf2-indic-icon">&#128290;</span> Situations obstétricales</div>
+        <ul>
+          <li>Grossesse monochoriale (STFF, TAPS)</li>
+          <li>FIV / ICSI (risque légèrement augmenté)</li>
+          <li>Jumeau acardiaque (TRAP)</li>
+          <li>Grossesse obtenue par don d'ovocyte</li>
         </ul>
       </div>
     </div>
