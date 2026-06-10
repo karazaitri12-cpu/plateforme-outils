@@ -26,20 +26,30 @@
     
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* CORRECTION ICI : width: 100% et overflow-x: hidden empêchent la page de déborder à droite sur mobile */
-    html, body { width: 100%; overflow-x: hidden; }
+    /* CORRECTION : On applique le fond au HTML pour qu'il n'y ait plus de bande "blanche" en cas de rebond */
+    html { background: var(--bg); transition: background 0.3s; scrollbar-width: none; }
     
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; 
+      background: var(--bg); 
+      color: var(--text); 
+      line-height: 1.5; 
+      transition: background 0.3s, color 0.3s;
+      -ms-overflow-style: none; 
+      overflow-y: auto;
+      overflow-x: hidden; /* Sécurité anti-débordement horizontal */
+    }
+    
+    /* CORRECTION : On s'assure que le container ne dépasse jamais l'écran */
+    .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
     .main-header { background: #fff !important; border-bottom: 3px solid #1a3a5c !important; padding: 25px 20px !important; text-align: center !important; }
     .main-header h1 { font-size: 20px !important; color: #1a3a5c !important; margin: 0 !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; font-weight: 700 !important; }
     
-    /* CORRECTION ICI : Ajout de word-wrap pour que le long lien coupe et ne pousse pas l'écran */
-    .main-header .subtitle { font-size: 13px !important; color: #607d8b !important; margin: 5px 0 0 0 !important; word-wrap: break-word !important; overflow-wrap: break-word !important; }
+    /* CORRECTION : word-break strict pour empêcher l'URL longue de casser l'écran mobile */
+    .main-header .subtitle { font-size: 13px !important; color: #607d8b !important; margin: 5px 0 0 0 !important; word-break: break-word !important; overflow-wrap: break-word !important; }
     .main-header .subtitle a { color: #1a3a5c !important; text-decoration: none !important; border-bottom: 1px dotted #1a3a5c !important; }
 
-    /* CORRECTION ICI : Ajout de flex-wrap pour que les boutons s'adaptent si l'écran est trop petit */
     .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     
     .icon-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; text-decoration: none; }
@@ -62,9 +72,10 @@
     .filter-btn.fav-btn.active { background: #D69E2E; color: white; border-color: #D69E2E; font-weight: 600; }
 
     .section-title { font-size: 1.05rem; font-weight: 600; color: var(--primary); margin: 28px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
-    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-bottom: 32px; }
+    
+    /* CORRECTION : min(100%, 260px) sécurise les grilles sur les téléphones particulièrement étroits */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 14px; margin-bottom: 32px; }
 
-    /* === CARTE STANDARD === */
     .tool-card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 16px;
@@ -74,7 +85,6 @@
     .tool-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px); }
     .tool-card.disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
 
-    /* === CARTE PREMIUM — bordure dorée, grisée, non cliquable MAIS avec effet hover === */
     .tool-card.premium {
       border: 2px solid #C9A84C !important;
       background: #fafaf7 !important;
@@ -85,29 +95,19 @@
       transition: all 0.2s ease !important; 
     }
 
-    /* Effet hover visuel pour premium (sans clic) */
     .tool-card.premium:hover {
       transform: translateY(-2px) !important; 
       box-shadow: 0 4px 16px rgba(201,168,76,0.35) !important; 
       opacity: 0.85 !important; 
     }
        
-    body.dark-mode .tool-card.premium {
-      background: #252d3a !important;
-      border-color: #a07d2a !important;
-    }
-
-    body.dark-mode .tool-card.premium:hover {
-      box-shadow: 0 4px 16px rgba(160,125,42,0.45) !important;
-    }
+    body.dark-mode .tool-card.premium { background: #252d3a !important; border-color: #a07d2a !important; }
+    body.dark-mode .tool-card.premium:hover { box-shadow: 0 4px 16px rgba(160,125,42,0.45) !important; }
         
     .tool-card.premium .tool-content h3 { color: #6b7280 !important; }
     .tool-card.premium .tool-content p  { color: #9ca3af !important; }
-    .tool-card.premium .tool-icon {
-      background: linear-gradient(135deg, #9ca3af, #6b7280) !important;
-    }
+    .tool-card.premium .tool-icon { background: linear-gradient(135deg, #9ca3af, #6b7280) !important; }
 
-    /* Badge ★ PREMIUM en haut à droite */
     .premium-badge {
       position: absolute; top: 10px; right: 10px;
       display: flex; align-items: center; gap: 3px;
@@ -119,14 +119,12 @@
       pointer-events: none;
     }
 
-    /* Icône cadenas en bas à droite de l'icône outil */
     .premium-lock {
       position: absolute; bottom: 10px; right: 10px;
       font-size: 14px; color: #C9A84C;
       opacity: 0.85; pointer-events: none;
     }
 
-    /* Étoile favori (cartes normales uniquement) */
     .star-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--border); transition: 0.2s; z-index: 2; padding: 0; line-height: 1; }
     .star-btn:hover { transform: scale(1.1); }
     .star-btn.is-fav { color: #D69E2E; }
@@ -139,10 +137,9 @@
     .tool-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin: 0 0 4px; line-height: 1.3; }
     .tool-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
 
-    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; transition: background 0.3s; }
+    /* CORRECTION : Le footer prend 20px de padding global pour que le texte ne touche plus les bords de l'écran mobile */
+    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; transition: background 0.3s; word-break: break-word; overflow-wrap: break-word; }
 
-    html { scrollbar-width: none; }
-    body { -ms-overflow-style: none; overflow-y: auto; }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
 
     @media (max-width: 600px) {
@@ -199,9 +196,6 @@
   let favorites      = JSON.parse(localStorage.getItem('drkz_favorites')) || [];
   let isPremiumUser  = false;
 
-  // -------------------------------------------------------
-  // Vérification premium via API WordPress
-  // -------------------------------------------------------
   async function checkPremium() {
     const urlParams = new URLSearchParams(window.location.search);
     const urlToken  = urlParams.get('token');
@@ -218,9 +212,6 @@
     } catch { return false; }
   }
 
-  // -------------------------------------------------------
-  // RÉCEPTION DU TOKEN DEPUIS LE PARENT WORDPRESS (postMessage)
-  // -------------------------------------------------------
   window.addEventListener('message', function(e) {
     if (e.origin !== 'https://www.dr-karazaitri-ma.net' &&
         e.origin !== 'https://dr-karazaitri-ma.net') return;
