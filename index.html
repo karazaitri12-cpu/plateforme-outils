@@ -26,9 +26,10 @@
     
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+    /* SECURITE GLOBALE : Interdit absolument le défilement horizontal */
+    html, body { max-width: 100%; overflow-x: hidden; }
     
-    /* CORRECTION 1 : Sécuriser la largeur du conteneur */
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; }
     .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
     .main-header { background: #fff !important; border-bottom: 3px solid #1a3a5c !important; padding: 25px 20px !important; text-align: center !important; }
@@ -48,9 +49,7 @@
     .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); background: var(--border); width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; transition: background 0.2s, color 0.2s; }
 
     .filters { display: flex; gap: 10px; flex-wrap: wrap; }
-    
-    /* CORRECTION 2 : Empêcher un nom de catégorie long de casser la page */
-    .filter-btn { max-width: 100%; white-space: normal; word-wrap: break-word; padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: normal; transition: all 0.2s; color: var(--text); }
+    .filter-btn { max-width: 100%; overflow-wrap: anywhere; padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: normal; transition: all 0.2s; color: var(--text); }
     .filter-btn:hover { background: #EBF8FF; border-color: var(--primary); color: var(--primary); }
     .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 600; }
     body.dark-mode .filter-btn:hover { background: rgba(43,108,176,0.2); }
@@ -59,11 +58,11 @@
 
     .section-title { font-size: 1.05rem; font-weight: 600; color: var(--primary); margin: 28px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
     
-    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-bottom: 32px; width: 100%; }
+    /* SECURITE GRILLE : min(100%, 260px) pour éviter qu'une carte dépasse l'écran */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 14px; margin-bottom: 32px; width: 100%; }
 
-    /* CORRECTION 3 : Le 'min-width: 0' dompte les grilles CSS et les flexbox */
     .tool-card {
-      min-width: 0; /* CRUCIAL pour ne jamais forcer l'élargissement */
+      max-width: 100%; min-width: 0; /* SECURITE : Limite la carte à 100% */
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 16px;
       transition: all 0.2s; text-decoration: none; color: inherit;
@@ -84,13 +83,29 @@
     .premium-lock { position: absolute; bottom: 10px; right: 10px; font-size: 14px; color: #C9A84C; opacity: 0.85; pointer-events: none; }
     .star-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--border); transition: 0.2s; z-index: 2; padding: 0; line-height: 1; }
     .star-btn.is-fav { color: #D69E2E; }
-    .tool-badge { position: absolute; top: -8px; right: 40px; background: #E53E3E; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; border: 1px solid var(--card); z-index: 2; box-shadow: var(--shadow); }
+    .tool-badge { position: absolute; top: -8px; right: 40px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background: #E53E3E; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; border: 1px solid var(--card); z-index: 2; box-shadow: var(--shadow); }
     .tool-badge.maj { background: var(--primary); }
 
-    .tool-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; flex-shrink: 0; }
+    /* SECURITE ICONE : Si un des nouveaux outils contient une image ou un SVG trop grand */
+    .tool-icon { 
+      width: 40px; height: 40px; flex-shrink: 0; 
+      background: linear-gradient(135deg, var(--primary), var(--accent)); 
+      border-radius: 8px; display: flex; align-items: center; justify-content: center; 
+      color: white; font-size: 1.1rem;
+      overflow: hidden; /* Empêche l'image de dépasser */
+    }
+    .tool-icon img, .tool-icon svg { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    /* SECURITE TEXTE : Force la coupure des mots trop longs injectés par le JSON */
+    .tool-content { 
+      flex: 1; min-width: 0; padding-right: 15px; 
+      overflow: hidden; /* Empêche tout contenu de pousser la carte */
+    }
+    .tool-content h3, .tool-content p { 
+      word-wrap: break-word; 
+      overflow-wrap: anywhere; /* Coupe n'importe quelle chaîne de caractères (URL, mot médical très long) */
+    }
     
-    /* CORRECTION 4 : Coupe ultra agressive des mots médicaux complexes injectés dynamiquement */
-    .tool-content { flex: 1; min-width: 0; padding-right: 15px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; }
     .tool-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin: 0 0 4px; line-height: 1.3; }
     .tool-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
 
@@ -101,7 +116,6 @@
     body { -ms-overflow-style: none; overflow-y: auto; }
 
     @media (max-width: 600px) {
-      /* CORRECTION 5 : Le minmax(0, 1fr) empêche le 1fr de faire déborder la grille */
       .tools-grid { grid-template-columns: minmax(0, 1fr); }
       .header-actions { width: 100%; justify-content: flex-end; }
     }
