@@ -243,10 +243,18 @@
 #ecf2-root .ecf2-algo-breadcrumb { font-family: 'Trebuchet MS', Arial, sans-serif; font-size: 11px; color: #7a8598; margin-bottom: 10px; min-height: 16px; line-height: 1.5; }
 #ecf2-root .ecf2-algo-breadcrumb span { color: #c8a84b; margin: 0 4px; }
 #ecf2-root .ecf2-algo-step { display: none; animation: ecf2FadeIn 0.25s ease; }
-#ecf2-root .ecf2-algo-step { display: none !important; }
-#ecf2-root .ecf2-algo-step.active { display: block !important; }
-@media (min-width: 1px) {
-  #ecf2-root .ecf2-algo-step.active { animation: none; }
+#ecf2-root .ecf2-algo-step { 
+  display: none !important; 
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+#ecf2-root .ecf2-algo-step.active { 
+  display: block !important; 
+  visibility: visible !important;
+  height: auto !important;
+  overflow: visible !important;
+}
 #ecf2-root .ecf2-algo-question { background: #1a3a5c; color: #fff; padding: 16px 20px; border-radius: 4px 4px 0 0; font-family: 'Trebuchet MS', Arial, sans-serif; font-size: 14px; font-weight: bold; line-height: 1.4; }
 #ecf2-root .ecf2-algo-question .ecf2-algo-step-num { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #c8a84b; display: block; margin-bottom: 5px; }
 #ecf2-root .ecf2-algo-options { background: #f7f8fc; border: 1px solid #d0dae8; border-top: none; border-radius: 0 0 4px 4px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -2826,27 +2834,41 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   var selBtns = document.querySelectorAll('#ecf2-root .ecf2-algo-sel-btn');
   var trees   = document.querySelectorAll('#ecf2-root .ecf2-algo-tree');
   selBtns.forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    var target = btn.getAttribute('data-tree');
-    selBtns.forEach(function(b) { b.classList.remove('active'); });
-    trees.forEach(function(t)   { t.classList.remove('active'); });
-    btn.classList.add('active');
-    var tree = document.getElementById('tree-' + target);
-    if (tree) {
-      tree.classList.add('active');
-      /* Forcer l'affichage du premier step */
-      var steps = tree.querySelectorAll('.ecf2-algo-step');
-      steps.forEach(function(s) { s.classList.remove('active'); });
-      var firstStep = tree.querySelector('.ecf2-algo-step');
-      if (firstStep) firstStep.classList.add('active');
-      /* Réinitialiser l'historique */
-      window._ecf2History[target]  = [];
-      window._ecf2BCLabels[target] = [];
-      var bc = document.getElementById('bc-' + target);
-      if (bc) bc.innerHTML = '';
-    }
+    btn.addEventListener('click', function() {
+      var target = btn.getAttribute('data-tree');
+      selBtns.forEach(function(b) { b.classList.remove('active'); });
+      trees.forEach(function(t)   { t.classList.remove('active'); });
+      btn.classList.add('active');
+      var tree = document.getElementById('tree-' + target);
+      if (tree) {
+        tree.classList.add('active');
+        /* Forcer l'affichage du premier step */
+        var steps = tree.querySelectorAll('.ecf2-algo-step');
+        steps.forEach(function(s) {
+          s.classList.remove('active');
+          s.style.display    = 'none';
+          s.style.visibility = 'hidden';
+          s.style.height     = '0';
+          s.style.overflow   = 'hidden';
+        });
+        var firstStep = tree.querySelector('.ecf2-algo-step');
+        if (firstStep) {
+          firstStep.classList.add('active');
+          firstStep.style.display    = 'block';
+          firstStep.style.visibility = 'visible';
+          firstStep.style.height     = 'auto';
+          firstStep.style.overflow   = 'visible';
+        }
+        /* Réinitialiser l'historique */
+        if (!window._ecf2History)  window._ecf2History  = {};
+        if (!window._ecf2BCLabels) window._ecf2BCLabels = {};
+        window._ecf2History[target]  = [];
+        window._ecf2BCLabels[target] = [];
+        var bc = document.getElementById('bc-' + target);
+        if (bc) bc.innerHTML = '';
+      }
+    });
   });
-});
 
   /* ---- NAVIGATION FICHES CARDIOPATHIES ---- */
   var cardioBtns   = document.querySelectorAll('#ecf2-root .ecf2-cardio-btn');
@@ -2862,7 +2884,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     });
   });
 
-   /* ---- ACCORDÉONS ANOMALIES ---- */
+  /* ---- ACCORDÉONS ANOMALIES ---- */
   document.querySelectorAll('#ecf2-root .ecf2-anomaly').forEach(function(a) {
     var h = a.querySelector('.ecf2-anomaly-header');
     if (h) h.addEventListener('click', function() { a.classList.toggle('open'); });
@@ -2871,7 +2893,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 })();
 
 /* ==============================================
-   FONCTIONS GLOBALES — onclick
+   FONCTIONS GLOBALES ALGO — onclick inline
    ============================================== */
 window._ecf2History  = {};
 window._ecf2BCLabels = {};
@@ -2881,14 +2903,35 @@ function ecf2AlgoGo(tree, stepId, label) {
   if (!window._ecf2BCLabels[tree]) window._ecf2BCLabels[tree] = [];
 
   var container = document.getElementById('algo-' + tree);
-  var current   = container ? container.querySelector('.ecf2-algo-step.active') : null;
+  if (!container) return;
+
+  /* Mémoriser l'id du step courant avant de le masquer */
+  var current = container.querySelector('.ecf2-algo-step.active');
   if (current) {
     window._ecf2History[tree].push(current.id);
-    current.classList.remove('active');
   }
-  var next = document.getElementById(stepId);
-  if (next) next.classList.add('active');
 
+  /* Masquer TOUS les steps */
+  var allSteps = container.querySelectorAll('.ecf2-algo-step');
+  allSteps.forEach(function(s) {
+    s.classList.remove('active');
+    s.style.display    = 'none';
+    s.style.visibility = 'hidden';
+    s.style.height     = '0';
+    s.style.overflow   = 'hidden';
+  });
+
+  /* Afficher le step cible */
+  var next = document.getElementById(stepId);
+  if (next) {
+    next.classList.add('active');
+    next.style.display    = 'block';
+    next.style.visibility = 'visible';
+    next.style.height     = 'auto';
+    next.style.overflow   = 'visible';
+  }
+
+  /* Breadcrumb */
   window._ecf2BCLabels[tree].push(label);
   var bc = document.getElementById('bc-' + tree);
   if (bc) {
@@ -2901,11 +2944,31 @@ function ecf2AlgoGo(tree, stepId, label) {
 function ecf2AlgoBack(tree) {
   if (!window._ecf2History || !window._ecf2History[tree] || !window._ecf2History[tree].length) return;
   var container = document.getElementById('algo-' + tree);
-  var current   = container ? container.querySelector('.ecf2-algo-step.active') : null;
-  if (current) current.classList.remove('active');
+  if (!container) return;
+
+  /* Masquer tous les steps */
+  var allSteps = container.querySelectorAll('.ecf2-algo-step');
+  allSteps.forEach(function(s) {
+    s.classList.remove('active');
+    s.style.display    = 'none';
+    s.style.visibility = 'hidden';
+    s.style.height     = '0';
+    s.style.overflow   = 'hidden';
+  });
+
+  /* Afficher le step précédent */
   var prevId = window._ecf2History[tree].pop();
-  var prev   = document.getElementById(prevId);
-  if (prev) prev.classList.add('active');
+  if (!prevId) return;
+  var prev = document.getElementById(prevId);
+  if (prev) {
+    prev.classList.add('active');
+    prev.style.display    = 'block';
+    prev.style.visibility = 'visible';
+    prev.style.height     = 'auto';
+    prev.style.overflow   = 'visible';
+  }
+
+  /* Breadcrumb */
   if (window._ecf2BCLabels[tree]) window._ecf2BCLabels[tree].pop();
   var bc = document.getElementById('bc-' + tree);
   if (bc) {
@@ -2918,16 +2981,37 @@ function ecf2AlgoBack(tree) {
 function ecf2AlgoRestart(tree) {
   var container = document.getElementById('algo-' + tree);
   if (!container) return;
-  var steps = container.querySelectorAll('.ecf2-algo-step');
-  steps.forEach(function(s) { s.classList.remove('active'); });
+
+  /* Masquer tous les steps */
+  var allSteps = container.querySelectorAll('.ecf2-algo-step');
+  allSteps.forEach(function(s) {
+    s.classList.remove('active');
+    s.style.display    = 'none';
+    s.style.visibility = 'hidden';
+    s.style.height     = '0';
+    s.style.overflow   = 'hidden';
+  });
+
+  /* Afficher le premier step */
   var first = container.querySelector('.ecf2-algo-step');
-  if (first) first.classList.add('active');
+  if (first) {
+    first.classList.add('active');
+    first.style.display    = 'block';
+    first.style.visibility = 'visible';
+    first.style.height     = 'auto';
+    first.style.overflow   = 'visible';
+  }
+
+  /* Réinitialiser */
   window._ecf2History[tree]  = [];
   window._ecf2BCLabels[tree] = [];
   var bc = document.getElementById('bc-' + tree);
   if (bc) bc.innerHTML = '';
 }
 
+/* ==============================================
+   CALCULATEUR T1
+   ============================================== */
 function ecf2T1Calc() {
   var cn  = parseFloat(document.getElementById('t1-cn').value);
   var it  = document.getElementById('t1-it').value;
@@ -2943,9 +3027,9 @@ function ecf2T1Calc() {
     else if (cn >= 3.5) { score += 2; anomalies.push('CN 3,5\u20134,4 mm (\u00d76 risque cardiopathie)'); }
     else if (cn >= 2.5) { score += 1; anomalies.push('CN 2,5\u20133,4 mm \u2014 surveiller'); }
   }
-  if (it === 'presente_s')  { score += 2; anomalies.push('IT \u2265 60\u00a0cm/s holosystolique \u2014 significative (LR+ \u22485)'); }
+  if (it === 'presente_s')       { score += 2; anomalies.push('IT \u2265 60\u00a0cm/s holosystolique \u2014 significative (LR+ \u22485)'); }
   else if (it === 'presente_ns') { score += 0.5; anomalies.push('IT pr\u00e9sente < 60\u00a0cm/s \u2014 non significative'); }
-  if (ca === 'retrograde')  { score += 3; anomalies.push('Onde a r\u00e9trograde au canal art\u00e9riel (LR+ \u22487)'); }
+  if (ca === 'retrograde') { score += 3; anomalies.push('Onde a r\u00e9trograde au canal art\u00e9riel (LR+ \u22487)'); }
   if (!isNaN(fc)) {
     if (fc < 100)      { score += 3; anomalies.push('Bradycardie s\u00e9v\u00e8re < 100\u00a0bpm \u2014 pronostic tr\u00e8s r\u00e9serv\u00e9'); }
     else if (fc < 120) { score += 2; anomalies.push('Bradycardie < 120\u00a0bpm \u2014 risque chromosomique et cardiaque'); }
@@ -2974,13 +3058,13 @@ function ecf2T1Calc() {
 
   var anomHtml = anomalies.length > 0
     ? '<ul style="margin:6px 0 0;padding:0;list-style:none;">' + anomalies.map(function(a) {
-        return '<li style="padding:2px 0 2px 16px;position:relative;font-size:12px;">'
-          + '<span style="position:absolute;left:4px;color:#c8a84b;font-size:16px;line-height:1;top:2px;">\u00b7</span>' + a + '</li>';
+        return '<li style="display:flex;align-items:flex-start;gap:8px;padding:3px 0;font-size:12px;">'
+          + '<span style="color:#c8a84b;font-size:14px;flex-shrink:0;line-height:1.4;">\u00b7</span>' + a + '</li>';
       }).join('') + '</ul>' : '';
 
   var actHtml = '<ul style="margin:8px 0 0;padding:0;list-style:none;">' + actions.map(function(a) {
-    return '<li style="padding:2px 0 2px 16px;position:relative;font-size:12px;">'
-      + '<span style="position:absolute;left:4px;color:#1a3a5c;font-size:11px;top:3px;">\u25b6</span>' + a + '</li>';
+    return '<li style="display:flex;align-items:flex-start;gap:8px;padding:3px 0;font-size:12px;">'
+      + '<span style="color:#1a3a5c;font-size:10px;flex-shrink:0;margin-top:3px;">\u25b6</span>' + a + '</li>';
   }).join('') + '</ul>';
 
   res.className = 'ecf2-t1-result visible ' + cls;
@@ -2991,7 +3075,9 @@ function ecf2T1Calc() {
     + '<p style="margin-top:8px;font-size:11px;font-style:italic;opacity:0.8;">' + corps + '</p>';
 }
 
-/* ---- NAVIGATION DOPPLER ---- */
+/* ==============================================
+   NAVIGATION DOPPLER
+   ============================================== */
 var dopBtns   = document.querySelectorAll('#ecf2-root .ecf2-dop-btn');
 var dopPanels = document.querySelectorAll('#ecf2-root .ecf2-dop-panel');
 dopBtns.forEach(function(b) {
@@ -3005,43 +3091,38 @@ dopBtns.forEach(function(b) {
   });
 });
 
-/* ---- CALCULATEUR BIOMÉTRIE (AVEC Z-SCORES APPROX SCHNEIDER) ---- */
+/* ==============================================
+   CALCULATEUR BIOMÉTRIE (Z-SCORES)
+   ============================================== */
 function ecf2BioCalc() {
   var sa = parseInt(document.getElementById('ecf2-bio-sa').value);
   if (!sa || sa < 14 || sa > 40) { alert('Terme valide requis (14–40 SA).'); return; }
-  
-  // Base des normes pour cavités (non Z-score, fourchettes simples)
+
   var norms = {
-    14:{vg:[3,8],vd:[3,8]},
-    16:{vg:[3,8],vd:[3,8]},
-    18:{vg:[5,9],vd:[5,9]},
-    20:{vg:[6,11],vd:[6,11]},
-    22:{vg:[7.5,12.5],vd:[7.5,12.5]},
-    24:{vg:[9,14],vd:[9,14]},
-    26:{vg:[10,16],vd:[10,16]},
-    28:{vg:[11.5,17.5],vd:[11.5,17.5]},
-    30:{vg:[13,19],vd:[13,19]},
-    32:{vg:[14.5,20.5],vd:[14.5,20.5]},
-    34:{vg:[16,22],vd:[16,22]},
-    36:{vg:[17.5,23.5],vd:[17.5,23.5]},
-    38:{vg:[19,25],vd:[19,25]},
-    40:{vg:[20,26],vd:[20,26]}
+    14:{vg:[3,8],vd:[3,8]},16:{vg:[3,8],vd:[3,8]},18:{vg:[5,9],vd:[5,9]},
+    20:{vg:[6,11],vd:[6,11]},22:{vg:[7.5,12.5],vd:[7.5,12.5]},24:{vg:[9,14],vd:[9,14]},
+    26:{vg:[10,16],vd:[10,16]},28:{vg:[11.5,17.5],vd:[11.5,17.5]},30:{vg:[13,19],vd:[13,19]},
+    32:{vg:[14.5,20.5],vd:[14.5,20.5]},34:{vg:[16,22],vd:[16,22]},36:{vg:[17.5,23.5],vd:[17.5,23.5]},
+    38:{vg:[19,25],vd:[19,25]},40:{vg:[20,26],vd:[20,26]}
   };
-  
+
   function getNorm(sa, key) {
     var keys = Object.keys(norms).map(Number).sort(function(a,b){return a-b;});
     var lo = keys[0], hi = keys[keys.length-1];
-    for (var i=0; i<keys.length-1; i++) { if (sa>=keys[i]&&sa<=keys[i+1]) { lo=keys[i]; hi=keys[i+1]; break; } }
+    for (var i=0; i<keys.length-1; i++) {
+      if (sa>=keys[i]&&sa<=keys[i+1]) { lo=keys[i]; hi=keys[i+1]; break; }
+    }
     if (lo===hi) return norms[lo][key];
     var t=(sa-lo)/(hi-lo);
-    return [norms[lo][key][0]+t*(norms[hi][key][0]-norms[lo][key][0]), norms[lo][key][1]+t*(norms[hi][key][1]-norms[lo][key][1])];
+    return [norms[lo][key][0]+t*(norms[hi][key][0]-norms[lo][key][0]),
+            norms[lo][key][1]+t*(norms[hi][key][1]-norms[lo][key][1])];
   }
 
-  var grid = document.getElementById('ecf2-bio-grid'); grid.innerHTML='';
-  var anomalies=0, hasValue=false;
+  var grid = document.getElementById('ecf2-bio-grid');
+  grid.innerHTML = '';
+  var anomalies = 0, hasValue = false;
 
-  // 1. Calculs standards VD, VG
-  var fields = [{id:'ecf2-bio-vg',key:'vg',label:'VG'}, {id:'ecf2-bio-vd',key:'vd',label:'VD'}];
+  var fields = [{id:'ecf2-bio-vg',key:'vg',label:'VG'},{id:'ecf2-bio-vd',key:'vd',label:'VD'}];
   fields.forEach(function(f) {
     var val = parseFloat(document.getElementById(f.id).value);
     if (!val||isNaN(val)) return;
@@ -3060,21 +3141,19 @@ function ecf2BioCalc() {
     grid.appendChild(card);
   });
 
-  // 2. Calculs Z-Scores pour Ao et AP (Schneider approximation : y = ax + b)
   var valAo = parseFloat(document.getElementById('ecf2-bio-ao').value);
   if (valAo && !isNaN(valAo)) {
     hasValue = true;
-    var meanAo = -1.45 + 0.25 * sa;
-    var sdAo = 0.35;
+    var meanAo = -1.45 + 0.25 * sa, sdAo = 0.35;
     var zAo = (valAo - meanAo) / sdAo;
-    var stAo = (Math.abs(zAo) > 2) ? 'danger' : (Math.abs(zAo) > 1.5) ? 'warning' : 'normal';
-    if(stAo !== 'normal') anomalies++;
+    var stAo = (Math.abs(zAo)>2)?'danger':(Math.abs(zAo)>1.5)?'warning':'normal';
+    if(stAo!=='normal') anomalies++;
     var cAo = document.createElement('div');
     cAo.className = 'ecf2-bio-card ' + stAo;
-    var badgeClass = (Math.abs(zAo) <= 2) ? 'ok' : 'nok';
-    cAo.innerHTML = '<div class="ecf2-bio-card-label">Aorte (Valve)</div>'
+    var bAo = (Math.abs(zAo)<=2)?'ok':'nok';
+    cAo.innerHTML='<div class="ecf2-bio-card-label">Aorte (Valve)</div>'
       +'<div class="ecf2-bio-card-value">'+valAo.toFixed(1)+' <span class="ecf2-bio-card-unit">mm</span></div>'
-      +'<div class="ecf2-zscore-badge '+badgeClass+'">Z-Score: '+zAo.toFixed(2)+'</div>'
+      +'<div class="ecf2-zscore-badge '+bAo+'">Z-Score: '+zAo.toFixed(2)+'</div>'
       +'<div class="ecf2-bio-interp" style="font-size:10px;">Moyenne attendue: '+meanAo.toFixed(1)+' mm</div>';
     grid.appendChild(cAo);
   }
@@ -3082,160 +3161,170 @@ function ecf2BioCalc() {
   var valAp = parseFloat(document.getElementById('ecf2-bio-ap').value);
   if (valAp && !isNaN(valAp)) {
     hasValue = true;
-    var meanAp = -1.55 + 0.28 * sa;
-    var sdAp = 0.40;
+    var meanAp = -1.55 + 0.28 * sa, sdAp = 0.40;
     var zAp = (valAp - meanAp) / sdAp;
-    var stAp = (Math.abs(zAp) > 2) ? 'danger' : (Math.abs(zAp) > 1.5) ? 'warning' : 'normal';
-    if(stAp !== 'normal') anomalies++;
+    var stAp = (Math.abs(zAp)>2)?'danger':(Math.abs(zAp)>1.5)?'warning':'normal';
+    if(stAp!=='normal') anomalies++;
     var cAp = document.createElement('div');
     cAp.className = 'ecf2-bio-card ' + stAp;
-    var badgeClassAp = (Math.abs(zAp) <= 2) ? 'ok' : 'nok';
-    cAp.innerHTML = '<div class="ecf2-bio-card-label">Art. Pulmonaire</div>'
+    var bAp = (Math.abs(zAp)<=2)?'ok':'nok';
+    cAp.innerHTML='<div class="ecf2-bio-card-label">Art. Pulmonaire</div>'
       +'<div class="ecf2-bio-card-value">'+valAp.toFixed(1)+' <span class="ecf2-bio-card-unit">mm</span></div>'
-      +'<div class="ecf2-zscore-badge '+badgeClassAp+'">Z-Score: '+zAp.toFixed(2)+'</div>'
+      +'<div class="ecf2-zscore-badge '+bAp+'">Z-Score: '+zAp.toFixed(2)+'</div>'
       +'<div class="ecf2-bio-interp" style="font-size:10px;">Moyenne attendue: '+meanAp.toFixed(1)+' mm</div>';
     grid.appendChild(cAp);
   }
 
-  // Ratio AP/Ao si les deux sont là
   if (valAo && valAp) {
     var ratio = valAp/valAo;
     var rs = (ratio>=0.9&&ratio<=1.35)?'normal':(ratio<0.8||ratio>1.5)?'danger':'warning';
-    if (rs!=='normal') anomalies++;
+    if(rs!=='normal') anomalies++;
     var rc = document.createElement('div');
     rc.className = 'ecf2-bio-card ' + rs;
-    rc.innerHTML = '<div class="ecf2-bio-card-label">Rapport AP/Ao</div>'
+    rc.innerHTML='<div class="ecf2-bio-card-label">Rapport AP/Ao</div>'
       +'<div class="ecf2-bio-card-value">'+ratio.toFixed(2)+'</div>'
       +'<div class="ecf2-bio-interp">'+(rs==='normal'?'\u2713 Normal (0,90\u20131,35)':rs==='warning'?'\u26A0 Limite':'\u2717 Anormal')+'</div>';
     grid.appendChild(rc);
   }
 
-  // Isthme
   var valIsthme = parseFloat(document.getElementById('ecf2-bio-isthme').value);
   if (valIsthme && !isNaN(valIsthme)) {
     hasValue = true;
-    var meanIsthme = -1.10 + 0.18 * sa; // Rough approx
-    var sdIsthme = 0.3;
-    var zIs = (valIsthme - meanIsthme) / sdIsthme;
-    var stIs = (Math.abs(zIs) > 2) ? 'danger' : 'normal';
-    if (stIs !== 'normal') anomalies++;
+    var meanIs = -1.10 + 0.18 * sa, sdIs = 0.3;
+    var zIs = (valIsthme - meanIs) / sdIs;
+    var stIs = (Math.abs(zIs)>2)?'danger':'normal';
+    if(stIs!=='normal') anomalies++;
     var cIs = document.createElement('div');
     cIs.className = 'ecf2-bio-card ' + stIs;
-    var badgeClassIs = (Math.abs(zIs) <= 2) ? 'ok' : 'nok';
-    cIs.innerHTML = '<div class="ecf2-bio-card-label">Isthme Ao</div>'
+    var bIs = (Math.abs(zIs)<=2)?'ok':'nok';
+    cIs.innerHTML='<div class="ecf2-bio-card-label">Isthme Ao</div>'
       +'<div class="ecf2-bio-card-value">'+valIsthme.toFixed(1)+' <span class="ecf2-bio-card-unit">mm</span></div>'
-      +'<div class="ecf2-zscore-badge '+badgeClassIs+'">Z-Score: '+zIs.toFixed(2)+'</div>'
-      +'<div class="ecf2-bio-interp" style="font-size:10px;">Moyenne: '+meanIsthme.toFixed(1)+' mm</div>';
+      +'<div class="ecf2-zscore-badge '+bIs+'">Z-Score: '+zIs.toFixed(2)+'</div>'
+      +'<div class="ecf2-bio-interp" style="font-size:10px;">Moyenne: '+meanIs.toFixed(1)+' mm</div>';
     grid.appendChild(cIs);
   }
 
   if (!hasValue) { alert('Veuillez saisir au moins une valeur.'); return; }
   var conc = document.getElementById('ecf2-bio-conclusion');
   document.getElementById('ecf2-bio-result-title').textContent = 'Résultats & Z-Scores pour ' + sa + ' SA';
-  if (anomalies===0) { conc.className='ecf2-bio-conclusion ok'; conc.innerHTML='\u2713 Toutes les mesures saisies et Z-scores sont normaux pour '+sa+' SA.'; }
-  else if (anomalies===1) { conc.className='ecf2-bio-conclusion warn'; conc.innerHTML='\u26A0 1 mesure hors normes (ou Z-score > 2). Contr\u00f4le recommand\u00e9.'; }
-  else { conc.className='ecf2-bio-conclusion err'; conc.innerHTML='\u2717 '+anomalies+' mesures ou Z-scores hors normes \u2014 \u00e9chocardiographie sp\u00e9cialis\u00e9e recommand\u00e9e.'; }
+  if (anomalies===0)      { conc.className='ecf2-bio-conclusion ok';   conc.innerHTML='\u2713 Toutes les mesures saisies et Z-scores sont normaux pour '+sa+' SA.'; }
+  else if (anomalies===1) { conc.className='ecf2-bio-conclusion warn';  conc.innerHTML='\u26A0 1 mesure hors normes (ou Z-score > 2). Contr\u00f4le recommand\u00e9.'; }
+  else                    { conc.className='ecf2-bio-conclusion err';   conc.innerHTML='\u2717 '+anomalies+' mesures ou Z-scores hors normes \u2014 \u00e9chocardiographie sp\u00e9cialis\u00e9e recommand\u00e9e.'; }
   document.getElementById('ecf2-bio-result').classList.add('visible');
 }
 
-/* ---- DOPPLER RYTHME TM ---- */
+/* ==============================================
+   DOPPLER RYTHME TM
+   ============================================== */
 function ecf2DisplayHR(bpm) {
   var res = document.getElementById('dop-tm-result');
   var cls, msg;
-  if (bpm < 100) { cls = 'abnormal'; msg = '\u2717 Bradycardie sévère \u2014 Risque de BAV complet. Urgence.'; }
-  else if (bpm < 120) { cls = 'borderline'; msg = '\u26A0 Bradycardie modérée \u2014 Surveillance.'; }
-  else if (bpm > 180) { cls = 'abnormal'; msg = '\u2717 Tachycardie \u2014 Risque de TSV ou Flutter. Urgence si hydrops.'; }
-  else { cls = 'normal'; msg = '\u2713 Rythme normal.'; }
-  
+  if (bpm < 100)      { cls='abnormal';  msg='\u2717 Bradycardie sévère \u2014 Risque de BAV complet. Urgence.'; }
+  else if (bpm < 120) { cls='borderline';msg='\u26A0 Bradycardie modérée \u2014 Surveillance.'; }
+  else if (bpm > 180) { cls='abnormal';  msg='\u2717 Tachycardie \u2014 Risque de TSV ou Flutter. Urgence si hydrops.'; }
+  else                { cls='normal';    msg='\u2713 Rythme normal.'; }
   res.className = 'ecf2-dop-result-box visible ' + cls;
   res.innerHTML = '<span class="ecf2-dop-result-title">Fréquence Cardiaque Calculée</span>'
-                + '<span style="font-size:24px; font-weight:bold; display:block; margin:6px 0;">' + Math.round(bpm) + ' bpm</span>'
-                + msg;
+    + '<span style="font-size:24px;font-weight:bold;display:block;margin:6px 0;">' + Math.round(bpm) + ' bpm</span>'
+    + msg;
 }
 
 function ecf2CalcTMMsec() {
   var ms = parseFloat(document.getElementById('dop-tm-ms').value);
-  if (isNaN(ms) || ms <= 0) return;
-  var bpm = 60000 / ms;
-  ecf2DisplayHR(bpm);
+  if (isNaN(ms)||ms<=0) return;
+  ecf2DisplayHR(60000/ms);
 }
 
 function ecf2CalcTMMm() {
   var sweep = parseFloat(document.getElementById('dop-tm-sweep').value);
-  var dist = parseFloat(document.getElementById('dop-tm-mm').value);
-  if (isNaN(sweep) || isNaN(dist) || dist <= 0) return;
-  // Temps(s) = Distance(mm) / Vitesse(mm/s)
-  var time_sec = dist / sweep;
-  var bpm = 60 / time_sec;
-  ecf2DisplayHR(bpm);
+  var dist  = parseFloat(document.getElementById('dop-tm-mm').value);
+  if (isNaN(sweep)||isNaN(dist)||dist<=0) return;
+  ecf2DisplayHR(60/(dist/sweep));
 }
 
-/* ---- DOPPLER ISTHME ---- */
+/* ==============================================
+   DOPPLER ISTHME
+   ============================================== */
 function ecf2DopIsthme() {
-  var sa = parseInt(document.getElementById('dop-isthme-sa').value);
+  var sa    = parseInt(document.getElementById('dop-isthme-sa').value);
   var diast = document.getElementById('dop-isthme-diast').value;
-  var ip = parseFloat(document.getElementById('dop-isthme-ip').value);
-  var res = document.getElementById('dop-isthme-result');
+  var ip    = parseFloat(document.getElementById('dop-isthme-ip').value);
+  var res   = document.getElementById('dop-isthme-result');
   if (isNaN(sa)||(!diast&&isNaN(ip))) { res.classList.remove('visible'); return; }
   var ipNorms = {20:[1.4,2.6],25:[1.3,2.4],29:[1.2,2.2],33:[1.1,2.0],37:[1.0,1.9]};
-  function getIPNorm(sa) { var keys=Object.keys(ipNorms).map(Number).sort(function(a,b){return a-b;}); for(var i=keys.length-1;i>=0;i--){if(sa>=keys[i])return ipNorms[keys[i]];} return ipNorms[keys[0]]; }
-  var norm = getIPNorm(sa); var cls, msg;
+  function getIPNorm(sa) {
+    var keys=Object.keys(ipNorms).map(Number).sort(function(a,b){return a-b;});
+    for(var i=keys.length-1;i>=0;i--){if(sa>=keys[i])return ipNorms[keys[i]];}
+    return ipNorms[keys[0]];
+  }
+  var norm=getIPNorm(sa), cls, msg;
   if (diast==='retrograde') { cls='abnormal'; msg='\u2717 Flux r\u00e9trograde \u00e0 l\'isthme \u2014 signe de gravit\u00e9 extr\u00eame. Redistribution vasculaire c\u00e9r\u00e9brale s\u00e9v\u00e8re. Hospitalisation et RCP urgente.'; }
   else if (diast==='absent') { cls=sa>=33?'abnormal':'borderline'; msg=sa>=33?'\u2717 Flux diastolique absent pathologique \u2014 bilan RCIU.':'\u26A0 Flux diastolique absent \u2014 borderline avant 33 SA. Contr\u00f4le rapproch\u00e9.'; }
   else { cls=(!isNaN(ip)&&(ip<norm[0]||ip>norm[1]))?'borderline':'normal'; msg=cls==='borderline'?'\u26A0 IP hors normes pour '+sa+' SA (normal\u00a0: '+norm[0]+'\u2013'+norm[1]+'). Contr\u00f4le recommand\u00e9.':'\u2713 Flux ant\u00e9grade normal.'+(isNaN(ip)?'':' IP = '+ip+' dans les normes.'); }
-  res.className = 'ecf2-dop-result-box visible ' + cls;
-  res.innerHTML = '<span class="ecf2-dop-result-title">Interpr\u00e9tation Isthme Aortique \u2014 '+sa+' SA</span>' + msg;
+  res.className='ecf2-dop-result-box visible '+cls;
+  res.innerHTML='<span class="ecf2-dop-result-title">Interpr\u00e9tation Isthme Aortique \u2014 '+sa+' SA</span>'+msg;
 }
 
-/* ---- DOPPLER DUCTUS VENOSUS ---- */
+/* ==============================================
+   DOPPLER DUCTUS VENOSUS
+   ============================================== */
 function ecf2DopDV() {
-  var a = parseFloat(document.getElementById('dop-dv-a').value);
-  var s = parseFloat(document.getElementById('dop-dv-s').value);
+  var a   = parseFloat(document.getElementById('dop-dv-a').value);
+  var s   = parseFloat(document.getElementById('dop-dv-s').value);
   var res = document.getElementById('dop-dv-result');
   if (isNaN(a)||isNaN(s)) { res.classList.remove('visible'); return; }
   var cls, msg;
-  if (a<0) { cls='abnormal'; msg='\u2717 Onde a n\u00e9gative (invers\u00e9e) \u2014 d\u00e9compensation cardiaque droite s\u00e9v\u00e8re. RCP urgente pour d\u00e9cision d\'extraction.'; }
-  else if (a<2) { cls='borderline'; msg='\u26A0 Onde a tr\u00e8s basse (\u2248nulle) \u2014 insuffisance cardiaque droite d\u00e9butante. ECF sp\u00e9cialis\u00e9e, surveillance rapproch\u00e9e.'; }
-  else if (s>0&&(a/s)<0.5) { cls='borderline'; msg='\u26A0 Rapport a/S diminu\u00e9 ('+(a/s).toFixed(2)+') \u2014 pr\u00e9-d\u00e9compensation. Surveillance.'; }
-  else { cls='normal'; msg='\u2713 Onde a positive ('+a+' cm/s), onde S = '+s+' cm/s. Ductus venosus d\'aspect normal.'; }
-  res.className = 'ecf2-dop-result-box visible ' + cls;
-  res.innerHTML = '<span class="ecf2-dop-result-title">Interpr\u00e9tation Ductus Venosus</span>' + msg;
+  if (a<0)           { cls='abnormal';  msg='\u2717 Onde a n\u00e9gative (invers\u00e9e) \u2014 d\u00e9compensation cardiaque droite s\u00e9v\u00e8re. RCP urgente pour d\u00e9cision d\'extraction.'; }
+  else if (a<2)      { cls='borderline';msg='\u26A0 Onde a tr\u00e8s basse (\u2248nulle) \u2014 insuffisance cardiaque droite d\u00e9butante. ECF sp\u00e9cialis\u00e9e, surveillance rapproch\u00e9e.'; }
+  else if (s>0&&(a/s)<0.5) { cls='borderline';msg='\u26A0 Rapport a/S diminu\u00e9 ('+(a/s).toFixed(2)+') \u2014 pr\u00e9-d\u00e9compensation. Surveillance.'; }
+  else               { cls='normal';    msg='\u2713 Onde a positive ('+a+' cm/s), onde S = '+s+' cm/s. Ductus venosus d\'aspect normal.'; }
+  res.className='ecf2-dop-result-box visible '+cls;
+  res.innerHTML='<span class="ecf2-dop-result-title">Interpr\u00e9tation Ductus Venosus</span>'+msg;
 }
 
-/* ---- DOPPLER IT / PSVD ---- */
+/* ==============================================
+   DOPPLER IT / PSVD
+   ============================================== */
 function ecf2DopIT() {
-  var v = parseFloat(document.getElementById('dop-it-v').value);
+  var v   = parseFloat(document.getElementById('dop-it-v').value);
   var res = document.getElementById('dop-it-result');
   if (isNaN(v)) { res.classList.remove('visible'); return; }
-  var gradient = (4*v*v).toFixed(1);
-  var psvd = (4*v*v+4).toFixed(1);
+  var gradient=(4*v*v).toFixed(1), psvd=(4*v*v+4).toFixed(1);
   var cls, msg;
-  if (v>3.0) { cls='abnormal'; msg='\u2717 PSVD estim\u00e9e = '+psvd+' mmHg (gradient IT = '+gradient+' mmHg) \u2014 HTAP s\u00e9v\u00e8re. ECF sp\u00e9cialis\u00e9e urgente.'; }
-  else if (v>2.5) { cls='borderline'; msg='\u26A0 PSVD = '+psvd+' mmHg (gradient '+gradient+' mmHg) \u2014 IT mod\u00e9r\u00e9e \u00e0 s\u00e9v\u00e8re. ECF sp\u00e9cialis\u00e9e recommand\u00e9e.'; }
-  else { cls='normal'; msg='\u2713 PSVD estim\u00e9e = '+psvd+' mmHg (gradient IT = '+gradient+' mmHg). Vitesse IT = '+v+' m/s \u2014 dans les limites acceptables.'; }
-  res.className = 'ecf2-dop-result-box visible ' + cls;
-  res.innerHTML = '<span class="ecf2-dop-result-title">Calcul PSVD \u2014 Bernoulli simplifi\u00e9e</span>' + msg;
+  if (v>3.0)      { cls='abnormal';  msg='\u2717 PSVD estim\u00e9e = '+psvd+' mmHg (gradient IT = '+gradient+' mmHg) \u2014 HTAP s\u00e9v\u00e8re. ECF sp\u00e9cialis\u00e9e urgente.'; }
+  else if (v>2.5) { cls='borderline';msg='\u26A0 PSVD = '+psvd+' mmHg (gradient '+gradient+' mmHg) \u2014 IT mod\u00e9r\u00e9e \u00e0 s\u00e9v\u00e8re. ECF sp\u00e9cialis\u00e9e recommand\u00e9e.'; }
+  else            { cls='normal';    msg='\u2713 PSVD estim\u00e9e = '+psvd+' mmHg (gradient IT = '+gradient+' mmHg). Vitesse IT = '+v+' m/s \u2014 dans les limites acceptables.'; }
+  res.className='ecf2-dop-result-box visible '+cls;
+  res.innerHTML='<span class="ecf2-dop-result-title">Calcul PSVD \u2014 Bernoulli simplifi\u00e9e</span>'+msg;
 }
 
-/* ---- CHECKLIST ---- */
+/* ==============================================
+   CHECKLIST
+   ============================================== */
 (function() {
   var checkItems = document.querySelectorAll('#ecf2-root .ecf2-check-item');
-  var pBar = document.getElementById('ecf2-progress-bar');
+  var pBar  = document.getElementById('ecf2-progress-bar');
   var pText = document.getElementById('ecf2-progress-text');
   var total = checkItems.length;
   function updateProgress() {
     var checked = document.querySelectorAll('#ecf2-root .ecf2-check-item.checked').length;
-    var pct = total > 0 ? Math.round(checked/total*100) : 0;
-    if (pBar) pBar.style.width = pct + '%';
-    if (pText) pText.textContent = checked + ' / ' + total + ' éléments cochés (' + pct + ' %)';
+    var pct = total>0 ? Math.round(checked/total*100) : 0;
+    if (pBar)  pBar.style.width = pct+'%';
+    if (pText) pText.textContent = checked+' / '+total+' éléments cochés ('+pct+' %)';
   }
-  checkItems.forEach(function(item) { item.addEventListener('click', function() { item.classList.toggle('checked'); updateProgress(); }); });
+  checkItems.forEach(function(item) {
+    item.addEventListener('click', function() { item.classList.toggle('checked'); updateProgress(); });
+  });
   var resetBtn = document.getElementById('ecf2-reset-btn');
-  if (resetBtn) resetBtn.addEventListener('click', function() { checkItems.forEach(function(i){i.classList.remove('checked');}); updateProgress(); });
+  if (resetBtn) resetBtn.addEventListener('click', function() {
+    checkItems.forEach(function(i){i.classList.remove('checked');}); updateProgress();
+  });
   updateProgress();
 })();
 
-/* ---- QUIZ ---- */
+/* ==============================================
+   QUIZ
+   ============================================== */
 var ecf2QuizData = [
   {q:"Une coupe 4 cavités T2 montre un VD nettement dominant avec une aorte ascendante grêle. Quelle est la cardiopathie la plus probable ?",opts:["Tétralogie de Fallot","Coarctation de l'aorte","Transposition des gros vaisseaux","CIV périmembraneuse"],ans:1,expl:"La disproportion VD &gt; VG avec aorte ascendante petite est le signe d'appel principal de la CoA. Le canal artériel compense in utero. Il faut mesurer l'isthme aortique (rapport isthme/Ao &lt; 0,7 = seuil d'alerte) et réaliser la coupe 3VT."},
   {q:"À 12 SA, clarté nucale à 4,8 mm, IT à 70 cm/s holosystolique, onde a rétrograde au canal artériel. Quelle est la conduite immédiate ?",opts:["Contrôle simple à 22 SA","ECF spécialisée précoce + DPNI/amniocentèse en urgence","Simplement noter dans le dossier","Proposer une IRM fœtale"],ans:1,expl:"La triple positivité (CN ≥ 4,5 mm, IT significative, onde a rétrograde) confère un risque de cardiopathie et de T21 très élevé (LR+ ×15–35). L'ECF spécialisée précoce (14–16 SA) et un diagnostic chromosomique s'imposent en urgence."},
@@ -3265,10 +3354,10 @@ function ecf2QuizInit() {
     var optsHTML = q.opts.map(function(o, j) {
       return '<button class="ecf2-quiz-opt" onclick="ecf2QuizAnswer('+i+','+j+')" id="ecf2-qopt-'+i+'-'+j+'">'+o+'</button>';
     }).join('');
-    card.innerHTML = '<span class="ecf2-quiz-num">Cas clinique ' + (i+1) + ' / ' + ecf2QuizData.length + '</span>'
-      + '<div class="ecf2-quiz-q">' + q.q + '</div>'
-      + '<div class="ecf2-quiz-options">' + optsHTML + '</div>'
-      + '<div class="ecf2-quiz-expl" id="ecf2-qexpl-'+i+'"><strong>Explication :</strong> ' + q.expl + '</div>';
+    card.innerHTML = '<span class="ecf2-quiz-num">Cas clinique '+(i+1)+' / '+ecf2QuizData.length+'</span>'
+      +'<div class="ecf2-quiz-q">'+q.q+'</div>'
+      +'<div class="ecf2-quiz-options">'+optsHTML+'</div>'
+      +'<div class="ecf2-quiz-expl" id="ecf2-qexpl-'+i+'"><strong>Explication :</strong> '+q.expl+'</div>';
     container.appendChild(card);
   });
 }
@@ -3281,10 +3370,10 @@ window.ecf2QuizAnswer = function(qi, chosen) {
     var btn = document.getElementById('ecf2-qopt-'+qi+'-'+j);
     if (!btn) continue;
     btn.disabled = true;
-    if (j === correct) btn.classList.add('reveal-correct');
+    if (j===correct) btn.classList.add('reveal-correct');
   }
   var chosenBtn = document.getElementById('ecf2-qopt-'+qi+'-'+chosen);
-  if (chosenBtn) { chosenBtn.classList.add(chosen === correct ? 'correct' : 'wrong'); }
+  if (chosenBtn) chosenBtn.classList.add(chosen===correct ? 'correct' : 'wrong');
   var expl = document.getElementById('ecf2-qexpl-'+qi);
   if (expl) expl.classList.add('visible');
   if (ecf2QuizAnswered.every(Boolean)) {
@@ -3296,8 +3385,8 @@ window.ecf2QuizAnswer = function(qi, chosen) {
     var sc = document.getElementById('ecf2-quiz-score');
     if (sc) {
       sc.style.display = 'block';
-      sc.innerHTML = '\u{1F3C6} Score final : ' + trueScore + ' / ' + ecf2QuizData.length + ' réponses correctes'
-        + (trueScore >= 8 ? ' — Excellent !' : trueScore >= 6 ? ' — Bien !' : ' — À réviser');
+      sc.innerHTML = '\uD83C\uDFC6 Score final : '+trueScore+' / '+ecf2QuizData.length+' réponses correctes'
+        +(trueScore>=8?' — Excellent !':trueScore>=6?' — Bien !':' — À réviser');
     }
   }
 };
@@ -3305,33 +3394,30 @@ window.ecf2QuizAnswer = function(qi, chosen) {
 window.ecf2QuizReset = function() { ecf2QuizInit(); };
 ecf2QuizInit();
 
-/* ============================================================
-   MOTEUR DU CALCULATEUR (OUTIL 1)
-   ============================================================ */
+/* ==============================================
+   MOTEUR CALCULATEUR (OUTIL 2)
+   ============================================== */
 (function() {
   var REFS = {
-    anneau_ao: [[14,2.0,1.4,2.6],[16,2.3,1.7,2.9],[18,2.8,2.1,3.5],[20,3.3,2.5,4.1],[22,3.8,2.9,4.7],[24,4.3,3.3,5.3],[26,4.9,3.8,6.0],[28,5.5,4.3,6.7],[30,6.1,4.8,7.4],[32,6.7,5.2,8.2],[34,7.3,5.7,8.9],[36,7.8,6.1,9.5],[38,8.2,6.4,10.0],[40,8.5,6.6,10.4]],
-    anneau_ap: [[14,2.4,1.7,3.1],[16,2.8,2.1,3.5],[18,3.3,2.5,4.1],[20,3.9,3.0,4.8],[22,4.5,3.5,5.5],[24,5.1,4.0,6.2],[26,5.8,4.5,7.1],[28,6.5,5.0,8.0],[30,7.2,5.6,8.8],[32,7.9,6.1,9.7],[34,8.5,6.6,10.4],[36,9.1,7.0,11.2],[38,9.6,7.4,11.8],[40,10.0,7.7,12.3]],
-    vg_td: [[14,3.5,2.5,4.5],[16,4.2,3.1,5.3],[18,5.1,3.9,6.3],[20,6.2,4.8,7.6],[22,7.4,5.8,9.0],[24,8.8,6.9,10.7],[26,10.2,8.0,12.4],[28,11.6,9.1,14.1],[30,13.0,10.2,15.8],[32,14.3,11.2,17.4],[34,15.5,12.1,18.9],[36,16.5,12.9,20.1],[38,17.3,13.5,21.1],[40,17.9,14.0,21.8]],
-    vd_td: [[14,3.8,2.7,4.9],[16,4.6,3.4,5.8],[18,5.6,4.2,7.0],[20,6.8,5.2,8.4],[22,8.1,6.2,10.0],[24,9.6,7.4,11.8],[26,11.1,8.6,13.6],[28,12.6,9.8,15.4],[30,14.1,10.9,17.3],[32,15.5,12.0,19.0],[34,16.8,13.0,20.6],[36,17.9,13.8,22.0],[38,18.8,14.5,23.1],[40,19.5,15.0,24.0]],
-    siv: [[14,1.3,0.9,1.7],[16,1.5,1.1,1.9],[18,1.7,1.3,2.1],[20,1.9,1.5,2.3],[22,2.1,1.7,2.5],[24,2.3,1.9,2.7],[26,2.5,2.1,2.9],[28,2.7,2.3,3.1],[30,2.9,2.5,3.3],[32,3.1,2.7,3.5],[34,3.3,2.9,3.7],[36,3.5,3.1,3.9],[38,3.7,3.3,4.1],[40,3.9,3.5,4.3]],
-    rct: [[14,0.27,0.22,0.32],[16,0.27,0.22,0.32],[18,0.28,0.23,0.33],[20,0.28,0.23,0.33],[22,0.29,0.24,0.34],[24,0.29,0.24,0.34],[26,0.30,0.25,0.35],[28,0.30,0.25,0.35],[30,0.30,0.25,0.35],[32,0.30,0.25,0.35],[34,0.31,0.26,0.36],[36,0.31,0.26,0.36],[38,0.31,0.26,0.36],[40,0.32,0.27,0.37]],
-    fc_min: [[14,150],[16,148],[18,146],[20,145],[22,142],[24,140],[26,138],[28,136],[30,134],[32,132],[34,130],[36,128],[38,125],[40,120]],
-    fc_max: [[14,170],[16,168],[18,166],[20,163],[22,162],[24,160],[26,158],[28,156],[30,154],[32,152],[34,150],[36,148],[38,145],[40,160]]
+    anneau_ao:[[14,2.0,1.4,2.6],[16,2.3,1.7,2.9],[18,2.8,2.1,3.5],[20,3.3,2.5,4.1],[22,3.8,2.9,4.7],[24,4.3,3.3,5.3],[26,4.9,3.8,6.0],[28,5.5,4.3,6.7],[30,6.1,4.8,7.4],[32,6.7,5.2,8.2],[34,7.3,5.7,8.9],[36,7.8,6.1,9.5],[38,8.2,6.4,10.0],[40,8.5,6.6,10.4]],
+    anneau_ap:[[14,2.4,1.7,3.1],[16,2.8,2.1,3.5],[18,3.3,2.5,4.1],[20,3.9,3.0,4.8],[22,4.5,3.5,5.5],[24,5.1,4.0,6.2],[26,5.8,4.5,7.1],[28,6.5,5.0,8.0],[30,7.2,5.6,8.8],[32,7.9,6.1,9.7],[34,8.5,6.6,10.4],[36,9.1,7.0,11.2],[38,9.6,7.4,11.8],[40,10.0,7.7,12.3]],
+    vg_td:[[14,3.5,2.5,4.5],[16,4.2,3.1,5.3],[18,5.1,3.9,6.3],[20,6.2,4.8,7.6],[22,7.4,5.8,9.0],[24,8.8,6.9,10.7],[26,10.2,8.0,12.4],[28,11.6,9.1,14.1],[30,13.0,10.2,15.8],[32,14.3,11.2,17.4],[34,15.5,12.1,18.9],[36,16.5,12.9,20.1],[38,17.3,13.5,21.1],[40,17.9,14.0,21.8]],
+    vd_td:[[14,3.8,2.7,4.9],[16,4.6,3.4,5.8],[18,5.6,4.2,7.0],[20,6.8,5.2,8.4],[22,8.1,6.2,10.0],[24,9.6,7.4,11.8],[26,11.1,8.6,13.6],[28,12.6,9.8,15.4],[30,14.1,10.9,17.3],[32,15.5,12.0,19.0],[34,16.8,13.0,20.6],[36,17.9,13.8,22.0],[38,18.8,14.5,23.1],[40,19.5,15.0,24.0]],
+    siv:[[14,1.3,0.9,1.7],[16,1.5,1.1,1.9],[18,1.7,1.3,2.1],[20,1.9,1.5,2.3],[22,2.1,1.7,2.5],[24,2.3,1.9,2.7],[26,2.5,2.1,2.9],[28,2.7,2.3,3.1],[30,2.9,2.5,3.3],[32,3.1,2.7,3.5],[34,3.3,2.9,3.7],[36,3.5,3.1,3.9],[38,3.7,3.3,4.1],[40,3.9,3.5,4.3]],
+    rct:[[14,0.27,0.22,0.32],[16,0.27,0.22,0.32],[18,0.28,0.23,0.33],[20,0.28,0.23,0.33],[22,0.29,0.24,0.34],[24,0.29,0.24,0.34],[26,0.30,0.25,0.35],[28,0.30,0.25,0.35],[30,0.30,0.25,0.35],[32,0.30,0.25,0.35],[34,0.31,0.26,0.36],[36,0.31,0.26,0.36],[38,0.31,0.26,0.36],[40,0.32,0.27,0.37]],
+    fc_min:[[14,150],[16,148],[18,146],[20,145],[22,142],[24,140],[26,138],[28,136],[30,134],[32,132],[34,130],[36,128],[38,125],[40,120]],
+    fc_max:[[14,170],[16,168],[18,166],[20,163],[22,162],[24,160],[26,158],[28,156],[30,154],[32,152],[34,150],[36,148],[38,145],[40,160]]
   };
 
   function interp(table, sa) {
-    if (!table || !table.length) return [sa, 0, 0, 0];
-    if (sa <= table[0][0]) return table[0];
-    if (sa >= table[table.length-1][0]) return table[table.length-1];
-    for (var i = 0; i < table.length - 1; i++) {
-      var s1 = table[i][0], s2 = table[i+1][0];
-      if (sa >= s1 && sa <= s2) {
-        var t = (sa - s1) / (s2 - s1);
-        var result = [sa];
-        for (var j = 1; j < table[i].length; j++) {
-          result.push(+(table[i][j] + t * (table[i+1][j] - table[i][j])).toFixed(2));
-        }
+    if (!table||!table.length) return [sa,0,0,0];
+    if (sa<=table[0][0]) return table[0];
+    if (sa>=table[table.length-1][0]) return table[table.length-1];
+    for (var i=0;i<table.length-1;i++) {
+      var s1=table[i][0],s2=table[i+1][0];
+      if (sa>=s1&&sa<=s2) {
+        var t=(sa-s1)/(s2-s1), result=[sa];
+        for (var j=1;j<table[i].length;j++) result.push(+(table[i][j]+t*(table[i+1][j]-table[i][j])).toFixed(2));
         return result;
       }
     }
@@ -3339,115 +3425,102 @@ ecf2QuizInit();
   }
 
   function getTrimestre(sa) {
-    if (sa <= 14) return { label: '1er trimestre', cls: 't1' };
-    if (sa <= 26) return { label: '2e trimestre', cls: 't2' };
-    return { label: '3e trimestre', cls: 't3' };
+    if (sa<=14) return {label:'1er trimestre',cls:'t1'};
+    if (sa<=26) return {label:'2e trimestre',cls:'t2'};
+    return {label:'3e trimestre',cls:'t3'};
   }
 
-  function barWidth(val, min, max) {
-    var pct = Math.round(((val - min) / (max - min)) * 100);
-    return Math.max(5, Math.min(95, pct));
+  function barWidth(val,min,max) {
+    var pct=Math.round(((val-min)/(max-min))*100);
+    return Math.max(5,Math.min(95,pct));
   }
 
   function renderCalc(sa) {
-    var root = document.getElementById('ecf2-root');
-    var ao = interp(REFS.anneau_ao, sa), ap = interp(REFS.anneau_ap, sa);
-    var vg = interp(REFS.vg_td, sa), vd = interp(REFS.vd_td, sa);
-    var siv = interp(REFS.siv, sa), rct = interp(REFS.rct, sa);
-    var fcMin = interp(REFS.fc_min, sa), fcMax = interp(REFS.fc_max, sa);
-    var tri = getTrimestre(sa);
-    var ratio = (ao && ao[1] > 0 && ap && ap[1]) ? (ap[1]/ao[1]).toFixed(2) : '—';
+    var root=document.getElementById('ecf2-root');
+    var ao=interp(REFS.anneau_ao,sa), ap=interp(REFS.anneau_ap,sa);
+    var vg=interp(REFS.vg_td,sa), vd=interp(REFS.vd_td,sa);
+    var siv=interp(REFS.siv,sa), rct=interp(REFS.rct,sa);
+    var fcMin=interp(REFS.fc_min,sa), fcMax=interp(REFS.fc_max,sa);
+    var tri=getTrimestre(sa);
+    var ratio=(ao&&ao[1]>0&&ap&&ap[1])?(ap[1]/ao[1]).toFixed(2):'—';
 
-    function row(label, val, min, max, unit) {
-      val = val || 0; min = min || 0; max = max || 1;
-      var bw = barWidth(val, min * 0.5, max * 1.5);
-      return '<div class="calc-row"><span class="calc-row-label">' + label + '</span>' +
-        '<span class="calc-row-value">' + val + ' <small class="val-unit">' + unit + '</small></span>' +
-        '<span class="calc-row-range">' + min + '–' + max + '</span></div>' +
-        '<div class="calc-bar-wrap"><div class="calc-bar" style="width:' + bw + '%"></div></div>';
+    function row(label,val,min,max,unit) {
+      val=val||0; min=min||0; max=max||1;
+      var bw=barWidth(val,min*0.5,max*1.5);
+      return '<div class="calc-row"><span class="calc-row-label">'+label+'</span>'
+        +'<span class="calc-row-value">'+val+' <small>'+unit+'</small></span>'
+        +'<span class="calc-row-range">'+min+'–'+max+'</span></div>'
+        +'<div class="calc-bar-wrap"><div class="calc-bar" style="width:'+bw+'%"></div></div>';
     }
 
-    var grid = root.querySelector('#calcBiometryGrid');
+    var grid=root.querySelector('#calcBiometryGrid');
     if (grid) {
-      grid.innerHTML =
-        '<div class="calc-card"><div class="calc-card-header">&#128196; Anneaux valvulaires</div><div class="calc-card-body">' +
-        row('Anneau aortique', ao[1], ao[2], ao[3], 'mm') + row('Anneau pulmonaire', ap[1], ap[2], ap[3], 'mm') +
-        '<div class="calc-row"><span class="calc-row-label">Ratio AP/Ao</span><span class="calc-row-value">' + ratio + '</span><span class="calc-row-range">1.1–1.3</span></div></div></div>' +
-        '<div class="calc-card"><div class="calc-card-header">&#128200; Diamètres ventriculaires (télédiast.)</div><div class="calc-card-body">' +
-        row('VG télédiastolique', vg[1], vg[2], vg[3], 'mm') + row('VD télédiastolique', vd[1], vd[2], vd[3], 'mm') + '</div></div>' +
-        '<div class="calc-card"><div class="calc-card-header">&#128200; Septum et rapport CT</div><div class="calc-card-body">' +
-        row('Épaisseur SIV', siv[1], siv[2], siv[3], 'mm') + row('Rapport cardiothoracique', rct[1], rct[2], rct[3], '') + '</div></div>' +
-        '<div class="calc-card"><div class="calc-card-header">&#9829; Rythme cardiaque</div><div class="calc-card-body" style="text-align:center; padding-top:14px;">' +
-        '<div class="calc-fc-display">' + (fcMin[1]||'—') + '–' + (fcMax[1]||'—') + ' <span class="calc-fc-unit">bpm</span></div>' +
-        '<div style="font-size:11px; color:#7a8899; margin-top:6px;">Plage normale à ' + sa + ' SA</div>' +
-        '<div style="font-size:11px; color:#c8102e; margin-top:4px;">&lt; ' + ((fcMin[1]||10)-10) + ' = bradycardie &nbsp;|&nbsp; &gt; ' + ((fcMax[1]||10)+10) + ' = tachycardie</div></div></div>';
+      grid.innerHTML=
+        '<div class="calc-card"><div class="calc-card-header">&#128196; Anneaux valvulaires</div><div class="calc-card-body">'
+        +row('Anneau aortique',ao[1],ao[2],ao[3],'mm')+row('Anneau pulmonaire',ap[1],ap[2],ap[3],'mm')
+        +'<div class="calc-row"><span class="calc-row-label">Ratio AP/Ao</span><span class="calc-row-value">'+ratio+'</span><span class="calc-row-range">1.1–1.3</span></div></div></div>'
+        +'<div class="calc-card"><div class="calc-card-header">&#128200; Diamètres ventriculaires</div><div class="calc-card-body">'
+        +row('VG télédiastolique',vg[1],vg[2],vg[3],'mm')+row('VD télédiastolique',vd[1],vd[2],vd[3],'mm')+'</div></div>'
+        +'<div class="calc-card"><div class="calc-card-header">&#128200; Septum et rapport CT</div><div class="calc-card-body">'
+        +row('Épaisseur SIV',siv[1],siv[2],siv[3],'mm')+row('Rapport cardiothoracique',rct[1],rct[2],rct[3],'')+'</div></div>'
+        +'<div class="calc-card"><div class="calc-card-header">&#9829; Rythme cardiaque</div><div class="calc-card-body" style="text-align:center;padding-top:14px;">'
+        +'<div class="calc-fc-display">'+(fcMin[1]||'—')+'–'+(fcMax[1]||'—')+' <span class="calc-fc-unit">bpm</span></div>'
+        +'<div style="font-size:11px;color:#7a8899;margin-top:6px;">Plage normale à '+sa+' SA</div>'
+        +'<div style="font-size:11px;color:#c8102e;margin-top:4px;">&lt; '+((fcMin[1]||10)-10)+' = bradycardie &nbsp;|&nbsp; &gt; '+((fcMax[1]||10)+10)+' = tachycardie</div></div></div>';
     }
 
-    var ctx = root.querySelector('#calcContextBox');
+    var ctx=root.querySelector('#calcContextBox');
     if (ctx) {
-      ctx.innerHTML = '<div class="calc-info-title">&#128204; Contexte clinique à ' + sa + ' SA</div>' +
-        '<span class="calc-tri-badge ' + tri.cls + '">' + tri.label + '</span>' +
-        '<div style="font-size:12.5px; color:#3a4a5c; line-height:1.6; margin-top:8px;">' +
-        (sa < 18 ? '<strong>Avant 18 SA :</strong> fenêtre acoustique souvent limitée. L\'examen peut être incomplet.' :
-         sa < 22 ? '<strong>18–21 SA :</strong> coupes généralement accessibles mais examen optimal à 22–26 SA.' :
-         sa < 27 ? '<strong>22–26 SA :</strong> période optimale pour l\'échocardiographie fœtale spécialisée.' :
-         sa < 32 ? '<strong>27–31 SA :</strong> examen de bonne qualité. Attention à l\'ombrage costal croissant.' :
-         '<strong>&#8805; 32 SA :</strong> fenêtre acoustique parfois réduite. Voie périnéale si nécessaire.') +
-        '</div>';
+      ctx.innerHTML='<div class="calc-info-title">&#128204; Contexte clinique à '+sa+' SA</div>'
+        +'<span class="calc-tri-badge '+tri.cls+'">'+tri.label+'</span>'
+        +'<div style="font-size:12.5px;color:#3a4a5c;line-height:1.6;margin-top:8px;">'
+        +(sa<18?'<strong>Avant 18 SA :</strong> fenêtre acoustique souvent limitée. L\'examen peut être incomplet.'
+        :sa<22?'<strong>18–21 SA :</strong> coupes généralement accessibles mais examen optimal à 22–26 SA.'
+        :sa<27?'<strong>22–26 SA :</strong> période optimale pour l\'échocardiographie fœtale spécialisée.'
+        :sa<32?'<strong>27–31 SA :</strong> examen de bonne qualité. Attention à l\'ombrage costal croissant.'
+        :'<strong>&#8805; 32 SA :</strong> fenêtre acoustique parfois réduite. Voie périnéale si nécessaire.')
+        +'</div>';
     }
 
-    var cr = root.querySelector('#calcResults');
+    var cr=root.querySelector('#calcResults');
     if (cr) cr.classList.add('visible');
   }
 
-  var calcRoot = document.getElementById('ecf2-root');
+  var calcRoot    = document.getElementById('ecf2-root');
   if (!calcRoot) return;
   var calcInput   = calcRoot.querySelector('#calcSaInput');
   var calcSlider  = calcRoot.querySelector('#calcSlider');
   var calcDisplay = calcRoot.querySelector('#calcSaDisplay');
   var calcBtn     = calcRoot.querySelector('#calcRunBtn');
 
-  if (calcSlider && calcInput && calcDisplay) {
+  if (calcSlider&&calcInput&&calcDisplay) {
     calcSlider.addEventListener('input', function() {
-      calcInput.value = calcSlider.value;
-      calcDisplay.textContent = calcSlider.value + ' SA';
+      calcInput.value=calcSlider.value;
+      calcDisplay.textContent=calcSlider.value+' SA';
       renderCalc(parseInt(calcSlider.value));
     });
     calcInput.addEventListener('input', function() {
-      var v = parseInt(calcInput.value);
-      if (v >= 14 && v <= 40) {
-        calcSlider.value = v;
-        calcDisplay.textContent = v + ' SA';
-      }
+      var v=parseInt(calcInput.value);
+      if (v>=14&&v<=40) { calcSlider.value=v; calcDisplay.textContent=v+' SA'; }
     });
-    // Init auto à 22 SA
     setTimeout(function() {
-      calcInput.value = 28;
-      calcSlider.value = 28;
-      calcDisplay.textContent = '28 SA';
-      renderCalc(28);
-    }, 100);
+      calcInput.value=28; calcSlider.value=28;
+      calcDisplay.textContent='28 SA'; renderCalc(28);
+    },100);
   }
 
   if (calcBtn) {
     calcBtn.addEventListener('click', function() {
-      var sa = parseInt(calcInput.value);
-      if (isNaN(sa) || sa < 14 || sa > 40) {
-        calcInput.style.borderColor = '#c8102e';
-        setTimeout(function() { calcInput.style.borderColor = ''; }, 1500);
-        return;
-      }
+      var sa=parseInt(calcInput.value);
+      if (isNaN(sa)||sa<14||sa>40) { calcInput.style.borderColor='#c8102e'; setTimeout(function(){calcInput.style.borderColor='';},1500); return; }
       renderCalc(sa);
     });
   }
 
   if (calcInput) {
-    calcInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') calcBtn && calcBtn.click();
-    });
+    calcInput.addEventListener('keydown', function(e) { if (e.key==='Enter') calcBtn&&calcBtn.click(); });
   }
 })();
-
        
 </script>
 
