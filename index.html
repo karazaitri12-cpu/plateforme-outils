@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plateforme d'outils médicaux | Dr. Kara Zaitri</title>
-  <meta name="description" content="Out ils professionnels d'aide à la décision en gynécologie-obstétrique." />
+  <meta name="description" content="Outils professionnels d'aide à la décision en gynécologie-obstétrique." />
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#2B6CB0">
   <link rel="apple-touch-icon" href="/icon-192.png">
@@ -23,16 +23,25 @@
       --text: #F7FAFC; --text-muted: #A0AEC0;
       --border: #4A5568; --shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
+    
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* CORRECTION ICI : width: 100% et overflow-x: hidden empêchent la page de déborder à droite sur mobile */
+    html, body { width: 100%; overflow-x: hidden; }
+    
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
     .main-header { background: #fff !important; border-bottom: 3px solid #1a3a5c !important; padding: 25px 20px !important; text-align: center !important; }
     .main-header h1 { font-size: 20px !important; color: #1a3a5c !important; margin: 0 !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; font-weight: 700 !important; }
-    .main-header .subtitle { font-size: 13px !important; color: #607d8b !important; margin: 5px 0 0 0 !important; }
+    
+    /* CORRECTION ICI : Ajout de word-wrap pour que le long lien coupe et ne pousse pas l'écran */
+    .main-header .subtitle { font-size: 13px !important; color: #607d8b !important; margin: 5px 0 0 0 !important; word-wrap: break-word !important; overflow-wrap: break-word !important; }
     .main-header .subtitle a { color: #1a3a5c !important; text-decoration: none !important; border-bottom: 1px dotted #1a3a5c !important; }
 
-    .header-actions { display: flex; gap: 10px; align-items: center; }
+    /* CORRECTION ICI : Ajout de flex-wrap pour que les boutons s'adaptent si l'écran est trop petit */
+    .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    
     .icon-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; text-decoration: none; }
     .icon-btn:hover { background: var(--border); }
 
@@ -65,41 +74,40 @@
     .tool-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px); }
     .tool-card.disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
 
-/* === CARTE PREMIUM — bordure dorée, grisée, non cliquable MAIS avec effet hover === */
-.tool-card.premium {
-  border: 2px solid #C9A84C !important;
-  background: #fafaf7 !important;
-  opacity: 1 !important;   /* 0.72 !important;   */
-  cursor: not-allowed !important;
-/*  pointer-events: none !important;   */
-  filter: grayscale(0.35) !important;
-  box-shadow: 0 0 0 1px rgba(201,168,76,0.18) !important;
-  transition: all 0.2s ease !important; /* ← Transition ajoutée */
-}
+    /* === CARTE PREMIUM — bordure dorée, grisée, non cliquable MAIS avec effet hover === */
+    .tool-card.premium {
+      border: 2px solid #C9A84C !important;
+      background: #fafaf7 !important;
+      opacity: 1 !important; 
+      cursor: not-allowed !important;
+      filter: grayscale(0.35) !important;
+      box-shadow: 0 0 0 1px rgba(201,168,76,0.18) !important;
+      transition: all 0.2s ease !important; 
+    }
 
-/* Effet hover visuel pour premium (sans clic) */
-.tool-card.premium:hover {
-  transform: translateY(-2px) !important; /* ← Lift effect */
-  box-shadow: 0 4px 16px rgba(201,168,76,0.35) !important; /* Ombre dorée renforcée */
-  opacity: 0.85 !important; /* Légèrement moins grisé au survol */
-}
-   
+    /* Effet hover visuel pour premium (sans clic) */
+    .tool-card.premium:hover {
+      transform: translateY(-2px) !important; 
+      box-shadow: 0 4px 16px rgba(201,168,76,0.35) !important; 
+      opacity: 0.85 !important; 
+    }
+       
     body.dark-mode .tool-card.premium {
       background: #252d3a !important;
       border-color: #a07d2a !important;
     }
 
-  body.dark-mode .tool-card.premium:hover {
-  box-shadow: 0 4px 16px rgba(160,125,42,0.45) !important;
-  }
-    
+    body.dark-mode .tool-card.premium:hover {
+      box-shadow: 0 4px 16px rgba(160,125,42,0.45) !important;
+    }
+        
     .tool-card.premium .tool-content h3 { color: #6b7280 !important; }
     .tool-card.premium .tool-content p  { color: #9ca3af !important; }
     .tool-card.premium .tool-icon {
       background: linear-gradient(135deg, #9ca3af, #6b7280) !important;
     }
 
-    /* Badge ★ PREMIUM en haut à droite (remplace l'étoile favori) */
+    /* Badge ★ PREMIUM en haut à droite */
     .premium-badge {
       position: absolute; top: 10px; right: 10px;
       display: flex; align-items: center; gap: 3px;
@@ -133,13 +141,12 @@
 
     .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; transition: background 0.3s; }
 
-    ::-webkit-scrollbar { width: 0px; background: transparent; }
     html { scrollbar-width: none; }
     body { -ms-overflow-style: none; overflow-y: auto; }
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
 
     @media (max-width: 600px) {
       .tools-grid { grid-template-columns: 1fr; }
-      .header-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
       .header-actions { width: 100%; justify-content: flex-end; }
     }
   </style>
@@ -213,8 +220,6 @@
 
   // -------------------------------------------------------
   // RÉCEPTION DU TOKEN DEPUIS LE PARENT WORDPRESS (postMessage)
-  // outils.dr-karazaitri-ma.net et dr-karazaitri-ma.net
-  // ont des localStorage séparés — postMessage fait le pont
   // -------------------------------------------------------
   window.addEventListener('message', function(e) {
     if (e.origin !== 'https://www.dr-karazaitri-ma.net' &&
@@ -295,7 +300,6 @@
       const isFav     = favorites.includes(t.id);
       const isPremium = t.premium === true;
 
-      // Carte premium : grisée + bordure dorée + badge + cadenas, non cliquable
       if (isPremium && !isPremiumUser) {
         const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
         return `
@@ -311,7 +315,6 @@
         </div>`;
       }
 
-      // Carte normale (gratuite ou premium déverrouillé)
       const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
       return `
       <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
