@@ -243,7 +243,10 @@
 #ecf2-root .ecf2-algo-breadcrumb { font-family: 'Trebuchet MS', Arial, sans-serif; font-size: 11px; color: #7a8598; margin-bottom: 10px; min-height: 16px; line-height: 1.5; }
 #ecf2-root .ecf2-algo-breadcrumb span { color: #c8a84b; margin: 0 4px; }
 #ecf2-root .ecf2-algo-step { display: none; animation: ecf2FadeIn 0.25s ease; }
-#ecf2-root .ecf2-algo-step.active { display: block; }
+#ecf2-root .ecf2-algo-step { display: none !important; }
+#ecf2-root .ecf2-algo-step.active { display: block !important; }
+@media (min-width: 1px) {
+  #ecf2-root .ecf2-algo-step.active { animation: none; }
 #ecf2-root .ecf2-algo-question { background: #1a3a5c; color: #fff; padding: 16px 20px; border-radius: 4px 4px 0 0; font-family: 'Trebuchet MS', Arial, sans-serif; font-size: 14px; font-weight: bold; line-height: 1.4; }
 #ecf2-root .ecf2-algo-question .ecf2-algo-step-num { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: #c8a84b; display: block; margin-bottom: 5px; }
 #ecf2-root .ecf2-algo-options { background: #f7f8fc; border: 1px solid #d0dae8; border-top: none; border-radius: 0 0 4px 4px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -2823,15 +2826,27 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   var selBtns = document.querySelectorAll('#ecf2-root .ecf2-algo-sel-btn');
   var trees   = document.querySelectorAll('#ecf2-root .ecf2-algo-tree');
   selBtns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var target = btn.getAttribute('data-tree');
-      selBtns.forEach(function(b) { b.classList.remove('active'); });
-      trees.forEach(function(t)   { t.classList.remove('active'); });
-      btn.classList.add('active');
-      var tree = document.getElementById('tree-' + target);
-      if (tree) tree.classList.add('active');
-    });
+  btn.addEventListener('click', function() {
+    var target = btn.getAttribute('data-tree');
+    selBtns.forEach(function(b) { b.classList.remove('active'); });
+    trees.forEach(function(t)   { t.classList.remove('active'); });
+    btn.classList.add('active');
+    var tree = document.getElementById('tree-' + target);
+    if (tree) {
+      tree.classList.add('active');
+      /* Forcer l'affichage du premier step */
+      var steps = tree.querySelectorAll('.ecf2-algo-step');
+      steps.forEach(function(s) { s.classList.remove('active'); });
+      var firstStep = tree.querySelector('.ecf2-algo-step');
+      if (firstStep) firstStep.classList.add('active');
+      /* Réinitialiser l'historique */
+      window._ecf2History[target]  = [];
+      window._ecf2BCLabels[target] = [];
+      var bc = document.getElementById('bc-' + target);
+      if (bc) bc.innerHTML = '';
+    }
   });
+});
 
   /* ---- NAVIGATION FICHES CARDIOPATHIES ---- */
   var cardioBtns   = document.querySelectorAll('#ecf2-root .ecf2-cardio-btn');
