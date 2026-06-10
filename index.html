@@ -26,32 +26,17 @@
     
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* CORRECTION : On applique le fond au HTML pour qu'il n'y ait plus de bande "blanche" en cas de rebond */
-    html { background: var(--bg); transition: background 0.3s; scrollbar-width: none; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
     
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; 
-      background: var(--bg); 
-      color: var(--text); 
-      line-height: 1.5; 
-      transition: background 0.3s, color 0.3s;
-      -ms-overflow-style: none; 
-      overflow-y: auto;
-      overflow-x: hidden; /* Sécurité anti-débordement horizontal */
-    }
-    
-    /* CORRECTION : On s'assure que le container ne dépasse jamais l'écran */
+    /* CORRECTION 1 : Sécuriser la largeur du conteneur */
     .container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
     .main-header { background: #fff !important; border-bottom: 3px solid #1a3a5c !important; padding: 25px 20px !important; text-align: center !important; }
     .main-header h1 { font-size: 20px !important; color: #1a3a5c !important; margin: 0 !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; font-weight: 700 !important; }
-    
-    /* CORRECTION : word-break strict pour empêcher l'URL longue de casser l'écran mobile */
-    .main-header .subtitle { font-size: 13px !important; color: #607d8b !important; margin: 5px 0 0 0 !important; word-break: break-word !important; overflow-wrap: break-word !important; }
+    .main-header .subtitle { font-size: 13px !important; color: #607d8b !important; margin: 5px 0 0 0 !important; word-break: break-word !important; }
     .main-header .subtitle a { color: #1a3a5c !important; text-decoration: none !important; border-bottom: 1px dotted #1a3a5c !important; }
 
     .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    
     .icon-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; text-decoration: none; }
     .icon-btn:hover { background: var(--border); }
 
@@ -61,10 +46,11 @@
     .search-box input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); background: var(--card); }
     .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
     .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); background: var(--border); width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; cursor: pointer; transition: background 0.2s, color 0.2s; }
-    .clear-icon:hover { background: var(--text-muted); color: var(--card); }
 
     .filters { display: flex; gap: 10px; flex-wrap: wrap; }
-    .filter-btn { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: normal; transition: all 0.2s; color: var(--text); }
+    
+    /* CORRECTION 2 : Empêcher un nom de catégorie long de casser la page */
+    .filter-btn { max-width: 100%; white-space: normal; word-wrap: break-word; padding: 8px 16px; border: 1px solid var(--border); background: var(--bg); border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: normal; transition: all 0.2s; color: var(--text); }
     .filter-btn:hover { background: #EBF8FF; border-color: var(--primary); color: var(--primary); }
     .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 600; }
     body.dark-mode .filter-btn:hover { background: rgba(43,108,176,0.2); }
@@ -73,10 +59,11 @@
 
     .section-title { font-size: 1.05rem; font-weight: 600; color: var(--primary); margin: 28px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
     
-    /* CORRECTION : min(100%, 260px) sécurise les grilles sur les téléphones particulièrement étroits */
-    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 14px; margin-bottom: 32px; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-bottom: 32px; width: 100%; }
 
+    /* CORRECTION 3 : Le 'min-width: 0' dompte les grilles CSS et les flexbox */
     .tool-card {
+      min-width: 0; /* CRUCIAL pour ne jamais forcer l'élargissement */
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 16px;
       transition: all 0.2s; text-decoration: none; color: inherit;
@@ -85,65 +72,37 @@
     .tool-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px); }
     .tool-card.disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
 
-    .tool-card.premium {
-      border: 2px solid #C9A84C !important;
-      background: #fafaf7 !important;
-      opacity: 1 !important; 
-      cursor: not-allowed !important;
-      filter: grayscale(0.35) !important;
-      box-shadow: 0 0 0 1px rgba(201,168,76,0.18) !important;
-      transition: all 0.2s ease !important; 
-    }
-
-    .tool-card.premium:hover {
-      transform: translateY(-2px) !important; 
-      box-shadow: 0 4px 16px rgba(201,168,76,0.35) !important; 
-      opacity: 0.85 !important; 
-    }
-       
+    .tool-card.premium { border: 2px solid #C9A84C !important; background: #fafaf7 !important; opacity: 1 !important; cursor: not-allowed !important; filter: grayscale(0.35) !important; box-shadow: 0 0 0 1px rgba(201,168,76,0.18) !important; transition: all 0.2s ease !important; }
+    .tool-card.premium:hover { transform: translateY(-2px) !important; box-shadow: 0 4px 16px rgba(201,168,76,0.35) !important; opacity: 0.85 !important; }
     body.dark-mode .tool-card.premium { background: #252d3a !important; border-color: #a07d2a !important; }
     body.dark-mode .tool-card.premium:hover { box-shadow: 0 4px 16px rgba(160,125,42,0.45) !important; }
-        
     .tool-card.premium .tool-content h3 { color: #6b7280 !important; }
     .tool-card.premium .tool-content p  { color: #9ca3af !important; }
     .tool-card.premium .tool-icon { background: linear-gradient(135deg, #9ca3af, #6b7280) !important; }
 
-    .premium-badge {
-      position: absolute; top: 10px; right: 10px;
-      display: flex; align-items: center; gap: 3px;
-      background: linear-gradient(135deg, #C9A84C, #e8c96a);
-      color: #fff; font-size: 10px; font-weight: 700;
-      padding: 2px 7px; border-radius: 10px;
-      letter-spacing: 0.04em; z-index: 2;
-      box-shadow: 0 1px 4px rgba(201,168,76,0.35);
-      pointer-events: none;
-    }
-
-    .premium-lock {
-      position: absolute; bottom: 10px; right: 10px;
-      font-size: 14px; color: #C9A84C;
-      opacity: 0.85; pointer-events: none;
-    }
-
+    .premium-badge { position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 3px; background: linear-gradient(135deg, #C9A84C, #e8c96a); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; letter-spacing: 0.04em; z-index: 2; box-shadow: 0 1px 4px rgba(201,168,76,0.35); pointer-events: none; }
+    .premium-lock { position: absolute; bottom: 10px; right: 10px; font-size: 14px; color: #C9A84C; opacity: 0.85; pointer-events: none; }
     .star-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--border); transition: 0.2s; z-index: 2; padding: 0; line-height: 1; }
-    .star-btn:hover { transform: scale(1.1); }
     .star-btn.is-fav { color: #D69E2E; }
-
     .tool-badge { position: absolute; top: -8px; right: 40px; background: #E53E3E; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; border: 1px solid var(--card); z-index: 2; box-shadow: var(--shadow); }
     .tool-badge.maj { background: var(--primary); }
 
     .tool-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; flex-shrink: 0; }
-    .tool-content { flex: 1; min-width: 0; padding-right: 15px; }
+    
+    /* CORRECTION 4 : Coupe ultra agressive des mots médicaux complexes injectés dynamiquement */
+    .tool-content { flex: 1; min-width: 0; padding-right: 15px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; }
     .tool-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin: 0 0 4px; line-height: 1.3; }
     .tool-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
 
-    /* CORRECTION : Le footer prend 20px de padding global pour que le texte ne touche plus les bords de l'écran mobile */
-    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; transition: background 0.3s; word-break: break-word; overflow-wrap: break-word; }
+    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 20px 0; margin-top: 40px; font-size: 0.85rem; color: var(--text-muted); text-align: center; transition: background 0.3s; }
 
     ::-webkit-scrollbar { width: 0px; background: transparent; }
+    html { scrollbar-width: none; }
+    body { -ms-overflow-style: none; overflow-y: auto; }
 
     @media (max-width: 600px) {
-      .tools-grid { grid-template-columns: 1fr; }
+      /* CORRECTION 5 : Le minmax(0, 1fr) empêche le 1fr de faire déborder la grille */
+      .tools-grid { grid-template-columns: minmax(0, 1fr); }
       .header-actions { width: 100%; justify-content: flex-end; }
     }
   </style>
