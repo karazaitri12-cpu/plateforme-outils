@@ -2,868 +2,1408 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<!-- Balise Viewport indispensable pour un affichage mobile optimal (évite l'effet "tout petit") -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1a3a5c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="VM Fœtale">
-<meta name="description" content="Aide au diagnostic et évaluation pronostique de la ventriculomégalie cérébrale anténatale">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<title>Ventriculomégalie Anténatale — Dr KARA-ZAITRI</title>
+<meta name="apple-mobile-web-app-title" content="VM F&#339;tale">
+<meta name="description" content="Aide au diagnostic et &#233;valuation pronostique de la ventriculom&#233;galie c&#233;r&#233;brale ant&#233;natale &#8212; CNGOF/SFMFME">
+<link rel="manifest" id="pwaManifest">
+<script>
+(function(){
+  try {
+    var m = '{\n  "name": "Ventriculomégalie Anténatale",\n  "short_name": "VM Fœtale",\n  "description": "Outil d\'aide au diagnostic et à l\'évaluation pronostique de la ventriculomégalie cérébrale anténatale — CNGOF/SFMFME",\n  "start_url": "./index.html",\n  "display": "standalone",\n  "background_color": "#0d1b2a",\n  "theme_color": "#1a3a5c",\n  "orientation": "portrait-primary",\n  "lang": "fr",\n  "icons": [\n    {\n      "src": "icon-192.png",\n      "sizes": "192x192",\n      "type": "image/png",\n      "purpose": "any maskable"\n    },\n    {\n      "src": "icon-512.png",\n      "sizes": "512x512",\n      "type": "image/png",\n      "purpose": "any maskable"\n    }\n  ],\n  "categories": ["medical", "health"],\n  "screenshots": []\n}\n';
+    var b = new Blob([m], {type:'application/json'});
+    document.getElementById('pwaManifest').href = URL.createObjectURL(b);
+  } catch(e) {}
+})();
+</script>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFtElEQVR4nO3dXVLcMBBF4SaVVcBCqIKtwOqyljxkIVkHeaBccQ1j/CfJ3fee7z01GklHtsMwPDy+vH0EYOrH1QMArkQAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsEYAsPbz6gGo+/v7158z//7p9f251Vjw1QN/JK+ds5t9K6JohwBOGLXh1xDEcQSw095Nf3Zzjn49NwSwwdZNOGrzZRtPZQTwjbWNlmWDVRlnRgRwx3cbKvtmqjz2KxDAjNLmUXovPRFALG8WlY2i/v7OsA/g3uZQ3RhO73Ur2wBcT0XX973EMgBOQuZgYhfA7cI7Lvqc+3zYBMCJt8x5biw+Du28wFvcm4ssn3PqTf4K4H6J38ttvqSvAG6L2cLtHKlfCWQDYPMf5xSBZABs/vNcIpALgM3fjkMEUgGw+dtTj0AmADZ/P8oRSATA5u9PNQKJAObY/P0ozm35AOYnkeICZTOfY4WrQOkAFBaguuprUDYA7vuvo/Q8UDaAOTb/eCpzXjIA7vtzUHgeKBdA1Yl2UHFtSn87dJZvYrvqKpRhXE+v788VN/6k1O8DjHrwzfqV5lXGVem2tGwAPSa59UnWaoxZxzVX9bmsTAA9J7j3JfzoeLOOa0nFCMo9BLc24v71yGtkHZeaEgH0OllGboA9r5V1XGsq/rdoiQB6qLJAIzjPRfoAeiyO84IvcZ3n9AHMtbj9qbAoV2kxN1UefielAjiLzb/ObY5SB9Dy4ddtYc9o+QO37POeOoBWsi9CRi5zZhEAsCRtAK1uf1xOsh7OzF2V26C0AQAjSAeQ+eSpQn0OpQMA1qQMoMX9v/rJNdLRuazwHJAyAGAUAoA1yQCyXm4rU51TyQCArdIFUPHX6rAs+4NwugCAkeQCyHjKqFCcW7kAgD0IANYIANYIANYIANYIANYIANYIANYIANYIANYIANbkAuATpP0ozq1cAMAe6QLI/vlx7JP99zvSBQCMJBlAxpOmOtU5lQwA2IoAYC1lAC0ehFUv2Vdo8e18WdcjZQDAKNIBZD11KlGfQ+kAgDVpA2j1AzH1E6ynVn+ZJ/MapA0AGMEigMwnUFYuc5Y6gJafC3JZ0BZa/k3m7POeOoDWsi9GBm5zVCqAFp8OdVvgPVrMTbVP8KYPoMeGJYKvXOc5fQC9VFicUZznokQAvX5JZuTC73mtrONaU+nhd1IigJ5GLNSR18g6LjUPjy9vH1cPYqveJ0zrB7hWY8w6rrmKp39E4QAi+k101p85VBkXAXR0xUmztvGuWvAs46p6+kcUDyCi3oSrqb4e5R6Cq02wk4prUy6ACL47KIvKtz6TkgHcIoLxVOa8bAC3J47KglRQ/b5/rmwAEbUnXkX1NSgdQATPA6Mp3PfPlQ/gFhH0ozi3EgHwPNCf0n3/nEQAEUTQk+rmjxAKIIIIelDe/BFiAUQQQUvqmz9CMIAIImjBYfNHiAYQQQRnuGz+COEAIojgCKfNH1Hw49BH3Nv46gu7l+scSV8BJvcWkqvBf66bP8LkCjDndolf4z4fdgFEeJ94E+bgk2UAEcu3QOqbwPV9L7ENYOJ0Ejq9163sA4jQPxXV398ZBDDz3f8MVdssSu+lJwK4o/LmqTz2KxDAN7J88dSaKuPMiAA22PpDsyzfVDdh468jgJ32/gS55d/bGvF6bgjghCwfp2DTH0cADY0Kgg3fDgF0lvUrzfGJAGDN4uPQwBICgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgLV/SNoswh/WeIoAAAAASUVORK5CYII=">
+<title>Ventriculom&#233;galie Ant&#233;natale &#8212; Dr KARA-ZAITRI</title>
 <style>
-/* =============================================
-   RESET & STRUCTURE DE BASE
-   ============================================= */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:        #1a3a5c;
+  --navy-deep:   #0d1b2a;
+  --navy-mid:    #1e4570;
+  --steel:       #8ba5be;
+  --mist:        #c8d8e8;
+  --ice:         #e8f0f8;
+  --white:       #ffffff;
+  --text:        #1a2332;
+  --text-soft:   #4a5a6a;
+  --text-muted:  #7a8a9a;
+
+  /* ACCENT OR — signature visuelle */
+  --gold:        #c8a84b;
+  --gold-light:  #e8c96a;
+  --gold-bg:     #fdf8ec;
+
+  --ok:          #1b6b3a;
+  --ok-bg:       #e6f4ec;
+  --ok-border:   #3aab6a;
+  --warn:        #7a4d00;
+  --warn-bg:     #fff8e6;
+  --warn-border: #f5a623;
+  --alert:       #8a3500;
+  --alert-bg:    #fff3ed;
+  --alert-border:#e86030;
+  --danger:      #7f1d1d;
+  --danger-bg:   #4a1515;
+  --danger-text: #ffffff;
+  --danger-border:#d63b3b;
+
+  --radius-sm:  4px;
+  --radius:     8px;
+  --radius-lg:  14px;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.18);
+  --shadow:     0 4px 16px rgba(13,27,42,.22);
+  --shadow-lg:  0 8px 32px rgba(13,27,42,.3);
+
+  --tab-h:      52px;
+  --header-h:   84px;
 }
+
+html {
+  height: 100%;
+  scrollbar-width: none;
+  background: #e8ecf2;
+}
+html::-webkit-scrollbar { display: none; }
 
 body {
-  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+  font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 14px;
-  line-height: 1.55;
-  color: #1a2535;
-  background-color: #e8ecf2; /* Fond gris clair autour de l'app sur PC */
+  color: var(--text);
+  background: #e8ecf2;
+  min-height: 100%;
   -webkit-font-smoothing: antialiased;
+  -ms-overflow-style: none;
+  overflow-y: auto;
 }
+body::-webkit-scrollbar { display: none; }
 
-/* Conteneur principal (limite la largeur sur PC, prend 100% sur mobile) */
-.app-container {
-  max-width: 800px;
-  margin: 0 auto;
-  background: #f4f6f9;
-  min-height: 100vh;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#vmApp {
   display: flex;
   flex-direction: column;
+  min-height: 100dvh;
+  max-width: 760px;
+  margin: 0 auto;
+  background: #f4f6f9;
 }
 
-/* =============================================
-   HEADER
-   ============================================= */
-.vm-header {
-  background: #1a3a5c;
-  color: #fff;
-  padding: 24px 24px 20px;
-  border-bottom: 4px solid #c8a84b;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.vm-header-icon {
-  font-size: 38px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.vm-header-content {
-  flex: 1;
-}
-
-.vm-header-meta {
-  font-family: 'Trebuchet MS', Arial, sans-serif;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #c8a84b;
-  margin-bottom: 6px;
-}
-
-.vm-header h1 {
-  font-family: 'Georgia', serif;
-  font-size: 20px;
-  font-weight: normal;
-  color: #fff;
-  line-height: 1.3;
-  margin-bottom: 6px;
-}
-
-.vm-header-sub {
-  font-family: 'Trebuchet MS', Arial, sans-serif;
-  font-size: 11.5px;
-  color: #a8c4d8;
-}
-
-/* =============================================
-   NAVIGATION ONGLETS
-   ============================================= */
-.vm-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  background: #e9eef5;
-  border-bottom: 2px solid #1a3a5c;
+/* ---- HEADER ---- */
+#vmApp .app-header {
+  background: var(--navy);
+  padding: 20px 22px 18px;
+  padding-top: calc(20px + env(safe-area-inset-top, 0px));
+  border-bottom: 4px solid var(--gold);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.vm-tab {
-  flex: 1 1 auto;
-  text-align: center;
-  padding: 14px 10px;
-  font-family: 'Trebuchet MS', Arial, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  color: #1a3a5c;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  border-bottom: 3px solid transparent;
-  transition: background 0.2s, border-color 0.2s;
-  white-space: nowrap;
+#vmApp .header-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+#vmApp .header-icon {
+  width: 42px;
+  height: 42px;
+  background: rgba(255,255,255,.1);
+  border-radius: 10px;
+  border: 1px solid rgba(200,168,75,.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+#vmApp .header-icon svg { width: 24px; height: 24px; }
+
+#vmApp .header-text { flex: 1; min-width: 0; }
+
+#vmApp .header-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: .12em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
-.vm-tab:hover { background: #d0dae8; }
-.vm-tab.active {
-  background: #fff;
-  border-bottom: 3px solid #c8a84b;
-  color: #1a3a5c;
+#vmApp .header-title {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: normal;
+  color: var(--white);
+  line-height: 1.25;
+  margin-bottom: 4px;
 }
 
-/* =============================================
-   PANELS & CONTENU
-   ============================================= */
-.vm-panel {
-  display: none;
-  padding: 20px 24px;
+#vmApp .header-sub {
+  font-size: 11px;
+  color: var(--steel);
+  letter-spacing: .02em;
+}
+
+#vmApp .header-badge {
+  background: rgba(200,168,75,.15);
+  border: 1px solid rgba(200,168,75,.4);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ---- TABS ---- */
+#vmApp .tabs-bar {
+  background: #eaf0f7;
+  border-bottom: 2px solid var(--navy);
+  position: sticky;
+  top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  z-index: 99;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+#vmApp .tabs-bar::-webkit-scrollbar { display: none; }
+
+#vmApp .tabs-inner {
+  display: flex;
+  min-width: max-content;
+}
+
+#vmApp .tab-btn {
+  padding: 0 18px;
+  height: var(--tab-h);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--navy);
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#vmApp .tab-btn .tab-icon { font-size: 13px; opacity: .7; }
+#vmApp .tab-btn.active {
+  background: var(--white);
+  color: var(--navy);
+  border-bottom: 3px solid var(--gold);
+}
+#vmApp .tab-btn.active .tab-icon { opacity: 1; }
+#vmApp .tab-btn:hover:not(.active) { background: #d8e4f0; }
+
+/* ---- CONTENT ---- */
+#vmApp .content {
+  background: #f4f6f9;
   flex: 1;
-  animation: fadeIn 0.25s ease;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-.vm-panel.active { display: block; }
 
-@keyframes fadeIn {
+#vmApp .tab-panel { display: none; animation: fadeSlide .22s ease; }
+#vmApp .tab-panel.active { display: block; }
+
+@keyframes fadeSlide {
   from { opacity: 0; transform: translateY(5px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.vm-section-title {
-  font-family: 'Trebuchet MS', Arial, sans-serif;
-  font-size: 13px;
-  font-weight: bold;
-  color: #1a3a5c;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-bottom: 2px solid #1a3a5c;
-  padding-bottom: 6px;
-  margin: 20px 0 14px;
-}
-.vm-section-title:first-child { margin-top: 0; }
+/* ---- SECTION ---- */
+#vmApp .section { padding: 20px 20px 0; }
 
-.vm-box {
-  padding: 14px 18px;
-  border-radius: 4px;
-  font-size: 13.5px;
-  line-height: 1.6;
+#vmApp .section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#vmApp .section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--mist);
+}
+
+/* ---- CARD ---- */
+#vmApp .card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--mist);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
   margin-bottom: 14px;
 }
-.vm-box.info { background: #eef4fb; border-left: 4px solid #1a3a5c; color: #1a3a5c; }
-.vm-box.warn { background: #fffbeb; border-left: 4px solid #c8a84b; color: #7a5a00; }
-.vm-box strong { font-weight: bold; }
+#vmApp .card-head {
+  background: linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 100%);
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#vmApp .card-body { padding: 16px; }
 
-/* =============================================
-   ÉVALUATION (CHAMPS DE SAISIE)
-   ============================================= */
-.vm-measure-wrap {
+/* ============================================================
+   MESURE WIDGET
+   ============================================================ */
+#vmApp .measure-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+#vmApp .measure-slot {
+  background: #f7f9fc;
+  border: 2px solid var(--mist);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color .2s, box-shadow .2s;
+}
+#vmApp .measure-slot:focus-within {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(200,168,75,.15);
+}
+#vmApp .measure-slot.active-slot { border-color: var(--gold); }
+
+#vmApp .measure-side {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+#vmApp .measure-slot.active-slot .measure-side { color: var(--gold); }
+
+#vmApp .measure-field { display: flex; align-items: baseline; gap: 4px; }
+
+#vmApp .measure-input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px dashed #bcc8d4;
+  background: none;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--navy);
+  font-family: 'Georgia', serif;
+  outline: none;
+  text-align: center;
+  padding-bottom: 2px;
+  transition: border-color .2s;
+  -moz-appearance: textfield;
+}
+#vmApp .measure-input:focus { border-bottom-color: var(--gold); }
+#vmApp .measure-input::-webkit-outer-spin-button,
+#vmApp .measure-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+#vmApp .measure-input::placeholder { color: var(--mist); }
+
+#vmApp .measure-unit {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+#vmApp .measure-hint {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* RESULT BANNER */
+#vmApp .result-banner {
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: none;
+  margin-bottom: 14px;
+}
+#vmApp .result-banner.visible { display: flex; gap: 14px; align-items: flex-start; }
+
+#vmApp .result-indicator {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+#vmApp .result-body { flex: 1; }
+#vmApp .result-cat  { font-size: 14px; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
+#vmApp .result-desc { font-size: 12px; line-height: 1.55; }
+
+/* States */
+#vmApp .state-normal { background: var(--ok-bg);    border-left: 5px solid var(--ok-border);     color: var(--ok); }
+#vmApp .state-minor  { background: var(--warn-bg);  border-left: 5px solid var(--warn-border);   color: var(--warn); }
+#vmApp .state-mod    { background: var(--alert-bg); border-left: 5px solid var(--alert-border);  color: var(--alert); }
+#vmApp .state-severe { background: var(--danger-bg);border-left: 5px solid var(--danger-border); color: var(--danger-text); }
+#vmApp .state-severe .result-desc { color: rgba(255,255,255,.8); }
+#vmApp .state-error  { background: var(--alert-bg); border-left: 5px solid var(--alert-border);  color: var(--alert); }
+
+#vmApp .ind-normal { background: var(--ok-bg);    color: var(--ok-border); }
+#vmApp .ind-minor  { background: var(--warn-bg);  color: var(--warn-border); }
+#vmApp .ind-mod    { background: var(--alert-bg); color: var(--alert-border); }
+#vmApp .ind-severe { background: rgba(255,255,255,.15); color: var(--danger-text); }
+
+/* TECHNIQUE STEPS */
+#vmApp .tech-step {
   display: flex;
   gap: 12px;
-  margin-bottom: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--ice);
+  align-items: flex-start;
 }
-.vm-measure-card {
-  flex: 1;
-  background: #fff;
-  border: 2px solid #c8d4e3;
-  border-radius: 6px;
-  padding: 16px 10px;
-  text-align: center;
-  transition: border-color 0.2s;
-}
-.vm-measure-card:focus-within {
-  border-color: #1a3a5c;
-  box-shadow: 0 0 0 3px rgba(26,58,92,0.1);
-}
-.vm-measure-label {
-  font-family: 'Trebuchet MS', Arial, sans-serif;
+#vmApp .tech-step:last-child { border-bottom: none; }
+
+#vmApp .step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
   font-size: 11px;
-  font-weight: bold;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+#vmApp .step-text { font-size: 12.5px; color: var(--text); line-height: 1.55; flex: 1; }
+#vmApp .step-text strong { color: var(--navy); }
+
+/* ============================================================
+   CLASSIFICATION
+   ============================================================ */
+#vmApp .class-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+
+#vmApp .class-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--mist);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+#vmApp .class-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+  background: #fbfcfd;
+  transition: background .12s;
+}
+#vmApp .class-card-head:hover { background: var(--ice); }
+
+#vmApp .class-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+#vmApp .pill-ok     { background: var(--ok-bg);    color: var(--ok);    border: 1px solid var(--ok-border); }
+#vmApp .pill-minor  { background: var(--warn-bg);  color: var(--warn);  border: 1px solid var(--warn-border); }
+#vmApp .pill-mod    { background: var(--alert-bg); color: var(--alert); border: 1px solid var(--alert-border); }
+#vmApp .pill-severe { background: var(--navy);     color: var(--white); border: 1px solid var(--navy-mid); }
+
+#vmApp .class-range {
+  font-size: 13px;
+  color: var(--text-soft);
+  font-weight: 700;
+  font-family: 'Georgia', serif;
+}
+#vmApp .class-chevron {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: transform .25s;
+}
+#vmApp .class-card.open .class-chevron { transform: rotate(180deg); }
+
+#vmApp .class-card-body {
+  display: none;
+  padding: 0 14px 14px;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.6;
+  border-top: 1px solid var(--ice);
+}
+#vmApp .class-card.open .class-card-body { display: block; }
+
+#vmApp .class-card-body ul { list-style: none; padding: 8px 0 0; display: flex; flex-direction: column; gap: 5px; }
+#vmApp .class-card-body li { display: flex; gap: 7px; }
+#vmApp .class-card-body li::before { content: '\2192'; color: var(--gold); font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+
+/* ETIOLOGY TABLE */
+#vmApp .etio-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+#vmApp .etio-table thead th {
+  background: var(--navy);
+  color: var(--white);
+  padding: 9px 12px;
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: .04em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #7a8899;
+}
+#vmApp .etio-table tbody tr:nth-child(even) { background: var(--ice); }
+#vmApp .etio-table tbody td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--mist);
+  vertical-align: top;
+  line-height: 1.45;
+  color: var(--text);
+}
+#vmApp .etio-table tbody tr:last-child td { border-bottom: none; }
+
+/* ============================================================
+   BILAN CHECKLIST
+   ============================================================ */
+#vmApp .progress-bar-wrap {
+  background: var(--white);
+  border: 1px solid var(--mist);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+#vmApp .progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+#vmApp .progress-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+#vmApp .progress-count { font-size: 12px; font-weight: 700; color: var(--gold); }
+
+#vmApp .progress-track { height: 6px; background: var(--ice); border-radius: 3px; overflow: hidden; }
+#vmApp .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+  border-radius: 3px;
+  transition: width .4s ease;
+  width: 0%;
+}
+
+#vmApp .bilan-group {
+  background: var(--white);
+  border: 1px solid var(--mist);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+}
+#vmApp .bilan-group-title {
+  background: linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 100%);
+  padding: 9px 14px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+#vmApp .bilan-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--ice);
+  cursor: pointer;
+  transition: background .1s;
+  user-select: none;
+}
+#vmApp .bilan-check-item:last-child { border-bottom: none; }
+#vmApp .bilan-check-item:hover { background: var(--ice); }
+
+#vmApp .check-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--mist);
+  border-radius: 4px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: background .15s, border-color .15s;
+}
+#vmApp .bilan-check-item.checked .check-box { background: var(--ok-border); border-color: var(--ok-border); }
+#vmApp .bilan-check-item.checked .check-box::after { content: '\2713'; font-size: 11px; color: var(--white); font-weight: 700; }
+#vmApp .bilan-check-item.checked { background: #f0fdf4; border-color: #a8d8b8; }
+
+#vmApp .check-content { flex: 1; }
+#vmApp .check-main { font-size: 12.5px; font-weight: 700; color: var(--navy); line-height: 1.4; transition: color .15s; margin-bottom: 2px; }
+#vmApp .bilan-check-item.checked .check-main { text-decoration: line-through; color: var(--text-muted); font-weight: normal; }
+#vmApp .check-note { font-size: 11px; color: var(--text-muted); line-height: 1.45; font-style: italic; }
+
+/* ============================================================
+   PRONOSTIC — SEGMENTED CONTROLS
+   ============================================================ */
+#vmApp .seg-item { margin-bottom: 16px; }
+
+#vmApp .seg-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
   margin-bottom: 8px;
   display: block;
 }
-.vm-measure-input-grp {
+
+#vmApp .seg-group {
   display: flex;
-  align-items: baseline;
-  justify-content: center;
   gap: 4px;
-}
-.vm-measure-input {
-  width: 70px;
-  font-family: 'Georgia', serif;
-  font-size: 26px;
-  font-weight: bold;
-  color: #1a3a5c;
-  border: none;
-  border-bottom: 2px dashed #aab4c0;
-  text-align: center;
-  background: transparent;
-  outline: none;
-  padding-bottom: 2px;
-}
-.vm-measure-input:focus { border-bottom-color: #c8a84b; }
-.vm-unit {
-  font-size: 14px;
-  color: #7a8899;
-  font-weight: bold;
+  background: #dde6f0;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  flex-wrap: wrap;
 }
 
-.vm-result-banner {
-  display: none;
-  padding: 16px 20px;
-  border-radius: 6px;
-  margin-top: 10px;
-  align-items: center;
-  gap: 16px;
-  animation: fadeIn 0.3s ease;
-}
-.vm-result-banner.visible { display: flex; }
-.vm-result-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
-.vm-result-text { flex: 1; }
-.vm-result-title { font-size: 15px; font-weight: bold; margin-bottom: 4px; }
-.vm-result-desc { font-size: 13px; line-height: 1.5; }
+#vmApp .seg-group input[type="radio"] { display: none; }
 
-/* Status Colors */
-.status-ok { background: #edf7f0; border-left: 5px solid #166534; color: #14532d; }
-.status-minor { background: #fffbeb; border-left: 5px solid #b45309; color: #78350f; }
-.status-mod { background: #fef2f2; border-left: 5px solid #c8102e; color: #7f1d1d; }
-.status-severe { background: #4a1515; border-left: 5px solid #c8102e; color: #fff; }
-.status-severe .vm-result-desc { color: rgba(255,255,255,0.8); }
-
-/* =============================================
-   ACCORDÉONS CLASSIFICATION
-   ============================================= */
-.vm-acc-item {
-  background: #fff;
-  border: 1px solid #d8dfe8;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  overflow: hidden;
-}
-.vm-acc-header {
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  background: #fbfcfd;
-  transition: background 0.2s;
-}
-.vm-acc-header:hover { background: #f0f4f9; }
-.vm-acc-title-grp { display: flex; align-items: center; gap: 10px; }
-.vm-badge {
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.badge-ok { background: #e8f5e9; color: #166534; }
-.badge-minor { background: #fff3e0; color: #b45309; }
-.badge-mod { background: #fce8ea; color: #c8102e; }
-.badge-severe { background: #1a3a5c; color: #fff; }
-.vm-acc-range { font-family: 'Georgia', serif; font-size: 14px; font-weight: bold; color: #1a3a5c; }
-.vm-acc-icon { font-size: 12px; color: #aab4c0; transition: transform 0.3s; }
-.vm-acc-item.open .vm-acc-icon { transform: rotate(180deg); }
-.vm-acc-body {
-  display: none;
-  padding: 14px 16px;
-  border-top: 1px solid #e8ecf2;
-  font-size: 13px;
-  line-height: 1.6;
-  color: #2c3e50;
-}
-.vm-acc-item.open .vm-acc-body { display: block; }
-.vm-acc-body ul { padding-left: 20px; margin-top: 6px; }
-.vm-acc-body ul li { margin-bottom: 4px; }
-
-.vm-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 14px; }
-.vm-table th { background: #1a3a5c; color: #fff; padding: 8px 12px; text-align: left; }
-.vm-table td { padding: 8px 12px; border-bottom: 1px solid #d8dfe8; background: #fff; }
-.vm-table tr:nth-child(even) td { background: #fbfcfd; }
-
-/* =============================================
-   CHECKLIST BILAN
-   ============================================= */
-.vm-progress-wrap { background: #fff; border: 1px solid #c8d4e3; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; }
-.vm-progress-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px; font-weight: bold; color: #1a3a5c; text-transform: uppercase; }
-.vm-progress-track { height: 6px; background: #e8ecf2; border-radius: 3px; overflow: hidden; }
-.vm-progress-fill { height: 100%; background: #c8a84b; width: 0%; transition: width 0.3s ease; }
-
-.vm-check-group { margin-bottom: 16px; }
-.vm-check-title { font-family: 'Trebuchet MS', Arial, sans-serif; font-size: 11.5px; font-weight: bold; color: #7a8899; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; border-bottom: 1px solid #d8dfe8; padding-bottom: 4px; }
-.vm-check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: #fff; border: 1px solid #d8dfe8; border-radius: 4px; margin-bottom: 6px; cursor: pointer; transition: background 0.2s; user-select: none; }
-.vm-check-item:hover { background: #f0f4f9; }
-.vm-check-box { width: 18px; height: 18px; border: 2px solid #aab4c0; border-radius: 3px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-.vm-check-item.checked { background: #f0fdf4; border-color: #a8d8b8; }
-.vm-check-item.checked .vm-check-box { background: #166534; border-color: #166534; }
-.vm-check-item.checked .vm-check-box::after { content: '\2713'; color: #fff; font-size: 12px; font-weight: bold; }
-.vm-check-text { flex: 1; }
-.vm-check-main { font-size: 13px; font-weight: bold; color: #1a3a5c; margin-bottom: 2px; }
-.vm-check-sub { font-size: 11.5px; color: #7a8899; line-height: 1.4; }
-.vm-check-item.checked .vm-check-main { text-decoration: line-through; color: #7a8899; }
-
-/* =============================================
-   PRONOSTIC (SEGMENTED CONTROLS)
-   ============================================= */
-.vm-score-item { margin-bottom: 18px; }
-.vm-score-label { font-size: 13px; font-weight: bold; color: #1a3a5c; margin-bottom: 8px; }
-.vm-seg-group { display: flex; gap: 4px; background: #e8ecf2; padding: 4px; border-radius: 6px; flex-wrap: wrap;}
-.vm-seg-group label {
+#vmApp .seg-group label {
   flex: 1;
   text-align: center;
-  padding: 10px 6px;
+  padding: 10px 8px;
   font-size: 12px;
-  font-weight: bold;
-  color: #4a5568;
+  font-weight: 700;
+  color: var(--text-soft);
   background: transparent;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all .2s;
   user-select: none;
-}
-.vm-seg-group input[type="radio"] { display: none; }
-.vm-seg-group input[type="radio"]:checked + label {
-  background: #1a3a5c;
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  line-height: 1.3;
+  min-width: 80px;
 }
 
-.vm-score-result {
+#vmApp .seg-group input[type="radio"]:checked + label {
+  background: var(--navy);
+  color: var(--white);
+  box-shadow: 0 2px 8px rgba(13,27,42,.25);
+}
+
+#vmApp .seg-group label:hover { background: rgba(26,58,92,.1); }
+#vmApp .seg-group input[type="radio"]:checked + label:hover { background: var(--navy); }
+
+/* Score result */
+#vmApp .score-result-box {
+  border-radius: var(--radius);
+  padding: 16px 18px;
   display: none;
+  margin-top: 14px;
   text-align: center;
-  padding: 20px;
-  border-radius: 6px;
-  margin-top: 20px;
-  animation: fadeIn 0.3s ease;
+  animation: fadeSlide .25s ease;
 }
-.vm-score-result.visible { display: block; }
-.vm-score-icon { font-size: 36px; margin-bottom: 10px; }
-.vm-score-title { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
-.vm-score-desc { font-size: 13px; line-height: 1.5; }
+#vmApp .score-result-box.visible { display: block; }
 
-/* =============================================
+#vmApp .score-result-icon { font-size: 30px; margin-bottom: 8px; }
+#vmApp .score-result-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+#vmApp .score-result-text  { font-size: 12.5px; line-height: 1.55; }
+
+/* PROG CARDS */
+#vmApp .prog-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+#vmApp .prog-card {
+  background: var(--white);
+  border: 1px solid var(--mist);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+#vmApp .prog-card-head {
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+#vmApp .prog-card-head.fav   { background: var(--ok-bg);    color: var(--ok); }
+#vmApp .prog-card-head.defav { background: var(--danger-bg);color: var(--danger-text); }
+
+#vmApp .prog-card-list { list-style: none; padding: 8px 12px 10px; }
+#vmApp .prog-card-list li {
+  font-size: 12px;
+  color: var(--text);
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--mist);
+  line-height: 1.4;
+  display: flex;
+  gap: 6px;
+}
+#vmApp .prog-card-list li:last-child { border-bottom: none; }
+#vmApp .prog-card-list.fav   li::before { content: '\2713'; color: var(--ok-border);     font-weight: 700; flex-shrink: 0; }
+#vmApp .prog-card-list.defav li::before { content: '\26A0'; color: var(--danger-border); font-size: 11px;  flex-shrink: 0; }
+
+/* ============================================================
+   INFO BOX
+   ============================================================ */
+#vmApp .info-box {
+  background: #f0f5fb;
+  border: 1px solid #c8d8ee;
+  border-left: 4px solid var(--navy);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+#vmApp .info-box strong { color: var(--navy); }
+
+/* ============================================================
+   FOOTER / DISCLAIMER
+   ============================================================ */
+#vmApp .disclaimer {
+  background: #e8ecf2;
+  border-top: 1px solid #d0dae8;
+  padding: 16px 20px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+#vmApp .disclaimer strong { color: var(--text-soft); }
+
+/* ============================================================
    PWA INSTALL BANNER
-   ============================================= */
-.vm-pwa-banner {
-  background: #0d1b2a;
-  color: #fff;
+   ============================================================ */
+#vmApp .install-banner {
+  background: var(--navy-deep);
+  color: var(--white);
   padding: 12px 18px;
   display: none;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #c8a84b;
+  gap: 12px;
+  border-bottom: 2px solid var(--gold);
 }
-.vm-pwa-banner.visible { display: flex; }
-.vm-pwa-text { font-size: 12px; line-height: 1.4; }
-.vm-pwa-text strong { color: #c8a84b; display: block; font-size: 13px; }
-.vm-pwa-btn {
-  background: #c8a84b;
-  color: #1a3a5c;
+#vmApp .install-banner.show { display: flex; }
+
+#vmApp .install-text { font-size: 12px; line-height: 1.4; flex: 1; }
+#vmApp .install-text strong { color: var(--gold); display: block; font-size: 13px; margin-bottom: 2px; }
+
+#vmApp .install-btn {
+  background: var(--gold);
+  color: var(--navy);
   border: none;
-  padding: 8px 14px;
-  border-radius: 4px;
-  font-weight: bold;
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
   font-size: 12px;
-  text-transform: uppercase;
+  font-weight: 700;
   cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
-/* =============================================
-   FOOTER
-   ============================================= */
-.vm-footer {
-  background: #e8ecf2;
-  border-top: 1px solid #d0dae8;
-  padding: 16px 24px;
-  font-size: 11.5px;
-  color: #7a8899;
-  line-height: 1.5;
-  text-align: justify;
-  margin-top: auto; /* Pousse le footer en bas */
+#vmApp .install-close {
+  background: none;
+  border: none;
+  color: var(--steel);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 2px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
-/* =============================================
-   RESPONSIVE MOBILE
-   ============================================= */
-@media (max-width: 600px) {
-  .vm-header { padding: 20px 16px; flex-direction: column; gap: 10px; }
-  .vm-panel { padding: 16px; }
-  .vm-tab { padding: 12px 8px; font-size: 10.5px; }
-  .vm-seg-group { flex-direction: column; }
-  .vm-measure-wrap { gap: 10px; }
-  .vm-measure-card { padding: 12px 8px; }
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+  :root { --header-h: 80px; --tab-h: 46px; }
+  #vmApp .header-badge { display: none; }
+  #vmApp .header-title { font-size: 16px; }
+  #vmApp .measure-input { font-size: 24px; }
+  #vmApp .prog-grid { grid-template-columns: 1fr; }
+  #vmApp .tab-btn { padding: 0 13px; font-size: 10.5px; }
+  #vmApp .seg-group { flex-direction: column; }
 }
+
+/* Spacing helper */
+#vmApp .pb { padding-bottom: 22px; }
+
+/* ============================================================
+   SCROLLBAR HIDE
+   ============================================================ */
+html { scrollbar-width: none; }
+body { -ms-overflow-style: none; overflow-y: auto; }
+::-webkit-scrollbar { display: none; }
+
 </style>
 </head>
 <body>
-
-<div class="app-container">
+<div id="vmApp">
 
   <!-- PWA INSTALL BANNER -->
-  <div class="vm-pwa-banner" id="pwaBanner">
-    <div class="vm-pwa-text">
-      <strong>Installer l'application</strong>
-      Pour un accès rapide et hors-ligne.
+  <div class="install-banner" id="installBanner">
+    <div class="install-text">
+      <strong>Installer l&#8217;application</strong>
+      Acc&#232;s hors connexion &middot; &#201;cran d&#8217;accueil
     </div>
-    <button class="vm-pwa-btn" id="pwaInstallBtn">Installer</button>
+    <button class="install-btn" id="installBtn">Installer</button>
+    <button class="install-close" id="installClose" aria-label="Fermer">&#215;</button>
   </div>
 
   <!-- HEADER -->
-  <div class="vm-header">
-    <div class="vm-header-icon">🧠</div>
-    <div class="vm-header-content">
-      <div class="vm-header-meta">Neuro-sonographie Fœtale</div>
-      <h1>Ventriculomégalie Anténatale</h1>
-      <div class="vm-header-sub">Aide au diagnostic et évaluation pronostique — Réf: CNGOF</div>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3C9.5 3 7.5 4.5 6.5 6.5C5 6.5 3.5 7.8 3.5 9.5C3.5 10.4 3.9 11.2 4.5 11.8C4.2 12.3 4 13 4 13.7C4 15.5 5.3 17 7 17.3V19C7 19.6 7.4 20 8 20H16C16.6 20 17 19.6 17 19V17.3C18.7 17 20 15.5 20 13.7C20 13 19.8 12.3 19.5 11.8C20.1 11.2 20.5 10.4 20.5 9.5C20.5 7.8 19 6.5 17.5 6.5C16.5 4.5 14.5 3 12 3Z" stroke="rgba(255,255,255,0.85)" stroke-width="1.3" stroke-linejoin="round"/>
+          <path d="M9 11.5C9 11.5 9.5 13 12 13C14.5 13 15 11.5 15 11.5" stroke="rgba(200,168,75,0.8)" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="9" cy="9.5" r="1.3" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="15" cy="9.5" r="1.3" fill="rgba(255,255,255,0.5)"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <div class="header-eyebrow">Neuro-sonographie F&#339;tale</div>
+        <div class="header-title">Ventriculom&#233;galie Ant&#233;natale</div>
+        <div class="header-sub">Aide diagnostique &amp; pronostique &middot; CNGOF / SFMFME</div>
+      </div>
+      <div class="header-badge">CNGOF 2010</div>
     </div>
-  </div>
+  </header>
 
-  <!-- NAVIGATION -->
-  <div class="vm-tabs">
-    <button class="vm-tab active" data-target="eval">Évaluation</button>
-    <button class="vm-tab" data-target="classif">Classification</button>
-    <button class="vm-tab" data-target="bilan">Bilan</button>
-    <button class="vm-tab" data-target="pronostic">Pronostic</button>
-  </div>
-
-  <!-- 1. EVALUATION -->
-  <div class="vm-panel active" id="panel-eval">
-    <div class="vm-section-title">Mesure du carrefour ventriculaire</div>
-    <div class="vm-box info">
-      <strong>Technique :</strong> Coupe axiale, mesure perpendiculaire aux parois au niveau du carrefour (sillon pariéto-occipital interne). Mesure de la zone trans-sonore (parois exclues).
+  <!-- TABS -->
+  <nav class="tabs-bar" role="tablist">
+    <div class="tabs-inner">
+      <button class="tab-btn active" data-target="panel-eval" role="tab">
+        <span class="tab-icon">&#128207;</span> &#201;valuation
+      </button>
+      <button class="tab-btn" data-target="panel-class" role="tab">
+        <span class="tab-icon">&#128203;</span> Classification
+      </button>
+      <button class="tab-btn" data-target="panel-bilan" role="tab">
+        <span class="tab-icon">&#9989;</span> Bilan
+      </button>
+      <button class="tab-btn" data-target="panel-prog" role="tab">
+        <span class="tab-icon">&#128202;</span> Pronostic
+      </button>
     </div>
+  </nav>
 
-    <div class="vm-measure-wrap">
-      <div class="vm-measure-card">
-        <label class="vm-measure-label" for="vm-vg">Ventricule Gauche</label>
-        <div class="vm-measure-input-grp">
-          <input type="number" id="vm-vg" class="vm-measure-input" min="0" max="50" step="0.1" placeholder="--">
-          <span class="vm-unit">mm</span>
+  <main class="content">
+
+    <!-- ===== TAB 1 : ÉVALUATION ===== -->
+    <div id="panel-eval" class="tab-panel active">
+      <div class="section">
+        <div class="section-label">Mesure du carrefour ventriculaire</div>
+        <div class="card">
+          <div class="card-body">
+            <div class="measure-grid">
+              <div class="measure-slot" id="slotL">
+                <div class="measure-side">Ventricule gauche</div>
+                <div class="measure-field">
+                  <input class="measure-input" type="number" id="vg" min="0" max="100" step="0.1" inputmode="decimal" placeholder="&#8212;">
+                  <span class="measure-unit">mm</span>
+                </div>
+                <div class="measure-hint">Carrefour, bord interne</div>
+              </div>
+              <div class="measure-slot" id="slotR">
+                <div class="measure-side">Ventricule droit</div>
+                <div class="measure-field">
+                  <input class="measure-input" type="number" id="vd" min="0" max="100" step="0.1" inputmode="decimal" placeholder="&#8212;">
+                  <span class="measure-unit">mm</span>
+                </div>
+                <div class="measure-hint">Carrefour, bord interne</div>
+              </div>
+            </div>
+
+            <div id="vmResultBanner" class="result-banner">
+              <div id="vmResultInd" class="result-indicator"></div>
+              <div class="result-body">
+                <div id="vmResultCat" class="result-cat"></div>
+                <div id="vmResultDesc" class="result-desc"></div>
+              </div>
+            </div>
+
+            <div style="font-size:11.5px;color:var(--text-muted);line-height:1.55;padding-top:8px;border-top:1px solid var(--ice);">
+              Perpendiculairement aux parois, en regard du sillon pari&#233;to-occipital interne.
+              <strong style="color:var(--navy)">Seuil normal&nbsp;: &lt; 10 mm</strong>, quel que soit le terme.
+            </div>
+          </div>
         </div>
       </div>
-      <div class="vm-measure-card">
-        <label class="vm-measure-label" for="vm-vd">Ventricule Droit</label>
-        <div class="vm-measure-input-grp">
-          <input type="number" id="vm-vd" class="vm-measure-input" min="0" max="50" step="0.1" placeholder="--">
-          <span class="vm-unit">mm</span>
+
+      <div class="section">
+        <div class="section-label">Technique de mesure</div>
+        <div class="card">
+          <div class="card-body">
+            <div class="tech-step">
+              <div class="step-num">1</div>
+              <div class="step-text">Coupe axiale du <strong>p&#233;rim&#232;tre cr&#226;nien</strong> : ligne m&#233;diane horizontale, image &#8805; &#190; de l&#8217;&#233;cran.</div>
+            </div>
+            <div class="tech-step">
+              <div class="step-num">2</div>
+              <div class="step-text">Rep&#232;res : <strong>cavit&#233; du septum pellucidum</strong> en avant, <strong>citerne ambiante</strong> en arri&#232;re. Ajuster la sonde cranialement ou caudalement pour la sym&#233;trie.</div>
+            </div>
+            <div class="tech-step">
+              <div class="step-num">3</div>
+              <div class="step-text"><strong>&#201;voquer une VM</strong> si les plexus choro&#239;des n&#8217;occupent pas compl&#232;tement les carrefours ventriculaires.</div>
+            </div>
+            <div class="tech-step">
+              <div class="step-num">4</div>
+              <div class="step-text"><strong>Confirmer</strong> par un op&#233;rateur r&#233;f&#233;rent. Voie vaginale utile en pr&#233;sentation c&#233;phalique.</div>
+            </div>
+          </div>
         </div>
       </div>
+      <div class="pb"></div>
     </div>
 
-    <div class="vm-result-banner" id="vm-result">
-      <div class="vm-result-icon" id="vm-res-icon"></div>
-      <div class="vm-result-text">
-        <div class="vm-result-title" id="vm-res-title"></div>
-        <div class="vm-result-desc" id="vm-res-desc"></div>
-      </div>
-    </div>
-  </div>
+    <!-- ===== TAB 2 : CLASSIFICATION ===== -->
+    <div id="panel-class" class="tab-panel">
+      <div class="section">
+        <div class="section-label">Cat&#233;gories selon la taille (CNGOF)</div>
+        <div class="class-cards">
 
-  <!-- 2. CLASSIFICATION -->
-  <div class="vm-panel" id="panel-classif">
-    <div class="vm-section-title">Catégories selon la taille (CNGOF)</div>
-    
-    <div class="vm-acc-item">
-      <div class="vm-acc-header" onclick="this.parentElement.classList.toggle('open')">
-        <div class="vm-acc-title-grp">
-          <span class="vm-badge badge-ok">Normale</span>
-          <span class="vm-acc-range">&lt; 10 mm</span>
+          <div class="class-card" id="cc-ok">
+            <div class="class-card-head" onclick="vmToggleCard('cc-ok')">
+              <span class="class-pill pill-ok">&#9679; Normale</span>
+              <span class="class-range">&lt; 10 mm</span>
+              <span class="class-chevron">&#9660;</span>
+            </div>
+            <div class="class-card-body">
+              <ul>
+                <li>Valeur normale quel que soit le terme de la grossesse</li>
+                <li>Asym&#233;trie &lt; 10 mm bilat&#233;rale : variante anatomique, sans signification pathologique</li>
+                <li>Mesure de la composante liquidienne &#8212; parois exclues</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="class-card" id="cc-minor">
+            <div class="class-card-head" onclick="vmToggleCard('cc-minor')">
+              <span class="class-pill pill-minor">&#9679; Mineure</span>
+              <span class="class-range">10 &#8211; 12 mm</span>
+              <span class="class-chevron">&#9660;</span>
+            </div>
+            <div class="class-card-body">
+              <ul>
+                <li>Peut &#234;tre une variante de la normale (plus fr&#233;quent chez le gar&#231;on / macrosomie)</li>
+                <li>Forme isol&#233;e et unilat&#233;rale : pronostic tr&#232;s favorable</li>
+                <li>Forme bilat&#233;rale : risque accru de T21 m&#234;me sans autre signe &#233;chographique</li>
+                <li>Surveillance par op&#233;rateur r&#233;f&#233;rent syst&#233;matique</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="class-card" id="cc-mod">
+            <div class="class-card-head" onclick="vmToggleCard('cc-mod')">
+              <span class="class-pill pill-mod">&#9679; Mod&#233;r&#233;e</span>
+              <span class="class-range">&gt; 12 &#8211; 15 mm</span>
+              <span class="class-chevron">&#9660;</span>
+            </div>
+            <div class="class-card-body">
+              <ul>
+                <li>Bilan complet indispensable : IRM c&#233;r&#233;brale f&#339;tale, s&#233;rologies, amniocentèse</li>
+                <li>Surveillance de l&#8217;&#233;volutivit&#233; obligatoire (taille ventriculaire + PC)</li>
+                <li>Consultation CPDPN (Centre Pluridisciplinaire de Diagnostic Pr&#233;natal) recommand&#233;e</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="class-card" id="cc-severe">
+            <div class="class-card-head" onclick="vmToggleCard('cc-severe')">
+              <span class="class-pill pill-severe">&#9679; S&#233;v&#232;re</span>
+              <span class="class-range">&gt; 15 mm</span>
+              <span class="class-chevron">&#9660;</span>
+            </div>
+            <div class="class-card-body">
+              <ul>
+                <li>Pronostic neurologique r&#233;serv&#233; &#224; d&#233;favorable</li>
+                <li>Prise en charge en centre sp&#233;cialis&#233; de niveau III syst&#233;matique</li>
+                <li>Recherche active d&#8217;une &#233;tiologie (IRM, g&#233;n&#233;tique exhaustive)</li>
+                <li>IRM c&#233;r&#233;brale f&#339;tale + amniocentèse + conseil g&#233;n&#233;tique obligatoires</li>
+              </ul>
+            </div>
+          </div>
+
         </div>
-        <div class="vm-acc-icon">▼</div>
-      </div>
-      <div class="vm-acc-body">
-        <ul>
-          <li>Valeur normale quel que soit le terme de la grossesse.</li>
-          <li>Asymétrie &lt; 10 mm bilatérale : variante anatomique, sans signification pathologique.</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="vm-acc-item">
-      <div class="vm-acc-header" onclick="this.parentElement.classList.toggle('open')">
-        <div class="vm-acc-title-grp">
-          <span class="vm-badge badge-minor">Mineure</span>
-          <span class="vm-acc-range">10 – 12 mm</span>
-        </div>
-        <div class="vm-acc-icon">▼</div>
-      </div>
-      <div class="vm-acc-body">
-        <ul>
-          <li>Peut être une variante de la normale (plus fréquent chez le garçon / macrosomie).</li>
-          <li>Forme isolée et unilatérale : pronostic très favorable.</li>
-          <li>Forme bilatérale : risque accru de T21 (même sans autre signe).</li>
-          <li>Surveillance échographique par un opérateur référent requise.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="vm-acc-item">
-      <div class="vm-acc-header" onclick="this.parentElement.classList.toggle('open')">
-        <div class="vm-acc-title-grp">
-          <span class="vm-badge badge-mod">Modérée</span>
-          <span class="vm-acc-range">&gt; 12 – 15 mm</span>
-        </div>
-        <div class="vm-acc-icon">▼</div>
-      </div>
-      <div class="vm-acc-body">
-        <ul>
-          <li>Bilan complet indispensable (IRM, sérologies, amniocentèse).</li>
-          <li>Surveillance de l'évolutivité obligatoire (taille + croissance du PC).</li>
-          <li>Consultation CPDPN (Centre Pluridisciplinaire de Diagnostic Prénatal) recommandée.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="vm-acc-item">
-      <div class="vm-acc-header" onclick="this.parentElement.classList.toggle('open')">
-        <div class="vm-acc-title-grp">
-          <span class="vm-badge badge-severe">Sévère</span>
-          <span class="vm-acc-range">&gt; 15 mm</span>
-        </div>
-        <div class="vm-acc-icon">▼</div>
-      </div>
-      <div class="vm-acc-body">
-        <ul>
-          <li>Pronostic neurologique réservé à défavorable.</li>
-          <li>Prise en charge spécialisée en niveau III systématique.</li>
-          <li>Recherche active d'une étiologie (IRM, génétique exhaustive).</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="vm-section-title">Étiologies principales</div>
-    <table class="vm-table">
-      <tr><th>Type</th><th>Exemples</th></tr>
-      <tr><td>Malformations SNC</td><td>Spina bifida, agénésie du corps calleux, Dandy-Walker</td></tr>
-      <tr><td>Phénomènes clastiques</td><td>Hémorragie intra-ventriculaire, ischémie</td></tr>
-      <tr><td>Infections</td><td>CMV, Toxoplasmose, Zika</td></tr>
-      <tr><td>Génétique</td><td>Trisomie 21 (formes bilatérales), anomalies chromosomiques complexes</td></tr>
-      <tr><td>Obstruction</td><td>Sténose de l'aqueduc de Sylvius</td></tr>
-    </table>
-  </div>
-
-  <!-- 3. BILAN CHECKLIST -->
-  <div class="vm-panel" id="panel-bilan">
-    <div class="vm-progress-wrap">
-      <div class="vm-progress-head">
-        <span>Avancement du Bilan Étiologique</span>
-        <span id="vm-chk-count">0 / 8</span>
-      </div>
-      <div class="vm-progress-track"><div class="vm-progress-fill" id="vm-chk-fill"></div></div>
-    </div>
-
-    <div class="vm-check-group">
-      <div class="vm-check-title">Imagerie spécialisée</div>
-      <div class="vm-check-item">
-        <div class="vm-check-box"></div>
-        <div class="vm-check-text">
-          <div class="vm-check-main">Échographie de référence (Neurosonographie)</div>
-          <div class="vm-check-sub">Voie endovaginale recommandée si présentation céphalique.</div>
+        <div class="section-label">&#201;tiologies principales</div>
+        <div class="card">
+          <table class="etio-table">
+            <thead><tr><th>Type</th><th>Exemples</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Malformations SNC</strong></td><td>Spina bifida, ag&#233;n&#233;sie du corps calleux, Dandy-Walker</td></tr>
+              <tr><td><strong>Ph&#233;nom&#232;nes clastiques</strong></td><td>H&#233;morragie intraventriculaire, isch&#233;mie c&#233;r&#233;brale</td></tr>
+              <tr><td><strong>Infections</strong></td><td>CMV, Toxoplasmose, Zika, Parvovirus B19</td></tr>
+              <tr><td><strong>G&#233;n&#233;tique</strong></td><td>Trisomie 21 (formes bilat&#233;rales), T18, T13, anomalies monog&#233;niques</td></tr>
+              <tr><td><strong>Obstruction</strong></td><td>St&#233;nose de l&#8217;aqueduc de Sylvius</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="vm-check-item">
-        <div class="vm-check-box"></div>
-        <div class="vm-check-text">
-          <div class="vm-check-main">IRM Cérébrale Fœtale</div>
-          <div class="vm-check-sub">Recommandée au 3e trimestre pour les formes ≥ 12mm.</div>
+      <div class="pb"></div>
+    </div>
+
+    <!-- ===== TAB 3 : BILAN ===== -->
+    <div id="panel-bilan" class="tab-panel">
+      <div class="section">
+        <div class="progress-bar-wrap">
+          <div class="progress-header">
+            <span class="progress-label">Avancement du bilan &#233;tiologique</span>
+            <span class="progress-count" id="progCount">0 / 12</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progFill"></div>
+          </div>
+        </div>
+
+        <div class="bilan-group">
+          <div class="bilan-group-title">&#128247; Imagerie</div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">&#201;chographie de confirmation par op&#233;rateur r&#233;f&#233;rent</div>
+              <div class="check-note">Coupes axiales + sagittales + parasagittales + coronales. Voie vaginale si pr&#233;sentation c&#233;phalique.</div>
+            </div>
+          </div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">IRM c&#233;r&#233;brale f&#339;tale (recommand&#233;e au 3<sup>e</sup> trimestre)</div>
+              <div class="check-note">Obligatoire pour VM mod&#233;r&#233;e et s&#233;v&#232;re. Recherche de malformations associ&#233;es.</div>
+            </div>
+          </div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">Analyse de l&#8217;aqueduc de Sylvius et de la fosse post&#233;rieure</div>
+            </div>
+          </div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">Analyse de la vall&#233;e sylvienne (estimation de la giration)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bilan-group">
+          <div class="bilan-group-title">&#128137; Pr&#233;l&#232;vements maternels</div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">S&#233;rologies infectieuses (CMV, toxoplasmose, rub&#233;ole, herp&#232;s, syphilis, parvovirus B19)</div>
+            </div>
+          </div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">Recherche d&#8217;anomalies de la coagulation maternelle</div>
+            </div>
+          </div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">Test de Kleihauer (si contexte h&#233;morragique &#233;vocateur)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bilan-group">
+          <div class="bilan-group-title">&#128300; Amniocentèse / Pr&#233;l&#232;vements f&#339;taux</div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">Caryotype f&#339;tal (ou ACPA / NGS cibl&#233; selon contexte)</div>
+              <div class="check-note">Consentement &#233;clair&#233; &#233;crit obligatoire apr&#232;s consultation de conseil g&#233;n&#233;tique.</div>
+            </div>
+          </div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">PCR liquide amniotique : CMV, toxoplasmose (selon s&#233;rologies)</div>
+            </div>
+          </div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">Conservation de pr&#233;l&#232;vements f&#339;taux pour analyses ult&#233;rieures</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bilan-group">
+          <div class="bilan-group-title">&#128203; Coordination / Suivi</div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">Consultation CPDPN (si VM &#8805; 12 mm ou VM isol&#233;e &#233;volutive)</div>
+            </div>
+          </div>
+          <div class="bilan-check-item">
+            <div class="check-box"></div>
+            <div class="check-content">
+              <div class="check-main">Suivi &#233;volutif : taille ventriculaire + p&#233;rim&#232;tre cr&#226;nien</div>
+              <div class="check-note">Acc&#233;l&#233;ration de croissance du PC = &#233;l&#233;ment de mauvais pronostic.</div>
+            </div>
+          </div>
         </div>
       </div>
+      <div class="pb"></div>
     </div>
 
-    <div class="vm-check-group">
-      <div class="vm-check-title">Biologie & Génétique</div>
-      <div class="vm-check-item">
-        <div class="vm-check-box"></div>
-        <div class="vm-check-text">
-          <div class="vm-check-main">Sérologies maternelles</div>
-          <div class="vm-check-sub">CMV, Toxoplasmose (en priorité).</div>
+    <!-- ===== TAB 4 : PRONOSTIC ===== -->
+    <div id="panel-prog" class="tab-panel">
+      <div class="section">
+        <div class="section-label">Score pronostique interactif</div>
+
+        <div class="card">
+          <div class="card-head">&#127919; Facteurs pronostiques &#8212; s&#233;lectionnez tous les crit&#232;res</div>
+          <div class="card-body">
+
+            <div class="seg-item">
+              <span class="seg-label">Taille maximale mesur&#233;e</span>
+              <div class="seg-group">
+                <input type="radio" name="p_taille" id="t1" value="2"><label for="t1">10&#8211;12 mm</label>
+                <input type="radio" name="p_taille" id="t2" value="1"><label for="t2">12&#8211;15 mm</label>
+                <input type="radio" name="p_taille" id="t3" value="0"><label for="t3">&gt; 15 mm</label>
+              </div>
+            </div>
+
+            <div class="seg-item">
+              <span class="seg-label">Contexte anatomique (bilan complet)</span>
+              <div class="seg-group">
+                <input type="radio" name="p_contexte" id="c1" value="2"><label for="c1">Isol&#233;e</label>
+                <input type="radio" name="p_contexte" id="c2" value="0"><label for="c2">Associ&#233;e (malfo / g&#233;n&#233;tique)</label>
+              </div>
+            </div>
+
+            <div class="seg-item">
+              <span class="seg-label">Lat&#233;ralit&#233; de la dilatation</span>
+              <div class="seg-group">
+                <input type="radio" name="p_lat" id="l1" value="1"><label for="l1">Unilat&#233;rale</label>
+                <input type="radio" name="p_lat" id="l2" value="0"><label for="l2">Bilat&#233;rale</label>
+              </div>
+            </div>
+
+            <div class="seg-item">
+              <span class="seg-label">Cin&#233;tique (&#233;volutivit&#233; de la mesure)</span>
+              <div class="seg-group">
+                <input type="radio" name="p_evo" id="e1" value="2"><label for="e1">Stable / R&#233;gresse</label>
+                <input type="radio" name="p_evo" id="e2" value="0"><label for="e2">S&#8217;aggrave</label>
+              </div>
+            </div>
+
+            <div class="seg-item">
+              <span class="seg-label">Croissance du p&#233;rim&#232;tre cr&#226;nien (PC)</span>
+              <div class="seg-group">
+                <input type="radio" name="p_pc" id="pc1" value="1"><label for="pc1">Normale</label>
+                <input type="radio" name="p_pc" id="pc2" value="0"><label for="pc2">Acc&#233;l&#233;ration anormale</label>
+              </div>
+            </div>
+
+            <div class="score-result-box" id="scoreResultBox">
+              <div class="score-result-icon" id="scoreIcon"></div>
+              <div class="score-result-title" id="scoreTitle"></div>
+              <div class="score-result-text" id="scoreText"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="section-label">Synth&#232;se des facteurs pronostiques</div>
+        <div class="prog-grid">
+          <div class="prog-card">
+            <div class="prog-card-head fav">&#10003; &#201;l&#233;ments favorables</div>
+            <ul class="prog-card-list fav">
+              <li>VM isol&#233;e (bilan n&#233;gatif)</li>
+              <li>Forme mineure 10&#8211;12 mm stable</li>
+              <li>Forme unilat&#233;rale</li>
+              <li>R&#233;gression spontan&#233;e</li>
+              <li>Croissance PC normale</li>
+            </ul>
+          </div>
+          <div class="prog-card">
+            <div class="prog-card-head defav">&#9888; &#201;l&#233;ments d&#233;favorables</div>
+            <ul class="prog-card-list defav">
+              <li>VM &gt; 15 mm</li>
+              <li>Anomalie associ&#233;e identifi&#233;e</li>
+              <li>&#201;volutivit&#233; progressive</li>
+              <li>Acc&#233;l&#233;ration du PC</li>
+              <li>Forme bilat&#233;rale</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <strong>Note clinique :</strong> Entre 10 et 15 mm, les donn&#233;es publi&#233;es ne permettent pas d&#8217;&#233;tablir un lien lin&#233;aire entre la taille ventriculaire et le pronostic neurologique. Le pronostic des VM isol&#233;es stables entre 10 et 12 mm est globalement favorable, mais reste sujet &#224; discussion. Le pronostic des formes associ&#233;es d&#233;pend avant tout de l&#8217;&#233;tiologie identifi&#233;e.
         </div>
       </div>
-      <div class="vm-check-item">
-        <div class="vm-check-box"></div>
-        <div class="vm-check-text">
-          <div class="vm-check-main">Amniocentèse (Caryotype / ACPA)</div>
-          <div class="vm-check-sub">Discussion systématique si VM > 12mm ou bilatérale.</div>
-        </div>
-      </div>
-      <div class="vm-check-item">
-        <div class="vm-check-box"></div>
-        <div class="vm-check-text">
-          <div class="vm-check-main">PCR sur Liquide Amniotique</div>
-          <div class="vm-check-sub">Si suspicion d'infection fœtale.</div>
-        </div>
-      </div>
+      <div class="pb"></div>
     </div>
 
-    <div class="vm-check-group">
-      <div class="vm-check-title">Suivi & Orientation</div>
-      <div class="vm-check-item">
-        <div class="vm-check-box"></div>
-        <div class="vm-check-text">
-          <div class="vm-check-main">Évaluation de la croissance du PC</div>
-          <div class="vm-check-sub">Une accélération du périmètre crânien est de mauvais pronostic (hydrocéphalie).</div>
-        </div>
-      </div>
-      <div class="vm-check-item">
-        <div class="vm-check-box"></div>
-        <div class="vm-check-text">
-          <div class="vm-check-main">Surveillance évolutive de la VM</div>
-          <div class="vm-check-sub">Contrôle échographique régulier (stabilité vs progression).</div>
-        </div>
-      </div>
-      <div class="vm-check-item">
-        <div class="vm-check-box"></div>
-        <div class="vm-check-text">
-          <div class="vm-check-main">Dossier en CPDPN</div>
-          <div class="vm-check-sub">Requis pour validation du pronostic et modalités d'accouchement.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </main>
 
-  <!-- 4. PRONOSTIC -->
-  <div class="vm-panel" id="panel-pronostic">
-    <div class="vm-section-title">Évaluation des facteurs pronostiques</div>
-    <div class="vm-box info">Remplissez les critères ci-dessous pour obtenir une synthèse pronostique. <em>Note: Ce score est purement indicatif.</em></div>
+  <footer class="disclaimer">
+    <strong>Avis m&#233;dico-l&#233;gal.</strong> Outil d&#8217;aide &#224; la d&#233;cision clinique &#8212; ne se substitue pas au jugement du praticien ni &#224; une consultation sp&#233;cialis&#233;e (CPDPN, m&#233;decine f&#339;tale). D&#233;cisions &#224; individualiser en r&#233;union multidisciplinaire. R&#233;f. : CNGOF 2010 &#8212; Recommandations sur la ventriculom&#233;galie c&#233;r&#233;brale ant&#233;natale.<br>
+    &copy; 2026 Dr KARA-ZAITRI M.A.
+  </footer>
 
-    <!-- Taille -->
-    <div class="vm-score-item">
-      <div class="vm-score-label">Taille maximale mesurée</div>
-      <div class="vm-seg-group">
-        <input type="radio" name="p_taille" id="t1" value="2"><label for="t1">10–12 mm</label>
-        <input type="radio" name="p_taille" id="t2" value="1"><label for="t2">12–15 mm</label>
-        <input type="radio" name="p_taille" id="t3" value="0"><label for="t3">&gt; 15 mm</label>
-      </div>
-    </div>
-
-    <!-- Contexte -->
-    <div class="vm-score-item">
-      <div class="vm-score-label">Contexte anatomique (Bilan complet)</div>
-      <div class="vm-seg-group">
-        <input type="radio" name="p_contexte" id="c1" value="2"><label for="c1">Isolée</label>
-        <input type="radio" name="p_contexte" id="c2" value="0"><label for="c2">Associée (Malfo/Génétique)</label>
-      </div>
-    </div>
-
-    <!-- Latéralité -->
-    <div class="vm-score-item">
-      <div class="vm-score-label">Latéralité de la dilatation</div>
-      <div class="vm-seg-group">
-        <input type="radio" name="p_lat" id="l1" value="1"><label for="l1">Unilatérale</label>
-        <input type="radio" name="p_lat" id="l2" value="0"><label for="l2">Bilatérale</label>
-      </div>
-    </div>
-
-    <!-- Évolution -->
-    <div class="vm-score-item">
-      <div class="vm-score-label">Cinétique (Évolutivité de la mesure)</div>
-      <div class="vm-seg-group">
-        <input type="radio" name="p_evo" id="e1" value="2"><label for="e1">Stable / Régresse</label>
-        <input type="radio" name="p_evo" id="e2" value="0"><label for="e2">S'aggrave</label>
-      </div>
-    </div>
-
-    <!-- PC -->
-    <div class="vm-score-item">
-      <div class="vm-score-label">Croissance du Périmètre Crânien (PC)</div>
-      <div class="vm-seg-group">
-        <input type="radio" name="p_pc" id="pc1" value="1"><label for="pc1">Normale</label>
-        <input type="radio" name="p_pc" id="pc2" value="0"><label for="pc2">Accélération anormale</label>
-      </div>
-    </div>
-
-    <div class="vm-score-result" id="score-result">
-      <div class="vm-score-icon" id="sc-icon"></div>
-      <div class="vm-score-title" id="sc-title"></div>
-      <div class="vm-score-desc" id="sc-desc"></div>
-    </div>
-  </div>
-
-  <div class="vm-footer">
-    <strong>Avis médico-légal :</strong> Cet outil est une aide pédagogique et clinique qui ne se substitue pas au jugement du praticien ni à une consultation en médecine fœtale. Toute anomalie nécessite une discussion multidisciplinaire en CPDPN. (Basé sur les recos CNGOF).<br>
-    © 2026 Dr KARA-ZAITRI M.A.
-  </div>
-
-</div> <!-- Fin app-container -->
+</div><!-- #vmApp -->
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  
-  // 1. TABS LOGIC
-  const tabs = document.querySelectorAll('.vm-tab');
-  const panels = document.querySelectorAll('.vm-panel');
-  
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('panel-' + tab.dataset.target).classList.add('active');
+(function() {
+  'use strict';
+
+  /* --- TABS --- */
+  var tabBtns   = document.querySelectorAll('#vmApp .tab-btn');
+  var tabPanels = document.querySelectorAll('#vmApp .tab-panel');
+
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = btn.getAttribute('data-target');
+      tabBtns.forEach(function(b) { b.classList.remove('active'); });
+      tabPanels.forEach(function(p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      var panel = document.getElementById(target);
+      if (panel) panel.classList.add('active');
     });
   });
 
-  // 2. EVALUATION CALCULATION
-  const inpG = document.getElementById('vm-vg');
-  const inpD = document.getElementById('vm-vd');
-  const banner = document.getElementById('vm-result');
-  const rIcon = document.getElementById('vm-res-icon');
-  const rTitle = document.getElementById('vm-res-title');
-  const rDesc = document.getElementById('vm-res-desc');
+  /* --- FOCUS SLOT HIGHLIGHT --- */
+  var vg    = document.getElementById('vg');
+  var vd    = document.getElementById('vd');
+  var slotL = document.getElementById('slotL');
+  var slotR = document.getElementById('slotR');
 
-  function updateEval() {
-    let vg = parseFloat(inpG.value) || 0;
-    let vd = parseFloat(inpD.value) || 0;
-    let max = Math.max(vg, vd);
+  if (vg && slotL) {
+    vg.addEventListener('focus', function() { slotL.classList.add('active-slot'); });
+    vg.addEventListener('blur',  function() { slotL.classList.remove('active-slot'); });
+  }
+  if (vd && slotR) {
+    vd.addEventListener('focus', function() { slotR.classList.add('active-slot'); });
+    vd.addEventListener('blur',  function() { slotR.classList.remove('active-slot'); });
+  }
 
-    if (max === 0) {
-      banner.classList.remove('visible');
+  /* --- ÉVALUATION --- */
+  var banner  = document.getElementById('vmResultBanner');
+  var indEl   = document.getElementById('vmResultInd');
+  var catEl   = document.getElementById('vmResultCat');
+  var descEl  = document.getElementById('vmResultDesc');
+
+  function calcVM() {
+    var valG = parseFloat(vg.value);
+    var valD = parseFloat(vd.value);
+    var hasG = !isNaN(valG) && valG > 0;
+    var hasD = !isNaN(valD) && valD > 0;
+
+    if (!hasG && !hasD) { banner.classList.remove('visible'); return; }
+
+    var val = Math.max(hasG ? valG : 0, hasD ? valD : 0);
+
+    if (val < 0 || val > 100) {
+      banner.className = 'result-banner visible state-error';
+      indEl.className  = 'result-indicator ind-mod';
+      indEl.textContent = '\u26A0';
+      catEl.textContent = 'Valeur aberrante \u2014 V\u00e9rifier la saisie';
+      descEl.textContent = '';
       return;
     }
 
-    banner.className = 'vm-result-banner visible';
-    
-    if (max < 10) {
-      banner.classList.add('status-ok');
-      rIcon.textContent = '✅';
-      rTitle.textContent = `Normal (${max.toFixed(1)} mm)`;
-      rDesc.textContent = "Mesure inférieure à 10 mm. Pas de ventriculomégalie.";
-    } else if (max <= 12) {
-      banner.classList.add('status-minor');
-      rIcon.textContent = '⚠️';
-      rTitle.textContent = `VM Mineure (${max.toFixed(1)} mm)`;
-      rDesc.textContent = "Surveillance de référence. Si bilatérale, attention au risque de T21 isolé.";
-    } else if (max <= 15) {
-      banner.classList.add('status-mod');
-      rIcon.textContent = '🚨';
-      rTitle.textContent = `VM Modérée (${max.toFixed(1)} mm)`;
-      rDesc.textContent = "Bilan étiologique complet (IRM, Génétique, Sérologies) et avis CPDPN.";
+    var cat, sc, ic, icon, desc;
+
+    if (val < 10) {
+      cat  = 'Normal (' + val.toFixed(1) + ' mm)';
+      sc   = 'state-normal'; ic = 'ind-normal'; icon = '\u2713';
+      desc = 'Mesure inf\u00e9rieure au seuil de 10 mm. Pas de ventriculom\u00e9galie. Si asym\u00e9trie < 10 mm bil\u00e9tale : variante anatomique sans signification pathologique.';
+    } else if (val <= 12) {
+      cat  = 'VM Mineure (' + val.toFixed(1) + ' mm)';
+      sc   = 'state-minor'; ic = 'ind-minor'; icon = '\u25CB';
+      desc = 'Peut \u00eatre une variante de la normale. Surveillance par op\u00e9rateur r\u00e9f\u00e9rent. En cas de forme bilat\u00e9rale, \u00e9liminer une T21 m\u00eame sans autre signe \u00e9chographique.';
+    } else if (val <= 15) {
+      cat  = 'VM Mod\u00e9r\u00e9e (' + val.toFixed(1) + ' mm)';
+      sc   = 'state-mod'; ic = 'ind-mod'; icon = '\u25B2';
+      desc = 'Bilan complet indispensable : IRM c\u00e9r\u00e9brale f\u0153tale (3e trim.), s\u00e9rologies infectieuses, amniocent\u00e8se (caryotype, PCR). Consultation CPDPN. Surveillance \u00e9volutive.';
     } else {
-      banner.classList.add('status-severe');
-      rIcon.textContent = '🛑';
-      rTitle.textContent = `VM Sévère (${max.toFixed(1)} mm)`;
-      rDesc.textContent = "Pronostic neurologique réservé. Prise en charge en centre de niveau III (CPDPN).";
+      cat  = 'VM S\u00e9v\u00e8re (' + val.toFixed(1) + ' mm)';
+      sc   = 'state-severe'; ic = 'ind-severe'; icon = '\u203C';
+      desc = 'Pronostic neurologique r\u00e9serv\u00e9 \u00e0 d\u00e9favorable. Prise en charge en centre de niveau III (CPDPN). IRM c\u00e9r\u00e9brale f\u0153tale + amniocent\u00e8se + conseil g\u00e9n\u00e9tique obligatoires.';
     }
+
+    banner.className   = 'result-banner visible ' + sc;
+    indEl.className    = 'result-indicator ' + ic;
+    indEl.textContent  = icon;
+    catEl.textContent  = cat;
+    descEl.textContent = desc;
   }
 
-  inpG.addEventListener('input', updateEval);
-  inpD.addEventListener('input', updateEval);
+  if (vg) vg.addEventListener('input', calcVM);
+  if (vd) vd.addEventListener('input', calcVM);
 
-  // 3. CHECKLIST
-  const chkItems = document.querySelectorAll('.vm-check-item');
-  const chkFill = document.getElementById('vm-chk-fill');
-  const chkCount = document.getElementById('vm-chk-count');
+  /* --- ACCORDION --- */
+  window.vmToggleCard = function(id) {
+    var card = document.getElementById(id);
+    if (card) card.classList.toggle('open');
+  };
 
-  chkItems.forEach(item => {
-    item.addEventListener('click', () => {
+  /* --- CHECKLIST --- */
+  var bilanItems = document.querySelectorAll('#vmApp .bilan-check-item');
+  var progCount  = document.getElementById('progCount');
+  var progFill   = document.getElementById('progFill');
+  var totalItems = bilanItems.length;
+
+  bilanItems.forEach(function(item) {
+    item.addEventListener('click', function() {
       item.classList.toggle('checked');
-      let done = document.querySelectorAll('.vm-check-item.checked').length;
-      let total = chkItems.length;
-      chkCount.textContent = `${done} / ${total}`;
-      chkFill.style.width = `${(done/total)*100}%`;
+      var done = document.querySelectorAll('#vmApp .bilan-check-item.checked').length;
+      progCount.textContent = done + ' / ' + totalItems;
+      progFill.style.width  = Math.round((done / totalItems) * 100) + '%';
     });
   });
 
-  // 4. PRONOSTIC SCORE
-  const radios = document.querySelectorAll('#panel-pronostic input[type="radio"]');
-  const resScore = document.getElementById('score-result');
-  const sIcon = document.getElementById('sc-icon');
-  const sTitle = document.getElementById('sc-title');
-  const sDesc = document.getElementById('sc-desc');
+  /* --- SCORE PRONOSTIQUE (segmented controls) --- */
+  var radios     = document.querySelectorAll('#vmApp #panel-prog input[type="radio"]');
+  var scoreBox   = document.getElementById('scoreResultBox');
+  var scoreIcon  = document.getElementById('scoreIcon');
+  var scoreTitle = document.getElementById('scoreTitle');
+  var scoreText  = document.getElementById('scoreText');
+  var segNames   = ['p_taille', 'p_contexte', 'p_lat', 'p_evo', 'p_pc'];
 
-  function calculateScore() {
-    let names = ['p_taille', 'p_contexte', 'p_lat', 'p_evo', 'p_pc'];
-    let score = 0;
-    let answered = 0;
-
-    names.forEach(name => {
-      let checked = document.querySelector(`input[name="${name}"]:checked`);
-      if (checked) {
-        score += parseInt(checked.value);
-        answered++;
-      }
+  function calcScore() {
+    var total2 = 0;
+    var answered = 0;
+    segNames.forEach(function(name) {
+      var checked = document.querySelector('input[name="' + name + '"]:checked');
+      if (checked) { total2 += parseInt(checked.value, 10); answered++; }
     });
 
-    if (answered < names.length) {
-      resScore.classList.remove('visible');
-      return;
+    if (answered < segNames.length) { scoreBox.className = 'score-result-box'; return; }
+
+    var cls, icon, title, text;
+    if (total2 >= 6) {
+      cls   = 'score-result-box visible state-normal';
+      icon  = '\u2705';
+      title = 'Profil pronostique globalement Favorable';
+      text  = 'Les donn\u00e9es de la litt\u00e9rature sont rassurantes pour les VM isol\u00e9es, stables et/ou mineures. Poursuivre le suivi de routine en m\u00e9decine f\u0153tale.';
+    } else if (total2 >= 3) {
+      cls   = 'score-result-box visible state-mod';
+      icon  = '\u26A0';
+      title = 'Profil pronostique R\u00e9serv\u00e9';
+      text  = 'Pr\u00e9sence de facteurs de risque. Le pronostic d\u00e9pendra de l\'\u00e9tiologie (IRM / G\u00e9n\u00e9tique). Surveillance sp\u00e9cialis\u00e9e stricte. Discussion en CPDPN.';
+    } else {
+      cls   = 'score-result-box visible state-severe';
+      icon  = '\u2716';
+      title = 'Profil pronostique D\u00e9favorable';
+      text  = 'Facteurs p\u00e9joratifs majeurs (taille, \u00e9volution, malformations associ\u00e9es). Prise en charge multidisciplinaire imp\u00e9rative en centre de niveau III.';
     }
 
-    resScore.className = 'vm-score-result visible';
-    
-    if (score >= 6) {
-      resScore.classList.add('status-ok');
-      sIcon.textContent = '🟢';
-      sTitle.textContent = 'Profil pronostique globalement Favorable';
-      sDesc.textContent = "Les données de la littérature sont rassurantes pour les VM isolées, stables et/ou mineures. Poursuivre le suivi de routine.";
-    } else if (score >= 3) {
-      resScore.classList.add('status-minor');
-      sIcon.textContent = '🟠';
-      sTitle.textContent = 'Profil pronostique Réservé';
-      sDesc.textContent = "Présence de facteurs de risque. Le pronostic dépendra de l'étiologie (IRM/Génétique). Surveillance spécialisée stricte.";
-    } else {
-      resScore.classList.add('status-severe');
-      sIcon.textContent = '🔴';
-      sTitle.textContent = 'Profil pronostique Défavorable';
-      sDesc.textContent = "Facteurs péjoratifs majeurs (taille, évolution, malformations). Prise en charge multidisciplinaire impérative.";
-    }
+    scoreBox.className    = cls;
+    scoreIcon.textContent = icon;
+    scoreTitle.textContent = title;
+    scoreText.textContent  = text;
   }
 
-  radios.forEach(r => r.addEventListener('change', calculateScore));
+  radios.forEach(function(r) { r.addEventListener('change', calcScore); });
 
-  // 5. PWA INSTALL (Simulated prompt handling + Service Worker registration)
-  let deferredPrompt;
-  const pwaBanner = document.getElementById('pwaBanner');
-  const installBtn = document.getElementById('pwaInstallBtn');
-
-  // Enregistrement du Service Worker pour que la PWA fonctionne sur GitHub Pages
+  /* --- PWA SW (standalone server only — silencieux en preview) --- */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-      // Assurez-vous d'avoir bien mis un fichier "sw.js" à côté de cette page sur GitHub
-      navigator.serviceWorker.register('/sw.js').then(function(registration) {
-        console.log('ServiceWorker correctement enregistré !');
-      }).catch(function(err) {
-        console.log('Erreur ServiceWorker (ignorée en local) : ', err);
-      });
+      navigator.serviceWorker.register('./sw.js').catch(function() {});
     });
   }
 
-  window.addEventListener('beforeinstallprompt', (e) => {
+  /* --- PWA INSTALL --- */
+  var deferredPrompt = null;
+  var installBanner  = document.getElementById('installBanner');
+  var installBtn     = document.getElementById('installBtn');
+  var installClose   = document.getElementById('installClose');
+
+  window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
     deferredPrompt = e;
-    pwaBanner.classList.add('visible');
+    if (installBanner) installBanner.classList.add('show');
   });
 
-  installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        pwaBanner.classList.remove('visible');
+  if (installBtn) {
+    installBtn.addEventListener('click', function() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function() {
+          deferredPrompt = null;
+          if (installBanner) installBanner.classList.remove('show');
+        });
       }
-      deferredPrompt = null;
-    }
+    });
+  }
+
+  if (installClose) {
+    installClose.addEventListener('click', function() {
+      if (installBanner) installBanner.classList.remove('show');
+    });
+  }
+
+  window.addEventListener('appinstalled', function() {
+    if (installBanner) installBanner.classList.remove('show');
   });
 
-});
+})();
 </script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 
 </body>
 </html>
