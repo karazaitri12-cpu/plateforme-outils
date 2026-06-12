@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💊 Médicaments & Périnatalité - Outil professionnel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+.mg-elementor-isolation {
+  all: initial;
+  display: block;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+.mg-elementor-isolation * {
+  all: unset; display: revert; box-sizing: border-box; font-family: inherit;
+}
+.mg-elementor-isolation {
+  --primary: #6C63FF; --primary-dark: #5A52D5;
+  --danger: #DC3545; --danger-light: #FF6B81;
+  --warning: #FD7E14; --warning-light: #FFBE76;
+  --success: #28A745; --info: #17A2B8;
+  --dark: #343A40; --gray: #6C757D;
+  --light: #F8F9FA; --white: #FFFFFF;
+  --shadow: 0 10px 40px rgba(0,0,0,0.08);
+  --shadow-hover: 0 20px 60px rgba(0,0,0,0.15);
+  --radius: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mg-elementor-isolation .mg-toast {
+  position: fixed; bottom: 100px; right: 30px;
+  padding: 15px 25px; border-radius: 10px;
+  background: var(--dark); color: white;
+  font-size: 0.9em; font-weight: 500;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  transform: translateY(100px); opacity: 0;
+  transition: all 0.3s ease; z-index: 10000; max-width: 300px;
+}
+.mg-elementor-isolation .mg-toast.show { transform: translateY(0); opacity: 1; }
+.mg-elementor-isolation .mg-toast-info { background: var(--info); }
+.mg-elementor-isolation .mg-toast-success { background: var(--success); }
+.mg-elementor-isolation .mg-toast-error { background: var(--danger); }
+.mg-elementor-isolation .mg-legal-banner {
+  background: linear-gradient(135deg, #FFF8E6 0%, #FFEFCC 100%);
+  border-left: 4px solid #FFA502;
+  padding: 15px 30px; text-align: center;
+  font-size: 0.9em; font-weight: 500; color: #8B6914;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: sticky; top: 0; z-index: 99; width: 100%;
+}
+.mg-elementor-isolation .mg-legal-banner a {
+  color: #1E90FF; text-decoration: underline; font-weight: 600; cursor: pointer;
+}
+/* ===== HEADER REDESIGN ===== */
+.mg-elementor-isolation .mg-header {
+  background: #1a3a5c;
+  padding: 0;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 4px solid #c8a84b;
+}
+.mg-elementor-isolation .mg-header::before {
+  content: '';
+  position: absolute;
+  top: 0; right: -100px;
+  width: 480px; height: 100%;
+  background: linear-gradient(135deg, transparent 0%, rgba(200,168,75,0.06) 40%, rgba(200,168,75,0.14) 100%);
+  clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
+  pointer-events: none;
+}
+.mg-elementor-isolation .mg-header-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 36px 26px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.mg-elementor-isolation .mg-header-icon-block {
+  flex-shrink: 0;
+  width: 68px; height: 68px;
+  background: rgba(200,168,75,0.12);
+  border: 2px solid rgba(200,168,75,0.35);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2em;
+}
+.mg-elementor-isolation .mg-header-text { flex: 1; min-width: 0; }
+.mg-elementor-isolation .mg-header-eyebrow {
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #c8a84b;
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.mg-elementor-isolation .mg-header-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 18px; height: 2px;
+  background: #c8a84b;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+.mg-elementor-isolation .mg-header h1 {
+  font-size: 1.8em;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 5px;
+  letter-spacing: -0.3px;
+  line-height: 1.15;
+}
+.mg-elementor-isolation .mg-header h1 em {
+  font-style: normal;
+  color: #c8a84b;
+}
+.mg-elementor-isolation .mg-subtitle {
+  font-size: 0.88em;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.mg-elementor-isolation .mg-badge-row {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.mg-elementor-isolation .mg-badge {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.13);
+  padding: 4px 11px;
+  border-radius: 4px;
+  color: rgba(255,255,255,0.75);
+  font-size: 0.7em;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.mg-elementor-isolation .mg-header-meta {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.mg-elementor-isolation .mg-header-version {
+  background: #c8a84b;
+  color: #1a3a5c;
+  font-size: 0.68em;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.mg-elementor-isolation .mg-header-sources {
+  font-size: 0.65em;
+  color: rgba(255,255,255,0.4);
+  text-align: right;
+  line-height: 1.65;
+}
+@media (max-width: 768px) {
+  .mg-elementor-isolation .mg-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 18px 18px;
+    gap: 14px;
+  }
+  .mg-elementor-isolation .mg-header-icon-block { display: none; }
+  .mg-elementor-isolation .mg-header h1 { font-size: 1.45em; }
+  .mg-elementor-isolation .mg-header-meta {
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+.mg-elementor-isolation .mg-search-container {
+  max-width: 700px; margin: -30px auto 30px;
+  position: relative; z-index: 10; padding: 0 20px;
+}
+.mg-elementor-isolation .mg-search-box {
+  display: flex; align-items: center;
+  background: white; border-radius: 60px;
+  padding: 4px 4px 4px 25px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  border: 2px solid transparent;
+  transition: all 0.3s ease; gap: 8px;
+}
+.mg-elementor-isolation .mg-search-box:focus-within {
+  border-color: #6C63FF; box-shadow: 0 10px 40px rgba(108,99,255,0.2);
+}
+.mg-elementor-isolation .mg-search-box input {
+  flex: 1; border: none; outline: none;
+  font-size: 1em; color: #343A40;
+  background: transparent; padding: 12px 0; min-width: 0;
+}
+.mg-elementor-isolation .mg-search-box input::placeholder { color: #6C757D; opacity: 0.8; }
+.mg-elementor-isolation .mg-search-clear {
+  border: none; width: 36px; height: 36px; border-radius: 50%;
+  cursor: pointer; flex-shrink: 0; padding: 0; margin: 0;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236C757D'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center; background-size: 18px 18px;
+  transition: all 0.3s ease;
+}
+.mg-elementor-isolation .mg-search-btn {
+  border: none; width: 48px; height: 48px; border-radius: 50%;
+  cursor: pointer; flex-shrink: 0; padding: 0; margin: 0;
+  background-color: #6C63FF;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center; background-size: 20px 20px;
+  transition: all 0.3s ease;
+}
+.mg-elementor-isolation .mg-search-btn:hover { background-color: #5A52D5; transform: scale(1.05); }
+.mg-elementor-isolation .mg-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px; max-width: 1200px; margin: 0 auto 30px; padding: 0 20px;
+}
+.mg-elementor-isolation .mg-stat-card {
+  background: white; border-radius: 16px; padding: 20px; text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s ease;
+  border-bottom: 4px solid transparent; cursor: pointer;
+}
+.mg-elementor-isolation .mg-stat-card:hover { transform: translateY(-3px); box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+.mg-elementor-isolation .mg-stat-card.danger { border-bottom-color: #DC3545; }
+.mg-elementor-isolation .mg-stat-card.warning { border-bottom-color: #FD7E14; }
+.mg-elementor-isolation .mg-stat-card.info { border-bottom-color: #17A2B8; }
+.mg-elementor-isolation .mg-stat-card.success { border-bottom-color: #28A745; }
+.mg-elementor-isolation .mg-stat-number { font-size: 2em; font-weight: 800; margin-bottom: 5px; }
+.mg-elementor-isolation .mg-stat-card.danger .mg-stat-number { color: #DC3545; }
+.mg-elementor-isolation .mg-stat-card.warning .mg-stat-number { color: #FD7E14; }
+.mg-elementor-isolation .mg-stat-card.info .mg-stat-number { color: #17A2B8; }
+.mg-elementor-isolation .mg-stat-card.success .mg-stat-number { color: #28A745; }
+.mg-elementor-isolation .mg-stat-label { font-size: 0.8em; color: #6C757D; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.mg-elementor-isolation .mg-filters {
+  max-width: 1200px; margin: 0 auto 20px; padding: 0 20px;
+  display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;
+}
+.mg-elementor-isolation .mg-filter-group { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.mg-elementor-isolation .mg-filter-select {
+  padding: 10px 16px; border: 2px solid #F8F9FA; border-radius: 50px;
+  font-size: 0.9em; color: #343A40; background: white;
+  cursor: pointer; outline: none; transition: all 0.3s ease;
+  -webkit-appearance: auto; appearance: auto;
+}
+.mg-elementor-isolation .mg-filter-select:hover,
+.mg-elementor-isolation .mg-filter-select:focus { border-color: #6C63FF; }
+.mg-elementor-isolation .mg-favorite-toggle {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px; background: white;
+  border-radius: 50px; border: 2px solid #F8F9FA;
+  cursor: pointer; transition: all 0.3s ease; font-weight: 500;
+}
+.mg-elementor-isolation .mg-favorite-toggle.active { background: #FFF8E6; border-color: #FD7E14; color: #FD7E14; }
+.mg-elementor-isolation .mg-compare-btn {
+  padding: 10px 20px; background: #6C63FF; color: white;
+  border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+}
+.mg-elementor-isolation .mg-compare-btn:hover:not(:disabled) { background: #5A52D5; transform: translateY(-2px); }
+.mg-elementor-isolation .mg-compare-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.mg-elementor-isolation .mg-comparison-panel { max-width: 1200px; margin: 0 auto 25px; padding: 0 20px; }
+.mg-elementor-isolation .mg-comparison-panel h3 { font-size: 1.3em; font-weight: 700; color: var(--dark); margin-bottom: 15px; }
+.mg-elementor-isolation .mg-comparison-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+.mg-elementor-isolation .mg-compare-item {
+  background: white; border-radius: 16px; padding: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08); border-top: 4px solid var(--primary);
+}
+.mg-elementor-isolation .mg-compare-item h4 { font-size: 1.1em; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+.mg-elementor-isolation .mg-compare-item p { font-size: 0.9em; color: #555; margin-bottom: 6px; }
+.mg-elementor-isolation .mg-compare-remove {
+  margin-top: 10px; padding: 8px 16px; background: var(--danger); color: white;
+  border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;
+}
+.mg-elementor-isolation .mg-nav {
+  max-width: 1200px; margin: 0 auto 30px; padding: 0 20px;
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+}
+.mg-elementor-isolation .mg-tab {
+  padding: 12px 24px; border: none; background: white; border-radius: 50px;
+  cursor: pointer; font-size: 0.9em; font-weight: 600; color: #6C757D;
+  transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.mg-elementor-isolation .mg-tab:hover { color: #6C63FF; transform: translateY(-2px); }
+.mg-elementor-isolation .mg-tab.active { background: #6C63FF; color: white; box-shadow: 0 5px 20px rgba(108,99,255,0.3); }
+.mg-elementor-isolation .mg-tab .mg-tab-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.1); width: 22px; height: 22px;
+  border-radius: 50%; font-size: 0.75em; margin-left: 6px;
+}
+.mg-elementor-isolation .mg-tab.active .mg-tab-count { background: rgba(255,255,255,0.3); }
+.mg-elementor-isolation .mg-content { max-width: 1200px; margin: 0 auto; padding: 0 20px 50px; }
+.mg-elementor-isolation .mg-section { display: none; }
+.mg-elementor-isolation .mg-section.active { display: block; animation: mg-fadeIn 0.4s ease; }
+@keyframes mg-fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+.mg-elementor-isolation .mg-section-header {
+  margin-bottom: 25px; display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: 15px;
+}
+.mg-elementor-isolation .mg-section-header h2 { font-size: 1.5em; font-weight: 700; color: #343A40; display: flex; align-items: center; gap: 10px; }
+.mg-elementor-isolation .mg-section-header .mg-count-badge { background: #6C63FF; color: white; padding: 4px 14px; border-radius: 50px; font-size: 0.55em; font-weight: 700; }
+.mg-elementor-isolation .mg-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+.mg-elementor-isolation .mg-card {
+  position: relative; background: white; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s ease; border-left: 5px solid #6C63FF;
+}
+.mg-elementor-isolation .mg-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.15); transform: translateY(-3px); }
+.mg-elementor-isolation .mg-card.risk-high { border-left-color: #DC3545; }
+.mg-elementor-isolation .mg-card.risk-medium { border-left-color: #FD7E14; }
+.mg-elementor-isolation .mg-card.risk-low { border-left-color: #28A745; }
+.mg-elementor-isolation .mg-card.risk-neonatal { border-left-color: #17A2B8; }
+.mg-elementor-isolation .mg-card-favorite {
+  position: absolute; top: 15px; right: 15px;
+  width: 36px; height: 36px; border-radius: 50%;
+  cursor: pointer; z-index: 20; border: none; padding: 0;
+  background-color: white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z' fill='none' stroke='%239E9E9E' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center; background-size: 20px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15); transition: all 0.3s ease;
+}
+.mg-elementor-isolation .mg-card-favorite.active {
+  background-color: #FFF8E6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z' fill='%23FFD700' stroke='%23FFA500' stroke-width='1'/%3E%3C/svg%3E");
+}
+.mg-elementor-isolation .mg-card-header {
+  padding: 20px 55px 15px 20px; cursor: pointer;
+  display: flex; align-items: flex-start; gap: 15px; transition: all 0.3s ease;
+}
+.mg-elementor-isolation .mg-card-header:hover { background: #F8F9FA; }
+.mg-elementor-isolation .mg-card-icon {
+  width: 50px; height: 50px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.4em; flex-shrink: 0;
+}
+.mg-elementor-isolation .mg-card.risk-high .mg-card-icon { background: #FFEEF0; }
+.mg-elementor-isolation .mg-card.risk-medium .mg-card-icon { background: #FFF4E6; }
+.mg-elementor-isolation .mg-card.risk-low .mg-card-icon { background: #E8F8EE; }
+.mg-elementor-isolation .mg-card.risk-neonatal .mg-card-icon { background: #E8F4FD; }
+.mg-elementor-isolation .mg-card-info { flex: 1; }
+.mg-elementor-isolation .mg-card-title { font-size: 1.05em; font-weight: 700; color: #343A40; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mg-elementor-isolation .mg-grade { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; font-weight: 700; text-transform: uppercase; }
+.mg-elementor-isolation .mg-grade.x { background: #DC3545; color: white; }
+.mg-elementor-isolation .mg-grade.d { background: #FD7E14; color: white; }
+.mg-elementor-isolation .mg-grade.c { background: #FFC107; color: black; }
+.mg-elementor-isolation .mg-grade.b { background: #28A745; color: white; }
+.mg-elementor-isolation .mg-grade.a { background: #17A2B8; color: white; }
+.mg-elementor-isolation .mg-card-family { font-size: 0.8em; color: #6C757D; font-weight: 500; }
+.mg-elementor-isolation .mg-card-toggle {
+  width: 30px; height: 30px; border-radius: 50%; background: #F8F9FA;
+  display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; flex-shrink: 0; margin-top: 5px;
+}
+.mg-elementor-isolation .mg-card-toggle::before { content: '▼'; font-size: 0.8em; color: #6C757D; }
+.mg-elementor-isolation .mg-card.open .mg-card-toggle::before { content: '▲'; color: white; }
+.mg-elementor-isolation .mg-card.open .mg-card-toggle { background: #6C63FF; }
+.mg-elementor-isolation .mg-card-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 15px; }
+.mg-elementor-isolation .mg-tag { padding: 3px 10px; border-radius: 50px; font-size: 0.7em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.mg-elementor-isolation .mg-tag-ci { background: #FFEEF0; color: #DC3545; }
+.mg-elementor-isolation .mg-tag-surv { background: #E8F4FD; color: #17A2B8; }
+.mg-elementor-isolation .mg-tag-prev { background: #E8F8EE; color: #28A745; }
+.mg-elementor-isolation .mg-tag-warn { background: #FFF4E6; color: #FD7E14; }
+.mg-elementor-isolation .mg-card-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+.mg-elementor-isolation .mg-card.open .mg-card-body { max-height: 2000px; }
+.mg-elementor-isolation .mg-card-content { padding: 0 20px 20px; border-top: 1px solid #F8F9FA; }
+.mg-elementor-isolation .mg-detail-section-title { font-size: 0.75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #6C757D; margin: 15px 0 8px; display: flex; align-items: center; gap: 6px; }
+.mg-elementor-isolation .mg-detail-section-title .mg-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.mg-elementor-isolation .mg-detail-section-title .mg-dot.red { background: #DC3545; }
+.mg-elementor-isolation .mg-detail-section-title .mg-dot.blue { background: #17A2B8; }
+.mg-elementor-isolation .mg-detail-section-title .mg-dot.green { background: #28A745; }
+.mg-elementor-isolation .mg-risk-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 0.85em; }
+.mg-elementor-isolation .mg-risk-table th { text-align: left; background: #F8F9FA; padding: 8px; font-weight: 600; color: #343A40; }
+.mg-elementor-isolation .mg-risk-table td { padding: 6px 8px; border-bottom: 1px solid #F0F0F0; }
+.mg-elementor-isolation .mg-risk-table tr:last-child td { border-bottom: none; }
+.mg-elementor-isolation .mg-list { list-style: none; padding: 0; margin: 0; }
+.mg-elementor-isolation .mg-list li { padding: 8px 0 8px 20px; position: relative; font-size: 0.9em; color: #555; border-bottom: 1px solid rgba(0,0,0,0.03); display: list-item; }
+.mg-elementor-isolation .mg-list li::before { content: '•'; position: absolute; left: 0; color: #6C63FF; font-weight: bold; }
+.mg-elementor-isolation .mg-list.danger li::before { color: #DC3545; }
+.mg-elementor-isolation .mg-list.success li::before { color: #28A745; }
+.mg-elementor-isolation .mg-alert { background: linear-gradient(135deg, #FFF5F5, #FFF0F0); border-left: 4px solid #DC3545; border-radius: 0 10px 10px 0; padding: 12px 15px; margin-top: 10px; font-size: 0.85em; color: #C0392B; font-weight: 500; }
+.mg-elementor-isolation .mg-info-box { background: linear-gradient(135deg, #F0F7FF, #E8F4FD); border-left: 4px solid #17A2B8; border-radius: 0 10px 10px 0; padding: 12px 15px; margin-top: 10px; font-size: 0.85em; color: #2471A3; font-weight: 500; }
+.mg-elementor-isolation .mg-lactation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+.mg-elementor-isolation .mg-lactation-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); border-top: 4px solid #17A2B8; transition: all 0.3s ease; }
+.mg-elementor-isolation .mg-lactation-card h3 { font-size: 1.2em; font-weight: 700; color: #343A40; margin-bottom: 15px; }
+.mg-elementor-isolation .mg-lactation-level { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 0.8em; font-weight: 600; margin-bottom: 15px; }
+.mg-elementor-isolation .mg-lactation-level.safe { background: #E8F8EE; color: #28A745; }
+.mg-elementor-isolation .mg-lactation-level.caution { background: #FFF4E6; color: #FD7E14; }
+.mg-elementor-isolation .mg-lactation-level.avoid { background: #FFEEF0; color: #DC3545; }
+.mg-elementor-isolation .mg-safe-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+.mg-elementor-isolation .mg-safe-category { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); border-top: 4px solid #28A745; }
+.mg-elementor-isolation .mg-safe-category h3 { font-size: 1.2em; font-weight: 700; color: #343A40; margin-bottom: 15px; }
+.mg-elementor-isolation .mg-safe-item { padding: 12px 0; border-bottom: 1px solid #F8F9FA; }
+.mg-elementor-isolation .mg-safe-item strong { color: #28A745; font-weight: 600; }
+.mg-elementor-isolation .mg-safe-item .mg-safe-note { font-size: 0.85em; color: #6C757D; margin-top: 4px; display: block; }
+.mg-elementor-isolation .mg-comparison-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+.mg-elementor-isolation .mg-comparison-table th { background: #6C63FF; color: white; padding: 15px; text-align: left; font-weight: 600; }
+.mg-elementor-isolation .mg-comparison-table td { padding: 12px 15px; border-bottom: 1px solid #F8F9FA; }
+.mg-elementor-isolation .mg-comparison-table .mg-avoid { color: #DC3545; font-weight: 500; }
+.mg-elementor-isolation .mg-comparison-table .mg-alternative { color: #28A745; font-weight: 600; }
+.mg-elementor-isolation .mg-memo-timeline { position: relative; padding-left: 40px; }
+.mg-elementor-isolation .mg-memo-timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #6C63FF, #DC3545, #FD7E14); }
+.mg-elementor-isolation .mg-memo-item { position: relative; margin-bottom: 25px; background: white; border-radius: 16px; padding: 20px 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+.mg-elementor-isolation .mg-memo-item::before { content: ''; position: absolute; left: -33px; top: 25px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 4px solid #6C63FF; }
+.mg-elementor-isolation .mg-memo-item.danger::before { border-color: #DC3545; }
+.mg-elementor-isolation .mg-memo-item.warning::before { border-color: #FD7E14; }
+.mg-elementor-isolation .mg-memo-item.info::before { border-color: #17A2B8; }
+.mg-elementor-isolation .mg-memo-sa { font-size: 0.8em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #6C63FF; margin-bottom: 6px; }
+.mg-elementor-isolation .mg-memo-item.danger .mg-memo-sa { color: #DC3545; }
+.mg-elementor-isolation .mg-memo-item.warning .mg-memo-sa { color: #FD7E14; }
+.mg-elementor-isolation .mg-memo-item.info .mg-memo-sa { color: #17A2B8; }
+.mg-elementor-isolation .mg-memo-text { font-size: 0.95em; color: #343A40; font-weight: 500; }
+.mg-elementor-isolation .mg-memo-details { font-size: 0.85em; color: #6C757D; margin-top: 5px; }
+.mg-elementor-isolation .mg-quiz-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+.mg-elementor-isolation .mg-quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.mg-elementor-isolation .mg-quiz-counter { background: #6C63FF; color: white; padding: 6px 16px; border-radius: 50px; font-size: 0.85em; }
+.mg-elementor-isolation .mg-quiz-score { background: #F8F9FA; padding: 6px 16px; border-radius: 50px; font-size: 0.85em; }
+.mg-elementor-isolation .mg-quiz-question { font-size: 1.2em; font-weight: 600; color: #343A40; margin-bottom: 25px; }
+.mg-elementor-isolation .mg-quiz-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.mg-elementor-isolation .mg-quiz-option { padding: 15px 20px; background: white; border: 2px solid #F8F9FA; border-radius: 12px; text-align: left; cursor: pointer; transition: all 0.3s ease; font-size: 1em; display: flex; align-items: center; gap: 15px; }
+.mg-elementor-isolation .mg-quiz-option:hover:not(:disabled) { border-color: #6C63FF; }
+.mg-elementor-isolation .mg-quiz-option:disabled { opacity: 0.7; cursor: not-allowed; }
+.mg-elementor-isolation .mg-quiz-option span:first-child { width: 30px; height: 30px; background: #F8F9FA; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0; }
+.mg-elementor-isolation .mg-quiz-next { margin-top: 20px; padding: 12px 25px; background: #6C63FF; color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+.mg-elementor-isolation .mg-quiz-results { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; }
+.mg-elementor-isolation .mg-quiz-results h3 { font-size: 1.5em; color: #343A40; margin-bottom: 10px; }
+.mg-elementor-isolation .mg-score-circle { width: 200px; height: 200px; border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
+.mg-elementor-isolation .mg-score-inner { width: 160px; height: 160px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; }
+.mg-elementor-isolation .mg-score-inner span { font-size: 2em; font-weight: 700; color: #6C63FF; }
+.mg-elementor-isolation .mg-compare-add { margin-top: 10px; padding: 10px; width: 100%; background: #6C63FF; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; font-size: 0.9em; }
+.mg-elementor-isolation .mg-compare-add:hover { background: #5A52D5; }
+.mg-elementor-isolation .mg-compare-add.active { background: #DC3545; }
+.mg-elementor-isolation .mg-no-results { text-align: center; padding: 60px 20px; color: #6C757D; }
+.mg-elementor-isolation .mg-no-results-icon { font-size: 3em; margin-bottom: 15px; }
+.mg-elementor-isolation .mg-print-btn { position: fixed; bottom: 60px; right: 30px; width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; z-index: 100; font-size: 1.3em; background: #343A40; color: white; }
+.mg-elementor-isolation .mg-print-btn:hover { transform: scale(1.1); background: #6C63FF; }
+.mg-elementor-isolation .mg-footer { max-width: 1200px; margin: 50px auto 30px; padding: 30px; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; color: #6C757D; font-size: 0.85em; }
+.mg-elementor-isolation .mg-footer a { color: #1E90FF; text-decoration: underline; cursor: pointer; }
+.mg-elementor-isolation .mg-footer .mg-footer-note { background: #FFF8E6; padding: 10px; border-radius: 8px; margin-top: 15px; }
+.mg-elementor-isolation .mg-guide { max-width: 1200px; margin: 0 auto 25px; padding: 0 20px; }
+.mg-elementor-isolation .mg-guide-toggle { width: 100%; padding: 14px 25px; background: linear-gradient(135deg, #6C63FF 0%, #4834D4 100%); color: white; border: none; border-radius: 16px; cursor: pointer; font-size: 1em; font-weight: 600; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; box-shadow: 0 5px 20px rgba(108,99,255,0.25); }
+.mg-elementor-isolation .mg-guide-toggle-arrow { width: 28px; height: 28px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; transition: transform 0.3s ease; }
+.mg-elementor-isolation .mg-guide.open .mg-guide-toggle-arrow { transform: rotate(180deg); }
+.mg-elementor-isolation .mg-guide-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+.mg-elementor-isolation .mg-guide.open .mg-guide-body { max-height: 3000px; }
+.mg-elementor-isolation .mg-guide-content { background: white; border-radius: 0 0 16px 16px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+.mg-elementor-isolation .mg-guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.mg-elementor-isolation .mg-guide-section h4 { font-size: 1em; font-weight: 700; color: #343A40; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #F0F0F0; }
+.mg-elementor-isolation .mg-guide-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 0.88em; color: #555; }
+.mg-elementor-isolation .mg-guide-color { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.08); }
+.mg-elementor-isolation .mg-guide-swatch { width: 40px; height: 6px; border-radius: 3px; flex-shrink: 0; }
+.mg-elementor-isolation .mg-guide-icon-demo { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85em; font-weight: 700; }
+.mg-elementor-isolation .mg-guide-tag-demo { padding: 2px 8px; border-radius: 50px; font-size: 0.7em; font-weight: 600; text-transform: uppercase; flex-shrink: 0; }
+.mg-elementor-isolation .mg-guide-tip { background: #F0F7FF; border-left: 4px solid #6C63FF; border-radius: 0 10px 10px 0; padding: 12px 15px; margin-top: 20px; font-size: 0.88em; color: #2471A3; }
+@media (max-width: 768px) {
+  .mg-elementor-isolation .mg-header h1 { font-size: 1.8em; }
+  .mg-elementor-isolation .mg-cards-grid { grid-template-columns: 1fr; }
+  .mg-elementor-isolation .mg-tab { padding: 10px 16px; font-size: 0.8em; }
+  .mg-elementor-isolation .mg-stats { grid-template-columns: repeat(2, 1fr); }
+  .mg-elementor-isolation .mg-filters { flex-direction: column; }
+}
+@media print {
+  .mg-elementor-isolation .mg-header,
+  .mg-elementor-isolation .mg-search-container,
+  .mg-elementor-isolation .mg-nav,
+  .mg-elementor-isolation .mg-print-btn,
+  .mg-elementor-isolation .mg-filters,
+  .mg-elementor-isolation .mg-stats,
+  .mg-elementor-isolation .mg-legal-banner { display: none !important; }
+  .mg-elementor-isolation .mg-section { display: block !important; }
+  .mg-elementor-isolation .mg-card-body { max-height: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="mg-elementor-isolation">
+  <!-- HEADER -->
+  <header class="mg-header">
+    <div class="mg-header-content">
+      <div class="mg-header-icon-block">💊</div>
+      <div class="mg-header-text">
+        <div class="mg-header-eyebrow">Outil clinique interactif — Obstétrique & Périnatalité</div>
+        <h1>Médicaments & <em>Périnatalité</em></h1>
+        <p class="mg-subtitle">Grossesse · Allaitement · Alternatives thérapeutiques · Quiz d'évaluation</p>
+        <div class="mg-badge-row">
+          <span class="mg-badge">📚 42 médicaments analysés</span>
+          <span class="mg-badge">✅ Alternatives sûres</span>
+          <span class="mg-badge">🤱 Allaitement inclus</span>
+          <span class="mg-badge">🧠 Quiz 20 questions</span>
+        </div>
+      </div>
+      <div class="mg-header-meta">
+        <span class="mg-header-version">Fév. 2026</span>
+        <div class="mg-header-sources">CRAT · ANSM<br>CNGOF · WHO</div>
+      </div>
+    </div>
+  </header>
+  <div class="mg-search-container">
+    <div class="mg-search-box">
+      <input type="text" id="mgSearch" placeholder="Rechercher un médicament (DCI ou nom commercial)..." aria-label="Rechercher un médicament">
+      <button class="mg-search-clear" id="mgSearchClear" aria-label="Effacer la recherche" style="display:none;"></button>
+      <button class="mg-search-btn" aria-label="Rechercher"></button>
+    </div>
+  </div>
+  <div class="mg-stats">
+    <div class="mg-stat-card danger" role="button" tabindex="0" data-tab="terato"><div class="mg-stat-number" id="mgStatTerato">0</div><div class="mg-stat-label">Tératogènes</div></div>
+    <div class="mg-stat-card warning" role="button" tabindex="0" data-tab="fetal"><div class="mg-stat-number" id="mgStatFetal">0</div><div class="mg-stat-label">Risque fœtal</div></div>
+    <div class="mg-stat-card info" role="button" tabindex="0" data-tab="neonatal"><div class="mg-stat-number" id="mgStatNeonatal">0</div><div class="mg-stat-label">Risque néonatal</div></div>
+    <div class="mg-stat-card success" role="button" tabindex="0" data-tab="lactation"><div class="mg-stat-number" id="mgStatTotal">0</div><div class="mg-stat-label">Allaitement</div></div>
+  </div>
+  <div class="mg-guide" id="mgGuide">
+    <button class="mg-guide-toggle" onclick="document.getElementById('mgGuide').classList.toggle('open')">
+      <span>❓ Mode d'emploi & code couleur</span>
+      <span class="mg-guide-toggle-arrow">▼</span>
+    </button>
+    <div class="mg-guide-body"><div class="mg-guide-content"><div class="mg-guide-grid">
+      <div class="mg-guide-section"><h4>🎨 Bordure gauche des cartes</h4>
+        <div class="mg-guide-row"><span class="mg-guide-swatch" style="background:#DC3545;"></span><span><strong>Rouge</strong> — Risque tératogène</span></div>
+        <div class="mg-guide-row"><span class="mg-guide-swatch" style="background:#FD7E14;"></span><span><strong>Orange</strong> — Risque fœtal</span></div>
+        <div class="mg-guide-row"><span class="mg-guide-swatch" style="background:#17A2B8;"></span><span><strong>Bleu</strong> — Risque néonatal</span></div>
+        <div class="mg-guide-row"><span class="mg-guide-swatch" style="background:#28A745;"></span><span><strong>Vert</strong> — Risque faible / compatible</span></div>
+      </div>
+      <div class="mg-guide-section"><h4>📊 Grades de risque (FDA)</h4>
+        <div class="mg-guide-row"><span class="mg-guide-icon-demo" style="background:#DC3545;color:white;">X</span><span><strong>Grade X</strong> — Contre-indiqué</span></div>
+        <div class="mg-guide-row"><span class="mg-guide-icon-demo" style="background:#FD7E14;color:white;">D</span><span><strong>Grade D</strong> — Risque prouvé</span></div>
+        <div class="mg-guide-row"><span class="mg-guide-icon-demo" style="background:#FFC107;color:black;">C</span><span><strong>Grade C</strong> — Risque possible</span></div>
+        <div class="mg-guide-row"><span class="mg-guide-icon-demo" style="background:#28A745;color:white;">B</span><span><strong>Grade B</strong> — Probablement sûr</span></div>
+        <div class="mg-guide-row"><span class="mg-guide-icon-demo" style="background:#17A2B8;color:white;">A</span><span><strong>Grade A</strong> — Sûr</span></div>
+      </div>
+    </div></div></div>
+  </div>
+  <div class="mg-filters">
+    <div class="mg-filter-group">
+      <select id="mgFilterTrimester" class="mg-filter-select">
+        <option value="">Tous les trimestres</option>
+        <option value="t1">1er trimestre</option>
+        <option value="t2">2ème trimestre</option>
+        <option value="t3">3ème trimestre</option>
+      </select>
+      <select id="mgFilterSystem" class="mg-filter-select">
+        <option value="">Tous les systèmes</option>
+        <option value="cardio">Cardiovasculaire</option>
+        <option value="neuro">Neurologie</option>
+        <option value="psycho">Psychiatrie</option>
+        <option value="infectio">Anti-infectieux</option>
+        <option value="endo">Endocrinologie</option>
+        <option value="dermato">Dermatologie</option>
+        <option value="rhumato">Rhumatologie</option>
+        <option value="immuno">Immunologie</option>
+        <option value="gastro">Gastroentérologie</option>
+        <option value="analgesie">Analgésie</option>
+      </select>
+      <select id="mgFilterGrade" class="mg-filter-select">
+        <option value="">Tous les grades</option>
+        <option value="X">Grade X – Contre-indiqué</option>
+        <option value="D">Grade D – Risque prouvé</option>
+        <option value="C">Grade C – Risque possible</option>
+        <option value="B">Grade B – Probablement sûr</option>
+        <option value="A">Grade A – Sûr</option>
+      </select>
+    </div>
+    <div class="mg-filter-group">
+      <div class="mg-favorite-toggle" role="button" tabindex="0" id="mgFavoritesFilter">⭐ Favoris uniquement</div>
+      <button class="mg-compare-btn" id="mgCompareBtn" disabled>Comparer (0/2)</button>
+    </div>
+  </div>
+  <div class="mg-comparison-panel" id="mgComparisonPanel" style="display:none;">
+    <h3>🔍 Comparaison de médicaments</h3>
+    <div class="mg-comparison-grid" id="mgComparisonGrid"></div>
+  </div>
+  <nav class="mg-nav">
+    <button class="mg-tab active" data-tab="all">📋 Tous<span class="mg-tab-count" id="mgTabAll">42</span></button>
+    <button class="mg-tab" data-tab="terato">🔴 Tératogène<span class="mg-tab-count" id="mgTabTerato">15</span></button>
+    <button class="mg-tab" data-tab="fetal">🟠 Fœtal<span class="mg-tab-count" id="mgTabFetal">10</span></button>
+    <button class="mg-tab" data-tab="neonatal">🔵 Néonatal<span class="mg-tab-count" id="mgTabNeonatal">17</span></button>
+    <button class="mg-tab" data-tab="lactation">🤱 Allaitement<span class="mg-tab-count" id="mgTabLactation">42</span></button>
+    <button class="mg-tab" data-tab="alternatives">✅ Alternatives</button>
+    <button class="mg-tab" data-tab="comparison">📊 Comparatif</button>
+    <button class="mg-tab" data-tab="timeline">📅 Timeline</button>
+    <button class="mg-tab" data-tab="quiz">🧠 Quiz</button>
+  </nav>
+  <main class="mg-content">
+    <div class="mg-section active" id="mg-sec-all">
+      <div class="mg-section-header">
+        <h2>⚠️ Médicaments à risque pendant la grossesse <span class="mg-count-badge" id="mgResultCount">42 résultats</span></h2>
+      </div>
+      <div class="mg-cards-grid" id="mgCardsContainer"></div>
+      <div class="mg-no-results" id="mgNoResults" style="display:none;">
+        <div class="mg-no-results-icon">🔍</div>
+        <div style="font-size:1.1em;font-weight:600;color:#343A40;margin-bottom:10px;">Aucun médicament trouvé</div>
+        <div style="color:#6C757D;">Consultez le <a href="https://lecrat.fr" target="_blank" rel="noopener" style="color:#1E90FF;cursor:pointer;">CRAT</a> pour une recherche complète.</div>
+      </div>
+    </div>
+    <div class="mg-section" id="mg-sec-terato"></div>
+    <div class="mg-section" id="mg-sec-fetal"></div>
+    <div class="mg-section" id="mg-sec-neonatal"></div>
+    <div class="mg-section" id="mg-sec-lactation">
+      <div class="mg-section-header"><h2>🤱 Médicaments et allaitement</h2></div>
+      <div class="mg-lactation-grid" id="mgLactationContainer"></div>
+    </div>
+    <div class="mg-section" id="mg-sec-alternatives">
+      <div class="mg-section-header"><h2>✅ Alternatives thérapeutiques sûres</h2></div>
+      <div class="mg-safe-grid" id="mgAlternativesContainer"></div>
+    </div>
+    <div class="mg-section" id="mg-sec-comparison">
+      <div class="mg-section-header"><h2>📊 Tableau comparatif</h2></div>
+      <table class="mg-comparison-table">
+        <thead><tr><th>Pathologie</th><th>❌ À ÉVITER</th><th>✅ ALTERNATIVE</th></tr></thead>
+        <tbody id="mgComparisonTableBody"></tbody>
+      </table>
+    </div>
+    <div class="mg-section" id="mg-sec-timeline">
+      <div class="mg-section-header"><h2>📅 Chronologie des risques</h2></div>
+      <div class="mg-memo-timeline" id="mgTimelineContainer"></div>
+    </div>
+    <div class="mg-section" id="mg-sec-quiz">
+      <div class="mg-section-header"><h2>🧠 Quiz d'évaluation (20 questions)</h2></div>
+      <div class="mg-quiz-container" id="mgQuizContainer"></div>
+    </div>
+  </main>
+  <footer class="mg-footer">
+    <h3>ℹ️ Informations importantes</h3>
+    <p><strong>Outil destiné exclusivement aux professionnels de santé.</strong></p>
+    <p>Ne remplace pas la consultation des SmPC actualisés ni le jugement clinique individuel.</p>
+    <p><strong>Références :</strong> <a href="https://lecrat.fr" target="_blank" rel="noopener">CRAT</a> • <a href="https://www.ansm.sante.fr" target="_blank" rel="noopener">ANSM</a> • <a href="https://www.cngof.fr" target="_blank" rel="noopener">CNGOF</a> • <a href="https://www.who.int" target="_blank" rel="noopener">WHO</a></p>
+    <p class="mg-footer-note">📌 Données mises à jour : février 2026.</p>
+  </footer>
+  <button class="mg-print-btn" onclick="window.print()" title="Imprimer">🖨️</button>
+
+<script>
+const mgMedications = [
+  {id:1,name:"Isotrétinoïne",commercial:["Roaccutane®","Curacné®"],family:"Rétinoïde",category:"terato",grade:"X",system:"dermato",icon:"💊",tags:["ci","prev"],
+    risks:{t1:["Malformations SNC (15-20%)","Oreille externe","Cardiopathies","Anomalies squelettiques"],t2:["Toxique – éviter"],t3:["Toxique – éviter"]},
+    lactation:{level:"avoid",risk:["Passage dans le lait","Toxicité potentielle"],recommendation:"Contre-indiqué pendant l'allaitement"},
+    conduct:["Contraception 1 mois avant, pendant, 1 mois après","Test de grossesse mensuel","Carnet de suivi patiente","CPDPN si grossesse exposée"],
+    alert:"Contre-indication absolue – Risque tératogène majeur"},
+  {id:2,name:"Acitretine",commercial:["Soriatane®"],family:"Rétinoïde",category:"terato",grade:"X",system:"dermato",icon:"💊",tags:["ci","prev"],
+    risks:{t1:["Malformations SNC","Oreille interne","Cardiopathies","Squelette"],t2:["Toxique – éviter"],t3:["Toxique – éviter"]},
+    lactation:{level:"avoid",risk:["Passage dans le lait"],recommendation:"Contre-indiqué pendant l'allaitement"},
+    conduct:["Contraception obligatoire","Grossesse contre-indiquée 2 ans après arrêt"],
+    alert:"Contre-indication 2 ANS après arrêt (demi-vie longue)"},
+  {id:3,name:"Valproate",commercial:["Dépakine®","Dépakote®"],family:"Antiépileptique",category:"terato",grade:"X",system:"neuro",icon:"⚡",tags:["ci","prev","surv"],
+    risks:{t1:["Spina bifida (1-2%)","Anomalies membres/face","Cardiopathies"],t2:["RCIU","Troubles neurocomportementaux"],t3:["Thrombopénie","Hypoglycémie néonatale"]},
+    lactation:{level:"caution",risk:["Passage faible (1-10%)"],recommendation:"Surveillance hématologique si indispensable"},
+    conduct:["Contre-indication formelle chez la femme en âge de procréer","Acide folique 5 mg/j","Échographie morphologique","Dosage AFP 2e trimestre"],
+    alert:"Contre-indication formelle – Risque autisme à long terme"},
+  {id:4,name:"Warfarine",commercial:["Coumadine®"],family:"AVK",category:"terato",grade:"X",system:"cardio",icon:"🩸",tags:["ci","prev"],
+    risks:{t1:["Warfarin fetal syndrome (4-6%)","Dysmorphie faciale","Hypoplasie phalanges"],t2:["Anomalies SNC","Microcéphalie"],t3:["Risque hémorragique néonatal"]},
+    lactation:{level:"safe",risk:["Pas de passage significatif"],recommendation:"Compatible avec allaitement (surveillance INR)"},
+    conduct:["Relais HBPM dès le diagnostic de grossesse","Écho + IRM cérébrale fœtale si exposition T1","Relais héparine à 36 SA si valve mécanique"],
+    alert:"Contre-indication pendant la grossesse – Relais HBPM"},
+  {id:5,name:"Lithium",commercial:["Neurolithium®","Téralithe®"],family:"Thymoregulateur",category:"terato",grade:"D",system:"psycho",icon:"🧠",tags:["surv"],
+    risks:{t1:["Malformations cardiaques (4-8%) : anomalie d'Ebstein"],t2:["Surveillance lithiemie"],t3:["Toxicité néonatale : hypotonie, bradycardie"]},
+    lactation:{level:"caution",risk:["Passage dans le lait (30-50% taux maternel)"],recommendation:"Surveillance dosage lait/plasma si indispensable"},
+    conduct:["Suivi CPDPN","Échocardiographie fœtale à 20-22 SA","Ionogramme et lithiemie mensuels"],
+    alert:"Échocardiographie fœtale obligatoire"},
+  {id:6,name:"Méthotrexate",commercial:["Novatrex®","Imeth®"],family:"Antimétabolite",category:"terato",grade:"X",system:"rhumato",icon:"💊",tags:["ci","prev"],
+    risks:{t1:["FCS (30-40%)","Malformations crânio-faciales","Anomalies membres"],t2:["Toxique – éviter"],t3:["Toxique – éviter"]},
+    lactation:{level:"avoid",risk:["Passage dans le lait","Immunosuppression nourrisson"],recommendation:"Contre-indiqué pendant l'allaitement"},
+    conduct:["Arrêt 3 mois avant conception","Contraception efficace homme et femme","Acide folique 5 mg/j"],
+    alert:"Arrêt obligatoire 3 mois avant conception"},
+  {id:7,name:"Mycophenolate",commercial:["Cellcept®","Myfortic®"],family:"Immunosuppresseur",category:"terato",grade:"X",system:"immuno",icon:"🛡️",tags:["ci","prev"],
+    risks:{t1:["FCS (50%)","Fentes faciales","Anomalies oreilles, membres"],t2:["Malformations multiples"],t3:["Prématurité"]},
+    lactation:{level:"avoid",risk:["Immunosuppression nourrisson"],recommendation:"Contre-indiqué pendant l'allaitement"},
+    conduct:["Switch vers azathioprine avant conception","Contraception 6 semaines après arrêt","Consultation préconceptionnelle obligatoire"],
+    alert:"FCS 50% – Switch azathioprine avant grossesse"},
+  {id:8,name:"Thalidomide",commercial:["Thalidomide Celgene®"],family:"Immunomodulateur",category:"terato",grade:"X",system:"immuno",icon:"⛔",tags:["ci","prev"],
+    risks:{t1:["Phocomelie","Amélie","Malformations cardiaques, digestives, rénales"],t2:["Toxique – éviter"],t3:["Toxique – éviter"]},
+    lactation:{level:"avoid",risk:["Passage probable dans le lait"],recommendation:"Contre-indiqué pendant l'allaitement"},
+    conduct:["Programme de prévention de grossesse obligatoire","Contraception double méthode","Test de grossesse hebdomadaire"],
+    alert:"Tératogène historique – Contre-indication absolue"},
+  {id:9,name:"Carbimazole",commercial:["Néomercazole®"],family:"Antithyroïdien",category:"terato",grade:"D",system:"endo",icon:"🦸",tags:["surv","prev"],
+    risks:{t1:["Aplasie cuir chevelu (1-2%)","Atrésie choanes","Fistule œso-trachéale"],t2:["Hypothyroïdie fœtale"],t3:["Hypothyroïdie néonatale"]},
+    lactation:{level:"caution",risk:["Passage modéré dans le lait"],recommendation:"Possible à dose minimale avec surveillance thyroïdienne nouveau-né"},
+    conduct:["Relais par PTU au 1er trimestre","Reprise carbimazole possible au 2e trimestre","Surveillance TSH/T4 mensuelles"],
+    alert:"Relais PTU obligatoire au 1er trimestre"},
+  {id:10,name:"Phénytoine",commercial:["Di-Hydan®"],family:"Antiépileptique",category:"terato",grade:"D",system:"neuro",icon:"⚡",tags:["surv","prev"],
+    risks:{t1:["Syndrome hydantoine fœtale (10%)","Dysmorphie faciale","Hypoplasie phalanges"],t2:["RCIU"],t3:["Hémorragie néonatale (déficit vit K)"]},
+    lactation:{level:"caution",risk:["Passage faible dans le lait"],recommendation:"Compatible sous surveillance sédation du nourrisson"},
+    conduct:["Acide folique 5 mg/j","Échographie morphologique T2","Vitamine K1 maternelle les 15 derniers jours","Vitamine K1 nouveau-né"],
+    alert:"Syndrome hydantoine fœtale – Acide folique indispensable"},
+  {id:11,name:"Misoprostol",commercial:["Cytotec®"],family:"Prostaglandine",category:"terato",grade:"X",system:"gastro",icon:"💊",tags:["ci"],
+    risks:{t1:["Syndrome de Möbius","Anomalies membres (arthrogrypose)","FCS"],t2:["Contractions utérines prématurées"],t3:["Rupture utérine"]},
+    lactation:{level:"caution",risk:["Passage dans le lait – diarrhée nourrisson"],recommendation:"Précaution si utilisation (demi-vie courte)"},
+    conduct:["Contre-indication absolue chez la femme enceinte","Information patiente sur le risque"],
+    alert:"Contre-indication absolue pendant la grossesse"},
+  {id:12,name:"Cyclophosphamide",commercial:["Endoxan®"],family:"Alkylant",category:"terato",grade:"X",system:"immuno",icon:"💊",tags:["ci","prev"],
+    risks:{t1:["Malformations multiples (membres, yeux, palais)","FCS"],t2:["RCIU","Aplasie médullaire fœtale"],t3:["Aplasie médullaire néonatale"]},
+    lactation:{level:"avoid",risk:["Passage dans le lait","Neutropénie nourrisson"],recommendation:"Contre-indiqué pendant l'allaitement"},
+    conduct:["Arrêt avant conception","Contraception efficace","Cryoconservation gamètes si possible"],
+    alert:"Contre-indication absolue – Alkylant hautement tératogène"},
+  {id:13,name:"Léflunomide",commercial:["Arava®"],family:"Immunosuppresseur",category:"terato",grade:"X",system:"rhumato",icon:"💊",tags:["ci","prev"],
+    risks:{t1:["Malformations multiples (données animales)","FCS"],t2:["RCIU"],t3:["Données limitées"]},
+    lactation:{level:"avoid",risk:["Passage probable dans le lait"],recommendation:"Contre-indiqué pendant l'allaitement"},
+    conduct:["Wash-out par cholestétyramine avant conception","Vérification taux plasmatique < 0,02 mg/L (2 dosages à 14j)"],
+    alert:"Wash-out cholestétyramine obligatoire avant conception"},
+  {id:14,name:"Danazol",commercial:["Danatrol®"],family:"Androgène",category:"terato",grade:"X",system:"endo",icon:"💊",tags:["ci"],
+    risks:{t1:["Virilisation fœtus féminin","Pseudohermaphrodisme"],t2:["Virilisation persistante"],t3:["Virilisation"]},
+    lactation:{level:"avoid",risk:["Passage dans le lait","Effet androgène"],recommendation:"Contre-indiqué pendant l'allaitement"},
+    conduct:["Contraception obligatoire","Arrêt immédiat si grossesse","Échographie génitale fœtale"],
+    alert:"Virilisation irréversible du fœtus féminin"},
+  {id:15,name:"Phénobarbital",commercial:["Gardénal®"],family:"Antiépileptique",category:"terato",grade:"D",system:"neuro",icon:"⚡",tags:["surv","prev"],
+    risks:{t1:["Malformations cardiaques (2-3%)","Fentes faciales"],t2:["RCIU"],t3:["Syndrome de sevrage néonatal","Hémorragie néonatale"]},
+    lactation:{level:"caution",risk:["Passage dans le lait – sédation possible"],recommendation:"Surveillance somnolence nourrisson"},
+    conduct:["Acide folique 5 mg/j","Vitamine K1 maternelle 15 derniers jours","Surveillance néonatale : sevrage, sédation"],
+    alert:"Inducteur enzymatique – Supplémentation vit K indispensable"},
+  {id:16,name:"Énalapril",commercial:["Renitec®"],family:"IEC",category:"fetal",grade:"D",system:"cardio",icon:"❤️",tags:["ci","surv"],
+    risks:{t1:["Données rassurantes (mais relais préférable)"],t2:["Oligoamnios","Insuffisance rénale fœtale","Anurie"],t3:["Hypoplasie pulmonaire","Hypotension néonatale"]},
+    lactation:{level:"caution",risk:["Passage faible"],recommendation:"Préférer captopril ou énalapril – compatible sous surveillance"},
+    conduct:["Relais α-méthyldopa ou labétalol dès projet de grossesse","Arrêt immédiat si grossesse sous IEC","Surveillance échographique rénale et liquide amniotique"],
+    alert:"Contre-indication formelle dès le 2e trimestre"},
+  {id:17,name:"Losartan",commercial:["Cozaar®"],family:"Sartan (ARA II)",category:"fetal",grade:"D",system:"cardio",icon:"❤️",tags:["ci","surv"],
+    risks:{t1:["Données insuffisantes"],t2:["Oligoamnios","Insuffisance rénale fœtale"],t3:["Hypoplasie pulmonaire","Dysgénèsie tubulaire rénale"]},
+    lactation:{level:"caution",risk:["Données limitées"],recommendation:"Préférer autre antihypertenseur compatible"},
+    conduct:["Relais α-méthyldopa avant grossesse","Arrêt immédiat si découverte de grossesse","Échographie rénale fœtale si exposition T2-T3"],
+    alert:"Même toxicité rénale fœtale que les IEC"},
+  {id:18,name:"Ibuprofene",commercial:["Advil®","Nurofen®"],family:"AINS",category:"fetal",grade:"D",system:"analgesie",icon:"💊",tags:["ci","warn"],
+    risks:{t1:["Risque modéré FCS (controversé)"],t2:["Toxicité rénale fœtale dès 12 SA","Oligoamnios"],t3:["Fermeture canal artériel","HTAP néonatale","Mort in utero"]},
+    lactation:{level:"safe",risk:["Passage très faible"],recommendation:"Compatible avec allaitement (usage ponctuel)"},
+    conduct:["Contre-indication absolue après 24 SA","Préférer paracétamol","Information systématique des patientes"],
+    alert:"Contre-indication absolue après 24 SA – Y compris voie cutanée"},
+  {id:19,name:"Diclofénac",commercial:["Voltaren®"],family:"AINS",category:"fetal",grade:"D",system:"analgesie",icon:"💊",tags:["ci","warn"],
+    risks:{t1:["Risque FCS possible"],t2:["Toxicité rénale fœtale"],t3:["Fermeture canal artériel","HTAP","Insuffisance rénale néonatale"]},
+    lactation:{level:"safe",risk:["Passage faible"],recommendation:"Compatible sous surveillance (usage court)"},
+    conduct:["Même conduite que ibuprofene","Contre-indication ≥ 24 SA y compris voie cutanée"],
+    alert:"Contre-indication absolue après 24 SA"},
+  {id:20,name:"Célécoxib",commercial:["Celebrex®"],family:"Anti-COX2",category:"fetal",grade:"D",system:"analgesie",icon:"💊",tags:["ci","warn"],
+    risks:{t1:["Données limitées"],t2:["Toxicité rénale fœtale"],t3:["Fermeture canal artériel","HTAP"]},
+    lactation:{level:"caution",risk:["Passage dans le lait"],recommendation:"Préférer ibuprofene si AINS nécessaire pendant allaitement"},
+    conduct:["Contre-indication après 24 SA","Mêmes règles que tous les AINS"],
+    alert:"Anti-COX2 = même risque que AINS classiques après 24 SA"},
+  {id:21,name:"Aliskiren",commercial:["Rasilez®"],family:"Inhibiteur rénine",category:"fetal",grade:"D",system:"cardio",icon:"❤️",tags:["ci"],
+    risks:{t1:["Données insuffisantes"],t2:["Oligoamnios","Toxicité rénale fœtale"],t3:["Hypoplasie pulmonaire"]},
+    lactation:{level:"avoid",risk:["Données insuffisantes"],recommendation:"Non recommandé pendant l'allaitement"},
+    conduct:["Relais antihypertenseur compatible","Mêmes précautions que IEC/Sartans"],
+    alert:"Inhibiteur de rénine – Même toxicité fœtale que IEC/Sartans"},
+  {id:22,name:"Dapagliflozine",commercial:["Forxiga®"],family:"Gliflozine (iSGLT2)",category:"fetal",grade:"D",system:"endo",icon:"💊",tags:["ci"],
+    risks:{t1:["Données animales : anomalies rénales"],t2:["Toxicité rénale fœtale","Polyurie fœtale"],t3:["Anomalies tubulaires rénales"]},
+    lactation:{level:"avoid",risk:["Données insuffisantes"],recommendation:"Non recommandé pendant l'allaitement"},
+    conduct:["Relais par insuline avant grossesse","Arrêt immédiat si grossesse"],
+    alert:"Relais insuline obligatoire – Gliflozines contre-indiquées"},
+  {id:23,name:"Empagliflozine",commercial:["Jardiance®"],family:"Gliflozine (iSGLT2)",category:"fetal",grade:"D",system:"endo",icon:"💊",tags:["ci"],
+    risks:{t1:["Données animales défavorables"],t2:["Toxicité rénale fœtale"],t3:["Anomalies tubulaires rénales"]},
+    lactation:{level:"avoid",risk:["Données insuffisantes"],recommendation:"Non recommandé pendant l'allaitement"},
+    conduct:["Relais par insuline","Mêmes règles que dapagliflozine"],
+    alert:"Contre-indication grossesse – Relais insuline"},
+  {id:24,name:"Doxycycline",commercial:["Vibramycine®","Tolexine®"],family:"Tétracycline",category:"fetal",grade:"D",system:"infectio",icon:"💊",tags:["ci","warn"],
+    risks:{t1:["Données rassurantes (exposition courte)"],t2:["Coloration dents de lait (jaune-brun)","Fixation osseuse"],t3:["Coloration dents","Retard ossification"]},
+    lactation:{level:"caution",risk:["Passage dans le lait","Coloration dents théorique"],recommendation:"Usage court possible – surveillance"},
+    conduct:["Éviter après 14 SA","Préférer amoxicilline ou macrolide"],
+    alert:"Coloration irréversible des dents de lait après 14 SA"},
+  {id:25,name:"Ciprofloxacine",commercial:["Ciflox®"],family:"Fluoroquinolone",category:"fetal",grade:"C",system:"infectio",icon:"💊",tags:["warn"],
+    risks:{t1:["Pas de tératogénicité prouvée"],t2:["Toxicité cartilagineuse (données animales)"],t3:["Arthropathies théoriques"]},
+    lactation:{level:"caution",risk:["Passage dans le lait"],recommendation:"Éviter si possible – préférer amoxicilline"},
+    conduct:["Utiliser uniquement si pas d'alternative","Préférer β-lactamines ou macrolides"],
+    alert:"Réserver aux situations sans alternative"},
+  {id:26,name:"Propranolol",commercial:["Avlocardyl®"],family:"Bêtabloquant",category:"neonatal",grade:"C",system:"cardio",icon:"❤️",tags:["surv"],
+    risks:{t1:["Pas de tératogénicité prouvée"],t2:["RCIU (surveillance)"],t3:["Bradycardie néonatale","Hypoglycémie néonatale"]},
+    lactation:{level:"safe",risk:["Passage faible dans le lait"],recommendation:"Compatible avec allaitement"},
+    conduct:["Surveillance croissance fœtale (écho mensuelle T3)","Scope néonatal 48h : FC, glycémie, PA"],
+    alert:"Surveillance néonatale 48h : bradycardie, hypoglycémie"},
+  {id:27,name:"Aténolol",commercial:["Ténormine®"],family:"Bêtabloquant",category:"neonatal",grade:"D",system:"cardio",icon:"❤️",tags:["surv","warn"],
+    risks:{t1:["RCIU si début précoce"],t2:["RCIU significatif"],t3:["Bradycardie néonatale sévère","Hypoglycémie"]},
+    lactation:{level:"caution",risk:["Concentration élevée dans le lait"],recommendation:"Préférer propranolol ou labétalol pour l'allaitement"},
+    conduct:["Préférer labétalol ou propranolol","Si maintenu : surveillance RCIU rapprochée","Scope néonatal 72h"],
+    alert:"Préférer labétalol – RCIU plus fréquent"},
+  {id:28,name:"Diazépam",commercial:["Valium®"],family:"Benzodiazépine",category:"neonatal",grade:"D",system:"psycho",icon:"🧠",tags:["surv","warn"],
+    risks:{t1:["Fentes palatines (controversé, risque faible)"],t2:["Pas de risque majeur"],t3:["Floppy infant syndrome","Détresse respiratoire","Syndrome de sevrage"]},
+    lactation:{level:"caution",risk:["Passage dans le lait","Sédation nourrisson","Accumulation (demi-vie longue)"],recommendation:"Éviter – préférer oxazépam (demi-vie courte)"},
+    conduct:["Réduire progressivement au T3","Éviter les doses élevées proches du terme","Surveillance néonatale 5-7 jours (scope apnée)"],
+    alert:"Floppy infant + sevrage néonatal – Surveillance prolongée"},
+  {id:29,name:"Alprazolam",commercial:["Xanax®"],family:"Benzodiazépine",category:"neonatal",grade:"D",system:"psycho",icon:"🧠",tags:["surv","warn"],
+    risks:{t1:["Risque fente palatine (controversé)"],t2:["Pas de risque majeur"],t3:["Syndrome de sevrage néonatal","Sédation"]},
+    lactation:{level:"caution",risk:["Passage dans le lait"],recommendation:"Éviter – préférer oxazépam si besoin"},
+    conduct:["Diminution progressive avant accouchement","Surveillance néonatale : scope, apnée, comportement"],
+    alert:"Syndrome de sevrage néonatal possible"},
+  {id:30,name:"Paroxétine",commercial:["Deroxat®","Divarius®"],family:"IRS (ISRS)",category:"neonatal",grade:"D",system:"psycho",icon:"🧠",tags:["surv","warn"],
+    risks:{t1:["Malformations cardiaques (1,5-2% vs 1%) – CIV/CIA"],t2:["Pas de risque majeur"],t3:["Syndrome d'adaptation néonatal (30%)","Détresse respiratoire","HTAP persistante (risque x2)"]},
+    lactation:{level:"safe",risk:["Passage très faible dans le lait"],recommendation:"IRS le mieux étudié en allaitement – compatible"},
+    conduct:["Préférer sertraline si initiation pendant grossesse","Si maintien : échographie cardiaque fœtale","Ne pas arrêter brutalement","Surveillance néonatale 72h"],
+    alert:"Préférer sertraline – Risque malformations cardiaques T1"},
+  {id:31,name:"Fluoxétine",commercial:["Prozac®"],family:"IRS (ISRS)",category:"neonatal",grade:"C",system:"psycho",icon:"🧠",tags:["surv"],
+    risks:{t1:["Pas de tératogénicité majeure prouvée"],t2:["Pas de risque majeur"],t3:["Syndrome d'adaptation néonatal","Agitation, tremblements"]},
+    lactation:{level:"caution",risk:["Passage dans le lait (demi-vie longue + métabolite actif)"],recommendation:"Préférer sertraline ou paroxétine pour l'allaitement"},
+    conduct:["Poursuivre si efficace","Surveillance néonatale 72h","Évaluer rapport bénéfice/risque"],
+    alert:"Demi-vie longue – Syndrome adaptation néonatal plus prolongé"},
+  {id:32,name:"Sertraline",commercial:["Zoloft®"],family:"IRS (ISRS)",category:"neonatal",grade:"C",system:"psycho",icon:"🧠",tags:["surv"],
+    risks:{t1:["Pas de tératogénicité prouvée"],t2:["Données rassurantes"],t3:["Syndrome d'adaptation néonatal (moins fréquent)"]},
+    lactation:{level:"safe",risk:["Passage très faible dans le lait"],recommendation:"IRS de choix pour l'allaitement – excellente sécurité"},
+    conduct:["IRS de 1re intention pendant la grossesse","Ne pas arrêter si indiqué (risque rechute)","Surveillance néonatale standard 48h"],
+    alert:"IRS le plus favorable pendant grossesse et allaitement"},
+  {id:33,name:"Halopéridol",commercial:["Haldol®"],family:"Neuroleptique (typique)",category:"neonatal",grade:"C",system:"psycho",icon:"🧠",tags:["surv"],
+    risks:{t1:["Pas de tératogénicité majeure"],t2:["Données rassurantes"],t3:["Syndrome extrapyramidal néonatal","Agitation, trémulations"]},
+    lactation:{level:"caution",risk:["Passage dans le lait"],recommendation:"Surveillance somnolence et développement neurologique"},
+    conduct:["Réduction posologie si possible au T3","Surveillance néonatale neuro + digestif 7j","Adapter au plus petit dose efficace"],
+    alert:"Syndrome extrapyramidal néonatal – Surveillance 7 jours"},
+  {id:34,name:"Rispéridone",commercial:["Risperdal®"],family:"Neuroleptique (atypique)",category:"neonatal",grade:"C",system:"psycho",icon:"🧠",tags:["surv"],
+    risks:{t1:["Données limitées – pas de signal tératogène majeur"],t2:["Risque diabète gestationnel (prise de poids)"],t3:["Syndrome extrapyramidal néonatal","Sédation"]},
+    lactation:{level:"caution",risk:["Passage dans le lait"],recommendation:"Données limitées – discuter avec spécialiste"},
+    conduct:["Surveillance glycémie maternelle (risque diabète)","Surveillance poids maternel","Surveillance néonatale 7j"],
+    alert:"Risque métabolique maternel + adaptation néonatale"},
+  {id:35,name:"Codéine",commercial:["Codoliprane®","Dafalgan codéiné®"],family:"Opioïde",category:"neonatal",grade:"C",system:"analgesie",icon:"💊",tags:["surv","warn"],
+    risks:{t1:["Pas de tératogénicité prouvée"],t2:["Pas de risque majeur"],t3:["Syndrome de sevrage néonatal","Dépression respiratoire","Métaboliseurs ultrarapides CYP2D6"]},
+    lactation:{level:"caution",risk:["Passage dans le lait","Risque sédation/apnée (métaboliseurs rapides)"],recommendation:"Préférer paracétamol seul – si besoin : usage court et surveillance"},
+    conduct:["Usage ponctuel uniquement","Éviter usage prolongé au T3","Surveillance néonatale si exposition proche du terme"],
+    alert:"Risque dépression respiratoire néonatale (métaboliseurs rapides)"},
+  {id:36,name:"Tramadol",commercial:["Topalgic®","Contramal®"],family:"Opioïde",category:"neonatal",grade:"C",system:"analgesie",icon:"💊",tags:["surv","warn"],
+    risks:{t1:["Pas de tératogénicité prouvée"],t2:["Données limitées"],t3:["Syndrome de sevrage néonatal","Dépression respiratoire"]},
+    lactation:{level:"caution",risk:["Passage dans le lait"],recommendation:"Éviter – préférer paracétamol"},
+    conduct:["Usage ponctuel uniquement","Préférer paracétamol ± codéine courte durée","Surveillance néonatale si usage péri-partum"],
+    alert:"Sevrage néonatal si usage prolongé au T3"},
+  {id:37,name:"Carbamazepine",commercial:["Tégrétol®"],family:"Antiépileptique",category:"neonatal",grade:"D",system:"neuro",icon:"⚡",tags:["surv","prev"],
+    risks:{t1:["Spina bifida (0,5-1%)","Dysmorphie faciale modérée"],t2:["RCIU modéré"],t3:["Hémorragie néonatale (déficit vit K)","Syndrome de sevrage"]},
+    lactation:{level:"safe",risk:["Passage modéré dans le lait"],recommendation:"Compatible avec allaitement – surveillance sédation"},
+    conduct:["Acide folique 5 mg/j avant conception","Échographie morphologique","Vitamine K1 10-20 mg/j maternelle les 15 derniers jours","Vitamine K1 nouveau-né"],
+    alert:"Acide folique + Vitamine K1 indispensables"},
+  {id:38,name:"Metformine",commercial:["Glucophage®","Stagid®"],family:"Biguanide",category:"neonatal",grade:"B",system:"endo",icon:"💊",tags:["surv"],
+    risks:{t1:["Pas de tératogénicité prouvée","Traverse le placenta"],t2:["Débat : poursuite vs relais insuline"],t3:["Hypoglycémie néonatale possible"]},
+    lactation:{level:"safe",risk:["Passage très faible dans le lait (< 1%)"],recommendation:"Compatible avec allaitement – aucun effet rapporté chez le nourrisson"},
+    conduct:["Relais insuline recommandé par le CNGOF","Surveillance glycémique rapprochée si maintien"],
+    alert:"Débat actuel : relais insuline recommandé (CNGOF)"},
+  {id:39,name:"Amoxicilline",commercial:["Clamoxyl®","Amoxicilline Générique"],family:"Pénicilline",category:"neonatal",grade:"B",system:"infectio",icon:"💊",tags:["surv"],
+    risks:{t1:["Pas de tératogénicité prouvée"],t2:["Données rassurantes"],t3:["Données rassurantes"]},
+    lactation:{level:"safe",risk:["Passage faible dans le lait","Possible diarrhée ou candidose nourrisson"],recommendation:"Compatible avec allaitement – antibiotique de référence"},
+    conduct:["Antibiotique de 1re intention pendant la grossesse","Aucune précaution particulière","Posologie standard"],
+    alert:"Antibiotique de référence pendant la grossesse – Excellent profil de sécurité"},
+  {id:40,name:"Paracétamol",commercial:["Doliprane®","Efferalgan®","Dafalgan®"],family:"Antalgique / Antipyrétique",category:"neonatal",grade:"A",system:"analgesie",icon:"💊",tags:["surv"],
+    risks:{t1:["Pas de tératogénicité prouvée"],t2:["Usage ponctuel recommandé","Débat récent sur usage prolongé et cryptorchidie"],t3:["Usage ponctuel recommandé"]},
+    lactation:{level:"safe",risk:["Passage très faible dans le lait"],recommendation:"Compatible avec allaitement – antalgique de référence"},
+    conduct:["Antalgique de 1re intention pendant la grossesse","Usage ponctuel à dose minimale efficace","Éviter usage prolongé sans avis médical"],
+    alert:"Antalgique de référence – Privilégier usage court à dose minimale efficace"},
+  {id:41,name:"Métoclopramide",commercial:["Primpéran®","Métoclopramide Générique"],family:"Antiémétique / Prokinétique",category:"neonatal",grade:"B",system:"gastro",icon:"💊",tags:["surv","warn"],
+    risks:{
+      t1:["Pas de tératogénicité prouvée (> 100 000 expositions rassurantes)","Traverse le placenta"],
+      t2:["Pas de risque majeur démontré"],
+      t3:["Syndrome extrapyramidal néonatal (rare)","Détresse respiratoire si dose élevée proche du terme"]},
+    lactation:{level:"caution",risk:["Passage dans le lait maternel","Galactorrhée maternelle possible (effet dopaminergique)"],recommendation:"Usage court possible si indispensable — surveiller le nourrisson"},
+    conduct:[
+      "Usage max 5 jours consécutifs (risque dyskinésies tardives au-delà)",
+      "Ambulatoire : 10 mg x 3/j PO ou suppositoire",
+      "Hospitalisation : 30–40 mg/j IV lente (3–4 ampoules)",
+      "Accepté pour NVG réfractaires au 1er trimestre (1re ligne en France)"],
+    alert:"Usage ≤ 5 jours — Risque effets extrapyramidaux à forte dose ou usage prolongé"},
+  {id:42,name:"Sulpiride",commercial:["Dogmatil®","Sulpiride Générique"],family:"Neuroleptique / Antipsychotique (typique)",category:"neonatal",grade:"C",system:"psycho",icon:"🧠",tags:["ci","surv","warn"],
+    risks:{
+      t1:["Données limitées — pas de signal tératogène majeur identifié","Traverse le placenta"],
+      t2:["Risque métabolique maternel : prise de poids, diabète gestationnel"],
+      t3:["Syndrome extrapyramidal néonatal","Hypotonie néonatale","Prolactinémie élevée chez le nouveau-né"]},
+    lactation:{level:"caution",risk:["Passage significatif dans le lait","Galactorrhée (effet prolactinémiant majeur)","Données insuffisantes LactMed"],recommendation:"Déconseillé pendant l'allaitement — préférer halopéridol ou rispéridone si indispensable"},
+    conduct:[
+      "Non recommandé comme antiémétique pendant la grossesse",
+      "Rapport bénéfice/risque défavorable comparé aux alternatives disponibles",
+      "Si usage psychiatrique indispensable : dose minimale efficace + surveillance rapprochée",
+      "Surveillance glycémie maternelle (risque diabète gestationnel)",
+      "Surveillance néonatale neurologique + digestif pendant 7 jours"],
+    alert:"Non recommandé comme antiémétique — Données de sécurité insuffisantes en grossesse"}
+];
+const mgAlternatives = [
+  {category:"Antalgiques / Antipyrétiques",items:[
+    {name:"Paracétamol (Doliprane®, Efferalgan®)",note:"Antalgique de choix – usage ponctuel recommandé",grade:"A"},
+    {name:"AINS (Ibuprofène, Aspirine > 100 mg)",note:"Contre-indiqués après 24 SA – fermeture canal artériel, HTAP",grade:"D"}
+  ]},
+  {category:"Antibiotiques",items:[
+    {name:"Amoxicilline (Clamoxyl®)",note:"Pénicilline de choix – excellente sécurité",grade:"B"},
+    {name:"Céphalosporines (Céfixime, Ceftriaxone)",note:"Alternative aux pénicillines",grade:"B"},
+    {name:"Macrolides (Azithromycine)",note:"Alternative en allergie aux β-lactamines",grade:"B"},
+    {name:"Tétracyclines, Quinolones",note:"À éviter – coloration dents, toxicité cartilage",grade:"D"}
+  ]},
+  {category:"Antihypertenseurs",items:[
+    {name:"α-Méthyldopa (Aldomet®)",note:"Antihypertenseur de référence pendant la grossesse",grade:"A"},
+    {name:"Labétalol (Trandate®)",note:"Bêtabloquant de choix – pas d'effet tératogène majeur",grade:"B"},
+    {name:"Nifédipine (Adalate®)",note:"Inhibiteur calcique – surveillance RCIU",grade:"C"},
+    {name:"IEC, Sartans, Aliskiren",note:"Contre-indiqués dès 2e trimestre – toxicité rénale fœtale",grade:"D"}
+  ]},
+  {category:"Anticoagulants",items:[
+    {name:"HBPM (Enoxaparine, Daltéparine)",note:"Pas de passage transplacentaire – anticoagulants de choix",grade:"B"},
+    {name:"AVK (Warfarine), NACO",note:"Warfarine tératogène. NACO : données limitées – préférer HBPM",grade:"D"}
+  ]},
+  {category:"Antiémétiques (NVG)",items:[
+    {name:"Doxylamine + Pyridoxine (B6)",note:"1re ligne internationale – > 200 000 expositions rassurantes (ACOG, RCOG)",grade:"A"},
+    {name:"Métoclopramide (Primpéran®)",note:"1re ligne France – usage ≤ 5 jours, PO ou suppositoire",grade:"B"},
+    {name:"Métopimazine (Vogalène®)",note:"Alternative française – suppositoire utile si vomissements",grade:"B"},
+    {name:"Domépridone (Motilium®)",note:"CONTRE-INDIQUÉ – allongement QT, réévaluation EMA 2014",grade:"X"}
+  ]},
+  {category:"Antihistaminiques",items:[
+    {name:"Loratadine (Clarityne®)",note:"Antihistaminique H1 de choix – sécurité démontrée",grade:"B"},
+    {name:"Cétirizine (Zyrtec®)",note:"Alternative à la loratadine",grade:"B"}
+  ]},
+  {category:"Antithyroïdiens",items:[
+    {name:"PTU (Propylex®) – 1er trimestre",note:"Moins tératogène que carbimazole au T1",grade:"B"},
+    {name:"Carbimazole (Néomercazole®) – 2e/3e trimestre",note:"Reprise possible après T1",grade:"C"}
+  ]},
+  {category:"Antidiabétiques",items:[
+    {name:"Insuline",note:"Traitement de référence – pas de passage transplacentaire",grade:"A"},
+    {name:"Gliflozines, Gliptines",note:"Gliflozines contre-indiquées. Gliptines : données limitées",grade:"D"}
+  ]},
+  {category:"Antiépileptiques",items:[
+    {name:"Lamotrigine",note:"Moins tératogène que valproate – à discuter au cas par cas",grade:"C"},
+    {name:"Valproate, Phénytoïne",note:"Valproate CI. Phénytoïne : risque tératogène modéré",grade:"D"}
+  ]},
+  {category:"Psychotropes",items:[
+    {name:"Sertraline (Zoloft®)",note:"IRS de 1re intention pendant grossesse et allaitement",grade:"C"},
+    {name:"Paroxétine",note:"Risque malformations cardiaques T1 – préférer sertraline",grade:"D"}
+  ]}
+];
+
+const mgComparisonData = [
+  {pathology:"Douleur / Fièvre",avoid:"AINS après 24 SA (fermeture canal artériel, HTAP)",alternative:"Paracétamol (usage ponctuel)"},
+  {pathology:"NVG / Hyperémèse",avoid:"Dompéridone (CI – allongement QT), Sulpiride (rapport B/R défavorable)",alternative:"Doxylamine+B6, Métoclopramide ≤ 5 j, Métopimazine"},
+  {pathology:"Infection bactérienne",avoid:"Tétracyclines, Quinolones (coloration dents, toxicité cartilage)",alternative:"Amoxicilline, Céphalosporines, Azithromycine"},
+  {pathology:"Hypertension",avoid:"IEC, Sartans, Aliskiren (toxicité rénale fœtale)",alternative:"α-Méthyldopa, Labétalol, Nifédipine"},
+  {pathology:"Anticoagulation",avoid:"AVK – Warfarine (warfarin fetal syndrome)",alternative:"HBPM – Enoxaparine (pas de passage placentaire)"},
+  {pathology:"Allergie",avoid:"Antihistaminiques sédatifs anciens",alternative:"Loratadine, Cétirizine"},
+  {pathology:"Hyperthyroïdie",avoid:"Carbimazole au 1er trimestre (aplasie cuir chevelu)",alternative:"PTU au T1, Carbimazole au T2-T3"},
+  {pathology:"Diabète",avoid:"Gliflozines (toxicité rénale fœtale)",alternative:"Insuline (traitement de référence)"},
+  {pathology:"Épilepsie",avoid:"Valproate (spina bifida 1-2%, autisme)",alternative:"Lamotrigine (moins tératogène)"},
+  {pathology:"Dépression",avoid:"Paroxétine (risque malformations cardiaques T1)",alternative:"Sertraline (données les plus rassurantes)"},
+  {pathology:"Acné sévère",avoid:"Isotrétinoïne (malformations SNC, cœur, oreille)",alternative:"Traitements locaux, pas de rétinoïde systémique"}
+];
+
+const mgTimelineData = [
+  {sa:"Préconceptionnel",type:"info",text:"Consultation préconceptionnelle obligatoire",details:"Acide folique 0,4 mg/j (5 mg/j si antiépileptique). Switch médicamenteux : valproate → lamotrigine, warfarine → HBPM, méthotrexate → azathioprine, IEC → méthyldopa. Arrêt isotrétinoïne 1 mois avant, acitrétine 2 ans avant."},
+  {sa:"1er Trimestre (< 12 SA)",type:"danger",text:"Risque tératogène maximal – Organogenèse",details:"Isotrétinoïne, Acitrétine, Valproate, Lithium, AVK, Méthotrexate, Mycophénolate, Carbimazole, Thalidomide, Cyclophosphamide → malformations majeures. Relais Carbimazole → PTU au T1."},
+  {sa:"12 SA",type:"danger",text:"Toxicité rénale fœtale – Début de la diurèse fœtale",details:"IEC, Sartans, Aliskiren, Gliflozines → oligoamnios, insuffisance rénale fœtale. AINS → toxicité rénale fœtale dès 12 SA."},
+  {sa:"14 SA",type:"warning",text:"Tétracyclines contre-indiquées",details:"Fixation osseuse et coloration irréversible des dents de lait. Préférer amoxicilline ou macrolides."},
+  {sa:"24 SA",type:"danger",text:"Contre-indication absolue des AINS",details:"Tous les AINS (y compris voie cutanée, anti-COX2) → fermeture canal artériel, HTAP, mort in utero. Exception : Aspirine ≤ 100 mg/j (prévention pré-éclampsie)."},
+  {sa:"3e Trimestre",type:"info",text:"Prévention déficit vitaminique",details:"Antiépileptiques inducteurs → Vit K1 (10-20 mg/j les 15 derniers jours). Vit D 1000 UI/j. Réduction progressive benzodiazépines et neuroleptiques."},
+  {sa:"36 SA",type:"warning",text:"Relais AVK → Héparine + Arrêt aspirine",details:"Si AVK indispensables (valve mécanique), relais HBPM à 36 SA. Arrêt aspirine faible dose. Réduction progressive psychotropes si possible."},
+  {sa:"À la naissance",type:"info",text:"Surveillance néonatale systématique",details:"Bêtabloquants → glycémie, FC, PA (48-72h). Benzodiazépines → scope apnée (5-7j). IRS → syndrome adaptation (72h). Neuroleptiques → neuro + digestif (7j). Opioïdes → sevrage, respiration. Valproate → plaquettes, fibrinogène, glycémie."}
+];
+
+const mgQuizData = [
+  {q:"À partir de quel terme les AINS sont-ils formellement contre-indiqués ?",options:["12 SA","20 SA","24 SA","36 SA"],correct:2,explanation:"Les AINS (y compris anti-COX2 et voie cutanée) sont contre-indiqués à partir de 24 SA en raison du risque de fermeture du canal artériel et d'HTAP."},
+  {q:"Quel est le risque de FCS sous mycophénolate (Cellcept®) ?",options:["10%","25%","50%","75%"],correct:2,explanation:"Le mycophénolate entraîne un risque de FCS de 50%. Un relais par azathioprine est obligatoire avant la conception."},
+  {q:"Quel antihypertenseur est le plus sûr pendant la grossesse ?",options:["Énalapril","Losartan","α-Méthyldopa","Aliskiren"],correct:2,explanation:"L'α-Méthyldopa (Aldomet®) est l'antihypertenseur de référence avec le meilleur recul pendant la grossesse."},
+  {q:"Quelle supplémentation est nécessaire en fin de grossesse sous carbamazépine ?",options:["Fer IV","Vitamine K1 10-20 mg/j les 15 derniers jours","Vitamine B12","Rien de particulier"],correct:1,explanation:"Les inducteurs enzymatiques entraînent un déficit en vitamine K. Supplémentation maternelle en Vit K1 les 15 derniers jours."},
+  {q:"Quel antidépresseur est le plus favorable pendant la grossesse ?",options:["Paroxétine","Fluoxétine","Sertraline","Venlafaxine"],correct:2,explanation:"La sertraline a le meilleur profil de sécurité parmi les IRS, tant en grossesse qu'en allaitement."},
+  {q:"Quel est le risque principal des IEC au 2e et 3e trimestre ?",options:["Malformations cardiaques","Toxicité rénale fœtale","Retard mental","Aucun risque"],correct:1,explanation:"Les IEC sont néphrotoxiques pour le fœtus aux 2e/3e trimestres, entraînant oligoamnios et insuffisance rénale néonatale."},
+  {q:"Durée de contre-indication de grossesse après arrêt de l'acitrétine ?",options:["1 mois","6 mois","1 an","2 ans"],correct:3,explanation:"L'acitrétine a une demi-vie très longue. Contraception efficace 2 ans après l'arrêt."},
+  {q:"Quel antithyroïdien préférer au 1er trimestre ?",options:["Carbimazole","PTU (Propylex®)","Iode radioactif","Thiamazole"],correct:1,explanation:"Le PTU est moins tératogène que le carbimazole au T1 (moins d'aplasie cuir chevelu et atrésie choanes)."},
+  {q:"Quelle malformation cardiaque est associée au lithium ?",options:["Tétralogie de Fallot","Anomalie d'Ebstein","Communication interventriculaire","Coarctation aorte"],correct:1,explanation:"Le lithium augmente le risque d'anomalie d'Ebstein (4-8%). Échocardiographie fœtale recommandée à 20-22 SA."},
+  {q:"Dose d'acide folique en prévention primaire du défaut de fermeture du tube neural ?",options:["0,4 mg/j","5 mg/j","10 mg/j","15 mg/j"],correct:0,explanation:"La dose standard est 0,4 mg/j (400 μg/j), à débuter 4 semaines avant conception jusqu'à 12 SA. Dose de 5 mg/j si antiépileptique."},
+  {q:"Quel anticoagulant est le plus sûr pendant la grossesse ?",options:["Warfarine","Rivaroxaban","Enoxaparine (HBPM)","Dabigatran"],correct:2,explanation:"Les HBPM (enoxaparine, daltéparine) ne traversent pas le placenta et sont les anticoagulants de choix."},
+  {q:"Quel syndrome est associé à l'exposition fœtale à la warfarine au T1 ?",options:["Syndrome de Turner","Warfarin fetal syndrome","Syndrome de Down","Syndrome de Marfan"],correct:1,explanation:"Le warfarin fetal syndrome (4-6%) associe dysmorphie faciale, hypoplasie des os propres du nez et des phalanges."},
+  {q:"Quel est le risque principal du valproate pour l'enfant à long terme ?",options:["Surdité","Cécité","Troubles du spectre autistique","Allergie"],correct:2,explanation:"Le valproate est associé à un risque significatif de troubles neurocomportementaux dont l'autisme."},
+  {q:"Quelle surveillance néonatale est nécessaire après exposition aux bêtabloquants ?",options:["Échographie abdominale","Glycémie, FC, PA pendant 48-72h","IRM cérébrale","Aucune surveillance"],correct:1,explanation:"Les bêtabloquants peuvent entraîner bradycardie, hypoglycémie et hypotension néonatales. Surveillance 48-72h."},
+  {q:"Pourquoi le méthotrexate doit-il être arrêté 3 mois avant conception ?",options:["Demi-vie longue","Risque FCS 30-40% et malformations","Toxicité hépatique","Interaction avec l'acide folique"],correct:1,explanation:"Le méthotrexate entraîne un risque de FCS de 30-40% et des malformations crânio-faciales et des membres."},
+  {q:"Quel est le floppy infant syndrome ?",options:["RCIU sévère","Hypotonie néonatale due aux benzodiazépines","Malformation cardiaque","Hypothyroïdie néonatale"],correct:1,explanation:"Le floppy infant syndrome (hypotonie, dépression respiratoire) survient chez le nouveau-né exposé aux benzodiazépines proches du terme."},
+  {q:"Quel est le traitement antidiabétique de référence pendant la grossesse ?",options:["Metformine","Gliclazide","Insuline","Dapagliflozine"],correct:2,explanation:"L'insuline est le traitement de référence car elle ne traverse pas le placenta."},
+  {q:"Quelle est la particularité du thalidomide en tératologie ?",options:["Risque uniquement au T3","Phocomélie (malformations des membres)","Risque uniquement chez le garçon","Aucun risque prouvé"],correct:1,explanation:"Le thalidomide est le tératogène historique responsable de phocomélie (absence/raccourcissement des membres)."},
+  {q:"À partir de quel terme les tétracyclines colorent-elles les dents de lait ?",options:["8 SA","14 SA","24 SA","36 SA"],correct:1,explanation:"Les tétracyclines se fixent sur l'émail dentaire à partir de 14 SA, entraînant une coloration jaune-brun irréversible."},
+  {q:"Quel IRS est le mieux adapté pour l'allaitement ?",options:["Fluoxétine (demi-vie longue)","Paroxétine","Sertraline","Citalopram"],correct:2,explanation:"La sertraline a le passage le plus faible dans le lait maternel et le meilleur profil de sécurité pendant l'allaitement."}
+];
+
+let currentTab = 'all';
+let currentFilter = '';
+let favorites = [];
+try { const s = localStorage.getItem('mgFavorites'); favorites = s ? JSON.parse(s) : []; if (!Array.isArray(favorites)) favorites = []; } catch(e) { favorites = []; }
+let compareList = [];
+let showFavoritesOnly = false;
+let currentQuiz = 0;
+let quizScore = 0;
+let quizAnswered = false;
+let searchTimeout = null;
+
+function showToast(message, type = 'info') {
+  const existing = document.querySelector('.mg-elementor-isolation .mg-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = `mg-toast mg-toast-${type}`;
+  toast.textContent = message;
+  document.querySelector('.mg-elementor-isolation').appendChild(toast);
+  requestAnimationFrame(() => { toast.classList.add('show'); });
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+}
+
+function mgUpdateStats() {
+  const counts = { terato: 0, fetal: 0, neonatal: 0 };
+  mgMedications.forEach(m => {
+    if (m.category === 'terato') counts.terato++;
+    else if (m.category === 'fetal') counts.fetal++;
+    else if (m.category === 'neonatal') counts.neonatal++;
+  });
+  document.getElementById('mgStatTerato').textContent = counts.terato;
+  document.getElementById('mgStatFetal').textContent = counts.fetal;
+  document.getElementById('mgStatNeonatal').textContent = counts.neonatal;
+  document.getElementById('mgStatTotal').textContent = mgMedications.length;
+  document.getElementById('mgTabAll').textContent = mgMedications.length;
+  document.getElementById('mgTabTerato').textContent = counts.terato;
+  document.getElementById('mgTabFetal').textContent = counts.fetal;
+  document.getElementById('mgTabNeonatal').textContent = counts.neonatal;
+  document.getElementById('mgTabLactation').textContent = mgMedications.length;
+}
+
+function mgSwitchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.mg-tab').forEach(t => t.classList.remove('active'));
+  const tabEl = document.querySelector(`.mg-tab[data-tab="${tab}"]`);
+  if (tabEl) tabEl.classList.add('active');
+  document.querySelectorAll('.mg-section').forEach(s => s.classList.remove('active'));
+  if (['all','terato','fetal','neonatal'].includes(tab)) {
+    document.getElementById('mg-sec-all').classList.add('active');
+    currentFilter = tab === 'all' ? '' : tab;
+    mgRenderCards();
+  } else {
+    const section = document.getElementById(`mg-sec-${tab}`);
+    if (section) section.classList.add('active');
+    if (tab === 'lactation') mgRenderLactation();
+    if (tab === 'alternatives') mgRenderAlternatives();
+    if (tab === 'comparison') mgRenderComparison();
+    if (tab === 'timeline') mgRenderTimeline();
+    if (tab === 'quiz') mgStartQuiz();
+  }
+}
+
+function mgRenderCards() {
+  const container = document.getElementById('mgCardsContainer');
+  const searchInput = document.getElementById('mgSearch');
+  const search = searchInput ? searchInput.value.toLowerCase().trim() : '';
+  const filterTrimester = document.getElementById('mgFilterTrimester').value;
+  const filterSystem = document.getElementById('mgFilterSystem').value;
+  const filterGrade = document.getElementById('mgFilterGrade').value;
+  let filtered = [...mgMedications];
+  if (currentFilter) filtered = filtered.filter(m => m.category === currentFilter);
+  if (search) filtered = filtered.filter(m => m.name.toLowerCase().includes(search) || m.commercial.some(c => c.toLowerCase().includes(search)) || m.family.toLowerCase().includes(search));
+  if (showFavoritesOnly) filtered = filtered.filter(m => favorites.includes(m.id));
+  if (filterSystem) filtered = filtered.filter(m => m.system === filterSystem);
+  if (filterGrade) filtered = filtered.filter(m => m.grade === filterGrade);
+  if (filterTrimester) {
+    filtered = filtered.filter(m => {
+      if (!m.risks) return false;
+      const risks = m.risks[filterTrimester];
+      return risks && risks.length > 0 && !risks.every(r => r.toLowerCase().includes('rassurantes') || r.toLowerCase().includes('pas de risque') || r.toLowerCase().includes('pas de tératogénicité'));
+    });
+  }
+  document.getElementById('mgResultCount').textContent = filtered.length + ' résultat' + (filtered.length > 1 ? 's' : '');
+  if (filtered.length === 0) {
+    document.getElementById('mgNoResults').style.display = 'block';
+    container.innerHTML = '';
+    return;
+  }
+  document.getElementById('mgNoResults').style.display = 'none';
+  const tagMap = { ci:{cls:'mg-tag-ci',label:'CONTRE-INDICATION'}, surv:{cls:'mg-tag-surv',label:'SURVEILLANCE'}, prev:{cls:'mg-tag-prev',label:'PRÉVENTION'}, warn:{cls:'mg-tag-warn',label:'PRÉCAUTION'} };
+  const riskMap = { terato:'risk-high', fetal:'risk-medium', neonatal:'risk-neonatal' };
+  const lactText = { safe:'✅ Compatible', caution:'⚠️ Précautions', avoid:'❌ Déconseillé' };
+  container.innerHTML = filtered.map(m => {
+    const riskClass = riskMap[m.category] || 'risk-low';
+    const isFav = favorites.includes(m.id);
+    const inCompare = compareList.includes(m.id);
+    const tagsHtml = m.tags.map(t => { const tag = tagMap[t]; return tag ? '<span class="mg-tag ' + tag.cls + '">' + tag.label + '</span>' : ''; }).join('');
+    const risksHtml = m.risks ? Object.entries(m.risks).map(([k,v]) => `<tr><th>${k.toUpperCase()}</th><td>${v.join('<br>')}</td></tr>`).join('') : '';
+    const conductHtml = m.conduct.map(c => '<li>' + c + '</li>').join('');
+    return '<div class="mg-card ' + riskClass + '" id="card-' + m.id + '" data-id="' + m.id + '">' +
+      '<div class="mg-card-favorite ' + (isFav ? 'active' : '') + '" onclick="mgToggleFavorite(' + m.id + ')" role="button" tabindex="0" title="' + (isFav ? 'Retirer des favoris' : 'Ajouter aux favoris') + '"></div>' +
+      '<div class="mg-card-header" onclick="mgToggleCard(' + m.id + ')">' +
+        '<div class="mg-card-icon">' + m.icon + '</div>' +
+        '<div class="mg-card-info">' +
+          '<div class="mg-card-title">' + m.name + ' <span class="mg-grade ' + m.grade.toLowerCase() + '">GRADE ' + m.grade + '</span></div>' +
+          '<div class="mg-card-family">' + m.family + ' — ' + m.commercial.join(', ') + '</div>' +
+        '</div>' +
+        '<div class="mg-card-toggle"></div>' +
+      '</div>' +
+      '<div class="mg-card-tags">' + tagsHtml + '</div>' +
+      '<div class="mg-card-body"><div class="mg-card-content">' +
+        '<div class="mg-detail-section-title"><span class="mg-dot red"></span> RISQUES PAR TRIMESTRE</div>' +
+        '<table class="mg-risk-table">' + risksHtml + '</table>' +
+        '<div class="mg-detail-section-title"><span class="mg-dot green"></span> CONDUITE À TENIR</div>' +
+        '<ul class="mg-list success">' + conductHtml + '</ul>' +
+        '<div class="mg-detail-section-title"><span class="mg-dot blue"></span> ALLAITEMENT</div>' +
+        '<div class="mg-info-box"><strong>Niveau :</strong> <span class="mg-lactation-level ' + m.lactation.level + '">' + lactText[m.lactation.level] + '</span><br><strong>Risques :</strong> ' + m.lactation.risk.join(', ') + '<br><strong>Recommandation :</strong> ' + m.lactation.recommendation + '</div>' +
+        (m.alert ? '<div class="mg-alert">⚠️ ' + m.alert + '</div>' : '') +
+        '<button class="mg-compare-add ' + (inCompare ? 'active' : '') + '" onclick="mgToggleCompare(' + m.id + ')">' + (inCompare ? '✓ Retirer de la comparaison' : '+ Ajouter à la comparaison') + '</button>' +
+      '</div></div></div>';
+  }).join('');
+  mgUpdateCompareButton();
+}
+
+function mgToggleCard(id) { const c = document.getElementById(`card-${id}`); if (c) c.classList.toggle('open'); }
+
+function mgToggleFavorite(id) {
+  if (favorites.includes(id)) { favorites = favorites.filter(f => f !== id); showToast('Retiré des favoris', 'info'); }
+  else { favorites.push(id); showToast('Ajouté aux favoris ⭐', 'success'); }
+  try { localStorage.setItem('mgFavorites', JSON.stringify(favorites)); } catch(e) {}
+  mgRenderCards();
+}
+
+function mgToggleFavoritesFilter() {
+  showFavoritesOnly = !showFavoritesOnly;
+  document.getElementById('mgFavoritesFilter').classList.toggle('active');
+  ['all','terato','fetal','neonatal'].includes(currentTab) ? mgRenderCards() : mgSwitchTab('all');
+}
+
+function mgToggleCompare(id) {
+  if (compareList.includes(id)) { compareList = compareList.filter(i => i !== id); showToast('Retiré de la comparaison', 'info'); }
+  else if (compareList.length < 2) { compareList.push(id); showToast('Ajouté à la comparaison', 'success'); }
+  else { showToast('Maximum 2 médicaments à comparer', 'error'); return; }
+  mgRenderCards(); mgUpdateComparePanel(); mgUpdateCompareButton();
+}
+
+function mgUpdateComparePanel() {
+  const panel = document.getElementById('mgComparisonPanel');
+  const grid = document.getElementById('mgComparisonGrid');
+  if (compareList.length === 0) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  const meds = mgMedications.filter(m => compareList.includes(m.id));
+  const llt = {safe:'✅ Compatible', caution:'⚠️ Précautions', avoid:'❌ Déconseillé'};
+  grid.innerHTML = meds.map(med => `<div class="mg-compare-item"><h4>${med.icon} ${med.name} <span class="mg-grade ${med.grade.toLowerCase()}">GRADE ${med.grade}</span></h4><p><strong>Famille :</strong> ${med.family}</p><p><strong>Risques T1 :</strong> ${med.risks.t1.join(', ')}</p><p><strong>Risques T3 :</strong> ${med.risks.t3.join(', ')}</p><p><strong>Allaitement :</strong> ${llt[med.lactation.level]}</p>${med.alert ? `<p style="color:#DC3545;font-weight:600;">⚠️ ${med.alert}</p>` : ''}<button class="mg-compare-remove" onclick="mgToggleCompare(${med.id})">✕ Retirer</button></div>`).join('');
+}
+
+function mgUpdateCompareButton() {
+  const btn = document.getElementById('mgCompareBtn');
+  btn.textContent = `Comparer (${compareList.length}/2)`;
+  btn.disabled = compareList.length !== 2;
+}
+
+function mgRenderLactation() {
+  const llt = {safe:'✅ Compatible', caution:'⚠️ Précautions', avoid:'❌ Déconseillé'};
+  document.getElementById('mgLactationContainer').innerHTML = mgMedications.map(m => `<div class="mg-lactation-card"><h3>${m.icon} ${m.name}</h3><div class="mg-lactation-level ${m.lactation.level}">${llt[m.lactation.level]}</div><p><strong>Famille :</strong> ${m.family}</p><p><strong>Risques :</strong> ${m.lactation.risk.join(', ')}</p><p><strong>Recommandation :</strong> ${m.lactation.recommendation}</p><p><span class="mg-grade ${m.grade.toLowerCase()}">GRADE ${m.grade}</span></p></div>`).join('');
+}
+
+function mgRenderAlternatives() {
+  document.getElementById('mgAlternativesContainer').innerHTML = mgAlternatives.map(alt => `<div class="mg-safe-category"><h3>${alt.category}</h3>${alt.items.map(item => `<div class="mg-safe-item"><strong>${['A','B'].includes(item.grade)?'✅':'⚠️'} ${item.name}</strong> <span class="mg-grade ${item.grade.toLowerCase()}">GRADE ${item.grade}</span><span class="mg-safe-note">${item.note}</span></div>`).join('')}</div>`).join('');
+}
+
+function mgRenderComparison() {
+  document.getElementById('mgComparisonTableBody').innerHTML = mgComparisonData.map(item => `<tr><td><strong>${item.pathology}</strong></td><td class="mg-avoid">❌ ${item.avoid}</td><td class="mg-alternative">✅ ${item.alternative}</td></tr>`).join('');
+}
+
+function mgRenderTimeline() {
+  document.getElementById('mgTimelineContainer').innerHTML = mgTimelineData.map(item => `<div class="mg-memo-item ${item.type}"><div class="mg-memo-sa">${item.sa}</div><div class="mg-memo-text">${item.text}</div><div class="mg-memo-details">${item.details}</div></div>`).join('');
+}
+
+function mgStartQuiz() { currentQuiz = 0; quizScore = 0; quizAnswered = false; mgRenderQuiz(); }
+
+function mgRenderQuiz() {
+  const container = document.getElementById('mgQuizContainer');
+  if (!container) return;
+  const q = mgQuizData[currentQuiz];
+  container.innerHTML = `<div class="mg-quiz-card"><div class="mg-quiz-header"><span class="mg-quiz-counter">Question ${currentQuiz+1}/${mgQuizData.length}</span><span class="mg-quiz-score">Score : ${quizScore}/${mgQuizData.length}</span></div><div class="mg-quiz-question">${q.q}</div><div class="mg-quiz-options">${q.options.map((opt,i) => `<button class="mg-quiz-option" onclick="mgAnswer(${currentQuiz},${i})"><span>${String.fromCharCode(65+i)}</span><span>${opt}</span></button>`).join('')}</div><div id="mgQuizFeedback" style="margin-top:20px;padding:15px;border-radius:8px;display:none;"></div><button class="mg-quiz-next" id="mgQuizNext" onclick="mgNextQuestion()" style="display:none;">Question suivante →</button></div>`;
+}
+
+function mgAnswer(qIndex, optIndex) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = mgQuizData[qIndex];
+  const isCorrect = optIndex === q.correct;
+  document.querySelectorAll('.mg-quiz-option').forEach((opt, i) => {
+    opt.disabled = true;
+    if (i === q.correct) { opt.style.background = '#E8F8EE'; opt.style.borderColor = '#28A745'; }
+    else if (i === optIndex && !isCorrect) { opt.style.background = '#FFEEF0'; opt.style.borderColor = '#DC3545'; }
+  });
+  if (isCorrect) { quizScore++; showToast('Bonne réponse !', 'success'); }
+  else { showToast('Mauvaise réponse', 'error'); }
+  const fb = document.getElementById('mgQuizFeedback');
+  fb.style.background = isCorrect ? '#E8F8EE' : '#FFEEF0';
+  fb.style.color = isCorrect ? '#155724' : '#721C24';
+  fb.innerHTML = (isCorrect ? '✅ Bonne réponse !' : '❌ Mauvaise réponse. La bonne réponse est : <strong>' + q.options[q.correct] + '</strong>') + '<br><small style="display:block;margin-top:8px;color:#555;">' + q.explanation + '</small>';
+  fb.style.display = 'block';
+  document.getElementById('mgQuizNext').style.display = 'inline-block';
+}
+
+function mgNextQuestion() {
+  if (currentQuiz + 1 < mgQuizData.length) { currentQuiz++; quizAnswered = false; mgRenderQuiz(); }
+  else { mgShowQuizResults(); }
+}
+
+function mgShowQuizResults() {
+  const pct = Math.round((quizScore / mgQuizData.length) * 100);
+  let msg, emoji;
+  if (pct === 100) { msg = '🏆 Parfait !'; emoji = '🎉'; }
+  else if (pct >= 80) { msg = '👏 Excellent !'; emoji = '🌟'; }
+  else if (pct >= 60) { msg = '👍 Bien ! Quelques points à revoir.'; emoji = '📚'; }
+  else { msg = '📖 Continuez vos révisions !'; emoji = '💪'; }
+  document.getElementById('mgQuizContainer').innerHTML = `<div class="mg-quiz-results"><div style="font-size:4em;margin-bottom:20px;">${emoji}</div><h3>Quiz terminé !</h3><p>Votre score : <strong>${quizScore}/${mgQuizData.length}</strong></p><div class="mg-score-circle" style="background:conic-gradient(#6C63FF ${pct}%, #F8F9FA 0);"><div class="mg-score-inner"><span>${pct}%</span></div></div><p style="color:#6C757D;margin:20px 0;">${msg}</p><button onclick="mgStartQuiz()" class="mg-quiz-next" style="display:inline-block;">🔄 Recommencer le quiz</button></div>`;
+}
+
+function mgSearchHandler() {
+  const searchInput = document.getElementById('mgSearch');
+  const clearBtn = document.getElementById('mgSearchClear');
+  if (clearBtn) clearBtn.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    if (!['all','terato','fetal','neonatal'].includes(currentTab)) mgSwitchTab('all');
+    else mgRenderCards();
+  }, 300);
+}
+
+function mgClearSearch() {
+  const searchInput = document.getElementById('mgSearch');
+  searchInput.value = '';
+  document.getElementById('mgSearchClear').style.display = 'none';
+  ['all','terato','fetal','neonatal'].includes(currentTab) ? mgRenderCards() : mgSwitchTab('all');
+  searchInput.focus();
+}
+
+function mgApplyFilters() {
+  ['all','terato','fetal','neonatal'].includes(currentTab) ? mgRenderCards() : mgSwitchTab('all');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  mgUpdateStats();
+  mgRenderCards();
+  var searchEl = document.getElementById('mgSearch');
+  var clearEl = document.getElementById('mgSearchClear');
+  if (searchEl) { searchEl.addEventListener('input', mgSearchHandler); searchEl.addEventListener('keydown', function(e) { if (e.key === 'Escape') mgClearSearch(); }); }
+  if (clearEl) clearEl.addEventListener('click', mgClearSearch);
+  document.querySelectorAll('.mg-tab').forEach(tab => tab.addEventListener('click', () => mgSwitchTab(tab.dataset.tab)));
+  document.querySelectorAll('.mg-stat-card').forEach(card => {
+    const handler = () => mgSwitchTab(card.dataset.tab);
+    card.addEventListener('click', handler);
+    card.addEventListener('keydown', e => { if (e.key === 'Enter') handler(); });
+  });
+  document.getElementById('mgFavoritesFilter').addEventListener('click', mgToggleFavoritesFilter);
+  document.getElementById('mgCompareBtn').addEventListener('click', () => {
+    if (compareList.length === 2) { mgUpdateComparePanel(); document.getElementById('mgComparisonPanel').scrollIntoView({behavior:'smooth'}); }
+  });
+  document.getElementById('mgFilterTrimester').addEventListener('change', mgApplyFilters);
+  document.getElementById('mgFilterSystem').addEventListener('change', mgApplyFilters);
+  document.getElementById('mgFilterGrade').addEventListener('change', mgApplyFilters);
+});
+</script>
+</div>
+</body>
+</html>
