@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interprétateur de Bilan Biologique – Dr KARA-ZAITRI</title>
+<style>
+/* =============================================
+   BLINDAGE ELEMENTOR — ROOT ID ISOLÉ
+   ============================================= */
+#bio-root {
+  --navy: #1A3A5C; --navy-light: #2C5282; --navy-bg: #EBF4FF; 
+  --slate: #4A5568; --slate-light: #718096;
+  --bg: #F8FAFC; --white: #FFFFFF;
+  --normal: #166534; --normal-bg: #DCFCE7; --normal-border: #86EFAC;
+  --low: #1E40AF; --low-bg: #DBEAFE; --low-border: #93C5FD;
+  --high: #B45309; --high-bg: #FEF3C7; --high-border: #FCD34D;
+  --critical: #C8102E; --critical-bg: #FEE2E2; --critical-border: #FCA5A5;
+  --border: #CBD5E0; --border-light: #E2E8F0; --text: #1A202C; --text-muted: #718096;
+  --radius: 6px; --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+
+  all: initial; font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 14px !important; color: var(--text) !important; background: var(--bg) !important;
+  display: block !important; box-sizing: border-box !important; line-height: 1.5 !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+#bio-root *, #bio-root *::before, #bio-root *::after { box-sizing: border-box !important; font-family: inherit !important; }
+
+/* ---- HEADER ---- */
+#bio-root .bio-header { background: var(--navy) !important; color: var(--white) !important; padding: 20px 24px 16px !important; border-bottom: 3px solid #C8102E !important; }
+#bio-root .bio-header-top { display: flex !important; align-items: flex-start !important; justify-content: space-between !important; flex-wrap: wrap !important; gap: 10px !important; }
+#bio-root .bio-header h1 { font-size: 18px !important; font-weight: 700 !important; color: var(--white) !important; margin: 0 0 4px 0 !important; line-height: 1.3 !important; }
+#bio-root .bio-subtitle { font-size: 12px !important; color: rgba(255,255,255,0.75) !important; font-weight: 400 !important; margin: 0 !important; }
+#bio-root .bio-badge { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.3) !important; color: var(--white) !important; font-size: 10px !important; font-weight: 700 !important; padding: 3px 8px !important; border-radius: 3px !important; letter-spacing: 0.05em !important; text-transform: uppercase !important; white-space: nowrap !important; }
+#bio-root .bio-disclaimer { margin-top: 10px !important; font-size: 10px !important; color: rgba(255,255,255,0.6) !important; border-top: 1px solid rgba(255,255,255,0.15) !important; padding-top: 8px !important; line-height: 1.4 !important; }
+
+/* ---- TABS ---- */
+#bio-root .bio-tabs-wrap { background: var(--white) !important; border-bottom: 2px solid var(--border-light) !important; overflow-x: auto !important; scrollbar-width: none !important; }
+#bio-root .bio-tabs-wrap::-webkit-scrollbar { display: none !important; }
+#bio-root .bio-tabs { display: flex !important; min-width: max-content !important; padding: 0 12px !important; }
+#bio-root .bio-tab { padding: 10px 14px !important; font-size: 11px !important; font-weight: 600 !important; color: var(--slate) !important; cursor: pointer !important; border: none !important; background: none !important; border-bottom: 3px solid transparent !important; white-space: nowrap !important; transition: color 0.15s, border-color 0.15s !important; letter-spacing: 0.01em !important; text-transform: uppercase !important; }
+#bio-root .bio-tab:hover { color: var(--navy) !important; }
+#bio-root .bio-tab.active { color: var(--navy) !important; border-bottom-color: var(--navy) !important; }
+
+/* ---- GLOBAL CONFIG ---- */
+#bio-root .bio-global-config { background: var(--white) !important; padding: 12px 20px !important; border-bottom: 1px solid var(--border-light) !important; display: flex !important; gap: 8px !important; align-items: center !important; flex-wrap: wrap !important; }
+#bio-root .bio-sex-btn { padding: 6px 14px !important; border: 1.5px solid var(--border) !important; border-radius: 20px !important; font-size: 12px !important; font-weight: 600 !important; cursor: pointer !important; background: var(--white) !important; color: var(--slate) !important; transition: all 0.15s !important; }
+#bio-root .bio-sex-btn.active { background: var(--navy) !important; color: var(--white) !important; border-color: var(--navy) !important; }
+
+/* ---- PANEL & GRIDS ---- */
+#bio-root .bio-panel { display: none !important; padding: 20px !important; max-width: 900px !important; margin: 0 auto !important; }
+#bio-root .bio-panel.active { display: block !important; }
+#bio-root .bio-section-title { font-size: 13px !important; font-weight: 700 !important; color: var(--navy) !important; text-transform: uppercase !important; letter-spacing: 0.06em !important; margin: 0 0 14px 0 !important; padding-bottom: 6px !important; border-bottom: 2px solid var(--navy-bg) !important; display: flex !important; align-items: center !important; gap: 8px !important; }
+#bio-root .bio-section-title::before { content: "\25A0" !important; color: #C8102E !important; font-size: 10px !important; }
+#bio-root .bio-grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; gap: 12px !important; margin-bottom: 20px !important; }
+#bio-root .bio-param-card { background: var(--white) !important; border: 1px solid var(--border-light) !important; border-radius: var(--radius) !important; padding: 12px !important; box-shadow: var(--shadow) !important; }
+#bio-root .bio-param-label { font-size: 11px !important; font-weight: 700 !important; color: var(--slate) !important; text-transform: uppercase !important; letter-spacing: 0.04em !important; margin-bottom: 6px !important; display: flex !important; align-items: center !important; justify-content: space-between !important; }
+#bio-root .bio-ref { font-size: 9px !important; font-weight: 400 !important; color: var(--text-muted) !important; font-style: italic !important; }
+#bio-root .bio-input-row { display: flex !important; align-items: center !important; gap: 6px !important; }
+#bio-root .bio-input { flex: 1 !important; padding: 7px 9px !important; border: 1.5px solid var(--border) !important; border-radius: 4px !important; font-size: 14px !important; font-weight: 600 !important; color: var(--text) !important; background: var(--bg) !important; outline: none !important; width: 100% !important; transition: border-color 0.15s !important; }
+#bio-root .bio-input:focus { border-color: var(--navy) !important; background: var(--white) !important; }
+#bio-root .bio-unit { font-size: 11px !important; color: var(--text-muted) !important; white-space: nowrap !important; min-width: 40px !important; }
+
+/* ---- GAUGES & RESULTS ---- */
+#bio-root .bio-gauge-wrap { margin-top: 8px !important; }
+#bio-root .bio-gauge-track { height: 5px !important; border-radius: 10px !important; background: linear-gradient(to right, #3B82F6 0%, #22C55E 40%, #F59E0B 70%, #EF4444 100%) !important; position: relative !important; margin-bottom: 4px !important; }
+#bio-root .bio-gauge-cursor { position: absolute !important; top: -3px !important; width: 11px !important; height: 11px !important; border-radius: 50% !important; border: 2px solid var(--white) !important; background: var(--slate) !important; transform: translateX(-50%) !important; transition: left 0.4s cubic-bezier(.4,0,.2,1), background 0.3s !important; box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important; display: none !important; }
+#bio-root .bio-result { display: none !important; margin-top: 8px !important; padding: 6px 9px !important; border-radius: 4px !important; font-size: 11px !important; font-weight: 600 !important; line-height: 1.4 !important; border-left: 3px solid !important; }
+
+#bio-root .r-normal { background: var(--normal-bg) !important; color: var(--normal) !important; border-color: var(--normal) !important; }
+#bio-root .r-low { background: var(--low-bg) !important; color: var(--low) !important; border-color: var(--low) !important; }
+#bio-root .r-high { background: var(--high-bg) !important; color: var(--high) !important; border-color: var(--high) !important; }
+#bio-root .r-critical { background: var(--critical-bg) !important; color: var(--critical) !important; border-color: var(--critical) !important; }
+#bio-root .r-info { background: var(--navy-bg) !important; color: var(--navy) !important; border-color: var(--navy) !important; }
+#bio-root .r-empty { background: #F8FAFC !important; color: #4A5568 !important; border-color: #CBD5E0 !important; }
+
+/* ---- SYNTHESIS & INTERPRET ---- */
+#bio-root .bio-synthesis, #bio-root .bio-interpret { background: var(--white) !important; border: 1px solid var(--border-light) !important; border-radius: var(--radius) !important; padding: 14px 16px !important; margin-bottom: 16px !important; box-shadow: var(--shadow) !important; display: none !important; }
+#bio-root .bio-synthesis.visible, #bio-root .bio-interpret.visible { display: block !important; }
+#bio-root .bio-synthesis-title { font-size: 12px !important; font-weight: 700 !important; color: var(--navy) !important; text-transform: uppercase !important; margin: 0 0 10px 0 !important; }
+#bio-root .bio-syn-item { display: flex !important; align-items: flex-start !important; gap: 8px !important; padding: 4px 0 !important; border-bottom: 1px solid var(--border-light) !important; font-size: 12px !important; }
+#bio-root .bio-syn-item:last-child { border-bottom: none !important; }
+#bio-root .bio-syn-dot { width: 8px !important; height: 8px !important; border-radius: 50% !important; margin-top: 4px !important; flex-shrink: 0 !important; }
+#bio-root .bio-syn-dot.normal { background: var(--normal) !important; }
+#bio-root .bio-syn-dot.low { background: var(--low) !important; }
+#bio-root .bio-syn-dot.high { background: var(--high) !important; }
+#bio-root .bio-syn-dot.critical { background: var(--critical) !important; }
+#bio-root .bio-interpret { background: var(--navy-bg) !important; border-color: #BEE3F8 !important; border-left: 4px solid var(--navy) !important; color: var(--navy) !important; margin-top: 16px !important; }
+#bio-root .bio-interpret strong { display: block !important; font-size: 11px !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; margin-bottom: 6px !important; color: var(--navy) !important; }
+
+/* ---- BUTTONS & ALERTS ---- */
+#bio-root .bio-btn { display: inline-flex !important; align-items: center !important; gap: 6px !important; padding: 9px 18px !important; background: var(--navy) !important; color: var(--white) !important; border: none !important; border-radius: var(--radius) !important; font-size: 12px !important; font-weight: 700 !important; cursor: pointer !important; text-transform: uppercase !important; transition: background 0.15s !important; margin-top: 12px !important; }
+#bio-root .bio-btn:hover { background: var(--navy-light) !important; }
+#bio-root .bio-btn-reset { background: var(--white) !important; color: var(--slate) !important; border: 1.5px solid var(--border) !important; }
+#bio-root .bio-btn-reset:hover { background: var(--bg) !important; }
+#bio-root .bio-btn-row { display: flex !important; gap: 10px !important; flex-wrap: wrap !important; margin-top: 14px !important; }
+#bio-root .bio-alert { padding: 10px 14px !important; border-radius: 4px !important; font-size: 12px !important; line-height: 1.5 !important; margin-bottom: 12px !important; border-left: 4px solid !important; }
+#bio-root .bio-alert-warn { background: #FFFBEB !important; border-color: var(--high) !important; color: #92400E !important; }
+#bio-root .bio-alert-info { background: var(--navy-bg) !important; border-color: var(--navy) !important; color: var(--navy) !important; }
+
+/* ---- CAS CLINIQUES & CELIAQUE ---- */
+#bio-root .bio-case-select { width: 100% !important; padding: 9px 12px !important; border: 1.5px solid var(--border) !important; border-radius: var(--radius) !important; font-size: 13px !important; color: var(--text) !important; background: var(--white) !important; margin-bottom: 16px !important; outline: none !important; }
+#bio-root .bio-case-card { background: var(--white) !important; border: 1px solid var(--border-light) !important; border-radius: var(--radius) !important; padding: 16px !important; box-shadow: var(--shadow) !important; display: none !important; }
+#bio-root .bio-case-card.visible { display: block !important; }
+#bio-root .bio-case-header { display: flex !important; align-items: flex-start !important; gap: 12px !important; margin-bottom: 12px !important; padding-bottom: 10px !important; border-bottom: 1px solid var(--border-light) !important; }
+#bio-root .bio-case-age { background: var(--navy) !important; color: var(--white) !important; font-size: 20px !important; font-weight: 700 !important; padding: 8px 12px !important; border-radius: 4px !important; text-align: center !important; min-width: 60px !important; line-height: 1.2 !important; }
+#bio-root .bio-case-age span { display: block !important; font-size: 10px !important; font-weight: 400 !important; opacity: 0.8 !important; }
+#bio-root .bio-case-motif { font-size: 13px !important; font-weight: 600 !important; color: var(--navy) !important; margin-bottom: 4px !important; }
+#bio-root .bio-case-context { font-size: 12px !important; color: var(--slate) !important; line-height: 1.5 !important; }
+#bio-root .bio-case-bio { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important; gap: 8px !important; margin-bottom: 14px !important; }
+#bio-root .bio-case-param { background: var(--bg) !important; border: 1px solid var(--border-light) !important; border-radius: 4px !important; padding: 7px 10px !important; }
+#bio-root .bio-case-param-name { font-size: 10px !important; text-transform: uppercase !important; color: var(--slate-light) !important; font-weight: 700 !important; letter-spacing: 0.04em !important; margin-bottom: 2px !important; }
+#bio-root .bio-case-param-val { font-size: 14px !important; font-weight: 700 !important; }
+#bio-root .bio-case-param-val.v-low { color: var(--low) !important; }
+#bio-root .bio-case-param-val.v-normal { color: var(--normal) !important; }
+#bio-root .bio-case-param-val.v-high { color: var(--high) !important; }
+#bio-root .bio-case-param-val.v-critical { color: var(--critical) !important; }
+#bio-root .bio-case-answer { display: none !important; }
+#bio-root .bio-case-answer.visible { display: block !important; }
+#bio-root .bio-case-section { margin-bottom: 10px !important; }
+#bio-root .bio-case-section-title { font-size: 11px !important; text-transform: uppercase !important; font-weight: 700 !important; color: var(--navy) !important; margin-bottom: 4px !important; }
+#bio-root .bio-case-diag { display: inline-block !important; background: var(--navy) !important; color: var(--white) !important; padding: 4px 10px !important; border-radius: 3px !important; font-size: 12px !important; font-weight: 700 !important; margin-bottom: 8px !important; }
+#bio-root .bio-celiaque-table { width: 100% !important; border-collapse: collapse !important; font-size: 12px !important; margin-bottom: 14px !important; }
+#bio-root .bio-celiaque-table th { background: var(--navy) !important; color: var(--white) !important; padding: 7px 10px !important; text-align: left !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase !important; }
+#bio-root .bio-celiaque-table td { padding: 7px 10px !important; border-bottom: 1px solid var(--border-light) !important; vertical-align: top !important; }
+#bio-root .bio-celiaque-table tr:nth-child(even) td { background: var(--bg) !important; }
+#bio-root .bio-sep { height: 1px !important; background: var(--border-light) !important; margin: 18px 0 !important; }
+#bio-root .bio-footer { background: var(--white) !important; border-top: 1px solid var(--border-light) !important; padding: 10px 24px !important; font-size: 10px !important; color: var(--text-muted) !important; text-align: center !important; line-height: 1.5 !important; }
+
+@media (max-width: 600px) { #bio-root .bio-grid { grid-template-columns: 1fr 1fr !important; } }
+@media (max-width: 380px) { #bio-root .bio-grid { grid-template-columns: 1fr !important; } }
+</style>
+</head>
+<body>
+<div id="bio-root">
+
+<!-- HEADER -->
+<div class="bio-header">
+  <div class="bio-header-top">
+    <div>
+      <h1>Interprétateur de Bilan Biologique</h1>
+      <p class="bio-subtitle">Médecine Générale & Gynécologie-Obstétrique — Normes adultes HAS / KDIGO 2021 / ESC 2021</p>
+    </div>
+    <span class="bio-badge">Usage Médical</span>
+  </div>
+  <p class="bio-disclaimer">Outil d'aide à la décision. Les valeurs de référence (notamment pendant la grossesse) sont indicatives et doivent être corrélées au contexte clinique. © Dr KARA-ZAITRI M.A.</p>
+</div>
+
+<!-- ONGLETS -->
+<div class="bio-tabs-wrap">
+  <div class="bio-tabs" role="tablist">
+    <button class="bio-tab active" role="tab" onclick="showPanel('nfs',this)">NFS</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('inflam',this)">Inflammation</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('martial',this)">Martial</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('glycemie',this)">Glycémie</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('renal',this)">Rénale</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('hepato',this)">Hépatique</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('hemostase',this)">Hémostase & SAPL</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('lipides',this)">Lipides</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('iono',this)">Ionogramme</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('vitamines',this)">Vitamines B9/B12</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('celiaque',this)">Cœliaque</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('cas',this)">Cas Cliniques</button>
+  </div>
+</div>
+
+<!-- SELECTEUR GLOBAL SEXE/GROSSESSE -->
+<div class="bio-global-config">
+  <span style="font-size:12px;font-weight:600;color:#4A5568;">Sexe / Statut du patient :</span>
+  <button class="bio-sex-btn active" id="sex-m" onclick="setSex('M')">Homme</button>
+  <button class="bio-sex-btn" id="sex-f" onclick="setSex('F')">Femme</button>
+  <button class="bio-sex-btn" id="sex-g" onclick="setSex('G')">Femme enceinte</button>
+</div>
+
+<!-- ==================== NFS ==================== -->
+<div id="panel-nfs" class="bio-panel active" role="tabpanel">
+  <div class="bio-section-title">Série Rouge</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Hémoglobine <span class="bio-ref" id="ref-hb">H: 13–17,5 g/dL</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Hémoglobine" type="number" step="0.1" id="val-hb" placeholder="--" oninput="evalHb(this.value)">
+        <span class="bio-unit">g/dL</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-hb"></div></div></div>
+      <div class="bio-result" id="res-hb" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">VGM <span class="bio-ref">80–100 fL</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur VGM" type="number" step="1" id="val-vgm" placeholder="--" oninput="evalSimple('vgm',this.value,80,100,'Macrocytose','Microcytose','Normocytose')">
+        <span class="bio-unit">fL</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-vgm"></div></div></div>
+      <div class="bio-result" id="res-vgm" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">TCMH <span class="bio-ref">27–33 pg</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur TCMH" type="number" step="0.1" id="val-tcmh" placeholder="--" oninput="evalSimple('tcmh',this.value,27,33,'Hyperchromie','Hypochromie','Normochromie')">
+        <span class="bio-unit">pg</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-tcmh"></div></div></div>
+      <div class="bio-result" id="res-tcmh" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Réticulocytes <span class="bio-ref">25–100 G/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Réticulocytes" type="number" step="1" id="val-reticu" placeholder="--" oninput="evalSimple('reticu',this.value,25,100,'Régénérative (hémolyse/saignement)','Arégénérative (centrale)','Régénération normale')">
+        <span class="bio-unit">G/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-reticu"></div></div></div>
+      <div class="bio-result" id="res-reticu" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="bio-section-title">Série Blanche</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Leucocytes totaux <span class="bio-ref">4–10 G/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Leucocytes" type="number" step="0.1" id="val-gb" placeholder="--" oninput="evalGB(this.value)">
+        <span class="bio-unit">G/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-gb"></div></div></div>
+      <div class="bio-result" id="res-gb" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Polynucléaires neutrophiles <span class="bio-ref">1,8–7,5 G/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur PNN" type="number" step="0.1" id="val-pnn" placeholder="--" oninput="evalPNN(this.value)">
+        <span class="bio-unit">G/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-pnn"></div></div></div>
+      <div class="bio-result" id="res-pnn" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Lymphocytes <span class="bio-ref">1,0–4,0 G/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Lymphocytes" type="number" step="0.1" id="val-lympho" placeholder="--" oninput="evalSimple('lympho',this.value,1.0,4.0,'Hyperlymphocytose (virale, LLC…)','Lymphopénie (immunodépression, corticoïdes…)','Lymphocytes normaux')">
+        <span class="bio-unit">G/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-lympho"></div></div></div>
+      <div class="bio-result" id="res-lympho" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Éosinophiles <span class="bio-ref">0,05–0,5 G/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Eosinophiles" type="number" step="0.01" id="val-eosino" placeholder="--" oninput="evalSimple('eosino',this.value,0.05,0.5,'Hyperéosinophilie (parasitose, allergie, DRESS…)','Éosinopénie','Éosinophiles normaux')">
+        <span class="bio-unit">G/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-eosino"></div></div></div>
+      <div class="bio-result" id="res-eosino" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="bio-section-title">Plaquettes</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Plaquettes <span class="bio-ref" id="ref-plt">150–400 G/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Plaquettes" type="number" step="1" id="val-plt" placeholder="--" oninput="evalPLT(this.value)">
+        <span class="bio-unit">G/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-plt"></div></div></div>
+      <div class="bio-result" id="res-plt" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div id="nfs-synthesis" class="bio-synthesis" aria-live="polite">
+    <div class="bio-synthesis-title">Synthèse NFS</div>
+    <div id="nfs-syn-list"></div>
+  </div>
+  <div id="nfs-interpret" class="bio-interpret" aria-live="polite">
+    <strong>Orientation diagnostique</strong>
+    <span id="nfs-interpret-text"></span>
+  </div>
+  <div class="bio-btn-row">
+    <button class="bio-btn" onclick="synthesizeNFS()">&#x25B6; Générer la synthèse</button>
+    <button class="bio-btn bio-btn-reset" onclick="resetPanel('nfs')">&#x21BA; Réinitialiser</button>
+  </div>
+</div>
+
+<!-- ==================== INFLAMMATION ==================== -->
+<div id="panel-inflam" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-info">La CRP est plus sensible et spécifique de l'inflammation aiguë que la VS. La VS augmente physiologiquement au cours de la grossesse (peut dépasser 50 mm/h au T3).</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">CRP <span class="bio-ref">&lt; 5 mg/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur CRP" type="number" step="0.1" id="val-crp" placeholder="--" oninput="evalCRP(this.value)">
+        <span class="bio-unit">mg/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-crp"></div></div></div>
+      <div class="bio-result" id="res-crp" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">VS (1ère heure) <span class="bio-ref" id="ref-vs">H: &lt;15 / F: &lt;20 mm/h</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur VS" type="number" step="1" id="val-vs" placeholder="--" oninput="evalVS(this.value)">
+        <span class="bio-unit">mm/h</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-vs"></div></div></div>
+      <div class="bio-result" id="res-vs" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== BILAN MARTIAL ==================== -->
+<div id="panel-martial" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-info">L'interprétation nécessite l'intégration de l'ensemble des marqueurs (ferritine + CS). Attention à la CRP (onglet Inflammation) qui peut faussement élever la ferritine.</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Ferritine <span class="bio-ref" id="ref-ferr">H:20–300 / F:10–150 µg/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Ferritine" type="number" step="1" id="val-ferr" placeholder="--" oninput="evalFerr(this.value)">
+        <span class="bio-unit">µg/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-ferr"></div></div></div>
+      <div class="bio-result" id="res-ferr" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Fer sérique <span class="bio-ref">10–30 µmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Fer Sérique" type="number" step="0.1" id="val-fer" placeholder="--" oninput="evalSimple('fer',this.value,10,30,'Surcharge en fer','Carence en fer','Fer sérique normal')">
+        <span class="bio-unit">µmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-fer"></div></div></div>
+      <div class="bio-result" id="res-fer" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Transferrine <span class="bio-ref">2,0–3,6 g/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Transferrine" type="number" step="0.1" id="val-transf" placeholder="--" oninput="evalSimple('transf',this.value,2.0,3.6,'Abaissée (inflamm., carence nutritionnelle)','Élevée (carence martiale)','Transferrine normale')">
+        <span class="bio-unit">g/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-transf"></div></div></div>
+      <div class="bio-result" id="res-transf" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Coefficient de saturation <span class="bio-ref">20–45 %</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Coefficient de saturation" type="number" step="0.1" id="val-cs" placeholder="--" oninput="evalCS(this.value)">
+        <span class="bio-unit">%</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-cs"></div></div></div>
+      <div class="bio-result" id="res-cs" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="bio-btn-row">
+    <button class="bio-btn" onclick="synthesizeMartial()">&#x25B6; Interpréter le bilan martial</button>
+    <button class="bio-btn bio-btn-reset" onclick="resetPanel('martial')">&#x21BA; Réinitialiser</button>
+  </div>
+  <div id="martial-interpret" class="bio-interpret" aria-live="polite">
+    <strong>Interprétation bilan martial</strong>
+    <span id="martial-interpret-text"></span>
+  </div>
+</div>
+
+<!-- ==================== GLYCÉMIE ==================== -->
+<div id="panel-glycemie" class="bio-panel" role="tabpanel">
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Glycémie à jeun <span class="bio-ref">3,9–5,5 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Glycémie à jeun" type="number" step="0.01" id="val-gly" placeholder="--" oninput="evalGly(this.value)">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-gly"></div></div></div>
+      <div class="bio-result" id="res-gly" aria-live="polite"></div>
+    </div>
+    
+    <div class="bio-param-card">
+      <div class="bio-param-label">Insulinémie à jeun <span class="bio-ref">2–20 µUI/mL</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Insuline à jeun" type="number" step="0.1" id="val-insul" placeholder="--" oninput="evalInsul(this.value)">
+        <span class="bio-unit">µUI/mL</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-insul"></div></div></div>
+      <div class="bio-result" id="res-insul" aria-live="polite"></div>
+    </div>
+
+    <!-- BOÎTE HOMA-IR (Calcul automatisé) -->
+    <div class="bio-param-card">
+      <div class="bio-param-label">HOMA-IR (calculé) <span class="bio-ref">&lt;2,5</span></div>
+      <div class="bio-result r-empty" id="res-homa" style="display:block!important; margin-top:14px;" aria-live="polite">Renseignez la glycémie et l'insuline</div>
+    </div>
+    
+    <div class="bio-param-card">
+      <div class="bio-param-label">HbA1c <span class="bio-ref">Normal &lt;5,7% / Cible DT2 &lt;7%</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur HbA1c" type="number" step="0.1" id="val-hba1c" placeholder="--" oninput="evalHbA1c(this.value)">
+        <span class="bio-unit">%</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-hba1c"></div></div></div>
+      <div class="bio-result" id="res-hba1c" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="bio-alert bio-alert-info" style="margin-top:8px;">
+    <b>Astuce HOMA-IR :</b> Le calcul se fait automatiquement. Si vous tapez une glycémie inférieure à 3.5, l'outil comprendra qu'il s'agit de <b>g/L</b> et fera la conversion mathématique tout seul.<br><br>
+    <b>Rappel OMS/HAS :</b> Diabète si glycémie à jeun ≥7,0 mmol/L (≥1,26 g/L) à 2 reprises, ou ≥11,1 mmol/L avec symptômes, ou HbA1c ≥6,5%.
+    Prédiabète si glycémie 5,6–6,9 mmol/L ou HbA1c 5,7–6,4%.
+  </div>
+</div>
+
+<!-- ==================== RÉNALE ==================== -->
+<div id="panel-renal" class="bio-panel" role="tabpanel">
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Créatinine <span class="bio-ref" id="ref-creat">H:62–115 / F:44–97 µmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Créatinine" type="number" step="1" id="val-creat" placeholder="--" oninput="evalCreat(this.value)">
+        <span class="bio-unit">µmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-creat"></div></div></div>
+      <div class="bio-result" id="res-creat" aria-live="polite"></div>
+    </div>
+    
+    <!-- BOÎTE CKD -->
+    <div class="bio-param-card">
+      <div class="bio-param-label">DFGe (CKD-EPI 2021) <span class="bio-ref">≥60 mL/min</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px;">
+        <input class="bio-input" aria-label="Créatinine DFG" type="number" step="1" id="ckd-creat" placeholder="Créat µmol/L" style="font-size:11px!important;" oninput="calcCKD()">
+        <input class="bio-input" aria-label="Âge" type="number" step="1" id="ckd-age" placeholder="Âge (ans)" style="font-size:11px!important;" oninput="calcCKD()">
+      </div>
+      <div class="bio-result r-empty" id="res-ckd" style="display:block!important;" aria-live="polite">Renseignez créatinine + âge</div>
+    </div>
+
+    <div class="bio-param-card">
+      <div class="bio-param-label">Urée <span class="bio-ref">2,5–7,5 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Urée" type="number" step="0.1" id="val-uree" placeholder="--" oninput="evalSimple('uree',this.value,2.5,7.5,'Hyperurémie (IRA, IRC, déshydratation, catabolisme)','Hypourémie (hépatopathie, grossesse)','Urée normale')">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-uree"></div></div></div>
+      <div class="bio-result" id="res-uree" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Acide urique <span class="bio-ref" id="ref-au">H:180–420 / F:150–360 µmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Acide Urique" type="number" step="1" id="val-au" placeholder="--" oninput="evalAU(this.value)">
+        <span class="bio-unit">µmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-au"></div></div></div>
+      <div class="bio-result" id="res-au" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Microalbuminurie <span class="bio-ref">&lt;30 mg/24h</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Microalbuminurie" type="number" step="1" id="val-albumin" placeholder="--" oninput="evalAlbumin(this.value)">
+        <span class="bio-unit">mg/24h</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-albumin"></div></div></div>
+      <div class="bio-result" id="res-albumin" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="bio-alert bio-alert-warn" style="margin-top:8px;">
+    <b>Stades MRC (KDIGO 2021) :</b> G1: DFG ≥90 — G2: 60–89 — G3a: 45–59 — G3b: 30–44 — G4: 15–29 — G5: &lt;15 mL/min/1,73m²
+  </div>
+</div>
+
+<!-- ==================== HÉPATIQUE ==================== -->
+<div id="panel-hepato" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-warn">En obstétrique, une cytolyse hépatique (ASAT/ALAT > 2N) avec thrombopénie oriente vers un <b>HELLP syndrome</b>. Les PAL doublent physiologiquement au T3 (origine placentaire).</div>
+  <div class="bio-section-title">Cytolyse</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">ASAT (TGO) <span class="bio-ref" id="ref-asat">H: &lt;40 / F: &lt;32 UI/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur ASAT" type="number" step="1" id="val-asat" placeholder="--" oninput="evalTransaminases('asat',this.value)">
+        <span class="bio-unit">UI/L</span>
+      </div>
+      <div class="bio-result" id="res-asat" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">ALAT (TGP) <span class="bio-ref" id="ref-alat">H: &lt;41 / F: &lt;33 UI/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur ALAT" type="number" step="1" id="val-alat" placeholder="--" oninput="evalTransaminases('alat',this.value)">
+        <span class="bio-unit">UI/L</span>
+      </div>
+      <div class="bio-result" id="res-alat" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="bio-section-title">Cholestase</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">GGT <span class="bio-ref" id="ref-ggt">H: &lt;60 / F: &lt;40 UI/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur GGT" type="number" step="1" id="val-ggt" placeholder="--" oninput="evalGGT(this.value)">
+        <span class="bio-unit">UI/L</span>
+      </div>
+      <div class="bio-result" id="res-ggt" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">PAL <span class="bio-ref" id="ref-pal">40–120 UI/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur PAL" type="number" step="1" id="val-pal" placeholder="--" oninput="evalPAL(this.value)">
+        <span class="bio-unit">UI/L</span>
+      </div>
+      <div class="bio-result" id="res-pal" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Bilirubine totale <span class="bio-ref">&lt; 17 µmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Bilirubine" type="number" step="0.1" id="val-bili" placeholder="--" oninput="evalSimple('bili',this.value,0,17,'Hyperbilirubinémie (rechercher ictère, hémolyse, cholestase)','—','Bilirubine normale')">
+        <span class="bio-unit">µmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-bili"></div></div></div>
+      <div class="bio-result" id="res-bili" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== HÉMOSTASE & SAPL ==================== -->
+<div id="panel-hemostase" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-info">Le fibrinogène et les D-dimères s'élèvent physiologiquement durant la grossesse.</div>
+  <div class="bio-section-title">Coagulation Standard</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Taux de Prothrombine (TP) <span class="bio-ref">70–130 %</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur TP" type="number" step="1" id="val-tp" placeholder="--" oninput="evalSimple('tp',this.value,70,130,'TP Élevé (peu significatif)','Baisse du TP (Insuffisance hépatique, CIVD, AVK, carence Vit K)','TP Normal')">
+        <span class="bio-unit">%</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-tp"></div></div></div>
+      <div class="bio-result" id="res-tp" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">TCA (Ratio Malade/Témoin) <span class="bio-ref">&lt; 1.20</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur TCA" type="number" step="0.01" id="val-tca" placeholder="--" oninput="evalSimple('tca',this.value,0.8,1.2,'Allongement du TCA (Héparine, SAPL, déficit facteur)','Raccourcissement (état prothrombotique)','TCA Normal')">
+        <span class="bio-unit">Ratio</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-tca"></div></div></div>
+      <div class="bio-result" id="res-tca" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Fibrinogène <span class="bio-ref" id="ref-fibrino">2–4 g/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Valeur Fibrinogène" type="number" step="0.1" id="val-fibrino" placeholder="--" oninput="evalFibrino(this.value)">
+        <span class="bio-unit">g/L</span>
+      </div>
+      <div class="bio-result" id="res-fibrino" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="bio-section-title">Maladie Thromboembolique (D-dimères)</div>
+  <div class="bio-grid">
+    <div class="bio-param-card" style="grid-column: span 2;">
+      <div class="bio-param-label">D-dimères <span class="bio-ref" id="ref-ddimeres">&lt; 500 µg/L (ou Âge ×10 si >50 ans)</span></div>
+      <div class="bio-input-row" style="margin-bottom:8px;">
+        <input class="bio-input" aria-label="Âge du patient" type="number" step="1" id="val-age-dd" placeholder="Âge (ans)" oninput="evalDdimeres()">
+        <span class="bio-unit">ans</span>
+        <input class="bio-input" aria-label="Valeur D-dimères" type="number" step="10" id="val-ddimeres" placeholder="D-dimères" oninput="evalDdimeres()">
+        <span class="bio-unit">µg/L</span>
+      </div>
+      <div class="bio-result" id="res-ddimeres" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="bio-section-title">Syndrome des Antiphospholipides (SAPL)</div>
+  <div class="bio-grid" style="grid-template-columns: 1fr;">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Critères Biologiques (Critères de Sydney)</div>
+      <div style="font-size:12px; margin-top:8px;">
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;">
+          <input type="checkbox" id="sapl-la" onchange="evalSAPL()"> Anticoagulant Circulant de type Lupique (ACC)
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;">
+          <input type="checkbox" id="sapl-acl" onchange="evalSAPL()"> Anticorps Anti-cardiolipine (IgG / IgM) > 40 UGPL/UMPL ou > 99e percentile
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;">
+          <input type="checkbox" id="sapl-b2" onchange="evalSAPL()"> Anticorps Anti-β2-Glycoprotéine I (IgG / IgM) > 99e percentile
+        </label>
+      </div>
+      <div class="bio-result" id="res-sapl" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== LIPIDES ==================== -->
+<div id="panel-lipides" class="bio-panel" role="tabpanel">
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Cholestérol total <span class="bio-ref">&lt;5,0 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Cholestérol total" type="number" step="0.1" id="val-ct" placeholder="--" oninput="evalSimple('ct',this.value,0,5.0,'Hypercholestérolémie','Hypocholestérolémie','Cholestérol normal')">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-ct"></div></div></div>
+      <div class="bio-result" id="res-ct" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">LDL-c <span class="bio-ref">Risque faible &lt;4,1</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="LDL cholestérol" type="number" step="0.1" id="val-ldl" placeholder="--" oninput="evalLDL(this.value)">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-ldl"></div></div></div>
+      <div class="bio-result" id="res-ldl" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">HDL-c <span class="bio-ref" id="ref-hdl">H&gt;1,0 / F&gt;1,2 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="HDL cholestérol" type="number" step="0.1" id="val-hdl" placeholder="--" oninput="evalHDL(this.value)">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-hdl"></div></div></div>
+      <div class="bio-result" id="res-hdl" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Triglycérides <span class="bio-ref">&lt;1,7 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Triglycérides" type="number" step="0.1" id="val-tg" placeholder="--" oninput="evalTG(this.value)">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-tg"></div></div></div>
+      <div class="bio-result" id="res-tg" aria-live="polite"></div>
+    </div>
+    
+    <!-- BOÎTE RATIO -->
+    <div class="bio-param-card">
+      <div class="bio-param-label">Ratio CT/HDL <span class="bio-ref">&lt;4,5 (CV)</span></div>
+      <div class="bio-result r-empty" id="res-ratio" style="display:block!important; margin-top:14px;" aria-live="polite">Renseignez CT et HDL</div>
+    </div>
+  </div>
+  <div class="bio-alert bio-alert-info" style="margin-top:8px;">
+    <b>Cibles LDL-c (ESC 2021) :</b> Risque très élevé (ATCD CV, DT2 à organe cible) : &lt;1,4 mmol/L — Risque élevé : &lt;1,8 — Risque modéré : &lt;2,6 — Risque faible : &lt;3,0 mmol/L.
+  </div>
+</div>
+
+<!-- ==================== IONOGRAMME ==================== -->
+<div id="panel-iono" class="bio-panel" role="tabpanel">
+  <div class="bio-section-title">Ionogramme sanguin</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Natrémie <span class="bio-ref">135–145 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Natrémie" type="number" step="1" id="val-na" placeholder="--" oninput="evalNa(this.value)">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-na"></div></div></div>
+      <div class="bio-result" id="res-na" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Kaliémie <span class="bio-ref">3,5–5,0 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Kaliémie" type="number" step="0.1" id="val-k" placeholder="--" oninput="evalK(this.value)">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-k"></div></div></div>
+      <div class="bio-result" id="res-k" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Chlorémie <span class="bio-ref">98–107 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Chlorémie" type="number" step="1" id="val-cl" placeholder="--" oninput="evalSimple('cl',this.value,98,107,'Hyperchlorémie','Hypochlorémie','Chlore normal')">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-cl"></div></div></div>
+      <div class="bio-result" id="res-cl" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Bicarbonates <span class="bio-ref">22–29 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Bicarbonates" type="number" step="1" id="val-hco3" placeholder="--" oninput="evalSimple('hco3',this.value,22,29,'Alcalose métabolique','Acidose métabolique','Bicarbonates normaux')">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-hco3"></div></div></div>
+      <div class="bio-result" id="res-hco3" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Calcémie (corrigée) <span class="bio-ref">2,20–2,60 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Calcémie" type="number" step="0.01" id="val-ca" placeholder="--" oninput="evalCa(this.value)">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-ca"></div></div></div>
+      <div class="bio-result" id="res-ca" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Phosphorémie <span class="bio-ref">0,80–1,45 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Phosphorémie" type="number" step="0.01" id="val-phos" placeholder="--" oninput="evalSimple('phos',this.value,0.80,1.45,'Hyperphosphorémie (IR, hypoparathyroïdie)','Hypophosphorémie (malnutrition, syndrome de renutrition)','Phosphore normal')">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-phos"></div></div></div>
+      <div class="bio-result" id="res-phos" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Magnésémie <span class="bio-ref">0,75–1,05 mmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Magnésémie" type="number" step="0.01" id="val-mg" placeholder="--" oninput="evalSimple('mg',this.value,0.75,1.05,'Hypermagnésémie (IR, apports excessifs)','Hypomagnésémie (alcoolisme, IPP, diarrhées chroniques)','Magnésium normal')">
+        <span class="bio-unit">mmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-mg"></div></div></div>
+      <div class="bio-result" id="res-mg" aria-live="polite"></div>
+    </div>
+  </div>
+  
+  <!-- BOÎTE TA -->
+  <div class="bio-param-card" style="max-width:340px;margin-bottom:14px;">
+    <div class="bio-param-label">Trou anionique (calculé) <span class="bio-ref">Normal : 8–16 mmol/L</span></div>
+    <div class="bio-result r-empty" id="res-ta" style="display:block!important; margin-top:14px;" aria-live="polite">Renseignez Na, K, Cl, HCO₃</div>
+  </div>
+</div>
+
+<!-- ==================== VITAMINES ==================== -->
+<div id="panel-vitamines" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-warn">Les carences en B9 et B12 sont souvent associées. Une macrocytose sans anémie doit toujours faire doser B9 ET B12.</div>
+  <div class="bio-section-title">Vitamine B9 (Folates)</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Folates sériques <span class="bio-ref">5–30 nmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Folates sériques" type="number" step="0.1" id="val-b9s" placeholder="--" oninput="evalB9S(this.value)">
+        <span class="bio-unit">nmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-b9s"></div></div></div>
+      <div class="bio-result" id="res-b9s" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Folates érythrocytaires <span class="bio-ref">360–1400 nmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Folates érythrocytaires" type="number" step="1" id="val-b9e" placeholder="--" oninput="evalSimple('b9e',this.value,360,1400,'Valeur limite haute','Carence sévère en folates','Réserves normales')">
+        <span class="bio-unit">nmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-b9e"></div></div></div>
+      <div class="bio-result" id="res-b9e" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Homocystéine <span class="bio-ref">&lt;15 µmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Homocystéine" type="number" step="0.1" id="val-homo" placeholder="--" oninput="evalHomo(this.value)">
+        <span class="bio-unit">µmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-homo"></div></div></div>
+      <div class="bio-result" id="res-homo" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="bio-section-title">Vitamine B12 (Cobalamine)</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">Vitamine B12 <span class="bio-ref">148–740 pmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Vitamine B12" type="number" step="1" id="val-b12" placeholder="--" oninput="evalB12(this.value)">
+        <span class="bio-unit">pmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-b12"></div></div></div>
+      <div class="bio-result" id="res-b12" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Acide méthylmalonique (AMM) <span class="bio-ref">&lt;270 nmol/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="Acide méthylmalonique" type="number" step="1" id="val-amm" placeholder="--" oninput="evalSimple('amm',this.value,0,270,'Carence fonctionnelle en B12','—','AMM normal')">
+        <span class="bio-unit">nmol/L</span>
+      </div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-amm"></div></div></div>
+      <div class="bio-result" id="res-amm" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Ac. anti-Facteur Intrinsèque <span class="bio-ref">Négatif</span></div>
+      <div style="margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;">
+          <input type="checkbox" id="val-afi" onchange="evalAFI()"> Positif (Maladie de Biermer)
+        </label>
+        <div class="bio-result" id="res-afi" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+  <div class="bio-interpret" id="vit-interpret" aria-live="polite">
+    <strong>Orientation diagnostique B9/B12</strong>
+    <span id="vit-interpret-text"></span>
+  </div>
+  <div class="bio-btn-row">
+    <button class="bio-btn" onclick="synthesizeVit()">&#x25B6; Analyser B9 / B12</button>
+    <button class="bio-btn bio-btn-reset" onclick="resetPanel('vitamines')">&#x21BA; Réinitialiser</button>
+  </div>
+</div>
+
+<!-- ==================== CŒLIAQUE ==================== -->
+<div id="panel-celiaque" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-info">Le dépistage repose sur les IgA anti-TG2, couplé aux IgA totales pour détecter un déficit sélectif (ESPGHAN / HAS). <b>Si IgA totales diminuées, utiliser les IgG.</b></div>
+  
+  <div class="bio-section-title">Interprétation rapide (IgA)</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">IgA anti-TG2 <span class="bio-ref">LSN = 10 UI/mL</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="IgA anti-TG2" type="number" step="0.1" id="val-tg2" placeholder="--" oninput="evalTG2(this.value)">
+        <span class="bio-unit">UI/mL</span>
+      </div>
+      <div class="bio-result" id="res-tg2" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">IgA totales <span class="bio-ref">0,7–4,0 g/L</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="IgA totales" type="number" step="0.01" id="val-iga-tot" placeholder="--" oninput="evalIgATot(this.value)">
+        <span class="bio-unit">g/L</span>
+      </div>
+      <div class="bio-result" id="res-iga-tot" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">IgA EMA</div>
+      <div style="margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;margin-bottom:4px;">
+          <input type="radio" name="ema" value="pos" onchange="evalEMA('pos')"> Positif
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;">
+          <input type="radio" name="ema" value="neg" onchange="evalEMA('neg')"> Négatif
+        </label>
+        <div class="bio-result" id="res-ema" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bio-section-title">Si Déficit en IgA (Utiliser IgG)</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
+      <div class="bio-param-label">IgG anti-TG2 <span class="bio-ref">Si déficit IgA</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="IgG anti-TG2" type="number" step="0.1" id="val-igg-tg2" placeholder="--" oninput="evalSimple('igg-tg2',this.value,0,10,'Positif (Suspicion MC)','—','Négatif')">
+        <span class="bio-unit">UI/mL</span>
+      </div>
+      <div class="bio-result" id="res-igg-tg2" aria-live="polite"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">IgG DGP <span class="bio-ref">Enfant &lt;2ans ou déficit IgA</span></div>
+      <div class="bio-input-row">
+        <input class="bio-input" aria-label="IgG DGP" type="number" step="0.1" id="val-igg-dgp" placeholder="--" oninput="evalSimple('igg-dgp',this.value,0,10,'Positif (Suspicion MC)','—','Négatif')">
+        <span class="bio-unit">UI/mL</span>
+      </div>
+      <div class="bio-result" id="res-igg-dgp" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="bio-section-title">Génétique</div>
+  <div class="bio-grid" style="grid-template-columns: 1fr;">
+    <div class="bio-param-card" style="max-width:300px;">
+      <div class="bio-param-label">HLA DQ2/DQ8</div>
+      <div style="margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;margin-bottom:4px;">
+          <input type="radio" name="hla" value="pos" onchange="evalHLA('pos')"> Présent
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;">
+          <input type="radio" name="hla" value="neg" onchange="evalHLA('neg')"> Absent
+        </label>
+        <div class="bio-result" id="res-hla" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bio-btn-row">
+    <button class="bio-btn" onclick="synthesizeCeliaque()">&#x25B6; Interpréter la sérologie</button>
+    <button class="bio-btn bio-btn-reset" onclick="resetPanel('celiaque')">&#x21BA; Réinitialiser</button>
+  </div>
+  <div id="celiaque-interpret" class="bio-interpret" aria-live="polite">
+    <strong>Interprétation maladie cœliaque</strong>
+    <span id="celiaque-interpret-text"></span>
+  </div>
+</div>
+
+<!-- ==================== CAS CLINIQUES ==================== -->
+<div id="panel-cas" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-info">Chaque cas clinique teste votre interprétation avant de révéler le diagnostic.</div>
+  <select class="bio-case-select" aria-label="Sélectionner un cas clinique" onchange="loadCase(this.value)">
+    <option value="">— Sélectionner un cas clinique —</option>
+    <option value="1">Cas 1 — Femme 28 ans, fatigue et dyspnée</option>
+    <option value="2">Cas 2 — Homme 55 ans, hypercholestérolémie</option>
+    <option value="3">Cas 3 — Femme 45 ans, diarrhées chroniques</option>
+    <option value="4">Cas 4 — Homme 68 ans, insuffisance rénale</option>
+    <option value="5">Cas 5 — Femme 34 ans, macrocytose asymptomatique</option>
+    <option value="6">Cas 6 — Enfant 8 ans, retard de croissance</option>
+  </select>
+  <div id="case-container" aria-live="polite"></div>
+</div>
+
+<!-- FOOTER -->
+<div class="bio-footer">
+  Dr KARA-ZAITRI M.A. — Gynécologue-Obstétricien &nbsp;|&nbsp; Références : HAS 2024, ESC 2021, KDIGO 2021 &nbsp;|&nbsp; Outil d'aide à la décision.
+</div>
+
+</div><!-- end #bio-root -->
+
+<script>
+/* ============================================
+   ÉTAT GLOBAL ET DONNÉES
+   ============================================ */
+let currentSex = 'M';
+
+const CASES = {
+  '1': {
+    age: 28, sexLabel: 'ans — F', motif: 'Fatigue intense, dyspnée d\'effort depuis 3 mois',
+    context: 'Femme en âge de procréer, règles abondantes (ménorragies depuis 6 mois), végétarienne stricte depuis 2 ans. Pas d\'antécédent notable.',
+    params: [
+      {n:'Hb', v:'7,8 g/dL', c:'v-critical'}, {n:'VGM', v:'68 fL', c:'v-low'}, {n:'TCMH', v:'21 pg', c:'v-low'},
+      {n:'Ferritine', v:'4 µg/L', c:'v-critical'}, {n:'Fer sérique', v:'5 µmol/L', c:'v-low'}, {n:'CS transferrine', v:'8 %', c:'v-low'},
+      {n:'Réticulocytes', v:'18 G/L', c:'v-low'}, {n:'CRP', v:'2 mg/L', c:'v-normal'},
+    ],
+    diag: 'Anémie ferriprive sévère microcytaire arégénérative',
+    orient: 'Le tableau est caractéristique : anémie microcytaire hypochrome, ferritine effondrée, fer sérique bas, coefficient de saturation abaissé, réticulocytes normaux à bas (arégénérative). L\'absence de syndrome inflammatoire (CRP normale) confirme que la ferritine basse reflète bien une carence vraie et non une fausse élévation masquant une carence réelle.',
+    conduite: 'Bilan gynécologique (hystéroscopie pour ménorragies). Supplément en fer per os (200 mg/j de fer élément 3 mois). Contrôle NFS + ferritine à 3 mois. Discuter supplémentation B12 vu régime végétarien.'
+  },
+  '2': {
+    age: 55, sexLabel: 'ans — H', motif: 'Bilan lipidique de contrôle — diabète type 2 sous metformine',
+    context: 'HTA traitée (amlodipine), DT2 diagnostiqué il y a 3 ans. Fumeur 20 PA. IMC 29,5. Pas d\'ATCD cardiovasculaire.',
+    params: [
+      {n:'CT', v:'6,2 mmol/L', c:'v-high'}, {n:'LDL-c', v:'4,1 mmol/L', c:'v-high'}, {n:'HDL-c', v:'0,9 mmol/L', c:'v-low'},
+      {n:'TG', v:'2,8 mmol/L', c:'v-high'}, {n:'HbA1c', v:'7,8 %', c:'v-high'}, {n:'Créat', v:'88 µmol/L', c:'v-normal'},
+      {n:'Microalb.', v:'42 mg/24h', c:'v-high'}, {n:'CRP', v:'8 mg/L', c:'v-high'},
+    ],
+    diag: 'Dyslipidémie mixte — Risque CV très élevé (DT2 + HTA + tabac + microalbuminurie)',
+    orient: 'Patient en risque CV très élevé (DT2 avec atteinte rénale précoce, HTA, tabagisme). LDL-c à 4,1 mmol/L : cible ESC 2021 pour ce profil = <1,4 mmol/L. L\'hypertriglycéridémie et le HDL bas constituent une dyslipidémie athérogène mixte. La microalbuminurie (42 mg/24h) confirme une atteinte rénale débutante de stade G2A2.',
+    conduite: 'Statine haute intensité (rosuvastatine 20–40 mg/j). Si LDL non atteint à 3 mois : envisager association ézétimibe ou inhibiteur PCSK9. Optimisation glycémique. Arrêt tabac. Contrôle microalbuminurie à 6 mois.'
+  },
+  '3': {
+    age: 45, sexLabel: 'ans — F', motif: 'Diarrhées chroniques, perte de poids 8 kg en 4 mois, asthénie',
+    context: 'Femme sans antécédent notable. Douleurs abdominales postprandiales intermittentes depuis 8 mois. Dermatite herpétiforme prurigineuse sur les coudes.',
+    params: [
+      {n:'Hb', v:'10,2 g/dL', c:'v-low'}, {n:'VGM', v:'109 fL', c:'v-high'}, {n:'Ferritine', v:'6 µg/L', c:'v-critical'},
+      {n:'B9 sérique', v:'2,8 nmol/L', c:'v-critical'}, {n:'B12', v:'165 pmol/L', c:'v-normal'}, {n:'IgA anti-TG2', v:'148 UI/mL', c:'v-critical'},
+      {n:'IgA totales', v:'2,4 g/L', c:'v-normal'}, {n:'CRP', v:'12 mg/L', c:'v-high'},
+    ],
+    diag: 'Maladie cœliaque compliquée — malabsorption sévère avec carence martiale et en folates',
+    orient: 'IgA anti-TG2 massivement élevées (×14,8 LSN) avec IgA totales normales = diagnostic de maladie cœliaque très probable sans biopsie requise selon ESPGHAN 2020 (seuil ×10 LSN). L\'anémie est mixte : macrocytaire (carence folates) et microcytaire (carence en fer) → VGM paradoxalement normal ou haut. La ferritine effondrée + B9 très basse témoignent de la malabsorption sévère. La dermatite herpétiforme est pathognomonique.',
+    conduite: 'Régime sans gluten strict et définitif. Supplémentation fer + acide folique. Biopsie duodénale (Marsh) si doute ou pour suivi. Contrôle IgA anti-TG2 à 6 mois (doit se négativer sous RSG). Dépistage familial au 1er degré.'
+  },
+  '4': {
+    age: 68, sexLabel: 'ans — H', motif: 'Suivi IRC — bilan trimestriel',
+    context: 'DT2 depuis 15 ans sous insulinothérapie, HTA, dyslipidémie. Créatinine en hausse progressive depuis 2 ans.',
+    params: [
+      {n:'Créat', v:'198 µmol/L', c:'v-high'}, {n:'DFGe', v:'28 mL/min', c:'v-critical'}, {n:'Urée', v:'18 mmol/L', c:'v-high'},
+      {n:'K+', v:'5,6 mmol/L', c:'v-critical'}, {n:'HCO₃⁻', v:'17 mmol/L', c:'v-critical'}, {n:'Hb', v:'9,6 g/dL', c:'v-low'},
+      {n:'Ferritine', v:'620 µg/L', c:'v-high'}, {n:'PTH', v:'198 pg/mL', c:'v-high'},
+    ],
+    diag: 'IRC stade G4 (KDIGO) — complications : acidose métabolique, hyperkaliémie, anémie rénale, hyperparathyroïdie secondaire',
+    orient: 'DFGe à 28 mL/min = MRC stade G4. Complications classiques : acidose métabolique (HCO₃ bas), hyperkaliémie (surveillance ECG indispensable), anémie normochrome normocytaire (déficit EPO — ferritine élevée = inflammation non carence vraie), hyperparathyroïdie secondaire (PTH ×4 N).',
+    conduite: 'Avis néphrologique urgent. Supplémentation bicarbonate per os. Régime hypokaliémiant + résine (kayexalate si hyperk. persistante). EPO-stimulant si Hb <10 g/dL. Correction vitamine D native. Préparation accès vasculaire pour dialyse.'
+  },
+  '5': {
+    age: 34, sexLabel: 'ans — F', motif: 'Macrocytose découverte fortuitement, pas de symptôme neurologique',
+    context: 'Végétalienne stricte depuis 5 ans. Sous IPP depuis 1 an pour RGO. Pas d\'alcoolisme.',
+    params: [
+      {n:'Hb', v:'12,8 g/dL', c:'v-normal'}, {n:'VGM', v:'112 fL', c:'v-high'}, {n:'B12 sérique', v:'138 pmol/L', c:'v-low'},
+      {n:'Folates sér.', v:'12 nmol/L', c:'v-normal'}, {n:'AMM', v:'410 nmol/L', c:'v-high'}, {n:'Homocystéine', v:'22 µmol/L', c:'v-high'},
+      {n:'Anti-FI', v:'Négatif', c:'v-normal'}, {n:'IgA anti-TG2', v:'4 UI/mL', c:'v-normal'},
+    ],
+    diag: 'Carence fonctionnelle en B12 (végétalisme + IPP) sans anémie ni atteinte neurologique',
+    orient: 'B12 sérique basse-normale mais AMM élevé et homocystéine augmentée → carence fonctionnelle avérée (les marqueurs fonctionnels sont plus sensibles que le taux sérique). Pas de Biermer (anti-FI négatifs), pas de cœliaque. IPP = facteur aggravant (réduction absorption B12 gastrique). Folates normaux : macrocytose isolément attribuable à la carence B12.',
+    conduite: 'Supplémentation B12 orale haute dose (1000 µg/j) ou IM mensuelle. Réévaluation neurologique. Contrôle B12 + AMM + homocystéine à 3 mois. Information sur sources alimentaires B12 (si maintien végétalisme).'
+  },
+  '6': {
+    age: 8, sexLabel: 'ans — Enfant', motif: 'Retard de croissance, ballonnements, diarrhées depuis 18 mois',
+    context: 'Enfant sans antécédent. Courbe de poids en cassure depuis 2 ans. Irritabilité, fatigue scolaire. Parents d\'origine maghrébine, alimentation mixte.',
+    params: [
+      {n:'Hb', v:'9,4 g/dL', c:'v-critical'}, {n:'VGM', v:'73 fL', c:'v-low'}, {n:'Ferritine', v:'7 µg/L', c:'v-critical'},
+      {n:'IgA anti-TG2', v:'112 UI/mL', c:'v-critical'}, {n:'IgA totales', v:'1,1 g/L', c:'v-normal'}, {n:'EMA IgA', v:'Positif', c:'v-high'},
+      {n:'Albumine', v:'32 g/L', c:'v-low'}, {n:'B9', v:'3,2 nmol/L', c:'v-critical'},
+    ],
+    diag: 'Maladie cœliaque pédiatrique — malabsorption sévère (critères diagnostiques réunis sans biopsie)',
+    orient: 'IgA anti-TG2 ×11,2 LSN + EMA positifs + IgA totales normales = diagnostic cœliaque confirmé sans biopsie obligatoire (ESPGHAN 2020). Malabsorption sévère : anémie ferriprive, hypoalbuminémie, carence en folates. Retard staturo-pondéral directement lié. Forme pédiatrique typique.',
+    conduite: 'Régime sans gluten strict immédiat. Supplémentation fer + folates + vitamines liposolubles. Avis gastro-pédiatrique. Suivi nutritionnel trimestriel. Dépistage familial (parents + fratrie). Contrôle sérologique à 6 mois + 12 mois.'
+  }
+};
+
+/* ============================================
+   NAVIGATION ONGLETS
+   ============================================ */
+const showPanel = (id, btn) => {
+  document.querySelectorAll('#bio-root .bio-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#bio-root .bio-tab').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById(`panel-${id}`);
+  if (el) el.classList.add('active');
+  if (btn) btn.classList.add('active');
+};
+
+/* ============================================
+   SEXE ET MISE À JOUR GLOBALE
+   ============================================ */
+const setSex = (s) => {
+  currentSex = s;
+  ['m','f','g'].forEach(x => {
+    const b = document.getElementById(`sex-${x}`);
+    if (b) b.classList.toggle('active', x.toUpperCase() === s);
+  });
+  
+  const refs = {
+    'ref-hb': { M:'H: 13–17,5 g/dL', F:'F: 12–16 g/dL', G:'Gros.: >11 g/dL' },
+    'ref-ferr': { M:'H: 20–300 µg/L', F:'F: 10–150 µg/L', G:'Gros.: ≥30 µg/L' },
+    'ref-creat': { M:'H: 62–115 µmol/L', F:'F: 44–97 µmol/L', G:'Gros.: diminution physio' },
+    'ref-au': { M:'H: 180–420 µmol/L', F:'F: 150–360 µmol/L', G:'Gros.: augmente T3' },
+    'ref-hdl': { M:'H: >1,0 mmol/L', F:'F: >1,2 mmol/L', G:'F: >1,2 mmol/L' },
+    'ref-plt': { M:'150–400 G/L', F:'150–400 G/L', G:'Gros.: baisse T3 possible' },
+    'ref-vs': { M:'H: <15 mm/h', F:'F: <20 mm/h', G:'Gros.: jusqu\'à 50 mm/h' },
+    'ref-asat': { M:'H: <40 UI/L', F:'F: <32 UI/L', G:'F: <32 UI/L' },
+    'ref-alat': { M:'H: <41 UI/L', F:'F: <33 UI/L', G:'F: <33 UI/L' },
+    'ref-ggt': { M:'H: <60 UI/L', F:'F: <40 UI/L', G:'Gros.: <40' },
+    'ref-pal': { M:'40–120 UI/L', F:'40–120 UI/L', G:'Gros.: Augmente (×2 normal)' },
+    'ref-fibrino': { M:'2–4 g/L', F:'2–4 g/L', G:'Gros.: Augmente (jusqu\'à 6 g/L)' },
+    'ref-ddimeres': { M:'< 500 ou Âge×10', F:'< 500 ou Âge×10', G:'Gros.: T1<750, T2<1000, T3<1500' }
+  };
+
+  for (const [id, vals] of Object.entries(refs)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = vals[s];
+  }
+  
+  // Re-déclencher calculs en cours pour qu'ils s'adaptent au nouveau sexe
+  ['hb', 'ferr', 'creat', 'au', 'vs', 'asat', 'alat', 'ggt', 'pal', 'fibrino'].forEach(id => {
+    const el = document.getElementById(`val-${id}`);
+    if (el && el.value) el.dispatchEvent(new Event('input'));
+  });
+  if (document.getElementById('val-ddimeres')?.value) evalDdimeres();
+  if (document.getElementById('ckd-creat')?.value) calcCKD();
+};
+
+/* ============================================
+   UTILITAIRES UI
+   ============================================ */
+const showResult = (id, cls, txt) => {
+  const el = document.getElementById(`res-${id}`);
+  if (!el) return;
+  el.style.display = 'block';
+  el.className = `bio-result ${cls}`;
+  el.innerHTML = txt;
+};
+
+const hideCursor = (id) => { const c = document.getElementById(`cur-${id}`); if(c) c.style.display='none'; };
+const moveCursor = (id, pct, color) => {
+  const c = document.getElementById(`cur-${id}`);
+  if(!c) return;
+  pct = Math.max(2, Math.min(98, pct));
+  c.style.display = 'block'; c.style.left = `${pct}%`; c.style.background = color;
+};
+
+const evalSimple = (id, val, lo, hi, highMsg, lowMsg, normMsg) => {
+  if (val === '' || isNaN(val)) { hideCursor(id); const el=document.getElementById(`res-${id}`); if(el) el.style.display='none'; return; }
+  val = parseFloat(val); let pct, cls, msg; const span = hi - lo || 1;
+  if (val < lo) { pct=Math.max(2,10*(val/lo)); cls='r-low'; msg=`\u2193 ${lowMsg}`; moveCursor(id, pct, '#1E40AF'); }
+  else if (val > hi) { pct=Math.min(95,60+((val-hi)/span)*25); cls='r-high'; msg=`\u2191 ${highMsg}`; moveCursor(id, pct, '#B45309'); }
+  else { pct=10+50*((val-lo)/span); cls='r-normal'; msg=`\u2713 ${normMsg}`; moveCursor(id, pct, '#166534'); }
+  showResult(id, cls, msg);
+};
+
+/* ============================================
+   NFS
+   ============================================ */
+const hbRanges = { M:{lo:13,hi:17.5,cLo:7,cHi:20}, F:{lo:12,hi:16,cLo:7,cHi:19}, G:{lo:11,hi:14.5,cLo:7,cHi:16} };
+const evalHb = (val) => {
+  if (val===''||isNaN(val)){hideCursor('hb');document.getElementById('res-hb').style.display='none';return;}
+  val=parseFloat(val); const r=hbRanges[currentSex]; let p,c,m;
+  if(val<=r.cLo){c='r-critical';m=`\u26A0 Anémie sévère (${val} g/dL)`;p=3;}
+  else if(val<r.lo){c='r-low';m=`\u2193 Anémie (${val} g/dL)`;p=3+20*(val-r.cLo)/(r.lo-r.cLo);}
+  else if(val>r.cHi){c='r-critical';m='\u26A0 Polyglobulie sévère';p=97;}
+  else if(val>r.hi){c='r-high';m='\u2191 Polyglobulie';p=80;}
+  else{c='r-normal';m=`\u2713 Hémoglobine normale (${val} g/dL)`;p=20+40*(val-r.lo)/(r.hi-r.lo);}
+  moveCursor('hb',p,c==='r-critical'?'#C8102E':c==='r-low'?'#1E40AF':c==='r-high'?'#B45309':'#166534'); showResult('hb',c,m);
+};
+const evalGB = (v) => evalSimple('gb',v,4,10,'Hyperleucocytose','Leucopénie','Leucocytes normaux');
+const evalPNN = (v) => evalSimple('pnn',v,1.8,7.5,'Neutrophilie','Neutropénie','PNN normaux');
+const evalPLT = (v) => {
+  if(v===''||isNaN(v)){hideCursor('plt');document.getElementById('res-plt').style.display='none';return;}
+  v=parseFloat(v); const lo=currentSex==='G'?100:150; let c,m,p;
+  if(v<20){c='r-critical';m='\u26A0 Thrombopénie sévère';p=3;}
+  else if(v<lo){c='r-low';m='\u2193 Thrombopénie';p=15;}
+  else if(v>800){c='r-critical';m='\u26A0 Thrombocytose massive';p=97;}
+  else if(v>400){c='r-high';m='\u2191 Thrombocytose';p=78;}
+  else{c='r-normal';m='\u2713 Plaquettes normales';p=20+55*(v-lo)/(400-lo);}
+  moveCursor('plt',p,c==='r-critical'?'#C8102E':c==='r-low'?'#1E40AF':c==='r-high'?'#B45309':'#166534'); showResult('plt',c,m);
+};
+const synthesizeNFS = () => {
+  const items = [];
+  ['hb','vgm','tcmh','reticu','gb','pnn','lympho','eosino','plt'].forEach(p => {
+    const res = document.getElementById(`res-${p}`);
+    if(res && res.style.display !== 'none' && res.textContent.trim()) {
+      let cls = 'normal';
+      if(res.classList.contains('r-critical')) cls='critical';
+      else if(res.classList.contains('r-low')) cls='low';
+      else if(res.classList.contains('r-high')) cls='high';
+      items.push({text: res.textContent.trim(), cls});
+    }
+  });
+  if(!items.length) { alert('Renseignez au moins un paramètre.'); return; }
+  const syn = document.getElementById('nfs-synthesis');
+  syn.classList.add('visible');
+  document.getElementById('nfs-syn-list').innerHTML = items.map(it => `<div class="bio-syn-item"><span class="bio-syn-dot ${it.cls}"></span><span>${it.text}</span></div>`).join('');
+
+  const hbVal = parseFloat(document.getElementById('val-hb').value);
+  const vgmVal = parseFloat(document.getElementById('val-vgm').value);
+  let orient = '';
+  const cutOffHb = currentSex==='G'?11:(currentSex==='F'?12:13);
+  if(!isNaN(hbVal) && hbVal < cutOffHb) {
+    if(!isNaN(vgmVal)) {
+      if(vgmVal < 80) orient = 'Anémie microcytaire : penser en priorité à la carence martiale (bilan martial), thalassémie, anémie inflammatoire.';
+      else if(vgmVal > 100) orient = 'Anémie macrocytaire : doser B12 et folates, rechercher alcoolisme, hypothyroïdie, hépatopathie, médicaments.';
+      else orient = 'Anémie normocytaire : explorer insuffisance médullaire, anémie rénale, anémie inflammatoire, hémolyse (réticulocytes).';
+    }
+  }
+  const interpEl = document.getElementById('nfs-interpret');
+  if(orient) { interpEl.classList.add('visible'); document.getElementById('nfs-interpret-text').textContent = orient; }
+  else interpEl.classList.remove('visible');
+};
+
+/* ============================================
+   INFLAMMATION
+   ============================================ */
+const evalCRP = (v) => {
+  if (v === '' || isNaN(v)) { hideCursor('crp'); document.getElementById('res-crp').style.display='none'; return; }
+  v = parseFloat(v); let cls, msg, pct;
+  if (v < 5) { cls = 'r-normal'; msg = '\u2713 CRP normale'; pct = 20; }
+  else if (v < 50) { cls = 'r-high'; msg = '\u2191 Inflammation modérée (virose, grossesse, etc.)'; pct = 60; }
+  else { cls = 'r-critical'; msg = '\u26A0 Syndrome inflammatoire franc (bactérien, systémique)'; pct = 90; }
+  moveCursor('crp', pct, cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('crp', cls, msg);
+};
+const evalVS = (v) => {
+  if (v === '' || isNaN(v)) { hideCursor('vs'); document.getElementById('res-vs').style.display='none'; return; }
+  v = parseFloat(v);
+  const hi = (currentSex === 'M') ? 15 : ((currentSex === 'G') ? 50 : 20);
+  let cls, msg, pct;
+  if (v <= hi) { cls = 'r-normal'; msg = '\u2713 VS normale'; pct = 30; }
+  else if (v > 100) { cls = 'r-critical'; msg = '\u26A0 VS très accélérée (>100)'; pct = 95; }
+  else { cls = 'r-high'; msg = '\u2191 VS accélérée'; pct = 70; }
+  moveCursor('vs', pct, cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('vs', cls, msg);
+};
+
+/* ============================================
+   BILAN MARTIAL
+   ============================================ */
+const evalFerr = (v) => {
+  if(v===''||isNaN(v)){hideCursor('ferr');document.getElementById('res-ferr').style.display='none';return;}
+  v=parseFloat(v); const lo = currentSex==='M'?20:10; const hi = currentSex==='M'?300:150;
+  let cls,msg,pct;
+  if(v<lo){ cls='r-low'; msg='\u2193 Ferritine basse — carence en fer'; pct=8; }
+  else if(v>500){ cls='r-critical'; msg='\u26A0 Ferritine très élevée (surcharge ou forte inflammation)'; pct=95; }
+  else if(v>hi){ cls='r-high'; msg='\u2191 Hyperferritinémie'; pct=75; }
+  else { cls='r-normal'; msg='\u2713 Ferritine normale'; pct=20+55*(v-lo)/(hi-lo); }
+  moveCursor('ferr',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('ferr',cls,msg);
+};
+const evalCS = (v) => evalSimple('cs',v,20,45,'Surcharge','Carence martiale','CS Normal');
+const synthesizeMartial = () => {
+  const ferr = parseFloat(document.getElementById('val-ferr').value);
+  const cs = parseFloat(document.getElementById('val-cs').value);
+  const crp = parseFloat(document.getElementById('val-crp').value);
+  let interp = '';
+  const loFerr = currentSex==='M'?20:10;
+  
+  if(!isNaN(ferr) && ferr < loFerr) {
+    if(!isNaN(cs) && cs < 20) interp = 'Carence martiale franche confirmée. Indication à la supplémentation en fer.';
+    else interp = 'Carence en fer (ferritine basse).';
+  } else if(!isNaN(ferr) && ferr > (currentSex==='M'?300:150) && !isNaN(cs) && cs > 45) {
+    interp = 'Surcharge en fer (hémochromatose à rechercher).';
+  } else if(!isNaN(crp) && crp > 10 && !isNaN(ferr) && ferr > loFerr) {
+    interp = 'Syndrome inflammatoire : ferritine faussement élevée. Doser le récepteur soluble de la transferrine.';
+  } else {
+    interp = 'Bilan martial sans anomalie évidente ou données insuffisantes.';
+  }
+  const el = document.getElementById('martial-interpret');
+  el.classList.add('visible');
+  document.getElementById('martial-interpret-text').textContent = interp;
+};
+
+/* ============================================
+   GLYCÉMIE & HOMA-IR (CORRIGÉ ET INTELLIGENT)
+   ============================================ */
+const evalGly = (v) => {
+  evalSimple('gly',v,3.9,5.5,'Hyperglycémie','Hypoglycémie','Glycémie normale');
+  calcHoma();
+};
+
+const evalInsul = (v) => {
+  evalSimple('insul',v,2,20,'Hyperinsulinisme (SOPK, IR...)','Insuffisance sécrétoire','Insulinémie normale');
+  calcHoma();
+};
+
+const evalHbA1c = (v) => evalSimple('hba1c',v,0,5.7,'Prédiabète / Diabète','—','HbA1c normale');
+
+const calcHoma = () => {
+  let g = parseFloat(document.getElementById('val-gly').value);
+  const i = parseFloat(document.getElementById('val-insul').value);
+  const el = document.getElementById('res-homa');
+  
+  if (isNaN(g) || isNaN(i)) {
+    el.innerHTML = 'Renseignez la glycémie et l\'insuline en haut';
+    el.className = 'bio-result r-empty';
+    return;
+  }
+
+  // ✨ AUTO-DÉTECTION g/L vers mmol/L
+  if (g < 3.5) { g = g * 5.55; }
+
+  const homa = (g * i) / 22.5;
+  let cls, msg;
+  
+  if(homa < 1.5) { cls = 'r-normal'; msg = `\u2713 HOMA-IR = ${homa.toFixed(2)} (Sensibilité normale à l'insuline)`; }
+  else if(homa < 2.5) { cls = 'r-high'; msg = `\u2191 HOMA-IR = ${homa.toFixed(2)} (Insulinorésistance précoce/modérée)`; }
+  else { cls = 'r-critical'; msg = `\u26A0 HOMA-IR = ${homa.toFixed(2)} (Insulinorésistance avérée)`; }
+  
+  el.className = `bio-result ${cls}`; 
+  el.innerHTML = msg;
+};
+
+/* ============================================
+   RÉNALE (CKD-EPI 2021)
+   ============================================ */
+const evalCreat = (v) => evalSimple('creat',v,currentSex==='M'?62:44,currentSex==='M'?115:97,'Élevée','Basse','Normale');
+const calcCKD = () => {
+  const creat = parseFloat(document.getElementById('ckd-creat').value);
+  const age = parseFloat(document.getElementById('ckd-age').value);
+  const el = document.getElementById('res-ckd');
+  
+  if (isNaN(creat) || isNaN(age)) { 
+    el.innerHTML = 'Renseignez créatinine + âge'; 
+    el.className = 'bio-result r-empty'; 
+    return; 
+  }
+  
+  const kappa = (currentSex === 'F' || currentSex === 'G') ? 61.9 : 79.6;
+  const alpha = (currentSex === 'F' || currentSex === 'G') ? -0.241 : -0.302;
+  let dfg;
+  if (creat <= kappa) dfg = 142 * Math.pow(creat / kappa, alpha) * Math.pow(0.9938, age);
+  else dfg = 142 * Math.pow(creat / kappa, -1.200) * Math.pow(0.9938, age);
+  if (currentSex === 'F' || currentSex === 'G') dfg *= 1.012;
+  
+  dfg = Math.round(dfg);
+  let stade, cls;
+  if (dfg >= 90) { stade = 'G1 (Normal)'; cls = 'r-normal'; }
+  else if (dfg >= 60) { stade = 'G2 (Léger)'; cls = 'r-normal'; }
+  else if (dfg >= 45) { stade = 'G3a'; cls = 'r-high'; }
+  else if (dfg >= 30) { stade = 'G3b'; cls = 'r-high'; }
+  else if (dfg >= 15) { stade = 'G4 (Sévère)'; cls = 'r-critical'; }
+  else { stade = 'G5 (Terminale)'; cls = 'r-critical'; }
+  
+  el.className = `bio-result ${cls}`;
+  el.innerHTML = `DFGe = <b>${dfg} mL/min/1,73m²</b> — Stade : <b>${stade}</b>`;
+};
+const evalAU = (v) => evalSimple('au',v,currentSex==='M'?180:150,currentSex==='M'?420:360,'Hyperuricémie','Hypouricémie','Normal');
+const evalAlbumin = (v) => evalSimple('albumin',v,0,30,'Micro/Macroalbuminurie','—','Normale');
+
+/* ============================================
+   HÉPATIQUE & HÉMOSTASE
+   ============================================ */
+const evalTransaminases = (id, val) => {
+  if (val === '' || isNaN(val)) { document.getElementById(`res-${id}`).style.display='none'; return; }
+  val = parseFloat(val); const maxN = (id === 'asat') ? (currentSex==='M'?40:32) : (currentSex==='M'?41:33);
+  let c, m;
+  if (val <= maxN) { c='r-normal'; m=`\u2713 Normales`; }
+  else if (val < maxN * 3) { c='r-high'; m=`\u2191 Cytolyse légère (< 3N) — Stéatose, alcool, médicaments...`; }
+  else if (val < maxN * 10) { c='r-critical'; m=`\u26A0 Cytolyse modérée à sévère.` + (currentSex === 'G' ? `<br><i>Alerte obstétrique : Penser au HELLP syndrome.</i>` : ''); }
+  else { c='r-critical'; m=`\u26A0 Cytolyse massive (> 10N) — Hépatite aiguë.`; }
+  showResult(id, c, m);
+};
+const evalGGT = (v) => evalSimple('ggt',v,0,currentSex==='M'?60:40,'Cholestase possible','—','Normales');
+const evalPAL = (v) => {
+  if (v === '' || isNaN(v)) { document.getElementById('res-pal').style.display='none'; return; }
+  v = parseFloat(v);
+  if (currentSex === 'G') {
+    if (v <= 250) showResult('pal', 'r-normal', '\u2713 PAL normales (élévation physiologique T3).');
+    else showResult('pal', 'r-high', '\u2191 PAL > au seuil physiologique de grossesse.');
+  } else {
+    if (v <= 120) showResult('pal', 'r-normal', '\u2713 PAL normales');
+    else showResult('pal', 'r-high', '\u2191 PAL élevées (Cholestase, pathologie osseuse).');
+  }
+};
+const evalFibrino = (v) => {
+  if (v === '' || isNaN(v)) { document.getElementById('res-fibrino').style.display='none'; return; }
+  v = parseFloat(v); let cls, msg;
+  if (v < 1.5) { cls = 'r-critical'; msg = '\u26A0 Hypofibrinogénémie (CIVD, IH)'; }
+  else if (currentSex === 'G') {
+    if (v <= 6.0) { cls = 'r-normal'; msg = '\u2713 Fibrinogène normal (élévation physio grossesse)'; }
+    else { cls = 'r-high'; msg = '\u2191 Hyperfibrinogénémie sévère'; }
+  } else {
+    if (v <= 4.0) { cls = 'r-normal'; msg = '\u2713 Fibrinogène normal'; }
+    else { cls = 'r-high'; msg = '\u2191 Fibrinogène élevé (Inflammation)'; }
+  }
+  showResult('fibrino', cls, msg);
+};
+const evalDdimeres = () => {
+  const age = parseFloat(document.getElementById('val-age-dd').value);
+  const dd = parseFloat(document.getElementById('val-ddimeres').value);
+  const el = document.getElementById('res-ddimeres');
+  if (isNaN(dd)) { el.style.display = 'none'; return; }
+
+  let seuil = 500, ctx = "";
+  if (currentSex === 'G') { seuil = 1000; ctx = "<br><i>Attention : Seuils de grossesse (T1 < 750, T2 < 1000, T3 < 1500).</i>"; } 
+  else if (!isNaN(age) && age > 50) { seuil = age * 10; ctx = `<br><i>Seuil ajusté à l'âge : ${seuil} µg/L.</i>`; }
+
+  if (dd < seuil) showResult('ddimeres', 'r-normal', `\u2713 D-dimères NÉGATIFS (< ${seuil}). Exclut MTEV avec proba forte.` + ctx);
+  else showResult('ddimeres', 'r-critical', `\u26A0 D-dimères POSITIFS (≥ ${seuil}). Imagerie requise.` + ctx);
+};
+const evalSAPL = () => {
+  const la = document.getElementById('sapl-la').checked, acl = document.getElementById('sapl-acl').checked, b2 = document.getElementById('sapl-b2').checked;
+  const el = document.getElementById('res-sapl');
+  if (la || acl || b2) { el.className = 'bio-result r-critical'; el.innerHTML = `\u26A0 <b>Critère biologique du SAPL présent.</b><br><i>Confirmer à 12 semaines.</i>`; el.style.display = 'block'; } 
+  else el.style.display = 'none';
+};
+
+/* ============================================
+   LIPIDES ET IONO
+   ============================================ */
+const evalLDL = (v) => evalSimple('ldl',v,0,4.1,'LDL Élevé','—','LDL Normal');
+const evalHDL = (v) => evalSimple('hdl',v,currentSex==='M'?1.0:1.2,5,'Normal (Protecteur)','HDL Bas (Risque)','Normal');
+const evalTG = (v) => evalSimple('tg',v,0,1.7,'Hypertriglycéridémie','—','TG Normaux');
+
+const updateRatioAndTA = () => {
+  const ct = parseFloat(document.getElementById('val-ct').value);
+  const hdl = parseFloat(document.getElementById('val-hdl').value);
+  const ratioEl = document.getElementById('res-ratio');
+  if(ratioEl) {
+    if (!isNaN(ct) && !isNaN(hdl) && hdl > 0) {
+      const r = (ct/hdl).toFixed(2); let cls,msg;
+      if(r<3.5){cls='r-normal';msg=`\u2713 Ratio = ${r} (Risque faible)`;}
+      else if(r<4.5){cls='r-high';msg=`\u2191 Ratio = ${r} (Risque modéré)`;}
+      else{cls='r-critical';msg=`\u26A0 Ratio = ${r} (Risque élevé)`;}
+      ratioEl.className=`bio-result ${cls}`; ratioEl.innerHTML=msg;
+    } else {
+      ratioEl.className='bio-result r-empty'; ratioEl.innerHTML='Renseignez CT et HDL';
+    }
+  }
+};
+
+const evalNa = (v) => { evalSimple('na',v,135,145,'Hypernatrémie','Hyponatrémie','Natrémie normale'); calcTA(); };
+const evalK = (v) => { evalSimple('k',v,3.5,5.0,'Hyperkaliémie','Hypokaliémie','Kaliémie normale'); calcTA(); };
+const evalCa = (v) => evalSimple('ca',v,2.20,2.60,'Hypercalcémie','Hypocalcémie','Normale');
+
+const calcTA = () => {
+  const na=parseFloat(document.getElementById('val-na').value), k=parseFloat(document.getElementById('val-k').value), cl=parseFloat(document.getElementById('val-cl').value), hco3=parseFloat(document.getElementById('val-hco3').value);
+  const el=document.getElementById('res-ta');
+  if(!el) return;
+  if(isNaN(na)||isNaN(k)||isNaN(cl)||isNaN(hco3)){
+    el.innerHTML='Renseignez Na, K, Cl, HCO₃'; el.className='bio-result r-empty'; return;
+  }
+  const ta=(na+k)-(cl+hco3); let cls,msg;
+  if(ta<8){cls='r-low';msg=`\u2193 Trou anionique = ${ta.toFixed(1)} (Bas)`;}
+  else if(ta<=16){cls='r-normal';msg=`\u2713 Trou anionique = ${ta.toFixed(1)} (Normal)`;}
+  else{cls='r-critical';msg=`\u26A0 Trou anionique = ${ta.toFixed(1)} (Élevé/Acidose)`;}
+  el.className=`bio-result ${cls}`; el.innerHTML=msg;
+};
+
+/* ============================================
+   VITAMINES & CELIAQUE (MODIFIÉ AVEC IGG)
+   ============================================ */
+const evalB9S = (v) => evalSimple('b9s',v,5,30,'Élevé','Carence','Normal');
+const evalB12 = (v) => evalSimple('b12',v,148,740,'Élevée','Carence','Normale');
+const evalHomo = (v) => evalSimple('homo',v,0,15,'Hyperhomocystéinémie','—','Normale');
+const evalAFI = () => { const el=document.getElementById('res-afi'); if(document.getElementById('val-afi').checked){el.className='bio-result r-critical';el.innerHTML='\u26A0 Maladie de Biermer';el.style.display='block';}else el.style.display='none';};
+
+const synthesizeVit = () => {
+  const b12 = parseFloat(document.getElementById('val-b12').value);
+  const b9s = parseFloat(document.getElementById('val-b9s').value);
+  const amm = parseFloat(document.getElementById('val-amm').value);
+  const homo = parseFloat(document.getElementById('val-homo').value);
+  const afi = document.getElementById('val-afi').checked;
+  let txt = '';
+
+  if(!isNaN(b12) && b12<148 && !isNaN(b9s) && b9s<5) {
+    txt='Carence combinée B12 + B9 — fréquente dans les malabsorptions (maladie cœliaque, gastrite atrophique). Bilan complémentaire : IgA anti-TG2, anti-FI, gastroscopie selon contexte.';
+  } else if(!isNaN(b12) && b12<148) {
+    if(afi) txt='Maladie de Biermer confirmée (anti-FI positifs). Supplémentation B12 IM mensuelle définitive (1000 µg/mois). Surveiller endoscopiquement (risque cancer gastrique multiplié).';
+    else if(!isNaN(amm) && amm>270) txt='Carence fonctionnelle en B12 (AMM élevé) — carence vraie malgré taux limite. Supplémentation orale haute dose ou IM selon tolérance et cause.';
+    else txt='Carence en B12 — Préciser la cause : végétalisme, malabsorption (cœliaque, Biermer), résection iléale, IPP au long cours. Doser anti-FI et IgA anti-TG2.';
+  } else if(!isNaN(b9s) && b9s<5) {
+    txt='Carence en folates isolée — causes fréquentes : alcoolisme, grossesse, malabsorption, médicaments (MTX, antiépileptiques). Supplémentation acide folique 5 mg/j. Si grossesse ou projet : 0,4 mg/j au moins 4 semaines avant conception.';
+  } else if(!isNaN(homo) && homo>15){
+    txt='Hyperhomocystéinémie sans carence évidente sur taux sériques — penser à carence fonctionnelle (AMM utile), IRC, hypothyroïdie. Risque cardiovasculaire et thrombotique augmenté.';
+  } else {
+    txt='Pas de carence en B9/B12 évidente sur les valeurs renseignées. Croiser avec le contexte clinique (macrocytose, symptômes neurologiques, régime alimentaire).';
+  }
+  const el = document.getElementById('vit-interpret');
+  el.style.display='block';
+  el.classList.add('visible');
+  document.getElementById('vit-interpret-text').textContent=txt;
+};
+
+const evalTG2 = (v) => {
+  if(v===''||isNaN(v)){document.getElementById('res-tg2').style.display='none';return;}
+  v=parseFloat(v); let cls,msg;
+  if(v<10){cls='r-normal';msg='\u2713 Négatif (<10)';}
+  else if(v<30){cls='r-high';msg='\u2191 Positif — Confirmer par biopsie';}
+  else if(v<100){cls='r-critical';msg='\u26A0 Très positif — Forte probabilité';}
+  else{cls='r-critical';msg='\u26A0 Massivement élevé (≥10x LSN) — Diag. possible sans biopsie';}
+  const el=document.getElementById('res-tg2'); el.className=`bio-result ${cls}`; el.innerHTML=msg; el.style.display='block';
+};
+const evalIgATot = (v) => {
+  if(v===''||isNaN(v)){document.getElementById('res-iga-tot').style.display='none';return;}
+  v=parseFloat(v); let cls,msg;
+  if(v<0.07){cls='r-critical';msg='\u26A0 Déficit IgA — Anti-TG2 non interprétables. Voir IgG.';}
+  else if(v<0.7){cls='r-low';msg='\u2193 IgA basses';}
+  else{cls='r-normal';msg='\u2713 IgA normales';}
+  const el=document.getElementById('res-iga-tot'); el.className=`bio-result ${cls}`; el.innerHTML=msg; el.style.display='block';
+};
+const evalEMA = (v) => { const el=document.getElementById('res-ema'); if(v==='pos'){el.className='bio-result r-critical';el.innerHTML='\u26A0 Positif';el.style.display='block';}else{el.className='bio-result r-normal';el.innerHTML='\u2713 Négatif';el.style.display='block';} };
+const evalHLA = (v) => { const el=document.getElementById('res-hla'); if(v==='pos'){el.className='bio-result r-high';el.innerHTML='\u2713 HLA Présent';el.style.display='block';}else{el.className='bio-result r-normal';el.innerHTML='\u2713 HLA Absent (Exclut la MC)';el.style.display='block';} };
+
+const synthesizeCeliaque = () => {
+  const tg2 = parseFloat(document.getElementById('val-tg2').value);
+  const iga = parseFloat(document.getElementById('val-iga-tot').value);
+  const iggTg2 = parseFloat(document.getElementById('val-igg-tg2').value);
+  const iggDgp = parseFloat(document.getElementById('val-igg-dgp').value);
+  const ema = document.querySelector('input[name="ema"]:checked')?.value;
+  const hla = document.querySelector('input[name="hla"]:checked')?.value;
+  let txt = '';
+  
+  if(!isNaN(iga) && iga<0.07) {
+    if((!isNaN(iggTg2) && iggTg2 > 10) || (!isNaN(iggDgp) && iggDgp > 10)) {
+       txt = 'Déficit sélectif en IgA avec IgG (anti-TG2 ou DGP) POSITIFS → Forte suspicion de maladie cœliaque. Biopsie duodénale requise.';
+    } else if (!isNaN(iggTg2) || !isNaN(iggDgp)) {
+       txt = 'Déficit sélectif en IgA mais marqueurs IgG NÉGATIFS → Maladie cœliaque très peu probable.';
+    } else {
+       txt = 'Déficit sélectif en IgA détecté : les IgA anti-TG2 sont NON INTERPRÉTABLES. Veuillez renseigner les IgG anti-TG2 et IgG anti-DGP pour statuer.';
+    }
+  } else if(!isNaN(tg2) && tg2>=100 && ema==='pos' && hla==='pos') {
+    txt='Critères ESPGHAN réunis : IgA anti-TG2 ≥×10 LSN + EMA positif + HLA DQ2/DQ8 présent → DIAGNOSTIC SANS BIOPSIE possible. Régime sans gluten à instaurer.';
+  } else if(!isNaN(tg2) && tg2>=30) {
+    txt='Sérologie fortement positive. Biopsie duodénale (Marsh 2–3) recommandée pour confirmation anatomopathologique.';
+  } else if(!isNaN(tg2) && tg2>=10) {
+    txt='Sérologie positive faible. Compléter par EMA IgA. Si EMA positif → biopsie. Si EMA négatif → contrôle à 3–6 mois (faux positif possible).';
+  } else if(!isNaN(tg2) && tg2<10) {
+    if(hla==='neg') txt='Sérologie négative ET HLA absent : Maladie cœliaque exclue (>99% de certitude).';
+    else txt='Sérologie négative. Si suspicion clinique forte, vérifier les IgA totales. Sinon, maladie cœliaque peu probable.';
+  } else {
+    txt='Renseignez au moins les IgA anti-TG2 pour orienter le diagnostic.';
+  }
+  
+  const el = document.getElementById('celiaque-interpret');
+  el.classList.add('visible');
+  document.getElementById('celiaque-interpret-text').textContent=txt;
+};
+
+/* ============================================
+   CAS CLINIQUES
+   ============================================ */
+const loadCase = (id) => {
+  const container = document.getElementById('case-container');
+  if(!id){container.innerHTML='';return;}
+  const c = CASES[id];
+  const paramsHtml = c.params.map(p => `<div class="bio-case-param"><div class="bio-case-param-name">${p.n}</div><div class="bio-case-param-val ${p.c}">${p.v}</div></div>`).join('');
+  container.innerHTML = `
+    <div class="bio-case-card visible">
+      <div class="bio-case-header">
+        <div class="bio-case-age">${c.age}<span>${c.sexLabel}</span></div>
+        <div><div class="bio-case-motif">${c.motif}</div><div class="bio-case-context">${c.context}</div></div>
+      </div>
+      <div class="bio-case-bio">${paramsHtml}</div>
+      <div class="bio-toggle-answer">
+        <button class="bio-btn" onclick="this.style.display='none'; document.getElementById('case-answer').classList.add('visible');" style="background:#C8102E!important;">\u25B6 Révéler le diagnostic</button>
+      </div>
+      <div class="bio-case-answer" id="case-answer">
+        <div class="bio-sep"></div>
+        <span class="bio-case-diag">${c.diag}</span>
+        <div class="bio-case-section"><div class="bio-case-section-title">Analyse</div><p>${c.orient}</p></div>
+        <div class="bio-case-section"><div class="bio-case-section-title">Conduite</div><p>${c.conduite}</p></div>
+      </div>
+    </div>`;
+};
+
+/* ============================================
+   RESET GÉNÉRIQUE
+   ============================================ */
+const resetPanel = (panelId) => {
+  const p = document.getElementById(`panel-${panelId}`);
+  if(!p) return;
+  p.querySelectorAll('.bio-input').forEach(inp => inp.value='');
+  p.querySelectorAll('.bio-result').forEach(el => {
+    const keep = ['res-homa','res-ckd','res-ratio','res-ta'].includes(el.id);
+    if (!keep) el.style.display='none';
+    else {
+      el.className = 'bio-result r-empty';
+      if (el.id === 'res-homa') el.innerHTML = 'Renseignez la glycémie et l\'insuline en haut';
+      if (el.id === 'res-ckd') el.innerHTML = 'Renseignez créatinine + âge';
+      if (el.id === 'res-ratio') el.innerHTML = 'Renseignez CT et HDL';
+      if (el.id === 'res-ta') el.innerHTML = 'Renseignez Na, K, Cl, HCO₃';
+    }
+  });
+  p.querySelectorAll('.bio-gauge-cursor').forEach(c => c.style.display='none');
+  p.querySelectorAll('.bio-interpret, .bio-synthesis').forEach(i => { i.classList.remove('visible'); i.style.display='none'; });
+  p.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(cb => cb.checked=false);
+};
+
+// Initialisation au chargement
+window.addEventListener('DOMContentLoaded', () => { setSex('M'); });
+</script>
+
+<!-- TRACKING UMAMI -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+</body>
+</html>
