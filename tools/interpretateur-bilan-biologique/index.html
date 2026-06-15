@@ -5,152 +5,767 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Interprétateur de Bilan Biologique – Dr KARA-ZAITRI</title>
 <style>
+/* =============================================
+   BLINDAGE ELEMENTOR — ROOT ID ISOLÉ
+   ============================================= */
 #bio-root {
-  --navy: #1A3A5C; --navy-light: #2C5282; --navy-bg: #EBF4FF;
-  --slate: #4A5568; --slate-light: #718096; --bg: #F8FAFC; --white: #FFFFFF;
-  --normal: #166534; --normal-bg: #DCFCE7; --normal-border: #86EFAC;
-  --low: #1E40AF; --low-bg: #DBEAFE; --low-border: #93C5FD;
-  --high: #B45309; --high-bg: #FEF3C7; --high-border: #FCD34D;
-  --critical: #C8102E; --critical-bg: #FEE2E2; --critical-border: #FCA5A5;
-  --border: #CBD5E0; --border-light: #E2E8F0; --text: #1A202C; --text-muted: #718096;
-  --radius: 6px; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  all: initial; font-family: Arial, Helvetica, sans-serif !important;
-  font-size: 14px !important; color: var(--text) !important; background: var(--bg) !important;
-  display: block !important; box-sizing: border-box !important; line-height: 1.5 !important;
+  --navy: #1A3A5C;
+  --navy-light: #2C5282;
+  --navy-bg: #EBF4FF;
+  --slate: #4A5568;
+  --slate-light: #718096;
+  --bg: #F8FAFC;
+  --white: #FFFFFF;
+  --normal: #166534;
+  --normal-bg: #DCFCE7;
+  --normal-border: #86EFAC;
+  --low: #1E40AF;
+  --low-bg: #DBEAFE;
+  --low-border: #93C5FD;
+  --high: #B45309;
+  --high-bg: #FEF3C7;
+  --high-border: #FCD34D;
+  --critical: #C8102E;
+  --critical-bg: #FEE2E2;
+  --critical-border: #FCA5A5;
+  --border: #CBD5E0;
+  --border-light: #E2E8F0;
+  --text: #1A202C;
+  --text-muted: #718096;
+  --radius: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+
+  all: initial;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 14px !important;
+  color: var(--text) !important;
+  background: var(--bg) !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  line-height: 1.5 !important;
   -webkit-font-smoothing: antialiased !important;
 }
-#bio-root *, #bio-root *::before, #bio-root *::after { box-sizing: border-box !important; font-family: inherit !important; }
+#bio-root *, #bio-root *::before, #bio-root *::after {
+  box-sizing: border-box !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
 
-#bio-root .bio-header { background: var(--navy) !important; color: var(--white) !important; padding: 20px 24px 16px !important; border-bottom: 3px solid #C8102E !important; }
-#bio-root .bio-header-top { display: flex !important; align-items: flex-start !important; justify-content: space-between !important; flex-wrap: wrap !important; gap: 10px !important; }
-#bio-root .bio-header h1 { font-size: 18px !important; font-weight: 700 !important; color: var(--white) !important; margin: 0 0 4px 0 !important; line-height: 1.3 !important; }
-#bio-root .bio-subtitle { font-size: 12px !important; color: rgba(255,255,255,0.75) !important; font-weight: 400 !important; margin: 0 !important; }
-#bio-root .bio-badge { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.3) !important; color: var(--white) !important; font-size: 10px !important; font-weight: 700 !important; padding: 3px 8px !important; border-radius: 3px !important; letter-spacing: 0.05em !important; text-transform: uppercase !important; white-space: nowrap !important; }
-#bio-root .bio-disclaimer { margin-top: 10px !important; font-size: 10px !important; color: rgba(255,255,255,0.6) !important; border-top: 1px solid rgba(255,255,255,0.15) !important; padding-top: 8px !important; line-height: 1.4 !important; }
-
-#bio-root .bio-tabs-wrap { background: var(--white) !important; border-bottom: 2px solid var(--border-light) !important; overflow-x: auto !important; scrollbar-width: none !important; }
-#bio-root .bio-tabs-wrap::-webkit-scrollbar { display: none !important; }
-#bio-root .bio-tabs { display: flex !important; min-width: max-content !important; padding: 0 12px !important; }
-#bio-root .bio-tab { padding: 10px 14px !important; font-size: 11px !important; font-weight: 600 !important; color: var(--slate) !important; cursor: pointer !important; border: none !important; background: none !important; border-bottom: 3px solid transparent !important; white-space: nowrap !important; transition: color 0.15s, border-color 0.15s !important; letter-spacing: 0.01em !important; text-transform: uppercase !important; }
-#bio-root .bio-tab:hover { color: var(--navy) !important; }
-#bio-root .bio-tab.active { color: var(--navy) !important; border-bottom-color: var(--navy) !important; }
-
-#bio-root .bio-global-config { background: var(--white) !important; padding: 12px 20px !important; border-bottom: 1px solid var(--border-light) !important; display: flex !important; gap: 15px !important; align-items: center !important; justify-content: space-between !important; flex-wrap: wrap !important; }
-#bio-root .bio-sex-group { display: flex !important; gap: 8px !important; align-items: center !important; flex-wrap: wrap !important;}
-#bio-root .bio-sex-btn { padding: 6px 14px !important; border: 1.5px solid var(--border) !important; border-radius: 20px !important; font-size: 12px !important; font-weight: 600 !important; cursor: pointer !important; background: var(--white) !important; color: var(--slate) !important; transition: all 0.15s !important; }
-#bio-root .bio-sex-btn.active { background: var(--navy) !important; color: var(--white) !important; border-color: var(--navy) !important; }
-#bio-root .bio-btn-global { background: #C8102E !important; color: white !important; border: none !important; padding: 8px 16px !important; border-radius: 20px !important; font-size: 12px !important; font-weight: 700 !important; cursor: pointer !important; transition: 0.2s !important; display: inline-flex !important; align-items: center !important; gap: 6px !important; box-shadow: var(--shadow) !important; }
-#bio-root .bio-btn-global:hover { background: #9B0C23 !important; transform: translateY(-1px) !important; }
-
-#bio-root .bio-panel { display: none !important; padding: 20px !important; max-width: 900px !important; margin: 0 auto !important; }
-#bio-root .bio-panel.active { display: block !important; }
-#bio-root .bio-section-title { font-size: 13px !important; font-weight: 700 !important; color: var(--navy) !important; text-transform: uppercase !important; letter-spacing: 0.06em !important; margin: 0 0 14px 0 !important; padding-bottom: 6px !important; border-bottom: 2px solid var(--navy-bg) !important; display: flex !important; align-items: center !important; gap: 8px !important; }
-#bio-root .bio-section-title::before { content: "\25A0" !important; color: #C8102E !important; font-size: 10px !important; }
-#bio-root .bio-grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; gap: 12px !important; margin-bottom: 20px !important; }
-#bio-root .bio-param-card { background: var(--white) !important; border: 1px solid var(--border-light) !important; border-radius: var(--radius) !important; padding: 12px !important; box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important; }
-#bio-root .bio-param-label { font-size: 11px !important; font-weight: 700 !important; color: var(--slate) !important; text-transform: uppercase !important; letter-spacing: 0.04em !important; margin-bottom: 6px !important; display: flex !important; align-items: center !important; justify-content: space-between !important; }
-#bio-root .bio-ref { font-size: 9px !important; font-weight: 400 !important; color: var(--text-muted) !important; font-style: italic !important; }
-#bio-root .bio-input-row { display: flex !important; align-items: center !important; gap: 6px !important; }
-#bio-root .bio-input { flex: 1 !important; padding: 7px 9px !important; border: 1.5px solid var(--border) !important; border-radius: 4px !important; font-size: 14px !important; font-weight: 600 !important; color: var(--text) !important; background: var(--bg) !important; outline: none !important; width: 100% !important; transition: border-color 0.15s !important; }
-#bio-root .bio-input:focus { border-color: var(--navy) !important; background: var(--white) !important; }
-#bio-root .bio-unit { font-size: 11px !important; color: var(--text-muted) !important; white-space: nowrap !important; min-width: 40px !important; }
-
-#bio-root .bio-gauge-wrap { margin-top: 8px !important; }
-#bio-root .bio-gauge-track { height: 5px !important; border-radius: 10px !important; background: linear-gradient(to right, #3B82F6 0%, #22C55E 40%, #F59E0B 70%, #EF4444 100%) !important; position: relative !important; margin-bottom: 4px !important; }
-#bio-root .bio-gauge-cursor { position: absolute !important; top: -3px !important; width: 11px !important; height: 11px !important; border-radius: 50% !important; border: 2px solid var(--white) !important; background: var(--slate) !important; transform: translateX(-50%) !important; transition: left 0.4s cubic-bezier(.4,0,.2,1), background 0.3s !important; display: none !important; }
-#bio-root .bio-result { display: none !important; margin-top: 8px !important; padding: 6px 9px !important; border-radius: 4px !important; font-size: 11px !important; font-weight: 600 !important; line-height: 1.4 !important; border-left: 3px solid !important; }
-#bio-root .r-normal { background: var(--normal-bg) !important; color: var(--normal) !important; border-color: var(--normal) !important; }
-#bio-root .r-low { background: var(--low-bg) !important; color: var(--low) !important; border-color: var(--low) !important; }
-#bio-root .r-high { background: var(--high-bg) !important; color: var(--high) !important; border-color: var(--high) !important; }
-#bio-root .r-critical { background: var(--critical-bg) !important; color: var(--critical) !important; border-color: var(--critical) !important; }
-#bio-root .r-info { background: var(--navy-bg) !important; color: var(--navy) !important; border-color: var(--navy) !important; }
-#bio-root .r-empty { background: #F8FAFC !important; color: #4A5568 !important; border-color: #CBD5E0 !important; }
-
-#bio-root .bio-alert { padding: 10px 14px !important; border-radius: 4px !important; font-size: 12px !important; line-height: 1.5 !important; margin-bottom: 12px !important; border-left: 4px solid !important; }
-#bio-root .bio-alert-warn { background: #FFFBEB !important; border-color: var(--high) !important; color: #92400E !important; }
-#bio-root .bio-alert-info { background: var(--navy-bg) !important; border-color: var(--navy) !important; color: var(--navy) !important; }
-
-#bio-root .bio-btn { display: inline-flex !important; align-items: center !important; gap: 6px !important; padding: 9px 18px !important; background: var(--navy) !important; color: var(--white) !important; border: none !important; border-radius: var(--radius) !important; font-size: 12px !important; font-weight: 700 !important; cursor: pointer !important; text-transform: uppercase !important; transition: 0.15s !important; margin-top: 12px !important; }
-#bio-root .bio-btn-reset { background: var(--white) !important; color: var(--slate) !important; border: 1.5px solid var(--border) !important; }
-#bio-root .bio-btn-row { display: flex !important; gap: 10px !important; flex-wrap: wrap !important; margin-top: 14px !important; }
-
-#bio-root .bio-celiaque-table { width: 100% !important; border-collapse: collapse !important; font-size: 12px !important; margin-bottom: 14px !important; }
-#bio-root .bio-celiaque-table th { background: var(--navy) !important; color: var(--white) !important; padding: 7px 10px !important; text-align: left !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase !important; }
-#bio-root .bio-celiaque-table td { padding: 7px 10px !important; border-bottom: 1px solid var(--border-light) !important; }
+/* ---- HEADER ---- */
+#bio-root .bio-header {
+  background: var(--navy) !important;
+  color: var(--white) !important;
+  padding: 20px 24px 16px !important;
+  border-bottom: 3px solid #C8102E !important;
+}
+#bio-root .bio-header-top {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+#bio-root .bio-header h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--white) !important;
+  margin: 0 0 4px 0 !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
+}
+#bio-root .bio-subtitle {
+  font-size: 12px !important;
+  color: rgba(255,255,255,0.75) !important;
+  font-weight: 400 !important;
+  margin: 0 !important;
+}
+#bio-root .bio-badge {
+  background: rgba(255,255,255,0.15) !important;
+  border: 1px solid rgba(255,255,255,0.3) !important;
+  color: var(--white) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 3px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+#bio-root .bio-disclaimer {
+  margin-top: 10px !important;
+  font-size: 10px !important;
+  color: rgba(255,255,255,0.6) !important;
+  border-top: 1px solid rgba(255,255,255,0.15) !important;
+  padding-top: 8px !important;
+  line-height: 1.4 !important;
+}
 
 /* ---- PANNEAU PATIENT ---- */
-#bio-root .bio-patient-bar { background: var(--white) !important; border-bottom: 1px solid var(--border-light) !important; }
-#bio-root .bio-patient-toggle { width: 100% !important; display: flex !important; align-items: center !important; gap: 8px !important; padding: 8px 20px !important; background: none !important; border: none !important; cursor: pointer !important; font-size: 11px !important; font-weight: 600 !important; color: var(--slate-light) !important; text-align: left !important; letter-spacing: 0.03em !important; text-transform: uppercase !important; transition: color 0.15s !important; }
+#bio-root .bio-patient-bar {
+  background: var(--white) !important;
+  border-bottom: 1px solid var(--border-light) !important;
+}
+#bio-root .bio-patient-toggle {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 20px !important;
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--slate-light) !important;
+  text-align: left !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  transition: color 0.15s !important;
+}
 #bio-root .bio-patient-toggle:hover { color: var(--navy) !important; }
-#bio-root .bio-patient-toggle .pt-arrow { font-size: 9px !important; transition: transform 0.2s !important; display: inline-block !important; }
+#bio-root .bio-patient-toggle .pt-arrow {
+  font-size: 9px !important;
+  transition: transform 0.2s !important;
+  display: inline-block !important;
+}
 #bio-root .bio-patient-toggle.open .pt-arrow { transform: rotate(90deg) !important; }
-#bio-root .bio-patient-form { display: none !important; padding: 10px 20px 14px !important; background: #FAFBFC !important; border-top: 1px solid var(--border-light) !important; }
+#bio-root .bio-patient-form {
+  display: none !important;
+  padding: 10px 20px 14px !important;
+  background: #FAFBFC !important;
+  border-top: 1px solid var(--border-light) !important;
+}
 #bio-root .bio-patient-form.open { display: block !important; }
-#bio-root .bio-patient-grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important; gap: 10px !important; }
+#bio-root .bio-patient-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+  gap: 10px !important;
+}
 #bio-root .bio-patient-field { display: flex !important; flex-direction: column !important; gap: 3px !important; }
-#bio-root .bio-patient-field label { font-size: 10px !important; font-weight: 700 !important; color: var(--slate) !important; text-transform: uppercase !important; letter-spacing: 0.04em !important; }
-#bio-root .bio-patient-field input { padding: 6px 8px !important; border: 1px solid var(--border) !important; border-radius: 4px !important; font-size: 12px !important; color: var(--text) !important; background: var(--white) !important; outline: none !important; transition: border-color 0.15s !important; }
+#bio-root .bio-patient-field label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: var(--slate) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+#bio-root .bio-patient-field input {
+  padding: 6px 8px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  color: var(--text) !important;
+  background: var(--white) !important;
+  outline: none !important;
+  transition: border-color 0.15s !important;
+}
 #bio-root .bio-patient-field input:focus { border-color: var(--navy) !important; }
-#bio-root .bio-patient-age-display { font-size: 10px !important; color: var(--slate-light) !important; margin-top: 2px !important; min-height: 14px !important; }
+#bio-root .bio-patient-age-display {
+  font-size: 10px !important;
+  color: var(--slate-light) !important;
+  margin-top: 2px !important;
+  min-height: 14px !important;
+}
+
+/* ---- TABS ---- */
+#bio-root .bio-tabs-wrap {
+  background: var(--white) !important;
+  border-bottom: 2px solid var(--border-light) !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+}
+#bio-root .bio-tabs-wrap::-webkit-scrollbar { display: none !important; }
+#bio-root .bio-tabs {
+  display: flex !important;
+  min-width: max-content !important;
+  padding: 0 12px !important;
+}
+#bio-root .bio-tab {
+  padding: 10px 14px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--slate) !important;
+  cursor: pointer !important;
+  border: none !important;
+  background: none !important;
+  border-bottom: 3px solid transparent !important;
+  white-space: nowrap !important;
+  transition: color 0.15s, border-color 0.15s !important;
+  letter-spacing: 0.01em !important;
+  text-transform: uppercase !important;
+}
+#bio-root .bio-tab:hover { color: var(--navy) !important; }
+#bio-root .bio-tab.active {
+  color: var(--navy) !important;
+  border-bottom-color: var(--navy) !important;
+}
+
+/* ---- SELECTEUR GLOBAL ---- */
+#bio-root .bio-global-config {
+  background: var(--white) !important;
+  padding: 12px 20px !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  display: flex !important;
+  gap: 15px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+}
+#bio-root .bio-sex-group {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+#bio-root .bio-sex-btn {
+  padding: 6px 14px !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  background: var(--white) !important;
+  color: var(--slate) !important;
+  transition: all 0.15s !important;
+}
+#bio-root .bio-sex-btn.active {
+  background: var(--navy) !important;
+  color: var(--white) !important;
+  border-color: var(--navy) !important;
+}
+#bio-root .bio-btn-global {
+  background: #C8102E !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: 0.2s !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  box-shadow: var(--shadow) !important;
+}
+#bio-root .bio-btn-global:hover { background: #9B0C23 !important; transform: translateY(-1px) !important; }
+
+/* ---- PANELS ---- */
+#bio-root .bio-panel {
+  display: none !important;
+  padding: 20px !important;
+  max-width: 900px !important;
+  margin: 0 auto !important;
+}
+#bio-root .bio-panel.active { display: block !important; }
+
+/* ---- SECTION TITLE ---- */
+#bio-root .bio-section-title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--navy) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  margin: 0 0 14px 0 !important;
+  padding-bottom: 6px !important;
+  border-bottom: 2px solid var(--navy-bg) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+#bio-root .bio-section-title::before {
+  content: "\25A0" !important;
+  color: #C8102E !important;
+  font-size: 10px !important;
+}
+
+/* ---- PARAM GRID ---- */
+#bio-root .bio-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+  gap: 12px !important;
+  margin-bottom: 20px !important;
+}
+#bio-root .bio-param-card {
+  background: var(--white) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius) !important;
+  padding: 12px !important;
+  box-shadow: var(--shadow) !important;
+}
+#bio-root .bio-param-label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: var(--slate) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+#bio-root .bio-ref {
+  font-size: 9px !important;
+  font-weight: 400 !important;
+  color: var(--text-muted) !important;
+  font-style: italic !important;
+}
+#bio-root .bio-input-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+#bio-root .bio-input {
+  flex: 1 !important;
+  padding: 7px 9px !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  background: var(--bg) !important;
+  outline: none !important;
+  width: 100% !important;
+  transition: border-color 0.15s !important;
+}
+#bio-root .bio-input:focus {
+  border-color: var(--navy) !important;
+  background: var(--white) !important;
+}
+#bio-root .bio-unit {
+  font-size: 11px !important;
+  color: var(--text-muted) !important;
+  white-space: nowrap !important;
+  min-width: 40px !important;
+}
+
+/* ---- GAUGE BAR ---- */
+#bio-root .bio-gauge-wrap { margin-top: 8px !important; }
+#bio-root .bio-gauge-track {
+  height: 5px !important;
+  border-radius: 10px !important;
+  background: linear-gradient(to right, #3B82F6 0%, #22C55E 40%, #F59E0B 70%, #EF4444 100%) !important;
+  position: relative !important;
+  margin-bottom: 4px !important;
+}
+#bio-root .bio-gauge-cursor {
+  position: absolute !important;
+  top: -3px !important;
+  width: 11px !important;
+  height: 11px !important;
+  border-radius: 50% !important;
+  border: 2px solid var(--white) !important;
+  background: var(--slate) !important;
+  transform: translateX(-50%) !important;
+  transition: left 0.4s cubic-bezier(.4,0,.2,1), background 0.3s !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+  display: none !important;
+}
+
+/* ---- RESULT BADGES ---- */
+#bio-root .bio-result {
+  display: none !important;
+  margin-top: 8px !important;
+  padding: 6px 9px !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  border-left: 3px solid !important;
+}
+#bio-root .r-normal { background: var(--normal-bg) !important; color: var(--normal) !important; border-color: var(--normal) !important; }
+#bio-root .r-low    { background: var(--low-bg) !important;    color: var(--low) !important;    border-color: var(--low) !important; }
+#bio-root .r-high   { background: var(--high-bg) !important;   color: var(--high) !important;   border-color: var(--high) !important; }
+#bio-root .r-critical { background: var(--critical-bg) !important; color: var(--critical) !important; border-color: var(--critical) !important; }
+#bio-root .r-info   { background: var(--navy-bg) !important;   color: var(--navy) !important;   border-color: var(--navy) !important; }
+#bio-root .r-empty  { background: #F8FAFC !important;           color: #4A5568 !important;       border-color: #CBD5E0 !important; }
+
+/* ---- ALERT BOXES ---- */
+#bio-root .bio-alert {
+  padding: 10px 14px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  margin-bottom: 12px !important;
+  border-left: 4px solid !important;
+}
+#bio-root .bio-alert-warn {
+  background: #FFFBEB !important;
+  border-color: var(--high) !important;
+  color: #92400E !important;
+}
+#bio-root .bio-alert-info {
+  background: var(--navy-bg) !important;
+  border-color: var(--navy) !important;
+  color: var(--navy) !important;
+}
+
+/* ---- BUTTONS ---- */
+#bio-root .bio-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 9px 18px !important;
+  background: var(--navy) !important;
+  color: var(--white) !important;
+  border: none !important;
+  border-radius: var(--radius) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  text-transform: uppercase !important;
+  transition: 0.15s !important;
+  margin-top: 12px !important;
+}
+#bio-root .bio-btn:hover { background: var(--navy-light) !important; }
+#bio-root .bio-btn-reset {
+  background: var(--white) !important;
+  color: var(--slate) !important;
+  border: 1.5px solid var(--border) !important;
+}
+#bio-root .bio-btn-reset:hover { background: var(--bg) !important; }
+#bio-root .bio-btn-row {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  margin-top: 14px !important;
+}
+
+/* ---- INTERPRET CARD ---- */
+#bio-root .bio-interpret {
+  background: var(--navy-bg) !important;
+  border: 1px solid #BEE3F8 !important;
+  border-left: 4px solid var(--navy) !important;
+  border-radius: var(--radius) !important;
+  padding: 12px 14px !important;
+  margin-top: 16px !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: var(--navy) !important;
+  display: none !important;
+}
+#bio-root .bio-interpret.visible { display: block !important; }
+#bio-root .bio-interpret strong {
+  display: block !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 6px !important;
+}
+
+/* ---- TABLEAU CŒLIAQUE ---- */
+#bio-root .bio-celiaque-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 12px !important;
+  margin-bottom: 14px !important;
+}
+#bio-root .bio-celiaque-table th {
+  background: var(--navy) !important;
+  color: var(--white) !important;
+  padding: 7px 10px !important;
+  text-align: left !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+}
+#bio-root .bio-celiaque-table td {
+  padding: 7px 10px !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  vertical-align: top !important;
+}
+#bio-root .bio-celiaque-table tr:nth-child(even) td { background: var(--bg) !important; }
+
+/* ---- CAS CLINIQUES ---- */
+#bio-root .bio-case-select {
+  width: 100% !important;
+  padding: 9px 12px !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  font-size: 13px !important;
+  color: var(--text) !important;
+  background: var(--white) !important;
+  margin-bottom: 16px !important;
+  outline: none !important;
+}
+#bio-root .bio-case-card {
+  background: var(--white) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius) !important;
+  padding: 16px !important;
+  box-shadow: var(--shadow) !important;
+  display: none !important;
+}
+#bio-root .bio-case-card.visible { display: block !important; }
+#bio-root .bio-case-header {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid var(--border-light) !important;
+}
+#bio-root .bio-case-age {
+  background: var(--navy) !important;
+  color: var(--white) !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  text-align: center !important;
+  min-width: 60px !important;
+  line-height: 1.2 !important;
+}
+#bio-root .bio-case-age span {
+  display: block !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  opacity: 0.8 !important;
+}
+#bio-root .bio-case-motif {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--navy) !important;
+  margin-bottom: 4px !important;
+}
+#bio-root .bio-case-context {
+  font-size: 12px !important;
+  color: var(--slate) !important;
+  line-height: 1.5 !important;
+}
+#bio-root .bio-case-bio {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+  gap: 8px !important;
+  margin-bottom: 14px !important;
+}
+#bio-root .bio-case-param {
+  background: var(--bg) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: 4px !important;
+  padding: 7px 10px !important;
+}
+#bio-root .bio-case-param-name {
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  color: var(--slate-light) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  margin-bottom: 2px !important;
+}
+#bio-root .bio-case-param-val {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+#bio-root .v-low      { color: var(--low) !important; }
+#bio-root .v-normal   { color: var(--normal) !important; }
+#bio-root .v-high     { color: var(--high) !important; }
+#bio-root .v-critical { color: var(--critical) !important; }
+#bio-root .bio-case-answer { display: none !important; }
+#bio-root .bio-case-answer.visible { display: block !important; }
+#bio-root .bio-sep { height: 1px !important; background: var(--border-light) !important; margin: 18px 0 !important; }
+#bio-root .bio-case-diag {
+  display: inline-block !important;
+  background: var(--navy) !important;
+  color: var(--white) !important;
+  padding: 4px 10px !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+#bio-root .bio-case-section { margin-bottom: 10px !important; }
+#bio-root .bio-case-section-title {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 700 !important;
+  color: var(--navy) !important;
+  margin-bottom: 4px !important;
+}
+#bio-root .bio-case-section p {
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: var(--text) !important;
+  margin: 0 !important;
+}
 
 /* ---- RÉSUMÉ INLINE ---- */
-#bio-root .bio-resume-panel { display: none !important; margin: 0 !important; border-top: 3px solid var(--navy) !important; background: var(--white) !important; }
+#bio-root .bio-resume-panel {
+  display: none !important;
+  margin: 0 !important;
+  border-top: 3px solid var(--navy) !important;
+  background: var(--white) !important;
+}
 #bio-root .bio-resume-panel.visible { display: block !important; }
-#bio-root .bio-resume-header { background: var(--navy) !important; color: var(--white) !important; padding: 14px 20px !important; display: flex !important; align-items: center !important; justify-content: space-between !important; flex-wrap: wrap !important; gap: 10px !important; }
+#bio-root .bio-resume-header {
+  background: var(--navy) !important;
+  color: var(--white) !important;
+  padding: 14px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
 #bio-root .bio-resume-header h2 { margin: 0 !important; font-size: 15px !important; font-weight: 700 !important; }
 #bio-root .bio-resume-header-meta { font-size: 11px !important; color: rgba(255,255,255,0.75) !important; }
 #bio-root .bio-resume-body { padding: 20px !important; max-width: 900px !important; margin: 0 auto !important; }
 #bio-root .bio-resume-section { margin-bottom: 18px !important; }
-#bio-root .bio-resume-section h3 { font-size: 12px !important; font-weight: 700 !important; color: var(--navy) !important; text-transform: uppercase !important; letter-spacing: 0.06em !important; margin: 0 0 8px 0 !important; padding-bottom: 5px !important; border-bottom: 2px solid var(--navy-bg) !important; display: flex !important; align-items: center !important; gap: 6px !important; }
+#bio-root .bio-resume-section h3 {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: var(--navy) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  margin: 0 0 8px 0 !important;
+  padding-bottom: 5px !important;
+  border-bottom: 2px solid var(--navy-bg) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
 #bio-root .bio-resume-section h3::before { content: "\25A0" !important; color: #C8102E !important; font-size: 9px !important; }
 #bio-root .bio-resume-list { margin: 0 !important; padding: 0 !important; list-style: none !important; }
-#bio-root .bio-resume-list li { padding: 5px 0 5px 14px !important; position: relative !important; font-size: 12px !important; border-bottom: 1px solid var(--border-light) !important; line-height: 1.5 !important; }
+#bio-root .bio-resume-list li {
+  padding: 5px 0 5px 14px !important;
+  position: relative !important;
+  font-size: 12px !important;
+  border-bottom: 1px solid var(--border-light) !important;
+  line-height: 1.5 !important;
+}
 #bio-root .bio-resume-list li:last-child { border-bottom: none !important; }
-#bio-root .bio-resume-list li::before { content: "\25B8" !important; position: absolute !important; left: 0 !important; color: #C8102E !important; font-size: 10px !important; top: 6px !important; }
-/* badges de priorité */
-#bio-root .bio-prio { display: inline-block !important; font-size: 9px !important; font-weight: 700 !important; padding: 1px 6px !important; border-radius: 3px !important; margin-right: 6px !important; text-transform: uppercase !important; letter-spacing: 0.04em !important; vertical-align: middle !important; }
+#bio-root .bio-resume-list li::before {
+  content: "\25B8" !important;
+  position: absolute !important;
+  left: 0 !important;
+  color: #C8102E !important;
+  font-size: 10px !important;
+  top: 6px !important;
+}
+#bio-root .bio-prio {
+  display: inline-block !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  padding: 1px 6px !important;
+  border-radius: 3px !important;
+  margin-right: 6px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  vertical-align: middle !important;
+}
 #bio-root .bio-prio.crit { background: var(--critical-bg) !important; color: var(--critical) !important; }
 #bio-root .bio-prio.high { background: var(--high-bg) !important; color: var(--high) !important; }
 #bio-root .bio-prio.watch { background: var(--low-bg) !important; color: var(--low) !important; }
-#bio-root .bio-pattern-box { border-left: 4px solid !important; padding: 10px 12px !important; margin: 8px 0 !important; border-radius: 4px !important; font-size: 12px !important; }
+#bio-root .bio-pattern-box {
+  border-left: 4px solid !important;
+  padding: 10px 12px !important;
+  margin: 8px 0 !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+}
 #bio-root .bio-pattern-box.crit { background: var(--critical-bg) !important; border-color: var(--critical) !important; }
 #bio-root .bio-pattern-box.high { background: var(--high-bg) !important; border-color: var(--high) !important; }
 #bio-root .bio-pattern-box.watch { background: var(--navy-bg) !important; border-color: var(--navy) !important; }
 #bio-root .bio-pattern-box b { color: var(--text) !important; }
-#bio-root .bio-autoimmun { background: #F0FDF4 !important; border-left: 4px solid #166534 !important; padding: 10px 12px !important; margin: 8px 0 !important; border-radius: 4px !important; font-size: 12px !important; }
+#bio-root .bio-autoimmun {
+  background: #F0FDF4 !important;
+  border-left: 4px solid #166534 !important;
+  padding: 10px 12px !important;
+  margin: 8px 0 !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+}
 #bio-root .bio-autoimmun b { color: #166534 !important; }
-#bio-root .bio-resume-footer { padding: 14px 20px !important; background: var(--bg) !important; border-top: 1px solid var(--border-light) !important; display: flex !important; align-items: center !important; gap: 12px !important; flex-wrap: wrap !important; }
-#bio-root .bio-btn-copy { display: inline-flex !important; align-items: center !important; gap: 7px !important; padding: 9px 18px !important; background: var(--navy) !important; color: var(--white) !important; border: none !important; border-radius: var(--radius) !important; font-size: 12px !important; font-weight: 700 !important; cursor: pointer !important; transition: 0.15s !important; }
+#bio-root .bio-resume-footer {
+  padding: 14px 20px !important;
+  background: var(--bg) !important;
+  border-top: 1px solid var(--border-light) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+#bio-root .bio-btn-copy {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 9px 18px !important;
+  background: var(--navy) !important;
+  color: var(--white) !important;
+  border: none !important;
+  border-radius: var(--radius) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: 0.15s !important;
+}
 #bio-root .bio-btn-copy:hover { background: var(--navy-light) !important; }
 #bio-root .bio-btn-copy.copied { background: var(--normal) !important; }
-#bio-root .bio-btn-close-resume { display: inline-flex !important; align-items: center !important; gap: 6px !important; padding: 9px 16px !important; background: var(--white) !important; color: var(--slate) !important; border: 1.5px solid var(--border) !important; border-radius: var(--radius) !important; font-size: 12px !important; font-weight: 600 !important; cursor: pointer !important; transition: 0.15s !important; }
+#bio-root .bio-btn-close-resume {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 9px 16px !important;
+  background: var(--white) !important;
+  color: var(--slate) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: 0.15s !important;
+}
 #bio-root .bio-btn-close-resume:hover { background: var(--bg) !important; }
 #bio-root .bio-copy-notice { font-size: 11px !important; color: var(--normal) !important; display: none !important; }
 #bio-root .bio-copy-notice.visible { display: inline !important; }
 
+/* ---- FOOTER ---- */
+#bio-root .bio-footer {
+  background: var(--white) !important;
+  border-top: 1px solid var(--border-light) !important;
+  padding: 10px 24px !important;
+  font-size: 10px !important;
+  color: var(--text-muted) !important;
+  text-align: center !important;
+  line-height: 1.5 !important;
+}
+
+/* ---- SCROLLBAR MASQUÉ (style app native) ---- */
 html { scrollbar-width: none; }
 body { -ms-overflow-style: none; overflow-y: auto; }
 ::-webkit-scrollbar { display: none; }
-@media (max-width: 600px) { #bio-root .bio-grid { grid-template-columns: 1fr 1fr !important; } }
-@media (max-width: 380px) { #bio-root .bio-grid { grid-template-columns: 1fr !important; } }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 600px) {
+  #bio-root .bio-grid { grid-template-columns: 1fr 1fr !important; }
+  #bio-root .bio-panel { padding: 14px 12px !important; }
+  #bio-root .bio-header { padding: 14px 14px 12px !important; }
+  #bio-root .bio-header h1 { font-size: 15px !important; }
+  #bio-root .bio-case-bio { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 380px) {
+  #bio-root .bio-grid { grid-template-columns: 1fr !important; }
+}
 </style>
 </head>
 <body>
 <div id="bio-root">
 
-<!-- HEADER -->
+<!-- ===== HEADER ===== -->
 <div class="bio-header">
   <div class="bio-header-top">
     <div>
       <h1>Interprétateur de Bilan Biologique</h1>
-      <p class="bio-subtitle">Médecine Générale &amp; Gynécologie-Obstétrique — Normes adultes HAS / KDIGO 2021 / ESC 2021</p>
+      <p class="bio-subtitle">Médecine Générale &amp; Gynécologie-Obstétrique — Normes adultes HAS / KDIGO 2022 / ESC 2021 / ESPGHAN 2020</p>
     </div>
     <span class="bio-badge">Usage Médical</span>
   </div>
-  <p class="bio-disclaimer">Outil d'aide à la décision. Détection de patterns, corrections et priorisation 100% locales (aucune donnée envoyée sur internet). © Dr KARA-ZAITRI M.A.</p>
+  <p class="bio-disclaimer">Outil d'aide à la décision. Détection de patterns, corrections et priorisation 100% locales (aucune donnée transmise). © Dr KARA-ZAITRI M.A.</p>
 </div>
 
-<!-- PANNEAU PATIENT -->
+<!-- ===== PANNEAU PATIENT ===== -->
 <div class="bio-patient-bar">
   <button class="bio-patient-toggle" id="patient-toggle-btn" onclick="togglePatientForm()" aria-expanded="false">
     <span class="pt-arrow">&#9658;</span>
@@ -168,24 +783,25 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   </div>
 </div>
 
-<!-- ONGLETS -->
+<!-- ===== ONGLETS ===== -->
 <div class="bio-tabs-wrap">
   <div class="bio-tabs" role="tablist">
-    <button class="bio-tab active" role="tab" onclick="showPanel('nfs',this)">NFS</button>
+    <button class="bio-tab active" role="tab" onclick="showPanel('nfs',this)">NFS Complète</button>
     <button class="bio-tab" role="tab" onclick="showPanel('inflam',this)">Inflammation</button>
-    <button class="bio-tab" role="tab" onclick="showPanel('martial',this)">Martial</button>
-    <button class="bio-tab" role="tab" onclick="showPanel('glycemie',this)">Glycémie</button>
-    <button class="bio-tab" role="tab" onclick="showPanel('renal',this)">Rénale</button>
-    <button class="bio-tab" role="tab" onclick="showPanel('hepato',this)">Hépatique</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('martial',this)">Bilan Martial</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('glycemie',this)">Glycémie / HbA1c</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('renal',this)">Fonction Rénale</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('hepato',this)">Bilan Hépatique</button>
     <button class="bio-tab" role="tab" onclick="showPanel('hemostase',this)">Hémostase &amp; SAPL</button>
-    <button class="bio-tab" role="tab" onclick="showPanel('lipides',this)">Lipides</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('lipides',this)">Bilan Lipidique</button>
     <button class="bio-tab" role="tab" onclick="showPanel('iono',this)">Ionogramme</button>
-    <button class="bio-tab" role="tab" onclick="showPanel('vitamines',this)">Vitamines</button>
-    <button class="bio-tab" role="tab" onclick="showPanel('celiaque',this)">Cœliaque</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('vitamines',this)">Vitamines B9/B12/D</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('celiaque',this)">Maladie Cœliaque</button>
+    <button class="bio-tab" role="tab" onclick="showPanel('cas',this)">Cas Cliniques</button>
   </div>
 </div>
 
-<!-- SELECTEUR GLOBAL -->
+<!-- ===== SÉLECTEUR GLOBAL SEXE + ANALYSE ===== -->
 <div class="bio-global-config">
   <div class="bio-sex-group">
     <span style="font-size:12px;font-weight:600;color:#4A5568;">Sexe / Statut :</span>
@@ -196,7 +812,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   <button class="bio-btn-global" onclick="runGlobalAnalysis()">&#11088; Analyse Globale du Bilan</button>
 </div>
 
-<!-- ==================== NFS ==================== -->
+<!-- ==================== NFS COMPLÈTE ==================== -->
 <div id="panel-nfs" class="bio-panel active" role="tabpanel">
   <div class="bio-section-title">Série Rouge</div>
   <div class="bio-grid">
@@ -213,12 +829,19 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-result" id="res-vgm"></div>
     </div>
     <div class="bio-param-card">
+      <div class="bio-param-label">TCMH <span class="bio-ref">27–33 pg</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-tcmh" placeholder="--" oninput="evalSimple('tcmh',this.value,27,33,'Hyperchromie','Hypochromie (carence martiale, thalassémie)','Normochromie')"><span class="bio-unit">pg</span></div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-tcmh"></div></div></div>
+      <div class="bio-result" id="res-tcmh"></div>
+    </div>
+    <div class="bio-param-card">
       <div class="bio-param-label">Réticulocytes <span class="bio-ref">25–100 G/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-reticu" placeholder="--" oninput="evalSimple('reticu',this.value,25,100,'Régénérative','Arégénérative','Normale')"><span class="bio-unit">G/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-reticu" placeholder="--" oninput="evalSimple('reticu',this.value,25,100,'Régénérative (hémolyse/saignement)','Arégénérative (centrale)','Régénération normale')"><span class="bio-unit">G/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-reticu"></div></div></div>
       <div class="bio-result" id="res-reticu"></div>
     </div>
   </div>
+
   <div class="bio-section-title">Série Blanche</div>
   <div class="bio-grid">
     <div class="bio-param-card">
@@ -229,23 +852,24 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">PNN <span class="bio-ref">1,8–7,5 G/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-pnn" placeholder="--" oninput="evalSimple('pnn',this.value,1.8,7.5,'Neutrophilie','Neutropénie','PNN normaux')"><span class="bio-unit">G/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-pnn" placeholder="--" oninput="evalPNN(this.value)"><span class="bio-unit">G/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-pnn"></div></div></div>
       <div class="bio-result" id="res-pnn"></div>
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">Lymphocytes <span class="bio-ref">1,0–4,0 G/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-lympho" placeholder="--" oninput="evalSimple('lympho',this.value,1.0,4.0,'Hyperlymphocytose','Lymphopénie','Lymphocytes normaux')"><span class="bio-unit">G/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-lympho" placeholder="--" oninput="evalSimple('lympho',this.value,1.0,4.0,'Hyperlymphocytose (virale, LLC\u2026)','Lymphopénie (immunodépression, corticoïdes\u2026)','Lymphocytes normaux')"><span class="bio-unit">G/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-lympho"></div></div></div>
       <div class="bio-result" id="res-lympho"></div>
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">Éosinophiles <span class="bio-ref">0,05–0,5 G/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-eosino" placeholder="--" oninput="evalSimple('eosino',this.value,0.05,0.5,'Hyperéosinophilie','Éosinopénie','Éosinophiles normaux')"><span class="bio-unit">G/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-eosino" placeholder="--" oninput="evalSimple('eosino',this.value,0.05,0.5,'Hyperéosinophilie (parasitose, allergie, DRESS\u2026)','Éosinopénie','Éosinophiles normaux')"><span class="bio-unit">G/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-eosino"></div></div></div>
       <div class="bio-result" id="res-eosino"></div>
     </div>
   </div>
+
   <div class="bio-section-title">Plaquettes</div>
   <div class="bio-grid">
     <div class="bio-param-card">
@@ -260,7 +884,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 
 <!-- ==================== INFLAMMATION ==================== -->
 <div id="panel-inflam" class="bio-panel" role="tabpanel">
-  <div class="bio-alert bio-alert-info">La VS augmente physiologiquement pendant la grossesse. La CRP est plus spécifique.</div>
+  <div class="bio-alert bio-alert-info">La VS augmente physiologiquement pendant la grossesse. La CRP est plus spécifique de l'inflammation aiguë.</div>
   <div class="bio-grid">
     <div class="bio-param-card">
       <div class="bio-param-label">CRP <span class="bio-ref">&lt; 5 mg/L</span></div>
@@ -280,10 +904,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-result" id="res-fibrino"></div>
     </div>
   </div>
+  <div class="bio-btn-row"><button class="bio-btn bio-btn-reset" onclick="resetPanel('inflam')">&#x21BA; Réinitialiser l'onglet</button></div>
 </div>
 
-<!-- ==================== MARTIAL ==================== -->
+<!-- ==================== BILAN MARTIAL ==================== -->
 <div id="panel-martial" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-info">La carence martiale est la cause la plus fréquente d'anémie. Interpréter ferritine + fer + CS + CRP ensemble. En présence d'inflammation (CRP &gt; 10), la ferritine peut être faussement normale.</div>
   <div class="bio-grid">
     <div class="bio-param-card">
       <div class="bio-param-label">Ferritine <span class="bio-ref" id="ref-ferr">H:20–300 / F:10–150 µg/L</span></div>
@@ -298,15 +924,29 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-result" id="res-fer"></div>
     </div>
     <div class="bio-param-card">
+      <div class="bio-param-label">Transferrine <span class="bio-ref">2,0–3,6 g/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-transf" placeholder="--" oninput="evalSimple('transf',this.value,2.0,3.6,'Abaissée (inflammation, dénutrition)','Élevée (carence martiale)','Transferrine normale')"><span class="bio-unit">g/L</span></div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-transf"></div></div></div>
+      <div class="bio-result" id="res-transf"></div>
+    </div>
+    <div class="bio-param-card">
       <div class="bio-param-label">Coefficient de saturation <span class="bio-ref">20–45 %</span></div>
       <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-cs" placeholder="--" oninput="evalCS(this.value)"><span class="bio-unit">%</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-cs"></div></div></div>
       <div class="bio-result" id="res-cs"></div>
     </div>
   </div>
+  <div class="bio-btn-row">
+    <button class="bio-btn" onclick="synthesizeMartial()">&#x25B6; Interpréter le bilan martial</button>
+    <button class="bio-btn bio-btn-reset" onclick="resetPanel('martial')">&#x21BA; Réinitialiser l'onglet</button>
+  </div>
+  <div id="martial-interpret" class="bio-interpret">
+    <strong>Interprétation bilan martial</strong>
+    <span id="martial-interpret-text"></span>
+  </div>
 </div>
 
-<!-- ==================== GLYCÉMIE ==================== -->
+<!-- ==================== GLYCÉMIE / HBA1C ==================== -->
 <div id="panel-glycemie" class="bio-panel" role="tabpanel">
   <div class="bio-grid">
     <div class="bio-param-card">
@@ -317,7 +957,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">Insulinémie à jeun <span class="bio-ref">2–20 µUI/mL</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-insul" placeholder="--" oninput="evalInsul(this.value)"><span class="bio-unit">µUI/mL</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-insul" placeholder="--" oninput="evalSimple('insul',this.value,2,20,'Hyperinsulinisme (insulinome, SOPK, IR)','Insuffisance sécrétoire','Insulinémie normale'); calcHoma();"><span class="bio-unit">µUI/mL</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-insul"></div></div></div>
       <div class="bio-result" id="res-insul"></div>
     </div>
@@ -332,10 +972,11 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-result" id="res-hba1c"></div>
     </div>
   </div>
-  <div class="bio-alert bio-alert-info" style="margin-top:8px;"><b>Astuce :</b> une glycémie &lt; 3.5 est interprétée en <b>g/L</b> et convertie automatiquement en mmol/L.</div>
+  <div class="bio-alert bio-alert-info"><b>Rappel OMS/HAS :</b> Diabète si glycémie à jeun ≥7,0 mmol/L à 2 reprises, ou HbA1c ≥6,5%. Prédiabète si glycémie 5,6–6,9 mmol/L ou HbA1c 5,7–6,4%. <b>Astuce :</b> une valeur &lt;3,5 est interprétée en g/L et convertie automatiquement.</div>
+  <div class="bio-btn-row"><button class="bio-btn bio-btn-reset" onclick="resetPanel('glycemie')">&#x21BA; Réinitialiser l'onglet</button></div>
 </div>
 
-<!-- ==================== RÉNALE ==================== -->
+<!-- ==================== FONCTION RÉNALE ==================== -->
 <div id="panel-renal" class="bio-panel" role="tabpanel">
   <div class="bio-grid">
     <div class="bio-param-card">
@@ -345,7 +986,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-result" id="res-creat"></div>
     </div>
     <div class="bio-param-card">
-      <div class="bio-param-label">DFGe (CKD-EPI 2021) <span class="bio-ref">≥60 mL/min</span></div>
+      <div class="bio-param-label">DFGe (CKD-EPI 2021) <span class="bio-ref">≥60 mL/min/1,73m²</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px;">
         <input class="bio-input" type="number" step="1" id="ckd-creat" placeholder="Créat µmol/L" style="font-size:11px!important;" oninput="calcCKD()">
         <input class="bio-input" type="number" step="1" id="ckd-age" placeholder="Âge (ans)" style="font-size:11px!important;" oninput="calcCKD()">
@@ -354,7 +995,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">Urée <span class="bio-ref">2,5–7,5 mmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-uree" placeholder="--" oninput="evalSimple('uree',this.value,2.5,7.5,'Hyperurémie','Hypourémie','Urée normale')"><span class="bio-unit">mmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-uree" placeholder="--" oninput="evalSimple('uree',this.value,2.5,7.5,'Hyperurémie (IRA, IRC, déshydratation)','Hypourémie (hépatopathie, grossesse)','Urée normale')"><span class="bio-unit">mmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-uree"></div></div></div>
       <div class="bio-result" id="res-uree"></div>
     </div>
@@ -364,10 +1005,18 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-au"></div></div></div>
       <div class="bio-result" id="res-au"></div>
     </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Microalbuminurie <span class="bio-ref">&lt;30 mg/24h</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-albumin" placeholder="--" oninput="evalMicroalbumin(this.value)"><span class="bio-unit">mg/24h</span></div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-albumin"></div></div></div>
+      <div class="bio-result" id="res-albumin"></div>
+    </div>
   </div>
+  <div class="bio-alert bio-alert-warn"><b>Stades MRC (KDIGO 2022) :</b> G1: DFG ≥90 — G2: 60–89 — G3a: 45–59 — G3b: 30–44 — G4: 15–29 — G5: &lt;15 mL/min/1,73m²</div>
+  <div class="bio-btn-row"><button class="bio-btn bio-btn-reset" onclick="resetPanel('renal')">&#x21BA; Réinitialiser l'onglet</button></div>
 </div>
 
-<!-- ==================== HÉPATIQUE ==================== -->
+<!-- ==================== BILAN HÉPATIQUE ==================== -->
 <div id="panel-hepato" class="bio-panel" role="tabpanel">
   <div class="bio-section-title">Cytolyse</div>
   <div class="bio-grid">
@@ -396,11 +1045,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">Bilirubine totale <span class="bio-ref">&lt; 17 µmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-bili" placeholder="--" oninput="evalSimple('bili',this.value,0,17,'Hyperbilirubinémie','—','Bilirubine normale')"><span class="bio-unit">µmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-bili" placeholder="--" oninput="evalSimple('bili',this.value,0,17,'Hyperbilirubinémie (ictère, hémolyse, cholestase)','—','Bilirubine normale')"><span class="bio-unit">µmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-bili"></div></div></div>
       <div class="bio-result" id="res-bili"></div>
     </div>
   </div>
+  <div class="bio-btn-row"><button class="bio-btn bio-btn-reset" onclick="resetPanel('hepato')">&#x21BA; Réinitialiser l'onglet</button></div>
 </div>
 
 <!-- ==================== HÉMOSTASE & SAPL ==================== -->
@@ -415,7 +1065,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">TCA (Ratio) <span class="bio-ref">&lt; 1.20</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-tca" placeholder="--" oninput="evalSimple('tca',this.value,0.8,1.2,'Allongement du TCA (héparine, SAPL, déficit facteur)','Raccourcissement (état prothrombotique)','TCA normal')"><span class="bio-unit">Ratio</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-tca" placeholder="--" oninput="evalSimple('tca',this.value,0.8,1.2,'Allongement TCA (héparine, SAPL, déficit facteur)','Raccourcissement (état prothrombotique)','TCA normal')"><span class="bio-unit">Ratio</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-tca"></div></div></div>
       <div class="bio-result" id="res-tca"></div>
     </div>
@@ -424,7 +1074,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   <div class="bio-section-title">Maladie Thromboembolique</div>
   <div class="bio-grid">
     <div class="bio-param-card" style="grid-column: span 2;">
-      <div class="bio-param-label">D-dimères <span class="bio-ref" id="ref-ddimeres">&lt; 500 µg/L (ou Âge ×10 si >50 ans)</span></div>
+      <div class="bio-param-label">D-dimères <span class="bio-ref" id="ref-ddimeres">&lt; 500 µg/L (ou Âge ×10 si &gt;50 ans)</span></div>
       <div class="bio-input-row" style="margin-bottom:8px;">
         <input class="bio-input" type="number" step="1" id="val-age-dd" placeholder="Âge (ans)" oninput="evalDdimeres()"><span class="bio-unit">ans</span>
         <input class="bio-input" type="number" step="10" id="val-ddimeres" placeholder="D-dimères" oninput="evalDdimeres()"><span class="bio-unit">µg/L</span>
@@ -434,12 +1084,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   </div>
 
   <div class="bio-section-title">Syndrome des Antiphospholipides (SAPL) — Critères de Sydney 2006</div>
-  <div class="bio-param-card" style="max-width:600px;">
+  <div class="bio-param-card" style="max-width:620px;">
     <div style="font-size:11px;font-weight:700;color:#1A3A5C;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Étape 1 — Anticorps antiphospholipides positifs ?</div>
     <div style="font-size:12px;margin-bottom:12px;">
       <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sapl-la" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>ACC (Anticoagulant Circulant Lupique) positif</span></label>
       <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sapl-acl" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>Anti-cardiolipine IgG ou IgM &gt; 40 GPL/MPL</span></label>
-      <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sapl-b2" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>Anti-β2-GPI IgG ou IgM &gt; 99e percentile</span></label>
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sapl-b2" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>Anti-&#946;2-GPI IgG ou IgM &gt; 99e percentile</span></label>
       <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;"><input type="checkbox" id="sapl-triple" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>Triple positivité (les 3 ci-dessus)</span></label>
     </div>
     <div style="border-top:1px solid #E2E8F0;margin-bottom:12px;"></div>
@@ -449,23 +1099,24 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sapl-thr-vein" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>Thrombose veineuse (TVP, embolie pulmonaire…)</span></label>
       <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sapl-obs1" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>Mort fœtale inexpliquée après 10 SA</span></label>
       <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="sapl-obs2" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>Prématurité &lt; 34 SA pour pré-éclampsie sévère ou RCIU sévère</span></label>
-      <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;"><input type="checkbox" id="sapl-obs3" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;"><span>≥ 3 fausses couches inexpliquées consécutives avant 10 SA</span></label>
+      <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;"><input type="checkbox" id="sapl-obs3" onchange="evalSAPL()" style="margin-top:2px;flex-shrink:0;">&ge; 3 fausses couches inexpliquées consécutives avant 10 SA</label>
     </div>
     <div id="res-sapl" class="bio-result" style="display:none;"></div>
   </div>
+  <div class="bio-btn-row"><button class="bio-btn bio-btn-reset" onclick="resetPanel('hemostase')">&#x21BA; Réinitialiser l'onglet</button></div>
 </div>
 
-<!-- ==================== LIPIDES ==================== -->
+<!-- ==================== BILAN LIPIDIQUE ==================== -->
 <div id="panel-lipides" class="bio-panel" role="tabpanel">
   <div class="bio-grid">
     <div class="bio-param-card">
       <div class="bio-param-label">Cholestérol total <span class="bio-ref">&lt;5,0 mmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-ct" placeholder="--" oninput="evalSimple('ct',this.value,0,5.0,'Hypercholestérolémie','Hypocholestérolémie','Cholestérol normal'); updateRatio();"><span class="bio-unit">mmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-ct" placeholder="--" oninput="evalSimple('ct',this.value,0,5.0,'Hypercholestérolémie','Hypocholestérolémie (malabsorption, hépatopathie)','Cholestérol normal'); updateRatio();"><span class="bio-unit">mmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-ct"></div></div></div>
       <div class="bio-result" id="res-ct"></div>
     </div>
     <div class="bio-param-card">
-      <div class="bio-param-label">LDL-c <span class="bio-ref">Risque faible &lt;4,1</span></div>
+      <div class="bio-param-label">LDL-c <span class="bio-ref">Risque faible &lt;4,1 mmol/L</span></div>
       <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-ldl" placeholder="--" oninput="evalLDL(this.value)"><span class="bio-unit">mmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-ldl"></div></div></div>
       <div class="bio-result" id="res-ldl"></div>
@@ -483,10 +1134,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-result" id="res-tg"></div>
     </div>
     <div class="bio-param-card">
-      <div class="bio-param-label">Ratio CT/HDL <span class="bio-ref">&lt;4,5 (CV)</span></div>
+      <div class="bio-param-label">Ratio CT/HDL <span class="bio-ref">&lt;4,5 (risque CV)</span></div>
       <div class="bio-result r-empty" id="res-ratio" style="display:block!important; margin-top:14px;">Renseignez CT et HDL</div>
     </div>
   </div>
+  <div class="bio-alert bio-alert-info"><b>Cibles LDL-c (ESC 2021) :</b> Risque très élevé (ATCD CV, DT2 + atteinte organe) : &lt;1,4 mmol/L — Risque élevé : &lt;1,8 — Risque modéré : &lt;2,6 — Risque faible : &lt;3,0 mmol/L.</div>
+  <div class="bio-btn-row"><button class="bio-btn bio-btn-reset" onclick="resetPanel('lipides')">&#x21BA; Réinitialiser l'onglet</button></div>
 </div>
 
 <!-- ==================== IONOGRAMME ==================== -->
@@ -506,13 +1159,13 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">Chlorémie <span class="bio-ref">98–107 mmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-cl" placeholder="--" oninput="evalSimple('cl',this.value,98,107,'Hyperchlorémie','Hypochlorémie','Chlore normal'); calcTA();"><span class="bio-unit">mmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-cl" placeholder="--" oninput="evalSimple('cl',this.value,98,107,'Hyperchlorémie (acidose métab., déshydrat.)','Hypochlorémie (vomissements, alcalose)','Chlore normal'); calcTA();"><span class="bio-unit">mmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-cl"></div></div></div>
       <div class="bio-result" id="res-cl"></div>
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">Bicarbonates <span class="bio-ref">22–29 mmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-hco3" placeholder="--" oninput="evalSimple('hco3',this.value,22,29,'Alcalose métabolique','Acidose métabolique','Bicarbonates normaux'); calcTA();"><span class="bio-unit">mmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-hco3" placeholder="--" oninput="evalSimple('hco3',this.value,22,29,'Alcalose métabolique (vomissements, diurétiques)','Acidose métabolique (IR, acidocétose, diarrhées)','Bicarbonates normaux'); calcTA();"><span class="bio-unit">mmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-hco3"></div></div></div>
       <div class="bio-result" id="res-hco3"></div>
     </div>
@@ -529,19 +1182,28 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <div class="bio-param-card">
       <div class="bio-param-label">Phosphorémie <span class="bio-ref">0,80–1,45 mmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-phos" placeholder="--" oninput="evalSimple('phos',this.value,0.80,1.45,'Hyperphosphorémie','Hypophosphorémie','Phosphore normal')"><span class="bio-unit">mmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-phos" placeholder="--" oninput="evalSimple('phos',this.value,0.80,1.45,'Hyperphosphorémie (IR, hypoparathyroïdie)','Hypophosphorémie (malnutrition, syndrome renutrition)','Phosphore normal')"><span class="bio-unit">mmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-phos"></div></div></div>
       <div class="bio-result" id="res-phos"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Magnésémie <span class="bio-ref">0,75–1,05 mmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-mg" placeholder="--" oninput="evalSimple('mg',this.value,0.75,1.05,'Hypermagnésémie (IR, apports excessifs)','Hypomagnésémie (alcoolisme, IPP, diarrhées chroniques)','Magnésium normal')"><span class="bio-unit">mmol/L</span></div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-mg"></div></div></div>
+      <div class="bio-result" id="res-mg"></div>
     </div>
   </div>
   <div class="bio-param-card" style="max-width:340px;margin-bottom:14px;">
     <div class="bio-param-label">Trou anionique (calculé) <span class="bio-ref">Normal : 8–16 mmol/L</span></div>
-    <div class="bio-result r-empty" id="res-ta" style="display:block!important; margin-top:14px;">Renseignez Na, K, Cl, HCO₃</div>
+    <div class="bio-result r-empty" id="res-ta" style="display:block!important; margin-top:14px;">Renseignez Na, K, Cl, HCO&#8323;</div>
   </div>
+  <div class="bio-btn-row"><button class="bio-btn bio-btn-reset" onclick="resetPanel('iono')">&#x21BA; Réinitialiser l'onglet</button></div>
 </div>
 
-<!-- ==================== VITAMINES ==================== -->
+<!-- ==================== VITAMINES B9/B12/D ==================== -->
 <div id="panel-vitamines" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-warn">Les carences en B9 et B12 sont souvent associées. Une macrocytose sans anémie doit toujours faire doser B9 ET B12. L'homocystéine et l'AMM sont des marqueurs fonctionnels plus sensibles que les taux sériques.</div>
+
   <div class="bio-section-title">Vitamine D (25-OH-D3)</div>
   <div class="bio-grid">
     <div class="bio-param-card">
@@ -551,26 +1213,121 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-result" id="res-vitd"></div>
     </div>
   </div>
-  <div class="bio-section-title">Vitamines B9 &amp; B12</div>
+
+  <div class="bio-section-title">Vitamine B9 (Folates)</div>
   <div class="bio-grid">
     <div class="bio-param-card">
       <div class="bio-param-label">Folates sériques (B9) <span class="bio-ref">5–30 nmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-b9s" placeholder="--" oninput="evalSimple('b9s',this.value,5,30,'Élevé','Carence en folates','Folates normaux')"><span class="bio-unit">nmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-b9s" placeholder="--" oninput="evalB9S(this.value)"><span class="bio-unit">nmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-b9s"></div></div></div>
       <div class="bio-result" id="res-b9s"></div>
     </div>
     <div class="bio-param-card">
+      <div class="bio-param-label">Folates érythrocytaires <span class="bio-ref">360–1400 nmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-b9e" placeholder="--" oninput="evalSimple('b9e',this.value,360,1400,'Limite haute','Carence sévère en folates (reflet 3 derniers mois)','Réserves en folates normales')"><span class="bio-unit">nmol/L</span></div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-b9e"></div></div></div>
+      <div class="bio-result" id="res-b9e"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Homocystéine <span class="bio-ref">&lt;15 µmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.1" id="val-homo" placeholder="--" oninput="evalHomo(this.value)"><span class="bio-unit">µmol/L</span></div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-homo"></div></div></div>
+      <div class="bio-result" id="res-homo"></div>
+    </div>
+  </div>
+
+  <div class="bio-section-title">Vitamine B12 (Cobalamine)</div>
+  <div class="bio-grid">
+    <div class="bio-param-card">
       <div class="bio-param-label">Vitamine B12 <span class="bio-ref">148–740 pmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-b12" placeholder="--" oninput="evalSimple('b12',this.value,148,740,'Élevée','Carence en B12','B12 normale')"><span class="bio-unit">pmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-b12" placeholder="--" oninput="evalB12(this.value)"><span class="bio-unit">pmol/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-b12"></div></div></div>
       <div class="bio-result" id="res-b12"></div>
     </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Acide méthylmalonique (AMM) <span class="bio-ref">&lt;270 nmol/L</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-amm" placeholder="--" oninput="evalSimple('amm',this.value,0,270,'Carence fonctionnelle en B12 (même si taux sérique normal)','—','AMM normal')"><span class="bio-unit">nmol/L</span></div>
+      <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-amm"></div></div></div>
+      <div class="bio-result" id="res-amm"></div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">Ac. anti-Facteur Intrinsèque <span class="bio-ref">Négatif</span></div>
+      <div style="margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;">
+          <input type="checkbox" id="val-afi" onchange="evalAFI()"> Positif (Maladie de Biermer)
+        </label>
+        <div class="bio-result" id="res-afi"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bio-btn-row">
+    <button class="bio-btn" onclick="synthesizeVit()">&#x25B6; Analyser B9 / B12</button>
+    <button class="bio-btn bio-btn-reset" onclick="resetPanel('vitamines')">&#x21BA; Réinitialiser l'onglet</button>
+  </div>
+  <div id="vit-interpret" class="bio-interpret">
+    <strong>Orientation diagnostique B9 / B12</strong>
+    <span id="vit-interpret-text"></span>
   </div>
 </div>
 
-<!-- ==================== CŒLIAQUE ==================== -->
+<!-- ==================== MALADIE CŒLIAQUE ==================== -->
 <div id="panel-celiaque" class="bio-panel" role="tabpanel">
-  <div class="bio-section-title">Interprétation rapide (IgA)</div>
+  <div class="bio-alert bio-alert-info">
+    Selon les recommandations ESPGHAN 2020 et HAS 2024 : le dépistage repose sur les <b>IgA anti-transglutaminase tissulaire de type 2 (IgA anti-TG2)</b>, couplé au dosage des IgA totales pour détecter un déficit sélectif.
+  </div>
+
+  <div class="bio-section-title">Tableau des marqueurs sérologiques</div>
+  <table class="bio-celiaque-table">
+    <thead>
+      <tr>
+        <th>Marqueur</th>
+        <th>Classe</th>
+        <th>Seuil positivité</th>
+        <th>Sensibilité / Spécificité</th>
+        <th>Remarques</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>IgA anti-TG2</b></td>
+        <td>IgA</td>
+        <td>&gt;10 UI/mL (×10 LSN = diagnostic sans biopsie possible)</td>
+        <td>95% / 97%</td>
+        <td><b>1er test recommandé (HAS 2024)</b></td>
+      </tr>
+      <tr>
+        <td>IgG anti-TG2</td>
+        <td>IgG</td>
+        <td>&gt;10 UI/mL</td>
+        <td>80% / 95%</td>
+        <td>Si déficit IgA sélectif</td>
+      </tr>
+      <tr>
+        <td>IgA anti-endomysium (EMA)</td>
+        <td>IgA</td>
+        <td>Positif / Négatif</td>
+        <td>90% / 99%</td>
+        <td>Confirmation si IgA anti-TG2 entre ×3 et ×10 LSN</td>
+      </tr>
+      <tr>
+        <td>IgG DGP (gliadine déamidée)</td>
+        <td>IgG</td>
+        <td>&gt;10 UI/mL</td>
+        <td>88% / 95%</td>
+        <td>Enfant &lt;2 ans ou déficit IgA</td>
+      </tr>
+      <tr>
+        <td>IgA totales</td>
+        <td>—</td>
+        <td>&gt;0,07 g/L</td>
+        <td>—</td>
+        <td>Toujours doser pour interpréter les IgA</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="bio-section-title">Interprétation rapide</div>
   <div class="bio-grid">
     <div class="bio-param-card">
       <div class="bio-param-label">IgA anti-TG2 <span class="bio-ref">LSN = 10 UI/mL</span></div>
@@ -582,10 +1339,50 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-iga-tot" placeholder="--" oninput="evalIgATot(this.value)"><span class="bio-unit">g/L</span></div>
       <div class="bio-result" id="res-iga-tot"></div>
     </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">IgA EMA</div>
+      <div style="margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;margin-bottom:4px;"><input type="radio" name="ema" value="pos" onchange="evalEMA('pos')"> Positif</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;"><input type="radio" name="ema" value="neg" onchange="evalEMA('neg')"> Négatif</label>
+        <div class="bio-result" id="res-ema"></div>
+      </div>
+    </div>
+    <div class="bio-param-card">
+      <div class="bio-param-label">HLA DQ2 / DQ8 <span class="bio-ref">(test génétique)</span></div>
+      <div style="margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;margin-bottom:4px;"><input type="radio" name="hla" value="pos" onchange="evalHLA('pos')"> DQ2 ou DQ8 présent</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;"><input type="radio" name="hla" value="neg" onchange="evalHLA('neg')"> Absent</label>
+        <div class="bio-result" id="res-hla"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bio-btn-row">
+    <button class="bio-btn" onclick="synthesizeCeliaque()">&#x25B6; Interpréter la sérologie</button>
+    <button class="bio-btn bio-btn-reset" onclick="resetPanel('celiaque')">&#x21BA; Réinitialiser l'onglet</button>
+  </div>
+  <div id="celiaque-interpret" class="bio-interpret">
+    <strong>Interprétation Maladie Cœliaque</strong>
+    <span id="celiaque-interpret-text"></span>
   </div>
 </div>
 
-<!-- ==================== RÉSUMÉ ==================== -->
+<!-- ==================== CAS CLINIQUES ==================== -->
+<div id="panel-cas" class="bio-panel" role="tabpanel">
+  <div class="bio-alert bio-alert-info">Chaque cas clinique est conçu pour tester votre interprétation biologique avant de révéler le diagnostic et la conduite à tenir.</div>
+  <select class="bio-case-select" onchange="loadCase(this.value)">
+    <option value="">— Sélectionner un cas clinique —</option>
+    <option value="1">Cas 1 — Femme 28 ans, fatigue et dyspnée d'effort</option>
+    <option value="2">Cas 2 — Homme 55 ans, découverte fortuite hypercholestérolémie</option>
+    <option value="3">Cas 3 — Femme 45 ans, diarrhées chroniques et perte de poids</option>
+    <option value="4">Cas 4 — Homme 68 ans, insuffisance rénale progressive</option>
+    <option value="5">Cas 5 — Femme 34 ans, macrocytose asymptomatique</option>
+    <option value="6">Cas 6 — Enfant 8 ans, retard de croissance et anémie</option>
+  </select>
+  <div id="case-container"></div>
+</div>
+
+<!-- ===== RÉSUMÉ ANALYSE GLOBALE ===== -->
 <div id="bio-resume-panel" class="bio-resume-panel">
   <div class="bio-resume-header">
     <div>
@@ -607,560 +1404,1074 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   </div>
 </div>
 
+<!-- ===== FOOTER ===== -->
+<div class="bio-footer">
+  Dr KARA-ZAITRI M.A. — Gynécologue-Obstétricien, Tlemcen (Algérie) &nbsp;|&nbsp; Références : HAS 2024, SFBC, ESC 2021, KDIGO 2022, ESPGHAN 2020 &nbsp;|&nbsp;
+  Outil réservé aux professionnels de santé. Valeurs indicatives à corréler aux normes du laboratoire et au contexte clinique.
+</div>
+
 </div><!-- end #bio-root -->
 
 <script>
 (function() {
-let currentSex = 'M';
+'use strict';
 
-/* ===== NAVIGATION ===== */
-window.showPanel = (id, btn) => {
-  document.querySelectorAll('#bio-root .bio-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('#bio-root .bio-tab').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById('panel-' + id);
+/* ===================================================
+   ÉTAT GLOBAL
+   =================================================== */
+var currentSex = 'M';
+
+var CASES = {
+  '1': {
+    age: 28, sexLabel: 'ans \u2014 F', motif: 'Fatigue intense, dyspn\u00e9e d\'effort depuis 3 mois',
+    context: 'Femme en \u00e2ge de procr\u00e9er, r\u00e8gles abondantes (m\u00e9norragies depuis 6 mois), v\u00e9g\u00e9tarienne stricte depuis 2 ans. Pas d\'ant\u00e9c\u00e9dent notable.',
+    params: [
+      {n:'Hb', v:'7,8 g/dL', c:'v-critical'},{n:'VGM', v:'68 fL', c:'v-low'},
+      {n:'TCMH', v:'21 pg', c:'v-low'},{n:'Ferritine', v:'4 \u00b5g/L', c:'v-critical'},
+      {n:'Fer s\u00e9rique', v:'5 \u00b5mol/L', c:'v-low'},{n:'CS transf.', v:'8 %', c:'v-low'},
+      {n:'R\u00e9ticulocytes', v:'18 G/L', c:'v-low'},{n:'CRP', v:'2 mg/L', c:'v-normal'}
+    ],
+    diag: 'An\u00e9mie ferriprive s\u00e9v\u00e8re microcytaire ar\u00e9g\u00e9n\u00e9rative',
+    orient: 'Le tableau est caract\u00e9ristique : an\u00e9mie microcytaire hypochrome, ferritine effondr\u00e9e, fer s\u00e9rique bas, coefficient de saturation abaiss\u00e9, r\u00e9ticulocytes bas (ar\u00e9g\u00e9n\u00e9rative). L\'absence de syndrome inflammatoire (CRP normale) confirme que la ferritine basse refl\u00e8te une carence vraie.',
+    conduite: 'Bilan gyn\u00e9cologique (hystéroscopie pour m\u00e9norragies). Suppl\u00e9ment en fer per os (200 mg/j de fer \u00e9l\u00e9ment, 3 mois). Contr\u00f4le NFS + ferritine \u00e0 3 mois. Discuter suppl\u00e9mentation B12 (r\u00e9gime v\u00e9g\u00e9tarien).'
+  },
+  '2': {
+    age: 55, sexLabel: 'ans \u2014 H', motif: 'Bilan lipidique de contr\u00f4le \u2014 diab\u00e8te type 2 sous metformine',
+    context: 'HTA trait\u00e9e (amlodipine), DT2 diagnostiqu\u00e9 il y a 3 ans. Fumeur 20 PA. IMC 29,5. Pas d\'ATCD cardiovasculaire.',
+    params: [
+      {n:'CT', v:'6,2 mmol/L', c:'v-high'},{n:'LDL-c', v:'4,1 mmol/L', c:'v-high'},
+      {n:'HDL-c', v:'0,9 mmol/L', c:'v-low'},{n:'TG', v:'2,8 mmol/L', c:'v-high'},
+      {n:'HbA1c', v:'7,8 %', c:'v-high'},{n:'Cr\u00e9atinine', v:'88 \u00b5mol/L', c:'v-normal'},
+      {n:'Microalb.', v:'42 mg/24h', c:'v-high'},{n:'CRP', v:'8 mg/L', c:'v-high'}
+    ],
+    diag: 'Dyslipid\u00e9mie mixte \u2014 Risque CV tr\u00e8s \u00e9lev\u00e9 (DT2 + HTA + tabac + microalbuminurie)',
+    orient: 'Patient en risque CV tr\u00e8s \u00e9lev\u00e9 (DT2 avec atteinte r\u00e9nale pr\u00e9coce, HTA, tabagisme). LDL-c 4,1 mmol/L : cible ESC 2021 pour ce profil = <1,4 mmol/L. Dyslip\u00e9mie mixte ath\u00e9rog\u00e8ne (hypertriglycérid\u00e9mie + HDL bas). Microalbuminurie (42 mg/24h) = n\u00e9phropathie d\u00e9butante stade G2A2.',
+    conduite: 'Statine haute intensit\u00e9 (rosuvastatine 20\u201340 mg/j). Si LDL non atteint \u00e0 3 mois : \u00e9z\u00e9timibe ou inhibiteur PCSK9. Optimisation glyc\u00e9mique. Arr\u00eat tabac. Contr\u00f4le microalbuminurie \u00e0 6 mois.'
+  },
+  '3': {
+    age: 45, sexLabel: 'ans \u2014 F', motif: 'Diarrh\u00e9es chroniques, perte de poids 8 kg en 4 mois, asth\u00e9nie',
+    context: 'Femme sans ant\u00e9c\u00e9dent. Douleurs abdominales postprandiales depuis 8 mois. Dermatite herp\u00e9tiforme prurigineuse sur les coudes.',
+    params: [
+      {n:'Hb', v:'10,2 g/dL', c:'v-low'},{n:'VGM', v:'109 fL', c:'v-high'},
+      {n:'Ferritine', v:'6 \u00b5g/L', c:'v-critical'},{n:'B9 s\u00e9rique', v:'2,8 nmol/L', c:'v-critical'},
+      {n:'B12', v:'165 pmol/L', c:'v-normal'},{n:'IgA anti-TG2', v:'148 UI/mL', c:'v-critical'},
+      {n:'IgA totales', v:'2,4 g/L', c:'v-normal'},{n:'CRP', v:'12 mg/L', c:'v-high'}
+    ],
+    diag: 'Maladie c\u0153liaque compliqu\u00e9e \u2014 malabsorption s\u00e9v\u00e8re (carence martiale + folates)',
+    orient: 'IgA anti-TG2 massivement \u00e9lev\u00e9es (\u00d714,8 LSN) avec IgA totales normales = diagnostic de maladie c\u0153liaque tr\u00e8s probable sans biopsie (ESPGHAN 2020 : seuil \u00d710 LSN). An\u00e9mie mixte macrocytaire (carence folates) + microcytaire (carence fer) : VGM paradoxalement haut. La dermatite herp\u00e9tiforme est pathognomonique.',
+    conduite: 'R\u00e9gime sans gluten strict et d\u00e9finitif. Suppl\u00e9mentation fer + acide folique. Biopsie duod\u00e9nale (Marsh) pour stade. Contr\u00f4le IgA anti-TG2 \u00e0 6 mois. D\u00e9pistage familial au 1er degr\u00e9.'
+  },
+  '4': {
+    age: 68, sexLabel: 'ans \u2014 H', motif: 'Suivi IRC \u2014 bilan trimestriel',
+    context: 'DT2 depuis 15 ans sous insulinoth\u00e9rapie, HTA, dyslipid\u00e9mie. Cr\u00e9atinine en hausse progressive depuis 2 ans.',
+    params: [
+      {n:'Cr\u00e9atinine', v:'198 \u00b5mol/L', c:'v-high'},{n:'DFGe', v:'28 mL/min', c:'v-critical'},
+      {n:'Ur\u00e9e', v:'18 mmol/L', c:'v-high'},{n:'K\u207a', v:'5,6 mmol/L', c:'v-critical'},
+      {n:'HCO\u2083\u207b', v:'17 mmol/L', c:'v-critical'},{n:'Hb', v:'9,6 g/dL', c:'v-low'},
+      {n:'Ferritine', v:'620 \u00b5g/L', c:'v-high'},{n:'PTH', v:'198 pg/mL', c:'v-high'}
+    ],
+    diag: 'IRC stade G4 (KDIGO) \u2014 acidose m\u00e9tabolique, hyperkali\u00e9mie, an\u00e9mie r\u00e9nale, hyperparathyro\u00efdie secondaire',
+    orient: 'DFGe \u00e0 28 mL/min = MRC stade G4. Complications : acidose m\u00e9tabolique (HCO\u2083 bas), hyperkali\u00e9mie (ECG indispensable), an\u00e9mie normochrome normocytaire (d\u00e9ficit EPO \u2014 ferritine \u00e9lev\u00e9e par inflammation, non surcharge), hyperparathyro\u00efdie secondaire (PTH \u00d74 N).',
+    conduite: 'Avis n\u00e9phrologique urgent. Bicarbonate per os. R\u00e9gime hypokali\u00e9miant. EPO-stimulant si Hb <10 g/dL. Correction vitamine D native. Pr\u00e9paration acc\u00e8s vasculaire pour dialyse anticip\u00e9e (DFGe <15).'
+  },
+  '5': {
+    age: 34, sexLabel: 'ans \u2014 F', motif: 'Macrocytose d\u00e9couverte fortuitement, pas de sympt\u00f4me neurologique',
+    context: 'V\u00e9g\u00e9talienne stricte depuis 5 ans. Sous IPP depuis 1 an pour RGO. Pas d\'alcoolisme.',
+    params: [
+      {n:'Hb', v:'12,8 g/dL', c:'v-normal'},{n:'VGM', v:'112 fL', c:'v-high'},
+      {n:'B12 s\u00e9rique', v:'138 pmol/L', c:'v-low'},{n:'Folates s\u00e9r.', v:'12 nmol/L', c:'v-normal'},
+      {n:'AMM', v:'410 nmol/L', c:'v-high'},{n:'Homocyst\u00e9ine', v:'22 \u00b5mol/L', c:'v-high'},
+      {n:'Anti-FI', v:'N\u00e9gatif', c:'v-normal'},{n:'IgA anti-TG2', v:'4 UI/mL', c:'v-normal'}
+    ],
+    diag: 'Carence fonctionnelle en B12 (v\u00e9g\u00e9talisme + IPP) sans an\u00e9mie ni atteinte neurologique',
+    orient: 'B12 s\u00e9rique basse-normale mais AMM \u00e9lev\u00e9 et homocyst\u00e9ine augment\u00e9e \u2192 carence fonctionnelle av\u00e9r\u00e9e (marqueurs fonctionnels plus sensibles). Pas de Biermer (anti-FI n\u00e9gatifs). IPP = facteur aggravant (r\u00e9duction absorption B12 gastrique). Folates normaux : macrocytose attribuable \u00e0 la carence B12.',
+    conduite: 'Suppl\u00e9mentation B12 orale haute dose (1000 \u00b5g/j) ou IM mensuelle. R\u00e9\u00e9valuation neurologique. Contr\u00f4le B12 + AMM + homocyst\u00e9ine \u00e0 3 mois. Information alimentation (sources B12 si maintien v\u00e9g\u00e9talisme).'
+  },
+  '6': {
+    age: 8, sexLabel: 'ans \u2014 Enfant', motif: 'Retard de croissance, ballonnements, diarrh\u00e9es depuis 18 mois',
+    context: 'Enfant sans ant\u00e9c\u00e9dent. Courbe de poids en cassure depuis 2 ans. Irritabilit\u00e9, fatigue scolaire. Parents d\'origine maghr\u00e9bine, alimentation mixte (p\u00e2tes, pain).',
+    params: [
+      {n:'Hb', v:'9,4 g/dL', c:'v-critical'},{n:'VGM', v:'73 fL', c:'v-low'},
+      {n:'Ferritine', v:'7 \u00b5g/L', c:'v-critical'},{n:'IgA anti-TG2', v:'112 UI/mL', c:'v-critical'},
+      {n:'IgA totales', v:'1,1 g/L', c:'v-normal'},{n:'EMA IgA', v:'Positif', c:'v-high'},
+      {n:'Albumine', v:'32 g/L', c:'v-low'},{n:'B9', v:'3,2 nmol/L', c:'v-critical'}
+    ],
+    diag: 'Maladie c\u0153liaque p\u00e9diatrique \u2014 malabsorption s\u00e9v\u00e8re (crit\u00e8res ESPGHAN sans biopsie)',
+    orient: 'IgA anti-TG2 \u00d711,2 LSN + EMA positifs + IgA totales normales = diagnostic c\u0153liaque confirm\u00e9 sans biopsie obligatoire (ESPGHAN 2020). Malabsorption s\u00e9v\u00e8re : an\u00e9mie ferriprive, hypoalbuminurie, carence en folates. Retard staturo-pond\u00e9ral directement li\u00e9. Forme p\u00e9diatrique typique.',
+    conduite: 'R\u00e9gime sans gluten strict imm\u00e9diat. Suppl\u00e9mentation fer + folates + vitamines liposolubles. Avis gastro-p\u00e9diatrique. Suivi nutritionnel trimestriel. D\u00e9pistage familial. Contr\u00f4le s\u00e9rologique \u00e0 6 mois et 12 mois.'
+  }
+};
+
+/* ===================================================
+   NAVIGATION
+   =================================================== */
+window.showPanel = function(id, btn) {
+  document.querySelectorAll('#bio-root .bio-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('#bio-root .bio-tab').forEach(function(b){ b.classList.remove('active'); });
+  var el = document.getElementById('panel-' + id);
   if (el) el.classList.add('active');
   if (btn) btn.classList.add('active');
 };
 
-/* ===== SEXE ===== */
-window.setSex = (s) => {
+/* ===================================================
+   SEXE
+   =================================================== */
+window.setSex = function(s) {
   currentSex = s;
-  ['m','f','g'].forEach(x => { const b = document.getElementById('sex-' + x); if (b) b.classList.toggle('active', x.toUpperCase() === s); });
-  const refs = {
-    'ref-hb': { M:'H: 13–17,5 g/dL', F:'F: 12–16 g/dL', G:'Gros.: >11 g/dL' },
-    'ref-ferr': { M:'H: 20–300 µg/L', F:'F: 10–150 µg/L', G:'Gros.: ≥30 µg/L' },
-    'ref-creat': { M:'H: 62–115 µmol/L', F:'F: 44–97 µmol/L', G:'Gros.: diminution physio' },
-    'ref-au': { M:'H: 180–420 µmol/L', F:'F: 150–360 µmol/L', G:'Gros.: augmente T3' },
-    'ref-hdl': { M:'H: >1,0 mmol/L', F:'F: >1,2 mmol/L', G:'F: >1,2 mmol/L' },
-    'ref-plt': { M:'150–400 G/L', F:'150–400 G/L', G:'Gros.: baisse T3 possible' },
-    'ref-vs': { M:'H: <15 mm/h', F:'F: <20 mm/h', G:"Gros.: jusqu'à 50 mm/h" },
-    'ref-asat': { M:'H: <40 UI/L', F:'F: <32 UI/L', G:'F: <32 UI/L' },
-    'ref-alat': { M:'H: <41 UI/L', F:'F: <33 UI/L', G:'F: <33 UI/L' },
-    'ref-ggt': { M:'H: <60 UI/L', F:'F: <40 UI/L', G:'Gros.: <40' },
-    'ref-pal': { M:'40–120 UI/L', F:'40–120 UI/L', G:'Gros.: augmente (×2)' },
-    'ref-fibrino': { M:'2–4 g/L', F:'2–4 g/L', G:"Gros.: jusqu'à 6 g/L" },
-    'ref-ddimeres': { M:'< 500 ou Âge×10', F:'< 500 ou Âge×10', G:'Gros.: T1<750, T2<1000, T3<1500' }
+  document.getElementById('sex-m').classList.toggle('active', s==='M');
+  document.getElementById('sex-f').classList.toggle('active', s==='F');
+  document.getElementById('sex-g').classList.toggle('active', s==='G');
+
+  var refs = {
+    'ref-hb':     {M:'H: 13\u201317,5 g/dL', F:'F: 12\u201316 g/dL',         G:'Gros.: >11 g/dL'},
+    'ref-ferr':   {M:'H: 20\u2013300 \u00b5g/L', F:'F: 10\u2013150 \u00b5g/L', G:'Gros.: \u226530 \u00b5g/L'},
+    'ref-creat':  {M:'H: 62\u2013115 \u00b5mol/L', F:'F: 44\u201397 \u00b5mol/L', G:'Gros.: diminution physio'},
+    'ref-au':     {M:'H: 180\u2013420 \u00b5mol/L', F:'F: 150\u2013360 \u00b5mol/L', G:'Gros.: augmente T3'},
+    'ref-hdl':    {M:'H: >1,0 mmol/L', F:'F: >1,2 mmol/L',              G:'F: >1,2 mmol/L'},
+    'ref-plt':    {M:'150\u2013400 G/L', F:'150\u2013400 G/L',             G:'Gros.: baisse T3 possible'},
+    'ref-vs':     {M:'H: <15 mm/h', F:'F: <20 mm/h',                    G:"Gros.: jusqu'\u00e0 50 mm/h"},
+    'ref-asat':   {M:'H: <40 UI/L', F:'F: <32 UI/L',                    G:'F: <32 UI/L'},
+    'ref-alat':   {M:'H: <41 UI/L', F:'F: <33 UI/L',                    G:'F: <33 UI/L'},
+    'ref-ggt':    {M:'H: <60 UI/L', F:'F: <40 UI/L',                    G:'Gros.: <40'},
+    'ref-pal':    {M:'40\u2013120 UI/L', F:'40\u2013120 UI/L',            G:'Gros.: augmente (\u00d72)'},
+    'ref-fibrino':{M:'2\u20134 g/L', F:'2\u20134 g/L',                   G:"Gros.: jusqu'\u00e0 6 g/L"},
+    'ref-ddimeres':{M:'< 500 ou \u00c2ge\u00d710', F:'< 500 ou \u00c2ge\u00d710', G:'T1<750, T2<1000, T3<1500 \u00b5g/L'}
   };
-  for (const [id, vals] of Object.entries(refs)) { const el = document.getElementById(id); if (el) el.textContent = vals[s]; }
-  ['hb','ferr','creat','au','vs','asat','alat','ggt','pal','fibrino'].forEach(id => { const el = document.getElementById('val-' + id); if (el && el.value) el.dispatchEvent(new Event('input')); });
+  Object.keys(refs).forEach(function(id){
+    var el = document.getElementById(id);
+    if (el && refs[id][s]) el.textContent = refs[id][s];
+  });
+
+  // Masquer critères obstétricaux SAPL si Homme
+  ['sapl-obs1','sapl-obs2','sapl-obs3'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var label = el.closest('label');
+    if (label) label.style.display = (s === 'M') ? 'none' : 'flex';
+  });
+
+  // Réévaluer les champs déjà renseignés
+  ['hb','ferr','creat','au','vs','asat','alat','ggt','pal','fibrino'].forEach(function(id){
+    var el = document.getElementById('val-' + id);
+    if (el && el.value) el.dispatchEvent(new Event('input'));
+  });
   if (document.getElementById('ckd-creat') && document.getElementById('ckd-creat').value) calcCKD();
   if (document.getElementById('val-ddimeres') && document.getElementById('val-ddimeres').value) evalDdimeres();
 };
 
-/* ===== UTILITAIRES ===== */
-const showResult = (id, cls, txt) => { const el = document.getElementById('res-' + id); if (!el) return; el.style.display = 'block'; el.className = 'bio-result ' + cls; el.innerHTML = txt; };
-const hideCursor = (id) => { const c = document.getElementById('cur-' + id); if (c) c.style.display = 'none'; };
-const moveCursor = (id, pct, color) => { const c = document.getElementById('cur-' + id); if (!c) return; pct = Math.max(2, Math.min(98, pct)); c.style.display = 'block'; c.style.left = pct + '%'; c.style.background = color; };
+/* ===================================================
+   UTILITAIRES
+   =================================================== */
+function showResult(id, cls, txt) {
+  var el = document.getElementById('res-' + id);
+  if (!el) return;
+  el.style.display = 'block';
+  el.className = 'bio-result ' + cls;
+  el.innerHTML = txt;
+}
+function hideCursor(id) {
+  var c = document.getElementById('cur-' + id);
+  if (c) c.style.display = 'none';
+}
+function moveCursor(id, pct, color) {
+  var c = document.getElementById('cur-' + id);
+  if (!c) return;
+  pct = Math.max(2, Math.min(98, pct));
+  c.style.display = 'block';
+  c.style.left = pct + '%';
+  c.style.background = color;
+}
 
-window.evalSimple = (id, val, lo, hi, highMsg, lowMsg, normMsg) => {
-  if (val === '' || isNaN(val)) { hideCursor(id); const el = document.getElementById('res-' + id); if (el) el.style.display = 'none'; return; }
-  val = parseFloat(val); let pct, cls, msg; const span = hi - lo || 1;
-  if (val < lo) { pct = Math.max(2, 10 * (val / lo)); cls = 'r-low'; msg = '↓ ' + lowMsg; moveCursor(id, pct, '#1E40AF'); }
-  else if (val > hi) { pct = Math.min(95, 60 + ((val - hi) / span) * 25); cls = 'r-high'; msg = '↑ ' + highMsg; moveCursor(id, pct, '#B45309'); }
-  else { pct = 10 + 50 * ((val - lo) / span); cls = 'r-normal'; msg = '✓ ' + normMsg; moveCursor(id, pct, '#166534'); }
+window.evalSimple = function(id, val, lo, hi, highMsg, lowMsg, normMsg) {
+  if (val === '' || val === null || isNaN(val)) {
+    hideCursor(id);
+    var el = document.getElementById('res-' + id);
+    if (el) el.style.display = 'none';
+    return;
+  }
+  val = parseFloat(val);
+  var span = hi - lo || 1;
+  var pct, cls, msg;
+  if (val < lo) {
+    pct = Math.max(2, 10 * (val / lo));
+    cls = 'r-low'; msg = '\u2193 ' + lowMsg;
+    moveCursor(id, pct, '#1E40AF');
+  } else if (val > hi) {
+    pct = Math.min(95, 60 + ((val - hi) / span) * 25);
+    cls = 'r-high'; msg = '\u2191 ' + highMsg;
+    moveCursor(id, pct, '#B45309');
+  } else {
+    pct = 10 + 50 * ((val - lo) / span);
+    cls = 'r-normal'; msg = '\u2713 ' + normMsg;
+    moveCursor(id, pct, '#166534');
+  }
   showResult(id, cls, msg);
 };
 
-/* ===== NFS ===== */
-const hbRanges = { M:{lo:13,hi:17.5,cLo:7}, F:{lo:12,hi:16,cLo:7}, G:{lo:11,hi:14.5,cLo:7} };
-window.evalHb = (val) => {
-  if (val === '' || isNaN(val)) { hideCursor('hb'); document.getElementById('res-hb').style.display = 'none'; return; }
-  val = parseFloat(val); const r = hbRanges[currentSex]; let p, c, m;
-  if (val <= r.cLo) { c='r-critical'; m='⚠ Anémie sévère ('+val+' g/dL)'; p=3; }
-  else if (val < r.lo) { c='r-low'; m='↓ Anémie ('+val+' g/dL)'; p=15; }
-  else if (val > r.hi) { c='r-high'; m='↑ Polyglobulie'; p=80; }
-  else { c='r-normal'; m='✓ Hémoglobine normale'; p=50; }
-  moveCursor('hb', p, c==='r-critical'?'#C8102E':c==='r-low'?'#1E40AF':c==='r-high'?'#B45309':'#166534');
-  showResult('hb', c, m);
-};
-window.evalGB = (v) => evalSimple('gb', v, 4, 10, 'Hyperleucocytose', 'Leucopénie', 'Leucocytes normaux');
-window.evalPLT = (v) => {
-  if (v === '' || isNaN(v)) { hideCursor('plt'); document.getElementById('res-plt').style.display = 'none'; return; }
-  v = parseFloat(v); const lo = currentSex === 'G' ? 100 : 150; let c, m, p;
-  if (v < 20) { c='r-critical'; m='⚠ Thrombopénie sévère'; p=3; }
-  else if (v < lo) { c='r-low'; m='↓ Thrombopénie'; p=15; }
-  else if (v > 800) { c='r-critical'; m='⚠ Thrombocytose massive'; p=97; }
-  else if (v > 400) { c='r-high'; m='↑ Thrombocytose'; p=78; }
-  else { c='r-normal'; m='✓ Plaquettes normales'; p=50; }
-  moveCursor('plt', p, c==='r-critical'?'#C8102E':c==='r-low'?'#1E40AF':c==='r-high'?'#B45309':'#166534');
-  showResult('plt', c, m);
+function valOf(id) {
+  var el = document.getElementById(id);
+  return (el && el.value !== '') ? parseFloat(el.value) : NaN;
+}
+
+/* ===================================================
+   NFS
+   =================================================== */
+var hbRanges = {
+  M: {lo:13,   hi:17.5, critLo:7},
+  F: {lo:12,   hi:16,   critLo:7},
+  G: {lo:11,   hi:14.5, critLo:7}
 };
 
-/* ===== INFLAMMATION ===== */
-window.evalCRP = (v) => {
-  if (v === '' || isNaN(v)) { hideCursor('crp'); document.getElementById('res-crp').style.display = 'none'; return; }
-  v = parseFloat(v); let cls, msg, pct;
-  if (v < 5) { cls='r-normal'; msg='✓ CRP normale'; pct=20; }
-  else if (v < 50) { cls='r-high'; msg='↑ Inflammation modérée'; pct=60; }
-  else { cls='r-critical'; msg='⚠ Syndrome inflammatoire franc'; pct=90; }
-  moveCursor('crp', pct, cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
-  showResult('crp', cls, msg);
-};
-window.evalVS = (v) => {
-  if (v === '' || isNaN(v)) { hideCursor('vs'); document.getElementById('res-vs').style.display = 'none'; return; }
-  v = parseFloat(v); const hi = currentSex==='M'?15:(currentSex==='G'?50:20); let cls, msg, pct;
-  if (v <= hi) { cls='r-normal'; msg='✓ VS normale'; pct=30; }
-  else if (v > 100) { cls='r-critical'; msg='⚠ VS très accélérée'; pct=95; }
-  else { cls='r-high'; msg='↑ VS accélérée'; pct=70; }
-  moveCursor('vs', pct, cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
-  showResult('vs', cls, msg);
-};
-window.evalFibrino = (v) => {
-  if (v === '' || isNaN(v)) { document.getElementById('res-fibrino').style.display = 'none'; return; }
-  v = parseFloat(v); let cls, msg;
-  if (v < 1.5) { cls='r-critical'; msg='⚠ Hypofibrinogénémie (CIVD, IH)'; }
-  else if (currentSex==='G') { if (v<=6.0){cls='r-normal';msg='✓ Normal (physio grossesse)';} else {cls='r-high';msg='↑ Hyperfibrinogénémie';} }
-  else { if (v<=4.0){cls='r-normal';msg='✓ Fibrinogène normal';} else {cls='r-high';msg='↑ Élevé (Inflammation)';} }
-  showResult('fibrino', cls, msg);
-};
-
-/* ===== MARTIAL ===== */
-window.evalFerr = (v) => {
-  if (v === '' || isNaN(v)) { hideCursor('ferr'); document.getElementById('res-ferr').style.display = 'none'; return; }
-  v = parseFloat(v); const lo = currentSex==='M'?20:10, hi = currentSex==='M'?300:150; let cls, msg, pct;
-  if (v < lo) { cls='r-low'; msg='↓ Ferritine basse — carence en fer'; pct=8; }
-  else if (v > 500) { cls='r-critical'; msg='⚠ Très élevée (surcharge ou inflammation)'; pct=95; }
-  else if (v > hi) { cls='r-high'; msg='↑ Hyperferritinémie'; pct=75; }
-  else { cls='r-normal'; msg='✓ Ferritine normale'; pct=45; }
-  moveCursor('ferr', pct, cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
-  showResult('ferr', cls, msg);
-};
-window.evalCS = (v) => evalSimple('cs', v, 20, 45, 'Surcharge', 'Carence martiale', 'CS Normal');
-
-/* ===== GLYCÉMIE ===== */
-window.evalGly = (v) => { evalSimple('gly', v, 3.9, 5.5, 'Hyperglycémie', 'Hypoglycémie', 'Glycémie normale'); calcHoma(); };
-window.evalInsul = (v) => { evalSimple('insul', v, 2, 20, 'Hyperinsulinisme', 'Insuffisance sécrétoire', 'Insulinémie normale'); calcHoma(); };
-window.evalHbA1c = (v) => evalSimple('hba1c', v, 0, 5.7, 'Prédiabète / Diabète', '—', 'HbA1c normale');
-const calcHoma = () => {
-  let g = parseFloat(document.getElementById('val-gly').value); const i = parseFloat(document.getElementById('val-insul').value);
-  const el = document.getElementById('res-homa');
-  if (isNaN(g) || isNaN(i)) { el.innerHTML = "Renseignez la glycémie et l'insuline"; el.className = 'bio-result r-empty'; return; }
-  if (g < 3.5) g = g * 5.55; const homa = (g * i) / 22.5; let cls, msg;
-  if (homa < 1.5) { cls='r-normal'; msg='✓ HOMA-IR = '+homa.toFixed(2)+' (Normal)'; }
-  else if (homa < 2.5) { cls='r-high'; msg='↑ HOMA-IR = '+homa.toFixed(2)+' (Insulinorésistance probable)'; }
-  else { cls='r-critical'; msg='⚠ HOMA-IR = '+homa.toFixed(2)+' (Insulinorésistance marquée)'; }
-  el.className = 'bio-result ' + cls; el.innerHTML = msg;
-};
-
-/* ===== RÉNALE ===== */
-window.evalCreat = (v) => evalSimple('creat', v, currentSex==='M'?62:44, currentSex==='M'?115:97, 'Élevée', 'Basse', 'Normale');
-window.calcCKD = () => {
-  const creat = parseFloat(document.getElementById('ckd-creat').value); const age = parseFloat(document.getElementById('ckd-age').value);
-  const el = document.getElementById('res-ckd');
-  if (isNaN(creat) || isNaN(age)) { el.innerHTML = 'Renseignez créatinine + âge'; el.className = 'bio-result r-empty'; return; }
-  const kappa = (currentSex==='F'||currentSex==='G')?61.9:79.6; const alpha = (currentSex==='F'||currentSex==='G')?-0.241:-0.302;
-  let dfg = creat <= kappa ? 142*Math.pow(creat/kappa,alpha)*Math.pow(0.9938,age) : 142*Math.pow(creat/kappa,-1.200)*Math.pow(0.9938,age);
-  if (currentSex==='F'||currentSex==='G') dfg *= 1.012; dfg = Math.round(dfg);
-  let stade, cls;
-  if (dfg>=90){stade='G1 (Normal)';cls='r-normal';} else if(dfg>=60){stade='G2 (Léger)';cls='r-normal';}
-  else if(dfg>=45){stade='G3a';cls='r-high';} else if(dfg>=30){stade='G3b';cls='r-high';}
-  else if(dfg>=15){stade='G4 (Sévère)';cls='r-critical';} else {stade='G5 (Terminale)';cls='r-critical';}
-  el.className = 'bio-result ' + cls; el.innerHTML = 'DFGe = <b>'+dfg+' mL/min/1,73m²</b> — <b>'+stade+'</b>';
-};
-window.evalAU = (v) => evalSimple('au', v, currentSex==='M'?180:150, currentSex==='M'?420:360, 'Hyperuricémie', 'Hypouricémie', 'Normal');
-
-/* ===== HÉPATIQUE ===== */
-window.evalTransaminases = (id, val) => {
-  if (val === '' || isNaN(val)) { document.getElementById('res-' + id).style.display = 'none'; return; }
-  val = parseFloat(val); const maxN = (id==='asat')?(currentSex==='M'?40:32):(currentSex==='M'?41:33); let c, m;
-  if (val <= maxN) { c='r-normal'; m='✓ Normales'; }
-  else if (val < maxN*3) { c='r-high'; m='↑ Cytolyse légère (< 3N)'; }
-  else if (val < maxN*10) { c='r-critical'; m='⚠ Cytolyse modérée à sévère'+(currentSex==='G'?'<br><i>Alerte : penser au HELLP.</i>':''); }
-  else { c='r-critical'; m='⚠ Cytolyse massive (> 10N) — Hépatite aiguë'; }
-  showResult(id, c, m);
-};
-window.evalGGT = (v) => evalSimple('ggt', v, 0, currentSex==='M'?60:40, 'Cholestase possible', '—', 'Normales');
-window.evalPAL = (v) => {
-  if (v === '' || isNaN(v)) { document.getElementById('res-pal').style.display = 'none'; return; }
-  v = parseFloat(v);
-  if (currentSex==='G') { if (v<=250) showResult('pal','r-normal','✓ PAL normales (physio T3)'); else showResult('pal','r-high','↑ PAL > seuil grossesse'); }
-  else { if (v<=120) showResult('pal','r-normal','✓ PAL normales'); else showResult('pal','r-high','↑ PAL élevées (cholestase, os)'); }
-};
-
-/* ===== HÉMOSTASE & SAPL ===== */
-window.evalDdimeres = () => {
-  const age = parseFloat(document.getElementById('val-age-dd').value);
-  const dd = parseFloat(document.getElementById('val-ddimeres').value);
-  const el = document.getElementById('res-ddimeres');
-  if (isNaN(dd)) { el.style.display = 'none'; return; }
-  let seuil = 500, ctx = '';
-  if (currentSex==='G') { seuil = 1000; ctx = '<br><i>Seuils grossesse : T1<750, T2<1000, T3<1500.</i>'; }
-  else if (!isNaN(age) && age > 50) { seuil = age * 10; ctx = '<br><i>Seuil ajusté à l\'âge : '+seuil+' µg/L.</i>'; }
-  if (dd < seuil) showResult('ddimeres', 'r-normal', '✓ D-dimères NÉGATIFS (< '+seuil+'). Exclut MTEV (proba forte).'+ctx);
-  else showResult('ddimeres', 'r-critical', '⚠ D-dimères POSITIFS (≥ '+seuil+'). Imagerie requise.'+ctx);
-};
-
-window.evalSAPL = () => {
-  const g = (id) => { const e = document.getElementById(id); return e && e.checked; };
-  const la=g('sapl-la'), acl=g('sapl-acl'), b2=g('sapl-b2'), triple=g('sapl-triple');
-  const thrArt=g('sapl-thr-art'), thrVein=g('sapl-thr-vein'), obs1=g('sapl-obs1'), obs2=g('sapl-obs2'), obs3=g('sapl-obs3');
-  const el = document.getElementById('res-sapl');
-  const nbBio = [la,acl,b2].filter(Boolean).length;
-  const hasBio = nbBio >= 1 || triple;
-  const hasClinThr = thrArt || thrVein;
-  const hasClinObs = obs1 || obs2 || obs3;
-  const hasClin = hasClinThr || hasClinObs;
-  if (!hasBio && !hasClin) { el.style.display='none'; el.innerHTML=''; return; }
-  let cls='r-info', html='';
-  if (hasBio && hasClin) {
-    cls='r-critical'; html += '<b>⚠ SAPL PROBABLE — Critères de Sydney remplis</b><br>';
-    if (triple || nbBio===3) html += 'Profil <b>triple positif</b> — risque maximal.<br>';
-    else if (nbBio===2) html += 'Profil double positif — risque élevé.<br>';
-    else html += 'Profil mono-positif — risque modéré.<br>';
-    html += '<br><b>Conduite à tenir :</b><ul style="margin:6px 0 0 16px;padding:0;font-weight:normal;">';
-    if (hasClinThr) { html += '<li>Anticoagulation au long cours : AVK (INR 2–3) ou HBPM.</li>'; if (thrArt) html += '<li>Forme artérielle : associer aspirine 75–100 mg/j.</li>'; }
-    if (hasClinObs) { html += '<li>Prochaine grossesse : HBPM préventive + aspirine 75–100 mg/j dès la conception.</li>'; if (obs3) html += '<li>Bilan FCS : caryotype parental, hystéroscopie, TSH.</li>'; if (obs1||obs2) html += '<li>Surveillance obstétricale rapprochée (Doppler utérin, biométries).</li>'; }
-    html += '<li>Bilan lupique (ANA, anti-ADNn, complément C3/C4).</li>';
-    html += '<li><b>Confirmer la positivité biologique à 12 semaines.</b></li></ul>';
-  } else if (hasBio) {
-    cls='r-high'; html += '<b>↑ Anticorps antiphospholipides positifs</b> — sans critère clinique.<br>Critères de Sydney <u>incomplets</u>.<br>';
-    if (triple || nbBio===3) html += '<span style="color:#C8102E;">▲ Triple positif : risque thrombotique très élevé.</span><br>';
-    html += '<br><b>À faire :</b><ul style="margin:6px 0 0 16px;padding:0;font-weight:normal;"><li>Rechercher morbidité clinique (interrogatoire vasculaire et obstétrical).</li><li>Recontrôler la sérologie à 12 semaines.</li><li>Bilan lupique.</li></ul>';
+window.evalHb = function(val) {
+  if (val === '' || isNaN(val)) { hideCursor('hb'); var e = document.getElementById('res-hb'); if(e) e.style.display='none'; return; }
+  val = parseFloat(val);
+  var r = hbRanges[currentSex];
+  var pct, cls, msg;
+  if (val <= r.critLo) {
+    cls='r-critical'; msg='\u26A0 An\u00e9mie s\u00e9v\u00e8re \u2014 transfusion \u00e0 discuter ('+val+' g/dL)'; pct=3;
+  } else if (val < r.lo) {
+    pct = 3 + 20*(val-r.critLo)/(r.lo-r.critLo);
+    cls='r-low'; msg='\u2193 An\u00e9mie ('+val+' g/dL) \u2014 pr\u00e9ciser type (microcytaire/macrocytaire/normocytaire)';
+  } else if (val > r.hi) {
+    cls='r-high'; msg='\u2191 Polyglobulie \u2014 explorer causes (BPCO, tabac, EPO, altitude\u2026)'; pct=80;
   } else {
-    cls='r-high'; html += '<b>↑ Antécédents cliniques évocateurs</b> — sérologie non confirmée.<br>';
-    html += '<br><b>À faire :</b><ul style="margin:6px 0 0 16px;padding:0;font-weight:normal;"><li>Prescrire : ACC, anti-CL IgG/IgM, anti-β2-GPI IgG/IgM.</li>';
-    if (hasClinObs) html += '<li>Thrombophilie complète : protéines C/S, antithrombine, facteur V Leiden, mutation 20210A.</li>';
-    html += '<li>Si positif → recontrôler à 12 semaines.</li></ul>';
+    pct = 20 + 40*(val-r.lo)/(r.hi-r.lo);
+    cls='r-normal'; msg='\u2713 H\u00e9moglobine normale ('+val+' g/dL)';
   }
-  el.className = 'bio-result ' + cls; el.innerHTML = html; el.style.cssText = 'display:block !important; margin-top:10px;';
+  if (!pct) pct = cls==='r-critical' ? 3 : 50;
+  moveCursor('hb', pct, cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('hb', cls, msg);
 };
 
-/* ===== LIPIDES ===== */
-window.evalLDL = (v) => evalSimple('ldl', v, 0, 4.1, 'LDL Élevé', '—', 'LDL Normal');
-window.evalHDL = (v) => evalSimple('hdl', v, currentSex==='M'?1.0:1.2, 5, 'Normal (Protecteur)', 'HDL Bas (Risque)', 'Normal');
-window.evalTG = (v) => evalSimple('tg', v, 0, 1.7, 'Hypertriglycéridémie', '—', 'TG Normaux');
-window.updateRatio = () => {
-  const ct = parseFloat(document.getElementById('val-ct').value); const hdl = parseFloat(document.getElementById('val-hdl').value);
-  const el = document.getElementById('res-ratio'); if (!el) return;
-  if (!isNaN(ct) && !isNaN(hdl) && hdl > 0) {
-    const r = (ct/hdl).toFixed(2); let cls, msg;
-    if (r < 3.5) { cls='r-normal'; msg='✓ Ratio = '+r+' (Risque faible)'; }
-    else if (r < 4.5) { cls='r-high'; msg='↑ Ratio = '+r+' (Risque modéré)'; }
-    else { cls='r-critical'; msg='⚠ Ratio = '+r+' (Risque élevé)'; }
-    el.className = 'bio-result ' + cls; el.innerHTML = msg;
-  } else { el.className = 'bio-result r-empty'; el.innerHTML = 'Renseignez CT et HDL'; }
+window.evalGB = function(v) {
+  if(v===''||isNaN(v)){hideCursor('gb');var e=document.getElementById('res-gb');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<2){cls='r-critical';msg='\u26A0 Leucop\u00e9nie s\u00e9v\u00e8re \u2014 aplasie \u00e0 exclure';pct=3;}
+  else if(v<4){cls='r-low';msg='\u2193 Leucop\u00e9nie \u2014 infections virales, m\u00e9dicaments, myélotoxicit\u00e9';pct=15;}
+  else if(v>30){cls='r-critical';msg='\u26A0 Hyperleucocytose massive \u2014 leuc\u00e9mie \u00e0 exclure';pct=97;}
+  else if(v>10){cls='r-high';msg='\u2191 Hyperleucocytose \u2014 infection bact\u00e9rienne, stress, cortico\u00efdes';pct=75;}
+  else{cls='r-normal';msg='\u2713 Leucocytes normaux';pct=35+30*(v-4)/6;}
+  moveCursor('gb',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('gb',cls,msg);
 };
 
-/* ===== IONOGRAMME + CORRECTIONS (option 9) ===== */
-window.evalNa = (v) => { evalSimple('na', v, 135, 145, 'Hypernatrémie', 'Hyponatrémie', 'Natrémie normale'); calcTA(); };
-window.evalK = (v) => { evalSimple('k', v, 3.5, 5.0, 'Hyperkaliémie', 'Hypokaliémie', 'Kaliémie normale'); calcTA(); };
-/* Calcémie CORRIGÉE selon albumine : Ca corr = Ca + 0,02 × (40 − albumine) */
-window.evalCa = (v) => {
-  if (v === '' || isNaN(v)) { hideCursor('ca'); document.getElementById('res-ca').style.display='none'; document.getElementById('res-alb').style.display='none'; return; }
-  v = parseFloat(v);
-  const alb = parseFloat(document.getElementById('val-alb').value);
-  let caUtil = v, note = '';
-  if (!isNaN(alb) && alb < 35) {
-    caUtil = v + 0.02 * (40 - alb);
-    note = '<br><b>Ca corrigé = ' + caUtil.toFixed(2) + ' mmol/L</b> (albumine ' + alb + ' g/L)';
-    showResult('alb', 'r-info', 'ℹ Albumine basse → calcémie corrigée appliquée');
-  } else if (!isNaN(alb)) {
-    showResult('alb', 'r-normal', '✓ Albumine normale');
+window.evalPNN = function(v) {
+  if(v===''||isNaN(v)){hideCursor('pnn');var e=document.getElementById('res-pnn');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<0.5){cls='r-critical';msg='\u26A0 Agranulocytose \u2014 risque infectieux majeur, hospitalisation';pct=3;}
+  else if(v<1.8){cls='r-low';msg='\u2193 Neutrop\u00e9nie \u2014 m\u00e9dicaments, virose, auto-immune';pct=15;}
+  else if(v>7.5){cls='r-high';msg='\u2191 Neutrophilie \u2014 infection bact\u00e9rienne, inflammation, cortico\u00efdes';pct=75;}
+  else{cls='r-normal';msg='\u2713 Neutrophiles normaux';pct=30+40*(v-1.8)/5.7;}
+  moveCursor('pnn',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('pnn',cls,msg);
+};
+
+window.evalPLT = function(v) {
+  if(v===''||isNaN(v)){hideCursor('plt');var e=document.getElementById('res-plt');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct; var lo=currentSex==='G'?100:150;
+  if(v<20){cls='r-critical';msg='\u26A0 Thrombop\u00e9nie s\u00e9v\u00e8re \u2014 risque h\u00e9morragique grave (PTI, CIVD, TTP)';pct=3;}
+  else if(v<lo){cls='r-low';msg='\u2193 Thrombop\u00e9nie \u2014 PTI, m\u00e9dicaments, CIVD, hyperspl\u00e9nisme';pct=15;}
+  else if(v>800){cls='r-critical';msg='\u26A0 Thrombocytose massive \u2014 SMP \u00e0 exclure';pct=97;}
+  else if(v>400){cls='r-high';msg='\u2191 Thrombocytose \u2014 inflammation, carence martiale, spl\u00e9nectomie';pct=78;}
+  else{cls='r-normal';msg='\u2713 Plaquettes normales';pct=20+55*(v-lo)/250;}
+  moveCursor('plt',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('plt',cls,msg);
+};
+
+/* ===================================================
+   INFLAMMATION
+   =================================================== */
+window.evalCRP = function(v) {
+  if(v===''||isNaN(v)){hideCursor('crp');var e=document.getElementById('res-crp');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<5){cls='r-normal';msg='\u2713 CRP normale';pct=20;}
+  else if(v<50){cls='r-high';msg='\u2191 Inflammation mod\u00e9r\u00e9e \u2014 attention : peut fausser la ferritine (faux normal)';pct=60;}
+  else{cls='r-critical';msg='\u26A0 Syndrome inflammatoire franc \u2014 ferritine non interpr\u00e9table comme marqueur martial';pct=90;}
+  moveCursor('crp',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('crp',cls,msg);
+};
+
+window.evalVS = function(v) {
+  if(v===''||isNaN(v)){hideCursor('vs');var e=document.getElementById('res-vs');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var hi=currentSex==='M'?15:(currentSex==='G'?50:20); var cls,msg,pct;
+  if(v<=hi){cls='r-normal';msg='\u2713 VS normale';pct=30;}
+  else if(v>100){cls='r-critical';msg='\u26A0 VS tr\u00e8s acc\u00e9l\u00e9r\u00e9e \u2014 my\u00e9lome, connectivite, infection s\u00e9v\u00e8re';pct=95;}
+  else{cls='r-high';msg='\u2191 VS acc\u00e9l\u00e9r\u00e9e';pct=70;}
+  moveCursor('vs',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('vs',cls,msg);
+};
+
+window.evalFibrino = function(v) {
+  if(v===''||isNaN(v)){var e=document.getElementById('res-fibrino');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg;
+  if(v<1.5){cls='r-critical';msg='\u26A0 Hypofibrinog\u00e9n\u00e9mie (CIVD, IH s\u00e9v\u00e8re)';}
+  else if(currentSex==='G'){
+    if(v<=6.0){cls='r-normal';msg='\u2713 Normal (physio grossesse, jusqu\u00e0 6 g/L)';}
+    else{cls='r-high';msg='\u2191 Hyperfibrinog\u00e9n\u00e9mie \u00e9lev\u00e9e \u2014 \u00e9carter CIVD chronique';}
   } else {
-    document.getElementById('res-alb').style.display = 'none';
+    if(v<=4.0){cls='r-normal';msg='\u2713 Fibrinog\u00e8ne normal';}
+    else{cls='r-high';msg='\u2191 \u00c9lev\u00e9 (Inflammation, syndrome n\u00e9phrotique)';}
   }
-  let cls, msg;
-  if (caUtil < 2.20) { cls='r-low'; msg='↓ Hypocalcémie'; }
-  else if (caUtil > 2.60) { cls='r-high'; msg='↑ Hypercalcémie'; }
-  else { cls='r-normal'; msg='✓ Calcémie normale'; }
-  moveCursor('ca', caUtil<2.2?15:caUtil>2.6?80:50, cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
-  showResult('ca', cls, msg + note);
-};
-window.calcTA = () => {
-  const na = parseFloat(document.getElementById('val-na').value), k = parseFloat(document.getElementById('val-k').value);
-  const cl = parseFloat(document.getElementById('val-cl').value), hco3 = parseFloat(document.getElementById('val-hco3').value);
-  const el = document.getElementById('res-ta'); if (!el) return;
-  if (isNaN(na) || isNaN(k) || isNaN(cl) || isNaN(hco3)) { el.innerHTML = 'Renseignez Na, K, Cl, HCO₃'; el.className = 'bio-result r-empty'; return; }
-  const ta = (na + k) - (cl + hco3); let cls, msg;
-  if (ta < 8) { cls='r-low'; msg='↓ Trou anionique = '+ta.toFixed(1)+' (Bas)'; }
-  else if (ta <= 16) { cls='r-normal'; msg='✓ Trou anionique = '+ta.toFixed(1)+' (Normal)'; }
-  else { cls='r-critical'; msg='⚠ Trou anionique = '+ta.toFixed(1)+' (Élevé → acidose : céto, lactique, toxiques)'; }
-  el.className = 'bio-result ' + cls; el.innerHTML = msg;
+  showResult('fibrino',cls,msg);
 };
 
-/* ===== VITAMINES ===== */
-window.evalVitD = (v) => {
-  if (v === '' || isNaN(v)) { hideCursor('vitd'); document.getElementById('res-vitd').style.display = 'none'; return; }
-  v = parseFloat(v); let cls, msg, pct;
-  if (v < 10) { cls='r-critical'; msg='⚠ Carence sévère (< 10)'; pct=5; }
-  else if (v < 30) { cls='r-low'; msg='↓ Insuffisance (10–30)'; pct=20; }
-  else if (v > 100) { cls='r-critical'; msg='⚠ Surdosage (> 100)'; pct=95; }
-  else { cls='r-normal'; msg='✓ Vitamine D normale'; pct=50; }
-  moveCursor('vitd', pct, cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':'#166534');
-  showResult('vitd', cls, msg);
+/* ===================================================
+   BILAN MARTIAL
+   =================================================== */
+window.evalFerr = function(v) {
+  if(v===''||isNaN(v)){hideCursor('ferr');var e=document.getElementById('res-ferr');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var lo=currentSex==='M'?20:10, hi=currentSex==='M'?300:150; var cls,msg,pct;
+  if(v<lo){cls='r-low';msg='\u2193 Ferritine basse \u2014 carence en fer (si pas de syndrome inflammatoire)';pct=8;}
+  else if(v>500){cls='r-critical';msg='\u26A0 Ferritine tr\u00e8s \u00e9lev\u00e9e \u2014 surcharge / h\u00e9mochromatose ou inflammation majeure';pct=95;}
+  else if(v>hi){cls='r-high';msg='\u2191 Hyperferritin\u00e9mie \u2014 inflammatoire, cytolyse, alcoolisme, h\u00e9mochromatose';pct=75;}
+  else{cls='r-normal';msg='\u2713 Ferritine normale';pct=20+55*(v-lo)/(hi-lo);}
+  moveCursor('ferr',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('ferr',cls,msg);
 };
 
-/* ===== CŒLIAQUE ===== */
-window.evalTG2 = (v) => {
-  if (v === '' || isNaN(v)) { document.getElementById('res-tg2').style.display = 'none'; return; }
-  v = parseFloat(v); let cls, msg;
-  if (v < 10) { cls='r-normal'; msg='✓ Négatif (<10)'; }
-  else if (v < 30) { cls='r-high'; msg='↑ Positif — Confirmer par biopsie'; }
-  else if (v < 100) { cls='r-critical'; msg='⚠ Très positif'; }
-  else { cls='r-critical'; msg='⚠ Massif (≥10× LSN) — Diag. possible sans biopsie'; }
-  const el = document.getElementById('res-tg2'); el.className = 'bio-result ' + cls; el.innerHTML = msg; el.style.display = 'block';
-};
-window.evalIgATot = (v) => {
-  if (v === '' || isNaN(v)) { document.getElementById('res-iga-tot').style.display = 'none'; return; }
-  v = parseFloat(v); let cls, msg;
-  if (v < 0.07) { cls='r-critical'; msg='⚠ Déficit IgA — anti-TG2 ininterprétables, utiliser IgG'; }
-  else if (v < 0.7) { cls='r-low'; msg='↓ IgA basses'; }
-  else { cls='r-normal'; msg='✓ IgA normales'; }
-  const el = document.getElementById('res-iga-tot'); el.className = 'bio-result ' + cls; el.innerHTML = msg; el.style.display = 'block';
+window.evalCS = function(v) {
+  if(v===''||isNaN(v)){hideCursor('cs');var e=document.getElementById('res-cs');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<16){cls='r-low';msg='\u2193 CS bas \u2014 carence martiale fonctionnelle';pct=10;}
+  else if(v>45){cls='r-high';msg='\u2191 CS \u00e9lev\u00e9 \u2014 surcharge ferrique (h\u00e9mochromatose)';pct=80;}
+  else{cls='r-normal';msg='\u2713 Coefficient de saturation normal';pct=30+50*(v-16)/29;}
+  moveCursor('cs',pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('cs',cls,msg);
 };
 
-/* ===== PATIENT ===== */
-window.togglePatientForm = () => {
-  const form = document.getElementById('patient-form'); const btn = document.getElementById('patient-toggle-btn');
-  const isOpen = form.classList.contains('open'); form.classList.toggle('open', !isOpen); btn.classList.toggle('open', !isOpen); btn.setAttribute('aria-expanded', String(!isOpen));
-};
-window.calcAge = () => {
-  const ddn = document.getElementById('pt-ddn').value; const display = document.getElementById('pt-age-display');
-  if (!ddn) { display.textContent = ''; return; }
-  const today = new Date(), birth = new Date(ddn); let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth(); if (m < 0 || (m===0 && today.getDate() < birth.getDate())) age--;
-  display.textContent = age >= 0 ? age + ' ans' : '';
-};
-const getPatientInfo = () => {
-  const nom=(document.getElementById('pt-nom').value||'').trim(), prenom=(document.getElementById('pt-prenom').value||'').trim();
-  const ddn=document.getElementById('pt-ddn').value, medecin=(document.getElementById('pt-medecin').value||'').trim(), dateBilan=document.getElementById('pt-date-bilan').value;
-  const age=document.getElementById('pt-age-display').textContent;
-  return { nomComplet:[prenom,nom].filter(Boolean).join(' '), ddnFormatted: ddn?new Date(ddn).toLocaleDateString('fr-FR'):'', age, medecin, dateBilanFormatted: dateBilan?new Date(dateBilan).toLocaleDateString('fr-FR'):'' };
+window.synthesizeMartial = function() {
+  var ferr=valOf('val-ferr'), cs=valOf('val-cs'), crp=valOf('val-crp');
+  var loFerr = currentSex==='M'?20:10; var txt='';
+  if(!isNaN(ferr) && ferr<loFerr && (isNaN(crp)||crp<10)) {
+    txt = !isNaN(cs) && cs<20
+      ? 'Carence martiale franche confirm\u00e9e (ferritine basse + CS abaiss\u00e9). Indication \u00e0 la suppl\u00e9mentation en fer.'
+      : 'Carence en fer probable sur ferritine abaiss\u00e9e. Compl\u00e9ter avec CS de la transferrine.';
+  } else if(!isNaN(ferr) && ferr>(currentSex==='M'?300:150) && !isNaN(cs) && cs>45) {
+    txt = 'Surcharge en fer \u2014 bilan h\u00e9mochromatose recommand\u00e9 : test HFE (C282Y, H63D), ferritine + CS r\u00e9p\u00e9t\u00e9s. \u00c9chographie h\u00e9patique.';
+  } else if(!isNaN(crp) && crp>10 && !isNaN(ferr) && ferr>loFerr) {
+    txt = 'Syndrome inflammatoire pr\u00e9sent : la ferritine peut \u00eatre faussement \u00e9lev\u00e9e. Interpr\u00e9ter le bilan martial avec prudence. Doser ferritine apr\u00e8s r\u00e9solution ou utiliser le r\u00e9cepteur soluble de la transferrine.';
+  } else {
+    txt = 'Pas de carence martiale \u00e9vidente sur les \u00e9l\u00e9ments disponibles. Croiser avec le contexte clinique et la NFS.';
+  }
+  var el=document.getElementById('martial-interpret');
+  document.getElementById('martial-interpret-text').textContent=txt;
+  el.classList.add('visible');
 };
 
-/* ============================================================
-   MOTEUR D'ANALYSE GLOBALE (100% LOCAL — sans IA)
-   Options : 7 patterns · 5 auto-immun · 9 corrections · 10 priorisation
-   ============================================================ */
-const val = (id) => { const el = document.getElementById(id); return (el && el.value !== '') ? parseFloat(el.value) : NaN; };
+/* ===================================================
+   GLYCÉMIE / HBA1C / HOMA
+   =================================================== */
+window.evalGly = function(v) {
+  if(v===''||isNaN(v)){hideCursor('gly');var e=document.getElementById('res-gly');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<3.5) v=v*5.55; // conversion g/L => mmol/L
+  if(v<2.8){cls='r-critical';msg='\u26A0 Hypoglyc\u00e9mie s\u00e9v\u00e8re \u2014 resucrage IV urgent';pct=3;}
+  else if(v<3.9){cls='r-low';msg='\u2193 Hypoglyc\u00e9mie l\u00e9g\u00e8re \u2014 resucrage per os + recherche cause';pct=15;}
+  else if(v>=7.0){cls='r-critical';msg='\u26A0 Diab\u00e8te (\u22657,0 mmol/L) \u2014 confirmer \u00e0 2 reprises \u00e0 jeun';pct=90;}
+  else if(v>=5.6){cls='r-high';msg='\u2191 Pr\u00e9diab\u00e8te (5,6\u20136,9 mmol/L)';pct=70;}
+  else{cls='r-normal';msg='\u2713 Glyc\u00e9mie \u00e0 jeun normale';pct=30+30*(v-3.9)/1.6;}
+  moveCursor('gly',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('gly',cls,msg);
+  calcHoma();
+};
 
-/* --- Option 7 : patterns combinés --- */
+window.evalHbA1c = function(v) {
+  if(v===''||isNaN(v)){hideCursor('hba1c');var e=document.getElementById('res-hba1c');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<5.7){cls='r-normal';msg='\u2713 HbA1c normale ('+v+'%)';pct=25;}
+  else if(v<6.5){cls='r-high';msg='\u2191 Zone pr\u00e9diab\u00e8te (5,7\u20136,4%) \u2014 pr\u00e9vention : activit\u00e9 physique, alimentation';pct=55;}
+  else if(v<8){cls='r-critical';msg='\u26A0 Diab\u00e8te \u2014 HbA1c '+v+'% (cible <7% sous traitement)';pct=75;}
+  else{cls='r-critical';msg='\u26A0 D\u00e9s\u00e9quilibre glyc\u00e9mique s\u00e9v\u00e8re ('+v+'%) \u2014 r\u00e9vision th\u00e9rapeutique urgente';pct=92;}
+  moveCursor('hba1c',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('hba1c',cls,msg);
+};
+
+function calcHoma() {
+  var g=valOf('val-gly'), i=valOf('val-insul');
+  var el=document.getElementById('res-homa');
+  if(isNaN(g)||isNaN(i)){el.innerHTML="Renseignez la glyc\u00e9mie et l'insuline";el.className='bio-result r-empty';return;}
+  if(g<3.5) g=g*5.55;
+  var homa=(g*i)/22.5; var cls,msg;
+  if(homa<1.5){cls='r-normal';msg='\u2713 HOMA-IR = '+homa.toFixed(2)+' (Normal)';}
+  else if(homa<2.5){cls='r-high';msg='\u2191 HOMA-IR = '+homa.toFixed(2)+' (Insulinor\u00e9sistance probable)';}
+  else{cls='r-critical';msg='\u26A0 HOMA-IR = '+homa.toFixed(2)+' (Insulinor\u00e9sistance marqu\u00e9e \u2014 SOPK, pr\u00e9-DT2, ob\u00e9sit\u00e9)';}
+  el.className='bio-result '+cls; el.innerHTML=msg;
+}
+
+/* ===================================================
+   FONCTION RÉNALE
+   =================================================== */
+window.evalCreat = function(v) {
+  if(v===''||isNaN(v)){hideCursor('creat');var e=document.getElementById('res-creat');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var lo=currentSex==='M'?62:44, hi=currentSex==='M'?115:97; var cls,msg,pct;
+  if(v<lo){cls='r-low';msg='\u2193 Cr\u00e9atinine basse \u2014 masse musculaire faible, grossesse, d\u00e9nutrition';pct=15;}
+  else if(v>250){cls='r-critical';msg='\u26A0 Cr\u00e9atinine tr\u00e8s \u00e9lev\u00e9e \u2014 IRC avanc\u00e9e ou IRA \u2014 DFGe obligatoire';pct=95;}
+  else if(v>hi){cls='r-high';msg='\u2191 \u00c9l\u00e9vation cr\u00e9atinine ('+v+' \u00b5mol/L) \u2014 calculer DFGe CKD-EPI';pct=60+25*(v-hi)/135;}
+  else{cls='r-normal';msg='\u2713 Cr\u00e9atinine normale ('+v+' \u00b5mol/L)';pct=30+40*(v-lo)/(hi-lo);}
+  moveCursor('creat',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('creat',cls,msg);
+};
+
+window.calcCKD = function() {
+  var creat=valOf('ckd-creat'), age=valOf('ckd-age');
+  var el=document.getElementById('res-ckd');
+  if(isNaN(creat)||isNaN(age)){el.innerHTML='Renseignez cr\u00e9atinine + \u00e2ge';el.className='bio-result r-empty';return;}
+  var kappa=(currentSex==='F'||currentSex==='G')?61.9:79.6;
+  var alpha=(currentSex==='F'||currentSex==='G')?-0.241:-0.302;
+  var dfg=creat<=kappa
+    ? 142*Math.pow(creat/kappa,alpha)*Math.pow(0.9938,age)
+    : 142*Math.pow(creat/kappa,-1.200)*Math.pow(0.9938,age);
+  if(currentSex==='F'||currentSex==='G') dfg*=1.012;
+  dfg=Math.round(dfg);
+  var stade,cls;
+  if(dfg>=90){stade='G1 (normal)';cls='r-normal';}
+  else if(dfg>=60){stade='G2 (l\u00e9g\u00e8rement diminu\u00e9)';cls='r-normal';}
+  else if(dfg>=45){stade='G3a';cls='r-high';}
+  else if(dfg>=30){stade='G3b';cls='r-high';}
+  else if(dfg>=15){stade='G4 (s\u00e9v\u00e8re)';cls='r-critical';}
+  else{stade='G5 (IRT)';cls='r-critical';}
+  el.className='bio-result '+cls;
+  el.innerHTML='DFGe = <b>'+dfg+' mL/min/1,73m\u00b2</b> \u2014 Stade MRC : <b>'+stade+'</b>';
+};
+
+window.evalAU = function(v) {
+  if(v===''||isNaN(v)){hideCursor('au');var e=document.getElementById('res-au');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var hi=currentSex==='M'?420:360, lo=currentSex==='M'?180:150; var cls,msg,pct;
+  if(v<lo){cls='r-low';msg='\u2193 Hypouric\u00e9mie \u2014 syndrome de Fanconi, m\u00e9dicaments uricosuriques';pct=15;}
+  else if(v>600){cls='r-critical';msg='\u26A0 Hyperuric\u00e9mie s\u00e9v\u00e8re \u2014 risque n\u00e9phropathie uratique';pct=95;}
+  else if(v>hi){cls='r-high';msg='\u2191 Hyperuric\u00e9mie \u2014 diur\u00e9tiques, alimentation riche en purines, IRC, alcool';pct=65+25*(v-hi)/180;}
+  else{cls='r-normal';msg='\u2713 Acide urique normal';pct=30+40*(v-lo)/(hi-lo);}
+  moveCursor('au',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('au',cls,msg);
+};
+
+window.evalMicroalbumin = function(v) {
+  if(v===''||isNaN(v)){hideCursor('albumin');var e=document.getElementById('res-albumin');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<30){cls='r-normal';msg='\u2713 Microalbuminurie normale (<30 mg/24h)';pct=20;}
+  else if(v<300){cls='r-high';msg='\u2191 Microalbuminurie (30\u2013299 mg/24h) \u2014 n\u00e9phropathie d\u00e9butante, stade A2';pct=60;}
+  else{cls='r-critical';msg='\u26A0 Macroalbuminurie (\u2265300 mg/24h) \u2014 stade A3, n\u00e9phropathie avanc\u00e9e';pct=92;}
+  moveCursor('albumin',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('albumin',cls,msg);
+};
+
+/* ===================================================
+   BILAN HÉPATIQUE
+   =================================================== */
+window.evalTransaminases = function(id, val) {
+  if(val===''||isNaN(val)){var e=document.getElementById('res-'+id);if(e)e.style.display='none';return;}
+  val=parseFloat(val); var maxN=(id==='asat')?(currentSex==='M'?40:32):(currentSex==='M'?41:33); var c,m;
+  if(val<=maxN){c='r-normal';m='\u2713 Normales';}
+  else if(val<maxN*3){c='r-high';m='\u2191 Cytolyse l\u00e9g\u00e8re (<3N)';}
+  else if(val<maxN*10){c='r-critical';m='\u26A0 Cytolyse mod\u00e9r\u00e9e \u00e0 s\u00e9v\u00e8re'+(currentSex==='G'?'<br><i>Alerte : penser au HELLP.</i>':'');}
+  else{c='r-critical';m='\u26A0 Cytolyse massive (>10N) \u2014 H\u00e9patite aigu\u00eb';}
+  showResult(id,c,m);
+};
+
+window.evalGGT = function(v) { evalSimple('ggt',v,0,currentSex==='M'?60:40,'Cholestase possible \u2014 alcool, m\u00e9dicaments, surcharge h\u00e9patique','\u2014','GGT normales'); };
+window.evalPAL = function(v) {
+  if(v===''||isNaN(v)){var e=document.getElementById('res-pal');if(e)e.style.display='none';return;}
+  v=parseFloat(v);
+  if(currentSex==='G'){
+    if(v<=250) showResult('pal','r-normal','\u2713 PAL normales (physio T3, can \u00eatre \u00d72)');
+    else showResult('pal','r-high','\u2191 PAL > seuil grossesse \u2014 rechercher cholestase intrah\u00e9patique de grossesse');
+  } else {
+    if(v<=120) showResult('pal','r-normal','\u2713 PAL normales');
+    else showResult('pal','r-high','\u2191 PAL \u00e9lev\u00e9es \u2014 cholestase (associ\u00e9 GGT\u2191) ou l\u00e9sion osseuse (GGT normal)');
+  }
+};
+
+/* ===================================================
+   HÉMOSTASE & SAPL
+   =================================================== */
+window.evalDdimeres = function() {
+  var age=valOf('val-age-dd'), dd=valOf('val-ddimeres');
+  var el=document.getElementById('res-ddimeres');
+  if(isNaN(dd)){el.style.display='none';return;}
+  var seuil=500, ctx='';
+  if(currentSex==='G'){seuil=1000;ctx='<br><i>Seuils grossesse : T1&lt;750, T2&lt;1000, T3&lt;1500 \u00b5g/L.</i>';}
+  else if(!isNaN(age)&&age>50){seuil=age*10;ctx='<br><i>Seuil ajust\u00e9 \u00e0 l\'\u00e2ge : '+seuil+' \u00b5g/L.</i>';}
+  if(dd<seuil) showResult('ddimeres','r-normal','\u2713 D-dim\u00e8res N\u00c9GATIFS (<'+seuil+'). Exclut MTEV (si proba pr\u00e9-test faible).'+ctx);
+  else showResult('ddimeres','r-critical','\u26A0 D-dim\u00e8res POSITIFS (\u2265'+seuil+'). Imagerie requise.'+ctx);
+};
+
+window.evalSAPL = function() {
+  var g=function(id){var e=document.getElementById(id);return e&&e.checked;};
+  var la=g('sapl-la'),acl=g('sapl-acl'),b2=g('sapl-b2'),triple=g('sapl-triple');
+  var thrArt=g('sapl-thr-art'),thrVein=g('sapl-thr-vein'),obs1=g('sapl-obs1'),obs2=g('sapl-obs2'),obs3=g('sapl-obs3');
+  var el=document.getElementById('res-sapl');
+  var nbBio=[la,acl,b2].filter(Boolean).length;
+  var hasBio=nbBio>=1||triple;
+  var hasClinThr=thrArt||thrVein;
+  var hasClinObs=obs1||obs2||obs3;
+  var hasClin=hasClinThr||hasClinObs;
+  if(!hasBio&&!hasClin){el.style.display='none';el.innerHTML='';return;}
+  var cls='r-info',html='';
+  if(hasBio&&hasClin){
+    cls='r-critical';html+='<b>\u26A0 SAPL PROBABLE \u2014 Crit\u00e8res de Sydney remplis</b><br>';
+    if(triple||nbBio===3)html+='Profil <b>triple positif</b> \u2014 risque maximal.<br>';
+    else if(nbBio===2)html+='Profil double positif \u2014 risque \u00e9lev\u00e9.<br>';
+    else html+='Profil mono-positif \u2014 risque mod\u00e9r\u00e9.<br>';
+    html+='<br><b>Conduite \u00e0 tenir :</b><ul style="margin:6px 0 0 16px;padding:0;font-weight:normal;">';
+    if(hasClinThr){html+='<li>Anticoagulation au long cours : AVK (INR 2\u20133) ou HBPM.</li>';if(thrArt)html+='<li>Forme art\u00e9rielle : associer aspirine 75\u2013100 mg/j.</li>';}
+    if(hasClinObs){html+='<li>Prochaine grossesse : HBPM pr\u00e9ventive + aspirine 75\u2013100 mg/j d\u00e8s la conception.</li>';if(obs3)html+='<li>Bilan FCS : caryotype parental, hyst\u00e9roscopie, TSH.</li>';if(obs1||obs2)html+='<li>Surveillance obst\u00e9tricale rapproch\u00e9e (Doppler ut\u00e9rin, biom\u00e9tries).</li>';}
+    html+='<li>Bilan lupique (ANA, anti-ADNn, compl\u00e9ment C3/C4).</li>';
+    html+='<li><b>Confirmer la positivit\u00e9 biologique \u00e0 12 semaines.</b></li></ul>';
+  } else if(hasBio){
+    cls='r-high';html+='<b>\u2191 Anticorps antiphospholipides positifs</b> \u2014 sans crit\u00e8re clinique.<br>Crit\u00e8res de Sydney <u>incomplets</u>.<br>';
+    if(triple||nbBio===3)html+='<span style="color:#C8102E;">\u25B2 Triple positif : risque thrombotique tr\u00e8s \u00e9lev\u00e9.</span><br>';
+    html+='<br><b>\u00c0 faire :</b><ul style="margin:6px 0 0 16px;padding:0;font-weight:normal;"><li>Rechercher morbidit\u00e9 clinique (interrogatoire vasculaire et obst\u00e9trical).</li><li>Recontr\u00f4ler la s\u00e9rologie \u00e0 12 semaines.</li><li>Bilan lupique.</li></ul>';
+  } else {
+    cls='r-high';html+='<b>\u2191 Ant\u00e9c\u00e9dents cliniques \u00e9vocateurs</b> \u2014 s\u00e9rologie non confirm\u00e9e.<br>';
+    html+='<br><b>\u00c0 faire :</b><ul style="margin:6px 0 0 16px;padding:0;font-weight:normal;"><li>Prescrire : ACC, anti-CL IgG/IgM, anti-\u03b22-GPI IgG/IgM.</li>';
+    if(hasClinObs)html+='<li>Thrombophilie compl\u00e8te : prot\u00e9ines C/S, antithrombine, facteur V Leiden, mutation 20210A.</li>';
+    html+='<li>Si positif \u2192 recontr\u00f4ler \u00e0 12 semaines.</li></ul>';
+  }
+  el.className='bio-result '+cls; el.innerHTML=html; el.style.cssText='display:block !important; margin-top:10px;';
+};
+
+/* ===================================================
+   BILAN LIPIDIQUE
+   =================================================== */
+window.evalLDL = function(v) {
+  if(v===''||isNaN(v)){hideCursor('ldl');var e=document.getElementById('res-ldl');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<1.8){cls='r-normal';msg='\u2713 LDL-c optimal (<1,8 mmol/L) \u2014 cible risque \u00e9lev\u00e9';pct=15;}
+  else if(v<2.6){cls='r-normal';msg='\u2713 LDL-c acceptable (<2,6 mmol/L) \u2014 cible risque mod\u00e9r\u00e9';pct=35;}
+  else if(v<4.1){cls='r-high';msg='\u2191 LDL-c \u00e9lev\u00e9 \u2014 intervention si risque CV mod\u00e9r\u00e9 \u00e0 \u00e9lev\u00e9';pct=60;}
+  else{cls='r-critical';msg='\u26A0 LDL-c tr\u00e8s \u00e9lev\u00e9 (>4,1 mmol/L) \u2014 traitement n\u00e9cessaire';pct=88;}
+  moveCursor('ldl',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('ldl',cls,msg);
+};
+
+window.evalHDL = function(v) {
+  if(v===''||isNaN(v)){hideCursor('hdl');var e=document.getElementById('res-hdl');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var lo=currentSex==='M'?1.0:1.2; var cls,msg,pct;
+  if(v<lo){cls='r-critical';msg='\u26A0 HDL bas \u2014 facteur de risque CV ind\u00e9pendant ('+v+' mmol/L)';pct=15;}
+  else if(v>2.0){cls='r-normal';msg='\u2713 HDL protecteur \u00e9lev\u00e9 ('+v+' mmol/L)';pct=90;}
+  else{cls='r-normal';msg='\u2713 HDL normal ('+v+' mmol/L)';pct=40+40*(v-lo)/0.8;}
+  moveCursor('hdl',pct,cls==='r-critical'?'#C8102E':'#166534');
+  showResult('hdl',cls,msg);
+};
+
+window.evalTG = function(v) {
+  if(v===''||isNaN(v)){hideCursor('tg');var e=document.getElementById('res-tg');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<1.7){cls='r-normal';msg='\u2713 Triglycérides normaux';pct=30;}
+  else if(v<5.6){cls='r-high';msg='\u2191 Hypertriglycérid\u00e9mie \u2014 syndrome m\u00e9tabolique, DT2, alcool, hypothyro\u00efdie';pct=65;}
+  else{cls='r-critical';msg='\u26A0 Hypertriglycérid\u00e9mie majeure (>5,6 mmol/L) \u2014 risque de pancr\u00e9atite aigu\u00eb';pct=93;}
+  moveCursor('tg',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('tg',cls,msg);
+};
+
+window.updateRatio = function() {
+  var ct=valOf('val-ct'), hdl=valOf('val-hdl');
+  var el=document.getElementById('res-ratio'); if(!el) return;
+  if(!isNaN(ct)&&!isNaN(hdl)&&hdl>0){
+    var r=(ct/hdl).toFixed(2); var cls,msg;
+    if(r<3.5){cls='r-normal';msg='\u2713 Ratio CT/HDL = '+r+' (Risque CV faible)';}
+    else if(r<4.5){cls='r-high';msg='\u2191 Ratio CT/HDL = '+r+' (Risque CV mod\u00e9r\u00e9)';}
+    else{cls='r-critical';msg='\u26A0 Ratio CT/HDL = '+r+' (Risque CV \u00e9lev\u00e9)';}
+    el.className='bio-result '+cls; el.innerHTML=msg;
+  } else {
+    el.className='bio-result r-empty'; el.innerHTML='Renseignez CT et HDL';
+  }
+};
+
+/* ===================================================
+   IONOGRAMME
+   =================================================== */
+window.evalNa = function(v) {
+  if(v===''||isNaN(v)){hideCursor('na');var e=document.getElementById('res-na');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<120){cls='r-critical';msg='\u26A0 Hyponatr\u00e9mie s\u00e9v\u00e8re \u2014 \u0153d\u00e8me c\u00e9r\u00e9bral possible \u2014 correction progressive (\u226410 mmol/24h)';pct=3;}
+  else if(v<135){cls='r-low';msg='\u2193 Hyponatr\u00e9mie \u2014 SIADH, d\u00e9pl\u00e9tion sod\u00e9e, potomanie, insuffisance surr\u00e9nale';pct=15;}
+  else if(v>155){cls='r-critical';msg='\u26A0 Hypernatr\u00e9mie s\u00e9v\u00e8re \u2014 d\u00e9shydratation intracellulaire \u2014 r\u00e9hydratation progressive';pct=95;}
+  else if(v>145){cls='r-high';msg='\u2191 Hypernatr\u00e9mie \u2014 d\u00e9shydratation, diab\u00e8te insipide';pct=75;}
+  else{cls='r-normal';msg='\u2713 Natr\u00e9mie normale';pct=20+55*(v-135)/10;}
+  moveCursor('na',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('na',cls,msg); calcTA();
+};
+
+window.evalK = function(v) {
+  if(v===''||isNaN(v)){hideCursor('k');var e=document.getElementById('res-k');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<2.5){cls='r-critical';msg='\u26A0 Hypokali\u00e9mie s\u00e9v\u00e8re \u2014 risque d\'arythmie \u2014 suppl\u00e9mentation IV urgente';pct=3;}
+  else if(v<3.5){cls='r-low';msg='\u2193 Hypokali\u00e9mie \u2014 diur\u00e9tiques, vomissements, hyperaldost\u00e9ronisme, diarrh\u00e9es';pct=20;}
+  else if(v>=6.5){cls='r-critical';msg='\u26A0 Hyperkali\u00e9mie s\u00e9v\u00e8re \u2014 ECG en urgence, risque arr\u00eat cardiaque';pct=97;}
+  else if(v>5.0){cls='r-high';msg='\u2191 Hyperkali\u00e9mie \u2014 IRC, m\u00e9dicaments (IEC/ARA2, h\u00e9parines), Addison';pct=75;}
+  else{cls='r-normal';msg='\u2713 Kali\u00e9mie normale';pct=20+50*(v-3.5)/1.5;}
+  moveCursor('k',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('k',cls,msg); calcTA();
+};
+
+window.evalCa = function(v) {
+  if(v===''||isNaN(v)){hideCursor('ca');var e=document.getElementById('res-ca');if(e)e.style.display='none';document.getElementById('res-alb').style.display='none';return;}
+  v=parseFloat(v);
+  var alb=valOf('val-alb'); var caUtil=v, note='';
+  if(!isNaN(alb)&&alb<35){
+    caUtil=v+0.02*(40-alb);
+    note='<br><b>Ca corrig\u00e9 = '+caUtil.toFixed(2)+' mmol/L</b> (albumine '+alb+' g/L)';
+    showResult('alb','r-info','\u2139 Albumine basse \u2192 calc\u00e9mie corrig\u00e9e appliqu\u00e9e');
+  } else if(!isNaN(alb)){
+    showResult('alb','r-normal','\u2713 Albumine normale');
+  } else {
+    document.getElementById('res-alb').style.display='none';
+  }
+  var cls,msg;
+  if(caUtil<1.75){cls='r-critical';msg='\u26A0 Hypocalc\u00e9mie s\u00e9v\u00e8re \u2014 t\u00e9tanie, convulsions \u2014 correction IV';}
+  else if(caUtil<2.20){cls='r-low';msg='\u2193 Hypocalc\u00e9mie \u2014 hypoparathyro\u00efdie, carence vit. D, malabsorption, IRC';}
+  else if(caUtil>3.0){cls='r-critical';msg='\u26A0 Hypercalc\u00e9mie s\u00e9v\u00e8re \u2014 hyperparathyro\u00efdie, n\u00e9oplasie, sarco\u00efde';}
+  else if(caUtil>2.60){cls='r-high';msg='\u2191 Hypercalc\u00e9mie \u2014 hyperparathyro\u00efdie primaire, n\u00e9oplasie, exc\u00e8s vit. D';}
+  else{cls='r-normal';msg='\u2713 Calc\u00e9mie normale';}
+  moveCursor('ca',caUtil<2.2?15:caUtil>2.6?80:50,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('ca',cls,msg+note);
+};
+
+window.calcTA = function() {
+  var na=valOf('val-na'),k=valOf('val-k'),cl=valOf('val-cl'),hco3=valOf('val-hco3');
+  var el=document.getElementById('res-ta'); if(!el) return;
+  if(isNaN(na)||isNaN(k)||isNaN(cl)||isNaN(hco3)){el.innerHTML='Renseignez Na, K, Cl, HCO\u2083';el.className='bio-result r-empty';return;}
+  var ta=(na+k)-(cl+hco3); var cls,msg;
+  if(ta<8){cls='r-low';msg='Trou anionique = '+ta.toFixed(1)+' mmol/L \u2014 Bas (hypoalbuminémie\u00a0?)'}
+  else if(ta<=16){cls='r-normal';msg='\u2713 Trou anionique = '+ta.toFixed(1)+' mmol/L (Normal 8\u201316)';}
+  else{cls='r-critical';msg='\u26A0 Trou anionique \u00e9lev\u00e9 = '+ta.toFixed(1)+' mmol/L \u2014 Acidose : c\u00e9toacidose, lactate, toxiques, IRC';}
+  el.className='bio-result '+cls; el.innerHTML=msg;
+};
+
+/* ===================================================
+   VITAMINES
+   =================================================== */
+window.evalVitD = function(v) {
+  if(v===''||isNaN(v)){hideCursor('vitd');var e=document.getElementById('res-vitd');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<10){cls='r-critical';msg='\u26A0 Carence s\u00e9v\u00e8re (<10 ng/mL) \u2014 recharge m\u00e9dicamenteuse urgente';pct=5;}
+  else if(v<30){cls='r-low';msg='\u2193 Insuffisance (10\u201330 ng/mL) \u2014 suppl\u00e9mentation requise';pct=20;}
+  else if(v>100){cls='r-critical';msg='\u26A0 Surdosage (>100 ng/mL) \u2014 risque de toxicit\u00e9';pct=95;}
+  else{cls='r-normal';msg='\u2713 Vitamine D normale ('+v+' ng/mL)';pct=50;}
+  moveCursor('vitd',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':'#166534');
+  showResult('vitd',cls,msg);
+};
+
+window.evalB9S = function(v) {
+  if(v===''||isNaN(v)){hideCursor('b9s');var e=document.getElementById('res-b9s');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<3){cls='r-critical';msg='\u26A0 Carence s\u00e9v\u00e8re en folates \u2014 macrocytose, risque malformations f\u0153tales (si grossesse)';pct=5;}
+  else if(v<5){cls='r-low';msg='\u2193 Folates bas \u2014 malabsorption, alcoolisme, grossesse, m\u00e9dicaments (MTX, anti\u00e9pileptiques)';pct=18;}
+  else if(v>30){cls='r-high';msg='\u2191 Folates \u00e9lev\u00e9s \u2014 suppl\u00e9mentation en cours (physiologique)';pct=85;}
+  else{cls='r-normal';msg='\u2713 Folates s\u00e9riques normaux';pct=20+55*(v-5)/25;}
+  moveCursor('b9s',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('b9s',cls,msg);
+};
+
+window.evalB12 = function(v) {
+  if(v===''||isNaN(v)){hideCursor('b12');var e=document.getElementById('res-b12');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<100){cls='r-critical';msg='\u26A0 Carence s\u00e9v\u00e8re en B12 \u2014 risque neurologique (neuropathie, scl\u00e9rose combin\u00e9e)';pct=5;}
+  else if(v<148){cls='r-low';msg='\u2193 Carence en B12 \u2014 v\u00e9g\u00e9talisme, malabsorption (Biermer, c\u0153liaque, r\u00e9section il\u00e9ale), IPP';pct=18;}
+  else if(v>740){cls='r-high';msg='\u2191 B12 \u00e9lev\u00e9e \u2014 h\u00e9patopathie, SMP, suppl\u00e9mentation';pct=85;}
+  else{cls='r-normal';msg='\u2713 Vitamine B12 normale';pct=20+55*(v-148)/592;}
+  moveCursor('b12',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166634');
+  showResult('b12',cls,msg);
+};
+
+window.evalHomo = function(v) {
+  if(v===''||isNaN(v)){hideCursor('homo');var e=document.getElementById('res-homo');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg,pct;
+  if(v<15){cls='r-normal';msg='\u2713 Homocyst\u00e9ine normale';pct=30;}
+  else if(v<30){cls='r-high';msg='\u2191 Hyperhomocyst\u00e9in\u00e9mie mod\u00e9r\u00e9e \u2014 carence B9/B12, IRC, tabac, risque thrombotique';pct=60;}
+  else if(v<100){cls='r-critical';msg='\u26A0 Hyperhomocyst\u00e9in\u00e9mie s\u00e9v\u00e8re \u2014 carence sévère B9/B12 ou homocystinurie';pct=88;}
+  else{cls='r-critical';msg='\u26A0 Hyperhomocyst\u00e9in\u00e9mie massive \u2014 homocystinurie g\u00e9n\u00e9tique \u00e0 exclure';pct=97;}
+  moveCursor('homo',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('homo',cls,msg);
+};
+
+window.evalAFI = function() {
+  var checked=document.getElementById('val-afi').checked;
+  var el=document.getElementById('res-afi');
+  if(checked){
+    el.className='bio-result r-critical';
+    el.innerHTML='\u26A0 Ac. anti-FI positifs \u2014 Maladie de Biermer confirm\u00e9e \u2014 B12 IM \u00e0 vie (1000 \u00b5g/mois)';
+    el.style.display='block';
+  } else {
+    el.style.display='none';
+  }
+};
+
+window.synthesizeVit = function() {
+  var b12=valOf('val-b12'), b9s=valOf('val-b9s'), amm=valOf('val-amm'), homo=valOf('val-homo');
+  var afi=document.getElementById('val-afi').checked;
+  var txt='';
+  if(!isNaN(b12)&&b12<148&&!isNaN(b9s)&&b9s<5){
+    txt='Carence combin\u00e9e B12 + B9 \u2014 fr\u00e9quente dans les malabsorptions (maladie c\u0153liaque, gastrite atrophique). Bilan compl\u00e9mentaire : IgA anti-TG2, anti-FI, gastroscopie.';
+  } else if(!isNaN(b12)&&b12<148){
+    if(afi) txt='Maladie de Biermer confirm\u00e9e (anti-FI positifs). Suppl\u00e9mentation B12 IM mensuelle d\u00e9finitive. Surveillance endoscopique (risque cancer gastrique).';
+    else if(!isNaN(amm)&&amm>270) txt='Carence fonctionnelle en B12 (AMM \u00e9lev\u00e9) \u2014 carence vraie malgr\u00e9 taux limite. Suppl\u00e9mentation orale haute dose ou IM selon tol\u00e9rance et cause.';
+    else txt='Carence en B12 \u2014 Pr\u00e9ciser la cause : v\u00e9g\u00e9talisme, malabsorption (c\u0153liaque, Biermer), r\u00e9section il\u00e9ale, IPP au long cours. Doser anti-FI et IgA anti-TG2.';
+  } else if(!isNaN(b9s)&&b9s<5){
+    txt='Carence en folates isol\u00e9e \u2014 causes : alcoolisme, grossesse, malabsorption, m\u00e9dicaments (MTX, anti\u00e9pileptiques). Suppl\u00e9mentation acide folique 5 mg/j. Si grossesse ou projet : 0,4 mg/j au moins 4 semaines avant conception.';
+  } else if(!isNaN(homo)&&homo>15){
+    txt='Hyperhomocyst\u00e9in\u00e9mie sans carence \u00e9vidente sur taux s\u00e9riques \u2014 penser \u00e0 carence fonctionnelle (AMM utile), IRC, hypothyro\u00efdie. Risque cardiovasculaire et thrombotique augment\u00e9.';
+  } else {
+    txt='Pas de carence en B9/B12 \u00e9vidente sur les valeurs renseign\u00e9es. Croiser avec le contexte clinique (macrocytose, sympt\u00f4mes neurologiques, r\u00e9gime alimentaire).';
+  }
+  var el=document.getElementById('vit-interpret');
+  document.getElementById('vit-interpret-text').textContent=txt;
+  el.classList.add('visible');
+};
+
+/* ===================================================
+   MALADIE CŒLIAQUE
+   =================================================== */
+window.evalTG2 = function(v) {
+  if(v===''||isNaN(v)){var e=document.getElementById('res-tg2');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg;
+  if(v<10){cls='r-normal';msg='\u2713 IgA anti-TG2 n\u00e9gatif (<10 UI/mL) \u2014 faible probabilit\u00e9 de maladie c\u0153liaque';}
+  else if(v<30){cls='r-high';msg='\u2191 IgA anti-TG2 positif (\u00d7'+Math.round(v/10)+' LSN) \u2014 confirmer par EMA + biopsie duod\u00e9nale';}
+  else if(v<100){cls='r-critical';msg='\u26A0 IgA anti-TG2 tr\u00e8s positif (\u00d7'+Math.round(v/10)+' LSN) \u2014 forte probabilit\u00e9 MC \u2014 EMA + biopsie';}
+  else{cls='r-critical';msg='\u26A0 IgA anti-TG2 massivement \u00e9lev\u00e9 (\u00d7'+Math.round(v/10)+' LSN \u2265\u00d710) \u2014 crit\u00e8res ESPGHAN 2020 : diagnostic sans biopsie si EMA+ et HLA DQ2/DQ8+';}
+  var el=document.getElementById('res-tg2');
+  el.className='bio-result '+cls; el.innerHTML=msg; el.style.display='block';
+};
+
+window.evalIgATot = function(v) {
+  if(v===''||isNaN(v)){var e=document.getElementById('res-iga-tot');if(e)e.style.display='none';return;}
+  v=parseFloat(v); var cls,msg;
+  if(v<0.07){cls='r-critical';msg='\u26A0 D\u00e9ficit s\u00e9lectif en IgA \u2014 les IgA anti-TG2 sont NON INTERPR\u00c9TABLES \u2014 utiliser IgG anti-TG2 et IgG DGP';}
+  else if(v<0.7){cls='r-low';msg='\u2193 IgA basses (sans d\u00e9ficit complet) \u2014 interpr\u00e9ter les IgA anti-TG2 avec prudence';}
+  else{cls='r-normal';msg='\u2713 IgA totales normales \u2014 interpr\u00e9tation des marqueurs IgA valide';}
+  var el=document.getElementById('res-iga-tot');
+  el.className='bio-result '+cls; el.innerHTML=msg; el.style.display='block';
+};
+
+window.evalEMA = function(val) {
+  var el=document.getElementById('res-ema');
+  if(val==='pos'){el.className='bio-result r-critical';el.innerHTML='\u26A0 EMA positif \u2014 haute sp\u00e9cificit\u00e9 (>99%) pour MC \u2014 confirme le diagnostic';}
+  else{el.className='bio-result r-normal';el.innerHTML='\u2713 EMA n\u00e9gatif';}
+  el.style.display='block';
+};
+
+window.evalHLA = function(val) {
+  var el=document.getElementById('res-hla');
+  if(val==='pos'){el.className='bio-result r-high';el.innerHTML='\u2713 HLA DQ2/DQ8 pr\u00e9sent \u2014 n\u00e9cessaire mais non suffisant (30% population g\u00e9n\u00e9rale) \u2014 requis dans les crit\u00e8res sans biopsie';}
+  else{el.className='bio-result r-normal';el.innerHTML='HLA DQ2/DQ8 absent \u2014 maladie c\u0153liaque exclue avec haute probabilit\u00e9 (>99% VPN)';}
+  el.style.display='block';
+};
+
+window.synthesizeCeliaque = function() {
+  var tg2=valOf('val-tg2'), iga=valOf('val-iga-tot');
+  var ema=document.querySelector('input[name="ema"]:checked');
+  var hla=document.querySelector('input[name="hla"]:checked');
+  var txt='';
+  if(!isNaN(iga)&&iga<0.07){
+    txt='D\u00e9ficit s\u00e9lectif en IgA d\u00e9tect\u00e9 : les IgA anti-TG2 sont NON INTERPR\u00c9TABLES. Demander en priorit\u00e9 IgG anti-TG2 et IgG anti-DGP. Si positifs \u2192 biopsie duod\u00e9nale.';
+  } else if(!isNaN(tg2)&&tg2>=100&&ema&&ema.value==='pos'&&hla&&hla.value==='pos'){
+    txt='Crit\u00e8res ESPGHAN 2020 r\u00e9unis : IgA anti-TG2 \u2265\u00d710 LSN + EMA positif + HLA DQ2/DQ8 pr\u00e9sent \u2192 DIAGNOSTIC SANS BIOPSIE possible. R\u00e9gime sans gluten \u00e0 instaurer. Contr\u00f4le s\u00e9rologique \u00e0 6 mois (normalisation attendue sous RSG).';
+  } else if(!isNaN(tg2)&&tg2>=30){
+    txt='S\u00e9rologie fortement positive. Biopsie duod\u00e9nale (Marsh 2\u20133) recommand\u00e9e pour confirmation anatomopathologique et stadification. Maintenir r\u00e9gime normal jusqu\'\u00e0 la biopsie.';
+  } else if(!isNaN(tg2)&&tg2>=10){
+    txt='S\u00e9rologie positive faible. Compl\u00e9ter par EMA IgA. Si EMA positif \u2192 biopsie. Si EMA n\u00e9gatif \u2192 contr\u00f4le \u00e0 3\u20136 mois (faux positif possible).';
+  } else {
+    txt='S\u00e9rologie n\u00e9gative ou insuffisante pour conclure. Si suspicion clinique forte malgr\u00e9 IgA anti-TG2 n\u00e9gatif : doser IgA totales, test g\u00e9n\u00e9tique HLA. R\u00e9sultat n\u00e9gatif sous r\u00e9gime sans gluten pr\u00e9alable n\'exclut pas la MC.';
+  }
+  var el=document.getElementById('celiaque-interpret');
+  document.getElementById('celiaque-interpret-text').textContent=txt;
+  el.classList.add('visible');
+};
+
+/* ===================================================
+   CAS CLINIQUES
+   =================================================== */
+window.loadCase = function(id) {
+  var container=document.getElementById('case-container');
+  if(!id){container.innerHTML='';return;}
+  var c=CASES[id]; if(!c){container.innerHTML='';return;}
+  var paramsHtml=c.params.map(function(p){
+    return '<div class="bio-case-param"><div class="bio-case-param-name">'+p.n+'</div><div class="bio-case-param-val '+p.c+'">'+p.v+'</div></div>';
+  }).join('');
+  container.innerHTML='<div class="bio-case-card visible">'
+    +'<div class="bio-case-header">'
+    +'<div class="bio-case-age">'+c.age+'<span>'+c.sexLabel+'</span></div>'
+    +'<div><div class="bio-case-motif">'+c.motif+'</div><div class="bio-case-context">'+c.context+'</div></div>'
+    +'</div>'
+    +'<div class="bio-case-bio">'+paramsHtml+'</div>'
+    +'<div style="margin-top:6px;">'
+    +'<button class="bio-btn" onclick="revealAnswer(this)" style="background:#C8102E!important;">\u25B6 R\u00e9v\u00e9ler le diagnostic et la conduite</button>'
+    +'</div>'
+    +'<div class="bio-case-answer" id="case-answer">'
+    +'<div class="bio-sep"></div>'
+    +'<span class="bio-case-diag">'+c.diag+'</span>'
+    +'<div class="bio-case-section"><div class="bio-case-section-title">Analyse du bilan</div><p>'+c.orient+'</p></div>'
+    +'<div class="bio-case-section"><div class="bio-case-section-title">Conduite \u00e0 tenir</div><p>'+c.conduite+'</p></div>'
+    +'</div>'
+    +'</div>';
+};
+
+window.revealAnswer = function(btn) {
+  var ans=document.getElementById('case-answer');
+  if(ans) ans.classList.add('visible');
+  btn.style.display='none';
+};
+
+/* ===================================================
+   PANNEAU PATIENT
+   =================================================== */
+window.togglePatientForm = function() {
+  var form=document.getElementById('patient-form');
+  var btn=document.getElementById('patient-toggle-btn');
+  var isOpen=form.classList.contains('open');
+  form.classList.toggle('open',!isOpen);
+  btn.classList.toggle('open',!isOpen);
+  btn.setAttribute('aria-expanded',String(!isOpen));
+};
+
+window.calcAge = function() {
+  var ddn=document.getElementById('pt-ddn').value;
+  var display=document.getElementById('pt-age-display');
+  if(!ddn){display.textContent='';return;}
+  var today=new Date(), birth=new Date(ddn);
+  var age=today.getFullYear()-birth.getFullYear();
+  var m=today.getMonth()-birth.getMonth();
+  if(m<0||(m===0&&today.getDate()<birth.getDate())) age--;
+  display.textContent=age>=0?age+' ans':'';
+};
+
+function getPatientInfo() {
+  var nom=(document.getElementById('pt-nom').value||'').trim();
+  var prenom=(document.getElementById('pt-prenom').value||'').trim();
+  var ddn=document.getElementById('pt-ddn').value;
+  var medecin=(document.getElementById('pt-medecin').value||'').trim();
+  var dateBilan=document.getElementById('pt-date-bilan').value;
+  var age=document.getElementById('pt-age-display').textContent;
+  return {
+    nomComplet:[prenom,nom].filter(Boolean).join(' '),
+    ddnFormatted:ddn?new Date(ddn).toLocaleDateString('fr-FR'):'',
+    age:age, medecin:medecin,
+    dateBilanFormatted:dateBilan?new Date(dateBilan).toLocaleDateString('fr-FR'):''
+  };
+}
+
+/* ===================================================
+   MOTEUR D'ANALYSE GLOBALE
+   =================================================== */
 function detectPatterns() {
-  const out = [];
-  const normT = currentSex==='M'?40:32;
-  const ferr=val('val-ferr'), cs=val('val-cs'), asat=val('val-asat'), alat=val('val-alat'), bili=val('val-bili');
-  const hb=val('val-hb'), vgm=val('val-vgm'), b12=val('val-b12'), b9=val('val-b9s'), plt=val('val-plt');
-  const crp=val('val-crp'), vs=val('val-vs'), fibr=val('val-fibrino'), gb=val('val-gb');
-  const creat=val('val-creat'), uree=val('val-uree'), ca=val('val-ca'), phos=val('val-phos');
-  const gly=val('val-gly'), tg=val('val-tg'), hdl=val('val-hdl');
-  const na=val('val-na'), k=val('val-k'), cl=val('val-cl'), hco3=val('val-hco3');
-
+  var out=[];
+  var normT=currentSex==='M'?40:32;
+  var ferr=valOf('val-ferr'),cs=valOf('val-cs'),asat=valOf('val-asat'),alat=valOf('val-alat');
+  var hb=valOf('val-hb'),vgm=valOf('val-vgm'),b12=valOf('val-b12'),b9=valOf('val-b9s'),plt=valOf('val-plt');
+  var crp=valOf('val-crp'),fibr=valOf('val-fibrino'),gb=valOf('val-gb');
+  var na=valOf('val-na'),k=valOf('val-k'),cl=valOf('val-cl'),hco3=valOf('val-hco3');
+  var gly=valOf('val-gly'),tg=valOf('val-tg'),hdl=valOf('val-hdl');
   // HELLP
-  if (currentSex==='G' && (asat>normT*2||alat>normT*2) && plt<100) out.push({lvl:'crit', t:'HELLP syndrome (grossesse)', a:'⚠️ URGENCE OBSTÉTRICALE — transfert maternité, bilan pré-éclampsie (PA, protéinurie, LDH, haptoglobine).'});
+  if(currentSex==='G'&&(asat>normT*2||alat>normT*2)&&plt<100) out.push({lvl:'crit',t:'HELLP syndrome (grossesse)',a:'\u26A0\uFE0F URGENCE OBST\u00c9TRICALE \u2014 transfert maternit\u00e9, bilan pr\u00e9-\u00e9clampsie (PA, prot\u00e9inurie, LDH, haptoglobine).'});
   // Hémochromatose
-  if (ferr>500 && cs>45) out.push({lvl:'high', t:'Surcharge martiale / hémochromatose', a:'Doser le gène HFE (C282Y/H63D), répéter ferritine + CST. Échographie hépatique.'});
+  if(ferr>500&&cs>45) out.push({lvl:'high',t:'Surcharge martiale / h\u00e9mochromatose',a:'Doser le g\u00e8ne HFE (C282Y/H63D), r\u00e9p\u00e9ter ferritine + CST. \u00c9chographie h\u00e9patique.'});
   // Anémie ferriprive
-  if (hb<(currentSex==='M'?13:(currentSex==='G'?11:12)) && vgm<80 && ferr<(currentSex==='M'?20:10)) out.push({lvl:'high', t:'Anémie ferriprive (microcytaire)', a:'Rechercher saignement (digestif/gynéco). Supplémentation martiale 3 mois.'});
-  // Anémie mixte
-  if (hb<12 && (b12<148||b9<5) && ferr<(currentSex==='M'?20:10)) out.push({lvl:'high', t:'Anémie mixte (fer + vitamines)', a:'Rechercher malabsorption (anti-TG2, endoscopie). Supplémentation combinée.'});
-  // Macrocytaire
-  if (vgm>100 && (b12<148||b9<5)) out.push({lvl:'watch', t:'Anémie/macrocytose carentielle (B12/B9)', a:'Doser B12 + folates, recherche Biermer (Ac anti-FI), interrogatoire alcool.'});
+  if(hb<(currentSex==='M'?13:(currentSex==='G'?11:12))&&vgm<80&&ferr<(currentSex==='M'?20:10)) out.push({lvl:'high',t:'An\u00e9mie ferriprive (microcytaire)',a:'Rechercher saignement (digestif/gyn\u00e9co). Suppl\u00e9mentation martiale 3 mois.'});
+  // Anémie macrocytaire carentielle
+  if(vgm>100&&(b12<148||b9<5)) out.push({lvl:'watch',t:'An\u00e9mie/macrocytose carentielle (B12/B9)',a:'Doser B12 + folates, recherche Biermer (Ac anti-FI), interrogatoire alcool.'});
   // Syndrome inflammatoire
-  if (crp>50 && (vs>50||fibr>4.5)) out.push({lvl:'high', t:'Syndrome inflammatoire marqué', a:'Rechercher foyer infectieux (imagerie, hémoc.) ou maladie systémique.'});
+  if(crp>50&&(fibr>4.5)) out.push({lvl:'high',t:'Syndrome inflammatoire marqu\u00e9',a:'Rechercher foyer infectieux (imagerie, h\u00e9moc.) ou maladie syst\u00e9mique.'});
   // Cytolyse sévère
-  if ((asat>normT*10||alat>normT*10)) out.push({lvl:'crit', t:'Cytolyse hépatique massive (>10N)', a:'Bilan urgent : TP/INR, sérologies virales, échographie. Hépatite aiguë ?'});
-  // IRC avancée
-  if (creat>300 && (phos>1.8||ca<2.0)) out.push({lvl:'high', t:'Insuffisance rénale avancée', a:'Avis néphrologique, PTH, adaptation des posologies.'});
-  // Acidose à TA élevé
-  if (!isNaN(na)&&!isNaN(k)&&!isNaN(cl)&&!isNaN(hco3)) { const ta=(na+k)-(cl+hco3); if (hco3<22 && ta>16) out.push({lvl:'crit', t:'Acidose métabolique à trou anionique élevé', a:'Gazométrie, lactate, glycémie, cétonémie, toxiques.'}); }
+  if(asat>normT*10||alat>normT*10) out.push({lvl:'crit',t:'Cytolyse h\u00e9patique massive (>10N)',a:'Bilan urgent : TP/INR, s\u00e9rologies virales, \u00e9chographie. H\u00e9patite aigu\u00eb\u00a0?'});
+  // Acidose TA élevé
+  if(!isNaN(na)&&!isNaN(k)&&!isNaN(cl)&&!isNaN(hco3)){var ta=(na+k)-(cl+hco3);if(hco3<22&&ta>16) out.push({lvl:'crit',t:'Acidose m\u00e9tabolique \u00e0 trou anionique \u00e9lev\u00e9',a:'Gazom\u00e9trie, lactate, glyc\u00e9mie, c\u00e9ton\u00e9mie, toxiques.'});}
   // Hyponatrémie sévère
-  if (na<120) out.push({lvl:'crit', t:'Hyponatrémie sévère (<120)', a:'Osmolalités plasma/urines, TSH, cortisol. Correction prudente (≤10 mmol/24h).'});
+  if(na<120) out.push({lvl:'crit',t:'Hyponatr\u00e9mie s\u00e9v\u00e8re (<120)',a:'Osmolarit\u00e9s plasma/urines, TSH, cortisol. Correction prudente (\u226410 mmol/24h).'});
   // Syndrome métabolique
-  if (gly>5.5 && tg>2.0 && hdl<(currentSex==='M'?1.0:1.2)) out.push({lvl:'watch', t:'Syndrome métabolique probable', a:'Mesures hygiéno-diététiques, activité physique, évaluer SOPK chez la femme.'});
+  if(gly>5.5&&tg>2.0&&hdl<(currentSex==='M'?1.0:1.2)) out.push({lvl:'watch',t:'Syndrome m\u00e9tabolique probable',a:'Mesures hygi\u00e9no-di\u00e9t\u00e9tiques, activit\u00e9 physique, \u00e9valuer SOPK chez la femme.'});
   return out;
 }
 
-/* --- Option 5 : bilan auto-immun --- */
 function suggestAutoimmun() {
-  const out = [];
-  const normT = currentSex==='M'?40:32;
-  const asat=val('val-asat'), alat=val('val-alat'), crp=val('val-crp'), vs=val('val-vs'), bili=val('val-bili'), hb=val('val-hb'), lympho=val('val-lympho');
-  if ((asat>normT*2||alat>normT*2) && (isNaN(crp)||crp<20)) out.push({t:'Hépatite auto-immune possible', tests:'ANA, anti-muscle lisse (SMA), anti-LKM1, anti-mitochondrie, IgG, sérologies virales'});
-  if ((asat>normT||alat>normT) && bili>17) out.push({t:'Cholangite biliaire primitive (CBP) à évoquer', tests:'Anti-mitochondrie (AMA-M2), ANA, GGT/PAL, élastographie hépatique'});
-  if (crp>20 && vs>30) out.push({t:'Pathologie systémique à explorer', tests:'ANA + dilution, anti-ADNn, anti-ENA (Ro/La/Sm/RNP), ANCA, complément C3/C4, FR, anti-CCP'});
-  if (hb<11 && lympho<1.0) out.push({t:'Atteinte hématologique auto-immune ?', tests:'Haptoglobine, LDH, réticulocytes, test de Coombs, ANA'});
+  var out=[];
+  var normT=currentSex==='M'?40:32;
+  var asat=valOf('val-asat'),alat=valOf('val-alat'),crp=valOf('val-crp'),bili=valOf('val-bili'),hb=valOf('val-hb'),lympho=valOf('val-lympho');
+  if((asat>normT*2||alat>normT*2)&&(isNaN(crp)||crp<20)) out.push({t:'H\u00e9patite auto-immune possible',tests:'ANA, anti-muscle lisse (SMA), anti-LKM1, anti-mitochondrie, IgG, s\u00e9rologies virales'});
+  if((asat>normT||alat>normT)&&bili>17) out.push({t:'Cholangite biliaire primitive (CBP) \u00e0 \u00e9voquer',tests:'Anti-mitochondrie (AMA-M2), ANA, GGT/PAL, \u00e9lastographie h\u00e9patique'});
+  if(crp>20) out.push({t:'Pathologie syst\u00e9mique \u00e0 explorer',tests:'ANA + dilution, anti-ADNn, anti-ENA (Ro/La/Sm/RNP), ANCA, compl\u00e9ment C3/C4, FR, anti-CCP'});
+  if(hb<11&&lympho<1.0) out.push({t:'Atteinte h\u00e9matologique auto-immune\u00a0?',tests:'Haptoglobine, LDH, r\u00e9ticulocytes, test de Coombs, ANA'});
   return out;
 }
 
-window.runGlobalAnalysis = () => {
-  const anomalies = []; // {lvl, txt}
-  const actions = [];
-  let hasData = false;
-  const push = (lvl, txt) => anomalies.push({lvl, txt});
+window.runGlobalAnalysis = function() {
+  var anomalies=[], actions=[], hasData=false;
+  function push(lvl,txt){anomalies.push({lvl:lvl,txt:txt});}
 
-  const normT = currentSex==='M'?40:32;
-  const hb=val('val-hb'), vgm=val('val-vgm'), plt=val('val-plt'), gb=val('val-gb');
-  const crp=val('val-crp'), ferr=val('val-ferr'); let gly=val('val-gly'); if(!isNaN(gly)&&gly<3.5) gly*=5.55;
-  const hba1c=val('val-hba1c'), insul=val('val-insul'), creat=val('val-creat'), age=val('ckd-age');
-  const asat=val('val-asat'), alat=val('val-alat'), ldl=val('val-ldl'), tg=val('val-tg');
-  const vitd=val('val-vitd'), b9=val('val-b9s'), b12=val('val-b12'), tg2=val('val-tg2'), iga=val('val-iga-tot');
-  const k=val('val-k'), na=val('val-na'), ca=val('val-ca');
+  var normT=currentSex==='M'?40:32;
+  var hb=valOf('val-hb'),vgm=valOf('val-vgm'),plt=valOf('val-plt'),gb=valOf('val-gb');
+  var crp=valOf('val-crp'),ferr=valOf('val-ferr');
+  var gly=valOf('val-gly'); if(!isNaN(gly)&&gly<3.5) gly*=5.55;
+  var hba1c=valOf('val-hba1c'),insul=valOf('val-insul');
+  var creat=valOf('val-creat'),age=valOf('ckd-age');
+  var asat=valOf('val-asat'),alat=valOf('val-alat');
+  var ldl=valOf('val-ldl'),tg=valOf('val-tg');
+  var vitd=valOf('val-vitd'),b9=valOf('val-b9s'),b12=valOf('val-b12');
+  var tg2=valOf('val-tg2'),iga=valOf('val-iga-tot');
+  var k=valOf('val-k'),na=valOf('val-na'),ca=valOf('val-ca');
 
   // NFS
-  if (!isNaN(hb)) { hasData=true; const cut=currentSex==='G'?11:(currentSex==='F'?12:13);
-    if (hb<=7) push('crit','Anémie sévère ('+hb+' g/dL)'); else if (hb<cut) push('high','Hémoglobine basse ('+hb+' g/dL)');
-    else if (hb>(currentSex==='M'?17.5:16)) push('watch','Hémoglobine élevée ('+hb+' g/dL)'); }
-  if (!isNaN(vgm)) { hasData=true; if (vgm<80) push('watch','Microcytose (VGM '+vgm+')'); if (vgm>100) push('watch','Macrocytose (VGM '+vgm+')'); }
-  if (!isNaN(plt)) { hasData=true; if (plt<20) push('crit','Thrombopénie sévère ('+plt+' G/L)'); else if (plt<150) push('high','Thrombopénie ('+plt+' G/L)'); else if (plt>800) push('crit','Thrombocytose massive'); }
-  if (!isNaN(gb)) { hasData=true; if (gb<2) push('crit','Leucopénie sévère'); else if (gb<4) push('high','Leucopénie'); else if (gb>20) push('high','Hyperleucocytose franche'); }
-  if (!isNaN(ferr)) { hasData=true; if (ferr<(currentSex==='M'?20:10)) push('high','Ferritine effondrée ('+ferr+')'); else if (ferr>500) push('high','Ferritine très élevée ('+ferr+')'); }
-  if (!isNaN(b12) && b12<148) { hasData=true; push('high','Carence en B12 ('+b12+')'); actions.push('Supplémentation B12, recherche Biermer / végétalisme.'); }
-  if (!isNaN(b9) && b9<5) { hasData=true; push('high','Carence en folates ('+b9+')'); actions.push('Supplémentation B9.'); }
+  if(!isNaN(hb)){hasData=true;var cut=currentSex==='G'?11:(currentSex==='F'?12:13);
+    if(hb<=7)push('crit','An\u00e9mie s\u00e9v\u00e8re ('+hb+' g/dL)');
+    else if(hb<cut)push('high','H\u00e9moglobine basse ('+hb+' g/dL)');
+    else if(hb>(currentSex==='M'?17.5:16))push('watch','H\u00e9moglobine \u00e9lev\u00e9e ('+hb+' g/dL)');}
+  if(!isNaN(vgm)){hasData=true;if(vgm<80)push('watch','Microcytose (VGM '+vgm+')');if(vgm>100)push('watch','Macrocytose (VGM '+vgm+')');}
+  if(!isNaN(plt)){hasData=true;if(plt<20)push('crit','Thrombop\u00e9nie s\u00e9v\u00e8re ('+plt+' G/L)');else if(plt<150)push('high','Thrombop\u00e9nie ('+plt+' G/L)');else if(plt>800)push('crit','Thrombocytose massive');}
+  if(!isNaN(gb)){hasData=true;if(gb<2)push('crit','Leucop\u00e9nie s\u00e9v\u00e8re');else if(gb<4)push('high','Leucop\u00e9nie');else if(gb>20)push('high','Hyperleucocytose franche');}
+  if(!isNaN(ferr)){hasData=true;if(ferr<(currentSex==='M'?20:10))push('high','Ferritine effondr\u00e9e ('+ferr+')');else if(ferr>500)push('high','Ferritine tr\u00e8s \u00e9lev\u00e9e ('+ferr+')');}
+  if(!isNaN(b12)&&b12<148){hasData=true;push('high','Carence en B12 ('+b12+')');actions.push('Suppl\u00e9mentation B12, recherche Biermer / v\u00e9g\u00e9talisme.');}
+  if(!isNaN(b9)&&b9<5){hasData=true;push('high','Carence en folates ('+b9+')');actions.push('Suppl\u00e9mentation B9.');}
+  if(!isNaN(vitd)){hasData=true;if(vitd<10){push('high','Carence s\u00e9v\u00e8re en vitamine D');actions.push('Recharge vitamine D (ampoules selon protocole).');}else if(vitd<30){push('watch','Insuffisance en vitamine D');actions.push('Suppl\u00e9mentation vitamine D.');}}
+  if(!isNaN(crp)){hasData=true;if(crp>=50){push('high','CRP tr\u00e8s \u00e9lev\u00e9e ('+crp+')');actions.push('Rechercher foyer infectieux / inflammatoire.');}else if(crp>=5)push('watch','CRP \u00e9lev\u00e9e ('+crp+')');}
+  if(!isNaN(gly)||!isNaN(hba1c)){hasData=true;
+    if((!isNaN(gly)&&gly>=7.0)||(!isNaN(hba1c)&&hba1c>=6.5)){push('high','Hyperglyc\u00e9mie / diab\u00e8te');actions.push('Confirmer diab\u00e8te, RHD, bilan de retentissement.');}
+    else if((!isNaN(gly)&&gly>=5.6)||(!isNaN(hba1c)&&hba1c>=5.7))push('watch','Pr\u00e9diab\u00e8te');}
+  if(!isNaN(gly)&&!isNaN(insul)){var homa=(gly*insul)/22.5;if(homa>=2.5){push('watch','Insulinor\u00e9sistance (HOMA '+homa.toFixed(1)+')');actions.push('\u00c9valuer syndrome m\u00e9tabolique / SOPK.');}}
+  if(!isNaN(creat)){hasData=true;
+    if(!isNaN(age)){var kap=(currentSex==='F'||currentSex==='G')?61.9:79.6,al=(currentSex==='F'||currentSex==='G')?-0.241:-0.302;
+      var dfg=creat<=kap?142*Math.pow(creat/kap,al)*Math.pow(0.9938,age):142*Math.pow(creat/kap,-1.2)*Math.pow(0.9938,age);
+      if(currentSex==='F'||currentSex==='G')dfg*=1.012; dfg=Math.round(dfg);
+      if(dfg<30){push('crit','DFGe effondr\u00e9 ('+dfg+' mL/min)');actions.push('Avis n\u00e9phrologique, adaptation m\u00e9dicamenteuse.');}
+      else if(dfg<60){push('high','DFGe abaiss\u00e9 ('+dfg+' mL/min)');actions.push('IRC \u2014 contr\u00f4le + adaptation posologies.');}}
+    else if(creat>(currentSex==='M'?115:97))push('high','Cr\u00e9atinine \u00e9lev\u00e9e ('+creat+') \u2014 calculer le DFGe avec l\'\u00e2ge');}
+  if(!isNaN(asat)||!isNaN(alat)){hasData=true;
+    if(asat>normT*10||alat>normT*10){push('crit','Cytolyse massive (>10N)');actions.push('Bilan h\u00e9patique urgent : TP/INR, s\u00e9rologies, \u00e9chographie.');}
+    else if(asat>normT||alat>normT){push('high','Cytolyse h\u00e9patique');actions.push('\u00c9chographie h\u00e9patique, s\u00e9rologies virales, interrogatoire alcool/m\u00e9dicaments.');}}
+  if(!isNaN(ldl)&&ldl>=4.1){hasData=true;push('watch','LDL \u00e9lev\u00e9 ('+ldl+')');actions.push('\u00c9valuer risque CV, envisager statine.');}
+  if(!isNaN(tg)){hasData=true;if(tg>=5.6){push('high','Hypertriglycérid\u00e9mie majeure ('+tg+')');actions.push('Risque de pancr\u00e9atite \u2014 r\u00e9gime strict sans alcool/sucre.');}else if(tg>=1.7)push('watch','Hypertriglycérid\u00e9mie ('+tg+')');}
+  if(!isNaN(k)){hasData=true;if(k>=6.5){push('crit','Hyperkali\u00e9mie s\u00e9v\u00e8re ('+k+') \u2192 ECG imm\u00e9diat');actions.push('Kali\u00e9mie \u22656,5 : ECG, mesures d\'urgence.');}else if(k>5.0)push('high','Hyperkali\u00e9mie ('+k+')');else if(k<2.5)push('crit','Hypokali\u00e9mie s\u00e9v\u00e8re ('+k+')');else if(k<3.5)push('high','Hypokali\u00e9mie ('+k+')');}
+  if(!isNaN(na)){hasData=true;if(na<120||na>155)push('crit','Dysnatr\u00e9mie s\u00e9v\u00e8re ('+na+')');else if(na<135||na>145)push('watch','Dysnatr\u00e9mie ('+na+')');}
+  if(!isNaN(ca)){hasData=true;var alb2=valOf('val-alb'),caC=ca;if(!isNaN(alb2)&&alb2<35)caC=ca+0.02*(40-alb2);if(caC<1.5||caC>3.5)push('crit','Calc\u00e9mie critique ('+caC.toFixed(2)+')');else if(caC<2.20||caC>2.60)push('watch','Calc\u00e9mie anormale ('+caC.toFixed(2)+')');}
+  if(!isNaN(tg2)&&tg2>=10&&(isNaN(iga)||iga>=0.07)){hasData=true;push('high','IgA anti-TG2 positifs ('+tg2+')');actions.push('Maintenir gluten jusqu\'\u00e0 biopsie duod\u00e9nale ; avis gastro.');}
 
-  // Vit D
-  if (!isNaN(vitd)) { hasData=true; if (vitd<10) { push('high','Carence sévère en vitamine D'); actions.push('Recharge vitamine D (ampoules selon protocole).'); } else if (vitd<30) { push('watch','Insuffisance en vitamine D'); actions.push('Supplémentation vitamine D.'); } }
+  // SAPL
+  var gch=function(id){var e=document.getElementById(id);return e&&e.checked;};
+  var sBio=gch('sapl-la')||gch('sapl-acl')||gch('sapl-b2')||gch('sapl-triple');
+  var sTriple=gch('sapl-triple')||(gch('sapl-la')&&gch('sapl-acl')&&gch('sapl-b2'));
+  var sThr=gch('sapl-thr-art')||gch('sapl-thr-vein');
+  var sObs=gch('sapl-obs1')||gch('sapl-obs2')||gch('sapl-obs3');
+  var sClin=sThr||sObs;
+  if(sBio||sClin){hasData=true;
+    if(sBio&&sClin){push('crit','SAPL probable \u2014 crit\u00e8res de Sydney remplis'+(sTriple?' (triple positif)':''));
+      if(sThr)actions.push('SAPL thrombotique : anticoagulation au long cours (AVK INR 2\u20133)'+(gch('sapl-thr-art')?' + aspirine 75\u2013100 mg/j.':'.'));
+      if(sObs)actions.push('SAPL obst\u00e9trical : HBPM pr\u00e9ventive + aspirine 75\u2013100 mg/j d\u00e8s la prochaine conception.');
+      actions.push('Confirmer la positivit\u00e9 biologique \u00e0 12 semaines. Bilan lupique (ANA, anti-ADNn).');}
+    else if(sBio){push('high','Anticorps antiphospholipides positifs (sans crit\u00e8re clinique)');actions.push('Recontr\u00f4ler la s\u00e9rologie \u00e0 12 semaines. Bilan lupique.');}
+    else{push('watch','Ant\u00e9c\u00e9dents \u00e9vocateurs de SAPL (s\u00e9rologie non faite)');actions.push('Prescrire le bilan SAPL : ACC, anti-CL IgG/IgM, anti-\u03b22-GPI IgG/IgM.');}}
 
-  // Inflammation
-  if (!isNaN(crp)) { hasData=true; if (crp>=50) { push('high','CRP très élevée ('+crp+')'); actions.push('Rechercher foyer infectieux / inflammatoire.'); } else if (crp>=5) push('watch','CRP élevée ('+crp+')'); }
+  var patterns=detectPatterns();
+  var autoimmun=suggestAutoimmun();
 
-  // Glycémie
-  if (!isNaN(gly)||!isNaN(hba1c)) { hasData=true;
-    if ((!isNaN(gly)&&gly>=7.0)||(!isNaN(hba1c)&&hba1c>=6.5)) { push('high','Hyperglycémie / diabète'); actions.push('Confirmer diabète, RHD, bilan de retentissement.'); }
-    else if ((!isNaN(gly)&&gly>=5.6)||(!isNaN(hba1c)&&hba1c>=5.7)) push('watch','Prédiabète'); }
-  if (!isNaN(gly)&&!isNaN(insul)) { const homa=(gly*insul)/22.5; if (homa>=2.5) { push('watch','Insulinorésistance (HOMA '+homa.toFixed(1)+')'); actions.push('Évaluer syndrome métabolique / SOPK.'); } }
-
-  // Rénal
-  if (!isNaN(creat)) { hasData=true;
-    if (!isNaN(age)) { const kap=(currentSex==='F'||currentSex==='G')?61.9:79.6, al=(currentSex==='F'||currentSex==='G')?-0.241:-0.302;
-      let dfg = creat<=kap?142*Math.pow(creat/kap,al)*Math.pow(0.9938,age):142*Math.pow(creat/kap,-1.2)*Math.pow(0.9938,age);
-      if (currentSex==='F'||currentSex==='G') dfg*=1.012; dfg=Math.round(dfg);
-      if (dfg<30) { push('crit','DFGe effondré ('+dfg+' mL/min)'); actions.push('Avis néphrologique, adaptation médicamenteuse.'); }
-      else if (dfg<60) { push('high','DFGe abaissé ('+dfg+' mL/min)'); actions.push('Insuffisance rénale chronique — contrôle + adaptation posologies.'); } }
-    else if (creat>(currentSex==='M'?115:97)) push('high','Créatinine élevée ('+creat+') — calculer le DFGe avec l\'âge'); }
-
-  // Hépatique
-  if (!isNaN(asat)||!isNaN(alat)) { hasData=true;
-    if (asat>normT*10||alat>normT*10) { push('crit','Cytolyse massive (>10N)'); actions.push('Bilan hépatique urgent : TP/INR, sérologies, échographie.'); }
-    else if (asat>normT||alat>normT) { push('high','Cytolyse hépatique'); actions.push('Échographie hépatique, sérologies virales, interrogatoire alcool/médicaments.'); } }
-
-  // Lipides
-  if (!isNaN(ldl) && ldl>=4.1) { hasData=true; push('watch','LDL élevé ('+ldl+')'); actions.push('Évaluer risque CV, envisager statine.'); }
-  if (!isNaN(tg)) { hasData=true; if (tg>=5.6) { push('high','Hypertriglycéridémie majeure ('+tg+')'); actions.push('Risque de pancréatite — régime strict sans alcool/sucre.'); } else if (tg>=1.7) push('watch','Hypertriglycéridémie ('+tg+')'); }
-
-  // Ionogramme — option 10 : valeurs critiques
-  if (!isNaN(k)) { hasData=true; if (k>=6.5) { push('crit','Hyperkaliémie sévère ('+k+') → ECG immédiat'); actions.push('Kaliémie ≥6,5 : ECG, mesures d\'urgence.'); } else if (k>5.0) push('high','Hyperkaliémie ('+k+')'); else if (k<2.5) push('crit','Hypokaliémie sévère ('+k+')'); else if (k<3.5) push('high','Hypokaliémie ('+k+')'); }
-  if (!isNaN(na)) { hasData=true; if (na<120||na>155) push('crit','Dysnatrémie sévère ('+na+')'); else if (na<135||na>145) push('watch','Dysnatrémie ('+na+')'); }
-  if (!isNaN(ca)) { hasData=true; const alb=val('val-alb'); let caC=ca; if(!isNaN(alb)&&alb<35) caC=ca+0.02*(40-alb);
-    if (caC<1.5||caC>3.5) push('crit','Calcémie critique ('+caC.toFixed(2)+')'); else if (caC<2.20||caC>2.60) push('watch','Calcémie anormale ('+caC.toFixed(2)+')'); }
-
-  // Cœliaque
-  if (!isNaN(tg2) && tg2>=10 && (isNaN(iga)||iga>=0.07)) { hasData=true; push('high','IgA anti-TG2 positifs ('+tg2+')'); actions.push('Maintenir gluten jusqu\'à biopsie duodénale ; avis gastro.'); }
-
-  // SAPL (cases à cocher)
-  const gch = (id) => { const e = document.getElementById(id); return e && e.checked; };
-  const sBio = gch('sapl-la')||gch('sapl-acl')||gch('sapl-b2')||gch('sapl-triple');
-  const sTriple = gch('sapl-triple') || (gch('sapl-la')&&gch('sapl-acl')&&gch('sapl-b2'));
-  const sThr = gch('sapl-thr-art')||gch('sapl-thr-vein');
-  const sObs = gch('sapl-obs1')||gch('sapl-obs2')||gch('sapl-obs3');
-  const sClin = sThr || sObs;
-  if (sBio || sClin) { hasData=true;
-    if (sBio && sClin) { push('crit','SAPL probable — critères de Sydney remplis'+(sTriple?' (triple positif)':''));
-      if (sThr) actions.push('SAPL thrombotique : anticoagulation au long cours (AVK INR 2–3)'+(gch('sapl-thr-art')?' + aspirine 75–100 mg/j.':'.'));
-      if (sObs) actions.push('SAPL obstétrical : HBPM préventive + aspirine 75–100 mg/j dès la prochaine conception.');
-      actions.push('Confirmer la positivité biologique à 12 semaines. Bilan lupique (ANA, anti-ADNn).'); }
-    else if (sBio) { push('high','Anticorps antiphospholipides positifs (sans critère clinique)'); actions.push('Recontrôler la sérologie à 12 semaines. Bilan lupique.'); }
-    else { push('watch','Antécédents évocateurs de SAPL (sérologie non faite)'); actions.push('Prescrire le bilan SAPL : ACC, anti-CL IgG/IgM, anti-β2-GPI IgG/IgM.'); }
-  }
-
-  const patterns = detectPatterns();
-  const autoimmun = suggestAutoimmun();
-
-  // ===== RENDU =====
-  const panel = document.getElementById('bio-resume-panel');
-  const ulAno = document.getElementById('resume-anomalies');
-  const divPat = document.getElementById('resume-patterns');
-  const divAuto = document.getElementById('resume-autoimmun');
-  const ulAct = document.getElementById('resume-actions');
+  // RENDU
+  var panel=document.getElementById('bio-resume-panel');
+  var ulAno=document.getElementById('resume-anomalies');
+  var divPat=document.getElementById('resume-patterns');
+  var divAuto=document.getElementById('resume-autoimmun');
+  var ulAct=document.getElementById('resume-actions');
   ulAno.innerHTML=''; divPat.innerHTML=''; divAuto.innerHTML=''; ulAct.innerHTML='';
 
-  // Méta patient
-  const info = getPatientInfo();
-  const sexLabel = currentSex==='M'?'Homme':(currentSex==='G'?'Femme enceinte':'Femme');
-  let meta=[sexLabel]; if(info.nomComplet) meta.unshift(info.nomComplet); if(info.age) meta.push(info.age);
-  if(info.dateBilanFormatted) meta.push('Bilan du '+info.dateBilanFormatted);
-  document.getElementById('resume-patient-meta').textContent = meta.join(' · ');
+  var info=getPatientInfo();
+  var sexLabel=currentSex==='M'?'Homme':(currentSex==='G'?'Femme enceinte':'Femme');
+  var meta=[sexLabel];
+  if(info.nomComplet)meta.unshift(info.nomComplet);
+  if(info.age)meta.push(info.age);
+  if(info.dateBilanFormatted)meta.push('Bilan du '+info.dateBilanFormatted);
+  document.getElementById('resume-patient-meta').textContent=meta.join(' \u00b7 ');
 
-  if (!hasData) {
-    ulAno.innerHTML = '<li>Veuillez renseigner au moins une valeur.</li>';
+  if(!hasData){
+    ulAno.innerHTML='<li>Veuillez renseigner au moins une valeur.</li>';
     document.getElementById('sec-patterns').style.display='none';
     document.getElementById('sec-autoimmun').style.display='none';
-    ulAct.innerHTML = '<li>—</li>';
+    ulAct.innerHTML='<li>\u2014</li>';
   } else {
-    // Option 10 : tri par priorité
-    const order = {crit:0, high:1, watch:2};
-    anomalies.sort((a,b) => order[a.lvl]-order[b.lvl]);
-    if (anomalies.length === 0) {
-      ulAno.innerHTML = '<li style="color:#166534;font-weight:700;">✓ Aucune anomalie majeure détectée.</li>';
+    var order={crit:0,high:1,watch:2};
+    anomalies.sort(function(a,b){return order[a.lvl]-order[b.lvl];});
+    if(anomalies.length===0){
+      ulAno.innerHTML='<li style="color:#166534;font-weight:700;">\u2713 Aucune anomalie majeure d\u00e9tect\u00e9e.</li>';
     } else {
-      const label = {crit:'Critique', high:'Important', watch:'À surveiller'};
-      anomalies.forEach(a => { ulAno.innerHTML += '<li><span class="bio-prio '+a.lvl+'">'+label[a.lvl]+'</span>'+a.txt+'</li>'; });
+      var label={crit:'Critique',high:'Important',watch:'\u00c0 surveiller'};
+      anomalies.forEach(function(a){ulAno.innerHTML+='<li><span class="bio-prio '+a.lvl+'">'+label[a.lvl]+'</span>'+a.txt+'</li>';});
     }
-    // Patterns
-    if (patterns.length) {
+    if(patterns.length){
       document.getElementById('sec-patterns').style.display='block';
-      const lab={crit:'🔴',high:'🟠',watch:'🔵'};
-      patterns.forEach(p => { divPat.innerHTML += '<div class="bio-pattern-box '+p.lvl+'">'+lab[p.lvl]+' <b>'+p.t+'</b><br>→ '+p.a+'</div>'; });
-    } else { document.getElementById('sec-patterns').style.display='none'; }
-    // Auto-immun
-    if (autoimmun.length) {
+      var lab={crit:'\uD83D\uDD34',high:'\uD83D\uDFE0',watch:'\uD83D\uDD35'};
+      patterns.forEach(function(p){divPat.innerHTML+='<div class="bio-pattern-box '+p.lvl+'">'+lab[p.lvl]+' <b>'+p.t+'</b><br>\u2192 '+p.a+'</div>';});
+    } else document.getElementById('sec-patterns').style.display='none';
+    if(autoimmun.length){
       document.getElementById('sec-autoimmun').style.display='block';
-      autoimmun.forEach(x => { divAuto.innerHTML += '<div class="bio-autoimmun">🔬 <b>'+x.t+'</b><br><small>Tests : '+x.tests+'</small></div>'; });
-    } else { document.getElementById('sec-autoimmun').style.display='none'; }
-    // Actions
-    const uniq = [...new Set(actions)];
-    if (uniq.length) uniq.forEach(a => ulAct.innerHTML += '<li>'+a+'</li>');
-    else ulAct.innerHTML = '<li>Corréler à la clinique. Poursuivre le suivi habituel.</li>';
+      autoimmun.forEach(function(x){divAuto.innerHTML+='<div class="bio-autoimmun">\uD83D\uDD2C <b>'+x.t+'</b><br><small>Tests : '+x.tests+'</small></div>';});
+    } else document.getElementById('sec-autoimmun').style.display='none';
+    var uniq=[]; actions.forEach(function(a){if(uniq.indexOf(a)<0)uniq.push(a);});
+    if(uniq.length) uniq.forEach(function(a){ulAct.innerHTML+='<li>'+a+'</li>';});
+    else ulAct.innerHTML='<li>Corr\u00e9ler \u00e0 la clinique. Poursuivre le suivi habituel.</li>';
   }
 
   panel.classList.add('visible');
-  setTimeout(() => panel.scrollIntoView({behavior:'smooth', block:'start'}), 50);
-  const btn=document.getElementById('btn-copy'); if(btn){btn.classList.remove('copied'); btn.innerHTML='&#128203; Copier le texte pour le dossier';}
+  setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'start'});},50);
+  var btn=document.getElementById('btn-copy');
+  if(btn){btn.classList.remove('copied');btn.innerHTML='&#128203; Copier le texte pour le dossier';}
   document.getElementById('copy-notice').classList.remove('visible');
 };
 
-window.closeResume = () => document.getElementById('bio-resume-panel').classList.remove('visible');
+window.closeResume = function(){document.getElementById('bio-resume-panel').classList.remove('visible');};
 
-window.copyResume = () => {
-  const info = getPatientInfo(); const today = new Date().toLocaleDateString('fr-FR');
-  const sexLabel = currentSex==='M'?'Homme':(currentSex==='G'?'Femme enceinte':'Femme');
-  let t = '=== INTERPRÉTATION DU BILAN BIOLOGIQUE ===\n';
-  t += 'Date : ' + (info.dateBilanFormatted||today) + '\n';
-  if (info.nomComplet) t += 'Patient(e) : ' + info.nomComplet + (info.age?' ('+info.age+')':'') + '\n';
-  t += 'Statut : ' + sexLabel + '\n';
-  if (info.medecin) t += 'Médecin : ' + info.medecin + '\n\n';
-  t += '--- ANOMALIES PAR PRIORITÉ ---\n';
-  document.querySelectorAll('#resume-anomalies li').forEach(li => t += '• ' + li.textContent.trim() + '\n');
-  const pats = document.querySelectorAll('#resume-patterns .bio-pattern-box');
-  if (pats.length) { t += '\n--- PATTERNS DIAGNOSTIQUES ---\n'; pats.forEach(p => t += '• ' + p.textContent.trim().replace(/\s+/g,' ') + '\n'); }
-  const autos = document.querySelectorAll('#resume-autoimmun .bio-autoimmun');
-  if (autos.length) { t += '\n--- BILAN AUTO-IMMUN SUGGÉRÉ ---\n'; autos.forEach(p => t += '• ' + p.textContent.trim().replace(/\s+/g,' ') + '\n'); }
-  t += '\n--- CONDUITE À TENIR ---\n';
-  document.querySelectorAll('#resume-actions li').forEach(li => t += '• ' + li.textContent.trim() + '\n');
-  t += '\n(Aide à la décision — à corréler à la clinique. Dr KARA-ZAITRI M.A.)\n';
-
-  const done = () => { const b=document.getElementById('btn-copy'); b.classList.add('copied'); b.textContent='✓ Copié !'; document.getElementById('copy-notice').classList.add('visible'); setTimeout(()=>{b.classList.remove('copied'); b.innerHTML='&#128203; Copier le texte pour le dossier'; document.getElementById('copy-notice').classList.remove('visible');},3000); };
-  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done);
-  else { const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done(); }
+window.copyResume = function() {
+  var info=getPatientInfo(); var today=new Date().toLocaleDateString('fr-FR');
+  var sexLabel=currentSex==='M'?'Homme':(currentSex==='G'?'Femme enceinte':'Femme');
+  var t='=== INTERPR\u00c9TATION DU BILAN BIOLOGIQUE ===\n';
+  t+='Date : '+(info.dateBilanFormatted||today)+'\n';
+  if(info.nomComplet)t+='Patient(e) : '+info.nomComplet+(info.age?' ('+info.age+')':'')+'\n';
+  t+='Statut : '+sexLabel+'\n';
+  if(info.medecin)t+='M\u00e9decin : '+info.medecin+'\n\n';
+  t+='--- ANOMALIES PAR PRIORIT\u00c9 ---\n';
+  document.querySelectorAll('#resume-anomalies li').forEach(function(li){t+='\u2022 '+li.textContent.trim()+'\n';});
+  var pats=document.querySelectorAll('#resume-patterns .bio-pattern-box');
+  if(pats.length){t+='\n--- PATTERNS DIAGNOSTIQUES ---\n';pats.forEach(function(p){t+='\u2022 '+p.textContent.trim().replace(/\s+/g,' ')+'\n';});}
+  var autos=document.querySelectorAll('#resume-autoimmun .bio-autoimmun');
+  if(autos.length){t+='\n--- BILAN AUTO-IMMUN SUGG\u00c9R\u00c9 ---\n';autos.forEach(function(p){t+='\u2022 '+p.textContent.trim().replace(/\s+/g,' ')+'\n';});}
+  t+='\n--- CONDUITE \u00c0 TENIR ---\n';
+  document.querySelectorAll('#resume-actions li').forEach(function(li){t+='\u2022 '+li.textContent.trim()+'\n';});
+  t+='\n(Aide \u00e0 la d\u00e9cision \u2014 \u00e0 corr\u00e9ler \u00e0 la clinique. Dr KARA-ZAITRI M.A.)\n';
+  var done=function(){
+    var b=document.getElementById('btn-copy');
+    b.classList.add('copied');b.textContent='\u2713 Copi\u00e9 !';
+    document.getElementById('copy-notice').classList.add('visible');
+    setTimeout(function(){b.classList.remove('copied');b.innerHTML='&#128203; Copier le texte pour le dossier';document.getElementById('copy-notice').classList.remove('visible');},3000);
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done);
+  else{var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);done();}
 };
 
-/* ===== RESET ===== */
-window.resetPanel = (panelId) => {
-  const p = document.getElementById('panel-' + panelId); if (!p) return;
-  p.querySelectorAll('.bio-input').forEach(inp => inp.value = '');
-  p.querySelectorAll('.bio-result').forEach(el => {
-    const keep = ['res-homa','res-ckd','res-ratio','res-ta'].includes(el.id);
-    if (!keep) el.style.display = 'none';
-    else { el.className = 'bio-result r-empty';
-      if (el.id==='res-homa') el.innerHTML="Renseignez la glycémie et l'insuline";
-      if (el.id==='res-ckd') el.innerHTML='Renseignez créatinine + âge';
-      if (el.id==='res-ratio') el.innerHTML='Renseignez CT et HDL';
-      if (el.id==='res-ta') el.innerHTML='Renseignez Na, K, Cl, HCO₃'; }
+/* ===================================================
+   RESET GÉNÉRIQUE
+   =================================================== */
+window.resetPanel = function(panelId) {
+  var p=document.getElementById('panel-'+panelId); if(!p) return;
+  p.querySelectorAll('.bio-input').forEach(function(inp){inp.value='';});
+  var keeps=['res-homa','res-ckd','res-ratio','res-ta'];
+  p.querySelectorAll('.bio-result').forEach(function(el){
+    if(keeps.indexOf(el.id)<0){el.style.display='none';}
+    else{
+      el.className='bio-result r-empty';
+      if(el.id==='res-homa')el.innerHTML="Renseignez la glyc\u00e9mie et l'insuline";
+      if(el.id==='res-ckd')el.innerHTML='Renseignez cr\u00e9atinine + \u00e2ge';
+      if(el.id==='res-ratio')el.innerHTML='Renseignez CT et HDL';
+      if(el.id==='res-ta')el.innerHTML='Renseignez Na, K, Cl, HCO\u2083';
+    }
   });
-  p.querySelectorAll('.bio-gauge-cursor').forEach(c => c.style.display = 'none');
+  p.querySelectorAll('.bio-gauge-cursor').forEach(function(c){c.style.display='none';});
+  p.querySelectorAll('.bio-interpret').forEach(function(i){i.classList.remove('visible');});
+  p.querySelectorAll('input[type="checkbox"]').forEach(function(cb){cb.checked=false;});
+  p.querySelectorAll('input[type="radio"]').forEach(function(rb){rb.checked=false;});
 };
 
-window.addEventListener('DOMContentLoaded', () => setSex('M'));
+/* INIT */
+window.addEventListener('DOMContentLoaded', function(){setSex('M');});
+
 })();
 </script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </body>
 </html>
