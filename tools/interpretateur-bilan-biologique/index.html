@@ -40,14 +40,22 @@
 #bio-root .bio-patient-field input{padding:6px 8px!important;border:1px solid var(--border)!important;border-radius:4px!important;font-size:12px!important;color:var(--text)!important;background:var(--white)!important;outline:none!important;transition:border-color 0.15s!important;}
 #bio-root .bio-patient-field input:focus{border-color:var(--navy)!important;}
 #bio-root .bio-patient-age-display{font-size:10px!important;color:var(--slate-light)!important;margin-top:2px!important;min-height:14px!important;}
+#bio-root .bio-patient-field-ddnage{grid-column:span 1!important;min-width:220px!important;}
+#bio-root .bio-ddnage-row{display:flex!important;gap:6px!important;}
+#bio-root .bio-ddnage-col{display:flex!important;flex-direction:column!important;gap:3px!important;flex:1 1 auto!important;}
+#bio-root .bio-ddnage-col-small{flex:0 0 76px!important;}
+#bio-root .bio-ddnage-col label{font-size:10px!important;font-weight:700!important;color:var(--slate)!important;text-transform:uppercase!important;letter-spacing:0.04em!important;white-space:nowrap!important;}
+#bio-root .bio-ddnage-col input{padding:6px 8px!important;border:1px solid var(--border)!important;border-radius:4px!important;font-size:12px!important;color:var(--text)!important;background:var(--white)!important;outline:none!important;transition:border-color 0.15s!important;width:100%!important;}
+#bio-root .bio-ddnage-col input:focus{border-color:var(--navy)!important;}
 
 /* TABS */
-#bio-root .bio-tabs-wrap{background:var(--white)!important;border-bottom:2px solid var(--border-light)!important;overflow-x:auto!important;scrollbar-width:none!important;}
-#bio-root .bio-tabs-wrap::-webkit-scrollbar{display:none!important;}
-#bio-root .bio-tabs{display:flex!important;min-width:max-content!important;padding:0 12px!important;}
-#bio-root .bio-tab{padding:10px 14px!important;font-size:11px!important;font-weight:600!important;color:var(--slate)!important;cursor:pointer!important;border:none!important;background:none!important;border-bottom:3px solid transparent!important;white-space:nowrap!important;transition:color 0.15s,border-color 0.15s!important;letter-spacing:0.01em!important;text-transform:uppercase!important;}
+#bio-root .bio-tabs-wrap{background:var(--white)!important;border-bottom:2px solid var(--border-light)!important;overflow-x:visible!important;}
+#bio-root .bio-tabs{display:grid!important;grid-template-columns:repeat(6,1fr)!important;padding:0 12px!important;}
+#bio-root .bio-tab{padding:10px 8px!important;font-size:10.5px!important;font-weight:600!important;color:var(--slate)!important;cursor:pointer!important;border:none!important;background:none!important;border-bottom:3px solid transparent!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;transition:color 0.15s,border-color 0.15s!important;letter-spacing:0.01em!important;text-transform:uppercase!important;text-align:center!important;}
 #bio-root .bio-tab:hover{color:var(--navy)!important;}
 #bio-root .bio-tab.active{color:var(--navy)!important;border-bottom-color:var(--navy)!important;}
+@media(max-width:640px){#bio-root .bio-tabs{grid-template-columns:repeat(3,1fr)!important;}#bio-root .bio-tab{font-size:9.5px!important;padding:8px 4px!important;}}
+@media(max-width:380px){#bio-root .bio-tabs{grid-template-columns:repeat(2,1fr)!important;}}
 
 /* GLOBAL CONFIG */
 #bio-root .bio-global-config{background:var(--white)!important;padding:12px 20px!important;border-bottom:1px solid var(--border-light)!important;display:flex!important;gap:15px!important;align-items:center!important;justify-content:space-between!important;flex-wrap:wrap!important;}
@@ -232,7 +240,12 @@ body{-ms-overflow-style:none;overflow-y:auto;}
     <div class="bio-patient-grid">
       <div class="bio-patient-field"><label for="pt-nom">Nom</label><input type="text" id="pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
       <div class="bio-patient-field"><label for="pt-prenom">Prénom</label><input type="text" id="pt-prenom" placeholder="Prénom" autocomplete="off"></div>
-      <div class="bio-patient-field"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"><span class="bio-patient-age-display" id="pt-age-display"></span></div>
+      <div class="bio-patient-field bio-patient-field-ddnage">
+        <div class="bio-ddnage-row">
+          <div class="bio-ddnage-col"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"></div>
+          <div class="bio-ddnage-col bio-ddnage-col-small"><label for="pt-age">Âge (années)</label><input type="number" id="pt-age" min="0" max="120" placeholder="--" oninput="onAgeInput()"></div>
+        </div>
+      </div>
       <div class="bio-patient-field"><label for="pt-medecin">Médecin prescripteur</label><input type="text" id="pt-medecin" placeholder="Dr ..." autocomplete="off"></div>
       <div class="bio-patient-field"><label for="pt-date-bilan">Date du bilan</label><input type="date" id="pt-date-bilan"></div>
     </div>
@@ -903,7 +916,7 @@ window.setSex=function(s){
 /* ===== UTILITAIRES ===== */
 var showResult=function(id,cls,txt){var el=document.getElementById('res-'+id);if(!el)return;el.className='bio-result '+cls;el.innerHTML=txt;el.style.cssText='display:block !important;';};
 var hideCursor=function(id){var c=document.getElementById('cur-'+id);if(c)c.style.display='none';};
-var moveCursor=function(id,pct,color){var c=document.getElementById('cur-'+id);if(!c)return;pct=Math.max(2,Math.min(98,pct));c.style.display='block';c.style.left=pct+'%';c.style.background=color;};
+var moveCursor=function(id,pct,color){var c=document.getElementById('cur-'+id);if(!c)return;pct=Math.max(2,Math.min(98,pct));c.style.cssText='display:block !important;left:'+pct+'%;background:'+color+';';};
 
 window.evalSimple=function(id,val,lo,hi,highMsg,lowMsg,normMsg){
   if(val===''||isNaN(val)){hideCursor(id);var el=document.getElementById('res-'+id);if(el)el.style.display='none';return;}
@@ -1555,17 +1568,18 @@ window.togglePatientForm=function(){
   var isOpen=form.classList.contains('open');form.classList.toggle('open',!isOpen);btn.classList.toggle('open',!isOpen);btn.setAttribute('aria-expanded',String(!isOpen));
 };
 window.calcAge=function(){
-  var ddn=document.getElementById('pt-ddn').value,display=document.getElementById('pt-age-display');
-  if(!ddn){display.textContent='';return;}
+  var ddn=document.getElementById('pt-ddn').value,ageField=document.getElementById('pt-age');
+  if(!ddn)return;
   var today=new Date(),birth=new Date(ddn);var age=today.getFullYear()-birth.getFullYear();
   var m=today.getMonth()-birth.getMonth();if(m<0||(m===0&&today.getDate()<birth.getDate()))age--;
-  display.textContent=age>=0?age+' ans':'';
+  if(age>=0)ageField.value=age;
 };
+window.onAgeInput=function(){};
 var getPatientInfo=function(){
   var nom=(document.getElementById('pt-nom').value||'').trim(),prenom=(document.getElementById('pt-prenom').value||'').trim();
   var ddn=document.getElementById('pt-ddn').value,medecin=(document.getElementById('pt-medecin').value||'').trim(),dateBilan=document.getElementById('pt-date-bilan').value;
-  var age=document.getElementById('pt-age-display').textContent;
-  return{nomComplet:[prenom,nom].filter(Boolean).join(' '),ddnFormatted:ddn?new Date(ddn).toLocaleDateString('fr-FR'):'',age:age,medecin:medecin,dateBilanFormatted:dateBilan?new Date(dateBilan).toLocaleDateString('fr-FR'):''};
+  var age=document.getElementById('pt-age').value;
+  return{nomComplet:[prenom,nom].filter(Boolean).join(' '),ddnFormatted:ddn?new Date(ddn).toLocaleDateString('fr-FR'):'',age:age?age+' ans':'',medecin:medecin,dateBilanFormatted:dateBilan?new Date(dateBilan).toLocaleDateString('fr-FR'):''};
 };
 
 /* ===== MOTEUR ANALYSE GLOBALE ===== */
