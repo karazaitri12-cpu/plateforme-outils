@@ -499,6 +499,17 @@
     }
   });
 
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'kz_platform_token') {
+      checkPremium().then(function(status) {
+        if (status !== isPremiumUser) {
+          isPremiumUser = status;
+          renderTools();
+        }
+      });
+    }
+  });
+
   (async function init() {
     if (localStorage.getItem('drkz_theme') === 'dark') {
       root.classList.add('dark-mode');
