@@ -326,6 +326,57 @@
       background: linear-gradient(135deg, #a07d2a, #C9A84C) !important;
     }
 
+    /* ---- MODAL PREMIUM ---- */
+    #kz-premium-modal {
+      display: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 10000;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      justify-content: center; align-items: center;
+    }
+    #kz-premium-modal.open { display: flex; }
+    #kz-premium-modal .kz-modal-card {
+      background: #fff; border-radius: 16px; padding: 32px 28px;
+      max-width: 420px; width: 92%; text-align: center;
+      box-shadow: 0 16px 48px rgba(0,0,0,.18);
+      animation: kzModalIn .18s ease;
+    }
+    @keyframes kzModalIn {
+      from { transform: translateY(12px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    #kz-premium-modal .kz-modal-icon { font-size: 38px; margin-bottom: 10px; }
+    #kz-premium-modal .kz-modal-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #fff8e0; border: 1px solid #e0c060; border-radius: 20px;
+      padding: 4px 14px; font-size: 12px; font-weight: 700; color: #7a5a00;
+      margin-bottom: 14px;
+    }
+    #kz-premium-modal h3 {
+      font-size: 1.1rem; color: #1e2a35; margin: 0 0 8px; font-weight: 700;
+    }
+    #kz-premium-modal .kz-modal-tool-name {
+      font-size: 0.95rem; color: #C9A84C; font-weight: 600; margin-bottom: 10px;
+    }
+    #kz-premium-modal p {
+      font-size: 0.88rem; color: #4b5563; margin: 0 0 22px; line-height: 1.55;
+    }
+    #kz-premium-modal .kz-modal-actions { display: flex; gap: 10px; justify-content: center; }
+    #kz-premium-modal .kz-btn-yes {
+      flex: 1; background: #1A3A5C; color: #fff; border: none;
+      padding: 11px 0; border-radius: 8px; font-size: 0.92rem;
+      font-weight: 600; cursor: pointer;
+    }
+    #kz-premium-modal .kz-btn-yes:hover { background: #22487a; }
+    #kz-premium-modal .kz-btn-no {
+      flex: 1; background: #f3f4f6; color: #374151; border: none;
+      padding: 11px 0; border-radius: 8px; font-size: 0.92rem;
+      font-weight: 600; cursor: pointer;
+    }
+    #kz-premium-modal .kz-btn-no:hover { background: #e5e7eb; }
+
     /* ---- BADGES / STARS ---- */
     #drkz-root .star-btn {
       position: absolute !important;
@@ -597,8 +648,11 @@
 
       if (isPremium && !isPremiumUser) {
         const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
+        const escapedTitle = t.titre.replace(/'/g, "\\'");
         return `
-        <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" class="tool-card premium" title="Acc\u00e8s r\u00e9serv\u00e9 aux membres premium">
+        <div class="tool-card premium" title="Acc\u00e8s r\u00e9serv\u00e9 aux membres premium"
+             onclick="openPremiumModal('${escapedTitle}', 'https://www.dr-karazaitri-ma.net/connexion-membres/')"
+             style="cursor:pointer;">
           ${badgeHtml}
           <span class="premium-badge">\u2605 Premium</span>
           <div class="tool-icon">${t.icone || '\uD83D\uDEE0\uFE0F'}</div>
@@ -607,7 +661,7 @@
             <p>${t.description}</p>
           </div>
           <span class="premium-lock">\uD83D\uDD12</span>
-        </a>`;
+        </div>`;
       }
 
       const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
@@ -644,6 +698,36 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); });
   }
+</script>
+
+<!-- MODAL PREMIUM -->
+<div id="kz-premium-modal" role="dialog" aria-modal="true">
+  <div class="kz-modal-card">
+    <div class="kz-modal-icon">🔒</div>
+    <div class="kz-modal-badge">★ Contenu Premium</div>
+    <h3>Outil réservé aux membres</h3>
+    <div class="kz-modal-tool-name" id="kz-modal-tool-name"></div>
+    <p>Cet outil est accessible aux membres premium de FemCare Hub.<br>
+    Souhaitez-vous accéder à la page de connexion / abonnement ?</p>
+    <div class="kz-modal-actions">
+      <button class="kz-btn-no" onclick="document.getElementById('kz-premium-modal').classList.remove('open')">
+        Non, pas maintenant
+      </button>
+      <button class="kz-btn-yes" id="kz-modal-btn-yes">Oui, me connecter</button>
+    </div>
+  </div>
+</div>
+<script>
+  function openPremiumModal(toolName, connexionUrl) {
+    document.getElementById('kz-modal-tool-name').textContent = toolName;
+    document.getElementById('kz-modal-btn-yes').onclick = function() {
+      window.location.href = connexionUrl;
+    };
+    document.getElementById('kz-premium-modal').classList.add('open');
+  }
+  document.getElementById('kz-premium-modal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
 </script>
 
 </body>
