@@ -1,3 +1,14 @@
+Pas de souci Docteur, c'est tout à fait compréhensible ! Parfois un petit
+point-virgule ou une accolade manquante casse tout, c'est le grand classique en
+informatique.
+
+Pour être sûr à 100% que tout fonctionne parfaitement, voici le code complet et
+final avec toutes les améliorations intégrées (la grille sur une ligne, l'âge
+qui calcule bien, et les onglets qui fonctionnent).
+
+Vous pouvez copier tout ce bloc et remplacer intégralement le contenu de votre
+outil :
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -34,12 +45,12 @@
 #horm-root .horm-patient-toggle.open .pt-arrow{transform:rotate(90deg)!important;}
 #horm-root .horm-patient-form{display:none!important;padding:10px 20px 14px!important;background:#FAFBFC!important;border-top:1px solid var(--border-light)!important;}
 #horm-root .horm-patient-form.open{display:block!important;}
-#horm-root .horm-patient-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))!important;gap:10px!important;}
+/* GRILLE PATIENT CORRIGÉE POUR TENIR SUR UNE LIGNE */
+#horm-root .horm-patient-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))!important;gap:8px!important;}
 #horm-root .horm-patient-field{display:flex!important;flex-direction:column!important;gap:3px!important;}
 #horm-root .horm-patient-field label{font-size:10px!important;font-weight:700!important;color:var(--slate)!important;text-transform:uppercase!important;letter-spacing:0.04em!important;}
 #horm-root .horm-patient-field input{padding:6px 8px!important;border:1px solid var(--border)!important;border-radius:4px!important;font-size:12px!important;color:var(--text)!important;background:var(--white)!important;outline:none!important;transition:border-color 0.15s!important;}
 #horm-root .horm-patient-field input:focus{border-color:var(--navy)!important;}
-#horm-root .horm-patient-age-display{font-size:10px!important;color:var(--slate-light)!important;margin-top:2px!important;min-height:14px!important;}
 
 /* TABS */
 #horm-root .horm-tabs-wrap{background:var(--white)!important;border-bottom:2px solid var(--border-light)!important;overflow-x:auto!important;scrollbar-width:none!important;}
@@ -228,13 +239,13 @@ body{-ms-overflow-style:none;overflow-y:auto;}
   </button>
   <div class="horm-patient-form" id="patient-form">
     <div class="horm-patient-grid">
-  <div class="horm-patient-field"><label for="pt-nom">Nom</label><input type="text" id="pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
-  <div class="horm-patient-field"><label for="pt-prenom">Prénom</label><input type="text" id="pt-prenom" placeholder="Prénom" autocomplete="off"></div>
-  <div class="horm-patient-field"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"></div>
-  <div class="horm-patient-field"><label for="pt-age">Âge (années)</label><input type="number" id="pt-age" placeholder="Ex: 35" min="0" max="130" oninput="clearDdn()"></div>
-  <div class="horm-patient-field"><label for="pt-medecin">Médecin prescripteur</label><input type="text" id="pt-medecin" placeholder="Dr ..." autocomplete="off"></div>
-  <div class="horm-patient-field"><label for="pt-date-bilan">Date du bilan</label><input type="date" id="pt-date-bilan"></div>
-</div>
+      <div class="horm-patient-field"><label for="pt-nom">Nom</label><input type="text" id="pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
+      <div class="horm-patient-field"><label for="pt-prenom">Prénom</label><input type="text" id="pt-prenom" placeholder="Prénom" autocomplete="off"></div>
+      <div class="horm-patient-field"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"></div>
+      <div class="horm-patient-field"><label for="pt-age">Âge (années)</label><input type="number" id="pt-age" placeholder="Ex: 35" min="0" max="130" oninput="clearDdn()"></div>
+      <div class="horm-patient-field"><label for="pt-medecin">Médecin prescripteur</label><input type="text" id="pt-medecin" placeholder="Dr ..." autocomplete="off"></div>
+      <div class="horm-patient-field"><label for="pt-date-bilan">Date du bilan</label><input type="date" id="pt-date-bilan"></div>
+    </div>
   </div>
 </div>
 
@@ -702,6 +713,12 @@ function getPatientInfo(){
 }
 
 /* ===== TABS ===== */
+window.showPanel=function(panelId,btn){
+  document.querySelectorAll('#horm-root .horm-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('#horm-root .horm-tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('panel-'+panelId).classList.add('active');
+  btn.classList.add('active');
+};
 
 /* ===== FONCTION OVARIENNE ===== */
 function getCycleContext(){return document.getElementById('val-jour-cycle').value;}
