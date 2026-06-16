@@ -36,18 +36,28 @@
 #horm-root .horm-patient-form.open{display:block!important;}
 /* GRILLE PATIENT CORRIGÉE POUR TENIR SUR UNE LIGNE */
 #horm-root .horm-patient-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))!important;gap:8px!important;}
-#horm-root .horm-patient-field{display:flex!important;flex-direction:column!important;gap:3px!important;}
-#horm-root .horm-patient-field label{font-size:10px!important;font-weight:700!important;color:var(--slate)!important;text-transform:uppercase!important;letter-spacing:0.04em!important;}
-#horm-root .horm-patient-field input{padding:6px 8px!important;border:1px solid var(--border)!important;border-radius:4px!important;font-size:12px!important;color:var(--text)!important;background:var(--white)!important;outline:none!important;transition:border-color 0.15s!important;}
+#horm-root .horm-patient-field{display:flex!important;flex-direction:column!important;gap:3px!important;min-width:0!important;}
+#horm-root .horm-patient-field label{font-size:10px!important;font-weight:700!important;color:var(--slate)!important;text-transform:uppercase!important;letter-spacing:0.04em!important;white-space:nowrap!important;}
+#horm-root .horm-patient-field input{padding:6px 8px!important;border:1px solid var(--border)!important;border-radius:4px!important;font-size:12px!important;color:var(--text)!important;background:var(--white)!important;outline:none!important;transition:border-color 0.15s!important;width:100%!important;min-width:0!important;}
 #horm-root .horm-patient-field input:focus{border-color:var(--navy)!important;}
+/* Bloc DDN + Âge compact, occupe 2 colonnes de la grille pour ne pas la déséquilibrer */
+#horm-root .horm-patient-field-ddnage{grid-column:span 2!important;min-width:0!important;}
+#horm-root .horm-ddnage-row{display:flex!important;gap:8px!important;}
+#horm-root .horm-ddnage-col{display:flex!important;flex-direction:column!important;gap:3px!important;flex:1 1 0!important;min-width:0!important;}
+#horm-root .horm-ddnage-col-small{flex:0 0 90px!important;}
+#horm-root .horm-ddnage-col label{font-size:10px!important;font-weight:700!important;color:var(--slate)!important;text-transform:uppercase!important;letter-spacing:0.04em!important;white-space:nowrap!important;}
+#horm-root .horm-ddnage-col input{padding:6px 8px!important;border:1px solid var(--border)!important;border-radius:4px!important;font-size:12px!important;color:var(--text)!important;background:var(--white)!important;outline:none!important;transition:border-color 0.15s!important;width:100%!important;min-width:0!important;}
+#horm-root .horm-ddnage-col input:focus{border-color:var(--navy)!important;}
+@media(max-width:680px){#horm-root .horm-patient-field-ddnage{grid-column:span 1!important;}}
 
 /* TABS */
-#horm-root .horm-tabs-wrap{background:var(--white)!important;border-bottom:2px solid var(--border-light)!important;overflow-x:auto!important;scrollbar-width:none!important;}
-#horm-root .horm-tabs-wrap::-webkit-scrollbar{display:none!important;}
-#horm-root .horm-tabs{display:flex!important;min-width:max-content!important;padding:0 12px!important;}
-#horm-root .horm-tab{padding:10px 14px!important;font-size:11px!important;font-weight:600!important;color:var(--slate)!important;cursor:pointer!important;border:none!important;background:none!important;border-bottom:3px solid transparent!important;white-space:nowrap!important;transition:color 0.15s,border-color 0.15s!important;letter-spacing:0.01em!important;text-transform:uppercase!important;}
+#horm-root .horm-tabs-wrap{background:var(--white)!important;border-bottom:2px solid var(--border-light)!important;overflow-x:visible!important;}
+#horm-root .horm-tabs{display:grid!important;grid-template-columns:repeat(6,1fr)!important;padding:0 12px!important;}
+#horm-root .horm-tab{padding:10px 8px!important;font-size:10.5px!important;font-weight:600!important;color:var(--slate)!important;cursor:pointer!important;border:none!important;background:none!important;border-bottom:3px solid transparent!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;transition:color 0.15s,border-color 0.15s!important;letter-spacing:0.01em!important;text-transform:uppercase!important;text-align:center!important;}
 #horm-root .horm-tab:hover{color:var(--navy)!important;}
 #horm-root .horm-tab.active{color:var(--navy)!important;border-bottom-color:var(--navy)!important;}
+@media(max-width:640px){#horm-root .horm-tabs{grid-template-columns:repeat(3,1fr)!important;}#horm-root .horm-tab{font-size:9.5px!important;padding:8px 4px!important;}}
+@media(max-width:380px){#horm-root .horm-tabs{grid-template-columns:repeat(2,1fr)!important;}}
 
 /* GLOBAL CONFIG */
 #horm-root .horm-global-config{background:var(--white)!important;padding:12px 20px!important;border-bottom:1px solid var(--border-light)!important;display:flex!important;gap:15px!important;align-items:center!important;justify-content:space-between!important;flex-wrap:wrap!important;}
@@ -191,11 +201,8 @@
 @media(max-width:600px){
   #horm-root .horm-grid{grid-template-columns:1fr 1fr!important;}
   #horm-root .horm-panel{padding:14px 12px!important;}
-  /* Nouveaux styles pour forcer les onglets sur 2 lignes (3 par ligne) */
-  #horm-root .horm-tabs { flex-wrap: wrap !important; min-width: 100% !important; padding: 4px !important; }
-  #horm-root .horm-tab { flex: 1 1 30% !important; white-space: normal !important; text-align: center !important; padding: 8px 4px !important; font-size: 10px !important; line-height: 1.2 !important; border-bottom: 2px solid transparent !important; }
 }
-  
+
 @media(max-width:380px){#horm-root .horm-grid{grid-template-columns:1fr!important;}}
 
 /* SCROLLBAR */
@@ -230,8 +237,12 @@ body{-ms-overflow-style:none;overflow-y:auto;}
     <div class="horm-patient-grid">
       <div class="horm-patient-field"><label for="pt-nom">Nom</label><input type="text" id="pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
       <div class="horm-patient-field"><label for="pt-prenom">Prénom</label><input type="text" id="pt-prenom" placeholder="Prénom" autocomplete="off"></div>
-      <div class="horm-patient-field"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"></div>
-      <div class="horm-patient-field"><label for="pt-age">Âge (années)</label><input type="number" id="pt-age" placeholder="Ex: 35" min="0" max="130" oninput="clearDdn()"></div>
+      <div class="horm-patient-field horm-patient-field-ddnage">
+        <div class="horm-ddnage-row">
+          <div class="horm-ddnage-col"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"></div>
+          <div class="horm-ddnage-col horm-ddnage-col-small"><label for="pt-age">Âge (années)</label><input type="number" id="pt-age" placeholder="Ex: 35" min="0" max="130" oninput="clearDdn()"></div>
+        </div>
+      </div>
       <div class="horm-patient-field"><label for="pt-medecin">Médecin prescripteur</label><input type="text" id="pt-medecin" placeholder="Dr ..." autocomplete="off"></div>
       <div class="horm-patient-field"><label for="pt-date-bilan">Date du bilan</label><input type="date" id="pt-date-bilan"></div>
     </div>
@@ -1018,7 +1029,6 @@ function calcFAI(){
   var shbg=parseFloat(document.getElementById('val-shbg').value);
   var el=document.getElementById('res-fai');
   if(isNaN(t)||isNaN(shbg)||shbg<=0){el.innerHTML='Renseignez testost\xe9rone + SHBG';el.className='horm-result r-empty';el.style.cssText='display:block !important;';return;}
-  // Conversion testostérone ng/mL -> nmol/L (x3.467) pour le calcul FAI standard
   var tNmol=t*3.467;
   var fai=(tNmol/shbg*100).toFixed(1);
   var cls,msg;
@@ -1195,7 +1205,6 @@ window.runGlobalAnalysis=function(){
 
   function addAnomalie(prio,text){anomalies.push({prio:prio,text:text});}
 
-  // FSH/LH/E2/AMH/Prog
   if(!isNaN(fsh)){
     if(cycleCtx==='amenorrhee'&&fsh>25)addAnomalie('crit','FSH très élevée ('+fsh+' UI/L) en aménorrhée — IOP à confirmer');
     else if(fsh>12.5)addAnomalie('high','FSH élevée ('+fsh+' UI/L)');
@@ -1212,14 +1221,12 @@ window.runGlobalAnalysis=function(){
   }
   if(!isNaN(prog)&&prog<3)addAnomalie('watch','Progestérone lutéale basse ('+prog+' ng/mL) — anovulation probable');
 
-  // Hypophyse
   if(!isNaN(prl)){
     if(prl>200)addAnomalie('crit','Prolactine très élevée ('+prl+' ng/mL) — macroadénome probable');
     else if(prl>hi)addAnomalie('high','Hyperprolactinémie ('+prl+' ng/mL)');
   }
   if(!isNaN(igf1)&&igf1>250)addAnomalie('watch','IGF-1 élevée ('+igf1+' ng/mL) — acromégalie à évoquer');
 
-  // Surrénale
   if(!isNaN(cort)){
     if(cort<3)addAnomalie('crit','Cortisol effondré ('+cort+' µg/dL) — insuffisance surrénalienne');
     else if(cort<10)addAnomalie('high','Cortisol bas ('+cort+' µg/dL)');
@@ -1228,7 +1235,6 @@ window.runGlobalAnalysis=function(){
   if(syna==='abs')addAnomalie('crit','Test au Synacthène : réponse absente — insuffisance surrénalienne confirmée');
   if(!isNaN(ohpSurr)&&ohpSurr>2)addAnomalie('high','17-OHP élevée ('+ohpSurr+' ng/mL) — bloc en 21-hydroxylase à évoquer');
 
-  // Androgènes
   if(!isNaN(testo)){
     var hiT=currentSex==='M'?10:0.8;
     if(currentSex!=='M'&&testo>1.5)addAnomalie('crit','Testostérone très élevée ('+testo+' ng/mL) — tumeur sécrétante à éliminer');
@@ -1236,7 +1242,6 @@ window.runGlobalAnalysis=function(){
   }
   if(!isNaN(d4a)&&d4a>3.3)addAnomalie('watch','Androstènedione élevée ('+d4a+' ng/mL)');
 
-  // Thyroïde
   if(!isNaN(tsh)){
     if(tsh>10)addAnomalie('crit','TSH très élevée ('+tsh+' mUI/L) — hypothyroïdie sévère');
     else if(tsh>tRange.hi)addAnomalie('high','TSH élevée ('+tsh+' mUI/L)');
@@ -1248,7 +1253,6 @@ window.runGlobalAnalysis=function(){
   if(!isNaN(atpo)&&atpo>=34)addAnomalie('watch','Anti-TPO positifs ('+atpo+' UI/mL)');
   if(!isNaN(trak)&&trak>=1.75)addAnomalie('high','TRAK positifs ('+trak+' UI/L) — Basedow probable');
 
-  /* PATTERNS INTER-AXES */
   var ratio=(!isNaN(fsh)&&!isNaN(lh)&&fsh>0)?lh/fsh:NaN;
   if(!isNaN(ratio)&&ratio>2&&!isNaN(amh)&&amh>4.0){
     patterns.push({lvl:'watch',t:'Profil SOPK',a:'Ratio LH/FSH > 2 + AMH élevée. Compléter par le bilan androgénique et les critères cliniques de Rotterdam.'});
@@ -1292,7 +1296,6 @@ window.runGlobalAnalysis=function(){
     patterns.push({lvl:'high',t:'Maladie de Basedow probable',a:'TSH basse + TRAK positifs.'});
   }
 
-  /* ACTIONS / CAT */
   if(anomalies.some(function(a){return a.prio==='crit';})){
     actions.push('Anomalie(s) critique(s) détectée(s) — confirmer rapidement et orienter vers une consultation spécialisée si besoin.');
   }
@@ -1315,7 +1318,6 @@ window.runGlobalAnalysis=function(){
     return;
   }
 
-  /* RENDU */
   var prioOrder={crit:0,high:1,watch:2};
   anomalies.sort(function(a,b){return prioOrder[a.prio]-prioOrder[b.prio];});
   var prioLabel={crit:'Critique',high:'Important',watch:'À surveiller'};
@@ -1403,7 +1405,7 @@ window.printResumeA5=function(){
     +'<style>'
     +'@page{size:A5;margin:12mm;}'
     +'*{box-sizing:border-box;margin:0;padding:0;}'
-    +'body{font-family:Arial,Helvetica,sans-serif;font-size:10.5pt;color:#1A202C;line-height:1.45;}'
+    +'body{font-family:Arial,Helvetica,sans-serif;font-size:10.5pt;color:#1A202C;line-height:1.45;position:relative;min-height:100vh;padding-bottom:30px;}'
     +'.hdr{border-bottom:2px solid #1A3A5C;padding-bottom:8px;margin-bottom:12px;}'
     +'.hdr-title{font-size:13pt;font-weight:700;color:#1A3A5C;margin-bottom:2px;}'
     +'.hdr-sub{font-size:8.5pt;color:#718096;}'
@@ -1419,7 +1421,7 @@ window.printResumeA5=function(){
     +'.horm-prio.crit{background:#FEE2E2;color:#C8102E;}'
     +'.horm-prio.high{background:#FEF3C7;color:#B45309;}'
     +'.horm-prio.watch{background:#DBEAFE;color:#1E40AF;}'
-    +'.ftr{margin-top:14px;padding-top:8px;border-top:1px solid #E2E8F0;font-size:7.5pt;color:#718096;text-align:center;line-height:1.4;}'
+    +'.ftr{position:fixed;bottom:0;left:0;right:0;padding-top:8px;border-top:1px solid #E2E8F0;font-size:7.5pt;color:#718096;text-align:center;line-height:1.4;background:#FFFFFF;}'
     +'</style></head><body>'
     +'<div class="hdr"><div class="hdr-title">Analyse Globale du Bilan Hormonal</div>'
     +'<div class="hdr-sub">Outil d\'aide à l\'interprétation — à corréler impérativement à la clinique</div></div>'
