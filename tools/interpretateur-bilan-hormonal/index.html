@@ -191,7 +191,11 @@
 @media(max-width:600px){
   #horm-root .horm-grid{grid-template-columns:1fr 1fr!important;}
   #horm-root .horm-panel{padding:14px 12px!important;}
+  /* Nouveaux styles pour forcer les onglets sur 2 lignes (3 par ligne) */
+  #horm-root .horm-tabs { flex-wrap: wrap !important; min-width: 100% !important; padding: 4px !important; }
+  #horm-root .horm-tab { flex: 1 1 30% !important; white-space: normal !important; text-align: center !important; padding: 8px 4px !important; font-size: 10px !important; line-height: 1.2 !important; border-bottom: 2px solid transparent !important; }
 }
+  
 @media(max-width:380px){#horm-root .horm-grid{grid-template-columns:1fr!important;}}
 
 /* SCROLLBAR */
@@ -224,12 +228,13 @@ body{-ms-overflow-style:none;overflow-y:auto;}
   </button>
   <div class="horm-patient-form" id="patient-form">
     <div class="horm-patient-grid">
-      <div class="horm-patient-field"><label for="pt-nom">Nom</label><input type="text" id="pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
-      <div class="horm-patient-field"><label for="pt-prenom">Prénom</label><input type="text" id="pt-prenom" placeholder="Prénom" autocomplete="off"></div>
-      <div class="horm-patient-field"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"><span class="horm-patient-age-display" id="pt-age-display"></span></div>
-      <div class="horm-patient-field"><label for="pt-medecin">Médecin prescripteur</label><input type="text" id="pt-medecin" placeholder="Dr ..." autocomplete="off"></div>
-      <div class="horm-patient-field"><label for="pt-date-bilan">Date du bilan</label><input type="date" id="pt-date-bilan"></div>
-    </div>
+  <div class="horm-patient-field"><label for="pt-nom">Nom</label><input type="text" id="pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
+  <div class="horm-patient-field"><label for="pt-prenom">Prénom</label><input type="text" id="pt-prenom" placeholder="Prénom" autocomplete="off"></div>
+  <div class="horm-patient-field"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"></div>
+  <div class="horm-patient-field"><label for="pt-age">Âge (années)</label><input type="number" id="pt-age" placeholder="Ex: 35" min="0" max="130" oninput="clearDdn()"></div>
+  <div class="horm-patient-field"><label for="pt-medecin">Médecin prescripteur</label><input type="text" id="pt-medecin" placeholder="Dr ..." autocomplete="off"></div>
+  <div class="horm-patient-field"><label for="pt-date-bilan">Date du bilan</label><input type="date" id="pt-date-bilan"></div>
+</div>
   </div>
 </div>
 
@@ -668,13 +673,17 @@ window.togglePatientForm=function(){
 };
 window.calcAge=function(){
   var ddn=document.getElementById('pt-ddn').value;
-  var disp=document.getElementById('pt-age-display');
-  if(!ddn){disp.textContent='';return;}
+  var ageInput=document.getElementById('pt-age');
+  if(!ddn){return;}
   var d=new Date(ddn),now=new Date();
   var age=now.getFullYear()-d.getFullYear();
   var m=now.getMonth()-d.getMonth();
   if(m<0||(m===0&&now.getDate()<d.getDate()))age--;
-  disp.textContent=age+' ans';
+  ageInput.value=age; // Remplit automatiquement la case Âge si on met la date de naissance
+};
+window.clearDdn=function(){
+  // Efface la date de naissance si on force un âge manuellement pour éviter les incohérences
+  document.getElementById('pt-ddn').value=''; 
 };
 function getPatientInfo(){
   var nom=document.getElementById('pt-nom').value.trim();
@@ -682,15 +691,9 @@ function getPatientInfo(){
   var ddn=document.getElementById('pt-ddn').value;
   var medecin=document.getElementById('pt-medecin').value.trim();
   var dateBilan=document.getElementById('pt-date-bilan').value;
-  var ageTxt=document.getElementById('pt-age-display').textContent;
+  var ageVal=document.getElementById('pt-age').value.trim();
+  var ageTxt=ageVal ? ageVal + ' ans' : ''; // Récupère l'âge depuis la nouvelle case
   var nomComplet=(prenom?prenom+' ':'')+(nom||'');
-  var ddnFormatted='';
-  if(ddn){var d=new Date(ddn);ddnFormatted=d.toLocaleDateString('fr-FR');}
-  var dateBilanFormatted='';
-  if(dateBilan){var db=new Date(dateBilan);dateBilanFormatted=db.toLocaleDateString('fr-FR');}
-  return{nomComplet:nomComplet.trim(),ddnFormatted:ddnFormatted,age:ageTxt,medecin:medecin,dateBilanFormatted:dateBilanFormatted};
-}
-
 /* ===== TABS ===== */
 window.showPanel=function(panelId,btn){
   document.querySelectorAll('#horm-root .horm-panel').forEach(function(p){p.classList.remove('active');});
