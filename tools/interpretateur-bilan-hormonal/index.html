@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interprétateur de Bilan Hormonal – Dr KARA-ZAITRI</title>
+<style>
+#horm-root {
+  --navy:#1A3A5C;--navy-light:#2C5282;--navy-bg:#EBF4FF;--slate:#4A5568;--slate-light:#718096;
+  --bg:#F8FAFC;--white:#FFFFFF;--normal:#166534;--normal-bg:#DCFCE7;--normal-border:#86EFAC;
+  --low:#1E40AF;--low-bg:#DBEAFE;--low-border:#93C5FD;--high:#B45309;--high-bg:#FEF3C7;
+  --high-border:#FCD34D;--critical:#C8102E;--critical-bg:#FEE2E2;--critical-border:#FCA5A5;
+  --border:#CBD5E0;--border-light:#E2E8F0;--text:#1A202C;--text-muted:#718096;--radius:6px;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+  all:initial;font-family:Arial,Helvetica,sans-serif!important;font-size:14px!important;
+  color:var(--text)!important;background:var(--bg)!important;display:block!important;
+  box-sizing:border-box!important;line-height:1.5!important;-webkit-font-smoothing:antialiased!important;
+}
+#horm-root *,#horm-root *::before,#horm-root *::after{box-sizing:border-box!important;font-family:Arial,Helvetica,sans-serif!important;}
+
+/* HEADER */
+#horm-root .horm-header{background:var(--navy)!important;color:var(--white)!important;padding:20px 24px 16px!important;border-bottom:3px solid #C8102E!important;}
+#horm-root .horm-header-top{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;flex-wrap:wrap!important;gap:10px!important;}
+#horm-root .horm-header h1{font-size:18px!important;font-weight:700!important;color:var(--white)!important;margin:0 0 4px 0!important;line-height:1.3!important;}
+#horm-root .horm-subtitle{font-size:12px!important;color:rgba(255,255,255,0.75)!important;font-weight:400!important;margin:0!important;}
+#horm-root .horm-badge{background:rgba(255,255,255,0.15)!important;border:1px solid rgba(255,255,255,0.3)!important;color:var(--white)!important;font-size:10px!important;font-weight:700!important;padding:3px 8px!important;border-radius:3px!important;letter-spacing:0.05em!important;text-transform:uppercase!important;white-space:nowrap!important;}
+#horm-root .horm-disclaimer{margin-top:10px!important;font-size:10px!important;color:rgba(255,255,255,0.6)!important;border-top:1px solid rgba(255,255,255,0.15)!important;padding-top:8px!important;line-height:1.4!important;}
+
+/* PANNEAU PATIENT */
+#horm-root .horm-patient-bar{background:var(--white)!important;border-bottom:1px solid var(--border-light)!important;}
+#horm-root .horm-patient-toggle{width:100%!important;display:flex!important;align-items:center!important;gap:8px!important;padding:8px 20px!important;background:none!important;border:none!important;cursor:pointer!important;font-size:11px!important;font-weight:600!important;color:var(--slate-light)!important;text-align:left!important;letter-spacing:0.03em!important;text-transform:uppercase!important;transition:color 0.15s!important;}
+#horm-root .horm-patient-toggle:hover{color:var(--navy)!important;}
+#horm-root .horm-patient-toggle .pt-arrow{font-size:9px!important;transition:transform 0.2s!important;display:inline-block!important;}
+#horm-root .horm-patient-toggle.open .pt-arrow{transform:rotate(90deg)!important;}
+#horm-root .horm-patient-form{display:none!important;padding:10px 20px 14px!important;background:#FAFBFC!important;border-top:1px solid var(--border-light)!important;}
+#horm-root .horm-patient-form.open{display:block!important;}
+#horm-root .horm-patient-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))!important;gap:10px!important;}
+#horm-root .horm-patient-field{display:flex!important;flex-direction:column!important;gap:3px!important;}
+#horm-root .horm-patient-field label{font-size:10px!important;font-weight:700!important;color:var(--slate)!important;text-transform:uppercase!important;letter-spacing:0.04em!important;}
+#horm-root .horm-patient-field input{padding:6px 8px!important;border:1px solid var(--border)!important;border-radius:4px!important;font-size:12px!important;color:var(--text)!important;background:var(--white)!important;outline:none!important;transition:border-color 0.15s!important;}
+#horm-root .horm-patient-field input:focus{border-color:var(--navy)!important;}
+#horm-root .horm-patient-age-display{font-size:10px!important;color:var(--slate-light)!important;margin-top:2px!important;min-height:14px!important;}
+
+/* TABS */
+#horm-root .horm-tabs-wrap{background:var(--white)!important;border-bottom:2px solid var(--border-light)!important;overflow-x:auto!important;scrollbar-width:none!important;}
+#horm-root .horm-tabs-wrap::-webkit-scrollbar{display:none!important;}
+#horm-root .horm-tabs{display:flex!important;min-width:max-content!important;padding:0 12px!important;}
+#horm-root .horm-tab{padding:10px 14px!important;font-size:11px!important;font-weight:600!important;color:var(--slate)!important;cursor:pointer!important;border:none!important;background:none!important;border-bottom:3px solid transparent!important;white-space:nowrap!important;transition:color 0.15s,border-color 0.15s!important;letter-spacing:0.01em!important;text-transform:uppercase!important;}
+#horm-root .horm-tab:hover{color:var(--navy)!important;}
+#horm-root .horm-tab.active{color:var(--navy)!important;border-bottom-color:var(--navy)!important;}
+
+/* GLOBAL CONFIG */
+#horm-root .horm-global-config{background:var(--white)!important;padding:12px 20px!important;border-bottom:1px solid var(--border-light)!important;display:flex!important;gap:15px!important;align-items:center!important;justify-content:space-between!important;flex-wrap:wrap!important;}
+#horm-root .horm-sex-group{display:flex!important;gap:8px!important;align-items:center!important;flex-wrap:wrap!important;}
+#horm-root .horm-sex-btn{padding:6px 14px!important;border:1.5px solid var(--border)!important;border-radius:20px!important;font-size:12px!important;font-weight:600!important;cursor:pointer!important;background:var(--white)!important;color:var(--slate)!important;transition:all 0.15s!important;}
+#horm-root .horm-sex-btn.active{background:var(--navy)!important;color:var(--white)!important;border-color:var(--navy)!important;}
+#horm-root .horm-btn-global{background:#C8102E!important;color:white!important;border:none!important;padding:8px 16px!important;border-radius:20px!important;font-size:12px!important;font-weight:700!important;cursor:pointer!important;transition:0.2s!important;display:inline-flex!important;align-items:center!important;gap:6px!important;box-shadow:var(--shadow)!important;}
+#horm-root .horm-btn-global:hover{background:#9B0C23!important;}
+
+/* PANELS */
+#horm-root .horm-panel{display:none!important;padding:20px!important;max-width:900px!important;margin:0 auto!important;}
+#horm-root .horm-panel.active{display:block!important;}
+#horm-root .horm-section-title{font-size:13px!important;font-weight:700!important;color:var(--navy)!important;text-transform:uppercase!important;letter-spacing:0.06em!important;margin:0 0 14px 0!important;padding-bottom:6px!important;border-bottom:2px solid var(--navy-bg)!important;display:flex!important;align-items:center!important;gap:8px!important;}
+#horm-root .horm-section-title::before{content:"\25A0"!important;color:#C8102E!important;font-size:10px!important;}
+
+/* GRID + CARDS */
+#horm-root .horm-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))!important;gap:12px!important;margin-bottom:20px!important;}
+#horm-root .horm-param-card{background:var(--white)!important;border:1px solid var(--border-light)!important;border-radius:var(--radius)!important;padding:12px!important;box-shadow:var(--shadow)!important;}
+#horm-root .horm-param-label{font-size:11px!important;font-weight:700!important;color:var(--slate)!important;text-transform:uppercase!important;letter-spacing:0.04em!important;margin-bottom:6px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;}
+#horm-root .horm-ref{font-size:9px!important;font-weight:400!important;color:var(--text-muted)!important;font-style:italic!important;}
+#horm-root .horm-input-row{display:flex!important;align-items:center!important;gap:6px!important;}
+#horm-root .horm-input{flex:1!important;padding:7px 9px!important;border:1.5px solid var(--border)!important;border-radius:4px!important;font-size:14px!important;font-weight:600!important;color:var(--text)!important;background:var(--bg)!important;outline:none!important;width:100%!important;transition:border-color 0.15s!important;}
+#horm-root .horm-input:focus{border-color:var(--navy)!important;background:var(--white)!important;}
+#horm-root select.horm-input{font-weight:600!important;cursor:pointer!important;}
+#horm-root .horm-unit{font-size:11px!important;color:var(--text-muted)!important;white-space:nowrap!important;min-width:40px!important;}
+
+/* GAUGE */
+#horm-root .horm-gauge-wrap{margin-top:8px!important;}
+#horm-root .horm-gauge-track{height:5px!important;border-radius:10px!important;background:linear-gradient(to right,#3B82F6 0%,#22C55E 40%,#F59E0B 70%,#EF4444 100%)!important;position:relative!important;margin-bottom:4px!important;}
+#horm-root .horm-gauge-cursor{position:absolute!important;top:-3px!important;width:11px!important;height:11px!important;border-radius:50%!important;border:2px solid var(--white)!important;background:var(--slate)!important;transform:translateX(-50%)!important;transition:left 0.4s cubic-bezier(.4,0,.2,1),background 0.3s!important;display:none!important;}
+
+/* CAS CLINIQUES */
+#horm-root .horm-case-select{width:100%!important;padding:9px 12px!important;border:1.5px solid var(--border)!important;border-radius:var(--radius)!important;font-size:13px!important;color:var(--text)!important;background:var(--white)!important;margin-bottom:16px!important;outline:none!important;}
+#horm-root .horm-case-card{background:var(--white)!important;border:1px solid var(--border-light)!important;border-radius:var(--radius)!important;padding:16px!important;box-shadow:var(--shadow)!important;display:none!important;}
+#horm-root .horm-case-card.visible{display:block!important;}
+#horm-root .horm-case-header{display:flex!important;align-items:flex-start!important;gap:12px!important;margin-bottom:12px!important;padding-bottom:10px!important;border-bottom:1px solid var(--border-light)!important;}
+#horm-root .horm-case-age{background:var(--navy)!important;color:var(--white)!important;font-size:20px!important;font-weight:700!important;padding:8px 12px!important;border-radius:4px!important;text-align:center!important;min-width:60px!important;line-height:1.2!important;}
+#horm-root .horm-case-age span{display:block!important;font-size:10px!important;font-weight:400!important;opacity:0.8!important;}
+#horm-root .horm-case-motif{font-size:13px!important;font-weight:600!important;color:var(--navy)!important;margin-bottom:4px!important;}
+#horm-root .horm-case-context{font-size:12px!important;color:var(--slate)!important;line-height:1.5!important;}
+#horm-root .horm-case-bio{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))!important;gap:8px!important;margin-bottom:14px!important;}
+#horm-root .horm-case-param{background:var(--bg)!important;border:1px solid var(--border-light)!important;border-radius:4px!important;padding:7px 10px!important;}
+#horm-root .horm-case-param-name{font-size:10px!important;text-transform:uppercase!important;color:var(--slate-light)!important;font-weight:700!important;letter-spacing:0.04em!important;margin-bottom:2px!important;}
+#horm-root .horm-case-param-val{font-size:14px!important;font-weight:700!important;}
+#horm-root .horm-case-param-val.v-low{color:var(--low)!important;}
+#horm-root .horm-case-param-val.v-normal{color:var(--normal)!important;}
+#horm-root .horm-case-param-val.v-high{color:var(--high)!important;}
+#horm-root .horm-case-param-val.v-critical{color:var(--critical)!important;}
+#horm-root .horm-case-answer{display:none!important;}
+#horm-root .horm-case-answer.visible{display:block!important;}
+#horm-root .horm-case-section{margin-bottom:10px!important;}
+#horm-root .horm-case-section-title{font-size:11px!important;text-transform:uppercase!important;letter-spacing:0.05em!important;font-weight:700!important;color:var(--navy)!important;margin-bottom:4px!important;}
+#horm-root .horm-case-diag{display:inline-block!important;background:var(--navy)!important;color:var(--white)!important;padding:4px 10px!important;border-radius:3px!important;font-size:12px!important;font-weight:700!important;margin-bottom:8px!important;}
+#horm-root .horm-toggle-answer{margin-top:10px!important;}
+#horm-root .horm-toggle-answer .horm-btn{background:#C8102E!important;font-size:11px!important;padding:7px 14px!important;}
+#horm-root .horm-sep{height:1px!important;background:var(--border-light)!important;margin:18px 0!important;}
+
+/* RESULTS */
+#horm-root .horm-result{display:none!important;margin-top:8px!important;padding:6px 9px!important;border-radius:4px!important;font-size:11px!important;font-weight:600!important;line-height:1.4!important;border-left:3px solid!important;}
+#horm-root .r-normal{background:var(--normal-bg)!important;color:var(--normal)!important;border-color:var(--normal)!important;}
+#horm-root .r-low{background:var(--low-bg)!important;color:var(--low)!important;border-color:var(--low)!important;}
+#horm-root .r-high{background:var(--high-bg)!important;color:var(--high)!important;border-color:var(--high)!important;}
+#horm-root .r-critical{background:var(--critical-bg)!important;color:var(--critical)!important;border-color:var(--critical)!important;}
+#horm-root .r-info{background:var(--navy-bg)!important;color:var(--navy)!important;border-color:var(--navy)!important;}
+#horm-root .r-empty{background:#F8FAFC!important;color:#4A5568!important;border-color:#CBD5E0!important;}
+
+/* ALERTS */
+#horm-root .horm-alert{padding:10px 14px!important;border-radius:4px!important;font-size:12px!important;line-height:1.5!important;margin-bottom:12px!important;border-left:4px solid!important;}
+#horm-root .horm-alert-warn{background:#FFFBEB!important;border-color:var(--high)!important;color:#92400E!important;}
+#horm-root .horm-alert-info{background:var(--navy-bg)!important;border-color:var(--navy)!important;color:var(--navy)!important;}
+
+/* BUTTONS */
+#horm-root .horm-btn{display:inline-flex!important;align-items:center!important;gap:6px!important;padding:9px 18px!important;background:var(--navy)!important;color:var(--white)!important;border:none!important;border-radius:var(--radius)!important;font-size:12px!important;font-weight:700!important;cursor:pointer!important;text-transform:uppercase!important;transition:0.15s!important;margin-top:12px!important;}
+#horm-root .horm-btn:hover{background:var(--navy-light)!important;}
+#horm-root .horm-btn-reset{background:var(--white)!important;color:var(--slate)!important;border:1.5px solid var(--border)!important;}
+#horm-root .horm-btn-reset:hover{background:var(--bg)!important;}
+#horm-root .horm-btn-row{display:flex!important;gap:10px!important;flex-wrap:wrap!important;margin-top:14px!important;}
+
+/* SYNTHESIS / INTERPRET / PROTO */
+#horm-root .horm-synthesis{background:var(--white)!important;border:1px solid var(--border-light)!important;border-radius:var(--radius)!important;padding:14px 16px!important;margin-bottom:16px!important;box-shadow:var(--shadow)!important;display:none!important;}
+#horm-root .horm-synthesis.visible{display:block!important;}
+#horm-root .horm-synthesis-title{font-size:12px!important;font-weight:700!important;color:var(--navy)!important;text-transform:uppercase!important;letter-spacing:0.05em!important;margin:0 0 10px 0!important;}
+#horm-root .horm-syn-item{display:flex!important;align-items:flex-start!important;gap:8px!important;padding:4px 0!important;border-bottom:1px solid var(--border-light)!important;font-size:12px!important;}
+#horm-root .horm-syn-item:last-child{border-bottom:none!important;}
+#horm-root .horm-syn-dot{width:8px!important;height:8px!important;border-radius:50%!important;margin-top:4px!important;flex-shrink:0!important;}
+#horm-root .horm-syn-dot.normal{background:var(--normal)!important;}
+#horm-root .horm-syn-dot.low{background:var(--low)!important;}
+#horm-root .horm-syn-dot.high{background:var(--high)!important;}
+#horm-root .horm-syn-dot.critical{background:var(--critical)!important;}
+#horm-root .horm-interpret{background:var(--navy-bg)!important;border:1px solid #BEE3F8!important;border-left:4px solid var(--navy)!important;border-radius:var(--radius)!important;padding:12px 14px!important;margin-top:16px!important;font-size:12px!important;line-height:1.6!important;color:var(--navy)!important;display:none!important;}
+#horm-root .horm-interpret.visible{display:block!important;}
+#horm-root .horm-interpret strong{display:block!important;font-size:11px!important;text-transform:uppercase!important;letter-spacing:0.05em!important;margin-bottom:6px!important;color:var(--navy)!important;}
+
+/* PROTOCOLE PRISE EN CHARGE */
+#horm-root .horm-proto{display:none!important;background:#F0FDF4!important;border:1px solid #BBF7D0!important;border-left:4px solid #166534!important;border-radius:var(--radius)!important;padding:12px 14px!important;margin-top:10px!important;font-size:12px!important;line-height:1.6!important;color:var(--text)!important;}
+#horm-root .horm-proto.visible{display:block!important;}
+#horm-root .horm-proto-title{display:flex!important;align-items:center!important;gap:6px!important;font-size:11px!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:0.05em!important;color:#166534!important;margin-bottom:8px!important;}
+#horm-root .horm-proto p{margin:0 0 6px 0!important;}
+#horm-root .horm-proto p:last-child{margin-bottom:0!important;}
+#horm-root .horm-proto b{color:#166534!important;}
+#horm-root .horm-proto .proto-note{font-style:italic!important;color:var(--slate)!important;font-size:11px!important;border-top:1px solid #BBF7D0!important;padding-top:6px!important;margin-top:8px!important;}
+
+/* RÉSUMÉ INLINE */
+#horm-root .horm-resume-panel{display:none!important;margin:0!important;border-top:3px solid var(--navy)!important;background:var(--white)!important;}
+#horm-root .horm-resume-panel.visible{display:block!important;}
+#horm-root .horm-resume-header{background:var(--navy)!important;color:var(--white)!important;padding:14px 20px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:wrap!important;gap:10px!important;}
+#horm-root .horm-resume-header h2{margin:0!important;font-size:15px!important;font-weight:700!important;}
+#horm-root .horm-resume-header-meta{font-size:11px!important;color:rgba(255,255,255,0.75)!important;}
+#horm-root .horm-resume-body{padding:20px!important;max-width:900px!important;margin:0 auto!important;}
+#horm-root .horm-resume-section{margin-bottom:18px!important;}
+#horm-root .horm-resume-section h3{font-size:12px!important;font-weight:700!important;color:var(--navy)!important;text-transform:uppercase!important;letter-spacing:0.06em!important;margin:0 0 8px 0!important;padding-bottom:5px!important;border-bottom:2px solid var(--navy-bg)!important;display:flex!important;align-items:center!important;gap:6px!important;}
+#horm-root .horm-resume-section h3::before{content:"\25A0"!important;color:#C8102E!important;font-size:9px!important;}
+#horm-root .horm-resume-list{margin:0!important;padding:0!important;list-style:none!important;}
+#horm-root .horm-resume-list li{padding:5px 0 5px 14px!important;position:relative!important;font-size:12px!important;border-bottom:1px solid var(--border-light)!important;line-height:1.5!important;}
+#horm-root .horm-resume-list li:last-child{border-bottom:none!important;}
+#horm-root .horm-resume-list li::before{content:"\25B8"!important;position:absolute!important;left:0!important;color:#C8102E!important;font-size:10px!important;top:6px!important;}
+#horm-root .horm-prio{display:inline-block!important;font-size:9px!important;font-weight:700!important;padding:1px 6px!important;border-radius:3px!important;margin-right:6px!important;text-transform:uppercase!important;letter-spacing:0.04em!important;vertical-align:middle!important;}
+#horm-root .horm-prio.crit{background:var(--critical-bg)!important;color:var(--critical)!important;}
+#horm-root .horm-prio.high{background:var(--high-bg)!important;color:var(--high)!important;}
+#horm-root .horm-prio.watch{background:var(--low-bg)!important;color:var(--low)!important;}
+#horm-root .horm-pattern-box{border-left:4px solid!important;padding:10px 12px!important;margin:8px 0!important;border-radius:4px!important;font-size:12px!important;}
+#horm-root .horm-pattern-box.crit{background:var(--critical-bg)!important;border-color:var(--critical)!important;}
+#horm-root .horm-pattern-box.high{background:var(--high-bg)!important;border-color:var(--high)!important;}
+#horm-root .horm-pattern-box.watch{background:var(--navy-bg)!important;border-color:var(--navy)!important;}
+#horm-root .horm-autoimmun{background:#F0FDF4!important;border-left:4px solid #166534!important;padding:10px 12px!important;margin:8px 0!important;border-radius:4px!important;font-size:12px!important;}
+#horm-root .horm-resume-footer{padding:14px 20px!important;background:var(--bg)!important;border-top:1px solid var(--border-light)!important;display:flex!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important;}
+#horm-root .horm-btn-copy{display:inline-flex!important;align-items:center!important;gap:7px!important;padding:9px 18px!important;background:var(--navy)!important;color:var(--white)!important;border:none!important;border-radius:var(--radius)!important;font-size:12px!important;font-weight:700!important;cursor:pointer!important;transition:0.15s!important;}
+#horm-root .horm-btn-copy:hover{background:var(--navy-light)!important;}
+#horm-root .horm-btn-copy.copied{background:var(--normal)!important;}
+#horm-root .horm-btn-print{display:inline-flex!important;align-items:center!important;gap:7px!important;padding:9px 18px!important;background:var(--white)!important;color:var(--navy)!important;border:1.5px solid var(--navy)!important;border-radius:var(--radius)!important;font-size:12px!important;font-weight:700!important;cursor:pointer!important;transition:0.15s!important;}
+#horm-root .horm-btn-print:hover{background:var(--navy-bg)!important;}
+#horm-root .horm-btn-close-resume{display:inline-flex!important;align-items:center!important;gap:6px!important;padding:9px 16px!important;background:var(--white)!important;color:var(--slate)!important;border:1.5px solid var(--border)!important;border-radius:var(--radius)!important;font-size:12px!important;font-weight:600!important;cursor:pointer!important;transition:0.15s!important;}
+#horm-root .horm-btn-close-resume:hover{background:var(--bg)!important;}
+#horm-root .horm-copy-notice{font-size:11px!important;color:var(--normal)!important;display:none!important;}
+#horm-root .horm-copy-notice.visible{display:inline!important;}
+
+/* FOOTER */
+#horm-root .horm-footer{background:var(--white)!important;border-top:1px solid var(--border-light)!important;padding:10px 24px!important;font-size:10px!important;color:var(--text-muted)!important;text-align:center!important;line-height:1.5!important;}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  #horm-root .horm-grid{grid-template-columns:1fr 1fr!important;}
+  #horm-root .horm-panel{padding:14px 12px!important;}
+}
+@media(max-width:380px){#horm-root .horm-grid{grid-template-columns:1fr!important;}}
+
+/* SCROLLBAR */
+html{scrollbar-width:none;}
+body{-ms-overflow-style:none;overflow-y:auto;}
+::-webkit-scrollbar{display:none;}
+</style>
+</head>
+<body>
+<div id="horm-root">
+
+<!-- HEADER -->
+<div class="horm-header">
+  <div class="horm-header-top">
+    <div>
+      <h1>Interprétateur de Bilan Hormonal</h1>
+      <p class="horm-subtitle">Gynécologie-Endocrinologie &amp; Médecine Générale — Normes adultes HAS / SFE / CNGOF / ESHRE</p>
+    </div>
+    <span class="horm-badge">Usage Médical</span>
+  </div>
+  <p class="horm-disclaimer">Outil d'aide à l'interprétation destiné aux professionnels de santé. Ne se substitue pas au jugement clinique. Valeurs indicatives — toujours croiser avec les normes du laboratoire (méthode de dosage, phase du cycle) et le contexte clinique. © Dr KARA-ZAITRI M.A.</p>
+</div>
+
+<!-- PANNEAU PATIENT -->
+<div class="horm-patient-bar">
+  <button class="horm-patient-toggle" id="patient-toggle-btn" onclick="togglePatientForm()" aria-expanded="false">
+    <span class="pt-arrow">&#9658;</span>
+    <span>&#128100; Informations patient / médecin</span>
+    <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#A0AEC0;">Optionnel — pour le compte-rendu</span>
+  </button>
+  <div class="horm-patient-form" id="patient-form">
+    <div class="horm-patient-grid">
+      <div class="horm-patient-field"><label for="pt-nom">Nom</label><input type="text" id="pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
+      <div class="horm-patient-field"><label for="pt-prenom">Prénom</label><input type="text" id="pt-prenom" placeholder="Prénom" autocomplete="off"></div>
+      <div class="horm-patient-field"><label for="pt-ddn">Date de naissance</label><input type="date" id="pt-ddn" oninput="calcAge()"><span class="horm-patient-age-display" id="pt-age-display"></span></div>
+      <div class="horm-patient-field"><label for="pt-medecin">Médecin prescripteur</label><input type="text" id="pt-medecin" placeholder="Dr ..." autocomplete="off"></div>
+      <div class="horm-patient-field"><label for="pt-date-bilan">Date du bilan</label><input type="date" id="pt-date-bilan"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ONGLETS -->
+<div class="horm-tabs-wrap">
+  <div class="horm-tabs" role="tablist">
+    <button class="horm-tab active" role="tab" onclick="showPanel('ovaire',this)">Fonction Ovarienne</button>
+    <button class="horm-tab" role="tab" onclick="showPanel('hypophyse',this)">Fonction Hypophysaire</button>
+    <button class="horm-tab" role="tab" onclick="showPanel('surrenale',this)">Fonction Surrénalienne</button>
+    <button class="horm-tab" role="tab" onclick="showPanel('androgen',this)">Fonction Androgénique</button>
+    <button class="horm-tab" role="tab" onclick="showPanel('thyroide',this)">Fonction Thyroïdienne</button>
+    <button class="horm-tab" role="tab" onclick="showPanel('cas',this)">Cas Cliniques</button>
+  </div>
+</div>
+
+<!-- SELECTEUR GLOBAL -->
+<div class="horm-global-config">
+  <div class="horm-sex-group">
+    <span style="font-size:12px;font-weight:600;color:#4A5568;">Sexe / Statut :</span>
+    <button class="horm-sex-btn" id="sex-m" onclick="setSex('M')">Homme</button>
+    <button class="horm-sex-btn active" id="sex-f" onclick="setSex('F')">Femme</button>
+    <button class="horm-sex-btn" id="sex-g" onclick="setSex('G')">Femme enceinte</button>
+  </div>
+  <button class="horm-btn-global" onclick="runGlobalAnalysis()">&#11088; Analyse Globale du Bilan</button>
+</div>
+
+<!-- ==================== FONCTION OVARIENNE ==================== -->
+<div id="panel-ovaire" class="horm-panel active" role="tabpanel">
+  <div class="horm-alert horm-alert-info">Onglet polyvalent : selon les valeurs renseignées, l'outil oriente vers un bilan de réserve ovarienne/infertilité, un SOPK, ou une aménorrhée/insuffisance ovarienne prématurée (IOP). Préciser le contexte du cycle pour une interprétation fiable.</div>
+
+  <div class="horm-section-title">Contexte du cycle</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">Jour du cycle au prélèvement</div>
+      <div class="horm-input-row">
+        <select class="horm-input" id="val-jour-cycle" onchange="evalOvaire()">
+          <option value="">--</option>
+          <option value="early">J2–J5 (phase folliculaire précoce)</option>
+          <option value="mid">J8–J12 (phase folliculaire tardive)</option>
+          <option value="luteal">J21–J24 (phase lutéale, ~7j post-ovulation)</option>
+          <option value="amenorrhee">Aménorrhée (cycle absent &gt; 3 mois)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="horm-section-title">Axe gonadotrope &amp; réserve ovarienne</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">FSH <span class="horm-ref" id="ref-fsh">J2–J5 : 3,5–12,5 UI/L</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-fsh" placeholder="--" oninput="evalFSH(this.value)"><span class="horm-unit">UI/L</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-fsh"></div></div></div>
+      <div class="horm-result" id="res-fsh"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">LH <span class="horm-ref" id="ref-lh">J2–J5 : 2,4–12,6 UI/L</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-lh" placeholder="--" oninput="evalLH(this.value)"><span class="horm-unit">UI/L</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-lh"></div></div></div>
+      <div class="horm-result" id="res-lh"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">Ratio LH/FSH <span class="horm-ref">&lt; 2 (suggestif SOPK si &gt;2)</span></div>
+      <div class="horm-result r-empty" id="res-ratio-lhfsh" style="display:block!important;">Renseignez LH et FSH</div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">Estradiol (E2) <span class="horm-ref" id="ref-e2">J2–J5 : 30–100 pg/mL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="1" id="val-e2" placeholder="--" oninput="evalE2(this.value)"><span class="horm-unit">pg/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-e2"></div></div></div>
+      <div class="horm-result" id="res-e2"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">AMH (Hormone Anti-Müllérienne) <span class="horm-ref">1,0–4,0 ng/mL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-amh" placeholder="--" oninput="evalAMH(this.value)"><span class="horm-unit">ng/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-amh"></div></div></div>
+      <div class="horm-result" id="res-amh"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">Progestérone (phase lutéale, J21-24) <span class="horm-ref">&gt; 10 ng/mL = ovulation confirmée</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-prog" placeholder="--" oninput="evalProg(this.value)"><span class="horm-unit">ng/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-prog"></div></div></div>
+      <div class="horm-result" id="res-prog"></div>
+    </div>
+  </div>
+
+  <div id="ovaire-synthesis" class="horm-synthesis">
+    <div class="horm-synthesis-title">Synthèse fonction ovarienne</div>
+    <div id="ovaire-syn-list"></div>
+  </div>
+  <div id="ovaire-interpret" class="horm-interpret">
+    <strong>Orientation diagnostique</strong>
+    <span id="ovaire-interpret-text"></span>
+  </div>
+  <div class="horm-proto" id="proto-ovaire">
+    <div class="horm-proto-title">&#128138; Conduite pratique</div>
+    <div id="proto-ovaire-text"></div>
+  </div>
+
+  <div class="horm-btn-row">
+    <button class="horm-btn" onclick="synthesizeOvaire()">&#x25B6; Générer la synthèse</button>
+    <button class="horm-btn horm-btn-reset" onclick="resetPanel('ovaire')">&#x21BA; Réinitialiser</button>
+  </div>
+</div>
+<!-- ==================== FONCTION HYPOPHYSAIRE ==================== -->
+<div id="panel-hypophyse" class="horm-panel" role="tabpanel">
+  <div class="horm-alert horm-alert-info">La TSH est interprétée en détail dans l'onglet "Fonction Thyroïdienne". Cet onglet se concentre sur la prolactine et le dépistage d'une insuffisance antéhypophysaire.</div>
+
+  <div class="horm-section-title">Prolactine</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">Prolactine <span class="horm-ref" id="ref-prl">H: 4–15 / F: 4–23 ng/mL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="1" id="val-prl" placeholder="--" oninput="evalPRL(this.value)"><span class="horm-unit">ng/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-prl"></div></div></div>
+      <div class="horm-result" id="res-prl"></div>
+    </div>
+  </div>
+  <div class="horm-proto" id="proto-prl">
+    <div class="horm-proto-title">&#128138; Conduite pratique — Hyperprolactinémie</div>
+    <div id="proto-prl-text"></div>
+  </div>
+
+  <div class="horm-section-title">Axe somatotrope</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">IGF-1 <span class="horm-ref">Normes selon âge (cf. labo)</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="1" id="val-igf1" placeholder="--" oninput="evalSimple('igf1',this.value,80,250,'Élevé — acromégalie/gigantisme à évoquer','Bas — déficit en GH possible','IGF-1 dans la norme usuelle adulte')"><span class="horm-unit">ng/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-igf1"></div></div></div>
+      <div class="horm-result" id="res-igf1"></div>
+    </div>
+  </div>
+
+  <div class="horm-section-title">Dépistage insuffisance antéhypophysaire</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">Cortisol 8h (axe corticotrope) <span class="horm-ref">10–20 µg/dL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-cort-hyp" placeholder="--" oninput="evalCortHyp(this.value)"><span class="horm-unit">µg/dL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-cort-hyp"></div></div></div>
+      <div class="horm-result" id="res-cort-hyp"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">TSH (rappel) <span class="horm-ref">0,4–4,0 mUI/L</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.01" id="val-tsh-hyp" placeholder="--" oninput="evalSimple('tsh-hyp',this.value,0.4,4.0,'Élevée','Basse — voir axe thyroïdien si central','TSH dans la norme')"><span class="horm-unit">mUI/L</span></div>
+      <div class="horm-result" id="res-tsh-hyp"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">FSH/LH (rappel) <span class="horm-ref">Voir onglet ovarien</span></div>
+      <div style="font-size:11px;color:var(--text-muted);font-style:italic;margin-top:6px;">Renseignés dans l'onglet "Fonction Ovarienne" — pris en compte dans l'analyse globale.</div>
+    </div>
+  </div>
+
+  <div id="hypophyse-interpret" class="horm-interpret">
+    <strong>Orientation diagnostique</strong>
+    <span id="hypophyse-interpret-text"></span>
+  </div>
+  <div class="horm-btn-row">
+    <button class="horm-btn" onclick="synthesizeHypophyse()">&#x25B6; Générer la synthèse</button>
+    <button class="horm-btn horm-btn-reset" onclick="resetPanel('hypophyse')">&#x21BA; Réinitialiser</button>
+  </div>
+</div>
+<!-- ==================== FONCTION SURRÉNALIENNE ==================== -->
+<div id="panel-surrenale" class="horm-panel" role="tabpanel">
+  <div class="horm-alert horm-alert-info">Le cortisol et l'ACTH doivent être interprétés ensemble (rapport central/périphérique) et idéalement prélevés à 8h. Le 17-OH-progestérone dépiste un bloc en 21-hydroxylase ; à interpréter avec prudence en cas d'hyperandrogénie associée (cf. onglet androgénique).</div>
+
+  <div class="horm-section-title">Axe corticotrope</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">Cortisol 8h <span class="horm-ref">10–20 µg/dL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-cort" placeholder="--" oninput="evalCort(this.value)"><span class="horm-unit">µg/dL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-cort"></div></div></div>
+      <div class="horm-result" id="res-cort"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">ACTH <span class="horm-ref">10–60 pg/mL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="1" id="val-acth" placeholder="--" oninput="evalACTH(this.value)"><span class="horm-unit">pg/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-acth"></div></div></div>
+      <div class="horm-result" id="res-acth"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">Test au Synacthène</div>
+      <div class="horm-input-row">
+        <select class="horm-input" id="val-synacthene" onchange="evalSynacthene()">
+          <option value="">Non réalisé</option>
+          <option value="normal">Réponse normale (cortisol &gt; 18–20 µg/dL post-stim)</option>
+          <option value="abs">Réponse absente/insuffisante</option>
+        </select>
+      </div>
+      <div class="horm-result" id="res-synacthene"></div>
+    </div>
+  </div>
+
+  <div class="horm-section-title">Stéroïdes surrénaliens complémentaires</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">17-OH-Progestérone <span class="horm-ref">&lt; 2 ng/mL (base)</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-17ohp-surr" placeholder="--" oninput="eval17OHPSurr(this.value)"><span class="horm-unit">ng/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-17ohp-surr"></div></div></div>
+      <div class="horm-result" id="res-17ohp-surr"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">DHEA-S <span class="horm-ref">H: 1,8–7,5 / F: 1,0–5,5 µmol/L</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-dheas-surr" placeholder="--" oninput="evalSimple('dheas-surr',this.value,1.0,7.5,'DHEA-S élevée — bloc enzymatique, tumeur surrénalienne, SOPK','DHEA-S basse — insuffisance surrénalienne, vieillissement','DHEA-S dans la norme')"><span class="horm-unit">µmol/L</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-dheas-surr"></div></div></div>
+      <div class="horm-result" id="res-dheas-surr"></div>
+    </div>
+  </div>
+
+  <div id="surrenale-interpret" class="horm-interpret">
+    <strong>Orientation diagnostique</strong>
+    <span id="surrenale-interpret-text"></span>
+  </div>
+  <div class="horm-proto" id="proto-surrenale">
+    <div class="horm-proto-title">&#128138; Conduite pratique — Insuffisance surrénalienne</div>
+    <div id="proto-surrenale-text"></div>
+  </div>
+
+  <div class="horm-btn-row">
+    <button class="horm-btn" onclick="synthesizeSurrenale()">&#x25B6; Générer la synthèse</button>
+    <button class="horm-btn horm-btn-reset" onclick="resetPanel('surrenale')">&#x21BA; Réinitialiser</button>
+  </div>
+</div>
+<!-- ==================== FONCTION ANDROGÉNIQUE ==================== -->
+<div id="panel-androgen" class="horm-panel" role="tabpanel">
+  <div class="horm-alert horm-alert-info">L'hyperandrogénie biologique doit être corrélée à la clinique (hirsutisme, acné, alopécie). Un taux de testostérone très élevé (&gt; 1,5–2 ng/mL) impose d'exclure une tumeur sécrétante avant de retenir un SOPK.</div>
+
+  <div class="horm-section-title">Testostérone &amp; transport</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">Testostérone totale <span class="horm-ref" id="ref-testo">F: 0,1–0,8 / H: 3–10 ng/mL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.01" id="val-testo" placeholder="--" oninput="evalTesto(this.value)"><span class="horm-unit">ng/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-testo"></div></div></div>
+      <div class="horm-result" id="res-testo"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">SHBG <span class="horm-ref">F: 30–120 / H: 10–57 nmol/L</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="1" id="val-shbg" placeholder="--" oninput="evalSHBG(this.value)"><span class="horm-unit">nmol/L</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-shbg"></div></div></div>
+      <div class="horm-result" id="res-shbg"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">Index Androgène Libre (FAI, calculé) <span class="horm-ref">&lt; 4–5 % (F)</span></div>
+      <div class="horm-result r-empty" id="res-fai" style="display:block!important;">Renseignez testostérone + SHBG</div>
+    </div>
+  </div>
+
+  <div class="horm-section-title">Précurseurs &amp; co-facteurs</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">Delta-4-Androstènedione <span class="horm-ref">F: 0,3–3,3 ng/mL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-d4a" placeholder="--" oninput="evalSimple('d4a',this.value,0.3,3.3,'Élevée — hyperandrogénie d\u2019origine surrénalienne ou ovarienne','—','Androstènedione dans la norme')"><span class="horm-unit">ng/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-d4a"></div></div></div>
+      <div class="horm-result" id="res-d4a"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">DHEA-S <span class="horm-ref">F: 1,0–5,5 µmol/L</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-dheas-andro" placeholder="--" oninput="evalSimple('dheas-andro',this.value,1.0,5.5,'Élevée — origine surrénalienne probable (tumeur si &gt;18 µmol/L)','Basse','DHEA-S dans la norme')"><span class="horm-unit">µmol/L</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-dheas-andro"></div></div></div>
+      <div class="horm-result" id="res-dheas-andro"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">17-OH-Progestérone <span class="horm-ref">&lt; 2 ng/mL (base)</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-17ohp-andro" placeholder="--" oninput="eval17OHPAndro(this.value)"><span class="horm-unit">ng/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-17ohp-andro"></div></div></div>
+      <div class="horm-result" id="res-17ohp-andro"></div>
+    </div>
+  </div>
+
+  <div id="androgen-synthesis" class="horm-synthesis">
+    <div class="horm-synthesis-title">Synthèse hyperandrogénie</div>
+    <div id="androgen-syn-list"></div>
+  </div>
+  <div id="androgen-interpret" class="horm-interpret">
+    <strong>Orientation diagnostique</strong>
+    <span id="androgen-interpret-text"></span>
+  </div>
+
+  <div class="horm-btn-row">
+    <button class="horm-btn" onclick="synthesizeAndrogen()">&#x25B6; Générer la synthèse</button>
+    <button class="horm-btn horm-btn-reset" onclick="resetPanel('androgen')">&#x21BA; Réinitialiser</button>
+  </div>
+</div>
+<!-- ==================== FONCTION THYROÏDIENNE ==================== -->
+<div id="panel-thyroide" class="horm-panel" role="tabpanel">
+  <div class="horm-alert horm-alert-info">Les seuils de TSH diffèrent en cas de grossesse (sélectionner "Femme enceinte" ci-dessus). Toujours interpréter la TSH avec T4L pour distinguer forme franche et infraclinique.</div>
+
+  <div class="horm-section-title">Axe thyréotrope</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">TSH <span class="horm-ref" id="ref-tsh">0,4–4,0 mUI/L</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.01" id="val-tsh" placeholder="--" oninput="evalTSH(this.value)"><span class="horm-unit">mUI/L</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-tsh"></div></div></div>
+      <div class="horm-result" id="res-tsh"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">T4 Libre <span class="horm-ref">0,8–1,8 ng/dL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.01" id="val-t4l" placeholder="--" oninput="evalT4L(this.value)"><span class="horm-unit">ng/dL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-t4l"></div></div></div>
+      <div class="horm-result" id="res-t4l"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">T3 Libre <span class="horm-ref">2,3–4,2 pg/mL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-t3l" placeholder="--" oninput="evalSimple('t3l',this.value,2.3,4.2,'T3L élevée — hyperthyroïdie (parfois isolée, T3-toxicose)','T3L basse','T3L dans la norme')"><span class="horm-unit">pg/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-t3l"></div></div></div>
+      <div class="horm-result" id="res-t3l"></div>
+    </div>
+  </div>
+
+  <div class="horm-section-title">Auto-immunité thyroïdienne</div>
+  <div class="horm-grid">
+    <div class="horm-param-card">
+      <div class="horm-param-label">Anti-TPO <span class="horm-ref">&lt; 34 UI/mL</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="1" id="val-atpo" placeholder="--" oninput="evalSimple('atpo',this.value,0,34,'Positif — thyroïdite auto-immune (Hashimoto)','—','Anti-TPO négatifs')"><span class="horm-unit">UI/mL</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-atpo"></div></div></div>
+      <div class="horm-result" id="res-atpo"></div>
+    </div>
+    <div class="horm-param-card">
+      <div class="horm-param-label">Anti-récepteurs TSH (TRAK) <span class="horm-ref">&lt; 1,75 UI/L</span></div>
+      <div class="horm-input-row"><input class="horm-input" type="number" step="0.1" id="val-trak" placeholder="--" oninput="evalSimple('trak',this.value,0,1.75,'Positif — Maladie de Basedow probable','—','TRAK négatifs')"><span class="horm-unit">UI/L</span></div>
+      <div class="horm-gauge-wrap"><div class="horm-gauge-track"><div class="horm-gauge-cursor" id="cur-trak"></div></div></div>
+      <div class="horm-result" id="res-trak"></div>
+    </div>
+  </div>
+
+  <div id="thyroide-synthesis" class="horm-synthesis">
+    <div class="horm-synthesis-title">Synthèse thyroïdienne</div>
+    <div id="thyroide-syn-list"></div>
+  </div>
+  <div id="thyroide-interpret" class="horm-interpret">
+    <strong>Orientation diagnostique</strong>
+    <span id="thyroide-interpret-text"></span>
+  </div>
+  <div class="horm-proto" id="proto-thyroide">
+    <div class="horm-proto-title">&#128138; Conduite pratique</div>
+    <div id="proto-thyroide-text"></div>
+  </div>
+
+  <div class="horm-btn-row">
+    <button class="horm-btn" onclick="synthesizeThyroide()">&#x25B6; Générer la synthèse</button>
+    <button class="horm-btn horm-btn-reset" onclick="resetPanel('thyroide')">&#x21BA; Réinitialiser</button>
+  </div>
+</div>
+
+<!-- ==================== CAS CLINIQUES ==================== -->
+<div id="panel-cas" class="horm-panel" role="tabpanel">
+  <div class="horm-alert horm-alert-info">Un cas par axe hormonal — testez votre interprétation avant de révéler le diagnostic et la conduite à tenir.</div>
+  <select class="horm-case-select" onchange="loadCase(this.value)">
+    <option value="">— Sélectionner un cas clinique —</option>
+    <option value="1">Cas 1 — Fonction Ovarienne — Femme 26 ans, infertilité et hirsutisme</option>
+    <option value="2">Cas 2 — Fonction Hypophysaire — Femme 31 ans, aménorrhée et galactorrhée</option>
+    <option value="3">Cas 3 — Fonction Surrénalienne — Femme 38 ans, asthénie et hyperpigmentation</option>
+    <option value="4">Cas 4 — Fonction Androgénique — Femme 24 ans, hirsutisme rapidement progressif</option>
+    <option value="5">Cas 5 — Fonction Thyroïdienne — Femme 45 ans, prise de poids et frilosité</option>
+  </select>
+  <div id="case-container"></div>
+</div>
+
+
+<!-- ==================== RÉSUMÉ INLINE ==================== -->
+<div id="horm-resume-panel" class="horm-resume-panel">
+  <div class="horm-resume-header">
+    <div>
+      <h2>&#11088; Analyse Globale du Bilan</h2>
+      <div class="horm-resume-header-meta" id="resume-patient-meta"></div>
+    </div>
+    <button class="horm-btn-close-resume" onclick="closeResume()">&#10005; Fermer</button>
+  </div>
+  <div class="horm-resume-body">
+    <div class="horm-resume-section"><h3>1. Anomalies par priorité</h3><ul id="resume-anomalies" class="horm-resume-list"></ul></div>
+    <div class="horm-resume-section" id="sec-patterns"><h3>2. Patterns diagnostiques</h3><div id="resume-patterns"></div></div>
+    <div class="horm-resume-section" id="sec-complementaire"><h3>3. Bilan complémentaire suggéré</h3><div id="resume-complementaire"></div></div>
+    <div class="horm-resume-section"><h3>4. Conduite à tenir</h3><ul id="resume-actions" class="horm-resume-list"></ul></div>
+  </div>
+  <div class="horm-resume-footer">
+    <button class="horm-btn-copy" id="btn-copy" onclick="copyResume()">&#128203; Copier le texte pour le dossier</button>
+    <button class="horm-btn-print" id="btn-print" onclick="printResumeA5()">&#128424; Imprimer (A5)</button>
+    <button class="horm-btn-close-resume" onclick="closeResume()">Fermer</button>
+    <span class="horm-copy-notice" id="copy-notice">&#10003; Texte copié !</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="horm-footer">
+  Dr KARA-ZAITRI M.A. — Gynécologue-Obstétricien, Tlemcen (Algérie) &nbsp;|&nbsp; Références : HAS, SFE, CNGOF 2022, ESHRE, ESE &nbsp;|&nbsp; Outil réservé aux professionnels de santé.
+</div>
+
+</div><!-- end #horm-root -->
+
+<script>
+(function(){
+'use strict';
+var currentSex='F';
+
+/* ===== UTILITAIRES GÉNÉRIQUES ===== */
+function showResult(id,cls,txt){
+  var el=document.getElementById('res-'+id);if(!el)return;
+  el.className='horm-result '+cls;el.innerHTML=txt;el.style.cssText='display:block !important;';
+}
+function moveCursor(id,pct,color){
+  var c=document.getElementById('cur-'+id);if(!c)return;
+  pct=Math.max(2,Math.min(98,pct));
+  c.style.cssText='display:block !important;left:'+pct+'%;background:'+color+';';
+}
+function hideCursor(id){
+  var c=document.getElementById('cur-'+id);if(c)c.style.display='none';
+}
+function evalSimple(id,v,lo,hi,highMsg,lowMsg,normMsg){
+  if(v===''||isNaN(v)){hideCursor(id);var el=document.getElementById('res-'+id);if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v<lo){cls='r-low';msg='\u2193 '+lowMsg;pct=15;}
+  else if(v>hi){cls='r-high';msg='\u2191 '+highMsg;pct=80;}
+  else{cls='r-normal';msg='\u2713 '+normMsg;pct=20+55*(v-lo)/(hi-lo);}
+  moveCursor(id,pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult(id,cls,msg);
+}
+window.evalSimple=evalSimple;
+
+/* ===== SEXE / STATUT ===== */
+window.setSex=function(s){
+  currentSex=s;
+  ['sex-m','sex-f','sex-g'].forEach(function(id){document.getElementById(id).classList.remove('active');});
+  document.getElementById(s==='M'?'sex-m':s==='F'?'sex-f':'sex-g').classList.add('active');
+  updateRefRanges();
+};
+function updateRefRanges(){
+  var refTesto=document.getElementById('ref-testo');
+  if(refTesto)refTesto.textContent=currentSex==='M'?'3–10 ng/mL':'0,1–0,8 ng/mL';
+  var refPrl=document.getElementById('ref-prl');
+  if(refPrl)refPrl.textContent=currentSex==='M'?'4–15 ng/mL':'4–23 ng/mL';
+}
+
+/* ===== PANNEAU PATIENT ===== */
+window.togglePatientForm=function(){
+  var form=document.getElementById('patient-form');
+  var btn=document.getElementById('patient-toggle-btn');
+  form.classList.toggle('open');
+  btn.classList.toggle('open');
+  btn.setAttribute('aria-expanded',form.classList.contains('open')?'true':'false');
+};
+window.calcAge=function(){
+  var ddn=document.getElementById('pt-ddn').value;
+  var disp=document.getElementById('pt-age-display');
+  if(!ddn){disp.textContent='';return;}
+  var d=new Date(ddn),now=new Date();
+  var age=now.getFullYear()-d.getFullYear();
+  var m=now.getMonth()-d.getMonth();
+  if(m<0||(m===0&&now.getDate()<d.getDate()))age--;
+  disp.textContent=age+' ans';
+};
+function getPatientInfo(){
+  var nom=document.getElementById('pt-nom').value.trim();
+  var prenom=document.getElementById('pt-prenom').value.trim();
+  var ddn=document.getElementById('pt-ddn').value;
+  var medecin=document.getElementById('pt-medecin').value.trim();
+  var dateBilan=document.getElementById('pt-date-bilan').value;
+  var ageTxt=document.getElementById('pt-age-display').textContent;
+  var nomComplet=(prenom?prenom+' ':'')+(nom||'');
+  var ddnFormatted='';
+  if(ddn){var d=new Date(ddn);ddnFormatted=d.toLocaleDateString('fr-FR');}
+  var dateBilanFormatted='';
+  if(dateBilan){var db=new Date(dateBilan);dateBilanFormatted=db.toLocaleDateString('fr-FR');}
+  return{nomComplet:nomComplet.trim(),ddnFormatted:ddnFormatted,age:ageTxt,medecin:medecin,dateBilanFormatted:dateBilanFormatted};
+}
+
+/* ===== TABS ===== */
+window.showPanel=function(panelId,btn){
+  document.querySelectorAll('#horm-root .horm-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('#horm-root .horm-tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('panel-'+panelId).classList.add('active');
+  btn.classList.add('active');
+};
+
+/* ===== FONCTION OVARIENNE ===== */
+function getCycleContext(){return document.getElementById('val-jour-cycle').value;}
+
+window.evalOvaire=function(){
+  // Revalide tous les paramètres déjà saisis lorsque le contexte du cycle change
+  var fshVal=document.getElementById('val-fsh').value;
+  var e2Val=document.getElementById('val-e2').value;
+  var progVal=document.getElementById('val-prog').value;
+  if(fshVal!=='')window.evalFSH(fshVal);
+  if(e2Val!=='')window.evalE2(e2Val);
+  if(progVal!=='')window.evalProg(progVal);
+};
+
+
+window.evalFSH=function(v){
+  var ctx=getCycleContext();
+  if(v===''||isNaN(v)){hideCursor('fsh');var el=document.getElementById('res-fsh');if(el)el.style.display='none';calcRatioLHFSH();return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(ctx==='amenorrhee'||ctx===''){
+    if(v>25){cls='r-critical';msg='\u26A0 FSH tr\xe8s \xe9lev\xe9e — \xe9voque une insuffisance ovarienne prématur\xe9e (IOP) si confirm\xe9e \xe0 2 reprises \xe0 1 mois d\u2019intervalle';pct=90;}
+    else if(v>12.5){cls='r-high';msg='\u2191 FSH \xe9lev\xe9e — \xe0 confronter au contexte clinique et \xe0 l\u2019\xe2ge';pct=70;}
+    else if(v<3.5){cls='r-low';msg='\u2193 FSH basse — \xe9voque un hypogonadisme hypogonadotrope (central) si E2 \xe9galement bas';pct=10;}
+    else{cls='r-normal';msg='\u2713 FSH dans la norme';pct=20+50*(v-3.5)/9;}
+  }else{
+    if(v>12.5){cls='r-high';msg='\u2191 FSH \xe9lev\xe9e pour le contexte de phase folliculaire — r\xe9serve ovarienne \xe0 surveiller';pct=75;}
+    else if(v<3.5){cls='r-low';msg='\u2193 FSH basse';pct=10;}
+    else{cls='r-normal';msg='\u2713 FSH dans la norme pour la phase folliculaire';pct=20+50*(v-3.5)/9;}
+  }
+  moveCursor('fsh',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('fsh',cls,msg);
+  calcRatioLHFSH();
+};
+window.evalLH=function(v){
+  if(v===''||isNaN(v)){hideCursor('lh');var el=document.getElementById('res-lh');if(el)el.style.display='none';calcRatioLHFSH();return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v>12.6){cls='r-high';msg='\u2191 LH \xe9lev\xe9e — \xe9voque un SOPK si associ\xe9e \xe0 un ratio LH/FSH \xe9lev\xe9, ou un pic ovulatoire selon le jour du cycle';pct=75;}
+  else if(v<2.4){cls='r-low';msg='\u2193 LH basse — \xe9voque un hypogonadisme hypogonadotrope si E2 \xe9galement bas';pct=10;}
+  else{cls='r-normal';msg='\u2713 LH dans la norme';pct=20+55*(v-2.4)/10.2;}
+  moveCursor('lh',pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('lh',cls,msg);
+  calcRatioLHFSH();
+};
+function calcRatioLHFSH(){
+  var fsh=parseFloat(document.getElementById('val-fsh').value);
+  var lh=parseFloat(document.getElementById('val-lh').value);
+  var el=document.getElementById('res-ratio-lhfsh');
+  if(isNaN(fsh)||isNaN(lh)||fsh<=0){el.innerHTML='Renseignez LH et FSH';el.className='horm-result r-empty';el.style.cssText='display:block !important;';return;}
+  var ratio=(lh/fsh).toFixed(2);var cls,msg;
+  if(ratio>2){cls='r-high';msg='\u2191 Ratio LH/FSH = '+ratio+' — suggestif de SOPK (seuil classique &gt;2, surtout si associ\xe9 \xe0 une AMH \xe9lev\xe9e)';}
+  else{cls='r-normal';msg='\u2713 Ratio LH/FSH = '+ratio+' — non suggestif de SOPK';}
+  el.className='horm-result '+cls;el.innerHTML=msg;el.style.cssText='display:block !important;';
+}
+window.evalE2=function(v){
+  var ctx=getCycleContext();
+  if(v===''||isNaN(v)){hideCursor('e2');var el=document.getElementById('res-e2');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v<30){cls='r-low';msg='\u2193 E2 bas — si FSH \xe9lev\xe9e : insuffisance ovarienne ; si FSH basse : origine centrale (hypogonadisme hypogonadotrope)';pct=10;}
+  else if(v>100&&(ctx==='early'||ctx===''))
+    {cls='r-high';msg='\u2191 E2 \xe9lev\xe9 pour une phase folliculaire pr\xe9coce — v\xe9rifier le jour du cycle, kyste folliculaire \xe0 \xe9voquer';pct=75;}
+  else{cls='r-normal';msg='\u2713 E2 dans la norme pour le contexte';pct=20+55*(v-30)/70;}
+  moveCursor('e2',pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('e2',cls,msg);
+};
+window.evalAMH=function(v){
+  if(v===''||isNaN(v)){hideCursor('amh');var el=document.getElementById('res-amh');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v<1.0){cls='r-low';msg='\u2193 AMH basse — r\xe9serve ovarienne diminu\xe9e ; si associ\xe9e \xe0 une am\xe9norrh\xe9e et FSH \xe9lev\xe9e, \xe9voquer une IOP';pct=10;}
+  else if(v>4.0){cls='r-high';msg='\u2191 AMH \xe9lev\xe9e — fortement suggestif de SOPK, surtout si ratio LH/FSH \xe9lev\xe9 et hyperandrog\xe9nie associ\xe9e';pct=80;}
+  else{cls='r-normal';msg='\u2713 AMH dans la norme — r\xe9serve ovarienne pr\xe9serv\xe9e';pct=20+55*(v-1.0)/3.0;}
+  moveCursor('amh',pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('amh',cls,msg);
+};
+window.evalProg=function(v){
+  var ctx=getCycleContext();
+  if(v===''||isNaN(v)){hideCursor('prog');var el=document.getElementById('res-prog');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v<3){cls='r-low';msg='\u2193 Progest\xe9rone basse — absence d\u2019ovulation probable (anovulation) si dosage bien r\xe9alis\xe9 en phase lut\xe9ale (J21\u201324)';pct=10;}
+  else if(v<10){cls='r-high';msg='\u2191 Progest\xe9rone interm\xe9diaire — ovulation possible mais corps jaune insuffisant \xe0 \xe9voquer ; refaire le dosage si doute sur le jour du cycle';pct=50;}
+  else{cls='r-normal';msg='\u2713 Progest\xe9rone &gt; 10 ng/mL — ovulation confirm\xe9e';pct=20+55*Math.min(v-10,20)/20;}
+  moveCursor('prog',pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('prog',cls,msg);
+};
+
+window.synthesizeOvaire=function(){
+  var ids=['fsh','lh','e2','amh','prog'];
+  var items=[];
+  ids.forEach(function(p){
+    var res=document.getElementById('res-'+p);
+    if(res&&res.style.display!=='none'&&res.textContent.trim()){
+      var cls='normal';
+      if(res.classList.contains('r-critical'))cls='critical';
+      else if(res.classList.contains('r-low'))cls='low';
+      else if(res.classList.contains('r-high'))cls='high';
+      items.push({text:res.textContent.trim(),cls:cls});
+    }
+  });
+  if(!items.length){alert('Renseignez au moins un param\xe8tre.');return;}
+  var syn=document.getElementById('ovaire-synthesis');
+  var lst=document.getElementById('ovaire-syn-list');
+  syn.classList.add('visible');
+  lst.innerHTML=items.map(function(it){return '<div class="horm-syn-item"><span class="horm-syn-dot '+it.cls+'"></span><span>'+it.text+'</span></div>';}).join('');
+
+  var fsh=parseFloat(document.getElementById('val-fsh').value);
+  var lh=parseFloat(document.getElementById('val-lh').value);
+  var e2=parseFloat(document.getElementById('val-e2').value);
+  var amh=parseFloat(document.getElementById('val-amh').value);
+  var ctx=getCycleContext();
+  var ratio=(!isNaN(fsh)&&!isNaN(lh)&&fsh>0)?lh/fsh:NaN;
+
+  var orient='',protoTxt='',showProto=false;
+  if(ctx==='amenorrhee'&&!isNaN(fsh)&&fsh>25&&!isNaN(e2)&&e2<30){
+    orient='Profil compatible avec une <b>insuffisance ovarienne pr\xe9matur\xe9e (IOP)</b> : FSH \xe9lev\xe9e + E2 bas + am\xe9norrh\xe9e. \xc0 confirmer par un 2e dosage \xe0 1 mois d\u2019intervalle (crit\xe8re diagnostique ESHRE).';
+    protoTxt='<p><b>IOP confirm\xe9e (2 dosages FSH&gt;25 UI/L \xe0 1 mois d\u2019intervalle) :</b> traitement hormonal substitutif (THS) recommand\xe9 jusqu\u2019\xe0 l\u2019\xe2ge physiologique de la m\xe9nopause (~50\u2013 51 ans), sauf contre-indication — b\xe9n\xe9fice osseux, cardiovasculaire et sur la qualit\xe9 de vie (ESHRE 2024).</p><p class="proto-note">Bilan \xe9tiologique : caryotype, recherche pr\xe9mutation FMR1 (X fragile), anticorps anti-surr\xe9naliens (IOP auto-immune), antc\xe9d\xe9nts de chimioth\xe9rapie/radioth\xe9rapie/chirurgie ovarienne.</p><p class="proto-note">Si d\xe9sir de grossesse : information sur la tr\xe8s faible probabilit\xe9 de conception spontan\xe9e — orientation pr\xe9coce vers don d\u2019ovocytes \xe0 discuter en AMP.</p>';
+    showProto=true;
+  }else if(!isNaN(ratio)&&ratio>2&&!isNaN(amh)&&amh>4.0){
+    orient='Profil compatible avec un <b>SOPK</b> : ratio LH/FSH &gt;2 associ\xe9 \xe0 une AMH \xe9lev\xe9e. \xc0 confronter aux crit\xe8res de Rotterdam (clinique + \xe9chographie) et au bilan androg\xe9nique (onglet d\xe9di\xe9).';
+    protoTxt='<p><b>Prise en charge selon le projet :</b></p><p>Si pas de d\xe9sir de grossesse : contraception œstroprogestative ou progestative seule selon profil de risque, pour r\xe9gulariser les cycles et limiter l\u2019hyperplasie endom\xe9triale.</p><p>Si d\xe9sir de grossesse : citrate de clomif\xe8ne ou l\xe9trozole en 1\xe8re intention pour l\u2019induction de l\u2019ovulation (CNGOF/ESHRE), sous surveillance \xe9chographique du risque de syndrome d\u2019hyperstimulation.</p><p class="proto-note">Mesures hygi\xe9no-di\xe9t\xe9tiques en 1\xe8re intention si surpoids (perte de 5\u201310% du poids am\xe9liore l\u2019ovulation spontan\xe9e). Metformine \xe0 discuter si insulinor\xe9sistance associ\xe9e (cf. onglet Glyc\xe9mie de l\u2019outil Bilan Biologique).</p>';
+    showProto=true;
+  }else if(!isNaN(fsh)&&!isNaN(lh)&&fsh<3.5&&lh<2.4&&!isNaN(e2)&&e2<30){
+    orient='Profil compatible avec un <b>hypogonadisme hypogonadotrope</b> (origine centrale) : FSH et LH basses avec E2 bas. Explorer l\u2019axe hypophysaire (prolactine, IRM si suspicion d\u2019atteinte centrale).';
+    protoTxt='<p><b>Orientation :</b> bilan hypophysaire complet (cf. onglet Fonction Hypophysaire), IRM hypophysaire si non expliqu\xe9 par une cause fonctionnelle (sport intensif, restriction calorique, stress).</p><p class="proto-note">Si confirm\xe9 et non r\xe9versible : œstrog\xe9noth\xe9rapie substitutive pour la protection osseuse, en association \xe0 un progestatif si ut\xe9rus en place.</p>';
+    showProto=true;
+  }else if(!isNaN(fsh)&&fsh>12.5&&ctx!=='amenorrhee'){
+    orient='FSH mod\xe9r\xe9ment \xe9lev\xe9e — \xe9voque une r\xe9serve ovarienne diminu\xe9e. Confronter \xe0 l\u2019AMH et \xe0 l\u2019\xe2ge.';
+  }else{
+    orient='Pas de profil hormonal univoque sur les \xe9l\xe9ments renseign\xe9s. Croiser avec le contexte clinique (r\xe9gularit\xe9 des cycles, hirsutisme, signes climat\xe9riques).';
+  }
+  var interpEl=document.getElementById('ovaire-interpret');
+  interpEl.classList.add('visible');
+  document.getElementById('ovaire-interpret-text').innerHTML=orient;
+
+  var proto=document.getElementById('proto-ovaire');
+  if(showProto){document.getElementById('proto-ovaire-text').innerHTML=protoTxt;proto.classList.add('visible');}
+  else proto.classList.remove('visible');
+};
+
+/* ===== FONCTION HYPOPHYSAIRE ===== */
+window.evalPRL=function(v){
+  var hi=currentSex==='M'?15:23;
+  var proto=document.getElementById('proto-prl');
+  if(v===''||isNaN(v)){hideCursor('prl');var el=document.getElementById('res-prl');if(el)el.style.display='none';proto.classList.remove('visible');return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v>200){cls='r-critical';msg='\u26A0 Hyperprolactin\xe9mie majeure (&gt;200 ng/mL) — fortement suggestive d\u2019un macroadénome \xe0 prolactine — IRM hypophysaire en urgence relative';pct=95;}
+  else if(v>hi){cls='r-high';msg='\u2191 Hyperprolactin\xe9mie — \xe9liminer m\xe9dicaments (neuroleptiques, antiémetiques), hypothyroïdie, grossesse, stress du pr\xe9l\xe8vement avant explorations';pct=70;}
+  else{cls='r-normal';msg='\u2713 Prolactine dans la norme';pct=20+55*(v-4)/(hi-4);}
+  moveCursor('prl',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('prl',cls,msg);
+
+  var ptxt=document.getElementById('proto-prl-text');
+  if(v>hi){
+    if(v>200){
+      ptxt.innerHTML='<p><b>Macroadénome probable :</b> IRM hypophysaire avec injection en premi\xe8re intention. Bilan du retentissement (champ visuel si volumineux, bilan anth\xe9hypophysaire complet).</p><p><b>Traitement :</b> agoniste dopaminergique en 1\xe8re intention (cabergoline 0,5\u00a0mg, 1\u00a02 fois/semaine, \xe0 doses progressives) — efficace sur la normalisation de la prolactine et la r\xe9duction tumorale dans la grande majorit\xe9 des cas, \xe9vitant le recours \xe0 la chirurgie.</p><p class="proto-note">Surveillance : prolactine \xe0 1 mois puis trimestrielle, IRM \xe0 6\u201312 mois, champ visuel si compression chiasmatique initiale.</p>';
+    }else{
+      ptxt.innerHTML='<p><b>Avant tout traitement :</b> exclure les causes physiologiques et m\xe9dicamenteuses — grossesse, allaitement, stress du pr\xe9l\xe8vement (recontr\xf4ler \xe0 distance), m\xe9dicaments hyperprolactin\xe9miants (neuroleptiques, antiémetiques type m\xe9toclopramide, certains antid\xe9presseurs), hypothyro\xefdie (TSH syst\xe9matique).</p><p>Si confirm\xe9e et symptomatique (am\xe9norrh\xe9e, galactorrh\xe9e, infertilit\xe9) : IRM hypophysaire pour rechercher un microadénome. Si macroprolactin\xe9mie suspect\xe9e (discordance clinico-biologique) : dosage apr\xe8s pr\xe9cipitation au PEG.</p><p class="proto-note">Traitement par agoniste dopaminergique (cabergoline) si microadénome symptomatique ou désir de grossesse.</p>';
+    }
+    proto.classList.add('visible');
+  }else{
+    proto.classList.remove('visible');
+  }
+};
+window.evalCortHyp=function(v){
+  if(v===''||isNaN(v)){hideCursor('cort-hyp');var el=document.getElementById('res-cort-hyp');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v<5){cls='r-critical';msg='\u26A0 Cortisol 8h tr\xe8s bas — insuffisance corticotrope probable, \xe0 confirmer par test au Synacth\xe8ne ou hypoglyc\xe9mie insulinique selon contexte';pct=5;}
+  else if(v<10){cls='r-low';msg='\u2193 Cortisol 8h bas — insuffisance corticotrope possible, \xe0 explorer';pct=20;}
+  else if(v>20){cls='r-high';msg='\u2191 Cortisol 8h \xe9lev\xe9 — contexte de stress aigu ou hypercorticisme \xe0 \xe9voquer selon le contexte clinique';pct=80;}
+  else{cls='r-normal';msg='\u2713 Cortisol 8h dans la norme';pct=20+55*(v-10)/10;}
+  moveCursor('cort-hyp',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('cort-hyp',cls,msg);
+};
+
+window.synthesizeHypophyse=function(){
+  var prl=parseFloat(document.getElementById('val-prl').value);
+  var igf1=parseFloat(document.getElementById('val-igf1').value);
+  var cortHyp=parseFloat(document.getElementById('val-cort-hyp').value);
+  var tshHyp=parseFloat(document.getElementById('val-tsh-hyp').value);
+  var fsh=parseFloat(document.getElementById('val-fsh')?document.getElementById('val-fsh').value:NaN);
+  var lh=parseFloat(document.getElementById('val-lh')?document.getElementById('val-lh').value:NaN);
+
+  var lowAxes=0;
+  if(!isNaN(cortHyp)&&cortHyp<10)lowAxes++;
+  if(!isNaN(tshHyp)&&tshHyp<0.4)lowAxes++;
+  if(!isNaN(fsh)&&!isNaN(lh)&&fsh<3.5&&lh<2.4)lowAxes++;
+
+  var orient='';
+  if(lowAxes>=2){
+    orient='<b>Plusieurs axes hypophysaires bas simultan\xe9ment</b> (corticotrope/thyr\xe9otrope/gonadotrope) — \xe9voque une insuffisance ant\xe9hypophysaire globale (panhypopituitarisme). IRM hypophysaire et bilan endocrinien complet \xe0 organiser. Substitution corticotrope prioritaire avant la substitution thyro\xefdienne (risque d\u2019insuffisance surr\xe9nalienne aigu\xe9 si l\u2019inverse est fait).';
+  }else if(!isNaN(prl)&&prl>(currentSex==='M'?15:23)){
+    orient='Hyperprolactin\xe9mie isol\xe9e — voir le protocole d\xe9di\xe9 ci-dessus.';
+  }else if(!isNaN(igf1)&&igf1>250){
+    orient='IGF-1 \xe9lev\xe9e — \xe9voquer une acrom\xe9galie si contexte clinique compatible (extr\xe9mit\xe9s, traits du visage, syndrome du canal carpien). Confirmer par test de freination de la GH au glucose et IRM hypophysaire.';
+  }else if(!isNaN(cortHyp)&&cortHyp<10){
+    orient='Cortisol 8h bas isol\xe9 — explorer l\u2019axe corticotrope (test au Synacth\xe8ne, voir onglet Fonction Surr\xe9nalienne).';
+  }else{
+    orient='Pas d\u2019anomalie hypophysaire \xe9vidente sur les \xe9l\xe9ments renseign\xe9s.';
+  }
+  var interpEl=document.getElementById('hypophyse-interpret');
+  interpEl.classList.add('visible');
+  document.getElementById('hypophyse-interpret-text').innerHTML=orient;
+};
+
+/* ===== FONCTION SURRÉNALIENNE ===== */
+window.evalCort=function(v){
+  if(v===''||isNaN(v)){hideCursor('cort');var el=document.getElementById('res-cort');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v<3){cls='r-critical';msg='\u26A0 Cortisol effondr\xe9 — insuffisance surr\xe9nalienne probable, contexte d\u2019urgence \xe0 \xe9liminer (hypotension, troubles digestifs, hyponatr\xe9mie)';pct=3;}
+  else if(v<10){cls='r-low';msg='\u2193 Cortisol bas — insuffisance surr\xe9nalienne possible, \xe0 confirmer par ACTH et test au Synacth\xe8ne';pct=18;}
+  else if(v>25){cls='r-high';msg='\u2191 Cortisol \xe9lev\xe9 — hypercorticisme \xe0 \xe9voquer (Cushing) si confirm\xe9 sur plusieurs dosages et non expliqu\xe9 par un stress aigu';pct=85;}
+  else{cls='r-normal';msg='\u2713 Cortisol 8h dans la norme';pct=20+55*(v-10)/15;}
+  moveCursor('cort',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('cort',cls,msg);
+  updateProtoSurrenale();
+};
+window.evalACTH=function(v){
+  if(v===''||isNaN(v)){hideCursor('acth');var el=document.getElementById('res-acth');if(el)el.style.display='none';updateProtoSurrenale();return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v>60){cls='r-high';msg='\u2191 ACTH \xe9lev\xe9e — si cortisol bas : insuffisance surr\xe9nalienne p\xe9riph\xe9rique (Addison) ; si cortisol \xe9lev\xe9 : Cushing ACTH-d\xe9pendant (maladie de Cushing ou s\xe9cr\xe9tion ectopique)';pct=80;}
+  else if(v<10){cls='r-low';msg='\u2193 ACTH basse — si cortisol bas : insuffisance corticotrope d\u2019origine centrale ; si cortisol \xe9lev\xe9 : Cushing ACTH-ind\xe9pendant (origine surr\xe9nalienne)';pct=10;}
+  else{cls='r-normal';msg='\u2713 ACTH dans la norme';pct=20+55*(v-10)/50;}
+  moveCursor('acth',pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('acth',cls,msg);
+  updateProtoSurrenale();
+};
+window.evalSynacthene=function(){
+  var v=document.getElementById('val-synacthene').value;
+  var el=document.getElementById('res-synacthene');
+  if(v===''){el.style.display='none';updateProtoSurrenale();return;}
+  if(v==='abs'){el.className='horm-result r-critical';el.innerHTML='\u26A0 R\xe9ponse absente/insuffisante — insuffisance surr\xe9nalienne confirm\xe9e';}
+  else{el.className='horm-result r-normal';el.innerHTML='\u2713 R\xe9ponse normale — fonction corticotrope p\xe9riph\xe9rique pr\xe9serv\xe9e';}
+  el.style.cssText='display:block !important;';
+  updateProtoSurrenale();
+};
+window.eval17OHPSurr=function(v){
+  if(v===''||isNaN(v)){hideCursor('17ohp-surr');var el=document.getElementById('res-17ohp-surr');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v>10){cls='r-critical';msg='\u26A0 17-OHP tr\xe8s \xe9lev\xe9e — bloc en 21-hydroxylase fortement probable (forme classique ou non classique selon le contexte)';pct=95;}
+  else if(v>2){cls='r-high';msg='\u2191 17-OHP mod\xe9r\xe9ment \xe9lev\xe9e — bloc en 21-hydroxylase \xe0 forme non classique \xe0 \xe9voquer, confirmer par test au Synacth\xe8ne (17-OHP post-stim)';pct=70;}
+  else{cls='r-normal';msg='\u2713 17-OHP de base dans la norme';pct=20+55*v/2;}
+  moveCursor('17ohp-surr',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('17ohp-surr',cls,msg);
+};
+function updateProtoSurrenale(){
+  var proto=document.getElementById('proto-surrenale');
+  var ptxt=document.getElementById('proto-surrenale-text');
+  var cort=parseFloat(document.getElementById('val-cort').value);
+  var acth=parseFloat(document.getElementById('val-acth').value);
+  var syna=document.getElementById('val-synacthene').value;
+  var insuffisanceConfirmee=(syna==='abs')||(!isNaN(cort)&&cort<3)||(!isNaN(cort)&&!isNaN(acth)&&cort<10&&acth>60);
+  if(!insuffisanceConfirmee){proto.classList.remove('visible');return;}
+  ptxt.innerHTML='<p><b>Substitution :</b> hydrocortisone per os, 15\u201320\u00a0mg/j en 2\u20133 prises (dose plus forte le matin, mimant le cycle physiologique), \xe0 adapter selon poids, contexte et signes de sur/sous-dosage clinique (pas de dosage de cortisol sous traitement pour ajuster).</p><p class="proto-note">Si origine p\xe9riph\xe9rique (Addison, ACTH \xe9lev\xe9e) : associer une substitution min\xe9ralocortico\xefde (fludrocortisone) selon la natr\xe9mie/kali\xe9mie et la r\xe9nine.</p><p><b>\u26A0 \xc9ducation th\xe9rapeutique indispensable :</b> carte d\u2019insuffisant surr\xe9nalien \xe0 porter sur soi, r\xe8gles d\u2019adaptation posologique en cas de stress (doubler/tripler la dose en cas de fi\xe8vre, infection, intervention), trousse d\u2019hydrocortisone injectable \xe0 disposition pour l\u2019entourage en cas de vomissements/impossibilit\xe9 de prise orale.</p><p class="proto-note">Toute suspicion de crise surr\xe9nalienne aigu\xeb (hypotension, troubles digestifs f\xe9briles, confusion) impose une hydrocortisone IV/IM imm\xe9diate sans attendre la confirmation biologique.</p>';
+  proto.classList.add('visible');
+}
+
+window.synthesizeSurrenale=function(){
+  var cort=parseFloat(document.getElementById('val-cort').value);
+  var acth=parseFloat(document.getElementById('val-acth').value);
+  var syna=document.getElementById('val-synacthene').value;
+  var ohp=parseFloat(document.getElementById('val-17ohp-surr').value);
+  var dheas=parseFloat(document.getElementById('val-dheas-surr').value);
+
+  var orient='';
+  if(syna==='abs'||(!isNaN(cort)&&cort<3)){
+    orient='<b>Insuffisance surr\xe9nalienne confirm\xe9e.</b> Voir le protocole de substitution ci-dessus.';
+  }else if(!isNaN(cort)&&!isNaN(acth)){
+    if(cort<10&&acth>60)orient='Cortisol bas + ACTH \xe9lev\xe9e — <b>insuffisance surr\xe9nalienne p\xe9riph\xe9rique (Addison)</b> probable. Confirmer par test au Synacth\xe8ne, rechercher une \xe9tiologie auto-immune (anticorps anti-21-hydroxylase) en 1\xe8re intention.';
+    else if(cort<10&&acth<10)orient='Cortisol bas + ACTH basse — <b>insuffisance corticotrope d\u2019origine centrale</b> probable. Explorer l\u2019hypophyse (voir onglet d\xe9di\xe9), rechercher une cause m\xe9dicamenteuse (corticoth\xe9rapie prolong\xe9e r\xe9cemment arr\xeat\xe9e).';
+    else if(cort>20&&acth>60)orient='Cortisol \xe9lev\xe9 + ACTH \xe9lev\xe9e — <b>Cushing ACTH-d\xe9pendant</b> \xe0 \xe9voquer (maladie de Cushing hypophysaire ou s\xe9cr\xe9tion ectopique). Explorations de 2nde ligne : freinage fort \xe0 la dexam\xe9thasone, IRM hypophysaire, imagerie thoraco-abdominale si n\xe9gative.';
+    else if(cort>20&&acth<10)orient='Cortisol \xe9lev\xe9 + ACTH basse — <b>Cushing ACTH-ind\xe9pendant</b> \xe0 \xe9voquer (origine surr\xe9nalienne — ad\xe9nome ou plus rarement corticosurr\xe9nalome). Imagerie surr\xe9nalienne (TDM/IRM) indiqu\xe9e.';
+    else orient='Profil cortisol/ACTH non univoque — recontr\xf4ler \xe0 distance et corr\xe9ler \xe0 la clinique.';
+  }else if(!isNaN(ohp)&&ohp>2){
+    orient='17-OHP \xe9lev\xe9e — bloc en 21-hydroxylase \xe0 \xe9voquer (voir r\xe9sultat d\xe9taill\xe9 ci-dessus). \xc0 corr\xe9ler au bilan androg\xe9nique (onglet d\xe9di\xe9) en cas d\u2019hyperandrog\xe9nie clinique associ\xe9e.';
+  }else if(!isNaN(dheas)&&dheas>7.5){
+    orient='DHEA-S \xe9lev\xe9e isol\xe9e — \xe9voquer une origine surr\xe9nalienne de l\u2019hyperandrog\xe9nie. Si tr\xe8s \xe9lev\xe9e (&gt;18\u00a0\u00b5mol/L), \xe9liminer une tumeur surr\xe9nalienne s\xe9cr\xe9tante par imagerie.';
+  }else{
+    orient='Pas d\u2019anomalie surr\xe9nalienne \xe9vidente sur les \xe9l\xe9ments renseign\xe9s.';
+  }
+  var interpEl=document.getElementById('surrenale-interpret');
+  interpEl.classList.add('visible');
+  document.getElementById('surrenale-interpret-text').innerHTML=orient;
+  updateProtoSurrenale();
+};
+
+/* ===== FONCTION ANDROGÉNIQUE ===== */
+window.evalTesto=function(v){
+  var hi=currentSex==='M'?10:0.8,lo=currentSex==='M'?3:0.1;
+  if(v===''||isNaN(v)){hideCursor('testo');var el=document.getElementById('res-testo');if(el)el.style.display='none';calcFAI();return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(currentSex!=='M'&&v>1.5){cls='r-critical';msg='\u26A0 Testost\xe9rone tr\xe8s \xe9lev\xe9e (&gt;1,5 ng/mL) — \xe9liminer une tumeur s\xe9cr\xe9tante (ovarienne ou surr\xe9nalienne) avant de retenir un SOPK';pct=95;}
+  else if(v>hi){cls='r-high';msg='\u2191 Testost\xe9rone \xe9lev\xe9e — hyperandrog\xe9nie biologique \xe0 corr\xe9ler \xe0 la clinique (hirsutisme, acn\xe9, alop\xe9cie)';pct=75;}
+  else if(v<lo){cls='r-low';msg='\u2193 Testost\xe9rone basse'+(currentSex==='M'?' — hypogonadisme \xe0 explorer (central vs p\xe9riph\xe9rique selon LH/FSH)':'');pct=15;}
+  else{cls='r-normal';msg='\u2713 Testost\xe9rone dans la norme';pct=20+55*(v-lo)/(hi-lo);}
+  moveCursor('testo',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('testo',cls,msg);
+  calcFAI();
+};
+window.evalSHBG=function(v){
+  var lo=currentSex==='M'?10:30,hi=currentSex==='M'?57:120;
+  if(v===''||isNaN(v)){hideCursor('shbg');var el=document.getElementById('res-shbg');if(el)el.style.display='none';calcFAI();return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v<lo){cls='r-low';msg='\u2193 SHBG basse — augmente la fraction libre de testost\xe9rone (insulinor\xe9sistance, ob\xe9sit\xe9, SOPK)';pct=15;}
+  else if(v>hi){cls='r-high';msg='\u2191 SHBG \xe9lev\xe9e — diminue la fraction libre active (œstrog\xe8nes, hyperthyro\xefdie, grossesse)';pct=80;}
+  else{cls='r-normal';msg='\u2713 SHBG dans la norme';pct=20+55*(v-lo)/(hi-lo);}
+  moveCursor('shbg',pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('shbg',cls,msg);
+  calcFAI();
+};
+function calcFAI(){
+  var t=parseFloat(document.getElementById('val-testo').value);
+  var shbg=parseFloat(document.getElementById('val-shbg').value);
+  var el=document.getElementById('res-fai');
+  if(isNaN(t)||isNaN(shbg)||shbg<=0){el.innerHTML='Renseignez testost\xe9rone + SHBG';el.className='horm-result r-empty';el.style.cssText='display:block !important;';return;}
+  // Conversion testostérone ng/mL -> nmol/L (x3.467) pour le calcul FAI standard
+  var tNmol=t*3.467;
+  var fai=(tNmol/shbg*100).toFixed(1);
+  var cls,msg;
+  var seuil=currentSex==='M'?100:5;
+  if(parseFloat(fai)>seuil){cls='r-high';msg='\u2191 FAI = '+fai+' % — hyperandrog\xe9nie biologique confirm\xe9e (index plus sensible que la testost\xe9rone totale seule, surtout si SHBG basse)';}
+  else{cls='r-normal';msg='\u2713 FAI = '+fai+' % — dans la norme';}
+  el.className='horm-result '+cls;el.innerHTML=msg;el.style.cssText='display:block !important;';
+}
+window.eval17OHPAndro=function(v){
+  if(v===''||isNaN(v)){hideCursor('17ohp-andro');var el=document.getElementById('res-17ohp-andro');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v>10){cls='r-critical';msg='\u26A0 17-OHP tr\xe8s \xe9lev\xe9e — bloc en 21-hydroxylase fortement probable';pct=95;}
+  else if(v>2){cls='r-high';msg='\u2191 17-OHP mod\xe9r\xe9ment \xe9lev\xe9e — bloc en 21-hydroxylase \xe0 forme non classique \xe0 \xe9voquer (voir onglet Fonction Surr\xe9nalienne pour le d\xe9tail)';pct=70;}
+  else{cls='r-normal';msg='\u2713 17-OHP de base dans la norme';pct=20+55*v/2;}
+  moveCursor('17ohp-andro',pct,cls==='r-critical'?'#C8102E':cls==='r-high'?'#B45309':'#166534');
+  showResult('17ohp-andro',cls,msg);
+};
+
+window.synthesizeAndrogen=function(){
+  var ids=['testo','shbg','d4a','dheas-andro','17ohp-andro'];
+  var items=[];
+  ids.forEach(function(p){
+    var res=document.getElementById('res-'+p);
+    if(res&&res.style.display!=='none'&&res.textContent.trim()){
+      var cls='normal';
+      if(res.classList.contains('r-critical'))cls='critical';
+      else if(res.classList.contains('r-low'))cls='low';
+      else if(res.classList.contains('r-high'))cls='high';
+      items.push({text:res.textContent.trim(),cls:cls});
+    }
+  });
+  var faiRes=document.getElementById('res-fai');
+  if(faiRes&&faiRes.style.display!=='none'&&faiRes.classList.contains('r-high')){
+    items.unshift({text:faiRes.textContent.trim(),cls:'high'});
+  }
+  if(!items.length){alert('Renseignez au moins un param\xe8tre.');return;}
+  var syn=document.getElementById('androgen-synthesis');
+  var lst=document.getElementById('androgen-syn-list');
+  syn.classList.add('visible');
+  lst.innerHTML=items.map(function(it){return '<div class="horm-syn-item"><span class="horm-syn-dot '+it.cls+'"></span><span>'+it.text+'</span></div>';}).join('');
+
+  var testo=parseFloat(document.getElementById('val-testo').value);
+  var ohp=parseFloat(document.getElementById('val-17ohp-andro').value);
+  var dheas=parseFloat(document.getElementById('val-dheas-andro').value);
+  var d4a=parseFloat(document.getElementById('val-d4a').value);
+
+  var orient='';
+  if(!isNaN(testo)&&currentSex!=='M'&&testo>1.5){
+    orient='<b>Testost\xe9rone tr\xe8s \xe9lev\xe9e — suspicion de tumeur s\xe9cr\xe9tante</b> (ovarienne ou surr\xe9nalienne). Imagerie pelvienne et surr\xe9nalienne \xe0 organiser avant tout traitement sympt\xf4matique. Installation rapide des signes de virilisation (raucit\xe9 de la voix, clitoridom\xe9galie) renforce la suspicion.';
+  }else if(!isNaN(ohp)&&ohp>2){
+    orient='17-OHP \xe9lev\xe9e — <b>bloc en 21-hydroxylase</b> \xe0 confirmer par test au Synacth\xe8ne (17-OHP post-stim &gt;10\u00a0ng/mL confirme la forme non classique).';
+  }else if(!isNaN(dheas)&&dheas>5.5){
+    orient='DHEA-S \xe9lev\xe9e — oriente vers une <b>origine surr\xe9nalienne</b> de l\u2019hyperandrog\xe9nie. Si tr\xe8s \xe9lev\xe9e (&gt;18\u00a0\u00b5mol/L), \xe9liminer une tumeur surr\xe9nalienne par imagerie avant de retenir une origine fonctionnelle.';
+  }else if(!isNaN(d4a)&&d4a>3.3){
+    orient='Androst\xe8nedione \xe9lev\xe9e — hyperandrog\xe9nie d\u2019origine mixte possible (ovarienne et/ou surr\xe9nalienne). Compl\xe9ter par le ratio LH/FSH et l\u2019AMH (onglet Fonction Ovarienne) pour orienter vers un SOPK.';
+  }else if(!isNaN(testo)&&testo>(currentSex==='M'?10:0.8)){
+    orient='Hyperandrog\xe9nie biologique mod\xe9r\xe9e — <b>SOPK</b> \xe0 \xe9voquer en 1\xe8re intention si associ\xe9e \xe0 des troubles du cycle (cf. onglet Fonction Ovarienne pour le ratio LH/FSH et l\u2019AMH).';
+  }else{
+    orient='Pas d\u2019hyperandrog\xe9nie biologique \xe9vidente sur les \xe9l\xe9ments renseign\xe9s.';
+  }
+  var interpEl=document.getElementById('androgen-interpret');
+  interpEl.classList.add('visible');
+  document.getElementById('androgen-interpret-text').innerHTML=orient;
+};
+
+/* ===== FONCTION THYROÏDIENNE ===== */
+function tshRange(){
+  if(currentSex==='G')return{lo:0.1,hi:3.0,label:'Grossesse (T1, seuil le plus bas — CNGOF/SFE)'};
+  return{lo:0.4,hi:4.0,label:'0,4–4,0 mUI/L'};
+}
+window.evalTSH=function(v){
+  var r=tshRange();
+  if(v===''||isNaN(v)){hideCursor('tsh');var el=document.getElementById('res-tsh');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  var t4l=parseFloat(document.getElementById('val-t4l').value);
+  if(v>10){cls='r-critical';msg='\u26A0 TSH tr\xe8s \xe9lev\xe9e — hypothyro\xefdie franche s\xe9v\xe8re probable';pct=95;}
+  else if(v>r.hi){
+    if(!isNaN(t4l)&&t4l<0.8){cls='r-high';msg='\u2191 TSH \xe9lev\xe9e + T4L basse — <b>hypothyro\xefdie franche</b>';}
+    else{cls='r-high';msg='\u2191 TSH \xe9lev\xe9e — <b>hypothyro\xefdie infraclinique</b> si T4L normale (\xe0 confirmer par un 2e dosage \xe0 1\u20133 mois)';}
+    pct=75;
+  }else if(v<r.lo){
+    if(!isNaN(t4l)&&t4l>1.8){cls='r-critical';msg='\u26A0 TSH basse + T4L \xe9lev\xe9e — <b>hyperthyro\xefdie franche</b>';pct=5;}
+    else{cls='r-low';msg='\u2193 TSH basse — <b>hyperthyro\xefdie infraclinique</b> si T4L normale, ou origine centrale si associ\xe9e \xe0 une T4L basse';pct=15;}
+  }else{cls='r-normal';msg='\u2713 TSH dans la norme'+(currentSex==='G'?' pour la grossesse (seuil sp\xe9cifique appliqu\xe9)':'');pct=20+55*(v-r.lo)/(r.hi-r.lo);}
+  moveCursor('tsh',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('tsh',cls,msg);
+  var refEl=document.getElementById('ref-tsh');if(refEl)refEl.textContent=r.label;
+};
+window.evalT4L=function(v){
+  if(v===''||isNaN(v)){hideCursor('t4l');var el=document.getElementById('res-t4l');if(el)el.style.display='none';return;}
+  v=parseFloat(v);var cls,msg,pct;
+  if(v<0.8){cls='r-low';msg='\u2193 T4L basse';pct=15;}
+  else if(v>1.8){cls='r-high';msg='\u2191 T4L \xe9lev\xe9e';pct=80;}
+  else{cls='r-normal';msg='\u2713 T4L dans la norme';pct=20+55*(v-0.8)/1.0;}
+  moveCursor('t4l',pct,cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166534');
+  showResult('t4l',cls,msg);
+};
+
+window.synthesizeThyroide=function(){
+  var ids=['tsh','t4l','t3l','atpo','trak'];
+  var items=[];
+  ids.forEach(function(p){
+    var res=document.getElementById('res-'+p);
+    if(res&&res.style.display!=='none'&&res.textContent.trim()){
+      var cls='normal';
+      if(res.classList.contains('r-critical'))cls='critical';
+      else if(res.classList.contains('r-low'))cls='low';
+      else if(res.classList.contains('r-high'))cls='high';
+      items.push({text:res.textContent.trim(),cls:cls});
+    }
+  });
+  if(!items.length){alert('Renseignez au moins un param\xe8tre.');return;}
+  var syn=document.getElementById('thyroide-synthesis');
+  var lst=document.getElementById('thyroide-syn-list');
+  syn.classList.add('visible');
+  lst.innerHTML=items.map(function(it){return '<div class="horm-syn-item"><span class="horm-syn-dot '+it.cls+'"></span><span>'+it.text+'</span></div>';}).join('');
+
+  var tsh=parseFloat(document.getElementById('val-tsh').value);
+  var t4l=parseFloat(document.getElementById('val-t4l').value);
+  var atpo=parseFloat(document.getElementById('val-atpo').value);
+  var trak=parseFloat(document.getElementById('val-trak').value);
+  var r=tshRange();
+
+  var orient='',protoTxt='',showProto=false;
+  if(!isNaN(tsh)&&tsh>r.hi){
+    var franche=!isNaN(t4l)&&t4l<0.8;
+    if(!isNaN(atpo)&&atpo>=34){
+      orient=(franche?'<b>Hypothyro\xefdie franche</b>':'<b>Hypothyro\xefdie infraclinique</b>')+' avec Anti-TPO positifs — <b>thyro\xefdite de Hashimoto</b> tr\xe8s probable.';
+    }else{
+      orient=(franche?'<b>Hypothyro\xefdie franche</b>':'<b>Hypothyro\xefdie infraclinique</b>')+'. Doser les Anti-TPO si non fait pour rechercher une origine auto-immune.';
+    }
+    protoTxt='<p><b>L\xe9vothyroxine :</b> dose initiale 1,6\u00a0\u00b5g/kg/j chez l\u2019adulte jeune sans cardiopathie ; commencer plus bas (12,5\u201325\u00a0\u00b5g/j) et augmenter progressivement par paliers de 2\u20134 semaines chez le sujet \xe2g\xe9 ou cardiaque, pour \xe9viter de d\xe9masquer une insuffisance coronarienne.</p>'
+      +(currentSex==='G'?'<p class="proto-note">Grossesse : objectif TSH &lt;\u00a02,5\u00a0mUI/L au T1 puis selon les seuils trimestriels (CNGOF/SFE). Augmenter la dose de l\xe9vothyroxine de 25\u201330\u00a0% d\xe8s la confirmation de grossesse chez une patiente d\xe9j\xe0 substitu\xe9e, contr\xf4le TSH toutes les 4\u00a0semaines au 1er trimestre.</p>':'<p class="proto-note">Contr\xf4le de la TSH \xe0 6\u20138 semaines apr\xe8s introduction ou changement de dose (pas avant, le temps que l\u2019\xe9quilibre se fasse).</p>');
+    showProto=true;
+  }else if(!isNaN(tsh)&&tsh<r.lo){
+    if(!isNaN(trak)&&trak>=1.75){
+      orient='TSH basse avec TRAK positifs — <b>Maladie de Basedow</b> probable.';
+    }else{
+      orient='<b>Hyperthyro\xefdie</b>'+(!isNaN(t4l)&&t4l<=1.8?' infraclinique':' franche')+'. Doser les TRAK et r\xe9aliser une scintigraphie/\xe9chographie thyro\xefdienne selon le contexte pour pr\xe9ciser l\u2019\xe9tiologie (Basedow, nodule toxique, thyro\xefdite).';
+    }
+    showProto=false;
+  }else{
+    orient='Pas d\u2019anomalie thyro\xefdienne \xe9vidente sur les \xe9l\xe9ments renseign\xe9s.';
+  }
+  var interpEl=document.getElementById('thyroide-interpret');
+  interpEl.classList.add('visible');
+  document.getElementById('thyroide-interpret-text').innerHTML=orient;
+
+  var proto=document.getElementById('proto-thyroide');
+  if(showProto){document.getElementById('proto-thyroide-text').innerHTML=protoTxt;proto.classList.add('visible');}
+  else proto.classList.remove('visible');
+};
+
+/* ===== ANALYSE GLOBALE ===== */
+window.runGlobalAnalysis=function(){
+  var anomalies=[];
+  var patterns=[];
+  var complementaire=[];
+  var actions=[];
+
+  function val(id){return parseFloat(document.getElementById(id)?document.getElementById(id).value:NaN);}
+  function checked(id){var e=document.getElementById(id);return e&&e.checked;}
+  function txt(id){var e=document.getElementById(id);return e?e.value:'';}
+
+  var fsh=val('val-fsh'),lh=val('val-lh'),e2=val('val-e2'),amh=val('val-amh'),prog=val('val-prog');
+  var cycleCtx=txt('val-jour-cycle');
+  var prl=val('val-prl'),igf1=val('val-igf1'),cortHyp=val('val-cort-hyp'),tshHyp=val('val-tsh-hyp');
+  var cort=val('val-cort'),acth=val('val-acth'),syna=txt('val-synacthene'),ohpSurr=val('val-17ohp-surr'),dheasSurr=val('val-dheas-surr');
+  var testo=val('val-testo'),shbg=val('val-shbg'),d4a=val('val-d4a'),dheasAndro=val('val-dheas-andro'),ohpAndro=val('val-17ohp-andro');
+  var tsh=val('val-tsh'),t4l=val('val-t4l'),t3l=val('val-t3l'),atpo=val('val-atpo'),trak=val('val-trak');
+
+  var hi=currentSex==='M'?15:23;
+  var tRange=tshRange();
+
+  function addAnomalie(prio,text){anomalies.push({prio:prio,text:text});}
+
+  // FSH/LH/E2/AMH/Prog
+  if(!isNaN(fsh)){
+    if(cycleCtx==='amenorrhee'&&fsh>25)addAnomalie('crit','FSH très élevée ('+fsh+' UI/L) en aménorrhée — IOP à confirmer');
+    else if(fsh>12.5)addAnomalie('high','FSH élevée ('+fsh+' UI/L)');
+    else if(fsh<3.5)addAnomalie('watch','FSH basse ('+fsh+' UI/L)');
+  }
+  if(!isNaN(lh)){
+    if(lh>12.6)addAnomalie('high','LH élevée ('+lh+' UI/L)');
+    else if(lh<2.4)addAnomalie('watch','LH basse ('+lh+' UI/L)');
+  }
+  if(!isNaN(e2)&&e2<30)addAnomalie('high','Estradiol bas ('+e2+' pg/mL)');
+  if(!isNaN(amh)){
+    if(amh>4.0)addAnomalie('watch','AMH élevée ('+amh+' ng/mL) — orientation SOPK');
+    else if(amh<1.0)addAnomalie('high','AMH basse ('+amh+' ng/mL) — réserve ovarienne diminuée');
+  }
+  if(!isNaN(prog)&&prog<3)addAnomalie('watch','Progestérone lutéale basse ('+prog+' ng/mL) — anovulation probable');
+
+  // Hypophyse
+  if(!isNaN(prl)){
+    if(prl>200)addAnomalie('crit','Prolactine très élevée ('+prl+' ng/mL) — macroadénome probable');
+    else if(prl>hi)addAnomalie('high','Hyperprolactinémie ('+prl+' ng/mL)');
+  }
+  if(!isNaN(igf1)&&igf1>250)addAnomalie('watch','IGF-1 élevée ('+igf1+' ng/mL) — acromégalie à évoquer');
+
+  // Surrénale
+  if(!isNaN(cort)){
+    if(cort<3)addAnomalie('crit','Cortisol effondré ('+cort+' µg/dL) — insuffisance surrénalienne');
+    else if(cort<10)addAnomalie('high','Cortisol bas ('+cort+' µg/dL)');
+    else if(cort>25)addAnomalie('high','Cortisol élevé ('+cort+' µg/dL) — Cushing à évoquer');
+  }
+  if(syna==='abs')addAnomalie('crit','Test au Synacthène : réponse absente — insuffisance surrénalienne confirmée');
+  if(!isNaN(ohpSurr)&&ohpSurr>2)addAnomalie('high','17-OHP élevée ('+ohpSurr+' ng/mL) — bloc en 21-hydroxylase à évoquer');
+
+  // Androgènes
+  if(!isNaN(testo)){
+    var hiT=currentSex==='M'?10:0.8;
+    if(currentSex!=='M'&&testo>1.5)addAnomalie('crit','Testostérone très élevée ('+testo+' ng/mL) — tumeur sécrétante à éliminer');
+    else if(testo>hiT)addAnomalie('high','Testostérone élevée ('+testo+' ng/mL)');
+  }
+  if(!isNaN(d4a)&&d4a>3.3)addAnomalie('watch','Androstènedione élevée ('+d4a+' ng/mL)');
+
+  // Thyroïde
+  if(!isNaN(tsh)){
+    if(tsh>10)addAnomalie('crit','TSH très élevée ('+tsh+' mUI/L) — hypothyroïdie sévère');
+    else if(tsh>tRange.hi)addAnomalie('high','TSH élevée ('+tsh+' mUI/L)');
+    else if(tsh<tRange.lo){
+      if(!isNaN(t4l)&&t4l>1.8)addAnomalie('crit','TSH basse + T4L élevée ('+tsh+' mUI/L) — hyperthyroïdie franche');
+      else addAnomalie('high','TSH basse ('+tsh+' mUI/L)');
+    }
+  }
+  if(!isNaN(atpo)&&atpo>=34)addAnomalie('watch','Anti-TPO positifs ('+atpo+' UI/mL)');
+  if(!isNaN(trak)&&trak>=1.75)addAnomalie('high','TRAK positifs ('+trak+' UI/L) — Basedow probable');
+
+  /* PATTERNS INTER-AXES */
+  var ratio=(!isNaN(fsh)&&!isNaN(lh)&&fsh>0)?lh/fsh:NaN;
+  if(!isNaN(ratio)&&ratio>2&&!isNaN(amh)&&amh>4.0){
+    patterns.push({lvl:'watch',t:'Profil SOPK',a:'Ratio LH/FSH > 2 + AMH élevée. Compléter par le bilan androgénique et les critères cliniques de Rotterdam.'});
+    complementaire.push({t:'Bilan androgénique complet',tests:'Testostérone, SHBG (FAI), Delta-4-androstènedione si non fait'});
+  }
+  if(cycleCtx==='amenorrhee'&&!isNaN(fsh)&&fsh>25&&!isNaN(e2)&&e2<30){
+    patterns.push({lvl:'crit',t:'Insuffisance ovarienne prématurée (IOP)',a:'FSH élevée + E2 bas + aménorrhée. Confirmer par un 2e dosage à 1 mois (critère ESHRE).'});
+    complementaire.push({t:'Bilan étiologique IOP',tests:'Caryotype, prémutation FMR1, anticorps anti-surrénaliens'});
+  }
+  if(!isNaN(fsh)&&!isNaN(lh)&&fsh<3.5&&lh<2.4&&!isNaN(e2)&&e2<30){
+    var lowAxesCount=1;
+    if(!isNaN(cortHyp)&&cortHyp<10)lowAxesCount++;
+    if(!isNaN(tshHyp)&&tshHyp<0.4)lowAxesCount++;
+    if(!isNaN(tsh)&&tsh<tRange.lo)lowAxesCount++;
+    if(lowAxesCount>=2){
+      patterns.push({lvl:'crit',t:'Insuffisance antéhypophysaire probable (panhypopituitarisme)',a:'Plusieurs axes hypophysaires bas simultanément (gonadotrope + corticotrope et/ou thyréotrope). IRM hypophysaire et bilan complet à organiser.'});
+      complementaire.push({t:'Bilan hypophysaire complet + imagerie',tests:'IRM hypophysaire, bilan des 4 axes (corticotrope, thyréotrope, gonadotrope, somatotrope)'});
+    }else{
+      patterns.push({lvl:'high',t:'Hypogonadisme hypogonadotrope',a:'FSH/LH basses + E2 bas. Explorer l\'axe hypophysaire (prolactine, IRM selon contexte).'});
+    }
+  }
+  if((!isNaN(testo)&&currentSex!=='M'&&testo>(currentSex==='M'?10:0.8))||(!isNaN(ohpAndro)&&ohpAndro>2)||(!isNaN(dheasAndro)&&dheasAndro>5.5)){
+    if(!isNaN(ohpAndro)&&ohpAndro>2){
+      patterns.push({lvl:'high',t:'Bloc en 21-hydroxylase (forme non classique probable)',a:'17-OHP élevée. Confirmer par test au Synacthène (17-OHP post-stim).'});
+    }
+  }
+  if(!isNaN(cort)&&!isNaN(acth)){
+    if(cort<10&&acth>60){
+      patterns.push({lvl:'crit',t:'Insuffisance surrénalienne périphérique (Addison)',a:'Cortisol bas + ACTH élevée. Rechercher une étiologie auto-immune.'});
+      complementaire.push({t:'Anticorps anti-21-hydroxylase, ionogramme, rénine',tests:'Confirmation étiologique Addison'});
+    }else if(cort>20&&acth>60){
+      patterns.push({lvl:'high',t:'Cushing ACTH-dépendant probable',a:'Cortisol élevé + ACTH élevée. Freinage fort à la dexaméthasone, IRM hypophysaire.'});
+    }else if(cort>20&&acth<10){
+      patterns.push({lvl:'high',t:'Cushing ACTH-indépendant probable',a:'Cortisol élevé + ACTH basse. Imagerie surrénalienne (TDM/IRM).'});
+    }
+  }
+  if(!isNaN(tsh)&&tsh>tRange.hi&&!isNaN(atpo)&&atpo>=34){
+    patterns.push({lvl:'watch',t:'Thyroïdite de Hashimoto probable',a:'TSH élevée + Anti-TPO positifs.'});
+  }
+  if(!isNaN(tsh)&&tsh<tRange.lo&&!isNaN(trak)&&trak>=1.75){
+    patterns.push({lvl:'high',t:'Maladie de Basedow probable',a:'TSH basse + TRAK positifs.'});
+  }
+
+  /* ACTIONS / CAT */
+  if(anomalies.some(function(a){return a.prio==='crit';})){
+    actions.push('Anomalie(s) critique(s) détectée(s) — confirmer rapidement et orienter vers une consultation spécialisée si besoin.');
+  }
+  if(patterns.some(function(p){return p.t.indexOf('IOP')>=0;})){
+    actions.push('Confirmer l\'IOP par un 2e dosage de FSH à 1 mois avant toute annonce diagnostique.');
+  }
+  if(patterns.some(function(p){return p.t.indexOf('Addison')>=0||p.t.indexOf('surrénalienne périphérique')>=0;})){
+    actions.push('Débuter une substitution par hydrocortisone sans attendre si signes de décompensation aiguë ; éducation thérapeutique et carte d\'urgence à prévoir.');
+  }
+  if(patterns.some(function(p){return p.t.indexOf('Hashimoto')>=0||p.t.indexOf('hypothyroïdie')>=0||p.t.toLowerCase().indexOf('hypothyro')>=0;})){
+    actions.push('Introduire ou ajuster la lévothyroxine selon la sévérité ; contrôle TSH à 6-8 semaines.');
+  }
+  if(patterns.some(function(p){return p.t.indexOf('SOPK')>=0;})){
+    actions.push('Confronter aux critères cliniques de Rotterdam (échographie ovarienne, troubles du cycle) avant de retenir le diagnostic.');
+  }
+  if(!actions.length)actions.push('Pas d\'action urgente identifiée sur les éléments renseignés — corréler à la clinique.');
+
+  if(!anomalies.length&&!patterns.length){
+    alert('Renseignez au moins un paramètre dans un des onglets avant de lancer l\'analyse globale.');
+    return;
+  }
+
+  /* RENDU */
+  var prioOrder={crit:0,high:1,watch:2};
+  anomalies.sort(function(a,b){return prioOrder[a.prio]-prioOrder[b.prio];});
+  var prioLabel={crit:'Critique',high:'Important',watch:'À surveiller'};
+  var divAno=document.getElementById('resume-anomalies');
+  divAno.innerHTML=anomalies.map(function(a){return '<li><span class="horm-prio '+a.prio+'">'+prioLabel[a.prio]+'</span>'+a.text+'</li>';}).join('')||'<li>Aucune anomalie isolée — voir patterns ci-dessous.</li>';
+
+  var divPat=document.getElementById('resume-patterns');
+  divPat.innerHTML='';
+  if(patterns.length){
+    document.getElementById('sec-patterns').style.cssText='display:block !important;';
+    var lab={crit:'\uD83D\uDD34',high:'\uD83D\uDFE0',watch:'\uD83D\uDD35'};
+    patterns.forEach(function(p){divPat.innerHTML+='<div class="horm-pattern-box '+p.lvl+'">'+lab[p.lvl]+' <b>'+p.t+'</b><br>\u2192 '+p.a+'</div>';});
+  }else document.getElementById('sec-patterns').style.display='none';
+
+  var divComp=document.getElementById('resume-complementaire');
+  divComp.innerHTML='';
+  if(complementaire.length){
+    document.getElementById('sec-complementaire').style.cssText='display:block !important;';
+    complementaire.forEach(function(x){divComp.innerHTML+='<div class="horm-autoimmun">\uD83D\uDD2C <b>'+x.t+'</b><br><small>'+x.tests+'</small></div>';});
+  }else document.getElementById('sec-complementaire').style.display='none';
+
+  document.getElementById('resume-actions').innerHTML=actions.map(function(a){return '<li>'+a+'</li>';}).join('');
+
+  var info=getPatientInfo();
+  var metaEl=document.getElementById('resume-patient-meta');
+  var metaParts=[];
+  if(info.nomComplet)metaParts.push(info.nomComplet+(info.age?' ('+info.age+')':''));
+  if(info.medecin)metaParts.push('Dr '+info.medecin.replace(/^Dr\.?\s*/i,''));
+  metaEl.textContent=metaParts.join(' — ');
+
+  document.getElementById('horm-resume-panel').classList.add('visible');
+  document.getElementById('horm-resume-panel').scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+window.closeResume=function(){
+  document.getElementById('horm-resume-panel').classList.remove('visible');
+};
+
+/* ===== COPIE ===== */
+window.copyResume=function(){
+  var info=getPatientInfo();var today=new Date().toLocaleDateString('fr-FR');
+  var sexLabel=currentSex==='M'?'Homme':(currentSex==='G'?'Femme enceinte':'Femme');
+  var t='=== INTERPRÉTATION DU BILAN HORMONAL ===\n';
+  t+='Date : '+(info.dateBilanFormatted||today)+'\n';
+  if(info.nomComplet)t+='Patient(e) : '+info.nomComplet+(info.age?' ('+info.age+')':'')+'\n';
+  t+='Statut : '+sexLabel+'\n';
+  if(info.medecin)t+='Médecin : '+info.medecin+'\n\n';
+  t+='--- ANOMALIES PAR PRIORITÉ ---\n';
+  document.querySelectorAll('#resume-anomalies li').forEach(function(li){t+='• '+li.textContent.trim()+'\n';});
+  var pats=document.querySelectorAll('#resume-patterns .horm-pattern-box');
+  if(pats.length){t+='\n--- PATTERNS DIAGNOSTIQUES ---\n';pats.forEach(function(p){t+='• '+p.textContent.trim().replace(/\s+/g,' ')+'\n';});}
+  var comps=document.querySelectorAll('#resume-complementaire .horm-autoimmun');
+  if(comps.length){t+='\n--- BILAN COMPLÉMENTAIRE SUGGÉRÉ ---\n';comps.forEach(function(p){t+='• '+p.textContent.trim().replace(/\s+/g,' ')+'\n';});}
+  t+='\n--- CONDUITE À TENIR ---\n';
+  document.querySelectorAll('#resume-actions li').forEach(function(li){t+='• '+li.textContent.trim()+'\n';});
+  t+='\n(Aide à la décision — à corréler à la clinique. Dr KARA-ZAITRI M.A.)\n';
+  var done=function(){var b=document.getElementById('btn-copy');b.classList.add('copied');b.textContent='\u2713 Copié !';document.getElementById('copy-notice').classList.add('visible');setTimeout(function(){b.classList.remove('copied');b.innerHTML='&#128203; Copier le texte pour le dossier';document.getElementById('copy-notice').classList.remove('visible');},3000);};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done);
+  else{var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);done();}
+};
+
+/* ===== IMPRESSION A5 ===== */
+window.printResumeA5=function(){
+  var info=getPatientInfo();
+  var today=new Date().toLocaleDateString('fr-FR');
+  var sexLabel=currentSex==='M'?'Homme':(currentSex==='G'?'Femme enceinte':'Femme');
+  var esc=function(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+
+  var anomaliesHtml='';
+  document.querySelectorAll('#resume-anomalies li').forEach(function(li){anomaliesHtml+='<li>'+li.innerHTML+'</li>';});
+  if(!anomaliesHtml)anomaliesHtml='<li>—</li>';
+
+  var patternsHtml='';
+  document.querySelectorAll('#resume-patterns .horm-pattern-box').forEach(function(p){patternsHtml+='<div class="p-block">'+p.innerHTML+'</div>';});
+
+  var compHtml='';
+  document.querySelectorAll('#resume-complementaire .horm-autoimmun').forEach(function(p){compHtml+='<div class="p-block">'+p.innerHTML+'</div>';});
+
+  var actionsHtml='';
+  document.querySelectorAll('#resume-actions li').forEach(function(li){actionsHtml+='<li>'+li.innerHTML+'</li>';});
+  if(!actionsHtml)actionsHtml='<li>—</li>';
+
+  var html='<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+    +'<title>Analyse du bilan hormonal</title>'
+    +'<style>'
+    +'@page{size:A5;margin:12mm;}'
+    +'*{box-sizing:border-box;margin:0;padding:0;}'
+    +'body{font-family:Arial,Helvetica,sans-serif;font-size:10.5pt;color:#1A202C;line-height:1.45;}'
+    +'.hdr{border-bottom:2px solid #1A3A5C;padding-bottom:8px;margin-bottom:12px;}'
+    +'.hdr-title{font-size:13pt;font-weight:700;color:#1A3A5C;margin-bottom:2px;}'
+    +'.hdr-sub{font-size:8.5pt;color:#718096;}'
+    +'.idbox{display:flex;justify-content:space-between;gap:14px;margin:10px 0 14px;padding:8px 10px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:4px;font-size:9.5pt;}'
+    +'.idcol b{display:block;font-size:8pt;text-transform:uppercase;letter-spacing:0.04em;color:#718096;margin-bottom:1px;}'
+    +'.sec{margin-bottom:11px;}'
+    +'.sec h3{font-size:10pt;font-weight:700;color:#1A3A5C;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1.5px solid #EBF4FF;padding-bottom:3px;margin-bottom:6px;}'
+    +'ul{list-style:none;padding:0;}'
+    +'li{padding:3px 0 3px 12px;position:relative;font-size:9.5pt;border-bottom:1px solid #F1F1F1;}'
+    +'li::before{content:"\\25B8";position:absolute;left:0;color:#C8102E;font-size:8pt;}'
+    +'.p-block{border-left:3px solid #1A3A5C;background:#F8FAFC;padding:6px 8px;margin-bottom:6px;font-size:9.5pt;border-radius:3px;}'
+    +'.horm-prio{display:inline-block;font-size:7.5pt;font-weight:700;padding:1px 5px;border-radius:3px;margin-right:5px;text-transform:uppercase;}'
+    +'.horm-prio.crit{background:#FEE2E2;color:#C8102E;}'
+    +'.horm-prio.high{background:#FEF3C7;color:#B45309;}'
+    +'.horm-prio.watch{background:#DBEAFE;color:#1E40AF;}'
+    +'.ftr{margin-top:14px;padding-top:8px;border-top:1px solid #E2E8F0;font-size:7.5pt;color:#718096;text-align:center;line-height:1.4;}'
+    +'</style></head><body>'
+    +'<div class="hdr"><div class="hdr-title">Analyse Globale du Bilan Hormonal</div>'
+    +'<div class="hdr-sub">Outil d\'aide à l\'interprétation — à corréler impérativement à la clinique</div></div>'
+    +'<div class="idbox">'
+    +'<div class="idcol"><b>Patient(e)</b>'+esc(info.nomComplet||'\u2014')+(info.ddnFormatted?' &nbsp;&middot;&nbsp; Né(e) le '+esc(info.ddnFormatted):'')+(info.age?' ('+esc(info.age)+')':'')+'<br><b style="margin-top:5px;">Statut</b>'+esc(sexLabel)+'</div>'
+    +'<div class="idcol"><b>Médecin prescripteur</b>'+(info.medecin?esc(info.medecin):'\u2014')+'<br><b style="margin-top:5px;">Date du bilan</b>'+esc(info.dateBilanFormatted||today)+'</div>'
+    +'</div>'
+    +'<div class="sec"><h3>1. Anomalies par priorité</h3><ul>'+anomaliesHtml+'</ul></div>'
+    +(patternsHtml?'<div class="sec"><h3>2. Patterns diagnostiques</h3>'+patternsHtml+'</div>':'')
+    +(compHtml?'<div class="sec"><h3>3. Bilan complémentaire suggéré</h3>'+compHtml+'</div>':'')
+    +'<div class="sec"><h3>4. Conduite à tenir</h3><ul>'+actionsHtml+'</ul></div>'
+    +'<div class="ftr">Document généré le '+today+' par l\'Interprétateur de Bilan Hormonal — Dr KARA-ZAITRI M.A.<br>Outil d\'aide à la décision ; ne se substitue pas au jugement clinique.</div>'
+    +'</body></html>';
+
+  var w=window.open('','_blank');
+  if(!w){alert('Veuillez autoriser les fenêtres pop-up pour imprimer.');return;}
+  w.document.open();w.document.write(html);w.document.close();
+  w.onload=function(){w.focus();w.print();};
+  setTimeout(function(){try{w.focus();w.print();}catch(e){}},300);
+};
+
+/* ===== CAS CLINIQUES ===== */
+var CASES={
+  '1':{age:26,sexLabel:'ans — F',motif:'Infertilité primaire depuis 2 ans, hirsutisme modéré, cycles irréguliers (35–60 jours)',
+    context:'IMC 27. Pas d\'antécédent médical notable. Acné persistante depuis l\'adolescence. Pas de désir de grossesse immédiat mais souhaite des explications.',
+    params:[{n:'FSH (J3)',v:'5,2 UI/L',c:'v-normal'},{n:'LH (J3)',v:'14,8 UI/L',c:'v-high'},{n:'Ratio LH/FSH',v:'2,8',c:'v-high'},{n:'E2 (J3)',v:'62 pg/mL',c:'v-normal'},{n:'AMH',v:'7,2 ng/mL',c:'v-high'},{n:'Progestérone lutéale',v:'2,1 ng/mL',c:'v-low'},{n:'Testostérone',v:'0,68 ng/mL',c:'v-high'},{n:'SHBG',v:'28 nmol/L',c:'v-low'}],
+    diag:'Syndrome des ovaires polykystiques (SOPK) — phénotype hyperandrogénie + dysovulation',
+    orient:'Le ratio LH/FSH élevé (2,8) associé à une AMH franchement augmentée (reflet d\'un excès de follicules antraux) oriente fortement vers un SOPK. La progestérone lutéale basse confirme l\'anovulation (cycle non ovulatoire au moment du dosage). La testostérone élevée avec SHBG abaissée — donc un index androgène libre encore plus élevé que ne le suggère la testostérone seule — explique l\'hirsutisme et l\'acné. Le diagnostic doit être confirmé par les critères de Rotterdam (clinique + échographie ovarienne).',
+    conduite:'Échographie pelvienne (compte des follicules antraux). Bilan métabolique associé (glycémie à jeun, HOMA-IR, bilan lipidique) car risque d\'insulinorésistance fréquent dans ce phénotype. Mesures hygiéno-diététiques en 1ère intention si surpoids. Pas de désir de grossesse immédiat : contraception œstroprogestative ou progestative pour réguler les cycles et limiter l\'hyperandrogénie. Réévaluer la fertilité (létrozole ou citrate de clomifène) lors d\'un futur désir de grossesse.'},
+  '2':{age:31,sexLabel:'ans — F',motif:'Aménorrhée secondaire depuis 8 mois, écoulement mamelaire bilatéral spontané',
+    context:'Pas de grossesse en cours (test négatif). Pas de traitement neuroleptique ni antiémétique. Céphalées frontales intermittentes depuis 3 mois, sans trouble visuel rapporté.',
+    params:[{n:'Prolactine',v:'186 ng/mL',c:'v-critical'},{n:'TSH',v:'1,8 mUI/L',c:'v-normal'},{n:'FSH',v:'3,1 UI/L',c:'v-low'},{n:'LH',v:'2,0 UI/L',c:'v-low'},{n:'E2',v:'22 pg/mL',c:'v-low'},{n:'Cortisol 8h',v:'14 µg/dL',c:'v-normal'},{n:'IGF-1',v:'180 ng/mL',c:'v-normal'},{n:'Test de grossesse',v:'Négatif',c:'v-normal'}],
+    diag:'Hyperprolactinémie majeure avec freinage gonadotrope — forte suspicion de macroadénome à prolactine',
+    orient:'Prolactine très élevée (186 ng/mL, bien au-delà du seuil de 100 évocateur d\'adénome) avec freinage de l\'axe gonadotrope (FSH/LH basses, E2 bas) expliquant l\'aménorrhée. L\'hyperprolactinémie inhibe la pulsatilité de la GnRH. Les céphalées associées renforcent la suspicion de macroadénome hypophysaire (effet de masse) plutôt qu\'une cause médicamenteuse ou fonctionnelle.',
+    conduite:'IRM hypophysaire en urgence relative (recherche macroadénome, effet de masse sur le chiasma — champ visuel à demander). Agoniste dopaminergique en 1ère intention (cabergoline) : efficace même sur les macroadénomes, évite souvent la chirurgie. Surveillance de la prolactine et de la taille tumorale sous traitement. Contraception à discuter tant que l\'aménorrhée n\'est pas corrigée et la grossesse non souhaitée.'},
+  '3':{age:38,sexLabel:'ans — F',motif:'Asthénie progressive depuis 6 mois, amaigrissement de 6 kg, hypotension orthostatique',
+    context:'Hyperpigmentation cutanée des plis et des cicatrices remarquée par l\'entourage. Appétence accrue pour le sel. Pas d\'antécédent de corticothérapie prolongée.',
+    params:[{n:'Cortisol 8h',v:'2,8 µg/dL',c:'v-critical'},{n:'ACTH',v:'186 pg/mL',c:'v-critical'},{n:'Test au Synacthène',v:'Absence de réponse',c:'v-critical'},{n:'Na+',v:'128 mmol/L',c:'v-low'},{n:'K+',v:'5,8 mmol/L',c:'v-high'},{n:'17-OHP',v:'1,1 ng/mL',c:'v-normal'},{n:'DHEA-S',v:'0,4 µmol/L',c:'v-low'},{n:'TSH',v:'2,1 mUI/L',c:'v-normal'}],
+    diag:'Insuffisance surrénalienne périphérique (maladie d\'Addison)',
+    orient:'Le cortisol effondré associé à une ACTH très élevée signe une insuffisance surrénalienne d\'origine périphérique (la chute du rétrocontrôle négatif fait monter l\'ACTH). L\'absence de réponse au test au Synacthène confirme l\'incapacité de la surrénale à sécréter du cortisol. L\'hyperpigmentation s\'explique par l\'excès d\'ACTH (et de POMC associée), l\'hyponatrémie/hyperkaliémie par le déficit associé en aldostérone (atteinte de toute la corticosurrénale).',
+    conduite:'Hospitalisation si signes de décompensation aiguë (hypotension sévère, troubles ioniques marqués) — hydrocortisone IV en urgence sans attendre la confirmation complète si suspicion forte. En relais : substitution orale par hydrocortisone (schéma fractionné) + fludrocortisone (déficit minéralocorticoïde). Éducation thérapeutique impérative : carte d\'insuffisant surrénalien, majoration des doses en cas de stress/infection/chirurgie, jamais d\'arrêt brutal du traitement. Recherche étiologique : anticorps anti-21-hydroxylase (cause auto-immune la plus fréquente).'},
+  '4':{age:24,sexLabel:'ans — F',motif:'Hirsutisme d\'apparition rapide (6 mois), raucité de la voix, hypertrophie clitoridienne',
+    context:'Pas d\'hirsutisme ni de trouble du cycle auparavant. Aménorrhée secondaire depuis 4 mois. Pas de prise médicamenteuse androgénique.',
+    params:[{n:'Testostérone totale',v:'2,4 ng/mL',c:'v-critical'},{n:'SHBG',v:'32 nmol/L',c:'v-low'},{n:'Index androgène libre (calculé)',v:'7,5 %',c:'v-critical'},{n:'Delta-4-androstènedione',v:'9,8 ng/mL',c:'v-critical'},{n:'DHEA-S',v:'3,2 µmol/L',c:'v-normal'},{n:'17-OHP',v:'1,4 ng/mL',c:'v-normal'},{n:'LH',v:'3,2 UI/L',c:'v-normal'},{n:'FSH',v:'4,1 UI/L',c:'v-normal'}],
+    diag:'Hyperandrogénie sévère d\'apparition rapide — tumeur sécrétante d\'origine ovarienne ou surrénalienne à éliminer en priorité',
+    orient:'Le caractère rapidement progressif (6 mois) associé à des signes de virilisation francs (raucité de la voix, hypertrophie clitoridienne) et une testostérone très franchement élevée (>1,5–2 ng/mL) doivent faire évoquer en priorité une tumeur sécrétante (ovarienne ou surrénalienne) plutôt qu\'un SOPK, qui donne classiquement une hyperandrogénie plus modérée et d\'installation progressive depuis l\'adolescence. Le 17-OHP normal rend peu probable un bloc enzymatique. La DHEA-S normale oriente plutôt vers une origine ovarienne que surrénalienne pour la tumeur sécrétante suspectée.',
+    conduite:'Imagerie en urgence : échographie pelvienne de 1ère intention (recherche tumeur ovarienne sécrétante — tumeur de la granulosa, tumeur à cellules de Sertoli-Leydig), complétée par IRM pelvienne si doute. TDM/IRM surrénalienne en complément. Avis gynéco-oncologique rapide. Ne pas retarder l\'exploration par un traitement symptomatique de l\'hirsutisme.'},
+  '5':{age:45,sexLabel:'ans — F',motif:'Prise de poids progressive (8 kg en 1 an), frilosité, constipation, ralentissement psychomoteur',
+    context:'Antécédent familial de thyroïdite chez la mère. Peau sèche, chute de cheveux diffuse. Pas de traitement en cours.',
+    params:[{n:'TSH',v:'14,2 mUI/L',c:'v-critical'},{n:'T4 Libre',v:'0,52 ng/dL',c:'v-critical'},{n:'T3 Libre',v:'2,0 pg/mL',c:'v-low'},{n:'Anti-TPO',v:'412 UI/mL',c:'v-high'},{n:'TRAK',v:'0,8 UI/L',c:'v-normal'},{n:'Cholestérol total',v:'6,4 mmol/L',c:'v-high'},{n:'CPK',v:'310 UI/L',c:'v-high'},{n:'Hb',v:'11,2 g/dL',c:'v-low'}],
+    diag:'Hypothyroïdie franche d\'origine auto-immune (thyroïdite de Hashimoto)',
+    orient:'TSH très élevée associée à une T4L basse confirme une hypothyroïdie franche (et non infraclinique). Les Anti-TPO fortement positifs orientent vers une thyroïdite de Hashimoto, cause la plus fréquente d\'hypothyroïdie en zone non carencée en iode, renforcée par le contexte familial. L\'élévation du cholestérol et des CPK ainsi que l\'anémie modérée sont des conséquences métaboliques classiques de l\'hypothyroïdie franche, et devraient se corriger sous traitement substitutif sans nécessiter de prise en charge spécifique propre.',
+    conduite:'Lévothyroxine à dose initiale adaptée à l\'âge et au terrain cardiovasculaire (dose progressive si cardiopathie associée, sinon dose pleine d\'emblée possible à cet âge). Contrôle de la TSH à 6–8 semaines pour ajustement posologique. Réévaluation du bilan lipidique et de la NFS après normalisation thyroïdienne — pas de traitement spécifique de l\'anémie ou de la dyslipidémie avant ce contrôle, sauf signe de gravité.'}
+};
+
+window.loadCase=function(id){
+  var container=document.getElementById('case-container');
+  if(!id){container.innerHTML='';return;}
+  var c=CASES[id];if(!c){container.innerHTML='';return;}
+  var paramsHtml=c.params.map(function(p){return '<div class="horm-case-param"><div class="horm-case-param-name">'+p.n+'</div><div class="horm-case-param-val '+p.c+'">'+p.v+'</div></div>';}).join('');
+  container.innerHTML='<div class="horm-case-card visible"><div class="horm-case-header"><div class="horm-case-age">'+c.age+'<span>'+c.sexLabel+'</span></div><div><div class="horm-case-motif">'+c.motif+'</div><div class="horm-case-context">'+c.context+'</div></div></div><div class="horm-case-bio">'+paramsHtml+'</div><div class="horm-toggle-answer"><button class="horm-btn" onclick="revealAnswer(this)">\u25b6 Révéler le diagnostic et la conduite</button></div><div class="horm-case-answer" id="case-answer"><div class="horm-sep"></div><span class="horm-case-diag">'+c.diag+'</span><div class="horm-case-section"><div class="horm-case-section-title">Analyse du bilan</div><p>'+c.orient+'</p></div><div class="horm-case-section"><div class="horm-case-section-title">Conduite à tenir</div><p>'+c.conduite+'</p></div></div></div>';
+};
+window.revealAnswer=function(btn){var ans=document.getElementById('case-answer');if(ans)ans.classList.add('visible');btn.style.display='none';};
+
+/* ===== RESET ===== */
+window.resetPanel=function(panelId){
+  var p=document.getElementById('panel-'+panelId);if(!p)return;
+  p.querySelectorAll('.horm-input').forEach(function(inp){
+    if(inp.tagName==='SELECT')inp.selectedIndex=0;
+    else inp.value='';
+  });
+  p.querySelectorAll('.horm-result').forEach(function(el){
+    var keep=['res-ratio-lhfsh','res-fai'].indexOf(el.id)>=0;
+    if(!keep)el.style.display='none';
+    else{el.className='horm-result r-empty';if(el.id==='res-ratio-lhfsh')el.innerHTML='Renseignez LH et FSH';if(el.id==='res-fai')el.innerHTML='Renseignez testostérone + SHBG';}
+  });
+  p.querySelectorAll('.horm-gauge-cursor').forEach(function(c){c.style.display='none';});
+  p.querySelectorAll('.horm-synthesis').forEach(function(s){s.classList.remove('visible');});
+  p.querySelectorAll('.horm-interpret').forEach(function(i){i.classList.remove('visible');});
+  p.querySelectorAll('.horm-proto').forEach(function(pr){pr.classList.remove('visible');});
+  p.querySelectorAll('input[type="checkbox"]').forEach(function(cb){cb.checked=false;});
+};
+
+window.addEventListener('DOMContentLoaded',function(){setSex('F');});
+})();
+
+</script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+</body>
+</html>
