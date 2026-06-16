@@ -394,7 +394,7 @@ body{-ms-overflow-style:none;overflow-y:auto;}
   <div class="bio-alert bio-alert-info">La carence martiale est la cause la plus fréquente d'anémie. L'interprétation doit intégrer l'ensemble des marqueurs (ferritine + fer sérique + CS de la transferrine + CRP).</div>
   <div class="bio-grid">
     <div class="bio-param-card">
-      <div class="bio-param-label">Ferritine <span class="bio-ref" id="ref-ferr">H:20–300 / F:10–150 µg/L</span></div>
+      <div class="bio-param-label">Ferritine <span class="bio-ref" id="ref-ferr">H:30–300 / F:20–200 µg/L</span></div>
       <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-ferr" placeholder="--" oninput="evalFerr(this.value)"><span class="bio-unit">µg/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-ferr"></div></div></div>
       <div class="bio-result" id="res-ferr"></div>
@@ -442,8 +442,9 @@ body{-ms-overflow-style:none;overflow-y:auto;}
 <div id="panel-glycemie" class="bio-panel" role="tabpanel">
   <div class="bio-grid">
     <div class="bio-param-card">
-      <div class="bio-param-label">Glycémie à jeun <span class="bio-ref">3,9–5,5 mmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-gly" placeholder="--" oninput="evalGly(this.value);calcHoma();"><span class="bio-unit">mmol/L</span></div>
+      <div class="bio-param-label">Glycémie à jeun <span class="bio-ref">3,9–6,1 mmol/L (0,70–1,10 g/L)</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="0.01" id="val-gly" placeholder="--" oninput="onGlyMmolInput(this.value)"><span class="bio-unit">mmol/L</span></div>
+      <div class="bio-input-row" style="margin-top:6px;"><input class="bio-input" type="number" step="0.01" id="val-gly-gl" placeholder="--" oninput="onGlyGlInput(this.value)"><span class="bio-unit">g/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-gly"></div></div></div>
       <div class="bio-result" id="res-gly"></div>
     </div>
@@ -464,15 +465,16 @@ body{-ms-overflow-style:none;overflow-y:auto;}
       <div class="bio-result r-empty" id="res-homa" style="display:block!important;">Renseignez glycémie + insuline ci-dessus</div>
     </div>
   </div>
-  <div class="bio-alert bio-alert-info" style="margin-top:8px;"><b>Rappel OMS/HAS :</b> Diabète si glycémie à jeun ≥7,0 mmol/L à 2 reprises, ou HbA1c ≥6,5%. Prédiabète si glycémie 5,6–6,9 mmol/L ou HbA1c 5,7–6,4%.<br><b>Astuce :</b> une valeur &lt;3,5 est interprétée en g/L et convertie automatiquement en mmol/L.</div>
+  <div class="bio-alert bio-alert-info" style="margin-top:8px;"><b>Rappel OMS/HAS :</b> Diabète si glycémie à jeun ≥7,0 mmol/L à 2 reprises, ou HbA1c ≥6,5%. Prédiabète si glycémie 6,1–6,9 mmol/L ou HbA1c 5,7–6,4%.<br><b>Astuce :</b> saisissez la valeur dans l'unité de votre choix (mmol/L ou g/L) — l'autre champ se remplit automatiquement.</div>
 </div>
 
 <!-- ==================== RÉNALE ==================== -->
 <div id="panel-renal" class="bio-panel" role="tabpanel">
   <div class="bio-grid">
     <div class="bio-param-card">
-      <div class="bio-param-label">Créatinine <span class="bio-ref" id="ref-creat">H:62–115 / F:44–97 µmol/L</span></div>
-      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-creat" placeholder="--" oninput="evalCreat(this.value)"><span class="bio-unit">µmol/L</span></div>
+      <div class="bio-param-label">Créatinine <span class="bio-ref" id="ref-creat">H:62–115 / F:44–97 µmol/L (≈H:7–13 / F:5–11 mg/L)</span></div>
+      <div class="bio-input-row"><input class="bio-input" type="number" step="1" id="val-creat" placeholder="--" oninput="onCreatUmolInput(this.value)"><span class="bio-unit">µmol/L</span></div>
+      <div class="bio-input-row" style="margin-top:6px;"><input class="bio-input" type="number" step="0.1" id="val-creat-mgl" placeholder="--" oninput="onCreatMglInput(this.value)"><span class="bio-unit">mg/L</span></div>
       <div class="bio-gauge-wrap"><div class="bio-gauge-track"><div class="bio-gauge-cursor" id="cur-creat"></div></div></div>
       <div class="bio-result" id="res-creat"></div>
     </div>
@@ -888,7 +890,7 @@ window.setSex=function(s){
   ['m','f','g'].forEach(function(x){var b=document.getElementById('sex-'+x);if(b)b.classList.toggle('active',x.toUpperCase()===s);});
   var refs={
     'ref-hb':{M:'H: 13–17,5 g/dL',F:'F: 12–16 g/dL',G:'Gros.: >11 g/dL'},
-    'ref-ferr':{M:'H:20–300 µg/L',F:'F:10–150 µg/L',G:'Gros.: \u226530 µg/L'},
+    'ref-ferr':{M:'H:30–300 µg/L',F:'F:20–200 µg/L',G:'Gros.: \u226530 µg/L'},
     'ref-creat':{M:'H:62–115 µmol/L',F:'F:44–97 µmol/L',G:'Gros.: diminution physio'},
     'ref-au':{M:'H:180–420 µmol/L',F:'F:150–360 µmol/L',G:'Gros.: augmente T3'},
     'ref-hdl':{M:'H: >1,0 mmol/L',F:'F: >1,2 mmol/L',G:'F: >1,2 mmol/L'},
@@ -1063,7 +1065,7 @@ window.evalFibrino=function(v){
 /* ===== MARTIAL ===== */
 window.evalFerr=function(v){
   if(v===''||isNaN(v)){hideCursor('ferr');document.getElementById('res-ferr').style.display='none';return;}
-  v=parseFloat(v);var lo=currentSex==='M'?20:10,hi=currentSex==='M'?300:150;var cls,msg,pct;
+  v=parseFloat(v);var lo=currentSex==='M'?30:20,hi=currentSex==='M'?300:200;var cls,msg,pct;
   if(v<lo){cls='r-low';msg='\u2193 Ferritine basse — carence en fer confirm\xe9e (si pas de syndrome inflammatoire)';pct=8;}
   else if(v>500){cls='r-critical';msg='\u26A0 Ferritine tr\xe8s \xe9lev\xe9e — surcharge / h\xe9mochromatose ou inflammation majeure';pct=95;}
   else if(v>hi){cls='r-high';msg='\u2191 Hyperferritin\xe9mie — inflammatoire, cytolyse h\xe9patique, alcoolisme';pct=75;}
@@ -1094,13 +1096,13 @@ window.synthesizeMartial=function(){
   var cs=parseFloat(document.getElementById('val-cs').value);
   var crp=parseFloat(document.getElementById('val-crp-mart').value);
   var interp='';
-  var loFerr=currentSex==='M'?20:10;
+  var loFerr=currentSex==='M'?30:20;
   var carenceConfirmee=false,surcharge=false;
   if(!isNaN(ferr)&&ferr<loFerr&&(!isNaN(crp)?crp<10:true)){
     carenceConfirmee=true;
     if(!isNaN(cs)&&cs<20)interp='Carence martiale franche confirm\xe9e (ferritine basse + CS abais\xe9). Indication \xe0 la suppl\xe9mentation en fer.';
     else interp='Carence en fer probable sur ferritine abais\xe9e. Compl\xe9ter avec CS de la transferrine.';
-  }else if(!isNaN(ferr)&&ferr>(currentSex==='M'?300:150)&&!isNaN(cs)&&cs>45){
+  }else if(!isNaN(ferr)&&ferr>(currentSex==='M'?300:200)&&!isNaN(cs)&&cs>45){
     surcharge=true;
     interp='Surcharge en fer — bilan h\xe9mochromatose recommand\xe9 : test HFE (C282Y, H63D), ferritine + CS r\xe9p\xe9t\xe9s. \xc9chographie h\xe9patique.';
   }else if(!isNaN(crp)&&crp>10&&!isNaN(ferr)&&ferr>loFerr){
@@ -1125,14 +1127,27 @@ window.synthesizeMartial=function(){
 };
 
 /* ===== GLYCÉMIE ===== */
+window.onGlyMmolInput=function(v){
+  var glField=document.getElementById('val-gly-gl');
+  if(v===''||isNaN(v)){glField.value='';}
+  else{glField.value=(parseFloat(v)/5.55).toFixed(2);}
+  evalGly(v);calcHoma();
+};
+window.onGlyGlInput=function(v){
+  var mmolField=document.getElementById('val-gly');
+  if(v===''||isNaN(v)){mmolField.value='';evalGly('');calcHoma();return;}
+  var mmol=(parseFloat(v)*5.55);
+  mmolField.value=mmol.toFixed(2);
+  evalGly(mmolField.value);calcHoma();
+};
 window.evalGly=function(v){
   if(v===''||isNaN(v)){hideCursor('gly');var el=document.getElementById('res-gly');if(el)el.style.display='none';return;}
   v=parseFloat(v);var cls,msg,pct;
   if(v<2.8){cls='r-critical';msg='\u26A0 Hypoglyc\xe9mie s\xe9v\xe8re — resucrage IV urgent';pct=3;}
   else if(v<3.9){cls='r-low';msg='\u2193 Hypoglyc\xe9mie l\xe9g\xe8re — resucrage per os + recherche cause';pct=15;}
   else if(v>=7.0){cls='r-critical';msg='\u26A0 Diab\xe8te (\u22657,0 mmol/L) — confirmer \xe0 2 reprises \xe0 jeun';pct=90;}
-  else if(v>=5.6){cls='r-high';msg='\u2191 Pr\xe9diab\xe8te (5,6–6,9 mmol/L)';pct=70;}
-  else{cls='r-normal';msg='\u2713 Glyy\xe9mie \xe0 jeun normale';pct=30+30*(v-3.9)/1.6;}
+  else if(v>=6.1){cls='r-high';msg='\u2191 Pr\xe9diab\xe8te (6,1–6,9 mmol/L)';pct=70;}
+  else{cls='r-normal';msg='\u2713 Glyy\xe9mie \xe0 jeun normale';pct=30+30*(v-3.9)/2.2;}
   moveCursor('gly',pct,cls==='r-critical'?'#C8102E':cls==='r-low'?'#1E40AF':cls==='r-high'?'#B45309':'#166634');
   showResult('gly',cls,msg);
 };
@@ -1160,6 +1175,19 @@ window.calcHoma=function(){
 };
 
 /* ===== RÉNALE ===== */
+window.onCreatUmolInput=function(v){
+  var mglField=document.getElementById('val-creat-mgl');
+  if(v===''||isNaN(v)){mglField.value='';}
+  else{mglField.value=(parseFloat(v)/8.84).toFixed(2);}
+  evalCreat(v);
+};
+window.onCreatMglInput=function(v){
+  var umolField=document.getElementById('val-creat');
+  if(v===''||isNaN(v)){umolField.value='';evalCreat('');return;}
+  var umol=(parseFloat(v)*8.84);
+  umolField.value=Math.round(umol);
+  evalCreat(umolField.value);
+};
 window.evalCreat=function(v){
   if(v===''||isNaN(v)){hideCursor('creat');var el=document.getElementById('res-creat');if(el)el.style.display='none';return;}
   v=parseFloat(v);var lo=currentSex==='M'?62:44;var hi=currentSex==='M'?115:97;var cls,msg,pct;
@@ -1597,8 +1625,8 @@ function detectPatterns(){
   var na=val('val-na'),k=val('val-k'),cl=val('val-cl'),hco3=val('val-hco3');
   if(currentSex==='G'&&(asat>normT*2||alat>normT*2)&&plt<100)out.push({lvl:'crit',t:'HELLP syndrome (grossesse)',a:'\u26A0\ufe0f URGENCE OBST\xc9TRICALE — transfert maternit\xe9, bilan pr\xe9-\xe9clampsie (PA, prot\xe9inurie, LDH, haptoglobine).'});
   if(ferr>500&&cs>45)out.push({lvl:'high',t:'Surcharge martiale / h\xe9mochromatose',a:'Doser le g\xe8ne HFE (C282Y/H63D), r\xe9p\xe9ter ferritine + CST. \xc9chographie h\xe9patique.'});
-  if(hb<(currentSex==='M'?13:(currentSex==='G'?11:12))&&vgm<80&&ferr<(currentSex==='M'?20:10))out.push({lvl:'high',t:'An\xe9mie ferriprive (microcytaire)',a:'Rechercher saignement (digestif/gyn\xe9co). Suppl\xe9mentation martiale 3 mois.'});
-  if(hb<12&&(b12<148||b9<5)&&ferr<(currentSex==='M'?20:10))out.push({lvl:'high',t:'An\xe9mie mixte (fer + vitamines)',a:'Rechercher malabsorption (anti-TG2, endoscopie). Suppl\xe9mentation combin\xe9e.'});
+  if(hb<(currentSex==='M'?13:(currentSex==='G'?11:12))&&vgm<80&&ferr<(currentSex==='M'?30:20))out.push({lvl:'high',t:'An\xe9mie ferriprive (microcytaire)',a:'Rechercher saignement (digestif/gyn\xe9co). Suppl\xe9mentation martiale 3 mois.'});
+  if(hb<12&&(b12<148||b9<5)&&ferr<(currentSex==='M'?30:20))out.push({lvl:'high',t:'An\xe9mie mixte (fer + vitamines)',a:'Rechercher malabsorption (anti-TG2, endoscopie). Suppl\xe9mentation combin\xe9e.'});
   if(vgm>100&&(b12<148||b9<5))out.push({lvl:'watch',t:'An\xe9mie/macrocytose carentielle (B12/B9)',a:'Doser B12 + folates, recherche Biermer (Ac anti-FI), interrogatoire alcool.'});
   if(crp>50&&(vs>50||fibr>4.5))out.push({lvl:'high',t:'Syndrome inflammatoire marqu\xe9',a:'Rechercher foyer infectieux (imagerie, h\xe9moc.) ou maladie syst\xe9mique.'});
   if(asat>normT*10||alat>normT*10)out.push({lvl:'crit',t:'Cytolyse h\xe9patique massive (>10N)',a:'Bilan urgent : TP/INR, s\xe9rologies virales, \xe9chographie. H\xe9patite aigu\xeb ?'});
@@ -1636,14 +1664,14 @@ window.runGlobalAnalysis=function(){
   if(!isNaN(vgm)){hasData=true;if(vgm<80)push('watch','Microcytose (VGM '+vgm+')');if(vgm>100)push('watch','Macrocytose (VGM '+vgm+')');}
   if(!isNaN(plt)){hasData=true;if(plt<20)push('crit','Thrombop\xe9nie s\xe9v\xe8re ('+plt+' G/L)');else if(plt<150)push('high','Thrombop\xe9nie ('+plt+' G/L)');else if(plt>800)push('crit','Thrombocytose massive');}
   if(!isNaN(gb)){hasData=true;if(gb<2)push('crit','Leucop\xe9nie s\xe9v\xe8re');else if(gb<4)push('high','Leucop\xe9nie');else if(gb>20)push('high','Hyperleucocytose franche');}
-  if(!isNaN(ferr)){hasData=true;if(ferr<(currentSex==='M'?20:10))push('high','Ferritine effond\xe9e ('+ferr+')');else if(ferr>500)push('high','Ferritine tr\xe8s \xe9lev\xe9e ('+ferr+')');}
-  if(!isNaN(b12)&&b12<148){hasData=true;push('high','Carence en B12 ('+b12+')');actions.push('Suppl\xe9mentation B12, recherche Biermer / v\xe9g\xe9talisme.');}
-  if(!isNaN(b9)&&b9<5){hasData=true;push('high','Carence en folates ('+b9+')');actions.push('Suppl\xe9mentation B9.');}
+  if(!isNaN(ferr)){hasData=true;if(ferr<(currentSex==='M'?30:20))push('high','Ferritine effond\xe9e ('+ferr+')');else if(ferr>500)push('high','Ferritine tr\xe8s \xe9lev\xe9e ('+ferr+')');}
+  if(!isNaN(b12)&&b12<148){hasData=true;push('high','Carence en B12');actions.push('Suppl\xe9mentation B12, recherche Biermer / v\xe9g\xe9talisme.');}
+  if(!isNaN(b9)&&b9<5){hasData=true;push('high','Carence en folates');actions.push('Suppl\xe9mentation B9.');}
   if(!isNaN(vitd)){hasData=true;if(vitd<10){push('high','Carence s\xe9v\xe8re en vitamine D');actions.push('Recharge vitamine D (ampoules selon protocole).');}else if(vitd<30){push('watch','Insuffisance en vitamine D');actions.push('Suppl\xe9mentation vitamine D.');}}
   if(!isNaN(crp)){hasData=true;if(crp>=50){push('high','CRP tr\xe8s \xe9lev\xe9e ('+crp+')');actions.push('Rechercher foyer infectieux / inflammatoire.');}else if(crp>=5)push('watch','CRP \xe9lev\xe9e ('+crp+')');}
   if(!isNaN(gly)||!isNaN(hba1c)){hasData=true;
     if((!isNaN(gly)&&gly>=7.0)||(!isNaN(hba1c)&&hba1c>=6.5)){push('high','Hyperglyc\xe9mie / diab\xe8te');actions.push('Confirmer diab\xe8te, RHD, bilan de retentissement.');}
-    else if((!isNaN(gly)&&gly>=5.6)||(!isNaN(hba1c)&&hba1c>=5.7))push('watch','Pr\xe9diab\xe8te');}
+    else if((!isNaN(gly)&&gly>=6.1)||(!isNaN(hba1c)&&hba1c>=5.7))push('watch','Pr\xe9diab\xe8te');}
   if(!isNaN(gly)&&!isNaN(insul)){var homa=(gly*insul)/22.5;if(homa>=2.5){push('watch','Insulinor\xe9sistance (HOMA '+homa.toFixed(1)+')');actions.push('\xc9valuer syndrome m\xe9tabolique / SOPK.');}}
   if(!isNaN(creat)){hasData=true;
     if(!isNaN(age)){var kap=(currentSex==='F'||currentSex==='G')?61.9:79.6,al=(currentSex==='F'||currentSex==='G')?-0.241:-0.302;
