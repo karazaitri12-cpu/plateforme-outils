@@ -651,31 +651,75 @@
 
 <script>
   function openPremiumModal(toolName, connexionUrl) {
+    function sp(el, prop, val) { el.style.setProperty(prop, val, 'important'); }
+
+    // Fond semi-transparent
     var overlay = document.createElement('div');
-    var S = overlay.style;
-    S.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:2147483647;background:rgba(15,23,42,0.6);display:flex;align-items:center;justify-content:center;box-sizing:border-box;margin:0;padding:16px;font-family:Segoe UI,Arial,sans-serif;';
+    sp(overlay,'position','fixed'); sp(overlay,'top','0'); sp(overlay,'left','0');
+    sp(overlay,'width','100%'); sp(overlay,'height','100%');
+    sp(overlay,'background','rgba(15,23,42,0.6)'); sp(overlay,'z-index','2147483646');
+    sp(overlay,'margin','0'); sp(overlay,'padding','0');
 
+    // Carte centrée par transform (indépendant du flex parent)
     var card = document.createElement('div');
-    card.style.cssText = 'background:#fff;border-radius:16px;padding:24px 20px;max-width:420px;width:100%;text-align:center;box-shadow:0 16px 48px rgba(0,0,0,.25);box-sizing:border-box;max-height:90vh;overflow-y:auto;';
+    sp(card,'position','fixed'); sp(card,'top','50%'); sp(card,'left','50%');
+    sp(card,'transform','translate(-50%,-50%)');
+    sp(card,'z-index','2147483647');
+    sp(card,'background','#ffffff'); sp(card,'border-radius','16px');
+    sp(card,'padding','24px 20px'); sp(card,'max-width','420px'); sp(card,'width','90%');
+    sp(card,'max-height','85vh'); sp(card,'overflow-y','auto');
+    sp(card,'box-shadow','0 16px 48px rgba(0,0,0,0.3)');
+    sp(card,'text-align','center'); sp(card,'box-sizing','border-box');
+    sp(card,'font-family','Segoe UI,Arial,sans-serif');
 
-    card.innerHTML =
-      '<div style="font-size:34px;margin-bottom:6px;">&#128274;</div>' +
-      '<div style="display:inline-block;background:#fff8e0;border:1px solid #e0c060;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#7a5a00;margin-bottom:10px;">&#9733; Contenu Premium</div>' +
-      '<h3 style="font-size:1rem;color:#1e2a35;margin:0 0 4px;font-weight:700;">Outil r&#233;serv&#233; aux membres</h3>' +
-      '<p style="font-size:0.92rem;color:#C9A84C;font-weight:600;margin:0 0 8px;">' + toolName + '</p>' +
-      '<p style="font-size:0.85rem;color:#4b5563;margin:0 0 18px;line-height:1.5;">Cet outil est accessible aux membres premium de FemCare Hub.<br>Souhaitez-vous acc&#233;der &#224; la page de connexion&nbsp;/ abonnement&nbsp;?</p>' +
-      '<div style="display:flex;gap:10px;">' +
-        '<button id="kzModalNo" style="flex:1;background:#f3f4f6;color:#374151;border:none;padding:11px 0;border-radius:8px;font-size:0.88rem;font-weight:600;cursor:pointer;">Non, pas maintenant</button>' +
-        '<button id="kzModalYes" style="flex:1;background:#1A3A5C;color:#fff;border:none;padding:11px 0;border-radius:8px;font-size:0.88rem;font-weight:600;cursor:pointer;">Oui, me connecter</button>' +
-      '</div>';
+    // Contenu texte
+    var inner = document.createElement('div');
+    inner.innerHTML =
+      '<div style="font-size:34px;margin-bottom:6px;line-height:1;">&#128274;</div>' +
+      '<div style="display:inline-block;background:#fff8e0;border:1px solid #e0c060;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#7a5a00;margin-bottom:10px;font-family:sans-serif;">&#9733; Contenu Premium</div>' +
+      '<div style="font-size:1rem;color:#1e2a35;margin:0 0 4px;font-weight:700;font-family:sans-serif;">Outil r&#233;serv&#233; aux membres</div>' +
+      '<div style="font-size:0.92rem;color:#C9A84C;font-weight:600;margin:0 0 10px;font-family:sans-serif;">' + toolName + '</div>' +
+      '<div style="font-size:0.85rem;color:#4b5563;margin:0 0 18px;line-height:1.5;font-family:sans-serif;">Cet outil est accessible aux membres premium de FemCare Hub.<br>Souhaitez-vous acc&#233;der &#224; la page de connexion / abonnement ?</div>';
+    card.appendChild(inner);
 
-    overlay.appendChild(card);
+    // Boutons via <a> pour éviter les resets WordPress sur <button>
+    var actions = document.createElement('div');
+    sp(actions,'display','flex'); sp(actions,'gap','10px'); sp(actions,'margin-top','4px');
+
+    var btnNo = document.createElement('a');
+    btnNo.textContent = 'Non, pas maintenant';
+    sp(btnNo,'flex','1'); sp(btnNo,'display','block');
+    sp(btnNo,'background','#f3f4f6'); sp(btnNo,'color','#374151');
+    sp(btnNo,'border','1px solid #d1d5db'); sp(btnNo,'border-radius','8px');
+    sp(btnNo,'padding','11px 6px'); sp(btnNo,'font-size','0.85rem');
+    sp(btnNo,'font-weight','600'); sp(btnNo,'cursor','pointer');
+    sp(btnNo,'text-decoration','none'); sp(btnNo,'text-align','center');
+    sp(btnNo,'font-family','sans-serif'); sp(btnNo,'box-sizing','border-box');
+
+    var btnYes = document.createElement('a');
+    btnYes.textContent = 'Oui, me connecter';
+    sp(btnYes,'flex','1'); sp(btnYes,'display','block');
+    sp(btnYes,'background','#1A3A5C'); sp(btnYes,'color','#ffffff');
+    sp(btnYes,'border','none'); sp(btnYes,'border-radius','8px');
+    sp(btnYes,'padding','11px 6px'); sp(btnYes,'font-size','0.85rem');
+    sp(btnYes,'font-weight','600'); sp(btnYes,'cursor','pointer');
+    sp(btnYes,'text-decoration','none'); sp(btnYes,'text-align','center');
+    sp(btnYes,'font-family','sans-serif'); sp(btnYes,'box-sizing','border-box');
+
+    actions.appendChild(btnNo);
+    actions.appendChild(btnYes);
+    card.appendChild(actions);
+
     document.body.appendChild(overlay);
+    document.body.appendChild(card);
 
-    function close() { document.body.removeChild(overlay); }
-    overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
-    card.querySelector('#kzModalNo').addEventListener('click', close);
-    card.querySelector('#kzModalYes').addEventListener('click', function() { window.location.href = connexionUrl; });
+    function close() {
+      if (document.body.contains(overlay)) document.body.removeChild(overlay);
+      if (document.body.contains(card))    document.body.removeChild(card);
+    }
+    overlay.addEventListener('click', close);
+    btnNo.addEventListener('click', close);
+    btnYes.addEventListener('click', function(e) { e.preventDefault(); window.location.href = connexionUrl; });
   }
 </script>
 
