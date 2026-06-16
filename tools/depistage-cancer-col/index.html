@@ -991,5 +991,34 @@ body { -ms-overflow-style: none; overflow-y: auto; }
      <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 
+
+<!-- SYSTÈME PREMIUM — VÉRIFICATION TOKEN -->
+<div id="kz-block-screen" style="display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);z-index:9999;justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:12px;padding:32px 28px;max-width:400px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.3);">
+    <div style="font-size:40px;margin-bottom:12px;">&#128274;</div>
+    <h2 style="font-size:1.2rem;color:#1a3a5c;margin:0 0 12px;font-family:sans-serif;">Acc&#232;s Premium Requis</h2>
+    <p style="font-size:0.9rem;color:#4b5563;margin:0 0 20px;line-height:1.5;font-family:sans-serif;">Cet outil est r&#233;serv&#233; aux membres premium de FemCare Hub.</p>
+    <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" style="display:inline-block;background:#1A3A5C;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.92rem;font-family:sans-serif;">Se connecter / S&#8217;abonner</a>
+    <p style="margin-top:14px;font-size:0.75rem;color:#9ca3af;font-family:sans-serif;">&#128273; Acc&#232;s via token personnel &mdash; FemCare Hub</p>
+  </div>
+</div>
+<script>
+(async function() {
+  var bs = document.getElementById('kz-block-screen');
+  var urlParams = new URLSearchParams(window.location.search);
+  var urlToken = urlParams.get('token');
+  if (urlToken) {
+    localStorage.setItem('kz_platform_token', urlToken);
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+  var token = localStorage.getItem('kz_platform_token');
+  if (!token) return;
+  try {
+    var r = await fetch('https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token));
+    var data = await r.json();
+    if (data.valid === true) bs.style.display = 'none';
+  } catch(e) {}
+})();
+</script>
 </body>
 </html>
