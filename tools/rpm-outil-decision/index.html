@@ -420,6 +420,35 @@
 html { scrollbar-width: none !important; }
 body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 ::-webkit-scrollbar { display: none !important; }
+
+/* ---- PREMIUM OVERLAY ---- */
+.kz-premium-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 8000; display: flex; justify-content: center; align-items: center;
+  background: rgba(240, 243, 248, 0.85);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+.kz-premium-card {
+  background: #fff; border: 1px solid #dde3ec; border-radius: 12px;
+  padding: 32px 28px; max-width: 420px; width: 90%;
+  text-align: center; box-shadow: 0 8px 32px rgba(26,74,122,.12);
+}
+.kz-premium-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #fff8e0; border: 1px solid #e0c060; border-radius: 20px;
+  padding: 4px 14px; font-size: 12px; font-weight: 700; color: #7a5a00;
+  margin-bottom: 14px;
+}
+.kz-premium-lock { font-size: 36px; display: block; margin-bottom: 10px; }
+.kz-premium-card h3 { font-size: 1.1rem; color: #1A3A5C; margin: 0 0 10px; font-weight: 700; }
+.kz-premium-card p  { font-size: 0.9rem; color: #4b5563; margin: 0 0 20px; line-height: 1.55; }
+.kz-premium-btn {
+  display: inline-block; background: #1A3A5C; color: #fff !important;
+  padding: 10px 22px; border-radius: 8px; font-size: 0.92rem;
+  font-weight: 600; text-decoration: none !important;
+}
+.kz-premium-btn:hover { background: #22487a; }
+.kz-premium-note { margin-top: 14px; font-size: 0.75rem; color: #9ca3af; }
     </style>
 </head>
 <body>
@@ -520,6 +549,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     });
 
     window.rpmGenerer = function() {
+        if (teaserMode) { showRpmPremiumOverlay(); return; }
         var sa         = parseInt(saInput.value);
         var infection  = document.getElementById('rpm-infection').checked;
         var travail    = document.getElementById('rpm-travail').checked;
@@ -679,6 +709,47 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     }
 
 })();
+</script>
+
+<!-- PREMIUM OVERLAY -->
+<div id="rpm-premium-overlay" class="kz-premium-overlay" style="display:none;">
+  <div class="kz-premium-card">
+    <div class="kz-premium-badge">&#9733; Contenu Premium</div>
+    <span class="kz-premium-lock">&#128274;</span>
+    <h3>RPM &mdash; Protocole de prise en charge</h3>
+    <p>Vous avez renseign&#233; les donn&#233;es cliniques.<br>
+    Pour g&#233;n&#233;rer le protocole complet, connectez-vous &#224; votre espace FemCare Hub.</p>
+    <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" class="kz-premium-btn">
+      Se connecter / S&#8217;abonner
+    </a>
+    <div class="kz-premium-note">&#128273; Acc&#232;s via token personnel &mdash; FemCare Hub</div>
+  </div>
+</div>
+
+<script>
+var teaserMode = true;
+
+function showRpmPremiumOverlay() {
+  document.getElementById('rpm-premium-overlay').style.display = 'flex';
+}
+
+async function checkPremiumAccess() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var urlToken  = urlParams.get('token');
+  if (urlToken) {
+    localStorage.setItem('kz_platform_token', urlToken);
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+  var token = localStorage.getItem('kz_platform_token');
+  if (!token) return;
+  try {
+    var r    = await fetch('https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token));
+    var data = await r.json();
+    if (data.valid === true) teaserMode = false;
+  } catch (e) {}
+}
+
+checkPremiumAccess();
 </script>
 
 <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->

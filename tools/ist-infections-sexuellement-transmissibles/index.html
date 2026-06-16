@@ -508,9 +508,9 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   <div class="kz-premium-card">
     <div class="kz-premium-badge">&#9733; Contenu Premium</div>
     <span class="kz-premium-lock">&#128274;</span>
-    <h3>IST — R&#233;sum&#233; clinique structur&#233;</h3>
-    <p>Cet outil est r&#233;serv&#233; aux membres premium de FemCare Hub.<br>
-    Connectez-vous pour acc&#233;der &#224; la synth&#232;se compl&#232;te.</p>
+    <h3>IST — Fiche clinique compl&#232;te</h3>
+    <p>Vous avez explor&#233; la liste des IST.<br>
+    Pour acc&#233;der au d&#233;tail complet (diagnostic, traitement, pr&#233;vention), connectez-vous &#224; votre espace FemCare Hub.</p>
     <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" class="kz-premium-btn">
       Se connecter / S&#8217;abonner
     </a>
@@ -699,7 +699,10 @@ var IST_DATA = [
 /* ================================================================
    RENDU DES CARTES
    ================================================================ */
+var teaserMode = false;
+
 function istToggle(headEl) {
+  if (teaserMode) { showPremiumOverlay(); return; }
   headEl.parentElement.classList.toggle('open');
 }
 
@@ -792,6 +795,14 @@ function showApp() {
   initApp();
 }
 
+function showTeaser() {
+  teaserMode = true;
+  document.getElementById('blockScreen').style.display = 'none';
+  document.getElementById('premiumOverlay').style.display = 'none';
+  document.getElementById('appContent').style.display = 'block';
+  initApp();
+}
+
 async function checkPremiumAccess() {
   // 1. Lire le token depuis l'URL (?token=XXXX) et le stocker en localStorage
   var urlParams = new URLSearchParams(window.location.search);
@@ -805,7 +816,7 @@ async function checkPremiumAccess() {
 
   // 2. Lire le token depuis localStorage
   var token = localStorage.getItem('kz_platform_token');
-  if (!token) { showPremiumOverlay(); return false; }
+  if (!token) { showTeaser(); return false; }
 
   // 3. Vérifier via l'API WordPress
   try {
@@ -814,8 +825,8 @@ async function checkPremiumAccess() {
     );
     var data = await response.json();
     if (data.valid === true) { showApp(); return true; }
-    else { showPremiumOverlay(); return false; }
-  } catch (error) { showPremiumOverlay(); return false; }
+    else { showTeaser(); return false; }
+  } catch (error) { showTeaser(); return false; }
 }
 
 checkPremiumAccess();
