@@ -305,6 +305,26 @@
       color: #C9A84C !important;
       pointer-events: none !important;
     }
+    #drkz-root .premium-unlocked-badge {
+      position: absolute !important;
+      top: 10px !important;
+      right: 10px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 3px !important;
+      background: linear-gradient(135deg, #C9A84C, #e8c96a) !important;
+      color: #fff !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      padding: 2px 7px !important;
+      border-radius: 10px !important;
+      z-index: 2 !important;
+      pointer-events: none !important;
+      box-shadow: 0 1px 4px rgba(201,168,76,0.4) !important;
+    }
+    #drkz-root.dark-mode .premium-unlocked-badge {
+      background: linear-gradient(135deg, #a07d2a, #C9A84C) !important;
+    }
 
     /* ---- BADGES / STARS ---- */
     #drkz-root .star-btn {
@@ -591,9 +611,11 @@
       }
 
       const badgeHtml = t.badge ? `<span class="tool-badge ${t.badge.toLowerCase().includes('maj') ? 'maj' : ''}">${t.badge}</span>` : '';
+      const premiumUnlockedBadge = isPremium && isPremiumUser ? `<span class="premium-unlocked-badge">\u2605 Premium \u2713</span>` : '';
       return `
       <a href="${t.url}" class="tool-card ${t.statut !== 'actif' ? 'disabled' : ''}">
         ${badgeHtml}
+        ${premiumUnlockedBadge}
         <button class="star-btn ${isFav ? 'is-fav' : ''}" onclick="toggleFav(event, '${t.id}')">
           ${isFav ? '\u2605' : '\u2606'}
         </button>
