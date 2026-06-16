@@ -694,13 +694,14 @@ function getPatientInfo(){
   var ageVal=document.getElementById('pt-age').value.trim();
   var ageTxt=ageVal ? ageVal + ' ans' : ''; // Récupère l'âge depuis la nouvelle case
   var nomComplet=(prenom?prenom+' ':'')+(nom||'');
+  var ddnFormatted='';
+  if(ddn){var d=new Date(ddn);ddnFormatted=d.toLocaleDateString('fr-FR');}
+  var dateBilanFormatted='';
+  if(dateBilan){var db=new Date(dateBilan);dateBilanFormatted=db.toLocaleDateString('fr-FR');}
+  return{nomComplet:nomComplet.trim(),ddnFormatted:ddnFormatted,age:ageTxt,medecin:medecin,dateBilanFormatted:dateBilanFormatted};
+}
+
 /* ===== TABS ===== */
-window.showPanel=function(panelId,btn){
-  document.querySelectorAll('#horm-root .horm-panel').forEach(function(p){p.classList.remove('active');});
-  document.querySelectorAll('#horm-root .horm-tab').forEach(function(t){t.classList.remove('active');});
-  document.getElementById('panel-'+panelId).classList.add('active');
-  btn.classList.add('active');
-};
 
 /* ===== FONCTION OVARIENNE ===== */
 function getCycleContext(){return document.getElementById('val-jour-cycle').value;}
