@@ -1762,9 +1762,30 @@ window.copyResume=function(){
   t+='\n--- CONDUITE \xc0 TENIR ---\n';
   document.querySelectorAll('#resume-actions li').forEach(function(li){t+='\u2022 '+li.textContent.trim()+'\n';});
   t+='\n(Aide \xe0 la d\xe9cision — \xe0 corr\xe9ler \xe0 la clinique. Dr KARA-ZAITRI M.A.)\n';
-  var done=function(){var b=document.getElementById('btn-copy');b.classList.add('copied');b.textContent='\u2713 Copi\xe9 !';document.getElementById('copy-notice').classList.add('visible');setTimeout(function(){b.classList.remove('copied');b.innerHTML='&#128203; Copier le texte pour le dossier';document.getElementById('copy-notice').classList.remove('visible');},3000);};
-  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done);
-  else{var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);done();}
+
+  var btn=document.getElementById('btn-copy');
+  var notice=document.getElementById('copy-notice');
+  var resetBtn=function(){if(btn){btn.classList.remove('copied');btn.innerHTML='&#128203; Copier le texte pour le dossier';}if(notice)notice.classList.remove('visible');};
+  var done=function(){if(btn){btn.classList.add('copied');btn.textContent='\u2713 Copi\xe9 !';}if(notice)notice.classList.add('visible');setTimeout(resetBtn,3000);};
+  var showError=function(){if(btn){var orig='&#128203; Copier le texte pour le dossier';btn.innerHTML='\u26A0 Copie impossible — s\xe9lectionnez et copiez manuellement';setTimeout(function(){btn.innerHTML=orig;},3500);}};
+  var legacyCopy=function(){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=t;
+      ta.setAttribute('readonly','');
+      ta.style.position='fixed';ta.style.top='0';ta.style.left='0';ta.style.opacity='0';
+      document.body.appendChild(ta);
+      ta.focus();ta.select();ta.setSelectionRange(0,t.length);
+      var ok=document.execCommand('copy');
+      document.body.removeChild(ta);
+      if(ok)done();else showError();
+    }catch(e){showError();}
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done).catch(legacyCopy);
+  }else{
+    legacyCopy();
+  }
 };
 
 /* ===== IMPRESSION A5 ===== */
