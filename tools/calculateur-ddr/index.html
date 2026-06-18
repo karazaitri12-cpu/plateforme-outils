@@ -1,9 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculateur de Datation Gestationnelle — Dr KARA-ZAITRI M.A.</title>
+  <meta name="description" content="Calculateur de datation gestationnelle : DDR, aménorrhée et terme théorique — quatre méthodes de calcul. Dr KARA-ZAITRI M.A., Gynécologie-Obstétrique, Tlemcen.">
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#1A3A5C">
+  <meta name="apple-mobile-web-app-capable" content="apple-mobile-web-app-capable">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="DDR — Dr KZ">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+</head>
+<body>
+
 <!-- ============================================================
      OUTIL : Calculateur de Datation Gestationnelle (DDR / Aménorrhée)
      Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique, Tlemcen
-     Version 1.0 — Blindage Elementor activé
-     (isolation CSS complète via #dkzDDRTool, JS encapsulé en IIFE,
-      aucune dépendance externe, codes Unicode CSS pour les puces)
+     Version 1.1 — PWA-ready — Blindage Elementor activé
      ============================================================ -->
 
 <div id="dkzDDRTool">
@@ -480,12 +496,11 @@
 }
 
 /* =========================================
- PRO : Masque l'ascenseur (style App native)
-A placer en fin de css dans chaque outil
+   PRO : Masque l'ascenseur (style App native)
    ========================================= */
-html { scrollbar-width: none; }               /* Firefox */
-body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
-::-webkit-scrollbar { display: none; }         /* Chrome, Safari, Opera */
+html { scrollbar-width: none; }
+body { -ms-overflow-style: none; overflow-y: auto; }
+::-webkit-scrollbar { display: none; }
 </style>
 
 <script>
@@ -552,43 +567,33 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     return 283;
   }
 
-  // ------------------------------------------------------------
-  // Module 1 : DDR connue -> datation complète
-  // ------------------------------------------------------------
+  // Module 1 : DDR connue
   window.dkzDDR1 = function(){
     var v = document.getElementById('dkzDDR1_input').value;
     var ddr = parseISO(v);
     if(!ddr){ showError('dkzDDR1_result', "Veuillez renseigner une DDR valide."); return; }
-
     var today = todayMidnight();
     var gaDays = diffInDays(ddr, today);
     if(gaDays < 0){ showError('dkzDDR1_result', "La DDR saisie est postérieure à la date du jour : vérifiez la saisie."); return; }
-
     var conception = addDays(ddr, 14);
     var dpa = addDays(ddr, getDpaDays());
-
     var html = '';
     html += lineHTML("Début de grossesse estimé (conception, J14)", fmtDate(conception));
     html += lineHTML("Aménorrhée à ce jour (" + fmtDate(today) + ")", fmtSA(gaDays));
     html += lineHTML("Date prévue d'accouchement (DPA)", fmtDate(dpa));
-
     var box = document.getElementById('dkzDDR1_result');
     box.className = 'ddr-result is-visible';
     box.innerHTML = html;
   };
 
-  // ------------------------------------------------------------
-  // Module 2 : DPA connue -> DDR corrigée
-  // ------------------------------------------------------------
+  // Module 2 : DPA connue
   window.dkzDDR2 = function(){
     var v = document.getElementById('dkzDDR2_input').value;
     var dpa = parseISO(v);
     if(!dpa){ showError('dkzDDR2_result', "Veuillez renseigner une date de terme prévu valide."); return; }
-
     var ddrCorrigee = addDays(dpa, -getDpaDays());
     var today = todayMidnight();
     var gaDays = diffInDays(ddrCorrigee, today);
-
     var html = '';
     html += lineHTML("DDR corrigée (théorique)", fmtDate(ddrCorrigee));
     if(gaDays < 0){
@@ -596,32 +601,26 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     } else {
       html += lineHTML("Aménorrhée à ce jour (" + fmtDate(today) + ")", fmtSA(gaDays));
     }
-
     var box = document.getElementById('dkzDDR2_result');
     box.className = 'ddr-result is-visible';
     box.innerHTML = html;
   };
 
-  // ------------------------------------------------------------
-  // Module 3 : Datation échographique -> DDR / DPA corrigées
-  // ------------------------------------------------------------
+  // Module 3 : Datation échographique
   window.dkzDDR3 = function(){
     var examVal = document.getElementById('dkzDDR3_date').value;
     var w = parseInt(document.getElementById('dkzDDR3_weeks').value, 10);
     var j = parseInt(document.getElementById('dkzDDR3_days').value, 10);
     var examDate = parseISO(examVal);
-
     if(!examDate || isNaN(w) || isNaN(j) || w < 0 || j < 0 || j > 6){
       showError('dkzDDR3_result', "Veuillez renseigner une date d'examen et un âge gestationnel valides (jours : 0 à 6).");
       return;
     }
-
     var gaAtExam = w * 7 + j;
     var ddrCorrigee = addDays(examDate, -gaAtExam);
     var dpaCorrigee = addDays(ddrCorrigee, getDpaDays());
     var today = todayMidnight();
     var gaToday = diffInDays(ddrCorrigee, today);
-
     var html = '';
     html += lineHTML("DDR corrigée (théorique)", fmtDate(ddrCorrigee));
     html += lineHTML("Terme théorique corrigé (DPA)", fmtDate(dpaCorrigee));
@@ -630,36 +629,27 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     } else {
       html += lineHTML("Aménorrhée à ce jour (" + fmtDate(today) + ")", fmtSA(gaToday));
     }
-
     var box = document.getElementById('dkzDDR3_result');
     box.className = 'ddr-result is-visible';
     box.innerHTML = html;
   };
 
-  // ------------------------------------------------------------
   // Module 4 : Aménorrhée à une date donnée
-  // ------------------------------------------------------------
   window.dkzDDR4 = function(){
     var ddrVal = document.getElementById('dkzDDR4_ddr').value;
     var targetVal = document.getElementById('dkzDDR4_target').value;
     var ddr = parseISO(ddrVal);
     var target = parseISO(targetVal);
-
     if(!ddr || !target){ showError('dkzDDR4_result', "Veuillez renseigner la DDR et la date cible."); return; }
-
     var diff = diffInDays(ddr, target);
     if(diff < 0){ showError('dkzDDR4_result', "La date cible est antérieure à la DDR : vérifiez les valeurs saisies."); return; }
-
     var html = lineHTML("Aménorrhée au " + fmtDate(target), fmtSA(diff));
     var box = document.getElementById('dkzDDR4_result');
     box.className = 'ddr-result is-visible';
     box.innerHTML = html;
   };
 
-  // ------------------------------------------------------------
-  // Init : calcul automatique à la saisie (suppression des boutons)
-  // + empêche la saisie d'une DDR future
-  // ------------------------------------------------------------
+  // Init : calcul automatique à la saisie
   function on(id, evt, fn){
     var el = document.getElementById(id);
     if(el){ el.addEventListener(evt, fn); }
@@ -667,11 +657,11 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
 
   on('dkzDDR1_input', 'input', window.dkzDDR1);
   on('dkzDDR2_input', 'input', window.dkzDDR2);
-  on('dkzDDR3_date', 'input', window.dkzDDR3);
+  on('dkzDDR3_date',  'input', window.dkzDDR3);
   on('dkzDDR3_weeks', 'input', window.dkzDDR3);
-  on('dkzDDR3_days', 'input', window.dkzDDR3);
-  on('dkzDDR4_ddr', 'input', window.dkzDDR4);
-  on('dkzDDR4_target', 'input', window.dkzDDR4);
+  on('dkzDDR3_days',  'input', window.dkzDDR3);
+  on('dkzDDR4_ddr',   'input', window.dkzDDR4);
+  on('dkzDDR4_target','input', window.dkzDDR4);
 
   function hasValue(id){
     var el = document.getElementById(id);
@@ -696,8 +686,23 @@ body { -ms-overflow-style: none; overflow-y: auto; } /* IE/Edge */
     if(el){ el.setAttribute('max', maxToday); }
   }
 
+  /* ============================================================
+     PWA — Enregistrement du Service Worker global
+     ============================================================ */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .catch(function(err) {
+          console.warn('[DKZ-DDR] SW non enregistré :', err);
+        });
+    });
+  }
+
 })();
 </script>
 
 <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+
+</body>
+</html>
