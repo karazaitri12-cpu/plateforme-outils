@@ -1313,25 +1313,51 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 (function() {
   'use strict';
 
-  window.mtgFilter = function(cat, btn) {
-    var cards = document.querySelectorAll('#mtgCards .mtg-card, #mtgCardsSein .mtg-card');
-    for (var i = 0; i < cards.length; i++) {
-      var c = cards[i].getAttribute('data-cat') || '';
-      cards[i].style.display = (c.indexOf(cat) !== -1) ? '' : 'none';
+  function applyFilter(cat) {
+    var allCards = document.querySelectorAll('#mtgCards .mtg-card, #mtgCardsSein .mtg-card');
+    var wrapper1 = document.getElementById('mtgCards');
+    var wrapper2 = document.getElementById('mtgCardsSein');
+    var sep      = document.getElementById('sein-section');
+    var synoptic = document.querySelector('#mtgTool .mtg-synoptic');
+
+    /* 1. Afficher / masquer chaque carte */
+    for (var i = 0; i < allCards.length; i++) {
+      var c = allCards[i].getAttribute('data-cat') || '';
+      var show = (cat === 'all') || (c.indexOf(cat) !== -1);
+      allCards[i].style.display = show ? '' : 'none';
     }
-    /* Masquer/afficher le séparateur sein */
-    var sep = document.getElementById('sein-section');
-    if (sep) sep.style.display = (cat === 'sein') ? '' : 'none';
+
+    /* 2. Masquer les wrappers entièrement vides */
+    if (wrapper1) {
+      var vis1 = wrapper1.querySelectorAll('.mtg-card:not([style*="none"])');
+      wrapper1.style.display = vis1.length ? '' : 'none';
+    }
+    if (wrapper2) {
+      var vis2 = wrapper2.querySelectorAll('.mtg-card:not([style*="none"])');
+      wrapper2.style.display = vis2.length ? '' : 'none';
+    }
+
+    /* 3. Séparateur sein : visible seulement si des cartes sein sont affichées */
+    if (sep) {
+      var seinVisible = (cat === 'all' || cat === 'sein');
+      sep.style.display = seinVisible ? '' : 'none';
+    }
+
+    /* 4. Tableau synoptique : masqué si filtre spécifique (sauf 'tous') */
+    if (synoptic) {
+      synoptic.style.display = (cat === 'all') ? '' : 'none';
+    }
+  }
+
+  window.mtgFilter = function(cat, btn) {
+    applyFilter(cat);
     var btns = document.querySelectorAll('#mtgNav .mtg-nav-btn');
     for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
     if (btn) btn.classList.add('active');
   };
 
   window.mtgShowAll = function(btn) {
-    var cards = document.querySelectorAll('#mtgCards .mtg-card, #mtgCardsSein .mtg-card');
-    for (var i = 0; i < cards.length; i++) cards[i].style.display = '';
-    var sep = document.getElementById('sein-section');
-    if (sep) sep.style.display = '';
+    applyFilter('all');
     var btns = document.querySelectorAll('#mtgNav .mtg-nav-btn');
     for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
     if (btn) btn.classList.add('active');
