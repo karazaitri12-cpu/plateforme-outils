@@ -1,318 +1,782 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithme Masse Ovarienne</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-       
-        h1 {
-            font-size: 2.3rem; /* Restauré */
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masse Ovarienne — Algorithme O-RADS | Dr KARA-ZAITRI M.A.</title>
+  <meta name="description" content="Algorithme de prise en charge des masses ovariennes selon classification O-RADS : bénigne, indéterminée ou suspecte de malignité. Dr KARA-ZAITRI M.A., Gynécologie-Obstétrique, Tlemcen.">
 
-        .subtitle { font-size: 1.5rem; color: #64748b; font-weight: 500; } /* Restauré */
-
-        .main-card {
-            max-width: 1200px; /* Élargi un peu pour contenir le gros texte */
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-
-        .start-node {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 1.5rem; /* Restauré */
-            font-weight: 600;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
-        }
-
-        .first-step {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            padding: 18px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 1.5rem; /* Restauré */
-            font-weight: 600;
-            margin-bottom: 40px;
-            box-shadow: 0 6px 15px rgba(17, 153, 142, 0.25);
-        }
-
-        /* --- GRID CORRIGÉE --- */
-        .pathways {
-            display: grid;
-            /* Largeur min ajustée pour éviter le décalage */
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
-            gap: 25px;
-            margin-top: 30px;
-            align-items: stretch; /* Important pour que les cartes aient la même hauteur */
-        }
-
-        .pathway {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            border: 2px solid;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .pathway:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
-
-        .pathway.benign { border-color: #2ecc71; background: #f0fff4; }
-        .pathway.complex { border-color: #f39c12; background: #fffaf0; }
-        .pathway.malign { border-color: #e74c3c; background: #fff5f5; }
-
-        .pathway-header {
-            font-size: 1.6rem; /* Restauré */
-            font-weight: 700;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid;
-            display: flex; align-items: center; gap: 8px;
-            flex-wrap: wrap; /* Au cas où le titre est long */
-        }
-
-        .benign .pathway-header { color: #2ecc71; border-color: #2ecc71; }
-        .complex .pathway-header { color: #f39c12; border-color: #f39c12; }
-        .malign .pathway-header { color: #e74c3c; border-color: #e74c3c; }
-
-        /* --- ICONES --- */
-        .arrow-icon {
-            color: #3498db;
-            font-weight: bold;
-            font-size: 24px; /* Grossi pour aller avec le texte */
-            margin-right: 10px;
-            line-height: 1.2;
-            flex-shrink: 0;
-        }
-
-        .check-icon {
-            background: #3498db;
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: bold;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
-
-        .sub-options { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            margin-top: 15px; 
-            flex-grow: 1; 
-        }
-
-        .sub-option {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .complex .sub-option { border-left-color: #f39c12; }
-
-        .sub-option-title { 
-            font-weight: 600; 
-            margin-bottom: 6px; 
-            color: #2c3e50; 
-            font-size: 1.5rem; /* Restauré */
-        }
-
-        .sub-option-action {
-            color: #57606f;
-            font-size: 1.4rem; /* Restauré */
-            font-weight: 400;
-            display: flex;
-            align-items: flex-start;
-            line-height: 1.4;
-        }
-
-        .action-box {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: auto; 
-            border-left: 4px solid #3498db;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .action-title {
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem; /* Ajusté pour cohérence */
-        }
-
-        .action-details { 
-            color: #57606f; 
-            line-height: 1.6; 
-            font-size: 1.4rem; /* Restauré */
-            font-weight: 500; 
-        }
-
-        .legend {
-            margin-top: 40px;
-            padding: 20px;
-            background: #fff3cd;
-            font-size: 1.5rem; /* Restauré */
-            font-weight: 400;
-            border-left: 5px solid #ffc107;
-            border-radius: 8px;
-            text-align: center;
-            color: #856404;
-        }
-
-        /* Petits badges pour O-RADS */
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 1rem;
-            color: white;
-            font-weight: bold;
-            margin-left: auto;
-            vertical-align: middle;
-        }
-        .bg-green { background: #2ecc71; }
-        .bg-orange { background: #f39c12; }
-        .bg-red { background: #e74c3c; }
-
-        @media (max-width: 768px) {
-            .pathways { grid-template-columns: 1fr; }
-            .main-card { padding: 20px; }
-            h1 { font-size: 1.8rem; }
-        }
-    </style>
+  <!-- PWA -->
+  <meta name="theme-color" content="#1A3A5C">
+  <meta name="apple-mobile-web-app-capable" content="apple-mobile-web-app-capable">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Masse Ovarienne — Dr KZ">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🔬 Algorithme : masse ovarienne</h1>
-            <p class="subtitle">Prise en charge diagnostique et thérapeutique</p>
-        </header>
 
-        <div class="main-card">
-            <div class="start-node">
-                DÉCOUVERTE D'UNE MASSE OVARIENNE<br>
-                <small style="opacity: 0.9; font-size: 1.3rem; font-weight: normal;">(Clinique ou Imagerie fortuite)</small>
-            </div>
+<div id="moTool">
 
-            <div class="first-step">
-                ÉCHOGRAPHIE ENDOVAGINALE + DOPPLER<br>
-                <small style="opacity: 0.9; font-size: 1.3rem; font-weight: normal;">Classification <strong>O-RADS</strong> recommandée</small>
-            </div>
+  <!-- EN-TÊTE -->
+  <header class="mo-header">
+    <div class="mo-eyebrow">Outil d'aide à la décision — Gynécologie-Obstétrique</div>
+    <h1 class="mo-title">Masse ovarienne — Algorithme décisionnel</h1>
+    <p class="mo-subtitle">Classification O-RADS · Score RMI · Marqueurs tumoraux</p>
+    <p class="mo-byline">Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique, Tlemcen</p>
+  </header>
 
-            <div class="pathways">
-                <!-- BÉNIGNE -->
-                <div class="pathway benign">
-                    <div class="pathway-header">
-                        ✅ Masse BÉNIGNE
-                        <span class="badge bg-green">O-RADS 2</span>
-                    </div>
-                    <div class="action-box">
-                        <div class="action-title">
-                            <span class="check-icon">✓</span> Conduite à tenir
-                        </div>
-                        <div class="action-details">
-                            • Abstention thérapeutique<br>
-                            • Surveillance écho simple<br>
-                            • Chirurgie si symptomatique
-                        </div>
-                    </div>
-                </div>
+  <!-- ÉTAPE 0 : POINT D'ENTRÉE -->
+  <div class="mo-entry">
+    <div class="mo-entry-label">Point d'entrée</div>
+    <div class="mo-entry-text">Découverte d'une masse ovarienne — clinique ou imagerie fortuite</div>
+    <div class="mo-arrow-down">▼</div>
+  </div>
 
-                <!-- INDÉTERMINÉE (ENRICHI) -->
-                <div class="pathway complex">
-                    <div class="pathway-header">
-                        ⚠️ Masse INDÉTERMINÉE
-                        <span class="badge bg-orange">O-RADS 3</span>
-                    </div>
-                    
-                    <div class="sub-options">
-                        <div class="sub-option">
-                            <div class="sub-option-title">📏 Taille &lt; 7 cm</div>
-                            <div class="sub-option-action">
-                                <span class="arrow-icon">➜</span> Avis spécialisé / Echo 3 mois
-                            </div>
-                        </div>
-                        
-                        <!-- Enrichissement Endométriome -->
-                        <div class="sub-option">
-                            <div class="sub-option-title">🩸 Aspect Endométriome</div>
-                            <div class="sub-option-action">
-                                <span class="arrow-icon">➜</span> IRM pour cartographie
-                            </div>
-                        </div>
-
-                        <div class="sub-option">
-                            <div class="sub-option-title">🔍 Suspicion Dermoïde</div>
-                            <div class="sub-option-action">
-                                <span class="arrow-icon">➜</span> Scanner ou IRM
-                            </div>
-                        </div>
-
-                        <div class="sub-option">
-                            <div class="sub-option-title">📏 Taille ≥ 7 cm / Solide</div>
-                            <div class="sub-option-action">
-                                <span class="arrow-icon">➜</span> IRM pelvienne exigée
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MALIGNE (ENRICHI) -->
-                <div class="pathway malign">
-                    <div class="pathway-header">
-                        🔴 SUSPICION MALIGNITÉ
-                        <span class="badge bg-red">O-RADS 4-5</span>
-                    </div>
-                    <div class="action-box">
-                        <div class="action-title">
-                            <span class="check-icon">✓</span> Bilan Pré-Opératoire
-                        </div>
-                        <div class="action-details">
-                            <strong>1. Scanner TAP</strong> (Extension)<br>
-                            <strong>2. Score RMI</strong> (Echo x Ménopause x CA125)<br>
-                            <strong>3. Marqueurs :</strong> CA 125 + HE4<br>
-                            <span style="font-size:1.1rem; color:#e74c3c;">(± ACE, CA19.9, AFP si jeune)</span><br>
-                            <strong>4. RCP Oncologique</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="legend">
-                💡 <strong>Point clé :</strong> Toute masse complexe ou kyste > 3cm chez la femme ménopausée nécessite un dosage CA 125.
-            </div>
-        </div>
+  <!-- ÉTAPE 1 : ÉCHOGRAPHIE -->
+  <div class="mo-step-echo">
+    <div class="mo-step-num">1</div>
+    <div class="mo-step-content">
+      <div class="mo-step-title">Échographie pelvienne endovaginale + Doppler couleur</div>
+      <div class="mo-step-sub">Premier examen systématique · Classification <strong>O-RADS</strong> (ACR 2022)</div>
     </div>
- <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+  </div>
+
+  <div class="mo-arrow-down mo-arrow-center">▼</div>
+
+  <!-- GRILLE O-RADS -->
+  <div class="mo-orads-grid">
+
+    <!-- COLONNE 1 : O-RADS 1-2 -->
+    <div class="mo-col mo-col-benign">
+      <div class="mo-col-header">
+        <span class="mo-badge mo-badge-green">O-RADS 1–2</span>
+        <span class="mo-col-title">Masse bénigne</span>
+      </div>
+
+      <div class="mo-criteria-block">
+        <div class="mo-criteria-label">Critères échographiques</div>
+        <ul class="mo-list">
+          <li>Kyste uniloculaire anéchogène pur</li>
+          <li>Paroi fine, régulière, sans végétation</li>
+          <li>Absence de flux Doppler intrakystique</li>
+          <li>Taille ≤ 10 cm (O-RADS 2)</li>
+        </ul>
+      </div>
+
+      <div class="mo-subtype-block">
+        <div class="mo-criteria-label">Entités typiques</div>
+        <div class="mo-subtype-row">
+          <span class="mo-subtype-tag mo-tag-green">Kyste fonctionnel</span>
+          <span class="mo-subtype-text">Disparition spontanée en 6–8 semaines</span>
+        </div>
+        <div class="mo-subtype-row">
+          <span class="mo-subtype-tag mo-tag-green">Kyste séreux</span>
+          <span class="mo-subtype-text">Anéchogène pur, paroi fine</span>
+        </div>
+        <div class="mo-subtype-row">
+          <span class="mo-subtype-tag mo-tag-green">Para-ovarien</span>
+          <span class="mo-subtype-text">Adjacent à l'ovaire, indépendant</span>
+        </div>
+      </div>
+
+      <div class="mo-cat-block mo-cat-green">
+        <div class="mo-cat-title">Conduite à tenir</div>
+        <ul class="mo-list">
+          <li>Abstention thérapeutique</li>
+          <li>Contrôle écho à <strong>3 mois</strong> (1er épisode)</li>
+          <li>Dosage CA 125 si femme ménopausée ou kyste &gt; 5 cm</li>
+          <li>Chirurgie si symptomatique (torsion, rupture, douleur)</li>
+        </ul>
+        <div class="mo-note">Chez la femme ménopausée : tout kyste &gt; 3 cm impose un CA 125</div>
+      </div>
+    </div>
+
+    <!-- COLONNE 2 : O-RADS 3 -->
+    <div class="mo-col mo-col-indet">
+      <div class="mo-col-header">
+        <span class="mo-badge mo-badge-orange">O-RADS 3</span>
+        <span class="mo-col-title">Masse indéterminée</span>
+      </div>
+
+      <div class="mo-criteria-block">
+        <div class="mo-criteria-label">Critères échographiques</div>
+        <ul class="mo-list">
+          <li>Kyste multiloculaire sans végétation</li>
+          <li>Contenu échogène homogène (endométriome, dermoïde)</li>
+          <li>Septas fins, sans végétation ni flux</li>
+          <li>Taille 5–10 cm avec caractères indéterminés</li>
+        </ul>
+      </div>
+
+      <div class="mo-subtype-block">
+        <div class="mo-criteria-label">Orientation par entité</div>
+
+        <div class="mo-subtype-card">
+          <div class="mo-subtype-card-title">🩸 Endométriome suspecté</div>
+          <div class="mo-subtype-card-body">
+            Contenu finement échogène « en verre dépoli »<br>
+            <span class="mo-arrow-inline">→</span> <strong>IRM pelvienne</strong> pour cartographie lésionnelle (endométriose profonde ?)
+          </div>
+        </div>
+
+        <div class="mo-subtype-card">
+          <div class="mo-subtype-card-title">🔆 Tératome mature (dermoïde) suspecté</div>
+          <div class="mo-subtype-card-body">
+            Contenu mixte, zones hyperéchogènes, cône d'ombre<br>
+            <span class="mo-arrow-inline">→</span> <strong>Scanner abdomino-pelvien</strong> ou IRM (graisse, calcification)
+          </div>
+        </div>
+
+        <div class="mo-subtype-card">
+          <div class="mo-subtype-card-title">📏 Taille ≥ 7 cm ou composante solide</div>
+          <div class="mo-subtype-card-body">
+            Kyste volumineux ou signal complexe<br>
+            <span class="mo-arrow-inline">→</span> <strong>IRM pelvienne exigée</strong> + CA 125 + HE4
+          </div>
+        </div>
+
+        <div class="mo-subtype-card">
+          <div class="mo-subtype-card-title">📏 Taille &lt; 7 cm sans signe suspect</div>
+          <div class="mo-subtype-card-body">
+            Caractères rassurants, pas de flux<br>
+            <span class="mo-arrow-inline">→</span> <strong>Avis spécialisé</strong> + contrôle écho à 3 mois
+          </div>
+        </div>
+      </div>
+
+      <div class="mo-cat-block mo-cat-orange">
+        <div class="mo-cat-title">Marqueurs tumoraux</div>
+        <ul class="mo-list">
+          <li><strong>CA 125</strong> — séreux, endométrioïde</li>
+          <li><strong>HE4</strong> — plus spécifique (non élevé dans endométriose)</li>
+          <li><strong>Score ROMA</strong> = CA 125 + HE4 + statut ménopausique</li>
+          <li>AFP / β-hCG si femme jeune (tumeur germinale)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- COLONNE 3 : O-RADS 4-5 -->
+    <div class="mo-col mo-col-malign">
+      <div class="mo-col-header">
+        <span class="mo-badge mo-badge-red">O-RADS 4–5</span>
+        <span class="mo-col-title">Suspicion malignité</span>
+      </div>
+
+      <div class="mo-criteria-block">
+        <div class="mo-criteria-label">Critères échographiques (O-RADS 4)</div>
+        <ul class="mo-list">
+          <li>Végétations ≥ 3 mm avec flux Doppler</li>
+          <li>Composante solide vascularisée</li>
+          <li>Paroi épaisse irrégulière</li>
+          <li>Ascite / adénopathies (→ O-RADS 5)</li>
+        </ul>
+      </div>
+
+      <div class="mo-criteria-block">
+        <div class="mo-criteria-label">Critères O-RADS 5 (malignité très probable)</div>
+        <ul class="mo-list">
+          <li>Masse solide irrégulière, très vascularisée</li>
+          <li>Carcinose péritonéale à l'imagerie</li>
+          <li>Envahissement des organes de voisinage</li>
+        </ul>
+      </div>
+
+      <div class="mo-score-block">
+        <div class="mo-criteria-label">Score RMI (Risk of Malignancy Index)</div>
+        <div class="mo-rmi-formula">
+          RMI = U × M × CA 125
+        </div>
+        <div class="mo-rmi-detail">
+          <div class="mo-rmi-row"><span class="mo-rmi-var">U</span> Score écho (0 / 1 / 3) — morphologie</div>
+          <div class="mo-rmi-row"><span class="mo-rmi-var">M</span> Ménopause (1 = non / 3 = oui)</div>
+          <div class="mo-rmi-row"><span class="mo-rmi-var">CA 125</span> en UI/mL</div>
+        </div>
+        <div class="mo-rmi-thresholds">
+          <div class="mo-threshold mo-thr-low">RMI &lt; 25 — Risque faible</div>
+          <div class="mo-threshold mo-thr-mid">RMI 25–250 — Risque intermédiaire</div>
+          <div class="mo-threshold mo-thr-high">RMI &gt; 250 — Risque élevé → RCP</div>
+        </div>
+      </div>
+
+      <div class="mo-cat-block mo-cat-red">
+        <div class="mo-cat-title">Bilan pré-opératoire systématique</div>
+        <ul class="mo-list">
+          <li><strong>Scanner TAP</strong> injecté — bilan d'extension</li>
+          <li><strong>CA 125 + HE4</strong> (± score ROMA)</li>
+          <li><strong>AFP, β-hCG, LDH</strong> si femme &lt; 40 ans</li>
+          <li><strong>ACE, CA 19-9</strong> si métastase digestive suspectée</li>
+          <li><strong>IRM pelvienne</strong> si non faite</li>
+        </ul>
+        <div class="mo-urgence-box">
+          <span class="mo-urgence-label">RCP oncologique obligatoire</span>
+          Adresser en centre expert (CPRC / niveau III) avant toute chirurgie
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /mo-orads-grid -->
+
+  <!-- TABLEAU RÉCAPITULATIF MARQUEURS -->
+  <div class="mo-markers-section">
+    <div class="mo-section-title">Marqueurs tumoraux ovariens — Référentiel rapide</div>
+    <div class="mo-markers-grid">
+      <div class="mo-marker-card">
+        <div class="mo-marker-name">CA 125</div>
+        <div class="mo-marker-normal">N &lt; 35 UI/mL</div>
+        <div class="mo-marker-use">Carcinome séreux de haut grade · Endométrioïde · Surveillance</div>
+        <div class="mo-marker-limit">Faux + : endométriose, grossesse, inflammation</div>
+      </div>
+      <div class="mo-marker-card">
+        <div class="mo-marker-name">HE4</div>
+        <div class="mo-marker-normal">N &lt; 70 pmol/L (préménopause)</div>
+        <div class="mo-marker-use">Plus spécifique que CA 125 · Non élevé dans endométriose · Mucineux</div>
+        <div class="mo-marker-limit">Augmenté dans IRC</div>
+      </div>
+      <div class="mo-marker-card">
+        <div class="mo-marker-name">AFP</div>
+        <div class="mo-marker-normal">N &lt; 10 ng/mL</div>
+        <div class="mo-marker-use">Tumeur du sinus endodermique · Tératome immature · Femme jeune</div>
+        <div class="mo-marker-limit">Grossesse, hépatocarcinome</div>
+      </div>
+      <div class="mo-marker-card">
+        <div class="mo-marker-name">β-hCG</div>
+        <div class="mo-marker-normal">N &lt; 5 UI/L (hors grossesse)</div>
+        <div class="mo-marker-use">Choriocarcinome · Dysgerminome · Tumeur germinale mixte</div>
+        <div class="mo-marker-limit">Éliminer grossesse intrautérine</div>
+      </div>
+      <div class="mo-marker-card">
+        <div class="mo-marker-name">ACE</div>
+        <div class="mo-marker-normal">N &lt; 5 ng/mL</div>
+        <div class="mo-marker-use">Carcinome mucineux · Métastase digestive (côlon++)</div>
+        <div class="mo-marker-limit">Tabac, pathologies digestives</div>
+      </div>
+      <div class="mo-marker-card">
+        <div class="mo-marker-name">CA 19-9</div>
+        <div class="mo-marker-normal">N &lt; 37 UI/mL</div>
+        <div class="mo-marker-use">Tumeur mucineuse · Métastase pancréas/voie biliaire</div>
+        <div class="mo-marker-limit">Complément à l'ACE, non spécifique</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENTION LÉGALE -->
+  <footer class="mo-disclaimer">
+    Algorithme basé sur la classification O-RADS ACR 2022, le score RMI (Jacobs 1990, révisé), et les recommandations CNGOF / INCa / ESGO. Cet outil constitue une aide à la décision clinique et ne se substitue pas à l'examen clinique, à l'imagerie de référence ni à l'avis d'un centre expert. Toute suspicion de malignité doit être discutée en RCP oncologique.
+    <br><span class="mo-ref">Réf. : O-RADS ACR 2022 · CNGOF 2022 · ESGO Guidelines · INCa</span>
+    <br><span class="mo-ref">Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique, Tlemcen — v1.0 — 2026</span>
+  </footer>
+
+</div><!-- /moTool -->
+
+<style>
+/* ============================================================
+   RESET & ROOT
+   ============================================================ */
+#moTool, #moTool * {
+  all: initial;
+  box-sizing: border-box;
+}
+#moTool {
+  display: block;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #1e2a38;
+  background: #f4f7fb;
+  -webkit-text-size-adjust: 100%;
+
+  --navy:    #1A3A5C;
+  --navy-dk: #12283f;
+  --gold:    #c8a84b;
+  --red:     #C8102E;
+  --green:   #166534;
+  --green-bg:#e8f5e9;
+  --green-bd:#4caf6e;
+  --orange:  #92400e;
+  --orange-bg:#fff7ed;
+  --orange-bd:#f59e0b;
+  --red-bg:  #fef2f2;
+  --red-bd:  #e57373;
+  --gray-50: #f8fafc;
+  --gray-100:#eef1f5;
+  --gray-300:#d1d9e0;
+  --gray-500:#6b7a8d;
+  --ink:     #1e2a38;
+}
+
+#moTool div, #moTool section, #moTool header,
+#moTool footer, #moTool p, #moTool ul, #moTool li,
+#moTool h1, #moTool h2, #moTool h3 {
+  display: block;
+  margin: 0; padding: 0;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  box-sizing: border-box;
+}
+#moTool span { display: inline; font-family: inherit; color: inherit; }
+#moTool strong { font-weight: 700; }
+#moTool ul { list-style: none; }
+
+/* ============================================================
+   EN-TÊTE
+   ============================================================ */
+#moTool .mo-header {
+  background: var(--navy);
+  padding: 28px 28px 22px;
+  border-bottom: 4px solid var(--gold);
+}
+#moTool .mo-eyebrow {
+  display: block;
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+#moTool h1.mo-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 5px;
+  line-height: 1.25;
+}
+#moTool .mo-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,.72);
+  margin-bottom: 8px;
+}
+#moTool .mo-byline {
+  font-size: 11.5px;
+  color: rgba(255,255,255,.55);
+}
+
+/* ============================================================
+   POINT D'ENTRÉE
+   ============================================================ */
+#moTool .mo-entry {
+  background: #fff;
+  border-left: 5px solid var(--navy);
+  margin: 20px 20px 0;
+  padding: 14px 18px 10px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+#moTool .mo-entry-label {
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gray-500);
+  margin-bottom: 4px;
+}
+#moTool .mo-entry-text {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--navy);
+}
+#moTool .mo-arrow-down {
+  display: block;
+  text-align: center;
+  color: var(--navy);
+  font-size: 18px;
+  margin: 6px 0 2px;
+  opacity: .5;
+}
+#moTool .mo-arrow-center {
+  margin: 4px 0 4px;
+}
+
+/* ============================================================
+   ÉTAPE ÉCHO
+   ============================================================ */
+#moTool .mo-step-echo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--navy);
+  margin: 0 20px;
+  padding: 14px 18px;
+  border-radius: 4px;
+}
+#moTool .mo-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy-dk);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+#moTool .mo-step-content { flex: 1; }
+#moTool .mo-step-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 3px;
+}
+#moTool .mo-step-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,.75);
+}
+
+/* ============================================================
+   GRILLE O-RADS
+   ============================================================ */
+#moTool .mo-orads-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin: 16px 20px 0;
+}
+
+/* COLONNES */
+#moTool .mo-col {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07);
+  display: flex;
+  flex-direction: column;
+}
+
+#moTool .mo-col-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--gray-100);
+}
+#moTool .mo-col-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* BADGES O-RADS */
+#moTool .mo-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: .03em;
+  flex-shrink: 0;
+}
+#moTool .mo-badge-green { background: var(--green); color: #fff; }
+#moTool .mo-badge-orange { background: #d97706; color: #fff; }
+#moTool .mo-badge-red { background: var(--red); color: #fff; }
+
+/* BLOCS INTERNES */
+#moTool .mo-criteria-block {
+  padding: 12px 14px 0;
+}
+#moTool .mo-criteria-label {
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--gray-100);
+}
+#moTool .mo-list {
+  padding-left: 0;
+  margin: 0;
+}
+#moTool .mo-list li {
+  position: relative;
+  padding-left: 14px;
+  margin-bottom: 5px;
+  font-size: 12.5px;
+  color: #3a4a5a;
+  line-height: 1.45;
+}
+#moTool .mo-list li::before {
+  content: '\2022';
+  position: absolute;
+  left: 0; top: 0;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* SOUS-TYPES BÉNIGNES */
+#moTool .mo-subtype-block {
+  padding: 10px 14px 0;
+}
+#moTool .mo-subtype-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+#moTool .mo-subtype-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+#moTool .mo-tag-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+#moTool .mo-subtype-text { font-size: 12px; color: var(--gray-500); line-height: 1.5; }
+
+/* SOUS-TYPES INDÉTERMINÉES (cartes) */
+#moTool .mo-subtype-card {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+#moTool .mo-subtype-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+#moTool .mo-subtype-card-body {
+  font-size: 12px;
+  color: #4a5a6a;
+  line-height: 1.5;
+}
+#moTool .mo-arrow-inline {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* SCORE RMI */
+#moTool .mo-score-block {
+  padding: 12px 14px 0;
+}
+#moTool .mo-rmi-formula {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--red);
+  text-align: center;
+  padding: 8px;
+  background: var(--red-bg);
+  border-radius: 4px;
+  margin: 8px 0;
+  letter-spacing: .04em;
+}
+#moTool .mo-rmi-detail {
+  margin-bottom: 8px;
+}
+#moTool .mo-rmi-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #3a4a5a;
+}
+#moTool .mo-rmi-var {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+#moTool .mo-rmi-thresholds { display: flex; flex-direction: column; gap: 4px; }
+#moTool .mo-threshold {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+#moTool .mo-thr-low  { background: var(--green-bg); color: var(--green); }
+#moTool .mo-thr-mid  { background: var(--orange-bg); color: var(--orange); }
+#moTool .mo-thr-high { background: var(--red-bg); color: var(--red); }
+
+/* BLOCS CAT */
+#moTool .mo-cat-block {
+  margin: 12px 14px 14px;
+  padding: 12px 14px;
+  border-radius: 4px;
+  margin-top: auto;
+}
+#moTool .mo-cat-green  { background: var(--green-bg); border: 1px solid var(--green-bd); }
+#moTool .mo-cat-orange { background: var(--orange-bg); border: 1px solid var(--orange-bd); }
+#moTool .mo-cat-red    { background: var(--red-bg); border: 1px solid var(--red-bd); }
+
+#moTool .mo-cat-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+#moTool .mo-cat-green  .mo-cat-title { color: var(--green); }
+#moTool .mo-cat-orange .mo-cat-title { color: var(--orange); }
+#moTool .mo-cat-red    .mo-cat-title { color: var(--red); }
+
+#moTool .mo-cat-block .mo-list li::before { color: inherit; }
+#moTool .mo-cat-green  .mo-list li::before { color: var(--green); }
+#moTool .mo-cat-orange .mo-list li::before { color: var(--orange); }
+#moTool .mo-cat-red    .mo-list li::before { color: var(--red); }
+
+#moTool .mo-note {
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--orange);
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(0,0,0,.1);
+}
+
+#moTool .mo-urgence-box {
+  background: var(--red);
+  color: #fff;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+#moTool .mo-urgence-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: rgba(255,255,255,.85);
+}
+
+/* ============================================================
+   TABLEAU MARQUEURS
+   ============================================================ */
+#moTool .mo-markers-section {
+  margin: 20px 20px 0;
+}
+#moTool .mo-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--navy);
+}
+#moTool .mo-markers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+#moTool .mo-marker-card {
+  background: #fff;
+  border: 1px solid var(--gray-300);
+  border-radius: 4px;
+  padding: 12px 13px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+#moTool .mo-marker-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+#moTool .mo-marker-normal {
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+#moTool .mo-marker-use {
+  font-size: 12px;
+  color: #3a4a5a;
+  margin-bottom: 5px;
+  line-height: 1.45;
+}
+#moTool .mo-marker-limit {
+  font-size: 11px;
+  color: var(--gray-500);
+  font-style: italic;
+  border-top: 1px dashed var(--gray-100);
+  padding-top: 5px;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   DISCLAIMER
+   ============================================================ */
+#moTool .mo-disclaimer {
+  margin: 20px 20px 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-300);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--gray-500);
+}
+#moTool .mo-ref {
+  display: block;
+  margin-top: 3px;
+  font-size: 10.5px;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+html { scrollbar-width: none; }
+body { -ms-overflow-style: none; overflow-y: auto; }
+::-webkit-scrollbar { display: none; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 860px) {
+  #moTool .mo-orads-grid { grid-template-columns: 1fr; }
+  #moTool .mo-markers-grid { grid-template-columns: 1fr 1fr; }
+  #moTool .mo-orads-grid,
+  #moTool .mo-markers-section,
+  #moTool .mo-entry { margin-left: 12px; margin-right: 12px; }
+  #moTool .mo-step-echo { margin: 0 12px; }
+}
+@media (max-width: 560px) {
+  #moTool .mo-markers-grid { grid-template-columns: 1fr; }
+  #moTool h1.mo-title { font-size: 17px; }
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  /* PWA — Service Worker global plateforme */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .catch(function(err) {
+          console.warn('[DKZ-MASSE-OVARIENNE] SW non enregistré :', err);
+        });
+    });
+  }
+
+})();
+</script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
-    
+
 </body>
-     
 </html>
