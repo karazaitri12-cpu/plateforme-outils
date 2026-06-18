@@ -901,38 +901,38 @@
   <!-- ═══════════════════════════════════════════
        RÈGLES D'OR
   ═══════════════════════════════════════════ -->
-  <div class="mtg-rules">
+  <div class="mtg-rules" id="mtgRules">
     <div class="mtg-rules-title">Règles d'or — Utilisation des marqueurs tumoraux</div>
     <div class="mtg-rules-grid">
-      <div class="mtg-rule-card" style="border-top:4px solid #dc2626;">
+      <div class="mtg-rule-card" data-cat="all" style="border-top:4px solid #dc2626;">
         <div class="mtg-rule-icon">🚫</div>
         <div class="mtg-rule-text">Aucun marqueur tumoral ne fait le diagnostic à lui seul. Un marqueur élevé isolé sans contexte clinique ou imagerie ne suffit pas à affirmer une malignité.</div>
       </div>
-      <div class="mtg-rule-card" style="border-top:4px solid #7c3aed;">
+      <div class="mtg-rule-card" data-cat="ovaire endometre" style="border-top:4px solid #7c3aed;">
         <div class="mtg-rule-icon">📊</div>
         <div class="mtg-rule-text">La cinétique (évolution dans le temps) est plus informative que la valeur absolue. Un CA 125 à 60 UI/mL stable depuis 5 ans est moins inquiétant qu'un passage de 35 à 55 UI/mL en 3 mois.</div>
       </div>
-      <div class="mtg-rule-card" style="border-top:4px solid #0891b2;">
+      <div class="mtg-rule-card" data-cat="ovaire endometre" style="border-top:4px solid #0891b2;">
         <div class="mtg-rule-icon">🔗</div>
         <div class="mtg-rule-text">Toujours associer CA 125 + HE4 devant une masse ovarienne indéterminée. Le HE4 normal oriente vers l'endométriose plutôt qu'un carcinome.</div>
       </div>
-      <div class="mtg-rule-card" style="border-top:4px solid #dc2626;">
+      <div class="mtg-rule-card" data-cat="ovaire germinal" style="border-top:4px solid #dc2626;">
         <div class="mtg-rule-icon">👩‍⚕️</div>
         <div class="mtg-rule-text">Chez la femme &lt; 40 ans avec masse ovarienne : toujours doser AFP + β-hCG + LDH pour ne pas méconnaître une tumeur germinale maligne (urgence chirurgicale, excellent pronostic si traité tôt).</div>
       </div>
-      <div class="mtg-rule-card" style="border-top:4px solid #b45309;">
+      <div class="mtg-rule-card" data-cat="germinal" style="border-top:4px solid #b45309;">
         <div class="mtg-rule-icon">⏱️</div>
         <div class="mtg-rule-text">Pour la surveillance des TTG (mole, choriocarcinome) : le β-hCG est LE seul marqueur de référence. La normalisation confirme la guérison ; toute remontée impose une réévaluation urgente.</div>
       </div>
-      <div class="mtg-rule-card" style="border-top:4px solid #9333ea;">
+      <div class="mtg-rule-card" data-cat="ovaire" style="border-top:4px solid #9333ea;">
         <div class="mtg-rule-icon">🔬</div>
         <div class="mtg-rule-text">Les tumeurs de la granulosa peuvent récidiver 10–20 ans après le traitement initial. L'inhibine B + AMH doivent être surveillées à vie.</div>
       </div>
-      <div class="mtg-rule-card" style="border-top:4px solid #c2185b;">
+      <div class="mtg-rule-card" data-cat="sein" style="border-top:4px solid #c2185b;">
         <div class="mtg-rule-icon">🎗️</div>
         <div class="mtg-rule-text">Cancer du sein : le CA 15-3 est <strong>interdit en dépistage</strong>. Il est uniquement indiqué pour la surveillance post-traitement. Toujours l'associer à l'ACE pour maximiser la sensibilité de détection des rechutes (~80%).</div>
       </div>
-      <div class="mtg-rule-card" style="border-top:4px solid #880e4f;">
+      <div class="mtg-rule-card" data-cat="sein" style="border-top:4px solid #880e4f;">
         <div class="mtg-rule-icon">🧫</div>
         <div class="mtg-rule-text">Les marqueurs tissulaires (RE, RP, HER2, Ki-67, BRCA) sont indispensables au bilan initial de tout cancer du sein — ils déterminent le sous-type moléculaire et guident la stratégie thérapeutique. Ils ne sont pas substituables par des marqueurs sériques.</div>
       </div>
@@ -1319,15 +1319,16 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     var wrapper2 = document.getElementById('mtgCardsSein');
     var sep      = document.getElementById('sein-section');
     var synoptic = document.querySelector('#mtgTool .mtg-synoptic');
+    var rules    = document.querySelectorAll('#mtgRules .mtg-rule-card');
+    var rulesBox = document.getElementById('mtgRules');
 
-    /* 1. Afficher / masquer chaque carte */
+    /* 1. Fiches marqueurs */
     for (var i = 0; i < allCards.length; i++) {
       var c = allCards[i].getAttribute('data-cat') || '';
-      var show = (cat === 'all') || (c.indexOf(cat) !== -1);
-      allCards[i].style.display = show ? '' : 'none';
+      allCards[i].style.display = (cat === 'all' || c.indexOf(cat) !== -1) ? '' : 'none';
     }
 
-    /* 2. Masquer les wrappers entièrement vides */
+    /* 2. Masquer les wrappers vides */
     if (wrapper1) {
       var vis1 = wrapper1.querySelectorAll('.mtg-card:not([style*="none"])');
       wrapper1.style.display = vis1.length ? '' : 'none';
@@ -1337,16 +1338,22 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       wrapper2.style.display = vis2.length ? '' : 'none';
     }
 
-    /* 3. Séparateur sein : visible seulement si des cartes sein sont affichées */
-    if (sep) {
-      var seinVisible = (cat === 'all' || cat === 'sein');
-      sep.style.display = seinVisible ? '' : 'none';
-    }
+    /* 3. Séparateur sein */
+    if (sep) sep.style.display = (cat === 'all' || cat === 'sein') ? '' : 'none';
 
-    /* 4. Tableau synoptique : masqué si filtre spécifique (sauf 'tous') */
-    if (synoptic) {
-      synoptic.style.display = (cat === 'all') ? '' : 'none';
+    /* 4. Tableau synoptique — uniquement en mode "Tous" */
+    if (synoptic) synoptic.style.display = (cat === 'all') ? '' : 'none';
+
+    /* 5. Règles d'or — filtrage par data-cat */
+    var visibleRules = 0;
+    for (var r = 0; r < rules.length; r++) {
+      var rc = rules[r].getAttribute('data-cat') || '';
+      var showRule = (cat === 'all') || (rc === 'all') || (rc.indexOf(cat) !== -1);
+      rules[r].style.display = showRule ? '' : 'none';
+      if (showRule) visibleRules++;
     }
+    /* Masquer tout le bloc règles d'or si aucune règle visible */
+    if (rulesBox) rulesBox.style.display = visibleRules ? '' : 'none';
   }
 
   window.mtgFilter = function(cat, btn) {
