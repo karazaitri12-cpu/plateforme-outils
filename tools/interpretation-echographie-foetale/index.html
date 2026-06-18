@@ -6,9 +6,6 @@
   <title>Outil d'échographie obstétricale — Biométrie fœtale</title>
   <style>
   
- 
-  
-  
     .echo-ob-tool *, .echo-ob-tool *::before, .echo-ob-tool *::after {
       box-sizing: border-box; margin: 0; padding: 0;
     }
@@ -525,36 +522,22 @@
         document.getElementById('eotAmenoDdr').value = sa + ' SA + ' + j + ' j';
 
         // --- NOUVEAUTÉ : Mise à jour automatique de la biométrie ---
-        // Si la modification vient d'une saisie utilisateur (DDR ou Date de l'écho)
         if (e && (e.target.id === 'eotDdr' || e.target.id === 'eotDateEcho')) {
-          
-          // On limite le calcul entre 14 et 40 SA (les limites des courbes de référence)
           var safeSa = Math.max(14, Math.min(sa, 40));
           var safeJ  = (sa >= 14 && sa <= 40) ? j : 0;
-
-          // 1. Mise à jour de l'Âge Gestationnel dans la partie Biométrie
           document.getElementById('eotGaSA').value = safeSa;
           document.getElementById('eotGaJours').value = safeJ;
-
-          // 2. Calcul du GA décimal pour lire les courbes
           var ga = safeSa + (safeJ / 7);
-
-          // 3. Récupération des valeurs médianes (50e percentile)
           var bpd50 = getRef('bpd', 'p50', ga);
           var hc50  = getRef('hc', 'p50', ga);
           var ac50  = getRef('ac', 'p50', ga);
           var fl50  = getRef('fl', 'p50', ga);
-
-          // 4. Injection dans les champs du formulaire (arrondi à 1 décimale)
           if (bpd50 !== null) document.getElementById('eotBpd').value = bpd50.toFixed(1);
           if (hc50 !== null)  document.getElementById('eotHc').value  = hc50.toFixed(1);
           if (ac50 !== null)  document.getElementById('eotAc').value  = ac50.toFixed(1);
           if (fl50 !== null)  document.getElementById('eotFl').value  = fl50.toFixed(1);
-
-          // 5. Actualisation globale (Poids fœtal estimé, graphiques et percentiles)
           validateAndRun();
         }
-        // --- FIN DE LA NOUVEAUTÉ ---
 
       } else {
         document.getElementById('eotAmenoDdr').value = '—';
@@ -619,7 +602,6 @@
     buildChart('eotChFl', 'LF/FL', 'mm','fl', vals.fl, ga,false);
   }
 
-  /* Plugin fond blanc : dessine AVANT Chart.js — imperméable aux filtres CSS Elementor */
   var eotWhiteBg = {
     id: 'eotWhiteBg',
     beforeDraw: function(chart) {
@@ -646,7 +628,6 @@
     var fs  = isZoom ? 13  : 11;
     var tfs = isZoom ? 16  : 14;
 
-    /* Couleurs rgb() pleines — sans alpha — imperméables aux filtres Elementor */
     var C_BAND   = 'rgb(70,120,195)';
     var C_FILL   = 'rgba(70,120,195,0.15)';
     var C_MEDIAN = 'rgb(0,45,130)';
@@ -730,8 +711,7 @@
   document.addEventListener('keydown', function(e){ if (e.key==='Escape') closeModal(); });
 
   /* =============================================
-     IMPRESSION A5 PAYSAGE — CORRIGÉE
-     Layout : EN-TÊTE → PATIENT + BIO (ligne compacte) → 4 COURBES 2×2
+     IMPRESSION A5 PAYSAGE
      ============================================= */
   document.getElementById('eotBtnPrintAll').addEventListener('click', function(){
     var ga  = getGA();
@@ -762,7 +742,6 @@
       return isNaN(p) ? '\u2014' : '\u2248\u00a0' + Math.round(p) + 'e\u00a0p.';
     }
 
-    /* Génération des canvas offscreen — 560×380px chacun */
     var bios = ['bpd','hc','ac','fl'];
     var canvasImgs = {};
     var weeks = []; for (var ww=14; ww<=40; ww++) weeks.push(ww);
@@ -786,8 +765,7 @@
           { label:'Mesure',         data:pd,   backgroundColor:'#c0392b', borderColor:'#7b0e0e', pointRadius:9, pointHoverRadius:9, showLine:false, fill:false }
         ]},
         options: {
-          responsive: false,
-          animation:  false,
+          responsive: false, animation: false,
           layout: { padding: { top:4, bottom:4, left:4, right:4 } },
           plugins: {
             legend: {
@@ -799,25 +777,13 @@
               }
             },
             title: {
-              display: true,
-              text: info.short + ' (' + info.unit + ')',
-              font: { size: 14, weight: '700' }, color: '#003d8f',
-              padding: { top: 4, bottom: 5 }
+              display: true, text: info.short + ' (' + info.unit + ')',
+              font: { size: 14, weight: '700' }, color: '#003d8f', padding: { top: 4, bottom: 5 }
             }
           },
           scales: {
-            x: {
-              min: 14, max: 40,
-              grid:  { color: 'rgba(0,0,0,0.28)', lineWidth: 1 },
-              ticks: { color: '#1a1f2e', font: { size: 10, weight: '700' }, maxTicksLimit: 8 },
-              title: { display: true, text: 'AG (SA)', font: { size: 10, weight: '700' }, color: '#1a1f2e', padding: { top: 2 } }
-            },
-            y: {
-              beginAtZero: false,
-              grid:  { color: 'rgba(0,0,0,0.28)', lineWidth: 1 },
-              ticks: { color: '#1a1f2e', font: { size: 10, weight: '700' }, maxTicksLimit: 6 },
-              title: { display: true, text: info.unit, font: { size: 10, weight: '700' }, color: '#1a1f2e', padding: { bottom: 2 } }
-            }
+            x: { min: 14, max: 40, grid: { color: 'rgba(0,0,0,0.28)', lineWidth: 1 }, ticks: { color: '#1a1f2e', font: { size: 10, weight: '700' }, maxTicksLimit: 8 }, title: { display: true, text: 'AG (SA)', font: { size: 10, weight: '700' }, color: '#1a1f2e', padding: { top: 2 } } },
+            y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.28)', lineWidth: 1 }, ticks: { color: '#1a1f2e', font: { size: 10, weight: '700' }, maxTicksLimit: 6 }, title: { display: true, text: info.unit, font: { size: 10, weight: '700' }, color: '#1a1f2e', padding: { bottom: 2 } } }
           }
         }
       });
@@ -825,13 +791,11 @@
       tc.destroy();
     });
 
-    /* Construction HTML d'impression */
     var dateEchoFmt = dateEcho ? formatDate(dateEcho) : formatDate(new Date().toISOString().split('T')[0]);
     var ddnFmt  = formatDate(ddn);
     var ddrFmt  = formatDate(ddr);
     var patLine = (nom || prenom) ? ((nom ? nom.toUpperCase() + ' ' : '') + prenom) : 'Patiente non identifi\u00e9e';
 
-    /* Infos patient compactes */
     var infoItems = [];
     if (ddnFmt)                            infoItems.push({l:'N\u00e9e le',    v: ddnFmt + (age && age !== '\u2014' ? ' (' + age + ')' : '')});
     if (parite)                            infoItems.push({l:'Parit\u00e9',    v: parite});
@@ -845,7 +809,6 @@
       return '<span class="pi"><b>' + i.l + '&nbsp;:</b>&nbsp;' + i.v + '</span>';
     }).join('');
 
-    /* Ligne biométrie compacte — 4 cellules + PFE */
     var bioData = [
       {k:'bpd', lbl:'BIP / BPD', val:vals.bpd},
       {k:'hc',  lbl:'PC / HC',   val:vals.hc},
@@ -860,11 +823,11 @@
         + '</div>';
     }).join('');
 
-    /* 4 courbes en grille 2×2 */
     var chartsHtml = bios.map(function(b){
       return '<div class="ch"><img src="' + canvasImgs[b] + '" alt="' + LABELS[b].short + '"></div>';
     }).join('');
 
+    // --- CORRECTION EFFECTUÉE ICI : ON FERME LA CHAINE HTML D'IMPRESSION PROPREMENT ---
     var printHtml = '<!DOCTYPE html>'
     + '<html lang="fr"><head><meta charset="utf-8">'
     + '<title>Compte-rendu \u00e9chographie \u2013 ' + patLine + '</title>'
@@ -872,23 +835,15 @@
     + '@page { size: 210mm 148mm; margin: 6mm 7mm; }'
     + '* { box-sizing: border-box; margin: 0; padding: 0; }'
     + 'html, body { width: 100%; background: #fff; font-family: Arial, Helvetica, sans-serif; font-size: 8.5pt; color: #1a1f2e; }'
-
-    /* PAGE = colonne flex, hauteur = zone utile A5 paysage */
     + '.page { display: flex; flex-direction: column; gap: 3px; height: 136mm; }'
-
-    /* EN-TÊTE */
     + '.hdr { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1.5pt solid #0056b3; padding-bottom: 3px; flex-shrink: 0; }'
     + '.hdr-t { font-size: 10pt; font-weight: 700; color: #0056b3; line-height: 1.2; }'
     + '.hdr-s { font-size: 6.5pt; color: #5a6474; margin-top: 1px; }'
     + '.hdr-r { font-size: 7.5pt; color: #5a6474; text-align: right; line-height: 1.6; }'
-
-    /* BLOC PATIENT */
     + '.pat { background: #f4f6f9; border: 0.5pt solid #d0d7e2; border-radius: 2pt; padding: 4px 7px; flex-shrink: 0; }'
     + '.pat-n { font-size: 10pt; font-weight: 700; color: #0056b3; margin-bottom: 3px; }'
     + '.pat-i { display: flex; flex-wrap: wrap; column-gap: 12px; row-gap: 1px; }'
     + '.pi { font-size: 7pt; white-space: nowrap; }'
-
-    /* LIGNE BIOMÉTRIE — bande compacte horizontale */
     + '.bio-strip { display: flex; align-items: stretch; border: 0.5pt solid #d0d7e2; border-radius: 2pt; overflow: hidden; flex-shrink: 0; }'
     + '.bio-cell { flex: 1; padding: 3px 6px; border-right: 0.4pt solid #d0d7e2; display: flex; flex-direction: column; gap: 1px; }'
     + '.bio-cell:last-of-type { border-right: none; }'
@@ -898,19 +853,12 @@
     + '.bio-efw { background: #eef3fb; border-left: 2pt solid #0056b3; padding: 4px 10px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }'
     + '.bio-efw-v { font-size: 10pt; font-weight: 700; color: #0056b3; white-space: nowrap; }'
     + '.bio-efw-s { font-size: 5.5pt; color: #5a6474; margin-top: 1px; }'
-
-    /* 4 COURBES 2×2 — occupe tout l'espace restant */
     + '.charts { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; flex: 1; min-height: 0; }'
     + '.ch { border: 0.4pt solid #d0d7e2; border-radius: 2pt; overflow: hidden; background: #fff; }'
     + '.ch img { width: 100%; height: 100%; object-fit: fill; display: block; }'
-
-    /* DISCLAIMER */
     + '.disc { font-size: 5.5pt; color: #7a6200; background: #fffbea; border-left: 2pt solid #e6b800; padding: 2px 6px; line-height: 1.4; flex-shrink: 0; }'
     + '</style></head><body>'
-
     + '<div class="page">'
-
-    /* En-tête */
     + '<div class="hdr">'
     +   '<div>'
     +     '<div class="hdr-t">Compte-rendu d\u2019\u00e9chographie obst\u00e9tricale</div>'
@@ -918,14 +866,10 @@
     +   '</div>'
     +   '<div class="hdr-r">Date&nbsp;: <b>' + dateEchoFmt + '</b><br>AG&nbsp;: <b>' + gaW + '&nbsp;SA&nbsp;+&nbsp;' + gaJ + '&nbsp;j</b></div>'
     + '</div>'
-
-    /* Bloc patient */
     + '<div class="pat">'
     +   '<div class="pat-n">' + patLine + '</div>'
     +   '<div class="pat-i">' + patInfoHtml + '</div>'
     + '</div>'
-
-    /* Bande biométrie compacte */
     + '<div class="bio-strip">'
     +   bioCellsHtml
     +   '<div class="bio-efw">'
@@ -933,44 +877,9 @@
     +     '<div class="bio-efw-s">Hadlock 1985 &middot; PC+PA+LF</div>'
     +   '</div>'
     + '</div>'
-
-    /* 4 courbes 2×2 — occupe tout le reste */
     + '<div class="charts">' + chartsHtml + '</div>'
-
-    /* Disclaimer */
     + '<div class="disc"><b>Usage professionnel uniquement.</b> Outil d\u2019aide \u00e0 l\u2019interpr\u00e9tation pour professionnels de sant\u00e9. Non certifi\u00e9 DM. Ne remplace pas le jugement clinique.</div>'
-
-    + '</div>'
-    + '
-<!-- SYSTÈME PREMIUM — VÉRIFICATION TOKEN -->
-<div id="kz-block-screen" style="display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);z-index:9999;justify-content:center;align-items:center;">
-  <div style="background:#fff;border-radius:12px;padding:32px 28px;max-width:400px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.3);">
-    <div style="font-size:40px;margin-bottom:12px;">&#128274;</div>
-    <h2 style="font-size:1.2rem;color:#1a3a5c;margin:0 0 12px;font-family:sans-serif;">Acc&#232;s Premium Requis</h2>
-    <p style="font-size:0.9rem;color:#4b5563;margin:0 0 20px;line-height:1.5;font-family:sans-serif;">Cet outil est r&#233;serv&#233; aux membres premium de FemCare Hub.</p>
-    <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" style="display:inline-block;background:#1A3A5C;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.92rem;font-family:sans-serif;">Se connecter / S&#8217;abonner</a>
-    <p style="margin-top:14px;font-size:0.75rem;color:#9ca3af;font-family:sans-serif;">&#128273; Acc&#232;s via token personnel &mdash; FemCare Hub</p>
-  </div>
-</div>
-<script>
-(async function() {
-  var bs = document.getElementById('kz-block-screen');
-  var urlParams = new URLSearchParams(window.location.search);
-  var urlToken = urlParams.get('token');
-  if (urlToken) {
-    localStorage.setItem('kz_platform_token', urlToken);
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-  var token = localStorage.getItem('kz_platform_token');
-  if (!token) return;
-  try {
-    var r = await fetch('https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token));
-    var data = await r.json();
-    if (data.valid === true) bs.style.display = 'none';
-  } catch(e) {}
-})();
-</script>
-</body></html>';
+    + '</div></body></html>';
 
     var pw = window.open('', '_blank', 'width=900,height=700');
     if (!pw) { alert('Veuillez autoriser les pop-ups pour imprimer.'); return; }
@@ -1001,7 +910,38 @@
 })();
 </script>
 
-    <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<!-- ========================================================= -->
+<!-- SYSTÈME PREMIUM — DÉPLACÉ ICI TOUT À LA FIN POUR QUE ÇA MARCHE -->
+<!-- ========================================================= -->
+<div id="kz-block-screen" style="display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);z-index:9999;justify-content:center;align-items:center;">
+  <div style="background:#fff;border-radius:12px;padding:32px 28px;max-width:400px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.3);">
+    <div style="font-size:40px;margin-bottom:12px;">&#128274;</div>
+    <h2 style="font-size:1.2rem;color:#1a3a5c;margin:0 0 12px;font-family:sans-serif;">Acc&#232;s Premium Requis</h2>
+    <p style="font-size:0.9rem;color:#4b5563;margin:0 0 20px;line-height:1.5;font-family:sans-serif;">Cet outil est r&#233;serv&#233; aux membres premium de FemCare Hub.</p>
+    <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" style="display:inline-block;background:#1A3A5C;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.92rem;font-family:sans-serif;">Se connecter / S&#8217;abonner</a>
+    <p style="margin-top:14px;font-size:0.75rem;color:#9ca3af;font-family:sans-serif;">&#128273; Acc&#232;s via token personnel &mdash; FemCare Hub</p>
+  </div>
+</div>
+<script>
+(async function() {
+  var bs = document.getElementById('kz-block-screen');
+  var urlParams = new URLSearchParams(window.location.search);
+  var urlToken = urlParams.get('token');
+  if (urlToken) {
+    localStorage.setItem('kz_platform_token', urlToken);
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+  var token = localStorage.getItem('kz_platform_token');
+  if (!token) return;
+  try {
+    var r = await fetch('https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token));
+    var data = await r.json();
+    if (data.valid === true) bs.style.display = 'none';
+  } catch(e) {}
+})();
+</script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 
 </body>
