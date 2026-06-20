@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>Interprétation de la sérologie toxoplasmique — IgG, IgM, Avidité</title>
+<meta name="description" content="Outil clinique d'aide à l'interprétation de la sérologie toxoplasmique pendant la grossesse : IgG, IgM, indice d'avidité, conduite à tenir et cinétique des marqueurs.">
+
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1A3A5C">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sérologie Toxo">
+
+<style>
+  #txs-root {
+    all: initial;
+    display: block;
+    --txs-navy: #1A3A5C;
+    --txs-navy-dark: #122C46;
+    --txs-gold: #C8A84B;
+    --txs-red: #C8102E;
+    --txs-green: #166534;
+    --txs-amber: #B45309;
+    --txs-bg: #FFFFFF;
+    --txs-bg-subtle: #F4F6F9;
+    --txs-border: #D7DEE7;
+    --txs-text: #1E2A38;
+    --txs-text-muted: #5B6B7C;
+    --txs-success-bg: #E8F5E9;
+    --txs-warn-bg: #FFFBEB;
+    --txs-danger-bg: #FEF2F2;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--txs-text);
+    -webkit-text-size-adjust: 100%;
+  }
+  #txs-root *,
+  #txs-root *::before,
+  #txs-root *::after { box-sizing: border-box; }
+
+  #txs-root .txs-wrap { max-width: 720px; margin: 0 auto; padding: 16px; }
+
+  #txs-root .txs-card {
+    background: var(--txs-bg);
+    border: 1px solid var(--txs-border);
+    border-top: 4px solid var(--txs-navy);
+    border-radius: 6px;
+    padding: 28px 28px 22px;
+    box-shadow: 0 1px 2px rgba(20, 35, 55, 0.05);
+  }
+
+  #txs-root .txs-eyebrow {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--txs-gold);
+  }
+  #txs-root .txs-title {
+    margin: 0 0 6px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--txs-navy);
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--txs-navy);
+  }
+  #txs-root .txs-subtitle { margin: 10px 0 12px; font-size: 14px; color: var(--txs-text-muted); }
+
+  #txs-root .txs-disclaimer {
+    margin: 0 0 22px;
+    padding: 10px 12px;
+    background: var(--txs-bg-subtle);
+    border: 1px solid var(--txs-border);
+    border-radius: 4px;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--txs-text-muted);
+  }
+
+  #txs-root .txs-section { margin-bottom: 18px; }
+  #txs-root .txs-section-title {
+    margin: 0 0 12px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--txs-navy);
+  }
+
+  #txs-root .txs-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 480px) {
+    #txs-root .txs-field-row { grid-template-columns: 1fr; }
+  }
+
+  #txs-root .txs-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--txs-text);
+    margin-bottom: 6px;
+  }
+  #txs-root .txs-hint {
+    display: block;
+    font-size: 11.5px;
+    color: var(--txs-text-muted);
+    margin-top: 4px;
+  }
+
+  #txs-root .txs-input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--txs-border);
+    border-radius: 4px;
+    background: var(--txs-bg);
+    color: var(--txs-text);
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+  }
+  #txs-root .txs-input:focus {
+    border-color: var(--txs-navy);
+    box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.12);
+  }
+  #txs-root .txs-input-small { width: 90px; }
+
+  #txs-root .txs-threshold-inputs { display: flex; align-items: center; gap: 8px; }
+  #txs-root .txs-threshold-sep { color: var(--txs-text-muted); font-weight: 700; }
+
+  #txs-root .txs-segmented { display: flex; gap: 6px; flex-wrap: wrap; }
+  #txs-root .txs-seg-btn {
+    flex: 1;
+    min-width: 86px;
+    padding: 10px 10px;
+    border: 1px solid var(--txs-border);
+    background: var(--txs-bg);
+    color: var(--txs-text);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  #txs-root .txs-seg-btn:hover { background: var(--txs-bg-subtle); }
+  #txs-root .txs-seg-btn.txs-active { background: var(--txs-navy); border-color: var(--txs-navy); color: #FFFFFF; }
+
+  #txs-root .txs-btn {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 12px 16px;
+    border: 1px solid transparent;
+  }
+  #txs-root .txs-btn-primary { width: 100%; background: var(--txs-navy); color: #FFFFFF; }
+  #txs-root .txs-btn-primary:hover { background: var(--txs-navy-dark); }
+
+  #txs-root .txs-result {
+    margin-top: 18px;
+    background: var(--txs-bg-subtle);
+    border-left: 4px solid var(--txs-navy);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  #txs-root .txs-result-label {
+    display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--txs-text-muted); margin-bottom: 4px;
+  }
+  #txs-root .txs-result-value { display: block; font-size: 18px; font-weight: 700; color: var(--txs-navy); }
+
+  #txs-root .txs-result.txs-state-success { background: var(--txs-success-bg); border-left-color: var(--txs-green); }
+  #txs-root .txs-result.txs-state-success .txs-result-value { color: var(--txs-green); }
+  #txs-root .txs-result.txs-state-warning { background: var(--txs-warn-bg); border-left-color: var(--txs-amber); }
+  #txs-root .txs-result.txs-state-warning .txs-result-value { color: var(--txs-amber); }
+  #txs-root .txs-result.txs-state-danger { background: var(--txs-danger-bg); border-left-color: var(--txs-red); }
+  #txs-root .txs-result.txs-state-danger .txs-result-value { color: var(--txs-red); }
+
+  #txs-root .txs-conduct {
+    margin-bottom: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--txs-border);
+    border-radius: 4px;
+  }
+  #txs-root .txs-conduct[hidden] { display: none; }
+  #txs-root .txs-conduct-label {
+    margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--txs-navy);
+  }
+  #txs-root .txs-conduct-list { margin: 0; padding-left: 0; list-style: none; }
+  #txs-root .txs-conduct-list li {
+    position: relative; padding-left: 18px; margin-bottom: 7px; font-size: 13.5px; line-height: 1.5;
+  }
+  #txs-root .txs-conduct-list li::before {
+    content: "\25B8";
+    position: absolute; left: 0; color: var(--txs-gold); font-weight: 700;
+  }
+
+  #txs-root .txs-avidity-result {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--txs-border);
+  }
+  #txs-root .txs-avidity-result[hidden] { display: none; }
+  #txs-root .txs-avidity-result.txs-state-success { background: var(--txs-success-bg); border-color: var(--txs-green); }
+  #txs-root .txs-avidity-result.txs-state-warning { background: var(--txs-warn-bg); border-color: var(--txs-amber); }
+  #txs-root .txs-avidity-result.txs-state-danger { background: var(--txs-danger-bg); border-color: var(--txs-red); }
+  #txs-root .txs-avidity-label { margin: 0 0 6px; font-size: 13px; font-weight: 700; }
+  #txs-root .txs-avidity-text { margin: 0; font-size: 13.5px; line-height: 1.55; }
+
+  #txs-root .txs-pedagogy {
+    background: #FBF8F0;
+    border-left: 4px solid var(--txs-gold);
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin-bottom: 22px;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  #txs-root .txs-pedagogy-label {
+    margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #8A6D1F;
+  }
+  #txs-root .txs-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 12.5px; }
+  #txs-root .txs-table th, #txs-root .txs-table td {
+    border: 1px solid var(--txs-border); padding: 7px 8px; text-align: left; vertical-align: top;
+  }
+  #txs-root .txs-table th { background: var(--txs-navy); color: #FFFFFF; font-weight: 700; }
+  #txs-root .txs-table tr:nth-child(even) td { background: var(--txs-bg-subtle); }
+  #txs-root .txs-pedagogy p { margin: 0 0 10px; }
+  #txs-root .txs-pedagogy p:last-child { margin-bottom: 0; }
+  #txs-root .txs-pedagogy b { color: var(--txs-navy); }
+
+  #txs-root .txs-chart-section { margin-bottom: 22px; }
+  #txs-root .txs-chart-title {
+    margin: 0 0 4px; font-size: 13px; font-weight: 700; color: var(--txs-navy);
+  }
+  #txs-root .txs-chart-note { margin: 0 0 10px; font-size: 12px; color: var(--txs-text-muted); }
+  #txs-root .txs-chart-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--txs-border); border-radius: 4px; padding: 8px; }
+  #txs-root .txs-chart-wrap svg { display: block; min-width: 560px; width: 100%; height: auto; }
+  #txs-root .txs-chart-caption { margin: 8px 0 0; font-size: 11.5px; color: var(--txs-text-muted); font-style: italic; }
+  #txs-root .txs-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; font-size: 12px; }
+  #txs-root .txs-legend-item { display: flex; align-items: center; gap: 6px; }
+  #txs-root .txs-legend-swatch { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+
+  #txs-root .txs-footer { border-top: 1px solid var(--txs-border); padding-top: 14px; }
+  #txs-root .txs-footer p { margin: 0; font-size: 11.5px; line-height: 1.5; color: var(--txs-text-muted); }
+
+  /* =========================================
+     PRO : Masque l'ascenseur (style App native)
+     A placer en fin de css dans chaque outil
+     ========================================= */
+  html { scrollbar-width: none; }
+  body { -ms-overflow-style: none; overflow-y: auto; }
+  ::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<div id="txs-root">
+  <div class="txs-wrap">
+    <div class="txs-card">
+      <p class="txs-eyebrow">Outil clinique — Sérologie</p>
+      <h1 class="txs-title">Interprétation de la sérologie toxoplasmique</h1>
+      <p class="txs-subtitle">IgG, IgM, indice d'avidité — Grossesse</p>
+      <p class="txs-disclaimer">Aide à l'interprétation — ne remplace pas l'avis du laboratoire référent ni les recommandations en vigueur (HAS, CNGOF, CNR Toxoplasmose). Seuils d'avidité indicatifs : à vérifier sur la fiche technique de la trousse utilisée par le laboratoire.</p>
+
+      <div class="txs-section">
+        <p class="txs-section-title">Résultats sérologiques</p>
+
+        <div class="txs-field-row">
+          <div>
+            <label class="txs-label">IgG anti-toxoplasme</label>
+            <div class="txs-segmented" id="txs-igg-group">
+              <button type="button" class="txs-seg-btn" data-group="igg" data-value="neg" aria-pressed="false">Négatif</button>
+              <button type="button" class="txs-seg-btn" data-group="igg" data-value="pos" aria-pressed="false">Positif</button>
+            </div>
+          </div>
+          <div>
+            <label class="txs-label">IgM anti-toxoplasme</label>
+            <div class="txs-segmented" id="txs-igm-group">
+              <button type="button" class="txs-seg-btn" data-group="igm" data-value="neg" aria-pressed="false">Négatif</button>
+              <button type="button" class="txs-seg-btn" data-group="igm" data-value="equivoque" aria-pressed="false">Douteux</button>
+              <button type="button" class="txs-seg-btn" data-group="igm" data-value="pos" aria-pressed="false">Positif</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="txs-field-row" id="txs-avidity-row" hidden>
+          <div>
+            <label for="txs-avidity-value" class="txs-label">Indice d'avidité des IgG</label>
+            <input type="number" step="0.01" min="0" max="1" id="txs-avidity-value" class="txs-input" placeholder="Ex. 0.18">
+            <span class="txs-hint">Échelle 0–1. Si exprimé en %, diviser par 100.</span>
+          </div>
+          <div>
+            <label class="txs-label">Seuils du laboratoire</label>
+            <div class="txs-threshold-inputs">
+              <input type="number" step="0.01" min="0" max="1" id="txs-seuil-bas" class="txs-input txs-input-small" value="0.20">
+              <span class="txs-threshold-sep">–</span>
+              <input type="number" step="0.01" min="0" max="1" id="txs-seuil-haut" class="txs-input txs-input-small" value="0.30">
+            </div>
+            <span class="txs-hint">Valeurs indicatives (technique courante) — à adapter.</span>
+          </div>
+        </div>
+
+        <div class="txs-field-row">
+          <div>
+            <label for="txs-terme" class="txs-label">Terme de grossesse (SA, facultatif)</label>
+            <input type="number" min="0" max="42" id="txs-terme" class="txs-input" placeholder="Ex. 14">
+          </div>
+        </div>
+
+        <button type="button" class="txs-btn txs-btn-primary" id="txs-interpret-btn">Interpréter</button>
+      </div>
+
+      <div class="txs-result" id="txs-result">
+        <span class="txs-result-label">Interprétation</span>
+        <span class="txs-result-value" id="txs-result-value" aria-live="polite">Sélectionnez le statut IgG et IgM</span>
+      </div>
+
+      <div class="txs-conduct" id="txs-conduct" hidden>
+        <p class="txs-conduct-label">Conduite à tenir</p>
+        <ul class="txs-conduct-list" id="txs-conduct-list"></ul>
+      </div>
+
+      <div class="txs-avidity-result" id="txs-avidity-result" hidden>
+        <p class="txs-avidity-label" id="txs-avidity-label"></p>
+        <p class="txs-avidity-text" id="txs-avidity-text"></p>
+      </div>
+
+      <div class="txs-pedagogy">
+        <p class="txs-pedagogy-label">Rappels d'usage</p>
+
+        <table class="txs-table">
+          <thead>
+            <tr><th>IgG</th><th>IgM</th><th>Interprétation</th><th>Conduite</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>—</td><td>—</td><td>Absence d'immunité</td><td>Surveillance mensuelle + règles hygiéno-diététiques</td></tr>
+            <tr><td>—</td><td>+ / douteux</td><td>IgM isolées</td><td>Contrôle à 3 semaines (recherche de séroconversion)</td></tr>
+            <tr><td>+</td><td>—</td><td>Immunité ancienne</td><td>Pas de surveillance mensuelle</td></tr>
+            <tr><td>+</td><td>+ / douteux</td><td>À dater</td><td>Indice d'avidité ± contrôle à 3 semaines, avis CNR</td></tr>
+          </tbody>
+        </table>
+
+        <p>En France, le dépistage de la toxoplasmose est <b>obligatoire avant la fin du 1er trimestre</b> (déclaration de grossesse), avec les sérologies de la rubéole et de la syphilis. En l'absence d'immunité, la sérologie est répétée <b>chaque mois jusqu'à l'accouchement</b>.</p>
+
+        <p>L'indice d'avidité des IgG n'est interprétable que sur un sérum prélevé <b>le plus précocement possible</b>. Une avidité élevée exclut une infection récente, sur une fenêtre de <b>3 à 4 mois</b> dépendant de la trousse réactif. Réalisée au 1er trimestre, une avidité élevée permet d'écarter une infection contractée en tout début de grossesse.</p>
+
+        <p>À l'inverse, une avidité basse <b>ne confirme pas formellement</b> une infection récente : elle peut persister plus d'un an chez certaines patientes. Elle doit donc toujours être interprétée avec la clinique, le contexte et, si besoin, un second prélèvement.</p>
+      </div>
+
+      <div class="txs-chart-section">
+        <p class="txs-chart-title">Cinétique typique des marqueurs après infection</p>
+        <p class="txs-chart-note">Représentation pédagogique de l'allure générale des courbes — non quantitative, ne permet pas de dater une infection individuelle.</p>
+        <div class="txs-chart-wrap">
+          <svg id="txs-chart-svg" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cinétique schématique des IgM, IgG et de l'indice d'avidité après une infection toxoplasmique">
+
+            <!-- Repère fin de 1er trimestre -->
+            <line x1="335" y1="20" x2="335" y2="250" stroke="#D7DEE7" stroke-width="1.5" stroke-dasharray="3 3"></line>
+            <text x="340" y="30" font-size="10.5" fill="#5B6B7C">Fin T1 (~12–14 SA)</text>
+
+            <!-- Seuils avidité -->
+            <line id="txs-line-seuil-haut" x1="50" y1="181" x2="620" y2="181" stroke="#166534" stroke-width="1.2" stroke-dasharray="5 3"></line>
+            <text id="txs-text-seuil-haut" x="555" y="177" font-size="10" fill="#166534">Avidité élevée \u2265 0.30</text>
+
+            <line id="txs-line-seuil-bas" x1="50" y1="204" x2="620" y2="204" stroke="#C8102E" stroke-width="1.2" stroke-dasharray="5 3"></line>
+            <text id="txs-text-seuil-bas" x="555" y="217" font-size="10" fill="#C8102E">Avidité basse \u2264 0.20</text>
+
+            <!-- Valeur saisie par l'utilisateur -->
+            <line id="txs-line-avidity-entered" x1="50" y1="0" x2="620" y2="0" stroke="#1A3A5C" stroke-width="1.6" stroke-dasharray="2 2" visibility="hidden"></line>
+            <text id="txs-text-avidity-entered" x="56" y="0" font-size="10.5" font-weight="700" fill="#1A3A5C" visibility="hidden">Valeur saisie</text>
+
+            <!-- Courbe IgM -->
+            <path d="M50,238.5 C61.875,238.5 61.875,204 73.75,204 C85.625,204 85.625,123.5 97.5,123.5 C109.375,123.5 109.375,54.5 121.25,54.5 C133.125,54.5 133.125,43 145,43 C168.75,43 168.75,77.5 192.5,77.5 C216.25,77.5 216.25,112 240,112 C287.5,112 287.5,146.5 335,146.5 C382.5,146.5 382.5,169.5 430,169.5 C477.5,169.5 477.5,192.5 525,192.5 C572.5,192.5 572.5,208.6 620,208.6" fill="none" stroke="#C8102E" stroke-width="2.2" stroke-linecap="round"></path>
+
+            <!-- Courbe IgG -->
+            <path d="M50,245.4 C61.875,245.4 61.875,238.5 73.75,238.5 C85.625,238.5 85.625,215.5 97.5,215.5 C109.375,215.5 109.375,169.5 121.25,169.5 C133.125,169.5 133.125,123.5 145,123.5 C168.75,123.5 168.75,77.5 192.5,77.5 C216.25,77.5 216.25,54.5 240,54.5 C263.75,54.5 263.75,43 287.5,43 C311.25,43 311.25,38.4 335,38.4 C382.5,38.4 382.5,36.1 430,36.1 C477.5,36.1 477.5,33.8 525,33.8 C572.5,33.8 572.5,31.5 620,31.5" fill="none" stroke="#1A3A5C" stroke-width="2.2" stroke-linecap="round"></path>
+
+            <!-- Courbe Avidité -->
+            <path d="M50,243.1 C73.75,243.1 73.75,238.5 97.5,238.5 C121.25,238.5 121.25,231.6 145,231.6 C168.75,231.6 168.75,222.4 192.5,222.4 C216.25,222.4 216.25,208.6 240,208.6 C263.75,208.6 263.75,197.1 287.5,197.1 C311.25,197.1 311.25,187.9 335,187.9 C358.75,187.9 358.75,178.7 382.5,178.7 C406.25,178.7 406.25,167.2 430,167.2 C477.5,167.2 477.5,146.5 525,146.5 C572.5,146.5 572.5,123.5 620,123.5" fill="none" stroke="#C8A84B" stroke-width="2.4" stroke-linecap="round"></path>
+
+            <!-- Axes -->
+            <line x1="50" y1="250" x2="620" y2="250" stroke="#1E2A38" stroke-width="1.2"></line>
+            <line x1="50" y1="20" x2="50" y2="250" stroke="#1E2A38" stroke-width="1.2"></line>
+
+            <!-- Graduations X -->
+            <text x="50" y="265" font-size="10.5" fill="#5B6B7C" text-anchor="middle">0</text>
+            <text x="145" y="265" font-size="10.5" fill="#5B6B7C" text-anchor="middle">4 sem.</text>
+            <text x="240" y="265" font-size="10.5" fill="#5B6B7C" text-anchor="middle">8 sem.</text>
+            <text x="335" y="265" font-size="10.5" fill="#5B6B7C" text-anchor="middle">12 sem.</text>
+            <text x="430" y="265" font-size="10.5" fill="#5B6B7C" text-anchor="middle">16 sem.</text>
+            <text x="525" y="265" font-size="10.5" fill="#5B6B7C" text-anchor="middle">20 sem.</text>
+            <text x="610" y="265" font-size="10.5" fill="#5B6B7C" text-anchor="middle">24 sem.</text>
+            <text x="335" y="282" font-size="11" fill="#1E2A38" text-anchor="middle">Temps depuis l'infection</text>
+
+            <!-- Graduation Y -->
+            <text x="44" y="248" font-size="10" fill="#5B6B7C" text-anchor="end">Faible</text>
+            <text x="44" y="28" font-size="10" fill="#5B6B7C" text-anchor="end">Élevé</text>
+          </svg>
+        </div>
+        <div class="txs-legend">
+          <span class="txs-legend-item"><span class="txs-legend-swatch" style="background:#C8102E;"></span>IgM</span>
+          <span class="txs-legend-item"><span class="txs-legend-swatch" style="background:#1A3A5C;"></span>IgG</span>
+          <span class="txs-legend-item"><span class="txs-legend-swatch" style="background:#C8A84B;"></span>Indice d'avidité (0–1)</span>
+        </div>
+        <p class="txs-chart-caption">Courbes schématiques (allure typique). Échelle en semaines depuis l'infection. Seuils d'avidité ajustables ci-dessus selon la trousse du laboratoire.</p>
+      </div>
+
+      <div class="txs-footer">
+        <p>Références indicatives : HAS — Surveillance sérologique de la toxoplasmose au cours de la grossesse ; CNGOF ; CNR Toxoplasmose. Outil pédagogique — Version 2026.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function $(id){ return document.getElementById(id); }
+
+  var state = { igg: null, igm: null };
+
+  function clamp(v, min, max){ return Math.min(max, Math.max(min, v)); }
+  function valY(v){ return 250 - clamp(v, 0, 1) * 230; }
+
+  function updateAvidityVisibility(){
+    var show = state.igg === "pos" && (state.igm === "pos" || state.igm === "equivoque");
+    $("txs-avidity-row").hidden = !show;
+    if(!show){
+      $("txs-avidity-value").value = "";
+      hideAvidityLine();
+    }
+  }
+
+  function selectSeg(group, value, btn){
+    var groupEl = group === "igg" ? $("txs-igg-group") : $("txs-igm-group");
+    var btns = groupEl.querySelectorAll(".txs-seg-btn");
+    for(var i = 0; i < btns.length; i++){
+      btns[i].classList.remove("txs-active");
+      btns[i].setAttribute("aria-pressed", "false");
+    }
+    btn.classList.add("txs-active");
+    btn.setAttribute("aria-pressed", "true");
+    if(group === "igg") state.igg = value; else state.igm = value;
+    updateAvidityVisibility();
+  }
+
+  function updateThresholdLines(){
+    var bas = parseFloat($("txs-seuil-bas").value);
+    var haut = parseFloat($("txs-seuil-haut").value);
+    if(isNaN(bas)) bas = 0.20;
+    if(isNaN(haut)) haut = 0.30;
+    var yBas = valY(bas), yHaut = valY(haut);
+    $("txs-line-seuil-bas").setAttribute("y1", yBas);
+    $("txs-line-seuil-bas").setAttribute("y2", yBas);
+    $("txs-text-seuil-bas").setAttribute("y", yBas + 13);
+    $("txs-text-seuil-bas").textContent = "Avidité basse \u2264 " + bas.toFixed(2);
+
+    $("txs-line-seuil-haut").setAttribute("y1", yHaut);
+    $("txs-line-seuil-haut").setAttribute("y2", yHaut);
+    $("txs-text-seuil-haut").setAttribute("y", yHaut - 6);
+    $("txs-text-seuil-haut").textContent = "Avidité élevée \u2265 " + haut.toFixed(2);
+  }
+
+  function hideAvidityLine(){
+    $("txs-line-avidity-entered").setAttribute("visibility", "hidden");
+    $("txs-text-avidity-entered").setAttribute("visibility", "hidden");
+  }
+
+  function updateAvidityLine(){
+    var raw = $("txs-avidity-value").value;
+    var val = parseFloat(raw);
+    if(raw === "" || isNaN(val)){ hideAvidityLine(); return; }
+    var y = valY(val);
+    var line = $("txs-line-avidity-entered");
+    var text = $("txs-text-avidity-entered");
+    line.setAttribute("y1", y);
+    line.setAttribute("y2", y);
+    line.setAttribute("visibility", "visible");
+    text.setAttribute("y", y - 6);
+    text.textContent = "Valeur saisie : " + val.toFixed(2);
+    text.setAttribute("visibility", "visible");
+  }
+
+  function setResultState(el, state2){
+    el.className = el.className.replace(/\btxs-state-\S+/g, "").trim();
+    if(state2) el.className += " txs-state-" + state2;
+  }
+
+  function buildConduct(items){
+    var list = $("txs-conduct-list");
+    list.innerHTML = "";
+    for(var i = 0; i < items.length; i++){
+      var li = document.createElement("li");
+      li.textContent = items[i];
+      list.appendChild(li);
+    }
+    $("txs-conduct").hidden = items.length === 0;
+  }
+
+  function interpret(){
+    if(!state.igg || !state.igm){
+      $("txs-result-value").textContent = "Sélectionnez le statut IgG et IgM avant d'interpréter.";
+      setResultState($("txs-result"), null);
+      $("txs-conduct").hidden = true;
+      $("txs-avidity-result").hidden = true;
+      return;
+    }
+
+    var terme = parseFloat($("txs-terme").value);
+    var hasTerme = !isNaN(terme);
+    var profileText = "", stateClass = "", conduct = [];
+    var igmDouteux = state.igm === "equivoque";
+
+    if(state.igg === "neg" && state.igm === "neg"){
+      profileText = "Absence d'immunité";
+      stateClass = "info";
+      conduct = [
+        "Sérologie mensuelle jusqu'à l'accouchement.",
+        "Rappel des règles hygiéno-diététiques de prévention (cuisson suffisante des viandes, lavage des fruits/légumes/crudités, lavage des mains après jardinage ou manipulation de terre, port de gants, hygiène du bac à litière du chat).",
+        "Sérologie postnatale en cas de doute sur une séroconversion survenue en fin de grossesse."
+      ];
+    } else if(state.igg === "neg" && (state.igm === "pos" || igmDouteux)){
+      profileText = "IgM isolées \u2014 à confirmer";
+      stateClass = "warning";
+      conduct = [
+        igmDouteux ? "Confirmer le résultat IgM par une seconde technique." : "IgM positives isolées : possible réaction non spécifique ou tout début d'infection.",
+        "Contrôle sérologique à 3 semaines pour rechercher l'apparition des IgG (séroconversion).",
+        "Poursuivre les conseils hygiéno-diététiques dans l'intervalle."
+      ];
+    } else if(state.igg === "pos" && state.igm === "neg"){
+      profileText = "Immunité ancienne";
+      stateClass = "success";
+      conduct = [
+        "Pas de surveillance sérologique mensuelle nécessaire.",
+        "Vérifier qu'un résultat positif a bien été documenté tôt en grossesse (1er trimestre) pour confirmer le caractère antérieur de l'immunité."
+      ];
+    } else if(state.igg === "pos" && (state.igm === "pos" || igmDouteux)){
+      profileText = "Profil à dater \u2014 infection récente possible";
+      stateClass = "danger";
+      conduct = [
+        igmDouteux ? "Confirmer le résultat IgM par une seconde technique." : "Mesure de l'indice d'avidité des IgG, si possible sur le sérum le plus précoce disponible.",
+        "Contrôle à 3 semaines pour apprécier la cinétique des IgG (titre stable ou en augmentation).",
+        "Avis du laboratoire de référence (CNR Toxoplasmose) en cas de doute.",
+        "Selon le contexte et le terme, discuter sans délai avec l'équipe de diagnostic prénatal (spiramycine en attente de la datation, surveillance échographique, ± PCR sur liquide amniotique après 18 SA en cas d'infection récente confirmée)."
+      ];
+    }
+
+    if(hasTerme && (profileText.indexOf("dater") !== -1 || profileText.indexOf("IgM isolées") !== -1)){
+      conduct.push("Terme actuel : " + terme + " SA \u2014 informer l'équipe de diagnostic prénatal de toute suspicion d'infection récente.");
+    }
+
+    var resultEl = $("txs-result-value");
+    resultEl.textContent = profileText;
+    setResultState($("txs-result"), stateClass);
+    buildConduct(conduct);
+
+    var avidityBox = $("txs-avidity-result");
+    if(state.igg === "pos" && (state.igm === "pos" || igmDouteux)){
+      var avRaw = $("txs-avidity-value").value;
+      var av = parseFloat(avRaw);
+      var bas = parseFloat($("txs-seuil-bas").value);
+      var haut = parseFloat($("txs-seuil-haut").value);
+      if(isNaN(bas)) bas = 0.20;
+      if(isNaN(haut)) haut = 0.30;
+
+      if(avRaw === "" || isNaN(av)){
+        avidityBox.hidden = true;
+      } else {
+        avidityBox.hidden = false;
+        var label, text, st;
+        if(av >= haut){
+          label = "Avidité élevée (" + av.toFixed(2) + ")";
+          text = "Une infection récente est exclue sur les 3 à 4 mois précédant le prélèvement (durée d'exclusion dépendante de la trousse utilisée).";
+          if(hasTerme && terme <= 14){
+            text += " Réalisé au 1er trimestre, ce résultat permet d'écarter une infection contractée en tout début de grossesse.";
+          }
+          st = "success";
+        } else if(av <= bas){
+          label = "Avidité basse (" + av.toFixed(2) + ")";
+          text = "Ce résultat ne permet pas d'exclure une infection récente. Une avidité basse peut toutefois persister plus d'un an chez certaines patientes et ne confirme donc pas, à elle seule, une infection en cours de grossesse. Une prise en charge spécialisée (CNR Toxoplasmose, contrôle à 3 semaines, discussion d'un diagnostic anténatal) est recommandée.";
+          st = "danger";
+        } else {
+          label = "Zone équivoque (" + av.toFixed(2) + ")";
+          text = "La datation ne peut être conclue sur ce seul critère. Un contrôle ou un avis spécialisé (CNR Toxoplasmose) est recommandé.";
+          st = "warning";
+        }
+        $("txs-avidity-label").textContent = label;
+        $("txs-avidity-text").textContent = text;
+        avidityBox.className = "txs-avidity-result txs-state-" + st;
+      }
+    } else {
+      avidityBox.hidden = true;
+    }
+
+    updateAvidityLine();
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    var segBtns = document.querySelectorAll("#txs-root .txs-seg-btn");
+    for(var i = 0; i < segBtns.length; i++){
+      segBtns[i].addEventListener("click", function(){
+        selectSeg(this.getAttribute("data-group"), this.getAttribute("data-value"), this);
+      });
+    }
+    $("txs-interpret-btn").addEventListener("click", interpret);
+    $("txs-seuil-bas").addEventListener("input", updateThresholdLines);
+    $("txs-seuil-haut").addEventListener("input", updateThresholdLines);
+    $("txs-avidity-value").addEventListener("input", updateAvidityLine);
+    updateThresholdLines();
+  });
+
+  window.ToxoSeroTool = { interpret: interpret };
+})();
+</script>
+
+<!-- PWA : enregistrement du service worker -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+</script>
+
+<!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+
+</body>
+</html>
