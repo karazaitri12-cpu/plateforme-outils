@@ -54,14 +54,145 @@
 #prot-root .ph-tag { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: #e2e8f0; white-space: nowrap; }
 #prot-root .ph-tag.v { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
 
-/* ─── NAVIGATION ─── */
-#prot-root .pnav { background: var(--white); border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: sticky; top: 0; z-index: 20; }
-#prot-root .pnav::-webkit-scrollbar { display: none; }
-#prot-root .pnav-inner { display: flex; min-width: max-content; }
-#prot-root .ptab { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; padding: 14px 20px; font-size: 13.5px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; transition: all 0.2s ease; }
-#prot-root .ptab:hover { color: var(--navy); background: var(--navy-pale); }
-#prot-root .ptab.on { color: var(--primary); border-bottom-color: var(--primary); }
-#prot-root .ptab-ico { font-size: 16px; }
+/* ─── PATIENT BAR ─── */
+#prot-root .prot-patient-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+#prot-root .prot-patient-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: left;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+#prot-root .prot-patient-toggle:hover { color: var(--primary); }
+#prot-root .pt-arrow {
+  font-size: 10px;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+#prot-root .prot-patient-toggle.open .pt-arrow { transform: rotate(90deg); }
+#prot-root .prot-patient-form {
+  display: none;
+  padding: 14px 24px 18px;
+  background: #f8fafc;
+  border-top: 1px solid var(--border);
+}
+#prot-root .prot-patient-form.open { display: block; }
+#prot-root .prot-patient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+#prot-root .prot-patient-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+#prot-root .prot-patient-field label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--navy-l);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+#prot-root .prot-patient-field input {
+  padding: 8px 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--navy);
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  min-width: 0;
+}
+#prot-root .prot-patient-field input:focus { border-color: var(--primary); }
+#prot-root .prot-patient-field-ddnage { grid-column: span 2; min-width: 0; }
+#prot-root .prot-ddnage-row { display: flex; gap: 8px; }
+#prot-root .prot-ddnage-col {
+  display: flex; flex-direction: column; gap: 4px;
+  flex: 1 1 0; min-width: 0;
+}
+#prot-root .prot-ddnage-col-small { flex: 0 0 80px; }
+#prot-root .prot-ddnage-col label {
+  font-size: 10.5px; font-weight: 700; color: var(--navy-l);
+  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+}
+#prot-root .prot-ddnage-col input {
+  padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px;
+  font-family: inherit; font-size: 13px; color: var(--navy);
+  background: #ffffff; outline: none; transition: border-color 0.15s;
+  width: 100%; min-width: 0;
+}
+#prot-root .prot-ddnage-col input:focus { border-color: var(--primary); }
+@media(max-width:680px){ #prot-root .prot-patient-field-ddnage { grid-column: span 1; } }
+
+/* ─── NAVIGATION ONGLETS ─── */
+#prot-root .prot-tabs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  overflow-x: visible;
+}
+#prot-root .prot-tab-btn {
+  flex-shrink: 0;
+  padding: 13px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  margin-bottom: -2px;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+}
+#prot-root .prot-tab-btn:hover {
+  color: var(--navy);
+  background: var(--navy-pale);
+}
+#prot-root .prot-tab-btn.on {
+  color: var(--primary);
+  border-bottom: 3px solid var(--primary);
+  background: #eff6ff;
+  font-weight: 700;
+}
+#prot-root .prot-tab-icon { margin-right: 6px; font-size: 15px; }
+
+@media (max-width: 640px) {
+  #prot-root .prot-tab-btn {
+    flex: 1 1 auto;
+    min-width: calc(33.333% - 2px);
+    padding: 12px 6px;
+    font-size: 12px;
+    text-align: center;
+    justify-content: center;
+  }
+  #prot-root .prot-tab-icon { display: none; }
+}
 
 /* ─── CORPS ─── */
 #prot-root .pbody { padding: 24px 28px; }
@@ -74,11 +205,9 @@
 #prot-root .pc-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
 #prot-root .pnum { background: var(--primary); color: #fff; min-width: 24px; height: 24px; border-radius: 50%; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
 
-/* ─── TEXTE ─── */
+/* ─── TEXTE & ALERTES ─── */
 #prot-root .pp { margin-bottom: 14px; }
 #prot-root .pp:last-child { margin-bottom: 0; }
-
-/* ─── ALERTES ─── */
 #prot-root .pa { border-radius: 6px; padding: 14px 16px; font-size: 14px; margin-bottom: 16px; display: flex; gap: 12px; align-items: flex-start; }
 #prot-root .pa-ico { font-size: 18px; line-height: 1; flex-shrink: 0; }
 #prot-root .pa.info   { background: var(--teal-pale);  border: 1px solid #ccfbf1; color: #115e59; }
@@ -134,7 +263,7 @@
 #prot-root .pf input, #prot-root .pf select { all: unset; box-sizing: border-box; display: block; width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 16px; color: var(--navy); background: #f8fafc; transition: all 0.2s; }
 #prot-root .pf input:focus, #prot-root .pf select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 #prot-root .pbtns { display: flex; gap: 10px; flex-wrap: wrap; }
-#prot-root .pbtn { all: unset; box-sizing: border-box; cursor: pointer; padding: 12px 24px; border-radius: 6px; font-size: 14.5px; font-weight: 600; background: var(--primary); color: #fff; transition: background 0.2s; text-align: center; }
+#prot-root .pbtn { all: unset; box-sizing: border-box; cursor: pointer; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; background: var(--primary); color: #fff; transition: background 0.2s; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit;}
 #prot-root .pbtn:hover { background: var(--primary-h); }
 #prot-root .pbtn.sec { background: #f1f5f9; color: var(--navy); border: 1px solid var(--border); }
 #prot-root .pbtn.sec:hover { background: #e2e8f0; }
@@ -143,6 +272,7 @@
 #prot-root .pres { margin-top: 20px; border-radius: 8px; display: none; overflow: hidden; border: 1px solid var(--border); }
 #prot-root .pres.on { display: block; animation: fadeIn 0.4s ease; }
 #prot-root .pres-hd { padding: 16px 20px; color: #fff; font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+#prot-root .pres-patient-info { padding: 10px 20px; background: #f1f5f9; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--navy); display: none; }
 #prot-root .pres-bd { padding: 20px; background: #fff; }
 #prot-root .pres-val { font-size: 24px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
 #prot-root .pres-int { font-size: 14.5px; color: var(--navy-l); margin-bottom: 16px; }
@@ -151,6 +281,15 @@
 #prot-root .pres.r-a2 .pres-hd { background: #d97706; }
 #prot-root .pres.r-a3 .pres-hd { background: #ea580c; }
 #prot-root .pres.r-sn .pres-hd { background: var(--red); }
+
+/* ─── ACTIONS RAPPORT & IMPRESSION ─── */
+#prot-root .prot-actions { display: none; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+#prot-root .prot-report-zone { display: none; margin-top: 16px; border: 1.5px dashed var(--border); border-radius: 8px; overflow: hidden; }
+#prot-root .prot-report-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: #f0f3f7; border-bottom: 1px solid var(--border); }
+#prot-root .prot-report-content { font-family: 'Courier New', 'Consolas', monospace; font-size: 13px; line-height: 1.6; color: #1e293b; padding: 14px 16px; white-space: pre-wrap; background: #fff; margin: 0; }
+#prot-root .btn-copy { padding: 6px 12px; font-size: 12px; background: var(--white); color: var(--navy); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; font-family: inherit;}
+#prot-root .btn-copy:hover { background: #e2e8f0; }
+#prot-root .btn-copy.copied { background: var(--green); color: #fff; border-color: var(--green); }
 
 /* ─── ALGO STEPS ─── */
 #prot-root .palgo { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
@@ -222,17 +361,56 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   </div>
 </div>
 
-<!-- ══ NAVIGATION ══ -->
-<div class="pnav">
-  <nav class="pnav-inner">
-    <button class="ptab on" onclick="showTab('def')"><span class="ptab-ico">📋</span>D&#233;finition &amp; Seuils</button>
-    <button class="ptab" onclick="showTab('calc')"><span class="ptab-ico">🧮</span>Calculateur P/C</button>
-    <button class="ptab" onclick="showTab('physio')"><span class="ptab-ico">🔬</span>Physiopathologie</button>
-    <button class="ptab" onclick="showTab('etio')"><span class="ptab-ico">🩺</span>&#201;tiologies</button>
-    <button class="ptab" onclick="showTab('grossesse')"><span class="ptab-ico">🤰</span>Grossesse</button>
-    <button class="ptab" onclick="showTab('demarche')"><span class="ptab-ico">▶️</span>D&#233;marche</button>
-  </nav>
+<!-- ══ PATIENT BAR (Identification) ══ -->
+<div class="prot-patient-bar">
+  <button type="button" class="prot-patient-toggle" id="prot-patient-toggle-btn" onclick="protTogglePatient()">
+    <span class="pt-arrow">&#9658;</span>
+    <span>&#128100; Identification patiente / médecin</span>
+    <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#94a3b8;">Optionnel</span>
+  </button>
+  <div class="prot-patient-form" id="prot-patient-form">
+    <div class="prot-patient-grid">
+      <div class="prot-patient-field">
+        <label>Nom</label>
+        <input type="text" id="prot-pt-nom" placeholder="Nom de famille">
+      </div>
+      <div class="prot-patient-field">
+        <label>Prénom</label>
+        <input type="text" id="prot-pt-prenom" placeholder="Prénom">
+      </div>
+      <div class="prot-patient-field prot-patient-field-ddnage">
+        <div class="prot-ddnage-row">
+          <div class="prot-ddnage-col">
+            <label>Date de naissance</label>
+            <input type="date" id="prot-pt-ddn" oninput="protCalcAge()">
+          </div>
+          <div class="prot-ddnage-col prot-ddnage-col-small">
+            <label>Âge</label>
+            <input type="number" id="prot-pt-age" placeholder="Ex: 34" oninput="protClearDdn()">
+          </div>
+        </div>
+      </div>
+      <div class="prot-patient-field">
+        <label>Médecin prescripteur</label>
+        <input type="text" id="prot-pt-medecin" placeholder="Dr ...">
+      </div>
+      <div class="prot-patient-field">
+        <label>Date</label>
+        <input type="date" id="prot-pt-date">
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ══ NAVIGATION ONGLETS ══ -->
+<nav class="prot-tabs-nav" role="tablist">
+  <button class="prot-tab-btn on" onclick="showTab(this, 'def')" role="tab"><span class="prot-tab-icon">📋</span>D&#233;finition &amp; Seuils</button>
+  <button class="prot-tab-btn" onclick="showTab(this, 'calc')" role="tab"><span class="prot-tab-icon">🧮</span>Calculateur P/C</button>
+  <button class="prot-tab-btn" onclick="showTab(this, 'physio')" role="tab"><span class="prot-tab-icon">🔬</span>Physiopathologie</button>
+  <button class="prot-tab-btn" onclick="showTab(this, 'etio')" role="tab"><span class="prot-tab-icon">🩺</span>&#201;tiologies</button>
+  <button class="prot-tab-btn" onclick="showTab(this, 'grossesse')" role="tab"><span class="prot-tab-icon">🤰</span>Grossesse</button>
+  <button class="prot-tab-btn" onclick="showTab(this, 'demarche')" role="tab"><span class="prot-tab-icon">▶️</span>D&#233;marche</button>
+</nav>
 
 <div class="pbody">
 
@@ -326,7 +504,10 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <button class="pbtn" onclick="calcPC()">Lancer l&#8217;interpr&#233;tation</button>
       <button class="pbtn sec" onclick="resetPC()">Effacer</button>
     </div>
+
+    <!-- RESULTAT BOX -->
     <div class="pres" id="prot-res">
+      <div class="pres-patient-info" id="rpatient"></div>
       <div class="pres-hd" id="rhd">
         <span id="rstade">Stade</span>
         <span id="rtag" style="font-size:12px;opacity:0.9;"></span>
@@ -337,6 +518,21 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         <div class="pres-rco" id="rr"></div>
       </div>
     </div>
+
+    <!-- ACTIONS REPORT & IMPRESSION -->
+    <div class="prot-actions" id="prot-actions">
+      <button class="pbtn" onclick="generateReport()">&#128203; Générer le rapport</button>
+      <button class="pbtn sec" onclick="printA5()">&#128424; Imprimer (A5)</button>
+    </div>
+
+    <div class="prot-report-zone" id="prot-report-zone">
+      <div class="prot-report-header">
+        <span style="font-size: 13px; font-weight: 600; color: var(--navy);">Texte structuré pour le dossier médical</span>
+        <button class="btn-copy" id="btn-copy" onclick="copyReport()">&#x2398; Copier</button>
+      </div>
+      <pre class="prot-report-content" id="prot-report-content"></pre>
+    </div>
+
   </div>
 </div>
 
@@ -418,7 +614,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 ═══════════════════════════════ -->
 <div class="psec" id="tab-etio">
   <div class="pacc">
-
     <div class="pacc-item">
       <button class="pacc-btn" onclick="togAcc(this)">&#9679;&nbsp; N&#233;phropathie Diab&#233;tique (La plus fr&#233;quente)<span class="pacc-chv">&#9660;</span></button>
       <div class="pacc-body">
@@ -430,7 +625,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         </ul>
       </div>
     </div>
-
     <div class="pacc-item">
       <button class="pacc-btn" onclick="togAcc(this)">&#9679;&nbsp; Glom&#233;rulopathies Primitives<span class="pacc-chv">&#9660;</span></button>
       <div class="pacc-body">
@@ -442,7 +636,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         </ul>
       </div>
     </div>
-
     <div class="pacc-item">
       <button class="pacc-btn" onclick="togAcc(this)">&#9679;&nbsp; Glom&#233;rulopathies Secondaires<span class="pacc-chv">&#9660;</span></button>
       <div class="pacc-body">
@@ -453,7 +646,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         </ul>
       </div>
     </div>
-
     <div class="pacc-item">
       <button class="pacc-btn" onclick="togAcc(this)">&#9679;&nbsp; Prot&#233;inuries de Surcharge &#8212; Pi&#232;ges diagnostiques<span class="pacc-chv">&#9660;</span></button>
       <div class="pacc-body">
@@ -468,7 +660,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         </ul>
       </div>
     </div>
-
     <div class="pacc-item">
       <button class="pacc-btn" onclick="togAcc(this)">&#9679;&nbsp; Prot&#233;inuries Fonctionnelles &amp; Orthostatique<span class="pacc-chv">&#9660;</span></button>
       <div class="pacc-body">
@@ -480,9 +671,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         </ul>
       </div>
     </div>
-
   </div>
-
   <div class="pc">
     <div class="pc-title"><span class="pnum">&#8776;</span>Tableau synoptique des &#233;tiologies</div>
     <div class="ptw">
@@ -512,7 +701,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <span>Le DFG augmente de 50&#8239;% au 1er trimestre. Les seuils de tol&#233;rance r&#233;nale sont red&#233;finis.</span>
     </div>
   </div>
-
   <div class="pc">
     <div class="pc-title"><span class="pnum">1</span>Seuils Diagnostiques</div>
     <p class="pp">Le seuil pathologique de prot&#233;inurie est <strong>doubl&#233;</strong> pendant la grossesse par rapport &#224; la population g&#233;n&#233;rale.</p>
@@ -522,7 +710,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <li><em>Note CNGOF 2023 :</em> La BU &#224; 1+ justifie la r&#233;alisation syst&#233;matique d&#8217;un rapport P/C quantitatif.</li>
     </ul>
   </div>
-
   <div class="pc">
     <div class="pc-title"><span class="pnum">2</span>Diagnostic de la Pr&#233;&#233;clampsie (PE)</div>
     <div class="pa danger">
@@ -535,7 +722,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
     <p class="pp"><strong>Signes de s&#233;v&#233;rit&#233; (PE S&#233;v&#232;re) justifiant une extraction :</strong><br>HTA &#8805; 160/110, HELLP syndrome, signes neurologiques (c&#233;phal&#233;es, phosph&#232;nes), oligurie, OAP, barre &#233;pigastrique.</p>
   </div>
-
   <div class="pc">
     <div class="pc-title"><span class="pnum">3</span>Marqueurs Angiog&#233;niques (sFlt-1 / PlGF)</div>
     <p class="pp">Utiles pour le diagnostic diff&#233;rentiel (ex : patiente avec n&#233;phropathie connue avant la grossesse) et l&#8217;exclusion de la pr&#233;&#233;clampsie &#224; court terme.</p>
@@ -544,7 +730,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <li><strong>Ratio &gt; 85 (avant 34 SA) :</strong> Hautement pr&#233;dictif de pr&#233;&#233;clampsie.</li>
     </ul>
   </div>
-
   <div class="pc">
     <div class="pc-title"><span class="pnum">4</span>N&#233;phropathies Chroniques et Grossesse</div>
     <div class="ptw">
@@ -569,7 +754,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <span class="pa-ico">&#8505;</span>
     <span>Confirmer sur <strong>2 mesures &#224; &#8805; 3 mois d&#8217;intervalle</strong> avant d&#8217;engager un bilan &#233;tiologique complet &#8212; sauf prot&#233;inurie abondante ou contexte clinique urgent.</span>
   </div>
-
   <div class="pc">
     <div class="pc-title"><span class="pnum">1</span>Algorithme de 1re intention</div>
     <div class="palgo">
@@ -581,7 +765,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div class="pstep"><div class="pstep-n">6</div><div class="pstep-c"><div class="pstep-l">Bilan &#233;tiologique orient&#233;</div><div class="pstep-d">Glyc&#233;mie + HbA1c &#183; Bilan lipidique &#183; NFS &#183; Albumine s&#233;rique &#183; AAN, C3/C4, anti-ADNn (lupus&#160;?) &#183; EPPS.</div></div></div>
     </div>
   </div>
-
   <div class="pc">
     <div class="pc-title"><span class="pnum">2</span>Quand r&#233;f&#233;rer au N&#233;phrologue&#160;?</div>
     <ul class="pl wrn">
@@ -592,7 +775,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <li>Suspicion de my&#233;lome (pic &#224; l&#8217;EPU).</li>
     </ul>
   </div>
-
   <div class="pc">
     <div class="pc-title"><span class="pnum">3</span>Principes th&#233;rapeutiques g&#233;n&#233;raux</div>
     <p class="pp">Le traitement d&#233;pend de la cause, mais la strat&#233;gie <strong>n&#233;phroprotectrice et antiprotéinurique</strong> de base inclut :</p>
@@ -626,24 +808,60 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 <script>
 (function(){
   'use strict';
-  var TABS=['def','calc','physio','etio','grossesse','demarche'];
 
-  window.showTab=function(id){
-    document.querySelectorAll('#prot-root .psec').forEach(function(s){s.classList.remove('on');});
-    document.querySelectorAll('#prot-root .ptab').forEach(function(b){b.classList.remove('on');});
-    var sec=document.getElementById('tab-'+id);
-    if(sec) sec.classList.add('on');
-    var idx=TABS.indexOf(id);
-    var btns=document.querySelectorAll('#prot-root .ptab');
-    if(idx>=0&&btns[idx]){
-      btns[idx].classList.add('on');
-      btns[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
-    }
+  // Pré-remplir la date du jour
+  var dateField = document.getElementById('prot-pt-date');
+  if (dateField) { dateField.valueAsDate = new Date(); }
+
+  window.lastCalcResult = null; // Stocke les résultats pour le rapport
+
+  // ─── GESTION PATIENT ───
+  window.protTogglePatient = function() {
+    var form = document.getElementById('prot-patient-form');
+    var btn = document.getElementById('prot-patient-toggle-btn');
+    form.classList.toggle('open');
+    btn.classList.toggle('open');
   };
 
-  window.togAcc=function(btn){
-    var body=btn.nextElementSibling;
-    var wasOn=btn.classList.contains('on');
+  window.protCalcAge = function() {
+    var ddn = document.getElementById('prot-pt-ddn').value;
+    if (!ddn) return;
+    var d = new Date(ddn), now = new Date();
+    var age = now.getFullYear() - d.getFullYear();
+    var m = now.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+    document.getElementById('prot-pt-age').value = age;
+  };
+
+  window.protClearDdn = function() { document.getElementById('prot-pt-ddn').value = ''; };
+
+  window.protGetPatient = function() {
+    var nom = document.getElementById('prot-pt-nom').value.trim();
+    var prenom = document.getElementById('prot-pt-prenom').value.trim();
+    var ddn = document.getElementById('prot-pt-ddn').value;
+    var age = document.getElementById('prot-pt-age').value.trim();
+    var medecin = document.getElementById('prot-pt-medecin').value.trim();
+    var date = document.getElementById('prot-pt-date').value;
+    
+    var nomComplet = (prenom ? prenom + ' ' : '') + (nom || '');
+    var ddnFmt = '', dateFmt = '';
+    if (ddn) { var d = new Date(ddn); ddnFmt = d.toLocaleDateString('fr-FR'); }
+    if (date) { var db = new Date(date); dateFmt = db.toLocaleDateString('fr-FR'); }
+    return { nomComplet: nomComplet.trim(), ddnFmt: ddnFmt, age: age, medecin: medecin, dateFmt: dateFmt };
+  };
+
+  // ─── GESTION ONGLETS ───
+  window.showTab = function(btn, id) {
+    document.querySelectorAll('#prot-root .psec').forEach(function(s){s.classList.remove('on');});
+    document.querySelectorAll('#prot-root .prot-tab-btn').forEach(function(b){b.classList.remove('on');});
+    var sec = document.getElementById('tab-' + id);
+    if(sec) sec.classList.add('on');
+    btn.classList.add('on');
+  };
+
+  window.togAcc = function(btn) {
+    var body = btn.nextElementSibling;
+    var wasOn = btn.classList.contains('on');
     document.querySelectorAll('#prot-root .pacc-btn').forEach(function(b){
       b.classList.remove('on');
       if(b.nextElementSibling) b.nextElementSibling.classList.remove('on');
@@ -651,77 +869,236 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     if(!wasOn){btn.classList.add('on');if(body)body.classList.add('on');}
   };
 
-  window.calcPC=function(){
-    var p=parseFloat(document.getElementById('pv').value);
-    var c=parseFloat(document.getElementById('cv').value);
-    var ctx=document.getElementById('ctx').value;
-    var a=parseFloat(document.getElementById('av').value);
-    if(isNaN(p)||isNaN(c)||c<=0){alert('Veuillez renseigner correctement la prot\u00e9inurie et la cr\u00e9atininurie (> 0).');return;}
-    var ratio=p/c;
-    var eq=Math.round(ratio*10);
-    var acr=(!isNaN(a)&&c>0)?(a/c).toFixed(1):null;
-    var hd_cls,stade,tag,interp,reco;
-    if(ctx==='grossesse'){
-      if(ratio<30){
-        hd_cls='r-ok';stade='Normal (Grossesse)';tag='P/C < 30 mg/mmol';
+  // ─── CALCULATEUR ───
+  window.calcPC = function(){
+    var p = parseFloat(document.getElementById('pv').value);
+    var c = parseFloat(document.getElementById('cv').value);
+    var ctxObj = document.getElementById('ctx');
+    var ctx = ctxObj.value;
+    var ctxText = ctxObj.options[ctxObj.selectedIndex].text;
+    var a = parseFloat(document.getElementById('av').value);
+    
+    if(isNaN(p) || isNaN(c) || c <= 0){
+      alert('Veuillez renseigner correctement la prot\u00e9inurie et la cr\u00e9atininurie (> 0).');
+      return;
+    }
+    
+    var ratio = p / c;
+    var eq = Math.round(ratio * 10);
+    var acr = (!isNaN(a) && c > 0) ? (a / c).toFixed(1) : null;
+    var hd_cls, stade, tag, interp, reco;
+    var aStade = null, aColor = null;
+
+    if(ctx === 'grossesse'){
+      if(ratio < 30){
+        hd_cls='r-ok'; stade='Normal (Grossesse)'; tag='P/C < 30 mg/mmol';
         interp='En dessous du seuil pathologique pour la grossesse. Pas de crit\u00e8re de pr\u00e9\u00e9clampsie sur le plan urinaire.';
         reco='Poursuivre la surveillance clinique standard (Bandelette aux CPN, suivi tensionnel).';
-      }else if(ratio<300){
-        hd_cls='r-a3';stade='Seuil Pathologique Atteint';tag='Crit\u00e8re de Pr\u00e9\u00e9clampsie';
+      }else if(ratio < 300){
+        hd_cls='r-a3'; stade='Seuil Pathologique Atteint'; tag='Crit\u00e8re de Pr\u00e9\u00e9clampsie';
         interp='P/C \u2265 30 mg/mmol (\u2248 300 mg/24h). Confirme le diagnostic de pr\u00e9\u00e9clampsie si associ\u00e9 \u00e0 une HTA gestationnelle (\u2265 140/90 mmHg).';
         reco='Surveillance stricte de la TA. Bilan complet de pr\u00e9\u00e9clampsie (NFS, ASAT/ALAT, acide urique, cr\u00e9atinine). Prise en charge obst\u00e9tricale rapproch\u00e9e.';
       }else{
-        hd_cls='r-sn';stade='Prot\u00e9inurie Massive';tag='Alerte S\u00e9v\u00e9rit\u00e9';
+        hd_cls='r-sn'; stade='Prot\u00e9inurie Massive'; tag='Alerte S\u00e9v\u00e9rit\u00e9';
         interp='P/C > 300 mg/mmol (\u2248 3 g/24h). Peut correspondre \u00e0 une pr\u00e9\u00e9clampsie tr\u00e8s s\u00e9v\u00e8re ou une pathologie glom\u00e9rulaire pr\u00e9existante d\u00e9compens\u00e9e.';
         reco='Avis obst\u00e9trical et n\u00e9phrologique urgent. \u00c9valuer l\'indication d\'extraction f\u0153tale selon le terme et la s\u00e9v\u00e9rit\u00e9 maternelle.';
       }
-    }else{
-      if(ratio<15){
-        hd_cls='r-ok';stade='Normal (Stade A1)';tag='< 15 mg/mmol';
+    } else {
+      if(ratio < 15){
+        hd_cls='r-ok'; stade='Normal (Stade A1)'; tag='< 15 mg/mmol';
         interp='Excr\u00e9tion urinaire de prot\u00e9ines dans les limites de la normale.';
         reco='Aucune action imm\u00e9diate. D\u00e9pistage annuel si patient \u00e0 risque (diab\u00e9tique, hypertendu).';
-      }else if(ratio<50){
-        hd_cls='r-a2';stade='Mod\u00e9r\u00e9ment augment\u00e9e (Stade A2)';tag='15 \u2013 50 mg/mmol';
+      }else if(ratio < 50){
+        hd_cls='r-a2'; stade='Mod\u00e9r\u00e9ment augment\u00e9e (Stade A2)'; tag='15 \u2013 50 mg/mmol';
         interp='\u00c9quivalent de l\'ancienne \u00ab microalbuminurie \u00bb. Marqueur pr\u00e9coce d\'atteinte glom\u00e9rulaire ou cardiovasculaire.';
         reco='Confirmer la persistance \u00e0 3 mois. Bilan m\u00e9tabolique et tensionnel. Adaptation du traitement cardio-r\u00e9nal si persistant.';
-      }else if(ratio<300){
-        hd_cls='r-a3';stade='S\u00e9v\u00e8rement augment\u00e9e (Stade A3)';tag='50 \u2013 300 mg/mmol';
+      }else if(ratio < 300){
+        hd_cls='r-a3'; stade='S\u00e9v\u00e8rement augment\u00e9e (Stade A3)'; tag='50 \u2013 300 mg/mmol';
         interp='Prot\u00e9inurie clinique confirm\u00e9e. Risque \u00e9lev\u00e9 de progression vers l\'IRC.';
         reco='Avis n\u00e9phrologique recommand\u00e9. Bloqueurs du SRAA (IEC/ARA2) et/ou iSGLT2 \u00e0 discuter selon l\'\u00e9tiologie (hors grossesse).';
       }else{
-        hd_cls='r-sn';stade='Syndrome N\u00e9phrotique Probable';tag='> 300 mg/mmol';
+        hd_cls='r-sn'; stade='Syndrome N\u00e9phrotique Probable'; tag='> 300 mg/mmol';
         interp='Prot\u00e9inurie massive \u00e9quivalente \u00e0 > 3 g/24h. Fortement \u00e9vocateur d\'un syndrome n\u00e9phrotique.';
         reco='Avis n\u00e9phrologique URGENT. Dosage de l\'albumine s\u00e9rique. Recherche de complications thrombotiques. Biopsie r\u00e9nale probable.';
       }
     }
+
     var albInfo='';
-    if(acr!==null){
-      var acrNum=parseFloat(acr);
-      var aStade=(acrNum<3)?'A1 (Normal)':(acrNum<30)?'A2 (Mod\u00e9r\u00e9ment augment\u00e9e)':'A3 (S\u00e9v\u00e8rement augment\u00e9e)';
-      var aColor=(acrNum<3)?'#166534':(acrNum<30)?'#d97706':'#dc2626';
+    if(acr !== null){
+      var acrNum = parseFloat(acr);
+      aStade = (acrNum < 3) ? 'A1 (Normal)' : (acrNum < 30) ? 'A2 (Mod\u00e9r\u00e9ment augment\u00e9e)' : 'A3 (S\u00e9v\u00e8rement augment\u00e9e)';
+      aColor = (acrNum < 3) ? '#166534' : (acrNum < 30) ? '#d97706' : '#dc2626';
       albInfo='<div style="margin-top:14px;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:13.5px;">'
         +'<span style="color:#0f172a;font-weight:700;">Rapport Albuminurie/Cr\u00e9atininurie (ACR) :</span><br>'
         +'<span style="font-size:16px;font-weight:700;color:'+aColor+';">'+acr+' mg/mmol</span> '
         +'<span style="color:#64748b;">(\u2248 Stade KDIGO '+aStade+')</span>'
         +'</div>';
     }
+
+    // Affichage infos patient dans la box
+    var pt = window.protGetPatient();
+    var rpatientEl = document.getElementById('rpatient');
+    if (pt.nomComplet || pt.medecin) {
+      rpatientEl.innerHTML = '<strong>Patient(e) :</strong> ' + (pt.nomComplet ? pt.nomComplet : 'Non spécifié') + 
+                             (pt.age ? ' (' + pt.age + ' ans)' : '') + 
+                             ' &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Prescripteur :</strong> ' + (pt.medecin ? 'Dr ' + pt.medecin : 'Non spécifié');
+      rpatientEl.style.display = 'block';
+    } else { rpatientEl.style.display = 'none'; }
+
+    // Remplissage Vue
     document.getElementById('rv').innerHTML=ratio.toFixed(1)+' <span style="font-size:16px;font-weight:600;color:#64748b;">mg/mmol</span> <span style="font-size:13px;font-weight:500;color:#64748b;margin-left:6px;">(\u2248 '+eq+' mg/24h)</span>';
     document.getElementById('rstade').textContent=stade;
     document.getElementById('rtag').textContent=tag;
     document.getElementById('ri').innerHTML=interp+albInfo;
     document.getElementById('rr').innerHTML='<strong>Conduite :</strong> '+reco;
     document.getElementById('prot-res').className='pres on '+hd_cls;
+
+    // Affichage Barre d'actions
+    document.getElementById('prot-actions').style.display = 'flex';
+    document.getElementById('prot-report-zone').style.display = 'none';
+
+    // Stockage global (Sécurisé pour l'impression des nombres)
+    window.lastCalcResult = { p: p, c: c, a: a, ctxText: ctxText, ratio: ratio.toFixed(1), eq: eq, acr: acr, aStade: aStade, stade: stade, interp: interp, reco: reco, hd_cls: hd_cls };
   };
 
-  window.resetPC=function(){
+  window.resetPC = function(){
     ['pv','cv','av'].forEach(function(i){document.getElementById(i).value='';});
     document.getElementById('ctx').selectedIndex=0;
     document.getElementById('prot-res').className='pres';
+    document.getElementById('prot-actions').style.display = 'none';
+    document.getElementById('prot-report-zone').style.display = 'none';
+    window.lastCalcResult = null;
   };
 
   document.querySelectorAll('#prot-root .pf input').forEach(function(el){
     el.addEventListener('keydown',function(e){if(e.key==='Enter')window.calcPC();});
   });
+
+  // ─── GÉNÉRATION DU RAPPORT (TEXTE STRUCTURÉ) ───
+  window.generateReport = function() {
+    if(!window.lastCalcResult) return;
+    var info = window.protGetPatient();
+    var r = window.lastCalcResult;
+    var today = new Date().toLocaleDateString('fr-FR');
+    
+    var lines = [
+      '=== PROTÉINURIE — ÉVALUATION QUANTITATIVE ===',
+      'Date        : ' + (info.dateFmt || today),
+      'Patient(e)  : ' + (info.nomComplet || 'Non spécifié') + (info.age ? ' (' + info.age + ' ans)' : '') + (info.ddnFmt ? ' — Né(e) le ' + info.ddnFmt : ''),
+      'Prescripteur: ' + (info.medecin || 'Non spécifié'),
+      '',
+      '--- DONNÉES CLINIQUES ---',
+      'Protéinurie    : ' + r.p + ' mg/L',
+      'Créatininurie  : ' + r.c + ' mmol/L',
+      (r.acr !== null ? 'Albuminurie    : ' + r.a + ' mg/L' : null),
+      'Contexte       : ' + r.ctxText,
+      '',
+      '--- RÉSULTATS ---',
+      'Rapport P/C    : ' + r.ratio + ' mg/mmol  (Estimation ≈ ' + r.eq + ' mg/24h)',
+      'Statut         : ' + r.stade,
+      (r.acr !== null ? 'Rapport A/C    : ' + r.acr + ' mg/mmol  (KDIGO : ' + r.aStade + ')' : null),
+      '',
+      '--- INTERPRÉTATION ---',
+      r.interp,
+      '',
+      '--- CONDUITE À TENIR ---',
+      r.reco,
+      '',
+      '(KDIGO 2024 / HAS — Outil d\'aide à la décision clinique)'
+    ];
+    
+    document.getElementById('prot-report-content').textContent = lines.filter(function(l){ return l !== null; }).join('\n');
+    var zone = document.getElementById('prot-report-zone');
+    zone.style.display = 'block';
+    zone.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  };
+
+  // ─── COPIER LE RAPPORT ───
+  window.copyReport = function() {
+    var txt = document.getElementById('prot-report-content').textContent;
+    var btn = document.getElementById('btn-copy');
+    var done = function(){ 
+      btn.textContent = '\u2713 Copié !'; 
+      btn.classList.add('copied');
+      setTimeout(function(){ 
+        btn.innerHTML = '&#x2398; Copier'; 
+        btn.classList.remove('copied');
+      }, 2500); 
+    };
+    var fail = function(){
+      var ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0;';
+      document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(txt).then(done).catch(fail); }
+    else { fail(); }
+  };
+
+  // ─── IMPRESSION A5 ───
+  window.printA5 = function() {
+    if(!window.lastCalcResult) { alert('Veuillez lancer l\'interprétation d\'abord.'); return; }
+    var info = window.protGetPatient();
+    var r = window.lastCalcResult;
+    var today = new Date().toLocaleDateString('fr-FR');
+    var esc = function(s){ return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+
+    var bgColor = r.hd_cls === 'r-ok' ? '#eafaf1' : r.hd_cls === 'r-a3' || r.hd_cls === 'r-sn' ? '#fdedec' : '#fef9e7';
+    var borderColor = r.hd_cls === 'r-ok' ? '#27ae60' : r.hd_cls === 'r-a3' || r.hd_cls === 'r-sn' ? '#c0392b' : '#f0b429';
+
+    var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+      + '<title>Protéinurie — Résumé</title>'
+      + '<style>@page{size:A5;margin:11mm;}'
+      + '*{box-sizing:border-box;margin:0;padding:0;}'
+      + 'body{font-family:Arial,Helvetica,sans-serif;font-size:9.5pt;color:#1e293b;line-height:1.4;padding-bottom:30px;}'
+      + '.hdr{border-bottom:2px solid #0f172a;padding-bottom:7px;margin-bottom:10px;}'
+      + '.hdr-title{font-size:12pt;font-weight:700;color:#0f172a;margin-bottom:1px;}'
+      + '.hdr-sub{font-size:7.5pt;color:#64748b;}'
+      + '.idbox{display:flex;justify-content:space-between;gap:12px;margin:8px 0 12px;padding:7px 9px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:3px;font-size:8.5pt;}'
+      + '.idcol b{display:block;font-size:7pt;text-transform:uppercase;letter-spacing:0.04em;color:#64748b;margin-bottom:1px;}'
+      + '.sec{margin-bottom:12px;}'
+      + '.sec h3{font-size:7.5pt;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1.5px solid #eef0f3;padding-bottom:3px;margin-bottom:5px;}'
+      + '.box-res{padding:7px 10px;border-radius:3px;background:' + bgColor + ';border-left:4px solid ' + borderColor + '; margin-bottom:8px;}'
+      + '.grid2{display:flex; justify-content:space-between; font-size:8.5pt; margin-bottom:6px;}'
+      + '.val{font-size:13pt;font-weight:800;color:#0f172a;}'
+      + '.val-sub{font-size:9pt;color:#64748b;font-weight:normal;}'
+      + '.interp{font-size:8.5pt; font-weight:600; margin-bottom:6px;}'
+      + '.reco{font-size:8.5pt; border-top:1px solid #e2e8f0; padding-top:6px;}'
+      + '.ftr{position:fixed;bottom:0;left:0;width:100%;padding-top:7px;border-top:1px solid #e2e8f0;font-size:7pt;color:#64748b;text-align:center;background:#fff;}'
+      + '</style></head><body>'
+      + '<div class="hdr"><div class="hdr-title">Protéinurie &mdash; Évaluation Quantitative</div>'
+      + '<div class="hdr-sub">Dr KARA-ZAITRI M.A. &bull; Gynécologie-Obstétrique &bull; KDIGO 2024 / HAS</div></div>'
+      + '<div class="idbox">'
+      + '<div class="idcol"><b>Patient(e)</b>' + esc(info.nomComplet || '\u2014') + (info.ddnFmt ? ' &middot; Né(e) le ' + esc(info.ddnFmt) : '') + (info.age ? ' (' + esc(info.age) + ' ans)' : '') + '</div>'
+      + '<div class="idcol" style="text-align:right"><b>Médecin</b>' + esc(info.medecin || '\u2014') + '<br><b style="margin-top:3px;display:block;">Date</b>' + esc(info.dateFmt || today) + '</div>'
+      + '</div>'
+      + '<div class="sec"><h3>Données Biologiques & Contexte</h3>'
+      + '<div style="font-size:8.5pt;">'
+      + '&bull; <b>Protéinurie</b> : ' + esc(r.p) + ' mg/L<br>'
+      + '&bull; <b>Créatininurie</b> : ' + esc(r.c) + ' mmol/L<br>'
+      + (r.acr !== null ? '&bull; <b>Albuminurie</b> : ' + esc(r.a) + ' mg/L<br>' : '')
+      + '&bull; <b>Contexte</b> : ' + esc(r.ctxText) 
+      + '</div></div>'
+      + '<div class="sec"><h3>Résultat & Décision</h3>'
+      + '<div class="box-res">'
+      + '  <div class="grid2">'
+      + '    <div><span class="val">P/C : ' + esc(r.ratio) + '</span> <span class="val-sub">mg/mmol</span></div>'
+      + '    <div style="text-align:right;"><b>' + esc(r.stade) + '</b></div>'
+      + '  </div>'
+      + '  <div class="interp">Équivalent 24h : ≈ ' + esc(r.eq) + ' mg/jour</div>'
+      + (r.acr !== null ? '<div class="interp" style="color:#d97706;">Ratio A/C : ' + esc(r.acr) + ' mg/mmol (KDIGO : ' + esc(r.aStade) + ')</div>' : '')
+      + '  <div class="interp">' + esc(r.interp) + '</div>'
+      + '  <div class="reco"><b>Conduite :</b> ' + esc(r.reco) + '</div>'
+      + '</div>'
+      + '</div>'
+      + '<div class="ftr">Généré le ' + today + ' &bull; Outil d\'aide à la décision clinique — ne se substitue pas au jugement médical.</div>'
+      + '</body></html>';
+
+    var w = window.open('', '_blank');
+    if (!w) { alert('Veuillez autoriser les fenêtres pop-up pour imprimer.'); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+    w.onload = function(){ w.focus(); w.print(); };
+    setTimeout(function(){ try { w.focus(); w.print(); } catch(e){} }, 300);
+  };
+
 })();
 </script>
 
@@ -729,4 +1106,3 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 </body>
 </html>
-
