@@ -127,16 +127,15 @@
 @media(max-width:680px){ #prot-root .ppt-field-ddnage { grid-column: span 1; } }
 
 /* ─── NAVIGATION — MODÈLE NVG (flex-wrap, responsive natif) ─── */
+/* ─── NAVIGATION — Modèle NVG : flex-wrap, grille 3 col mobile ─── */
 #prot-root .pnav {
   background: var(--white);
   border-bottom: 2px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 20;
+  /* pas de sticky : évite le comportement pleine largeur sur mobile */
 }
 #prot-root .pnav-inner {
   display: flex;
-  flex-wrap: wrap;          /* ← clé : wrapping au lieu de scroll */
+  flex-wrap: wrap;
 }
 #prot-root .ptab {
   all: unset;
@@ -152,27 +151,29 @@
   border-bottom: 3px solid transparent;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
   white-space: nowrap;
-  margin-bottom: -2px;
   font-family: inherit;
+  box-sizing: border-box;
 }
 #prot-root .ptab:hover { color: var(--navy); background: var(--navy-pale); }
 #prot-root .ptab.on  { color: var(--primary); border-bottom-color: var(--primary); background: #f0f6ff; font-weight: 700; }
 #prot-root .ptab-ico { font-size: 15px; }
 
-/* Mobile : grille 3 colonnes égales, icônes masquées */
+/* Mobile : grille 3 colonnes, 2 lignes de 3 — même modèle que l'outil NVG */
 @media (max-width: 640px) {
   #prot-root .ptab {
     flex: 1 1 auto;
     min-width: calc(33.333% - 2px);
-    padding: 10px 6px;
+    max-width: 50%;
+    padding: 10px 4px;
     font-size: 11px;
     text-align: center;
     justify-content: center;
+    border-bottom-width: 2px;
   }
   #prot-root .ptab-ico { display: none; }
 }
-@media (max-width: 400px) {
-  #prot-root .ptab { min-width: calc(50% - 2px); font-size: 10.5px; }
+@media (max-width: 380px) {
+  #prot-root .ptab { min-width: calc(50% - 2px); font-size: 10.5px; padding: 9px 3px; }
 }
 
 /* ─── CORPS ─── */
