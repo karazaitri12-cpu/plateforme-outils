@@ -91,8 +91,14 @@
 #prot-root .ppt-form.open { display: block; }
 #prot-root .ppt-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: 1fr 1fr 1fr 80px;
   gap: 8px;
+}
+@media (max-width: 580px) {
+  #prot-root .ppt-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 340px) {
+  #prot-root .ppt-grid { grid-template-columns: 1fr; }
 }
 #prot-root .ppt-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 #prot-root .ppt-field label {
@@ -106,22 +112,9 @@
   transition: border-color 0.15s;
 }
 #prot-root .ppt-field input:focus { border-color: var(--primary); }
-#prot-root .ppt-field-ddnage { grid-column: span 2; min-width: 0; }
-#prot-root .ppt-ddnage-row { display: flex; gap: 8px; }
-#prot-root .ppt-ddnage-col { display: flex; flex-direction: column; gap: 3px; flex: 1 1 0; min-width: 0; }
-#prot-root .ppt-ddnage-col-small { flex: 0 0 90px; }
-#prot-root .ppt-ddnage-col label {
-  font-size: 10px; font-weight: 700; color: #4a5568;
-  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
-}
-#prot-root .ppt-ddnage-col input {
-  padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px;
-  font-family: inherit; font-size: 12px; color: var(--navy-l);
-  background: var(--white); outline: none; width: 100%; min-width: 0;
-  transition: border-color 0.15s;
-}
-#prot-root .ppt-ddnage-col input:focus { border-color: var(--primary); }
-@media(max-width:680px){ #prot-root .ppt-field-ddnage { grid-column: span 1; } }
+/* Ligne 2 : médecin + date consultation sur 2 colonnes */
+#prot-root .ppt-field-wide { grid-column: span 2; }
+@media (max-width: 580px) { #prot-root .ppt-field-wide { grid-column: span 1; } }
 
 /* ─── NAVIGATION — MODÈLE NVG (flex-wrap, responsive natif, sans scrollIntoView) ─── */
 #prot-root .pnav {
@@ -291,6 +284,105 @@
   #prot-root .pbtn { width: 100%; }
   #prot-root .pres-hd { flex-direction: column; align-items: flex-start; gap: 4px; }
 }
+/* ─── BARRE D'ACTIONS ─── */
+#prot-root .pact {
+  margin-top: 14px;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--border);
+  display: none;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#prot-root .pact.on { display: flex; }
+#prot-root .pbtn-rapport {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 700;
+  background: var(--navy); color: #fff; display: inline-flex; align-items: center;
+  gap: 7px; transition: background 0.2s; font-family: inherit;
+}
+#prot-root .pbtn-rapport:hover { background: #334155; }
+#prot-root .pbtn-act-copy {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 600;
+  background: var(--teal); color: #fff; display: inline-flex; align-items: center;
+  gap: 7px; transition: background 0.2s; font-family: inherit;
+}
+#prot-root .pbtn-act-copy:hover { background: #0f766e; }
+#prot-root .pbtn-act-print {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 600;
+  background: #64748b; color: #fff; display: inline-flex; align-items: center;
+  gap: 7px; transition: background 0.2s; font-family: inherit;
+}
+#prot-root .pbtn-act-print:hover { background: #475569; }
+@media (max-width: 580px) {
+  #prot-root .pact { flex-direction: column; }
+  #prot-root .pact button { width: 100%; justify-content: center; }
+}
+/* ─── RÉSUMÉ PANEL ─── */
+#prot-root .presume {
+  display: none;
+  margin-top: 24px;
+  border: 2px solid var(--navy);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--white);
+  animation: fadeIn 0.35s ease;
+}
+#prot-root .presume.on { display: block; }
+#prot-root .presume-hd {
+  background: var(--navy); color: #fff;
+  padding: 14px 20px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+#prot-root .presume-hd-title { font-size: 15px; font-weight: 800; }
+#prot-root .presume-hd-meta { font-size: 11.5px; color: #94a3b8; margin-top: 4px; }
+#prot-root .presume-close {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  background: rgba(255,255,255,0.15); color: #fff; border-radius: 4px;
+  padding: 5px 12px; font-size: 12px; font-weight: 700; font-family: inherit;
+  white-space: nowrap; transition: background 0.2s; flex-shrink: 0; margin-top: 2px;
+}
+#prot-root .presume-close:hover { background: rgba(255,255,255,0.28); }
+#prot-root .presume-bd { padding: 20px; }
+#prot-root .presume-sect { margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+#prot-root .presume-sect:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+#prot-root .presume-sect-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted); margin-bottom: 7px;
+}
+#prot-root .presume-decision {
+  padding: 13px 18px; border-radius: 7px;
+  font-size: 14.5px; font-weight: 800; color: #fff; margin-bottom: 6px;
+}
+#prot-root .presume-val {
+  font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 4px;
+}
+#prot-root .presume-text { font-size: 14px; color: var(--navy-l); line-height: 1.6; }
+#prot-root .presume-ft {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 14px 20px;
+  background: var(--navy-pale); border-top: 1px solid var(--border);
+}
+#prot-root .presume-btn-copy {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  padding: 9px 18px; border-radius: 5px; font-size: 13px; font-weight: 700;
+  background: var(--teal); color: #fff; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s;
+}
+#prot-root .presume-btn-copy:hover { background: #0f766e; }
+#prot-root .presume-btn-print {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  padding: 9px 18px; border-radius: 5px; font-size: 13px; font-weight: 700;
+  background: #64748b; color: #fff; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s;
+}
+#prot-root .presume-btn-print:hover { background: #475569; }
+@media (max-width: 580px) {
+  #prot-root .presume-ft { flex-direction: column; }
+  #prot-root .presume-ft button { width: 100%; justify-content: center; }
+}
 /* =========================================
    PRO : Masque l'ascenseur (style App native)
    ========================================= */
@@ -333,23 +425,19 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         <label for="ppt-prenom">Prénom</label>
         <input type="text" id="ppt-prenom" placeholder="Prénom" autocomplete="off">
       </div>
-      <div class="ppt-field ppt-field-ddnage">
-        <div class="ppt-ddnage-row">
-          <div class="ppt-ddnage-col">
-            <label for="ppt-ddn">Date de naissance</label>
-            <input type="date" id="ppt-ddn" oninput="pptCalcAge()">
-          </div>
-          <div class="ppt-ddnage-col ppt-ddnage-col-small">
-            <label for="ppt-age">Âge (ans)</label>
-            <input type="number" id="ppt-age" placeholder="Ex: 45" min="0" max="130" oninput="pptClearDdn()">
-          </div>
-        </div>
+      <div class="ppt-field">
+        <label for="ppt-ddn">Date de naissance</label>
+        <input type="date" id="ppt-ddn" oninput="pptCalcAge()">
       </div>
       <div class="ppt-field">
+        <label for="ppt-age">Âge (ans)</label>
+        <input type="number" id="ppt-age" placeholder="Âge" min="0" max="130" oninput="pptClearDdn()">
+      </div>
+      <div class="ppt-field ppt-field-wide">
         <label for="ppt-medecin">Médecin prescripteur</label>
         <input type="text" id="ppt-medecin" placeholder="Dr ..." autocomplete="off">
       </div>
-      <div class="ppt-field">
+      <div class="ppt-field ppt-field-wide">
         <label for="ppt-date">Date de consultation</label>
         <input type="date" id="ppt-date">
       </div>
@@ -458,6 +546,42 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         <div class="pres-int" id="ri"></div>
         <div class="pres-rco" id="rr"></div>
       </div>
+    </div>
+    <!-- Barre d'actions (visible après calcul) -->
+    <div class="pact" id="prot-act">
+      <button class="pbtn-rapport" onclick="generateReport()">&#128196; Générer le rapport</button>
+      <button class="pbtn-act-copy" id="prot-act-copy" onclick="protCopyResume()">&#128203; Copier pour le dossier</button>
+      <button class="pbtn-act-print" onclick="protPrintResume()">&#128438; Imprimer A5</button>
+    </div>
+  </div>
+  <!-- Résumé panel (déployé sous le calculateur) -->
+  <div id="prot-resume" class="presume">
+    <div class="presume-hd">
+      <div>
+        <div class="presume-hd-title">&#128196; Résumé clinique — Protéinurie</div>
+        <div class="presume-hd-meta" id="prot-resume-patient"></div>
+      </div>
+      <button class="presume-close" onclick="closeResume()">&#10005; Fermer</button>
+    </div>
+    <div class="presume-bd">
+      <div class="presume-sect">
+        <div class="presume-sect-label">Stade KDIGO / Décision</div>
+        <div class="presume-decision" id="prot-resume-decision"></div>
+        <div class="presume-val" id="prot-resume-val"></div>
+      </div>
+      <div class="presume-sect">
+        <div class="presume-sect-label">Interprétation</div>
+        <div class="presume-text" id="prot-resume-interp"></div>
+      </div>
+      <div class="presume-sect">
+        <div class="presume-sect-label">Conduite à tenir</div>
+        <div class="presume-text" id="prot-resume-reco"></div>
+      </div>
+      <div id="prot-resume-acr"></div>
+    </div>
+    <div class="presume-ft">
+      <button class="presume-btn-copy" id="presume-copy-btn" onclick="protCopyResume()">&#128203; Copier pour le dossier</button>
+      <button class="presume-btn-print" onclick="protPrintResume()">&#128438; Imprimer A5</button>
     </div>
   </div>
 </div>
@@ -761,6 +885,19 @@ window.togAcc = function(btn) {
   if (!wasOn) { btn.classList.add('on'); if (body) body.classList.add('on'); }
 };
 
+/* ===== PATIENT HELPER ===== */
+function pptGetPatient() {
+  function v(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  var nom = v('ppt-nom'), prenom = v('ppt-prenom');
+  var ddn = v('ppt-ddn'), age = v('ppt-age');
+  var medecin = v('ppt-medecin'), dateConsult = v('ppt-date');
+  var nomComplet = [prenom, nom].filter(Boolean).join(' ');
+  function fmtDate(d){ var p = d.split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : d; }
+  var ddnFmt = ddn ? fmtDate(ddn) : '';
+  var dateFmt = dateConsult ? fmtDate(dateConsult) : new Date().toLocaleDateString('fr-FR');
+  return { nomComplet: nomComplet, ddnFmt: ddnFmt, age: age, medecin: medecin, dateFmt: dateFmt };
+}
+
 /* ===== CALCULATEUR P/C ===== */
 window.calcPC = function() {
   var p   = parseFloat(document.getElementById('pv').value);
@@ -842,11 +979,14 @@ window.calcPC = function() {
   document.getElementById('rr').innerHTML       = '<strong>Conduite :</strong> ' + reco;
   document.getElementById('prot-res').className = 'pres on ' + hd_cls;
   window._protCalcResult = { ratio: ratio, eq: eq, stade: stade, tag: tag, interp: interp, reco: reco, acr: acr, hd_cls: hd_cls };
+  document.getElementById('prot-act').classList.add('on');
 };
 window.resetPC = function() {
   ['pv','cv','av'].forEach(function(i){ document.getElementById(i).value = ''; });
   document.getElementById('ctx').selectedIndex = 0;
   document.getElementById('prot-res').className = 'pres';
+  document.getElementById('prot-act').classList.remove('on');
+  document.getElementById('prot-resume').classList.remove('on');
   window._protCalcResult = null;
 };
 /* Soumission par Entrée */
