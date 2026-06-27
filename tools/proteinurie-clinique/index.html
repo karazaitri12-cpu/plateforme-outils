@@ -127,47 +127,54 @@
 @media(max-width:680px){ #prot-root .ppt-field-ddnage { grid-column: span 1; } }
 
 /* ─── NAVIGATION — MODÈLE NVG (flex-wrap, responsive natif) ─── */
-/* ─── NAVIGATION — Modèle NVG : flex-wrap, grille 3 col mobile ─── */
+/* ─── NAVIGATION — identique NVG ─── */
 #prot-root .pnav {
-  background: var(--white);
-  border-bottom: 2px solid var(--border);
-  /* pas de sticky : évite le comportement pleine largeur sur mobile */
-}
-#prot-root .pnav-inner {
   display: flex;
   flex-wrap: wrap;
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  overflow: hidden;
 }
 #prot-root .ptab {
   all: unset;
-  cursor: pointer;
+  box-sizing: border-box;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 11px 18px;
-  font-size: 13px;
+  padding: 11px 16px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--muted);
-  border-bottom: 3px solid transparent;
+  background: transparent;
+  border: none;
+  border-bottom: 4px solid transparent;
+  cursor: pointer;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
+  letter-spacing: 0.2px;
   white-space: nowrap;
+  margin-bottom: -2px;
   font-family: inherit;
-  box-sizing: border-box;
 }
 #prot-root .ptab:hover { color: var(--navy); background: var(--navy-pale); }
-#prot-root .ptab.on  { color: var(--primary); border-bottom-color: var(--primary); background: #f0f6ff; font-weight: 700; }
+#prot-root .ptab.on {
+  color: var(--primary);
+  border-bottom: 4px solid var(--primary);
+  background: #f0f6ff;
+  font-weight: 700;
+}
 #prot-root .ptab-ico { font-size: 15px; }
 
-/* Mobile : 3 onglets par ligne exactement (2 lignes de 3) */
+/* Mobile : 3 par ligne (2 lignes de 3), exactement comme NVG 4 par ligne */
 @media (max-width: 640px) {
   #prot-root .ptab {
-    flex: 0 0 33.333%;
-    width: 33.333%;
-    padding: 9px 2px;
+    flex: 1 1 auto;
+    min-width: calc(33.333% - 2px);
+    padding: 10px 4px;
     font-size: 11px;
     text-align: center;
     justify-content: center;
-    border-bottom-width: 2px;
+    display: flex;
   }
   #prot-root .ptab-ico { display: none; }
 }
@@ -302,24 +309,10 @@
   #prot-root .pres-hd { flex-direction: column; align-items: flex-start; gap: 4px; }
 }
 
-/* ─── SCROLLBAR & REFLOW FIX ─── */
-/* Isoler le scroll dans #prot-root → la largeur de body ne varie jamais */
-html, body {
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
-#prot-root {
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100vh;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-#prot-root::-webkit-scrollbar { display: none; }
+/* ─── SCROLLBAR ─── */
+html { scrollbar-width: none; }
+body { -ms-overflow-style: none; overflow-y: auto; }
+::-webkit-scrollbar { display: none; }
 </style>
 </head>
 <body>
@@ -383,16 +376,14 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
 </div>
 
 <!-- ══ NAVIGATION — MODÈLE NVG (flex-wrap) ══ -->
-<div class="pnav">
-  <nav class="pnav-inner">
+<nav class="pnav">
     <button class="ptab on" onclick="showTab('def')"><span class="ptab-ico">📋</span>Définition &amp; Seuils</button>
     <button class="ptab" onclick="showTab('calc')"><span class="ptab-ico">🧮</span>Calculateur P/C</button>
     <button class="ptab" onclick="showTab('physio')"><span class="ptab-ico">🔬</span>Physiopathologie</button>
     <button class="ptab" onclick="showTab('etio')"><span class="ptab-ico">🩺</span>Étiologies</button>
     <button class="ptab" onclick="showTab('grossesse')"><span class="ptab-ico">🤰</span>Grossesse</button>
     <button class="ptab" onclick="showTab('demarche')"><span class="ptab-ico">▶️</span>Démarche</button>
-  </nav>
-</div>
+</nav>
 
 <div class="pbody">
 <!-- ═══ ONGLET 1 — DÉFINITION ═══ -->
