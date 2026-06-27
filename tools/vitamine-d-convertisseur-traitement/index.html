@@ -11,7 +11,7 @@
 #vitd-root {
   all: initial;
   display: block;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 15px;
   line-height: 1.6;
   color: #1a2535;
@@ -22,7 +22,7 @@
   margin: 0 auto;
 }
 #vitd-root *, #vitd-root *::before, #vitd-root *::after {
-  box-sizing: border-box;
+  box-sizing: border-box !important;
   margin: 0;
   padding: 0;
 }
@@ -45,7 +45,7 @@
   --shadow:   0 2px 8px rgba(26,58,92,0.09);
   --radius:   6px;
 }
-#vitd-root .vd-wrap { padding: 0 0 40px; }
+#vitd-root .vd-wrap { padding: 0 0 40px; background: #ffffff; border: 1px solid var(--border); box-shadow: var(--shadow); border-radius: 8px; overflow: hidden; }
 #vitd-root .vd-header {
   background: var(--navy);
   color: var(--white);
@@ -67,17 +67,17 @@
   margin-bottom: 8px;
 }
 #vitd-root .vd-title {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+  font-family: 'Georgia', serif;
   font-weight: 700;
   color: #fff;
   line-height: 1.25;
 }
 #vitd-root .vd-subtitle {
-  font-size: 0.80rem;
+  font-size: 0.85rem;
   color: rgba(255,255,255,0.68);
   margin-top: 4px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-style: italic;
 }
 #vitd-root .vd-ref-tags {
   margin-top: 10px;
@@ -95,7 +95,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ─── PATIENT BAR (Style Premium inspiré Biopsie) ─── */
+/* ─── PATIENT BAR (Style Premium) ─── */
 #vitd-root .vd-patient-bar {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
@@ -112,7 +112,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 11.5px;
   font-weight: 700;
-  color: #64748b;
+  color: var(--slate);
   text-align: left;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -579,8 +579,11 @@ html { scrollbar-width: none; }
 body { -ms-overflow-style: none; overflow-y: auto; }
 ::-webkit-scrollbar { display: none; }
 </style>
-
+</head>
+<body>
+<div id="vitd-root">
 <div class="vd-wrap">
+
 <div class="vd-header">
   <div class="vd-badge">Outil Clinique</div>
   <div class="vd-title">Vitamine D &mdash; Convertisseur &amp; Sch&eacute;mas Th&eacute;rapeutiques</div>
@@ -1328,7 +1331,6 @@ window.vdTraitement = function() {
   }
 
   /* ── TRAITEMENT CURATIF (carence/insuffisance) ── */
-  var html = '';
   var stColors = { severe:'var(--accent)', moderate:'#ea580c', insuf:'var(--gold)' };
   html += '<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--light);border-radius:5px;margin-bottom:16px;font-family:-apple-system, BlinkMacSystemFont, sans-serif;">'
     + '<div style="font-size:2rem;line-height:1;font-weight:900;color:' + (stColors[st]||'#333') + ';">' + taux.toFixed(1) + '</div>'
