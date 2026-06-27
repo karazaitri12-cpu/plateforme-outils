@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1A3A5C">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Rupture Prématurée des Membranes – Outil de Décision</title>
     <style>
-/* ============================================================
-   RPM TOOL — Blindage Elementor complet
-   Charte Dr KARA-ZAITRI : Navy #1A3A5C / Bordeaux #8B1A2F
-   ============================================================ */
 #rpm-tool-root *,
 #rpm-tool-root *::before,
 #rpm-tool-root *::after {
@@ -16,7 +16,6 @@
     margin: 0 !important;
     padding: 0 !important;
 }
-
 #rpm-tool-root {
     font-family: 'Segoe UI', Arial, sans-serif !important;
     font-size: 15px !important;
@@ -28,8 +27,6 @@
     margin: 0 auto !important;
     -webkit-text-size-adjust: 100% !important;
 }
-
-/* ---- PALETTE ---- */
 #rpm-tool-root {
     --rpm-navy:    #1A3A5C !important;
     --rpm-navy2:   #22487a !important;
@@ -48,8 +45,7 @@
     --rpm-dbg:     #fef2f2 !important;
     --rpm-infobg:  #EEF4FB !important;
 }
-
-/* ---- EN-TÊTE ---- */
+/* EN-TÊTE */
 #rpm-tool-root .rpm-header {
     background: var(--rpm-navy) !important;
     color: var(--rpm-white) !important;
@@ -57,356 +53,242 @@
     padding: 22px 28px 18px !important;
     margin-bottom: 0 !important;
 }
-
 #rpm-tool-root .rpm-header-specialty {
-    font-size: 0.78rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
-    color: rgba(255,255,255,0.65) !important;
-    margin-bottom: 6px !important;
+    font-size: 0.78rem !important; font-weight: 600 !important;
+    letter-spacing: 0.12em !important; text-transform: uppercase !important;
+    color: rgba(255,255,255,0.65) !important; margin-bottom: 6px !important;
 }
-
 #rpm-tool-root .rpm-header h1 {
-    font-size: 1.35rem !important;
-    font-weight: 700 !important;
-    color: var(--rpm-white) !important;
-    margin: 0 0 4px !important;
-    padding: 0 !important;
-    border: none !important;
-    line-height: 1.3 !important;
+    font-size: 1.35rem !important; font-weight: 700 !important;
+    color: var(--rpm-white) !important; margin: 0 0 4px !important;
+    padding: 0 !important; border: none !important; line-height: 1.3 !important;
 }
-
 #rpm-tool-root .rpm-header-sub {
-    font-size: 0.82rem !important;
-    color: rgba(255,255,255,0.60) !important;
-    margin-top: 6px !important;
+    font-size: 0.82rem !important; color: rgba(255,255,255,0.60) !important; margin-top: 6px !important;
 }
-
 #rpm-tool-root .rpm-version-bar {
-    background: var(--rpm-bord) !important;
-    color: var(--rpm-white) !important;
-    font-size: 0.78rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.08em !important;
-    text-align: center !important;
-    padding: 6px 12px !important;
+    background: var(--rpm-bord) !important; color: var(--rpm-white) !important;
+    font-size: 0.78rem !important; font-weight: 600 !important; letter-spacing: 0.08em !important;
+    text-align: center !important; padding: 6px 12px !important; margin-bottom: 0 !important;
+}
+/* PATIENT BAR */
+#rpm-tool-root .rpm-patient-bar {
+    background: var(--rpm-white) !important;
+    border-bottom: 1px solid var(--rpm-border) !important;
+}
+#rpm-tool-root .rpm-patient-toggle {
+    width: 100% !important; display: flex !important; align-items: center !important; gap: 8px !important;
+    padding: 8px 20px !important; background: none !important; border: none !important; cursor: pointer !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important; font-size: 11px !important; font-weight: 600 !important;
+    color: var(--rpm-gray) !important; text-align: left !important; letter-spacing: 0.04em !important;
+    text-transform: uppercase !important; transition: color 0.15s !important;
+}
+#rpm-tool-root .rpm-patient-toggle:hover { color: var(--rpm-navy) !important; }
+#rpm-tool-root .rpm-patient-toggle .pt-arrow {
+    font-size: 9px !important; transition: transform 0.2s !important; display: inline-block !important;
+}
+#rpm-tool-root .rpm-patient-toggle.open .pt-arrow { transform: rotate(90deg) !important; }
+#rpm-tool-root .rpm-patient-form {
+    display: none !important; padding: 10px 20px 14px !important;
+    background: #fafbfc !important; border-top: 1px solid var(--rpm-border) !important;
+}
+#rpm-tool-root .rpm-patient-form.open { display: block !important; }
+#rpm-tool-root .rpm-patient-grid {
+    display: grid !important; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important; gap: 8px !important;
+}
+#rpm-tool-root .rpm-patient-field { display: flex !important; flex-direction: column !important; gap: 3px !important; min-width: 0 !important; }
+#rpm-tool-root .rpm-patient-field label {
+    font-size: 10px !important; font-weight: 700 !important; color: #4a5568 !important;
+    text-transform: uppercase !important; letter-spacing: 0.04em !important; white-space: nowrap !important;
     margin-bottom: 0 !important;
 }
-
-/* ---- CORPS ---- */
+#rpm-tool-root .rpm-patient-field input {
+    padding: 6px 8px !important; border: 1px solid var(--rpm-border) !important; border-radius: 4px !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important; font-size: 12px !important; color: #1a202c !important;
+    background: #ffffff !important; outline: none !important; width: 100% !important; min-width: 0 !important;
+    transition: border-color 0.15s !important; margin-bottom: 0 !important;
+}
+#rpm-tool-root .rpm-patient-field input:focus { border-color: var(--rpm-navy) !important; }
+#rpm-tool-root .rpm-patient-field-ddnage { grid-column: span 2 !important; min-width: 0 !important; }
+#rpm-tool-root .rpm-ddnage-row { display: flex !important; gap: 8px !important; }
+#rpm-tool-root .rpm-ddnage-col { display: flex !important; flex-direction: column !important; gap: 3px !important; flex: 1 1 0 !important; min-width: 0 !important; }
+#rpm-tool-root .rpm-ddnage-col-small { flex: 0 0 90px !important; }
+#rpm-tool-root .rpm-ddnage-col label {
+    font-size: 10px !important; font-weight: 700 !important; color: #4a5568 !important;
+    text-transform: uppercase !important; letter-spacing: 0.04em !important; white-space: nowrap !important; margin-bottom: 0 !important;
+}
+#rpm-tool-root .rpm-ddnage-col input {
+    padding: 6px 8px !important; border: 1px solid var(--rpm-border) !important; border-radius: 4px !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important; font-size: 12px !important; color: #1a202c !important;
+    background: #ffffff !important; outline: none !important; width: 100% !important; min-width: 0 !important;
+    transition: border-color 0.15s !important; margin-bottom: 0 !important;
+}
+#rpm-tool-root .rpm-ddnage-col input:focus { border-color: var(--rpm-navy) !important; }
+@media(max-width:680px){ #rpm-tool-root .rpm-patient-field-ddnage { grid-column: span 1 !important; } }
+/* CORPS */
 #rpm-tool-root .rpm-body {
-    background: var(--rpm-white) !important;
-    border: 1px solid var(--rpm-border) !important;
-    border-top: none !important;
-    border-radius: 0 0 10px 10px !important;
-    padding: 24px !important;
+    background: var(--rpm-white) !important; border: 1px solid var(--rpm-border) !important;
+    border-top: none !important; border-radius: 0 0 10px 10px !important; padding: 24px !important;
 }
-
-/* ---- SECTION FORMULAIRE ---- */
 #rpm-tool-root .rpm-section {
-    background: var(--rpm-infobg) !important;
-    border-left: 4px solid var(--rpm-navy) !important;
-    border-radius: 0 6px 6px 0 !important;
-    padding: 16px 18px !important;
-    margin-bottom: 18px !important;
+    background: var(--rpm-infobg) !important; border-left: 4px solid var(--rpm-navy) !important;
+    border-radius: 0 6px 6px 0 !important; padding: 16px 18px !important; margin-bottom: 18px !important;
 }
-
 #rpm-tool-root .rpm-section-title {
-    font-size: 0.78rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase !important;
-    color: var(--rpm-navy) !important;
-    margin-bottom: 14px !important;
+    font-size: 0.78rem !important; font-weight: 700 !important; letter-spacing: 0.1em !important;
+    text-transform: uppercase !important; color: var(--rpm-navy) !important; margin-bottom: 14px !important;
 }
-
-/* ---- LABELS & INPUTS ---- */
 #rpm-tool-root label {
-    display: block !important;
-    font-size: 0.88rem !important;
-    font-weight: 600 !important;
-    color: var(--rpm-navy) !important;
-    margin-bottom: 6px !important;
+    display: block !important; font-size: 0.88rem !important; font-weight: 600 !important;
+    color: var(--rpm-navy) !important; margin-bottom: 6px !important;
 }
-
 #rpm-tool-root input[type="number"],
 #rpm-tool-root select {
-    width: 100% !important;
-    padding: 10px 12px !important;
-    border: 1.5px solid var(--rpm-border) !important;
-    border-radius: 6px !important;
-    font-size: 0.95rem !important;
-    font-family: 'Segoe UI', Arial, sans-serif !important;
-    color: #1e2a35 !important;
-    background: var(--rpm-white) !important;
-    appearance: auto !important;
-    -webkit-appearance: auto !important;
-    outline: none !important;
-    transition: border-color 0.2s !important;
-    margin-bottom: 0 !important;
+    width: 100% !important; padding: 10px 12px !important; border: 1.5px solid var(--rpm-border) !important;
+    border-radius: 6px !important; font-size: 0.95rem !important; font-family: 'Segoe UI', Arial, sans-serif !important;
+    color: #1e2a35 !important; background: var(--rpm-white) !important; appearance: auto !important;
+    -webkit-appearance: auto !important; outline: none !important; transition: border-color 0.2s !important; margin-bottom: 0 !important;
 }
-
 #rpm-tool-root input[type="number"]:focus,
-#rpm-tool-root select:focus {
-    border-color: var(--rpm-navy) !important;
-}
-
-#rpm-tool-root .rpm-form-group {
-    margin-bottom: 14px !important;
-}
-
-/* ---- CHECKBOXES GRILLE ---- */
-#rpm-tool-root .rpm-grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
-}
-
+#rpm-tool-root select:focus { border-color: var(--rpm-navy) !important; }
+#rpm-tool-root .rpm-form-group { margin-bottom: 14px !important; }
+#rpm-tool-root .rpm-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
 #rpm-tool-root .rpm-check-item {
-    background: var(--rpm-white) !important;
-    border: 1.5px solid var(--rpm-border) !important;
-    border-radius: 6px !important;
-    padding: 12px 14px !important;
-    display: flex !important;
-    align-items: flex-start !important;
-    cursor: pointer !important;
+    background: var(--rpm-white) !important; border: 1.5px solid var(--rpm-border) !important;
+    border-radius: 6px !important; padding: 12px 14px !important; display: flex !important;
+    align-items: flex-start !important; cursor: pointer !important;
     transition: border-color 0.15s, background 0.15s !important;
 }
-
-#rpm-tool-root .rpm-check-item:hover {
-    border-color: var(--rpm-navy) !important;
-    background: var(--rpm-infobg) !important;
-}
-
+#rpm-tool-root .rpm-check-item:hover { border-color: var(--rpm-navy) !important; background: var(--rpm-infobg) !important; }
 #rpm-tool-root .rpm-check-item input[type="checkbox"] {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px !important;
-    margin-right: 10px !important;
-    margin-top: 2px !important;
-    cursor: pointer !important;
-    accent-color: var(--rpm-navy) !important;
-    flex-shrink: 0 !important;
+    width: 18px !important; height: 18px !important; min-width: 18px !important;
+    margin-right: 10px !important; margin-top: 2px !important; cursor: pointer !important;
+    accent-color: var(--rpm-navy) !important; flex-shrink: 0 !important;
 }
-
 #rpm-tool-root .rpm-check-item label {
-    font-size: 0.88rem !important;
-    font-weight: 500 !important;
-    color: #2c3e50 !important;
-    cursor: pointer !important;
-    margin: 0 !important;
-    line-height: 1.4 !important;
+    font-size: 0.88rem !important; font-weight: 500 !important; color: #2c3e50 !important;
+    cursor: pointer !important; margin: 0 !important; line-height: 1.4 !important;
 }
-
 #rpm-tool-root .rpm-check-item label em {
-    display: block !important;
-    font-size: 0.78rem !important;
-    color: var(--rpm-gray) !important;
-    font-style: italic !important;
-    margin-top: 2px !important;
+    display: block !important; font-size: 0.78rem !important; color: var(--rpm-gray) !important;
+    font-style: italic !important; margin-top: 2px !important;
 }
-
-/* ---- BOUTON ---- */
 #rpm-tool-root .rpm-btn {
-    display: block !important;
-    width: 100% !important;
-    background: var(--rpm-navy) !important;
-    color: var(--rpm-white) !important;
-    border: none !important;
-    border-radius: 7px !important;
-    padding: 13px 20px !important;
-    font-size: 0.95rem !important;
-    font-weight: 700 !important;
-    font-family: 'Segoe UI', Arial, sans-serif !important;
-    letter-spacing: 0.04em !important;
-    cursor: pointer !important;
-    margin-top: 6px !important;
-    transition: background 0.2s !important;
-    text-align: center !important;
+    display: block !important; width: 100% !important; background: var(--rpm-navy) !important;
+    color: var(--rpm-white) !important; border: none !important; border-radius: 7px !important;
+    padding: 13px 20px !important; font-size: 0.95rem !important; font-weight: 700 !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important; letter-spacing: 0.04em !important;
+    cursor: pointer !important; margin-top: 6px !important; transition: background 0.2s !important; text-align: center !important;
 }
-
-#rpm-tool-root .rpm-btn::before {
-    content: "\25B6\0020" !important;
-}
-
-#rpm-tool-root .rpm-btn:hover {
-    background: var(--rpm-navy2) !important;
-}
-
-/* ---- RÉSULTATS ---- */
-#rpm-tool-root .rpm-results {
-    display: none !important;
-    margin-top: 28px !important;
-    border-top: 2px solid var(--rpm-border) !important;
-    padding-top: 24px !important;
-}
-
+#rpm-tool-root .rpm-btn::before { content: "\25B6\0020" !important; }
+#rpm-tool-root .rpm-btn:hover { background: var(--rpm-navy2) !important; }
+/* RÉSULTATS */
+#rpm-tool-root .rpm-results { display: none !important; margin-top: 28px !important; border-top: 2px solid var(--rpm-border) !important; padding-top: 24px !important; }
 #rpm-tool-root .rpm-results-title {
-    font-size: 1rem !important;
-    font-weight: 700 !important;
-    color: var(--rpm-navy) !important;
-    text-align: center !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
-    margin-bottom: 18px !important;
-    padding-bottom: 10px !important;
-    border-bottom: 2px solid var(--rpm-navy) !important;
+    font-size: 1rem !important; font-weight: 700 !important; color: var(--rpm-navy) !important;
+    text-align: center !important; text-transform: uppercase !important; letter-spacing: 0.08em !important;
+    margin-bottom: 18px !important; padding-bottom: 10px !important; border-bottom: 2px solid var(--rpm-navy) !important;
 }
-
-/* ---- CARDS RÉSULTAT ---- */
 #rpm-tool-root .rpm-card {
-    border-radius: 6px !important;
-    padding: 16px 18px !important;
-    margin-bottom: 14px !important;
-    border-left-width: 5px !important;
-    border-left-style: solid !important;
+    border-radius: 6px !important; padding: 16px 18px !important; margin-bottom: 14px !important;
+    border-left-width: 5px !important; border-left-style: solid !important;
 }
-
-#rpm-tool-root .rpm-card h3 {
-    font-size: 0.95rem !important;
-    font-weight: 700 !important;
-    margin-bottom: 10px !important;
-    padding-bottom: 8px !important;
-    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
-    line-height: 1.3 !important;
-}
-
-#rpm-tool-root .rpm-card h4 {
-    font-size: 0.85rem !important;
-    font-weight: 700 !important;
-    margin: 12px 0 6px !important;
-    color: var(--rpm-navy) !important;
-}
-
-#rpm-tool-root .rpm-card ul {
-    margin: 0 !important;
-    padding-left: 0 !important;
-    list-style: none !important;
-}
-
-#rpm-tool-root .rpm-card ul li {
-    font-size: 0.88rem !important;
-    padding: 4px 0 4px 20px !important;
-    position: relative !important;
-    line-height: 1.5 !important;
-    margin-bottom: 0 !important;
-}
-
-#rpm-tool-root .rpm-card ul li::before {
-    content: "\2192" !important;
-    position: absolute !important;
-    left: 0 !important;
-    color: inherit !important;
-    font-weight: 700 !important;
-}
-
-#rpm-tool-root .rpm-card p {
-    font-size: 0.88rem !important;
-    line-height: 1.5 !important;
-    margin-bottom: 6px !important;
-}
-
-/* ---- VARIANTES COULEUR ---- */
-#rpm-tool-root .rpm-danger {
-    background: var(--rpm-dbg) !important;
-    border-left-color: var(--rpm-danger) !important;
-    color: #7f1d1d !important;
-}
-
+#rpm-tool-root .rpm-card h3 { font-size: 0.95rem !important; font-weight: 700 !important; margin-bottom: 10px !important; padding-bottom: 8px !important; border-bottom: 1px solid rgba(0,0,0,0.08) !important; line-height: 1.3 !important; }
+#rpm-tool-root .rpm-card h4 { font-size: 0.85rem !important; font-weight: 700 !important; margin: 12px 0 6px !important; color: var(--rpm-navy) !important; }
+#rpm-tool-root .rpm-card ul { margin: 0 !important; padding-left: 0 !important; list-style: none !important; }
+#rpm-tool-root .rpm-card ul li { font-size: 0.88rem !important; padding: 4px 0 4px 20px !important; position: relative !important; line-height: 1.5 !important; margin-bottom: 0 !important; }
+#rpm-tool-root .rpm-card ul li::before { content: "\2192" !important; position: absolute !important; left: 0 !important; color: inherit !important; font-weight: 700 !important; }
+#rpm-tool-root .rpm-card p { font-size: 0.88rem !important; line-height: 1.5 !important; margin-bottom: 6px !important; }
+#rpm-tool-root .rpm-danger { background: var(--rpm-dbg) !important; border-left-color: var(--rpm-danger) !important; color: #7f1d1d !important; }
 #rpm-tool-root .rpm-danger h3 { color: var(--rpm-danger) !important; }
 #rpm-tool-root .rpm-danger h4 { color: var(--rpm-danger) !important; }
-
-#rpm-tool-root .rpm-warning {
-    background: var(--rpm-wbg) !important;
-    border-left-color: var(--rpm-gold) !important;
-    color: #5c3a00 !important;
-}
-
+#rpm-tool-root .rpm-warning { background: var(--rpm-wbg) !important; border-left-color: var(--rpm-gold) !important; color: #5c3a00 !important; }
 #rpm-tool-root .rpm-warning h3 { color: var(--rpm-gold) !important; }
 #rpm-tool-root .rpm-warning h4 { color: var(--rpm-gold) !important; }
-
-#rpm-tool-root .rpm-info {
-    background: var(--rpm-infobg) !important;
-    border-left-color: var(--rpm-navy) !important;
-    color: #1e2a35 !important;
-}
-
+#rpm-tool-root .rpm-info { background: var(--rpm-infobg) !important; border-left-color: var(--rpm-navy) !important; color: #1e2a35 !important; }
 #rpm-tool-root .rpm-info h3 { color: var(--rpm-navy) !important; }
-
-#rpm-tool-root .rpm-success {
-    background: var(--rpm-sbg) !important;
-    border-left-color: var(--rpm-success) !important;
-    color: #14532d !important;
-}
-
+#rpm-tool-root .rpm-success { background: var(--rpm-sbg) !important; border-left-color: var(--rpm-success) !important; color: #14532d !important; }
 #rpm-tool-root .rpm-success h3 { color: var(--rpm-success) !important; }
-
-#rpm-tool-root .rpm-nn {
-    background: #F5F0F8 !important;
-    border-left-color: #6b21a8 !important;
-    color: #3b0764 !important;
-}
-
+#rpm-tool-root .rpm-nn { background: #F5F0F8 !important; border-left-color: #6b21a8 !important; color: #3b0764 !important; }
 #rpm-tool-root .rpm-nn h3 { color: #6b21a8 !important; }
 #rpm-tool-root .rpm-nn h4 { color: #6b21a8 !important; }
-
-/* ---- HIGHLIGHT ---- */
-#rpm-tool-root .rpm-hl {
-    background: #fef9c3 !important;
-    border: 1px solid #fde047 !important;
-    border-radius: 4px !important;
-    padding: 2px 7px !important;
-    font-weight: 700 !important;
-    color: #713f12 !important;
-    display: inline !important;
-    font-size: 0.87rem !important;
+#rpm-tool-root .rpm-hl { background: #fef9c3 !important; border: 1px solid #fde047 !important; border-radius: 4px !important; padding: 2px 7px !important; font-weight: 700 !important; color: #713f12 !important; display: inline !important; font-size: 0.87rem !important; }
+#rpm-tool-root .rpm-sgb-note { background: var(--rpm-wbg) !important; border-left: 4px solid var(--rpm-gold) !important; border-radius: 0 5px 5px 0 !important; padding: 9px 13px !important; font-size: 0.84rem !important; color: #5c3a00 !important; margin-top: 10px !important; line-height: 1.5 !important; }
+#rpm-tool-root .rpm-ci-box { background: var(--rpm-dbg) !important; border-left: 4px solid var(--rpm-danger) !important; border-radius: 0 5px 5px 0 !important; padding: 9px 13px !important; font-size: 0.85rem !important; font-weight: 700 !important; color: var(--rpm-danger) !important; margin-bottom: 10px !important; }
+#rpm-tool-root .rpm-ci-box::before { content: "\26A0\0020" !important; }
+/* RÉSUMÉ PANEL */
+#rpm-tool-root .rpm-resume-panel {
+    display: none !important; margin-top: 24px !important;
+    border: 1px solid var(--rpm-border) !important;
+    border-top: 3px solid var(--rpm-navy) !important;
+    border-radius: 6px !important; overflow: hidden !important;
 }
-
-/* ---- NOTE SGB ---- */
-#rpm-tool-root .rpm-sgb-note {
-    background: var(--rpm-wbg) !important;
-    border-left: 4px solid var(--rpm-gold) !important;
-    border-radius: 0 5px 5px 0 !important;
-    padding: 9px 13px !important;
-    font-size: 0.84rem !important;
-    color: #5c3a00 !important;
-    margin-top: 10px !important;
-    line-height: 1.5 !important;
+#rpm-tool-root .rpm-resume-panel.visible { display: block !important; }
+#rpm-tool-root .rpm-resume-header {
+    background: var(--rpm-navy) !important; color: #ffffff !important;
+    padding: 12px 18px !important; display: flex !important;
+    align-items: center !important; justify-content: space-between !important;
+    flex-wrap: wrap !important; gap: 8px !important;
 }
-
-/* ---- CONTRE-INDICATION BOX ---- */
-#rpm-tool-root .rpm-ci-box {
-    background: var(--rpm-dbg) !important;
-    border-left: 4px solid var(--rpm-danger) !important;
-    border-radius: 0 5px 5px 0 !important;
-    padding: 9px 13px !important;
-    font-size: 0.85rem !important;
-    font-weight: 700 !important;
-    color: var(--rpm-danger) !important;
-    margin-bottom: 10px !important;
+#rpm-tool-root .rpm-resume-header h2 { margin: 0 !important; font-size: 13px !important; font-weight: 700 !important; color: #ffffff !important; }
+#rpm-tool-root .rpm-resume-header-meta { font-size: 11px !important; color: rgba(255,255,255,0.7) !important; }
+#rpm-tool-root .rpm-resume-body { padding: 16px 18px !important; background: #ffffff !important; }
+#rpm-tool-root .rpm-resume-section { margin-bottom: 12px !important; }
+#rpm-tool-root .rpm-resume-section h3 {
+    font-size: 10px !important; font-weight: 700 !important; color: var(--rpm-navy) !important;
+    text-transform: uppercase !important; letter-spacing: 0.08em !important;
+    margin: 0 0 5px !important; padding-bottom: 4px !important; border-bottom: 1px solid var(--rpm-border) !important;
+    display: flex !important; align-items: center !important; gap: 5px !important;
 }
-
-#rpm-tool-root .rpm-ci-box::before {
-    content: "\26A0\0020" !important;
+#rpm-tool-root .rpm-resume-section h3::before { content: "\25A0" !important; color: var(--rpm-bord) !important; font-size: 7px !important; }
+#rpm-tool-root .rpm-resume-box {
+    padding: 9px 12px !important; border-radius: 4px !important;
+    font-size: 13px !important; line-height: 1.5 !important; color: var(--rpm-text) !important;
 }
-
-/* ---- FOOTER ---- */
-#rpm-tool-root .rpm-footer {
-    margin-top: 28px !important;
-    padding-top: 14px !important;
+#rpm-tool-root .rpm-resume-box-navy   { background: #EEF4FB !important; border-left: 4px solid var(--rpm-navy) !important; }
+#rpm-tool-root .rpm-resume-box-warn   { background: var(--rpm-wbg) !important; border-left: 4px solid var(--rpm-gold) !important; }
+#rpm-tool-root .rpm-resume-box-danger { background: var(--rpm-dbg) !important; border-left: 4px solid var(--rpm-danger) !important; }
+#rpm-tool-root .rpm-resume-box-success{ background: var(--rpm-sbg) !important; border-left: 4px solid var(--rpm-success) !important; }
+#rpm-tool-root .rpm-resume-box-purple { background: #F5F0F8 !important; border-left: 4px solid #6b21a8 !important; }
+#rpm-tool-root .rpm-resume-list { margin: 0 !important; padding: 0 !important; list-style: none !important; background: #f8fafc !important; border: 1px solid var(--rpm-border) !important; border-radius: 4px !important; overflow: hidden !important; }
+#rpm-tool-root .rpm-resume-list li { padding: 6px 12px 6px 26px !important; position: relative !important; font-size: 12.5px !important; line-height: 1.5 !important; border-bottom: 1px solid var(--rpm-border) !important; }
+#rpm-tool-root .rpm-resume-list li:last-child { border-bottom: none !important; }
+#rpm-tool-root .rpm-resume-list li::before { content: "\2192" !important; position: absolute !important; left: 8px !important; color: var(--rpm-navy) !important; font-size: 11px !important; top: 7px !important; }
+#rpm-tool-root .rpm-resume-footer {
+    padding: 10px 18px !important; background: #f8fafc !important;
     border-top: 1px solid var(--rpm-border) !important;
-    font-size: 0.76rem !important;
-    color: var(--rpm-gray) !important;
-    text-align: center !important;
-    line-height: 1.6 !important;
+    display: flex !important; align-items: center !important; gap: 8px !important; flex-wrap: wrap !important;
 }
-
-#rpm-tool-root .rpm-footer strong {
-    color: var(--rpm-navy) !important;
+#rpm-tool-root .rpm-btn-res-copy {
+    display: inline-flex !important; align-items: center !important; gap: 6px !important;
+    padding: 8px 16px !important; background: var(--rpm-navy) !important; color: #ffffff !important;
+    border: none !important; border-radius: 4px !important; font-family: 'Segoe UI', Arial, sans-serif !important;
+    font-size: 12px !important; font-weight: 700 !important; cursor: pointer !important; transition: background 0.15s !important;
 }
-
-/* ---- RESPONSIVE ---- */
+#rpm-tool-root .rpm-btn-res-copy:hover { background: var(--rpm-navy2) !important; }
+#rpm-tool-root .rpm-btn-res-copy.copied { background: var(--rpm-success) !important; }
+#rpm-tool-root .rpm-btn-res-print {
+    display: inline-flex !important; align-items: center !important; gap: 6px !important;
+    padding: 8px 16px !important; background: #ffffff !important; color: var(--rpm-navy) !important;
+    border: 1.5px solid var(--rpm-navy) !important; border-radius: 4px !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important; font-size: 12px !important;
+    font-weight: 700 !important; cursor: pointer !important; transition: background 0.15s !important;
+}
+#rpm-tool-root .rpm-btn-res-print:hover { background: #EEF4FB !important; }
+#rpm-tool-root .rpm-btn-res-close {
+    display: inline-flex !important; align-items: center !important; gap: 6px !important;
+    padding: 8px 14px !important; background: #ffffff !important; color: #64748b !important;
+    border: 1.5px solid #cbd5e1 !important; border-radius: 4px !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important; font-size: 12px !important;
+    font-weight: 600 !important; cursor: pointer !important; transition: background 0.15s !important;
+}
+#rpm-tool-root .rpm-btn-res-close:hover { background: #f8fafc !important; }
+#rpm-tool-root .rpm-copy-notice { font-size: 11px !important; color: var(--rpm-success) !important; display: none !important; }
+#rpm-tool-root .rpm-copy-notice.visible { display: inline !important; }
+/* FOOTER */
+#rpm-tool-root .rpm-footer { margin-top: 28px !important; padding-top: 14px !important; border-top: 1px solid var(--rpm-border) !important; font-size: 0.76rem !important; color: var(--rpm-gray) !important; text-align: center !important; line-height: 1.6 !important; }
+#rpm-tool-root .rpm-footer strong { color: var(--rpm-navy) !important; }
+/* RESPONSIVE */
 @media (max-width: 600px) {
     #rpm-tool-root { padding: 10px !important; }
     #rpm-tool-root .rpm-header { padding: 16px 16px 14px !important; }
@@ -414,45 +296,14 @@
     #rpm-tool-root .rpm-body { padding: 16px !important; }
     #rpm-tool-root .rpm-grid { grid-template-columns: 1fr !important; }
     #rpm-tool-root .rpm-check-item { padding: 13px 12px !important; }
+    #rpm-tool-root .rpm-resume-body, #rpm-tool-root .rpm-resume-header { padding-left: 14px !important; padding-right: 14px !important; }
 }
-
-/* ---- SCROLLBAR MASQUÉE (style App native) ---- */
 html { scrollbar-width: none !important; }
 body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 ::-webkit-scrollbar { display: none !important; }
-
-/* ---- PREMIUM OVERLAY ---- */
-.kz-premium-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  z-index: 8000; display: flex; justify-content: center; align-items: center;
-  background: rgba(240, 243, 248, 0.85);
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-}
-.kz-premium-card {
-  background: #fff; border: 1px solid #dde3ec; border-radius: 12px;
-  padding: 32px 28px; max-width: 420px; width: 90%;
-  text-align: center; box-shadow: 0 8px 32px rgba(26,74,122,.12);
-}
-.kz-premium-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #fff8e0; border: 1px solid #e0c060; border-radius: 20px;
-  padding: 4px 14px; font-size: 12px; font-weight: 700; color: #7a5a00;
-  margin-bottom: 14px;
-}
-.kz-premium-lock { font-size: 36px; display: block; margin-bottom: 10px; }
-.kz-premium-card h3 { font-size: 1.1rem; color: #1A3A5C; margin: 0 0 10px; font-weight: 700; }
-.kz-premium-card p  { font-size: 0.9rem; color: #4b5563; margin: 0 0 20px; line-height: 1.55; }
-.kz-premium-btn {
-  display: inline-block; background: #1A3A5C; color: #fff !important;
-  padding: 10px 22px; border-radius: 8px; font-size: 0.92rem;
-  font-weight: 600; text-decoration: none !important;
-}
-.kz-premium-btn:hover { background: #22487a; }
-.kz-premium-note { margin-top: 14px; font-size: 0.75rem; color: #9ca3af; }
     </style>
 </head>
 <body>
-
 <div id="rpm-tool-root">
 
     <!-- EN-TÊTE -->
@@ -463,17 +314,56 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
     </div>
     <div class="rpm-version-bar">CNGOF &bull; HAS &bull; Version 2024</div>
 
+    <!-- PATIENT BAR -->
+    <div class="rpm-patient-bar">
+        <button type="button" class="rpm-patient-toggle" id="rpm-patient-toggle-btn" onclick="rpmTogglePatient()" aria-expanded="false">
+            <span class="pt-arrow">&#9658;</span>
+            <span>&#128100; Identification patiente / médecin</span>
+            <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#A0AEC0;">Optionnel &mdash; pour le résumé et l'impression</span>
+        </button>
+        <div class="rpm-patient-form" id="rpm-patient-form">
+            <div class="rpm-patient-grid">
+                <div class="rpm-patient-field">
+                    <label for="rpm-pt-nom">Nom</label>
+                    <input type="text" id="rpm-pt-nom" placeholder="Nom de famille" autocomplete="off">
+                </div>
+                <div class="rpm-patient-field">
+                    <label for="rpm-pt-prenom">Prénom</label>
+                    <input type="text" id="rpm-pt-prenom" placeholder="Prénom" autocomplete="off">
+                </div>
+                <div class="rpm-patient-field rpm-patient-field-ddnage">
+                    <div class="rpm-ddnage-row">
+                        <div class="rpm-ddnage-col">
+                            <label for="rpm-pt-ddn">Date de naissance</label>
+                            <input type="date" id="rpm-pt-ddn" oninput="rpmCalcAge()">
+                        </div>
+                        <div class="rpm-ddnage-col rpm-ddnage-col-small">
+                            <label for="rpm-pt-age">Âge (ans)</label>
+                            <input type="number" id="rpm-pt-age" placeholder="Ex: 30" min="0" max="130" oninput="rpmClearDdn()">
+                        </div>
+                    </div>
+                </div>
+                <div class="rpm-patient-field">
+                    <label for="rpm-pt-medecin">Médecin prescripteur</label>
+                    <input type="text" id="rpm-pt-medecin" placeholder="Dr ..." autocomplete="off">
+                </div>
+                <div class="rpm-patient-field">
+                    <label for="rpm-pt-date">Date de la consultation</label>
+                    <input type="date" id="rpm-pt-date">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="rpm-body">
 
-        <!-- SECTION 1 : TERME -->
+        <!-- SECTION 1 -->
         <div class="rpm-section">
             <div class="rpm-section-title">Données cliniques principales</div>
-
             <div class="rpm-form-group">
                 <label for="rpm-sa">Terme de la grossesse (SA)</label>
                 <input type="number" id="rpm-sa" min="15" max="43" placeholder="Ex : 32" inputmode="numeric">
             </div>
-
             <div class="rpm-form-group" id="rpm-gbs-div" style="display:none !important;">
                 <label for="rpm-gbs">Statut Streptocoque B (terme &ge; 37 SA)</label>
                 <select id="rpm-gbs">
@@ -483,7 +373,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
             </div>
         </div>
 
-        <!-- SECTION 2 : COMPLICATIONS -->
+        <!-- SECTION 2 -->
         <div class="rpm-section">
             <div class="rpm-section-title">Complications et Contexte</div>
             <div class="rpm-grid">
@@ -508,7 +398,7 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
             </div>
         </div>
 
-        <!-- SECTION 3 : TERRAIN -->
+        <!-- SECTION 3 -->
         <div class="rpm-section">
             <div class="rpm-section-title">Terrain maternel</div>
             <div class="rpm-check-item">
@@ -526,6 +416,41 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
             <div id="rpm-main"></div>
         </div>
 
+        <!-- RÉSUMÉ PANEL -->
+        <div id="rpm-resume-panel" class="rpm-resume-panel">
+            <div class="rpm-resume-header">
+                <div>
+                    <h2>&#128203; Résumé du protocole</h2>
+                    <div class="rpm-resume-header-meta" id="rpm-resume-meta"></div>
+                </div>
+                <button type="button" class="rpm-btn-res-close" onclick="rpmCloseResume()">&#10005; Fermer</button>
+            </div>
+            <div class="rpm-resume-body">
+                <div class="rpm-resume-section">
+                    <h3>Contexte clinique</h3>
+                    <div id="rpm-resume-contexte" class="rpm-resume-box rpm-resume-box-navy"></div>
+                </div>
+                <div class="rpm-resume-section" id="rpm-resume-sec-urgence" style="display:none;">
+                    <h3>Urgences immédiates</h3>
+                    <ul id="rpm-resume-urgence" class="rpm-resume-list"></ul>
+                </div>
+                <div class="rpm-resume-section">
+                    <h3>Décision principale</h3>
+                    <div id="rpm-resume-decision" class="rpm-resume-box rpm-resume-box-navy"></div>
+                </div>
+                <div class="rpm-resume-section" id="rpm-resume-sec-actions">
+                    <h3>Actions recommandées</h3>
+                    <ul id="rpm-resume-actions" class="rpm-resume-list"></ul>
+                </div>
+            </div>
+            <div class="rpm-resume-footer">
+                <button type="button" class="rpm-btn-res-copy" id="rpm-btn-res-copy" onclick="rpmCopyResume()">&#128203; Copier pour le dossier</button>
+                <button type="button" class="rpm-btn-res-print" onclick="rpmPrintResume()">&#128424; Imprimer (A5)</button>
+                <button type="button" class="rpm-btn-res-close" onclick="rpmCloseResume()">Fermer</button>
+                <span class="rpm-copy-notice" id="rpm-copy-notice">&#10003; Texte copié !</span>
+            </div>
+        </div>
+
         <!-- FOOTER -->
         <div class="rpm-footer">
             <strong>Dr KARA-ZAITRI M.A.</strong> &mdash; Gynécologie-Obstétrique, CHU Tlemcen<br>
@@ -535,221 +460,385 @@ body { -ms-overflow-style: none !important; overflow-y: auto !important; }
 
     </div><!-- /rpm-body -->
 </div><!-- /rpm-tool-root -->
-
 <script>
 (function() {
-    'use strict';
+'use strict';
 
-    var saInput = document.getElementById('rpm-sa');
-    var gbsDiv  = document.getElementById('rpm-gbs-div');
+var saInput = document.getElementById('rpm-sa');
+var gbsDiv  = document.getElementById('rpm-gbs-div');
 
-    saInput.addEventListener('input', function() {
-        var sa = parseInt(this.value);
-        gbsDiv.style.setProperty('display', sa >= 37 ? 'block' : 'none', 'important');
-    });
+saInput.addEventListener('input', function() {
+    var sa = parseInt(this.value);
+    gbsDiv.style.setProperty('display', sa >= 37 ? 'block' : 'none', 'important');
+});
 
-    window.rpmGenerer = function() {
-        if (teaserMode) { showRpmPremiumOverlay(); return; }
-        var sa         = parseInt(saInput.value);
-        var infection  = document.getElementById('rpm-infection').checked;
-        var travail    = document.getElementById('rpm-travail').checked;
-        var miu        = document.getElementById('rpm-miu').checked;
-        var cerclage   = document.getElementById('rpm-cerclage').checked;
-        var allergie   = document.getElementById('rpm-allergie').checked;
-        var gbs        = document.getElementById('rpm-gbs').value;
+/* ===== PATIENT ===== */
+window.rpmTogglePatient = function() {
+    var form = document.getElementById('rpm-patient-form');
+    var btn  = document.getElementById('rpm-patient-toggle-btn');
+    form.classList.toggle('open');
+    btn.classList.toggle('open');
+    btn.setAttribute('aria-expanded', form.classList.contains('open') ? 'true' : 'false');
+};
+window.rpmCalcAge = function() {
+    var ddn = document.getElementById('rpm-pt-ddn').value;
+    if (!ddn) return;
+    var d = new Date(ddn), now = new Date();
+    var age = now.getFullYear() - d.getFullYear();
+    var m = now.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+    document.getElementById('rpm-pt-age').value = age;
+};
+window.rpmClearDdn = function() { document.getElementById('rpm-pt-ddn').value = ''; };
 
-        if (isNaN(sa) || sa < 15 || sa > 43) {
-            alert('Veuillez saisir un terme valide (15 – 43 SA).');
-            return;
+function rpmGetPatient() {
+    var nom     = document.getElementById('rpm-pt-nom').value.trim();
+    var prenom  = document.getElementById('rpm-pt-prenom').value.trim();
+    var ddn     = document.getElementById('rpm-pt-ddn').value;
+    var age     = document.getElementById('rpm-pt-age').value.trim();
+    var medecin = document.getElementById('rpm-pt-medecin').value.trim();
+    var date    = document.getElementById('rpm-pt-date').value;
+    var nomComplet = (prenom ? prenom + ' ' : '') + (nom || '');
+    var ddnFmt = '', dateFmt = '';
+    if (ddn) { var d = new Date(ddn); ddnFmt = d.toLocaleDateString('fr-FR'); }
+    if (date) { var db = new Date(date); dateFmt = db.toLocaleDateString('fr-FR'); }
+    return { nomComplet: nomComplet.trim(), ddnFmt: ddnFmt, age: age, medecin: medecin, dateFmt: dateFmt };
+}
+
+/* ===== STORED RESULT FOR RESUME ===== */
+var rpmLastResult = null;
+
+/* ===== MAIN LOGIC ===== */
+window.rpmGenerer = function() {
+    var sa         = parseInt(saInput.value);
+    var infection  = document.getElementById('rpm-infection').checked;
+    var travail    = document.getElementById('rpm-travail').checked;
+    var miu        = document.getElementById('rpm-miu').checked;
+    var cerclage   = document.getElementById('rpm-cerclage').checked;
+    var allergie   = document.getElementById('rpm-allergie').checked;
+    var gbs        = document.getElementById('rpm-gbs').value;
+
+    if (isNaN(sa) || sa < 15 || sa > 43) {
+        alert('Veuillez saisir un terme valide (15 – 43 SA).');
+        return;
+    }
+
+    var alertsHTML = '';
+    var mainHTML   = '';
+
+    /* Données pour le résumé */
+    var urgences = [];
+    var decisionPrincipale = '';
+    var decisionClass = 'rpm-resume-box-navy';
+    var actions = [];
+
+    /* ── URGENCES IMMÉDIATES ── */
+    if (cerclage) {
+        alertsHTML += card('warning', '\u26A0\uFE0F Cerclage du col – Ablation requise',
+            '<p>Le cerclage doit être <strong>retiré immédiatement</strong>. Bilan infectieux (CRP, NFS) impératif.</p>');
+        urgences.push('Cerclage du col : ablation immédiate requise. Bilan infectieux (CRP, NFS) impératif.');
+    }
+    if (miu) {
+        alertsHTML += card('danger', '\u26AB Mort in Utero (MIU)',
+            '<p>Risque infectieux majeur. <strong>Déclenchement du travail sans délai</strong>, quel que soit le terme.</p>');
+        urgences.push('MIU : déclenchement du travail sans délai, quel que soit le terme.');
+    }
+    if (infection) {
+        alertsHTML += card('danger', '\uD83D\uDEA8 Infection Intra-Utérine (IIU) – Urgence absolue',
+            '<ul><li>Expectative et tocolyse <strong>formellement contre-indiquées</strong></li>' +
+            '<li><strong>Antibiothérapie curative large spectre</strong> à démarrer immédiatement</li>' +
+            '<li><strong>Extraction fœtale en urgence</strong>, quel que soit le terme</li></ul>');
+        urgences.push('IIU : antibiothérapie curative large spectre immédiate + extraction fœtale en urgence.');
+    }
+
+    if (miu || infection) {
+        decisionPrincipale = miu ? 'Déclenchement du travail sans délai (MIU)' : 'Extraction fœtale en urgence (IIU)';
+        decisionClass = 'rpm-resume-box-danger';
+        rpmLastResult = { sa: sa, infection: infection, miu: miu, cerclage: cerclage, allergie: allergie, gbs: gbs,
+            urgences: urgences, decisionPrincipale: decisionPrincipale, decisionClass: decisionClass, actions: [] };
+        afficherResultats(alertsHTML, '');
+        buildResume(sa, infection, miu, cerclage, allergie, gbs, urgences, decisionPrincipale, decisionClass, []);
+        return;
+    }
+
+    /* ── SELON L'ÂGE GESTATIONNEL ── */
+    if (sa < 24) {
+        mainHTML += card('warning', 'RPM Pré-viable (< 24 SA)',
+            '<p>Risque majeur d\'hypoplasie pulmonaire et d\'arthrogrypose. Information et discussion du couple indispensables (poursuite / IMG).</p>' +
+            '<h4>Si décision d\'expectative :</h4><ul>' +
+            '<li>Hospitalisation initiale 48 h, puis surveillance ambulatoire possible</li>' +
+            '<li>Bilan hebdomadaire : NFS, CRP, PV, ECBU</li>' +
+            '<li>Antibiothérapie selon résultats des prélèvements</li></ul>');
+        decisionPrincipale = 'RPM pré-viable (< 24 SA) : information du couple — décision partagée (expectative vs IMG)';
+        decisionClass = 'rpm-resume-box-warn';
+        actions = ['Hospitalisation initiale 48 h, puis surveillance ambulatoire possible', 'Bilan hebdomadaire : NFS, CRP, PV, ECBU', 'Antibiothérapie selon résultats des prélèvements'];
+    }
+    else if (sa >= 24 && sa < 34) {
+        if (travail) {
+            mainHTML += card('warning', 'Travail actif en cours (' + sa + ' SA)',
+                '<p><strong>Laisser évoluer vers l\'accouchement par voie basse.</strong> La tocolyse n\'est pas indiquée en dehors d\'une corticothérapie non encore réalisée.</p>');
+            decisionPrincipale = 'Travail actif à ' + sa + ' SA : laisser évoluer par voie basse';
+            decisionClass = 'rpm-resume-box-warn';
+            actions = ['Ne pas inhiber le travail sauf si corticothérapie non encore réalisée (max 48 h)', 'Corticothérapie de maturation si non encore faite', sa < 32 ? 'Neuroprotection fœtale : Sulfate de Magnésium IV si accouchement inéluctable' : ''];
+        } else {
+            var atb = allergie ? 'Érythromycine 500 mg × 4/j per os' : 'Amoxicilline 1 g × 3/j per os';
+            var mgso4 = sa < 32 ? '<li><span class="rpm-hl">Neuroprotection fœtale</span> : Si accouchement inéluctable, <strong>Sulfate de Magnésium (MgSO\u2084) IV</strong> selon protocole</li>' : '';
+            mainHTML += card('info', 'RPM Loin du terme (' + sa + ' SA) — Expectative active',
+                '<h4>Hospitalisation initiale (&ge; 48 h)</h4><ul>' +
+                '<li><strong>Antibioprophylaxie :</strong> ' + atb + ' (arrêt si prélèvements négatifs ; si positifs : adapter, durée totale 7 jours)</li>' +
+                '<li><strong>Corticothérapie de maturation :</strong> Indiquée (Bétaméthasone)</li>' +
+                mgso4 +
+                '<li><strong>Tocolyse :</strong> Non systématique — uniquement 48 h max pour permettre la corticothérapie si contractions présentes</li></ul>' +
+                '<h4>Surveillance</h4><ul>' +
+                '<li>Température 3 fois/j &mdash; Pas de toucher vaginal sauf nécessité absolue</li>' +
+                '<li>Monitoring (RCF) : 1 fois/j minimum (2 fois/semaine en ambulatoire)</li>' +
+                '<li>Biologie : NFS, CRP <strong>1 fois/semaine</strong> &mdash; PV 1 fois/semaine &mdash; ECBU 1 fois/15 j</li>' +
+                '<li>Échographie : hebdomadaire (index du LA)</li></ul>');
+            decisionPrincipale = 'RPM loin du terme (' + sa + ' SA) : expectative active';
+            decisionClass = 'rpm-resume-box-navy';
+            actions = [
+                'Antibioprophylaxie : ' + atb,
+                'Corticothérapie de maturation : Bétaméthasone',
+                sa < 32 ? 'Neuroprotection fœtale : MgSO\u2084 IV si accouchement inéluctable' : '',
+                'Tocolyse 48 h max si contractions (pour permettre la corticothérapie uniquement)',
+                'Surveillance : T° 3/j, RCF 1/j, NFS+CRP 1/sem, PV 1/sem, ECBU 1/15 j, écho hebdo (LA)'
+            ];
         }
-
-        var alertsHTML = '';
-        var mainHTML   = '';
-
-        // ---------- URGENCES IMMÉDIATES ----------
-        if (cerclage) {
-            alertsHTML += card('warning',
-                '\u26A0\uFE0F Cerclage du col – Ablation requise',
-                '<p>Le cerclage doit être <strong>retiré immédiatement</strong>. Bilan infectieux (CRP, NFS) impératif.</p>'
-            );
+    }
+    else if (sa >= 34 && sa < 37) {
+        var atb2 = allergie ? 'Érythromycine 500 mg × 4/j per os' : 'Amoxicilline 1 g × 3/j per os';
+        mainHTML += card('info', 'RPM Proche du terme (' + sa + ' SA) — Expectative courte',
+            '<div class="rpm-ci-box">Tocolyse contre-indiquée — Le risque infectieux prime sur le risque de prématurité à ce terme</div>' +
+            '<ul><li><strong>Antibioprophylaxie :</strong> ' + atb2 + '</li>' +
+            '<li><strong>Corticothérapie :</strong> Envisageable, à discuter au cas par cas</li>' +
+            '<li><strong>Surveillance :</strong> NFS/CRP 2–3 fois/semaine — Écho 2–3/sem (LA, maturité) — PV/ECBU 2/sem — RCF 2/j — T° 2/j</li>' +
+            '<li>Expectative recommandée jusqu\'à 37 SA</li></ul>' +
+            '<div class="rpm-sgb-note"><strong>\u26A0 Remarque :</strong> PV positif à <em>Streptocoque B isolé</em> n\'est <strong>pas</strong> une indication de déclenchement avant 37 SA sous couvert d\'antibiothérapie adaptée.</div>');
+        decisionPrincipale = 'RPM proche du terme (' + sa + ' SA) : expectative courte jusqu\'à 37 SA';
+        decisionClass = 'rpm-resume-box-navy';
+        actions = [
+            'Tocolyse CONTRE-INDIQUÉE à ce terme',
+            'Antibioprophylaxie : ' + atb2,
+            'Corticothérapie : à discuter au cas par cas',
+            'Surveillance : NFS/CRP 2–3/sem, Écho 2–3/sem, PV/ECBU 2/sem, RCF 2/j, T° 2/j'
+        ];
+    }
+    else if (sa >= 37) {
+        if (gbs === 'positif') {
+            mainHTML += card('danger', 'RPM à terme (\u2265 37 SA) — Streptocoque B POSITIF',
+                '<ul><li><strong>Antibiothérapie :</strong> Démarrer <strong>dès l\'admission</strong></li>' +
+                '<li><strong>Déclenchement du travail sans délai</strong></li></ul>');
+            decisionPrincipale = 'RPM à terme (' + sa + ' SA) — SGB positif : déclenchement sans délai';
+            decisionClass = 'rpm-resume-box-danger';
+            actions = ['Antibiothérapie IV dès l\'admission (Amoxicilline IV ou alternative si allergie)', 'Déclenchement du travail sans délai'];
+        } else {
+            mainHTML += card('success', 'RPM à terme (\u2265 37 SA) — Streptocoque B Négatif / Inconnu',
+                '<ul><li><strong>Expectative :</strong> Jusqu\'à 24 h maximum</li>' +
+                '<li><strong>Antibiothérapie :</strong> Démarrer à <strong>H12</strong></li>' +
+                '<li><strong>Déclenchement :</strong> À <strong>H24</strong> si travail non spontané</li>' +
+                '<li><span class="rpm-hl">\u26A0 Latence max 48 h</span> — Surveillance NFS/CRP à l\'admission puis toutes les 12 h</li></ul>');
+            decisionPrincipale = 'RPM à terme (' + sa + ' SA) — SGB négatif/inconnu : expectative ≤ 24 h';
+            decisionClass = 'rpm-resume-box-success';
+            actions = ['Expectative jusqu\'à 24 h maximum', 'Antibiothérapie à H12 post-rupture', 'Déclenchement à H24 si travail non spontané', 'Surveillance NFS/CRP à l\'admission puis toutes les 12 h'];
         }
+    }
 
-        if (miu) {
-            alertsHTML += card('danger',
-                '\u26AB Mort in Utero (MIU)',
-                '<p>Risque infectieux majeur. <strong>Déclenchement du travail sans délai</strong>, quel que soit le terme.</p>'
-            );
-        }
+    /* ── ACCUEIL NOUVEAU-NÉ ── */
+    mainHTML += card('nn', 'Accueil et surveillance du Nouveau-né',
+        '<p><span class="rpm-hl">Abandon des prélèvements périphériques systématiques</span></p>' +
+        '<ul><li><strong>Nouveau-né asymptomatique (\u2265 34 SA) :</strong> Surveillance clinique 48 h — Pas d\'antibiothérapie ni de bilan biologique systématique</li>' +
+        '<li><strong>Nouveau-né symptomatique ou contexte sévère :</strong> Bilan central (NFS, CRP, Hémoculture) + <strong>Antibiothérapie IV immédiate</strong> (Amoxicilline + Gentamicine)</li></ul>');
 
-        if (infection) {
-            alertsHTML += card('danger',
-                '\uD83D\uDEA8 Infection Intra-Utérine (IIU) – Urgence absolue',
-                '<ul>' +
-                '<li>Expectative et tocolyse <strong>formellement contre-indiquées</strong></li>' +
-                '<li><strong>Antibiothérapie curative large spectre</strong> à démarrer immédiatement</li>' +
-                '<li><strong>Extraction fœtale en urgence</strong>, quel que soit le terme</li>' +
-                '</ul>'
-            );
-        }
+    actions = actions.filter(function(a){ return a && a.trim(); });
 
-        if (miu || infection) {
-            afficherResultats(alertsHTML, '');
-            return;
-        }
+    rpmLastResult = { sa: sa, infection: infection, miu: miu, cerclage: cerclage, allergie: allergie, gbs: gbs, travail: travail,
+        urgences: urgences, decisionPrincipale: decisionPrincipale, decisionClass: decisionClass, actions: actions };
 
-        // ---------- SELON L'ÂGE GESTATIONNEL ----------
-        if (sa < 24) {
-            mainHTML += card('warning',
-                'RPM Pré-viable (< 24 SA)',
-                '<p>Risque majeur d\'hypoplasie pulmonaire et d\'arthrogrypose. Information et discussion du couple indispensables (poursuite / IMG).</p>' +
-                '<h4>Si décision d\'expectative :</h4>' +
-                '<ul>' +
-                '<li>Hospitalisation initiale 48 h, puis surveillance ambulatoire possible</li>' +
-                '<li>Bilan hebdomadaire : NFS, CRP, PV, ECBU</li>' +
-                '<li>Antibiothérapie selon résultats des prélèvements</li>' +
-                '</ul>'
-            );
-        }
-        else if (sa >= 24 && sa < 34) {
-            if (travail) {
-                mainHTML += card('warning',
-                    'Travail actif en cours (' + sa + ' SA)',
-                    '<p><strong>Laisser évoluer vers l\'accouchement par voie basse.</strong> La tocolyse n\'est pas indiquée en dehors d\'une corticothérapie non encore réalisée.</p>'
-                );
-            } else {
-                var atb = allergie
-                    ? '<strong>Érythromycine</strong> 500 mg × 4/j per os'
-                    : '<strong>Amoxicilline</strong> 1 g × 3/j per os';
+    afficherResultats(alertsHTML, mainHTML);
+    buildResume(sa, infection, miu, cerclage, allergie, gbs, urgences, decisionPrincipale, decisionClass, actions);
+};
 
-                var mgso4 = sa < 32
-                    ? '<li><span class="rpm-hl">Neuroprotection fœtale</span> : Si accouchement inéluctable, <strong>Sulfate de Magnésium (MgSO\u2084) IV</strong> selon protocole</li>'
-                    : '';
+function card(type, titre, contenu) {
+    return '<div class="rpm-card rpm-' + type + '"><h3>' + titre + '</h3>' + contenu + '</div>';
+}
 
-                mainHTML += card('info',
-                    'RPM Loin du terme (' + sa + ' SA) — Expectative active',
-                    '<h4>Hospitalisation initiale (&ge; 48 h)</h4>' +
-                    '<ul>' +
-                    '<li><strong>Antibioprophylaxie :</strong> ' + atb + ' (arrêt si prélèvements négatifs ; si positifs : adapter, durée totale 7 jours)</li>' +
-                    '<li><strong>Corticothérapie de maturation :</strong> Indiquée (Bétaméthasone)</li>' +
-                    mgso4 +
-                    '<li><strong>Tocolyse :</strong> Non systématique — uniquement 48 h max pour permettre la corticothérapie si contractions présentes</li>' +
-                    '</ul>' +
-                    '<h4>Surveillance</h4>' +
-                    '<ul>' +
-                    '<li>Température 3 fois/j &mdash; Pas de toucher vaginal sauf nécessité absolue</li>' +
-                    '<li>Monitoring (RCF) : 1 fois/j minimum (2 fois/semaine en ambulatoire)</li>' +
-                    '<li>Biologie : NFS, CRP <strong>1 fois/semaine</strong> &mdash; PV 1 fois/semaine &mdash; ECBU 1 fois/15 j</li>' +
-                    '<li>Échographie : hebdomadaire (index du LA)</li>' +
-                    '</ul>'
-                );
-            }
-        }
-        else if (sa >= 34 && sa < 37) {
-            var atb2 = allergie
-                ? '<strong>Érythromycine</strong> 500 mg × 4/j per os'
-                : '<strong>Amoxicilline</strong> 1 g × 3/j per os';
+function afficherResultats(alertsHTML, mainHTML) {
+    document.getElementById('rpm-alerts').innerHTML = alertsHTML;
+    document.getElementById('rpm-main').innerHTML   = mainHTML;
+    var zone = document.getElementById('rpm-results');
+    zone.style.setProperty('display', 'block', 'important');
+    zone.scrollIntoView({ behavior: 'smooth' });
+}
 
-            mainHTML += card('info',
-                'RPM Proche du terme (' + sa + ' SA) — Expectative courte',
-                '<div class="rpm-ci-box">Tocolyse contre-indiquée — Le risque infectieux prime sur le risque de prématurité à ce terme</div>' +
-                '<ul>' +
-                '<li><strong>Antibioprophylaxie :</strong> ' + atb2 + ' &mdash; Arrêt si prélèvements négatifs ; 7 j si positifs</li>' +
-                '<li><strong>Corticothérapie :</strong> Envisageable, à discuter au cas par cas (discussion obstétrico-pédiatrique)</li>' +
-                '<li><strong>Surveillance :</strong> NFS/CRP 2–3 fois/semaine &mdash; Écho 2–3 fois/semaine (LA, maturité) &mdash; PV/ECBU 2 fois/semaine &mdash; RCF 2 fois/j &mdash; Clinique T\u00B0 2/j</li>' +
-                '<li>Expectative recommandée jusqu\'à 37 SA en cas de RPM non compliquée</li>' +
-                '</ul>' +
-                '<div class="rpm-sgb-note"><strong>\u26A0 Remarque :</strong> Un PV positif à <em>Streptocoque B isolé</em> n\'est <strong>pas</strong> une indication de déclenchement avant 37 SA, sous couvert d\'une antibiothérapie adaptée. Si <em>E. coli K1</em>, <em>Haemophilus</em> ou <em>Klebsiella</em> : discussion collégiale pour déclenchement.</div>'
-            );
-        }
-        else if (sa >= 37) {
-            if (gbs === 'positif') {
-                mainHTML += card('danger',
-                    'RPM à terme (\u2265 37 SA) — Streptocoque B POSITIF',
-                    '<ul>' +
-                    '<li><strong>Antibiothérapie :</strong> Démarrer <strong>dès l\'admission</strong> (Amoxicilline IV ou alternative si allergie)</li>' +
-                    '<li><strong>Déclenchement du travail sans délai</strong></li>' +
-                    '</ul>'
-                );
-            } else {
-                mainHTML += card('success',
-                    'RPM à terme (\u2265 37 SA) — Streptocoque B Négatif / Inconnu',
-                    '<ul>' +
-                    '<li><strong>Expectative :</strong> Jusqu\'à 24 h maximum après la rupture</li>' +
-                    '<li><strong>Antibiothérapie :</strong> Démarrer à <strong>H12</strong> post-rupture</li>' +
-                    '<li><strong>Déclenchement :</strong> À <strong>H24</strong> si travail non déclenché spontanément</li>' +
-                    '<li><span class="rpm-hl">\u26A0 Le temps de latence ne doit pas dépasser 48 heures</span> — Surveillance NFS/CRP à l\'admission puis toutes les 12 h</li>' +
-                    '</ul>'
-                );
-            }
-        }
+/* ===== RÉSUMÉ BUILDER ===== */
+function buildResume(sa, infection, miu, cerclage, allergie, gbs, urgences, decisionPrincipale, decisionClass, actions) {
+    /* Meta patient */
+    var info = rpmGetPatient();
+    var meta = [];
+    if (info.nomComplet) meta.push(info.nomComplet + (info.age ? ' (' + info.age + ' ans)' : ''));
+    if (info.medecin) meta.push('Dr ' + info.medecin.replace(/^Dr\.?\s*/i, ''));
+    document.getElementById('rpm-resume-meta').textContent = meta.join(' \u2014 ');
 
-        // ---------- ACCUEIL DU NOUVEAU-NÉ ----------
-        mainHTML += card('nn',
-            'Accueil et surveillance du Nouveau-né',
-            '<p><span class="rpm-hl">Abandon des prélèvements périphériques systématiques</span> (recommandation actuelle)</p>' +
-            '<ul>' +
-            '<li><strong>Nouveau-né asymptomatique (\u2265 34 SA) :</strong> Surveillance clinique 48 h &mdash; Pas d\'antibiothérapie ni de bilan biologique systématique</li>' +
-            '<li><strong>Nouveau-né symptomatique ou contexte sévère :</strong> Bilan central (NFS, CRP, Hémoculture) + <strong>Antibiothérapie IV immédiate</strong> (Amoxicilline + Gentamicine)</li>' +
-            '</ul>'
-        );
+    /* Contexte */
+    var ctx = ['Terme : ' + sa + ' SA'];
+    if (infection) ctx.push('IIU suspectée');
+    if (miu) ctx.push('MIU');
+    if (cerclage) ctx.push('Cerclage en place');
+    if (allergie) ctx.push('Allergie pénicillines');
+    if (sa >= 37) ctx.push('SGB : ' + (gbs === 'positif' ? 'Positif' : 'Négatif / Inconnu'));
+    var contexteEl = document.getElementById('rpm-resume-contexte');
+    contexteEl.className = 'rpm-resume-box rpm-resume-box-navy';
+    contexteEl.textContent = ctx.join(' — ');
 
-        afficherResultats(alertsHTML, mainHTML);
+    /* Urgences */
+    var secUrg = document.getElementById('rpm-resume-sec-urgence');
+    if (urgences.length) {
+        document.getElementById('rpm-resume-urgence').innerHTML = urgences.map(function(u){ return '<li>' + u + '</li>'; }).join('');
+        secUrg.style.display = '';
+    } else {
+        secUrg.style.display = 'none';
+    }
+
+    /* Décision */
+    var decEl = document.getElementById('rpm-resume-decision');
+    decEl.className = 'rpm-resume-box ' + decisionClass;
+    decEl.textContent = decisionPrincipale;
+
+    /* Actions */
+    var actEl = document.getElementById('rpm-resume-actions');
+    var secAct = document.getElementById('rpm-resume-sec-actions');
+    if (actions.length) {
+        actEl.innerHTML = actions.map(function(a){ return '<li>' + a + '</li>'; }).join('');
+        secAct.style.display = '';
+    } else {
+        secAct.style.display = 'none';
+    }
+
+    document.getElementById('rpm-resume-panel').classList.add('visible');
+}
+
+window.rpmCloseResume = function() { document.getElementById('rpm-resume-panel').classList.remove('visible'); };
+
+/* ===== COPIER ===== */
+window.rpmCopyResume = function() {
+    if (!rpmLastResult) return;
+    var r = rpmLastResult;
+    var info = rpmGetPatient();
+    var today = new Date().toLocaleDateString('fr-FR');
+
+    var t = '=== RPM — PROTOCOLE DE PRISE EN CHARGE ===\n';
+    t += 'Date : ' + (info.dateFmt || today) + '\n';
+    if (info.nomComplet) t += 'Patiente : ' + info.nomComplet + (info.age ? ' (' + info.age + ' ans)' : '') + (info.ddnFmt ? ' — Née le ' + info.ddnFmt : '') + '\n';
+    if (info.medecin) t += 'Médecin : ' + info.medecin + '\n';
+    t += '\n--- CONTEXTE ---\n';
+    t += 'Terme : ' + r.sa + ' SA\n';
+    if (r.infection) t += 'IIU suspectée\n';
+    if (r.miu) t += 'MIU\n';
+    if (r.cerclage) t += 'Cerclage en place\n';
+    if (r.allergie) t += 'Allergie aux pénicillines\n';
+    if (r.sa >= 37) t += 'SGB : ' + (r.gbs === 'positif' ? 'Positif' : 'Négatif / Inconnu') + '\n';
+    if (r.urgences && r.urgences.length) {
+        t += '\n--- URGENCES IMMÉDIATES ---\n';
+        r.urgences.forEach(function(u){ t += '• ' + u + '\n'; });
+    }
+    t += '\n--- DÉCISION PRINCIPALE ---\n' + r.decisionPrincipale + '\n';
+    if (r.actions && r.actions.length) {
+        t += '\n--- ACTIONS RECOMMANDÉES ---\n';
+        r.actions.forEach(function(a){ t += '• ' + a + '\n'; });
+    }
+    t += '\n(CNGOF / HAS 2024 — Dr KARA-ZAITRI M.A.)\n';
+
+    var btn = document.getElementById('rpm-btn-res-copy');
+    var notice = document.getElementById('rpm-copy-notice');
+    var resetBtn = function(){ btn.classList.remove('copied'); btn.innerHTML = '&#128203; Copier pour le dossier'; if(notice) notice.classList.remove('visible'); };
+    var done = function(){ btn.classList.add('copied'); btn.textContent = '\u2713 Copié !'; if(notice) notice.classList.add('visible'); setTimeout(resetBtn, 3000); };
+    var showError = function(){ btn.innerHTML = '\u26A0 Copie impossible'; setTimeout(function(){ btn.innerHTML = '&#128203; Copier pour le dossier'; }, 3000); };
+    var legacyCopy = function(){
+        try {
+            var ta = document.createElement('textarea');
+            ta.value = t; ta.setAttribute('readonly',''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+            document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0, t.length);
+            var ok = document.execCommand('copy'); document.body.removeChild(ta);
+            if(ok) done(); else showError();
+        } catch(e){ showError(); }
     };
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done).catch(legacyCopy); }
+    else { legacyCopy(); }
+};
 
-    function card(type, titre, contenu) {
-        return '<div class="rpm-card rpm-' + type + '"><h3>' + titre + '</h3>' + contenu + '</div>';
-    }
+/* ===== IMPRESSION A5 ===== */
+window.rpmPrintResume = function() {
+    if (!rpmLastResult) return;
+    var r = rpmLastResult;
+    var info = rpmGetPatient();
+    var today = new Date().toLocaleDateString('fr-FR');
+    var esc = function(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
 
-    function afficherResultats(alertsHTML, mainHTML) {
-        document.getElementById('rpm-alerts').innerHTML = alertsHTML;
-        document.getElementById('rpm-main').innerHTML   = mainHTML;
-        var zone = document.getElementById('rpm-results');
-        zone.style.setProperty('display', 'block', 'important');
-        zone.scrollIntoView({ behavior: 'smooth' });
-    }
+    var decBg = r.decisionClass === 'rpm-resume-box-danger'  ? '#fef2f2'
+              : r.decisionClass === 'rpm-resume-box-warn'    ? '#fffbeb'
+              : r.decisionClass === 'rpm-resume-box-success' ? '#f0faf4'
+              : '#EEF4FB';
+    var decBd = r.decisionClass === 'rpm-resume-box-danger'  ? '#991b1b'
+              : r.decisionClass === 'rpm-resume-box-warn'    ? '#B45309'
+              : r.decisionClass === 'rpm-resume-box-success' ? '#166534'
+              : '#1A3A5C';
+
+    var ctxParts = ['Terme : ' + r.sa + ' SA'];
+    if (r.infection) ctxParts.push('IIU');
+    if (r.miu) ctxParts.push('MIU');
+    if (r.cerclage) ctxParts.push('Cerclage');
+    if (r.allergie) ctxParts.push('Allergie péni.');
+    if (r.sa >= 37) ctxParts.push('SGB : ' + (r.gbs === 'positif' ? 'Positif' : 'Nég./Inconnu'));
+
+    var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+        + '<title>RPM — Protocole</title>'
+        + '<style>@page{size:A5;margin:11mm;}'
+        + '*{box-sizing:border-box;margin:0;padding:0;}'
+        + 'body{font-family:Arial,Helvetica,sans-serif;font-size:9.5pt;color:#1e2a35;line-height:1.4;}'
+        + '.hdr{border-bottom:2px solid #1A3A5C;padding-bottom:6px;margin-bottom:10px;}'
+        + '.hdr-title{font-size:12pt;font-weight:700;color:#1A3A5C;margin-bottom:1px;}'
+        + '.hdr-sub{font-size:7.5pt;color:#6b7a8d;}'
+        + '.idbox{display:flex;justify-content:space-between;gap:12px;margin:8px 0 12px;padding:6px 9px;background:#f4f6f9;border:1px solid #d0d8e4;border-radius:3px;font-size:8.5pt;}'
+        + '.idcol b{display:block;font-size:7pt;text-transform:uppercase;letter-spacing:0.04em;color:#6b7a8d;margin-bottom:1px;}'
+        + '.sec{margin-bottom:10px;}'
+        + '.sec h3{font-size:7.5pt;font-weight:700;color:#1A3A5C;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #d0d8e4;padding-bottom:2px;margin-bottom:5px;}'
+        + '.ctx-box{padding:6px 9px;background:#EEF4FB;border-left:3px solid #1A3A5C;border-radius:3px;font-size:9pt;}'
+        + '.dec-box{padding:7px 10px;border-radius:3px;border-left:4px solid ' + decBd + ';background:' + decBg + ';font-size:9pt;font-weight:700;}'
+        + (r.urgences && r.urgences.length ? '.urg-box{padding:7px 10px;border-radius:3px;border-left:4px solid #991b1b;background:#fef2f2;font-size:9pt;}' : '')
+        + 'ul{list-style:none;padding:0;}'
+        + 'li{padding:3px 0 3px 14px;position:relative;font-size:8.5pt;border-bottom:1px solid #f0f3f7;}'
+        + 'li:last-child{border-bottom:none;}'
+        + 'li::before{content:"\\2192";position:absolute;left:2px;color:#1A3A5C;font-size:8pt;}'
+        + '.ftr{margin-top:14px;padding-top:6px;border-top:1px solid #d0d8e4;font-size:7pt;color:#6b7a8d;text-align:center;}'
+        + '</style></head><body>'
+        + '<div class="hdr"><div class="hdr-title">RPM — Protocole de Prise en Charge</div>'
+        + '<div class="hdr-sub">CNGOF / HAS 2024 &bull; Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique, CHU Tlemcen</div></div>'
+        + '<div class="idbox">'
+        + '<div class="idcol"><b>Patiente</b>' + esc(info.nomComplet || '\u2014') + (info.ddnFmt ? ' &middot; Née le ' + esc(info.ddnFmt) : '') + (info.age ? ' (' + esc(info.age) + ' ans)' : '') + '</div>'
+        + '<div class="idcol" style="text-align:right"><b>Médecin</b>' + esc(info.medecin || '\u2014') + '<br><b style="margin-top:3px;display:block;">Date</b>' + esc(info.dateFmt || today) + '</div>'
+        + '</div>'
+        + '<div class="sec"><h3>Contexte clinique</h3><div class="ctx-box">' + esc(ctxParts.join(' — ')) + '</div></div>'
+        + (r.urgences && r.urgences.length ? '<div class="sec"><h3>Urgences immédiates</h3><div class="urg-box"><ul>' + r.urgences.map(function(u){ return '<li>' + esc(u) + '</li>'; }).join('') + '</ul></div></div>' : '')
+        + '<div class="sec"><h3>Décision principale</h3><div class="dec-box">' + esc(r.decisionPrincipale) + '</div></div>'
+        + (r.actions && r.actions.length ? '<div class="sec"><h3>Actions recommandées</h3><ul>' + r.actions.map(function(a){ return '<li>' + esc(a) + '</li>'; }).join('') + '</ul></div>' : '')
+        + '<div class="ftr">Généré le ' + today + ' &bull; Outil d\'aide à la décision — ne se substitue pas au jugement clinique.</div>'
+        + '</body></html>';
+
+    var w = window.open('', '_blank');
+    if(!w){ alert('Veuillez autoriser les fenêtres pop-up pour imprimer.'); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+    w.onload = function(){ w.focus(); w.print(); };
+    setTimeout(function(){ try{ w.focus(); w.print(); }catch(e){} }, 300);
+};
+
+/* ===== PWA ===== */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function(){
+        navigator.serviceWorker.register('/sw.js').catch(function(){});
+    });
+}
 
 })();
-</script>
-
-<!-- PREMIUM OVERLAY -->
-<div id="rpm-premium-overlay" class="kz-premium-overlay" style="display:none;">
-  <div class="kz-premium-card">
-    <div class="kz-premium-badge">&#9733; Contenu Premium</div>
-    <span class="kz-premium-lock">&#128274;</span>
-    <h3>RPM &mdash; Protocole de prise en charge</h3>
-    <p>Vous avez renseign&#233; les donn&#233;es cliniques.<br>
-    Pour g&#233;n&#233;rer le protocole complet, connectez-vous &#224; votre espace FemCare Hub.</p>
-    <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" class="kz-premium-btn">
-      Se connecter / S&#8217;abonner
-    </a>
-    <div class="kz-premium-note">&#128273; Acc&#232;s via token personnel &mdash; FemCare Hub</div>
-  </div>
-</div>
-
-<script>
-var teaserMode = true;
-
-function showRpmPremiumOverlay() {
-  document.getElementById('rpm-premium-overlay').style.display = 'flex';
-}
-
-async function checkPremiumAccess() {
-  var urlParams = new URLSearchParams(window.location.search);
-  var urlToken  = urlParams.get('token');
-  if (urlToken) {
-    localStorage.setItem('kz_platform_token', urlToken);
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-  var token = localStorage.getItem('kz_platform_token');
-  if (!token) return;
-  try {
-    var r    = await fetch('https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token));
-    var data = await r.json();
-    if (data.valid === true) teaserMode = false;
-  } catch (e) {}
-}
-
-checkPremiumAccess();
 </script>
 
 <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
