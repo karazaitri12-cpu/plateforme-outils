@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1A3A5C">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Bandelette Urinaire Interactive - Complète</title>
 <style>
-/* ============================================================
-   ROOT & RESET — Isolé pour Elementor
-   ============================================================ */
 #bandu-app {
   --c-bg:      #F4F6F9;
   --c-card:    #FFFFFF;
@@ -16,7 +17,6 @@
   --c-navy-lt: #2A5298;
   --c-text:    #1C2B3A;
   --c-muted:   #6B7280;
-
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
   color: var(--c-text);
@@ -28,37 +28,69 @@
   padding: 24px 16px 52px;
 }
 #bandu-app *, #bandu-app *::before, #bandu-app *::after {
-  box-sizing: inherit;
-  margin: 0;
-  padding: 0;
+  box-sizing: inherit; margin: 0; padding: 0;
 }
 
-/* ============================================================
-   EN-TÊTE
-   ============================================================ */
+/* EN-TÊTE */
 #bandu-app .bandu-header { text-align: center; margin-bottom: 26px; }
 #bandu-app .bandu-badge {
-  display: inline-block;
-  background: var(--c-navy);
-  color: #fff;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  padding: 4px 14px;
-  border-radius: 20px;
-  margin-bottom: 10px;
+  display: inline-block; background: var(--c-navy); color: #fff;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 4px 14px; border-radius: 20px; margin-bottom: 10px;
 }
-#bandu-app .bandu-header h1 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--c-navy);
-  margin-bottom: 5px;
-}
+#bandu-app .bandu-header h1 { font-size: 1.4rem; font-weight: 700; color: var(--c-navy); margin-bottom: 5px; }
 
-/* ============================================================
-   PRÉSETS
-   ============================================================ */
+/* PATIENT BAR */
+#bandu-app .bandu-patient-bar {
+  background: var(--c-card); border: 1.5px solid var(--c-border); border-radius: 12px;
+  margin-bottom: 18px; overflow: hidden; box-shadow: 0 2px 14px rgba(26,58,92,0.05);
+}
+#bandu-app .bandu-patient-toggle {
+  width: 100%; display: flex; align-items: center; gap: 8px;
+  padding: 9px 16px; background: none; border: none; cursor: pointer;
+  font-family: inherit; font-size: 11px; font-weight: 700;
+  color: var(--c-muted); text-align: left; letter-spacing: 0.04em; text-transform: uppercase;
+  transition: color 0.15s;
+}
+#bandu-app .bandu-patient-toggle:hover { color: var(--c-navy); }
+#bandu-app .bandu-patient-toggle .pt-arrow { font-size: 9px; transition: transform 0.2s; display: inline-block; }
+#bandu-app .bandu-patient-toggle.open .pt-arrow { transform: rotate(90deg); }
+#bandu-app .bandu-patient-form {
+  display: none; padding: 10px 16px 14px;
+  background: #fafbfc; border-top: 1px solid var(--c-border);
+}
+#bandu-app .bandu-patient-form.open { display: block; }
+#bandu-app .bandu-patient-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px;
+}
+#bandu-app .bandu-patient-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#bandu-app .bandu-patient-field label {
+  font-size: 10px; font-weight: 700; color: #4a5568;
+  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+}
+#bandu-app .bandu-patient-field input {
+  padding: 6px 8px; border: 1px solid var(--c-border); border-radius: 4px;
+  font-family: inherit; font-size: 12px; color: var(--c-text);
+  background: #ffffff; outline: none; width: 100%; min-width: 0; transition: border-color 0.15s;
+}
+#bandu-app .bandu-patient-field input:focus { border-color: var(--c-navy); }
+#bandu-app .bandu-patient-field-ddnage { grid-column: span 2; min-width: 0; }
+#bandu-app .bandu-ddnage-row { display: flex; gap: 8px; }
+#bandu-app .bandu-ddnage-col { display: flex; flex-direction: column; gap: 3px; flex: 1 1 0; min-width: 0; }
+#bandu-app .bandu-ddnage-col-small { flex: 0 0 90px; }
+#bandu-app .bandu-ddnage-col label {
+  font-size: 10px; font-weight: 700; color: #4a5568;
+  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+}
+#bandu-app .bandu-ddnage-col input {
+  padding: 6px 8px; border: 1px solid var(--c-border); border-radius: 4px;
+  font-family: inherit; font-size: 12px; color: var(--c-text);
+  background: #ffffff; outline: none; width: 100%; min-width: 0; transition: border-color 0.15s;
+}
+#bandu-app .bandu-ddnage-col input:focus { border-color: var(--c-navy); }
+@media(max-width:680px){ #bandu-app .bandu-patient-field-ddnage { grid-column: span 1; } }
+
+/* PRÉSETS */
 #bandu-app .btn-row {
   display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 22px;
 }
@@ -67,23 +99,19 @@
   cursor: pointer; font-family: inherit; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px;
 }
 #bandu-app .btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-#bandu-app .btn-reset   { background: #F1F3F7; color: var(--c-navy); border: 1.5px solid var(--c-border); }
-#bandu-app .btn-iu      { background: #C0392B; color: #fff; }
-#bandu-app .btn-nephro  { background: #8E44AD; color: #fff; }
-#bandu-app .btn-diab    { background: #E67E22; color: #fff; }
-#bandu-app .btn-precla  { background: #1A3A5C; color: #fff; }
+#bandu-app .btn-reset  { background: #F1F3F7; color: var(--c-navy); border: 1.5px solid var(--c-border); }
+#bandu-app .btn-iu     { background: #C0392B; color: #fff; }
+#bandu-app .btn-nephro { background: #8E44AD; color: #fff; }
+#bandu-app .btn-diab   { background: #E67E22; color: #fff; }
+#bandu-app .btn-precla { background: #1A3A5C; color: #fff; }
 
-/* ============================================================
-   BANDELETTE VISUELLE VIRTUELLE
-   ============================================================ */
+/* BANDELETTE VISUELLE */
 #bandu-app .strip-wrapper {
   background: var(--c-card); border: 1.5px solid var(--c-border); border-radius: 12px;
   padding: 15px; margin-bottom: 22px; box-shadow: 0 2px 14px rgba(26,58,92,0.05);
   display: flex; flex-direction: column; align-items: center;
 }
-#bandu-app .strip-label {
-  font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: var(--c-muted); margin-bottom: 12px;
-}
+#bandu-app .strip-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: var(--c-muted); margin-bottom: 12px; }
 #bandu-app .strip-body {
   display: flex; align-items: center; background: #EBE4D8; padding: 8px 12px;
   border-radius: 8px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1); gap: 6px;
@@ -93,82 +121,45 @@
 #bandu-app .pad-square-top { width: 34px; height: 34px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 1px 4px rgba(0,0,0,0.2); transition: background-color 0.3s ease; }
 #bandu-app .pad-abbr { font-size: 0.55rem; font-weight: 700; color: var(--c-muted); margin-top: 4px; }
 
-/* ============================================================
-   TABLEAU CONTRÔLEUR (Skéuomorphisme Boîte)
-   ============================================================ */
+/* TABLEAU CONTRÔLEUR */
 #bandu-app .table-container {
   background: var(--c-card); border: 1.5px solid var(--c-border); border-radius: 12px;
-  overflow: visible; /* Fix Z-index Tooltip */
-  margin-bottom: 25px; box-shadow: 0 2px 14px rgba(26,58,92,0.05);
-  padding: 15px 15px 5px 15px; /* Espace pour le scroll et les tooltips */
+  overflow: visible; margin-bottom: 25px; box-shadow: 0 2px 14px rgba(26,58,92,0.05);
+  padding: 15px 15px 5px 15px;
 }
-#bandu-app .table-scroll-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 40px; /* Espace VITAL pour le tooltip de la 1ere ligne ! */
-  margin-top: -40px; 
-}
+#bandu-app .table-scroll-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-top: 40px; margin-top: -40px; }
 #bandu-app .urinary-table { width: 100%; border-collapse: collapse; min-width: 650px; }
-#bandu-app .urinary-table th {
-  background-color: #f8f9fa; color: #34495e; font-weight: 600; padding: 10px 12px;
-  border-bottom: 2px solid #cfd8dc; text-transform: uppercase; font-size: 0.75rem; text-align: left;
-}
+#bandu-app .urinary-table th { background-color: #f8f9fa; color: #34495e; font-weight: 600; padding: 10px 12px; border-bottom: 2px solid #cfd8dc; text-transform: uppercase; font-size: 0.75rem; text-align: left; }
 #bandu-app .urinary-table td { padding: 8px 12px; border-bottom: 1px solid #eef2f7; vertical-align: middle; }
 #bandu-app .urinary-table tr:hover td { background-color: #FAFBFC; }
 #bandu-app .col-param { font-weight: 700; width: 130px; color: var(--c-navy); font-size: 0.85rem; }
 #bandu-app .col-time { width: 70px; color: #7f8c8d; font-size: 0.75rem; text-align: center; }
-
-/* Les Carrés Cliquables */
 #bandu-app .color-scale { display: flex; gap: 6px; align-items: center; position: relative; }
 #bandu-app .color-box {
   width: 38px; height: 38px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.15);
   position: relative; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1; /* Default Z */
+  display: flex; align-items: center; justify-content: center; z-index: 1;
 }
 #bandu-app .color-box:hover { transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 50; }
 #bandu-app .color-box.active {
   transform: scale(1.15); border: 2.5px solid var(--c-navy);
   box-shadow: 0 0 0 3px rgba(42,82,152,0.15), 0 5px 12px rgba(0,0,0,0.25); z-index: 40;
 }
-#bandu-app .color-box.active::before {
-  content: '✓'; color: #fff; font-weight: bold; font-size: 1.2rem;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1); /* Ombre forte pour visibilité sur jaune/blanc */
-}
-
-/* Tooltip (Correction Z-index et Overflow) */
+#bandu-app .color-box.active::before { content: '✓'; color: #fff; font-weight: bold; font-size: 1.2rem; text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,1); }
 #bandu-app .color-box::after {
-  content: attr(data-value);
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) scale(0.8);
-  background: var(--c-navy);
-  color: #ffffff;
-  padding: 6px 10px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  border-radius: 4px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-  z-index: 100; /* Toujours au-dessus */
+  content: attr(data-value); position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%) scale(0.8); background: var(--c-navy); color: #ffffff;
+  padding: 6px 10px; font-size: 0.72rem; font-weight: 600; border-radius: 4px;
+  white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none;
+  transition: all 0.2s ease; box-shadow: 0 3px 10px rgba(0,0,0,0.3); z-index: 100;
 }
 #bandu-app .color-box:hover::after { opacity: 1; visibility: visible; transform: translateX(-50%) scale(1); }
-
-/* Motif Sang non hémolysé */
 #bandu-app .spots-bg { background-image: radial-gradient(#2c3e50 1.5px, transparent 1.5px); background-size: 8px 8px; }
 
-/* ============================================================
-   RÉSULTATS (Tableau des interprétations + Alertes)
-   ============================================================ */
+/* RÉSULTATS */
 #bandu-app .result-section {
   background: var(--c-card); border: 1.5px solid var(--c-border); border-radius: 12px;
-  padding: 20px; margin-bottom: 22px; box-shadow: 0 2px 14px rgba(26,58,92,0.05);
-  scroll-margin-top: 20px;
+  padding: 20px; margin-bottom: 22px; box-shadow: 0 2px 14px rgba(26,58,92,0.05); scroll-margin-top: 20px;
 }
 #bandu-app .section-title {
   font-size: 0.93rem; font-weight: 700; color: var(--c-navy); margin-bottom: 16px;
@@ -178,15 +169,12 @@
   width: 28px; height: 28px; background: var(--c-navy); border-radius: 7px; color: #fff;
   display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;
 }
-
 #bandu-app .result-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
 #bandu-app .result-table th { background: var(--c-navy); color: #fff; padding: 9px 13px; font-weight: 600; text-align: left; font-size: 0.77rem; border-radius: 6px 6px 0 0; }
 #bandu-app .result-table td { padding: 8px 13px; border-bottom: 1px solid #EEF1F6; vertical-align: middle; line-height: 1.4; }
 #bandu-app .result-table tr:nth-child(even) td { background: #F8FAFC; }
 #bandu-app .result-table tr:last-child td { border-bottom: none; }
 #bandu-app .chip { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; border: 1px solid rgba(0,0,0,0.1); }
-
-/* Alertes Dynamiques */
 #bandu-app .alert-zone { margin-top: 16px; display: flex; flex-direction: column; gap: 9px; }
 #bandu-app .alert-banner { padding: 12px 15px; border-radius: 8px; font-size: 0.82rem; display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; animation: slideIn 0.3s ease; }
 @keyframes slideIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
@@ -197,9 +185,30 @@
 #bandu-app .alert-purple { background: #F5F3FF; border-left: 4px solid #8B5CF6; color: #4C1D95; }
 #bandu-app .alert-icon   { font-size: 1.15rem; flex-shrink: 0; }
 
-/* ============================================================
-   ACCORDÉON PIÈGES & LIMITES
-   ============================================================ */
+/* RÉSUMÉ / COPIER / IMPRIMER */
+#bandu-app .bandu-resume-bar {
+  margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--c-border);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+#bandu-app .bandu-btn-copy {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; background: var(--c-navy); color: #ffffff;
+  border: none; border-radius: 6px; font-family: inherit;
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+}
+#bandu-app .bandu-btn-copy:hover { background: var(--c-navy-lt); }
+#bandu-app .bandu-btn-copy.copied { background: #166534; }
+#bandu-app .bandu-btn-print {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; background: #ffffff; color: var(--c-navy);
+  border: 1.5px solid var(--c-navy); border-radius: 6px; font-family: inherit;
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+}
+#bandu-app .bandu-btn-print:hover { background: #EEF4FB; }
+#bandu-app .bandu-copy-notice { font-size: 11px; color: #166534; display: none; }
+#bandu-app .bandu-copy-notice.visible { display: inline; }
+
+/* ACCORDÉON PIÈGES */
 #bandu-app .traps-section { background: var(--c-card); border: 1.5px solid var(--c-border); border-radius: 12px; margin-bottom: 22px; overflow: hidden; box-shadow: 0 2px 14px rgba(26,58,92,0.05); }
 #bandu-app .traps-toggle { width: 100%; background: none; border: none; padding: 16px 20px; display: flex; align-items: center; gap: 10px; font-family: inherit; font-size: 0.93rem; font-weight: 700; color: var(--c-navy); cursor: pointer; text-align: left; transition: background 0.2s; }
 #bandu-app .traps-toggle:hover { background: #F4F6F9; }
@@ -214,18 +223,14 @@
 #bandu-app .trap-fp { background: #FEF2F2; border: 1.5px solid #FCA5A5; color: #7F1D1D; }
 #bandu-app .trap-fn { background: #FFFBEB; border: 1.5px solid #FCD34D; color: #78350F; }
 #bandu-app .trap-note { margin-top: 14px; padding: 11px 15px; background: #F5F3FF; border: 1.5px solid #8B5CF6; border-radius: 8px; font-size: 0.8rem; color: #4C1D95; line-height: 1.5; }
-
-/* Limites Table */
 #bandu-app .limits-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 14px; }
 #bandu-app .limits-table th { background: #1A3A5C; color: #fff; padding: 8px 12px; text-align: left; font-size: 0.76rem; }
 #bandu-app .limits-table td { padding: 7px 12px; border-bottom: 1px solid #EEF1F6; }
 #bandu-app .limits-table tr:nth-child(even) td { background: #F8FAFC; }
-#bandu-app .tag-ok  { color: #166534; font-weight: 700; }
-#bandu-app .tag-no  { color: #991B1B; font-weight: 700; }
+#bandu-app .tag-ok   { color: #166534; font-weight: 700; }
+#bandu-app .tag-no   { color: #991B1B; font-weight: 700; }
 #bandu-app .tag-warn { color: #92400E; font-weight: 700; }
-
-/* Légende & Footer */
-#bandu-app .legend-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px;}
+#bandu-app .legend-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
 #bandu-app .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; background: #F7F8FA; border-radius: 6px; padding: 4px 9px; border: 1px solid var(--c-border); }
 #bandu-app .legend-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
 #bandu-app .disclaimer { font-size: 0.72rem; color: #9CA3AF; text-align: center; margin-top: 20px; border-top: 1px solid var(--c-border); padding-top: 14px; }
@@ -236,20 +241,59 @@
   #bandu-app .col-param { width: 100px; font-size: 0.8rem; }
   #bandu-app .col-time { width: 50px; font-size: 0.7rem; }
 }
-/* Style App Mobile : Cache l'ascenseur global mais garde le scroll */
 html { scrollbar-width: none; }
 body { -ms-overflow-style: none; }
 ::-webkit-scrollbar { display: none; }
 </style>
 </head>
 <body>
-
 <div id="bandu-app">
 
   <div class="bandu-header">
     <div class="bandu-badge">Outil pédagogique interactif</div>
     <h1>Bandelette Urinaire — Lecture Interactive</h1>
     <p>Sélectionnez les carrés de couleur ci-dessous pour simuler une lecture et générer l'interprétation clinique.</p>
+  </div>
+
+  <!-- PATIENT BAR -->
+  <div class="bandu-patient-bar">
+    <button type="button" class="bandu-patient-toggle" id="bandu-patient-toggle-btn" onclick="banduTogglePatient()" aria-expanded="false">
+      <span class="pt-arrow">&#9658;</span>
+      <span>&#128100; Identification patient(e) / médecin</span>
+      <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#A0AEC0;">Optionnel &mdash; pour le résumé et l'impression</span>
+    </button>
+    <div class="bandu-patient-form" id="bandu-patient-form">
+      <div class="bandu-patient-grid">
+        <div class="bandu-patient-field">
+          <label for="bandu-pt-nom">Nom</label>
+          <input type="text" id="bandu-pt-nom" placeholder="Nom de famille" autocomplete="off">
+        </div>
+        <div class="bandu-patient-field">
+          <label for="bandu-pt-prenom">Prénom</label>
+          <input type="text" id="bandu-pt-prenom" placeholder="Prénom" autocomplete="off">
+        </div>
+        <div class="bandu-patient-field bandu-patient-field-ddnage">
+          <div class="bandu-ddnage-row">
+            <div class="bandu-ddnage-col">
+              <label for="bandu-pt-ddn">Date de naissance</label>
+              <input type="date" id="bandu-pt-ddn" oninput="banduCalcAge()">
+            </div>
+            <div class="bandu-ddnage-col bandu-ddnage-col-small">
+              <label for="bandu-pt-age">Âge (ans)</label>
+              <input type="number" id="bandu-pt-age" placeholder="Ex: 42" min="0" max="130" oninput="banduClearDdn()">
+            </div>
+          </div>
+        </div>
+        <div class="bandu-patient-field">
+          <label for="bandu-pt-medecin">Médecin prescripteur</label>
+          <input type="text" id="bandu-pt-medecin" placeholder="Dr ..." autocomplete="off">
+        </div>
+        <div class="bandu-patient-field">
+          <label for="bandu-pt-date">Date du prélèvement</label>
+          <input type="date" id="bandu-pt-date">
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- PRÉSETS -->
@@ -267,7 +311,7 @@ body { -ms-overflow-style: none; }
     <div class="strip-body" id="virtualStrip"></div>
   </div>
 
-  <!-- TABLEAU CONTRÔLEUR (Skéuomorphisme) -->
+  <!-- TABLEAU CONTRÔLEUR -->
   <div class="table-container">
     <div class="table-scroll-wrapper">
       <table class="urinary-table">
@@ -283,30 +327,34 @@ body { -ms-overflow-style: none; }
     </div>
   </div>
 
-  <!-- RÉSULTATS (Tableau des textes détaillés + Alertes) -->
+  <!-- RÉSULTATS + RÉSUMÉ INTÉGRÉ -->
   <div class="result-section" id="resultSectionAnchor">
     <div class="section-title">
       <span class="section-icon">📋</span> Synthèse Clinique Détaillée
     </div>
-    
     <div style="overflow-x:auto;">
       <table class="result-table">
         <thead>
           <tr>
             <th style="width:120px;">Paramètre</th>
-            <th style="width:140px;">Valeur Lues</th>
+            <th style="width:140px;">Valeur lue</th>
             <th>Interprétation de la ligne</th>
           </tr>
         </thead>
         <tbody id="resultBody"></tbody>
       </table>
     </div>
-
     <!-- Alertes combinées -->
     <div class="alert-zone" id="alertZone" style="margin-top:20px;"></div>
+    <!-- Barre Copier / Imprimer -->
+    <div class="bandu-resume-bar">
+      <button type="button" class="bandu-btn-copy" id="bandu-btn-copy" onclick="banduCopyResume()">&#128203; Copier pour le dossier</button>
+      <button type="button" class="bandu-btn-print" onclick="banduPrintResume()">&#128424; Imprimer (A5)</button>
+      <span class="bandu-copy-notice" id="bandu-copy-notice">&#10003; Texte copié !</span>
+    </div>
   </div>
 
-  <!-- PIÈGES & INTERFÉRENCES — ACCORDÉON -->
+  <!-- PIÈGES & INTERFÉRENCES -->
   <div class="traps-section">
     <button class="traps-toggle" id="trapsToggle">
       <span>⚠️</span> Pièges, interférences et limites analytiques
@@ -317,7 +365,7 @@ body { -ms-overflow-style: none; }
         <div class="trap-card trap-fp">
           <h4>❌ Faux positifs</h4>
           <ul>
-            <li><strong>Protéines :</strong> urines alcalines (pH > 8), chlorhexidine (toilette intime), urines très concentrées.</li>
+            <li><strong>Protéines :</strong> urines alcalines (pH > 8), chlorhexidine, urines très concentrées.</li>
             <li><strong>Leucocytes :</strong> leucorrhées, Trichomonas (contamination vaginale).</li>
             <li><strong>Sang :</strong> contamination menstruelle, saignements génitaux, hémoglobinurie d'effort.</li>
           </ul>
@@ -325,49 +373,29 @@ body { -ms-overflow-style: none; }
         <div class="trap-card trap-fn">
           <h4>❗️ Faux négatifs</h4>
           <ul>
-            <li><strong>Vitamine C</strong> (≥ 500 mg/j) : puissant réducteur qui inhibe glucose, nitrites, sang, leucocytes.</li>
+            <li><strong>Vitamine C</strong> (≥ 500 mg/j) : inhibe glucose, nitrites, sang, leucocytes.</li>
             <li><strong>Nitrites :</strong> stase vésicale &lt; 4 h, germes non réducteurs (<em>Strepto B, Entérocoque, Staph. saprophyticus, Pseudomonas</em>).</li>
-            <li><strong>Protéines :</strong> microalbuminurie (A2 KDIGO), protéine de Bence Jones (myélome).</li>
+            <li><strong>Protéines :</strong> microalbuminurie (A2 KDIGO), protéine de Bence Jones.</li>
           </ul>
         </div>
       </div>
-      
       <div class="trap-note">
         <strong>💡 Piège majeur — Myélome multiple :</strong> un myélome peut présenter une protéinurie abondante (chaînes légères = Bence Jones) avec une <strong>bandelette négative</strong>, car l'indicateur est exclusif à l'albumine.
       </div>
-      
       <div class="section-title" style="margin-top:25px; margin-bottom:10px; padding-bottom:5px; font-size:0.85rem;">
         <span class="section-icon" style="background:#8E44AD; width:22px; height:22px; font-size:0.7rem;">📊</span>
         Ce que la bandelette ne détecte PAS
       </div>
       <table class="limits-table">
-        <thead>
-          <tr><th>Situation</th><th>Bandelette</th><th>Solution</th></tr>
-        </thead>
+        <thead><tr><th>Situation</th><th>Bandelette</th><th>Solution</th></tr></thead>
         <tbody>
-          <tr>
-            <td>Protéinurie physiologique (&lt; 150 mg/24h)</td>
-            <td><span class="tag-ok">Négative ✔</span></td><td>—</td>
-          </tr>
-          <tr>
-            <td>Microalbuminurie (30–300 mg/g) — Diabète/HTA</td>
-            <td><span class="tag-no">Négative ⚠ (Faux rassurant)</span></td><td>Ratio ACR urinaire obligatoire</td>
-          </tr>
-          <tr>
-            <td>Chaînes légères d'Ig (Myélome)</td>
-            <td><span class="tag-no">Négative ⚠</span></td><td>Électrophorèse urinaire</td>
-          </tr>
-          <tr>
-            <td>Protéinurie tubulaire (faible poids moléculaire)</td>
-            <td><span class="tag-warn">Faible ou négative</span></td><td>Dosage spécifique</td>
-          </tr>
-          <tr>
-            <td>IU à germes non réducteurs (Ex: <em>Staph. Saprophyticus</em>)</td>
-            <td><span class="tag-no">Nitrites négatifs ⚠</span></td><td>ECBU si clinique</td>
-          </tr>
+          <tr><td>Protéinurie physiologique (&lt; 150 mg/24h)</td><td><span class="tag-ok">Négative ✔</span></td><td>—</td></tr>
+          <tr><td>Microalbuminurie (30–300 mg/g) — Diabète/HTA</td><td><span class="tag-no">Négative ⚠ (Faux rassurant)</span></td><td>Ratio ACR urinaire obligatoire</td></tr>
+          <tr><td>Chaînes légères d'Ig (Myélome)</td><td><span class="tag-no">Négative ⚠</span></td><td>Électrophorèse urinaire</td></tr>
+          <tr><td>Protéinurie tubulaire (faible poids moléculaire)</td><td><span class="tag-warn">Faible ou négative</span></td><td>Dosage spécifique</td></tr>
+          <tr><td>IU à germes non réducteurs (Ex: <em>Staph. Saprophyticus</em>)</td><td><span class="tag-no">Nitrites négatifs ⚠</span></td><td>ECBU si clinique</td></tr>
         </tbody>
       </table>
-
       <div class="legend-grid">
         <div class="legend-item"><div class="legend-swatch" style="background:#F4F6F9"></div>Négatif / Normal</div>
         <div class="legend-item"><div class="legend-swatch" style="background:#FDE68A"></div>Traces</div>
@@ -384,20 +412,166 @@ body { -ms-overflow-style: none; }
   </div>
 
 </div>
-
 <script>
+/* ===== PATIENT ===== */
+window.banduTogglePatient = function() {
+  var form = document.getElementById('bandu-patient-form');
+  var btn  = document.getElementById('bandu-patient-toggle-btn');
+  form.classList.toggle('open');
+  btn.classList.toggle('open');
+  btn.setAttribute('aria-expanded', form.classList.contains('open') ? 'true' : 'false');
+};
+window.banduCalcAge = function() {
+  var ddn = document.getElementById('bandu-pt-ddn').value;
+  if (!ddn) return;
+  var d = new Date(ddn), now = new Date();
+  var age = now.getFullYear() - d.getFullYear();
+  var m = now.getMonth() - d.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+  document.getElementById('bandu-pt-age').value = age;
+};
+window.banduClearDdn = function() { document.getElementById('bandu-pt-ddn').value = ''; };
+
+function banduGetPatient() {
+  var nom     = document.getElementById('bandu-pt-nom').value.trim();
+  var prenom  = document.getElementById('bandu-pt-prenom').value.trim();
+  var ddn     = document.getElementById('bandu-pt-ddn').value;
+  var age     = document.getElementById('bandu-pt-age').value.trim();
+  var medecin = document.getElementById('bandu-pt-medecin').value.trim();
+  var date    = document.getElementById('bandu-pt-date').value;
+  var nomComplet = (prenom ? prenom + ' ' : '') + (nom || '');
+  var ddnFmt = '', dateFmt = '';
+  if (ddn) { var d = new Date(ddn); ddnFmt = d.toLocaleDateString('fr-FR'); }
+  if (date) { var db = new Date(date); dateFmt = db.toLocaleDateString('fr-FR'); }
+  return { nomComplet: nomComplet.trim(), ddnFmt: ddnFmt, age: age, medecin: medecin, dateFmt: dateFmt };
+}
+
+/* ===== COPIER ===== */
+window.banduCopyResume = function() {
+  var info = banduGetPatient();
+  var today = new Date().toLocaleDateString('fr-FR');
+
+  var t = '=== BANDELETTE URINAIRE — LECTURE INTERPRÉTÉE ===\n';
+  t += 'Date : ' + (info.dateFmt || today) + '\n';
+  if (info.nomComplet) t += 'Patient(e) : ' + info.nomComplet + (info.age ? ' (' + info.age + ' ans)' : '') + (info.ddnFmt ? ' — Né(e) le ' + info.ddnFmt : '') + '\n';
+  if (info.medecin) t += 'Médecin : ' + info.medecin + '\n';
+  t += '\n--- RÉSULTATS PAR PARAMÈTRE ---\n';
+
+  document.querySelectorAll('#resultBody tr').forEach(function(tr) {
+    var cells = tr.querySelectorAll('td');
+    if (cells.length >= 3) {
+      t += cells[0].innerText.trim() + ' | ' + cells[1].innerText.trim() + ' : ' + cells[2].innerText.trim() + '\n';
+    }
+  });
+
+  t += '\n--- ALERTES CLINIQUES ---\n';
+  document.querySelectorAll('#alertZone .alert-banner').forEach(function(el) {
+    t += '• ' + el.innerText.trim() + '\n';
+  });
+
+  t += '\n(KDIGO 2024 / HAS — Dr KARA-ZAITRI M.A.)\n';
+
+  var btn = document.getElementById('bandu-btn-copy');
+  var notice = document.getElementById('bandu-copy-notice');
+  var resetBtn = function(){ btn.classList.remove('copied'); btn.innerHTML = '&#128203; Copier pour le dossier'; if(notice) notice.classList.remove('visible'); };
+  var done = function(){ btn.classList.add('copied'); btn.textContent = '\u2713 Copié !'; if(notice) notice.classList.add('visible'); setTimeout(resetBtn, 3000); };
+  var showError = function(){ btn.innerHTML = '\u26A0 Copie impossible'; setTimeout(function(){ btn.innerHTML = '&#128203; Copier pour le dossier'; }, 3000); };
+  var legacyCopy = function(){
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = t; ta.setAttribute('readonly',''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+      document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0, t.length);
+      var ok = document.execCommand('copy'); document.body.removeChild(ta);
+      if(ok) done(); else showError();
+    } catch(e){ showError(); }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done).catch(legacyCopy); }
+  else { legacyCopy(); }
+};
+
+/* ===== IMPRESSION A5 ===== */
+window.banduPrintResume = function() {
+  var info = banduGetPatient();
+  var today = new Date().toLocaleDateString('fr-FR');
+  var esc = function(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+
+  /* Collecter les lignes du tableau résultat */
+  var rows = '';
+  document.querySelectorAll('#resultBody tr').forEach(function(tr) {
+    var cells = tr.querySelectorAll('td');
+    if (cells.length >= 3) {
+      /* Récupérer la couleur de la puce */
+      var swatchEl = cells[1].querySelector('span[style]');
+      var swatchStyle = swatchEl ? swatchEl.getAttribute('style') : '';
+      var valLabel = cells[1].innerText.trim();
+      rows += '<tr><td><strong>' + esc(cells[0].innerText.trim()) + '</strong></td>'
+           + '<td>' + esc(valLabel) + '</td>'
+           + '<td>' + esc(cells[2].innerText.trim()) + '</td></tr>';
+    }
+  });
+
+  /* Collecter les alertes */
+  var alertsHtml = '';
+  document.querySelectorAll('#alertZone .alert-banner').forEach(function(el) {
+    var cls = '';
+    if (el.classList.contains('alert-danger')) cls = '#FEF2F2;border-left:4px solid #EF4444;color:#7F1D1D';
+    else if (el.classList.contains('alert-warn')) cls = '#FFFBEB;border-left:4px solid #F59E0B;color:#92400E';
+    else if (el.classList.contains('alert-ok')) cls = '#ECFDF5;border-left:4px solid #10B981;color:#064E3B';
+    else if (el.classList.contains('alert-purple')) cls = '#F5F3FF;border-left:4px solid #8B5CF6;color:#4C1D95';
+    else cls = '#EFF6FF;border-left:4px solid #3B82F6;color:#1E3A8A';
+    alertsHtml += '<div style="padding:6px 10px;border-radius:4px;margin-bottom:5px;font-size:8pt;background:' + cls + ';">' + esc(el.innerText.trim()) + '</div>';
+  });
+
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+    + '<title>Bandelette Urinaire — Résumé</title>'
+    + '<style>@page{size:A5;margin:11mm;}'
+    + '*{box-sizing:border-box;margin:0;padding:0;}'
+    + 'body{font-family:Arial,Helvetica,sans-serif;font-size:9pt;color:#1C2B3A;line-height:1.4;}'
+    + '.hdr{border-bottom:2px solid #1A3A5C;padding-bottom:6px;margin-bottom:10px;}'
+    + '.hdr-title{font-size:12pt;font-weight:700;color:#1A3A5C;margin-bottom:1px;}'
+    + '.hdr-sub{font-size:7.5pt;color:#6B7280;}'
+    + '.idbox{display:flex;justify-content:space-between;gap:12px;margin:8px 0 12px;padding:6px 9px;background:#F4F6F9;border:1px solid #DDE3EA;border-radius:3px;font-size:8.5pt;}'
+    + '.idcol b{display:block;font-size:7pt;text-transform:uppercase;letter-spacing:0.04em;color:#6B7280;margin-bottom:1px;}'
+    + '.sec{margin-bottom:10px;}'
+    + '.sec h3{font-size:7.5pt;font-weight:700;color:#1A3A5C;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #DDE3EA;padding-bottom:2px;margin-bottom:5px;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:8pt;}'
+    + 'th{background:#1A3A5C;color:#fff;padding:5px 8px;text-align:left;font-size:7.5pt;}'
+    + 'td{padding:4px 8px;border-bottom:1px solid #EEF1F6;vertical-align:top;}'
+    + 'tr:nth-child(even) td{background:#F8FAFC;}'
+    + 'tr:last-child td{border-bottom:none;}'
+    + '.ftr{margin-top:14px;padding-top:6px;border-top:1px solid #DDE3EA;font-size:7pt;color:#9CA3AF;text-align:center;}'
+    + '</style></head><body>'
+    + '<div class="hdr"><div class="hdr-title">Bandelette Urinaire — Lecture Interprétée</div>'
+    + '<div class="hdr-sub">KDIGO 2024 / HAS &bull; Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique, CHU Tlemcen</div></div>'
+    + '<div class="idbox">'
+    + '<div class="idcol"><b>Patient(e)</b>' + esc(info.nomComplet || '\u2014') + (info.ddnFmt ? ' &middot; Né(e) le ' + esc(info.ddnFmt) : '') + (info.age ? ' (' + esc(info.age) + ' ans)' : '') + '</div>'
+    + '<div class="idcol" style="text-align:right"><b>Médecin</b>' + esc(info.medecin || '\u2014') + '<br><b style="margin-top:3px;display:block;">Date</b>' + esc(info.dateFmt || today) + '</div>'
+    + '</div>'
+    + '<div class="sec"><h3>Résultats par paramètre</h3>'
+    + '<table><thead><tr><th>Paramètre</th><th>Valeur lue</th><th>Interprétation</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+    + '<div class="sec"><h3>Alertes cliniques</h3>' + (alertsHtml || '<p style="font-size:8pt;color:#6B7280;">Aucune alerte.</p>') + '</div>'
+    + '<div class="ftr">Généré le ' + today + ' &bull; Outil pédagogique — ne se substitue pas à un ECBU ni à un avis médical.</div>'
+    + '</body></html>';
+
+  var w = window.open('', '_blank');
+  if(!w){ alert('Veuillez autoriser les fenêtres pop-up pour imprimer.'); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+  w.onload = function(){ w.focus(); w.print(); };
+  setTimeout(function(){ try{ w.focus(); w.print(); }catch(e){} }, 300);
+};
+
+/* ===== LOGIQUE PRINCIPALE ===== */
 const app = (function() {
-  
-  // 1. DÉFINITION DES PARAMÈTRES (Couleurs V3 + Textes V2)
+
   const PARAMS = [
     {
       id: 'LEU', name: 'Leucocytes', time: '120 sec', unit: 'leuco/µL',
       options: [
-        { val: 'neg', color: '#F8F6E6', label: 'Négatif', sev: 0, interp: 'Absence de leucocyturie (&lt; 10/mm³). Infection urinaire peu probable.' },
-        { val: 'trace', color: '#E9D6D3', label: 'Traces (15)', sev: 1, interp: 'Traces. Interpréter selon contexte ; éliminer contamination vaginale.' },
-        { val: '1p', color: '#DDB6C7', label: '+ (70)', sev: 2, interp: 'Leucocyturie légère. Infection débutante ou inflammation pelvienne. ECBU.' },
-        { val: '2p', color: '#AF76A2', label: '++ (125)', sev: 3, interp: 'Leucocyturie modérée. Infection urinaire probable ; ECBU recommandé.' },
-        { val: '3p', color: '#7E5586', label: '+++ (500)', sev: 4, interp: 'Leucocyturie franche. Infection certaine. ECBU avant antibiothérapie.' }
+        { val: 'neg',   color: '#F8F6E6', label: 'Négatif',      sev: 0, interp: 'Absence de leucocyturie (&lt; 10/mm³). Infection urinaire peu probable.' },
+        { val: 'trace', color: '#E9D6D3', label: 'Traces (15)',   sev: 1, interp: 'Traces. Interpréter selon contexte ; éliminer contamination vaginale.' },
+        { val: '1p',    color: '#DDB6C7', label: '+ (70)',        sev: 2, interp: 'Leucocyturie légère. Infection débutante ou inflammation pelvienne. ECBU.' },
+        { val: '2p',    color: '#AF76A2', label: '++ (125)',      sev: 3, interp: 'Leucocyturie modérée. Infection urinaire probable ; ECBU recommandé.' },
+        { val: '3p',    color: '#7E5586', label: '+++ (500)',     sev: 4, interp: 'Leucocyturie franche. Infection certaine. ECBU avant antibiothérapie.' }
       ]
     },
     {
@@ -411,21 +585,21 @@ const app = (function() {
       id: 'URO', name: 'Urobilinogène', time: '60 sec', unit: 'µmol/L',
       options: [
         { val: 'norm', color: '#F4BA94', label: 'Normal (3.2)', sev: 0, interp: 'Normal. Métabolisme de la bilirubine intact.' },
-        { val: '1p', color: '#F49C94', label: '1 (16)', sev: 1, interp: 'Élevé. Hémolyse légère ou surcharge hépatique à explorer.' },
-        { val: '2p', color: '#F68494', label: '2 (32)', sev: 2, interp: 'Élevé. Hémolyse ou insuffisance hépatique ; bilan complémentaire.' },
-        { val: '4p', color: '#F6738A', label: '4 (64)', sev: 3, interp: 'Très élevé. Hémolyse importante ou hépatopathie.' },
-        { val: '8p', color: '#F5839C', label: '8 (128)', sev: 4, interp: 'Massif. Pathologie hépatique sévère.' }
+        { val: '1p',   color: '#F49C94', label: '1 (16)',       sev: 1, interp: 'Élevé. Hémolyse légère ou surcharge hépatique à explorer.' },
+        { val: '2p',   color: '#F68494', label: '2 (32)',       sev: 2, interp: 'Élevé. Hémolyse ou insuffisance hépatique ; bilan complémentaire.' },
+        { val: '4p',   color: '#F6738A', label: '4 (64)',       sev: 3, interp: 'Très élevé. Hémolyse importante ou hépatopathie.' },
+        { val: '8p',   color: '#F5839C', label: '8 (128)',      sev: 4, interp: 'Massif. Pathologie hépatique sévère.' }
       ]
     },
     {
       id: 'PRO', name: 'Protéines', time: '60 sec', unit: 'g/L',
       options: [
-        { val: 'neg', color: '#DCE468', label: 'Négatif', sev: 0, interp: 'Normal (&lt; 0.15 g/L). <em>Ne détecte pas la microalbuminurie (Stade A2).</em>' },
-        { val: 'trace', color: '#B6D74B', label: 'Trace', sev: 1, interp: 'Traces. Recontrôler sur un 2e échantillon matineux.' },
-        { val: '1p', color: '#97C986', label: '+ (0.3 g/L)', sev: 2, interp: 'Protéinurie légère. Quantification requise (ratio ACR ou 24h).' },
-        { val: '2p', color: '#56B08E', label: '++ (1.0 g/L)', sev: 3, interp: 'Protéinurie modérée. Évocatrice de prééclampsie si HTA gravidique.' },
-        { val: '3p', color: '#2F8B7D', label: '+++ (3.0 g/L)', sev: 4, interp: 'Protéinurie importante. Syndrome néphrotique possible. Bilan urgent.' },
-        { val: '4p', color: '#286975', label: '++++ (>20.0)', sev: 5, interp: 'Protéinurie critique. Syndrome néphrotique probable.' }
+        { val: 'neg',   color: '#DCE468', label: 'Négatif',        sev: 0, interp: 'Normal (&lt; 0.15 g/L). <em>Ne détecte pas la microalbuminurie (Stade A2).</em>' },
+        { val: 'trace', color: '#B6D74B', label: 'Trace',          sev: 1, interp: 'Traces. Recontrôler sur un 2e échantillon matineux.' },
+        { val: '1p',    color: '#97C986', label: '+ (0.3 g/L)',    sev: 2, interp: 'Protéinurie légère. Quantification requise (ratio ACR ou 24h).' },
+        { val: '2p',    color: '#56B08E', label: '++ (1.0 g/L)',   sev: 3, interp: 'Protéinurie modérée. Évocatrice de prééclampsie si HTA gravidique.' },
+        { val: '3p',    color: '#2F8B7D', label: '+++ (3.0 g/L)',  sev: 4, interp: 'Protéinurie importante. Syndrome néphrotique possible. Bilan urgent.' },
+        { val: '4p',    color: '#286975', label: '++++ (>20.0)',   sev: 5, interp: 'Protéinurie critique. Syndrome néphrotique probable.' }
       ]
     },
     {
@@ -443,12 +617,12 @@ const app = (function() {
     {
       id: 'BLO', name: 'Sang', time: '60 sec', unit: 'éryth/µL',
       options: [
-        { val: 'neg', color: '#EFBB35', label: 'Négatif', sev: 0, interp: 'Absence d\'hématurie. Normal.' },
+        { val: 'neg',   color: '#EFBB35', label: 'Négatif',              sev: 0, interp: 'Absence d\'hématurie. Normal.' },
         { val: 'spots', color: '#EFBB35', label: 'Non-hémolysé (Trace)', css: 'spots-bg', sev: 1, interp: 'Érythrocytes intacts (Microhématurie). Contamination menstruelle à éliminer.' },
-        { val: 'trace', color: '#C8CD30', label: 'Hémolysé (Trace)', sev: 1, interp: 'Hémoglobine libre (Trace). Microhématurie.' },
-        { val: '1p', color: '#88A941', label: '+ (25)', sev: 2, interp: 'Microhématurie. Explorer : infection, lithiase, traumatisme.' },
-        { val: '2p', color: '#55763F', label: '++ (80)', sev: 3, interp: 'Hématurie modérée. Bilan urologique nécessaire.' },
-        { val: '3p', color: '#274D38', label: '+++ (200)', sev: 4, interp: 'Macrohématurie. Bilan urologique urgent. Si ECBU négatif : rhabdomyolyse ?' }
+        { val: 'trace', color: '#C8CD30', label: 'Hémolysé (Trace)',     sev: 1, interp: 'Hémoglobine libre (Trace). Microhématurie.' },
+        { val: '1p',    color: '#88A941', label: '+ (25)',               sev: 2, interp: 'Microhématurie. Explorer : infection, lithiase, traumatisme.' },
+        { val: '2p',    color: '#55763F', label: '++ (80)',              sev: 3, interp: 'Hématurie modérée. Bilan urologique nécessaire.' },
+        { val: '3p',    color: '#274D38', label: '+++ (200)',            sev: 4, interp: 'Macrohématurie. Bilan urologique urgent. Si ECBU négatif : rhabdomyolyse ?' }
       ]
     },
     {
@@ -466,32 +640,32 @@ const app = (function() {
     {
       id: 'KET', name: 'Cétones', time: '40 sec', unit: 'mmol/L',
       options: [
-        { val: 'neg', color: '#E4B695', label: 'Négatif', sev: 0, interp: 'Absence de cétones. Normal.' },
-        { val: 'trace', color: '#F4A6A8', label: 'Trace (0.5)', sev: 1, interp: 'Traces. Jeûne prolongé ou vomissements gravidiques ?' },
-        { val: '1p', color: '#ED839D', label: '+ (1.5)', sev: 2, interp: 'Cétonurie légère. Bilan glycémique nécessaire.' },
-        { val: '2p', color: '#C95F81', label: '++ (4.0)', sev: 3, interp: 'Cétonurie modérée. Risque d\'acidocétose ; glycémie urgente.' },
-        { val: '3p', color: '#A04169', label: '+++ (8.0)', sev: 4, interp: 'Cétonurie massive. Urgence médicale (acidocétose probable).' },
-        { val: '4p', color: '#84315D', label: '++++ (16)', sev: 4, interp: 'Cétonurie critique. Urgence absolue.' }
+        { val: 'neg',   color: '#E4B695', label: 'Négatif',      sev: 0, interp: 'Absence de cétones. Normal.' },
+        { val: 'trace', color: '#F4A6A8', label: 'Trace (0.5)',   sev: 1, interp: 'Traces. Jeûne prolongé ou vomissements gravidiques ?' },
+        { val: '1p',    color: '#ED839D', label: '+ (1.5)',       sev: 2, interp: 'Cétonurie légère. Bilan glycémique nécessaire.' },
+        { val: '2p',    color: '#C95F81', label: '++ (4.0)',      sev: 3, interp: 'Cétonurie modérée. Risque d\'acidocétose ; glycémie urgente.' },
+        { val: '3p',    color: '#A04169', label: '+++ (8.0)',     sev: 4, interp: 'Cétonurie massive. Urgence médicale (acidocétose probable).' },
+        { val: '4p',    color: '#84315D', label: '++++ (16)',     sev: 4, interp: 'Cétonurie critique. Urgence absolue.' }
       ]
     },
     {
       id: 'BIL', name: 'Bilirubine', time: '30 sec', unit: '',
       options: [
         { val: 'neg', color: '#EFD4A5', label: 'Négatif', sev: 0, interp: 'Absence de bilirubine. Normal.' },
-        { val: '1p', color: '#E7B68D', label: '+', sev: 1, interp: 'Bilirubinurie légère. Bilan hépatique recommandé.' },
-        { val: '2p', color: '#D99876', label: '++', sev: 2, interp: 'Bilirubinurie modérée. Ictère cholestatique ou hépatocellulaire.' },
-        { val: '3p', color: '#C07C5F', label: '+++', sev: 3, interp: 'Bilirubinurie importante. Pathologie hépatobiliaire.' }
+        { val: '1p',  color: '#E7B68D', label: '+',       sev: 1, interp: 'Bilirubinurie légère. Bilan hépatique recommandé.' },
+        { val: '2p',  color: '#D99876', label: '++',      sev: 2, interp: 'Bilirubinurie modérée. Ictère cholestatique ou hépatocellulaire.' },
+        { val: '3p',  color: '#C07C5F', label: '+++',     sev: 3, interp: 'Bilirubinurie importante. Pathologie hépatobiliaire.' }
       ]
     },
     {
       id: 'GLU', name: 'Glucose', time: '30 sec', unit: 'mmol/L',
       options: [
-        { val: 'neg', color: '#6BBBB2', label: 'Négatif', sev: 0, interp: 'Absence de glycosurie. Normal.' },
-        { val: 'trace', color: '#82C17D', label: 'Trace (5)', sev: 1, interp: 'Traces. Seuil rénal abaissé possible (grossesse normale).' },
-        { val: '1p', color: '#5DB361', label: '+ (15)', sev: 2, interp: 'Glycosurie légère. Diabète ou seuil rénal bas. Glycémie veineuse.' },
-        { val: '2p', color: '#57923E', label: '++ (30)', sev: 3, interp: 'Glycosurie modérée. Diabète probable ; glycémie urgente.' },
-        { val: '3p', color: '#686431', label: '+++ (60)', sev: 4, interp: 'Glycosurie massive. Diabète déséquilibré.' },
-        { val: '4p', color: '#564227', label: '++++ (110)', sev: 4, interp: 'Glycosurie critique. Risque d\'acidocétose ou coma hyperosmolaire.' }
+        { val: 'neg',   color: '#6BBBB2', label: 'Négatif',       sev: 0, interp: 'Absence de glycosurie. Normal.' },
+        { val: 'trace', color: '#82C17D', label: 'Trace (5)',      sev: 1, interp: 'Traces. Seuil rénal abaissé possible (grossesse normale).' },
+        { val: '1p',    color: '#5DB361', label: '+ (15)',         sev: 2, interp: 'Glycosurie légère. Diabète ou seuil rénal bas. Glycémie veineuse.' },
+        { val: '2p',    color: '#57923E', label: '++ (30)',        sev: 3, interp: 'Glycosurie modérée. Diabète probable ; glycémie urgente.' },
+        { val: '3p',    color: '#686431', label: '+++ (60)',       sev: 4, interp: 'Glycosurie massive. Diabète déséquilibré.' },
+        { val: '4p',    color: '#564227', label: '++++ (110)',     sev: 4, interp: 'Glycosurie critique. Risque d\'acidocétose ou coma hyperosmolaire.' }
       ]
     }
   ];
@@ -502,9 +676,9 @@ const app = (function() {
   const getParam = id => PARAMS.find(p => p.id === id);
   const getOpt = paramId => getParam(paramId).options.find(o => o.val === state[paramId]);
   const isDark = hex => {
-    let c = hex.replace('#', '');
+    let c = hex.replace('#','');
     let r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
-    return (r*299 + g*587 + b*114) / 1000 < 148;
+    return (r*299 + g*587 + b*114)/1000 < 148;
   };
 
   function buildTable() {
@@ -513,10 +687,7 @@ const app = (function() {
       let squares = p.options.map(o => {
         let activeClass = (state[p.id] === o.val) ? 'active' : '';
         let extraCss = o.css || '';
-        return `<div class="color-box ${activeClass} ${extraCss}" 
-                     style="background-color: ${o.color};" 
-                     data-value="${o.label}" 
-                     onclick="app.selectOption('${p.id}', '${o.val}')"></div>`;
+        return `<div class="color-box ${activeClass} ${extraCss}" style="background-color: ${o.color};" data-value="${o.label}" onclick="app.selectOption('${p.id}', '${o.val}')"></div>`;
       }).join('');
       tbody += `<tr><td class="col-param">${p.name}</td><td class="col-time">${p.time}</td><td><div class="color-scale">${squares}</div></td></tr>`;
     });
@@ -524,7 +695,7 @@ const app = (function() {
   }
 
   function buildStrip() {
-    let reversedParams = [...PARAMS].reverse(); // Handle on left, Glu first, Leu last
+    let reversedParams = [...PARAMS].reverse();
     let html = `<div class="strip-handle"></div>`;
     reversedParams.forEach(p => {
       let opt = getOpt(p.id);
@@ -540,13 +711,7 @@ const app = (function() {
       let opt = getOpt(p.id);
       let dark = isDark(opt.color);
       let dot = `<span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:${opt.color};border:1px solid rgba(0,0,0,0.2);vertical-align:middle;margin-right:6px;${opt.css==='spots-bg'?'background-image:radial-gradient(#2c3e50 1px, transparent 1px);background-size:4px 4px;':''}"></span>`;
-      
-      tbody += `
-        <tr>
-          <td><strong>${p.name}</strong></td>
-          <td style="white-space:nowrap;">${dot}<span class="chip" style="background:${opt.color};color:${dark?'#fff':'#333'};">${opt.label}</span></td>
-          <td style="color:#374151;">${opt.interp}</td>
-        </tr>`;
+      tbody += `<tr><td><strong>${p.name}</strong></td><td style="white-space:nowrap;">${dot}<span class="chip" style="background:${opt.color};color:${dark?'#fff':'#333'};">${opt.label}</span></td><td style="color:#374151;">${opt.interp}</td></tr>`;
     });
     document.getElementById('resultBody').innerHTML = tbody;
     evaluateAlerts();
@@ -554,41 +719,32 @@ const app = (function() {
 
   function selectOption(paramId, val) {
     state[paramId] = val;
-    buildTable();
-    buildStrip();
-    buildResults();
+    buildTable(); buildStrip(); buildResults();
   }
 
   function evaluateAlerts() {
     let zone = document.getElementById('alertZone');
     let alerts = [];
-
     let leu = getOpt('LEU'), nit = getOpt('NIT'), pro = getOpt('PRO');
     let glu = getOpt('GLU'), ket = getOpt('KET'), blo = getOpt('BLO');
     let ph  = getOpt('PH'),  sg  = getOpt('SG'),  bil = getOpt('BIL');
 
-    // Infection
     if (leu.sev >= 3 && nit.val === 'pos') alerts.push({ cls: 'alert-danger', icon: '🚨', msg: '<strong>Infection urinaire très probable :</strong> Leucocyturie franche + nitrites (entérobactéries). ECBU + antibiogramme.' });
     else if (leu.sev >= 2 || nit.val === 'pos') alerts.push({ cls: 'alert-warn', icon: '⚠️', msg: '<strong>Anomalie urinaire :</strong> Leucocytes et/ou nitrites. Éliminer contamination vaginale. ECBU si clinique.' });
     if (leu.sev >= 1 && nit.val === 'neg') alerts.push({ cls: 'alert-info', icon: 'ℹ️', msg: '<strong>Nitrites négatifs isolés :</strong> Sensibilité 40-60%. N\'exclut pas une IU à <em>Entérocoque, Staph</em> ou <em>Pseudomonas</em>.' });
 
-    // Protéinurie / Prééclampsie / KDIGO
     if (pro.sev >= 4) alerts.push({ cls: 'alert-danger', icon: '🚨', msg: '<strong>Protéinurie massive :</strong> Syndrome néphrotique probable. Bilan urgent.' });
-    else if (pro.sev >= 2) {
-      alerts.push({ cls: 'alert-danger', icon: '🤰', msg: '<strong>Protéinurie significative :</strong> À quantifier. En obstétrique : évocatrice de prééclampsie si HTA ≥ 140/90 mmHg.' });
-    } else if (pro.sev >= 1) alerts.push({ cls: 'alert-warn', icon: '⚠️', msg: '<strong>Protéines (Traces) :</strong> Recontrôler. Si persistant, quantifier (ACR).' });
+    else if (pro.sev >= 2) alerts.push({ cls: 'alert-danger', icon: '🤰', msg: '<strong>Protéinurie significative :</strong> À quantifier. En obstétrique : évocatrice de prééclampsie si HTA ≥ 140/90 mmHg.' });
+    else if (pro.sev >= 1) alerts.push({ cls: 'alert-warn', icon: '⚠️', msg: '<strong>Protéines (Traces) :</strong> Recontrôler. Si persistant, quantifier (ACR).' });
     if (pro.sev < 2) alerts.push({ cls: 'alert-purple', icon: '📌', msg: '<strong>Rappel KDIGO (Diabète/HTA) :</strong> La bandelette ne détecte PAS la microalbuminurie (Stade A2). Le ratio albumine/créatinine (ACR) est indispensable chez la patiente à risque.' });
 
-    // Diabète / Cétose
     if (glu.sev >= 3 && ket.sev >= 3) alerts.push({ cls: 'alert-danger', icon: '🚨', msg: '<strong>Urgence diabétique :</strong> Glycosurie massive + Cétose importante. Risque d\'acidocétose. Glycémie capillaire et gaz du sang immédiats.' });
     else if (glu.sev >= 2) alerts.push({ cls: 'alert-warn', icon: '⚠️', msg: '<strong>Glycosurie :</strong> Bilan glycémique nécessaire. Le seuil rénal est abaissé pendant la grossesse.' });
 
-    // Sang / Rhabdo
     if (blo.sev >= 3) alerts.push({ cls: 'alert-danger', icon: '🚨', msg: '<strong>Macrohématurie :</strong> Bilan urologique urgent. Si ECBU sans hématies -> Rhabdomyolyse ?' });
     else if (blo.sev >= 2) alerts.push({ cls: 'alert-warn', icon: '⚠️', msg: '<strong>Hématurie :</strong> ECBU. Si confirmée : échographie (lithiase, tumeur).' });
     if (blo.sev >= 2 && leu.sev === 0 && nit.val === 'neg') alerts.push({ cls: 'alert-info', icon: '🧬', msg: '<strong>Piège Myoglobinurie :</strong> Sang positif isolé. Profil compatible avec une rhabdomyolyse ou hémolyse (contrôler CPK).' });
 
-    // Autres
     if (bil.sev >= 2) alerts.push({ cls: 'alert-warn', icon: '⚠️', msg: '<strong>Bilirubinurie :</strong> Bilan hépatobiliaire recommandé.' });
     if (ph.val === '8.0' && nit.val === 'neg' && leu.sev >= 1) alerts.push({ cls: 'alert-info', icon: 'ℹ️', msg: '<strong>pH très alcalin :</strong> Infection à <em>Proteus mirabilis</em> (germe uréasique) à évoquer.' });
 
@@ -602,22 +758,18 @@ const app = (function() {
   function applyPreset(type) {
     PARAMS.forEach(p => state[p.id] = p.options[0].val);
     state['SG'] = '1.015'; state['PH'] = '6.0';
-
-    if (type === 'iu') { state['LEU'] = '3p'; state['NIT'] = 'pos'; state['BLO'] = '1p'; state['PH'] = '8.0'; }
-    else if (type === 'nephro') { state['LEU'] = 'trace'; state['PRO'] = '4p'; state['BLO'] = '2p'; state['SG'] = '1.010'; }
-    else if (type === 'precla') { state['PRO'] = '3p'; state['SG'] = '1.025'; state['LEU'] = 'trace'; }
-    else if (type === 'diab') { state['GLU'] = '4p'; state['KET'] = '3p'; state['SG'] = '1.030'; state['PH'] = '5.0'; }
-    
+    if (type === 'iu')     { state['LEU'] = '3p'; state['NIT'] = 'pos'; state['BLO'] = '1p'; state['PH'] = '8.0'; }
+    else if (type === 'nephro')  { state['LEU'] = 'trace'; state['PRO'] = '4p'; state['BLO'] = '2p'; state['SG'] = '1.010'; }
+    else if (type === 'precla')  { state['PRO'] = '3p'; state['SG'] = '1.025'; state['LEU'] = 'trace'; }
+    else if (type === 'diab')    { state['GLU'] = '4p'; state['KET'] = '3p'; state['SG'] = '1.030'; state['PH'] = '5.0'; }
     buildTable(); buildStrip(); buildResults();
     setTimeout(() => document.getElementById('resultSectionAnchor').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
   }
 
   return {
     init: function() {
-      state['SG'] = '1.015'; state['PH'] = '6.0'; // Default normal values
+      state['SG'] = '1.015'; state['PH'] = '6.0';
       buildTable(); buildStrip(); buildResults();
-      
-      // Accordéon Traps
       document.getElementById('trapsToggle').addEventListener('click', function () {
         let body = document.getElementById('trapsBody');
         let isOpen = body.classList.contains('open');
@@ -628,10 +780,16 @@ const app = (function() {
     selectOption,
     applyPreset
   };
-
 })();
 
 document.addEventListener("DOMContentLoaded", app.init);
+
+/* ===== PWA ===== */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
 </script>
 
 <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
