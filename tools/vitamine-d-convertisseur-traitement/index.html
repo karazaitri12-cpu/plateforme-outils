@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vitamine D — Convertisseur &amp; Schémas Thérapeutiques</title>
-</head>
-<body>
-<div id="vitd-root">
+<meta name="theme-color" content="#1a3a5c">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Vitamine D — Convertisseur &amp; Schémas Thérapeutiques | Dr Kara-Zaitri M.A.</title>
 <style>
 /* ============================================================
    BLINDAGE ELEMENTOR — Isolation totale via #vitd-root
@@ -128,8 +129,9 @@
 }
 #vitd-root .vd-tab:hover { color: rgba(255,255,255,0.88); background: rgba(255,255,255,0.05); }
 #vitd-root .vd-tab.active { color: #fbbf24; border-bottom-color: var(--gold); background: rgba(180,83,9,0.12); }
-#vitd-root .vd-panel { display: none; background: var(--white); padding: 26px 28px 30px; }
-#vitd-root .vd-panel.active { display: block; animation: vdFade 0.25s ease; }
+/* Panels : contrôle display via JS (style inline), animation via classe .active */
+#vitd-root .vd-panel { background: var(--white); padding: 26px 28px 30px; }
+#vitd-root .vd-panel.active { animation: vdFade 0.25s ease; }
 @keyframes vdFade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
 #vitd-root .vd-section {
   background: var(--white);
@@ -218,15 +220,14 @@
   transition: background 0.15s, transform 0.2s;
 }
 #vitd-root .vd-arrow-btn:hover { background: var(--navy-lt); transform: rotate(180deg); }
+/* Status : display contrôlé via style inline, couleurs via classes */
 #vitd-root .vd-status {
   border-radius: 5px;
   padding: 13px 18px;
   font-family: Arial, sans-serif;
   font-size: 0.84rem;
   margin-top: 6px;
-  display: none;
 }
-#vitd-root .vd-status.visible { display: block; }
 #vitd-root .vd-status.s0  { background:#fef2f2; border-left:4px solid #c8102e; color:#7f1d1d; }
 #vitd-root .vd-status.s1  { background:#fff7ed; border-left:4px solid #ea580c; color:#7c2d12; }
 #vitd-root .vd-status.s2  { background:var(--gold-bg); border-left:4px solid var(--gold); color:#78350f; }
@@ -346,15 +347,15 @@
   font-weight: 400;
 }
 #vitd-root .vd-btn-reset:hover { background: var(--light); }
+/* Result box : display contrôlé via style inline, animation via .visible */
 #vitd-root .vd-result-box {
-  display: none;
   border: 2px solid var(--navy);
   border-radius: var(--radius);
   margin-top: 18px;
   overflow: hidden;
   box-shadow: var(--shadow);
 }
-#vitd-root .vd-result-box.visible { display: block; animation: vdFade 0.25s ease; }
+#vitd-root .vd-result-box.visible { animation: vdFade 0.25s ease; }
 #vitd-root .vd-result-head {
   background: var(--navy);
   color: #fff;
@@ -379,6 +380,31 @@
   transition: background 0.2s;
 }
 #vitd-root .vd-result-body { padding: 20px 22px; background: var(--white); }
+#vitd-root .vd-result-ft {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  background: var(--light);
+  border-top: 1px solid var(--border);
+}
+#vitd-root .vd-ft-btn {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+#vitd-root .vd-ft-btn:hover { opacity: 0.85; }
+#vitd-root .vd-ft-copy  { background: #0d9488; color: #fff; }
+#vitd-root .vd-ft-print { background: #64748b; color: #fff; }
 #vitd-root .vd-phase {
   border-radius: 5px;
   margin-bottom: 14px;
@@ -397,9 +423,9 @@
   gap: 6px;
   flex-wrap: wrap;
 }
-#vitd-root .vd-phase-head.attack  { background: var(--red-bg); color: var(--accent); border-bottom: 1px solid #fca5a5; }
-#vitd-root .vd-phase-head.maintain{ background: var(--green-bg); color: var(--green); border-bottom: 1px solid #86efac; }
-#vitd-root .vd-phase-head.control { background: var(--blue-bg); color: var(--blue); border-bottom: 1px solid #93c5fd; }
+#vitd-root .vd-phase-head.attack   { background: var(--red-bg); color: var(--accent); border-bottom: 1px solid #fca5a5; }
+#vitd-root .vd-phase-head.maintain { background: var(--green-bg); color: var(--green); border-bottom: 1px solid #86efac; }
+#vitd-root .vd-phase-head.control  { background: var(--blue-bg); color: var(--blue); border-bottom: 1px solid #93c5fd; }
 #vitd-root .vd-phase-body { padding: 13px 16px; font-family: Arial, sans-serif; font-size: 0.83rem; line-height: 1.65; }
 #vitd-root .vd-dose {
   font-size: 1.2rem;
@@ -420,10 +446,10 @@
   line-height: 1.5;
 }
 #vitd-root .vd-rlist li:last-child { border-bottom: none; }
-#vitd-root .vd-rlist li::before { content: '\2022'; position: absolute; left: 0; color: var(--gold); font-size: 1rem; }
-#vitd-root .vd-rlist.check li::before { content: '\2713'; color: var(--green); font-weight: 700; }
-#vitd-root .vd-rlist.warn li::before  { content: '\26A0'; color: var(--gold); }
-#vitd-root .vd-rlist.stop li::before  { content: '\2716'; color: var(--accent); }
+#vitd-root .vd-rlist li::before        { content: '\2022'; position: absolute; left: 0; color: var(--gold); font-size: 1rem; }
+#vitd-root .vd-rlist.check li::before  { content: '\2713'; color: var(--green); font-weight: 700; }
+#vitd-root .vd-rlist.warn li::before   { content: '\26A0'; color: var(--gold); }
+#vitd-root .vd-rlist.stop li::before   { content: '\2716'; color: var(--accent); }
 #vitd-root .vd-alert {
   display: flex;
   gap: 10px;
@@ -478,12 +504,78 @@
   #vitd-root .vd-btn { width: 100%; justify-content: center; }
   #vitd-root .vd-result-head { flex-direction: column; align-items: flex-start; }
 }
+/* ── Barre identification patiente (rétractable) ── */
+#vitd-root .vd-patient { background: var(--white); border-bottom: 1px solid var(--border); }
+#vitd-root .vd-pt-toggle {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: var(--light);
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--slate);
+  text-align: left;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+  border-bottom: 1px solid var(--border);
+}
+#vitd-root .vd-pt-toggle:hover { color: var(--navy); }
+#vitd-root .vd-pt-arrow { font-size: 9px; transition: transform 0.2s; display: inline-block; }
+#vitd-root .vd-pt-toggle.open .vd-pt-arrow { transform: rotate(90deg); }
+#vitd-root .vd-pt-form {
+  display: none;
+  padding: 10px 20px 14px;
+  background: #fafbfc;
+  border-bottom: 1px solid var(--border);
+}
+#vitd-root .vd-pt-form.open { display: block; }
+#vitd-root .vd-pt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 80px;
+  gap: 8px;
+}
+#vitd-root .vd-pt-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#vitd-root .vd-pt-field label {
+  font-family: Arial, sans-serif;
+  font-size: 10px; font-weight: 700; color: #4a5568;
+  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+}
+#vitd-root .vd-pt-field input {
+  all: unset;
+  box-sizing: border-box;
+  display: block;
+  padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px;
+  font-family: Arial, sans-serif; font-size: 12px; color: var(--navy);
+  background: var(--white); width: 100%; min-width: 0;
+  transition: border-color 0.15s;
+}
+#vitd-root .vd-pt-field input:focus { border-color: var(--navy-lt); outline: none; }
+#vitd-root .vd-pt-field-wide { grid-column: span 2; }
+@media (max-width: 580px) {
+  #vitd-root .vd-pt-grid { grid-template-columns: 1fr 1fr; }
+  #vitd-root .vd-pt-field-wide { grid-column: span 1; }
+}
+@media (max-width: 340px) { #vitd-root .vd-pt-grid { grid-template-columns: 1fr; } }
+/* =========================================
+   PRO : Masque l'ascenseur (style App native)
+   ========================================= */
 html { scrollbar-width: none; }
 body { -ms-overflow-style: none; overflow-y: auto; }
 ::-webkit-scrollbar { display: none; }
 </style>
-
+</head>
+<body>
+<div id="vitd-root">
 <div class="vd-wrap">
+
+<!-- ══ HEADER ══ -->
 <div class="vd-header">
   <div class="vd-badge">Outil Clinique</div>
   <div class="vd-title">Vitamine D &mdash; Convertisseur &amp; Sch&eacute;mas Th&eacute;rapeutiques</div>
@@ -497,6 +589,43 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   </div>
 </div>
 
+<!-- ══ IDENTIFICATION PATIENTE (rétractable) ══ -->
+<div class="vd-patient">
+  <button type="button" class="vd-pt-toggle" id="vdpt-toggle" onclick="vdPtToggle()" aria-expanded="false">
+    <span class="vd-pt-arrow">&#9654;</span>
+    <span>&#128100; Identification patient(e) / m&eacute;decin</span>
+  </button>
+  <div class="vd-pt-form" id="vdpt-form">
+    <div class="vd-pt-grid">
+      <div class="vd-pt-field">
+        <label>Nom</label>
+        <input type="text" id="vdpt-nom" placeholder="Nom de famille" autocomplete="off">
+      </div>
+      <div class="vd-pt-field">
+        <label>Pr&eacute;nom</label>
+        <input type="text" id="vdpt-prenom" placeholder="Pr&eacute;nom" autocomplete="off">
+      </div>
+      <div class="vd-pt-field">
+        <label>Date de naissance</label>
+        <input type="date" id="vdpt-ddn" oninput="vdPtCalcAge()">
+      </div>
+      <div class="vd-pt-field">
+        <label>&Acirc;ge (ans)</label>
+        <input type="number" id="vdpt-age" placeholder="&Acirc;ge" min="0" max="130" oninput="vdPtClearDdn()">
+      </div>
+      <div class="vd-pt-field vd-pt-field-wide">
+        <label>M&eacute;decin prescripteur</label>
+        <input type="text" id="vdpt-medecin" placeholder="Dr ..." autocomplete="off">
+      </div>
+      <div class="vd-pt-field vd-pt-field-wide">
+        <label>Date de consultation</label>
+        <input type="date" id="vdpt-date">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ONGLETS ══ -->
 <div class="vd-tabs">
   <button class="vd-tab active" onclick="vdTab('conv',this)">&#9728; Convertisseur</button>
   <button class="vd-tab" onclick="vdTab('trt',this)">&#9654; Traitement curatif</button>
@@ -504,8 +633,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 </div>
 
 <!-- ════════════ PANEL 1 : CONVERTISSEUR ════════════ -->
-<div id="vd-conv" class="vd-panel active">
-
+<div id="vd-conv" class="vd-panel active" style="display:block">
   <div class="vd-section">
     <div class="vd-section-head">&#9728; Conversion bidirectionnelle</div>
     <div class="vd-section-body">
@@ -525,13 +653,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       <div style="font-family:Arial,sans-serif; font-size:0.74rem; color:var(--slate); text-align:center; margin-bottom:12px;">
         Facteur de conversion&nbsp;: <strong>1 ng/mL = 2,5 nmol/L</strong>
       </div>
-      <div id="vd-status" class="vd-status">
+      <div id="vd-status" class="vd-status" style="display:none">
         <div class="vd-status-title" id="vd-status-title"></div>
         <div id="vd-status-text"></div>
       </div>
     </div>
   </div>
-
   <div class="vd-section">
     <div class="vd-section-head">&#9660; Seuils d&apos;interpr&eacute;tation (consensus actuel)</div>
     <div class="vd-section-body" style="padding:0;">
@@ -543,11 +670,11 @@ body { -ms-overflow-style: none; overflow-y: auto; }
           <tbody>
             <tr>
               <td><span class="vd-dot" style="background:#c8102e;"></span><strong>Carence s&eacute;v&egrave;re</strong></td>
-              <td>&lt; 10 ng/mL</td><td>&lt; 25 nmol/L</td>
+              <td>&lt;&nbsp;10 ng/mL</td><td>&lt;&nbsp;25 nmol/L</td>
               <td>Rachitisme, ost&eacute;omalacie, myopathie. Traitement curatif urgent.</td>
             </tr>
             <tr>
-              <td><span class="vd-dot" style="background:#ea580c;"></span><strong>Car</strong><strong>ence mod&eacute;r&eacute;e</strong></td>
+              <td><span class="vd-dot" style="background:#ea580c;"></span><strong>Carence mod&eacute;r&eacute;e</strong></td>
               <td>10&ndash;20 ng/mL</td><td>25&ndash;50 nmol/L</td>
               <td>Risque osseux et immunitaire. Traitement curatif standard.</td>
             </tr>
@@ -568,7 +695,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
             </tr>
             <tr>
               <td><span class="vd-dot" style="background:#6b7280;"></span><strong>Toxique</strong></td>
-              <td>&gt; 100 ng/mL</td><td>&gt; 250 nmol/L</td>
+              <td>&gt;&nbsp;100 ng/mL</td><td>&gt;&nbsp;250 nmol/L</td>
               <td>Hypercalc&eacute;mie possible. Arr&ecirc;t imm&eacute;diat. Contr&ocirc;le calc&eacute;mie urgent.</td>
             </tr>
           </tbody>
@@ -576,12 +703,10 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       </div>
     </div>
   </div>
-
 </div>
 
 <!-- ════════════ PANEL 2 : TRAITEMENT ════════════ -->
-<div id="vd-trt" class="vd-panel">
-
+<div id="vd-trt" class="vd-panel" style="display:none">
   <div class="vd-section">
     <div class="vd-section-head">&#9654; Param&egrave;tres cliniques</div>
     <div class="vd-section-body">
@@ -626,22 +751,22 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       </div>
     </div>
   </div>
-
-  <div id="vd-trt-result" class="vd-result-box">
+  <div id="vd-trt-result" class="vd-result-box" style="display:none">
     <div class="vd-result-head">
       <span id="vd-trt-title">Sch&eacute;ma th&eacute;rapeutique personnalis&eacute;</span>
       <span id="vd-trt-tag" class="vd-result-tag"></span>
     </div>
     <div class="vd-result-body" id="vd-trt-body"></div>
+    <div class="vd-result-ft">
+      <button class="vd-ft-btn vd-ft-copy" id="vd-copy-btn" onclick="vdCopyResume()">&#128203; Copier pour le dossier</button>
+      <button class="vd-ft-btn vd-ft-print" onclick="vdPrintResume()">&#128438; Imprimer A5</button>
+    </div>
   </div>
-
 </div>
 
 <!-- ════════════ PANEL 3 : RÉFÉRENTIEL ════════════ -->
-<div id="vd-ref" class="vd-panel">
-
+<div id="vd-ref" class="vd-panel" style="display:none">
   <div class="vd-sub" style="margin-top:0;">Cofacteurs essentiels &agrave; l&apos;efficacit&eacute; de la vitamine D</div>
-
   <div class="vd-section">
     <div class="vd-section-head">&#9660; Synergies et cofacteurs (par priorit&eacute;)</div>
     <div class="vd-section-body" style="padding:0;">
@@ -653,7 +778,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
           <tbody>
             <tr>
               <td><strong>Magn&eacute;sium</strong></td>
-              <td>Active les enzymes d&apos;hydroxylation. Sans Mg, la Vit. D reste inactive m&ecirc;me si le taux sanguin s&apos;&eacute;l&egrave;ve.</td>
+              <td>Active les enzymes d&apos;hydroxylation. Sans Mg, la Vit.&nbsp;D reste inactive m&ecirc;me si le taux sanguin s&apos;&eacute;l&egrave;ve.</td>
               <td>300&ndash;400 mg/j</td>
               <td style="color:var(--accent);font-weight:700;">Indispensable</td>
             </tr>
@@ -686,9 +811,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
       </div>
     </div>
   </div>
-
   <div class="vd-sub">Pr&eacute;cautions d&apos;emploi et toxicit&eacute;</div>
-
   <div class="vd-section">
     <div class="vd-section-head">&#9888; Hypervitaminose D &mdash; Signes et seuils</div>
     <div class="vd-section-body">
@@ -703,91 +826,118 @@ body { -ms-overflow-style: none; overflow-y: auto; }
           <strong>Grossesse &mdash; r&egrave;gle absolue (CNGOF / ANSM)</strong>&nbsp;:
           Les ampoules de <strong>200&nbsp;000&nbsp;UI sont &agrave; &eacute;viter</strong> pendant la grossesse
           (RecoM&eacute;dicales 2025, Souberbielle 2019). Le CNGOF recommande
-          <strong>100&nbsp;000&nbsp;UI maximum</strong> en prise unique au d&eacute;but du 6&egrave;-7&egrave; mois,
+          <strong>100&nbsp;000&nbsp;UI maximum</strong> en prise unique au d&eacute;but du 6e&ndash;7e mois,
           et exclut &laquo;&nbsp;les doses de charge plus &eacute;lev&eacute;es, en raison de leur toxicit&eacute; potentielle&nbsp;&raquo;.
-          L&apos;ANSM confirme&nbsp;: &laquo;&nbsp;un surdosage doit &ecirc;tre &eacute;vit&eacute; en raison du risque d&apos;hypercalc&eacute;mie
-          prolong&eacute;e pouvant entra&icirc;ner un retard de d&eacute;veloppement physique et mental, une
-          st&eacute;nose aortique supravalvulaire et une r&eacute;tinopathie chez l&apos;enfant.&nbsp;&raquo;
+          L&apos;ANSM confirme&nbsp;: risque d&apos;hypercalc&eacute;mie prolong&eacute;e pouvant entra&icirc;ner retard de d&eacute;veloppement,
+          st&eacute;nose aortique supravalvulaire et r&eacute;tinopathie chez l&apos;enfant.
         </li>
       </ul>
     </div>
   </div>
-
 </div>
 
+<!-- ══ DISCLAIMER ══ -->
 <div class="vd-disclaimer">
   <strong>Avertissement m&eacute;dico-l&eacute;gal &middot;</strong>
   Outil d&apos;aide &agrave; la d&eacute;cision bas&eacute; sur&nbsp;: CNGOF &laquo;&nbsp;Suppl&eacute;mentations au cours de la grossesse&nbsp;&raquo; (RCP 1997, toujours en vigueur)&nbsp;; ANSM / Base publique des m&eacute;dicaments (notices UVEDOSE, ZYMAD, CHOLECALCIFEROL VIATRIS)&nbsp;; Souberbielle JC et al., <em>Rev Rhum</em> 2019&nbsp;; RecoM&eacute;dicales.fr 2025. Les ampoules de 200&nbsp;000&nbsp;UI sont contre-indiqu&eacute;es en grossesse selon ces sources. En cas de carence sev&egrave;re document&eacute;e, la d&eacute;cision th&eacute;rapeutique reste de la responsabilit&eacute; du prescripteur, avec contr&ocirc;le de la calc&eacute;mie.
   Dr KARA-ZAITRI M.A. &mdash; Gyn&eacute;cologie-Obst&eacute;trique &mdash; Tlemcen.
 </div>
 
-</div>
-</div>
+</div><!-- /vd-wrap -->
+</div><!-- /vitd-root -->
 
 <script>
 (function(){
 'use strict';
 
-/* ══ NAVIGATION ══ */
+/* ══ PATIENT TOGGLE ══ */
+window.vdPtToggle = function() {
+  var form = document.getElementById('vdpt-form');
+  var btn  = document.getElementById('vdpt-toggle');
+  form.classList.toggle('open');
+  btn.classList.toggle('open');
+  btn.setAttribute('aria-expanded', btn.classList.contains('open') ? 'true' : 'false');
+};
+window.vdPtCalcAge = function() {
+  var ddn = document.getElementById('vdpt-ddn').value;
+  if (!ddn) return;
+  var diff = Date.now() - new Date(ddn).getTime();
+  var age  = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+  if (age >= 0 && age < 130) document.getElementById('vdpt-age').value = age;
+};
+window.vdPtClearDdn = function() { document.getElementById('vdpt-ddn').value = ''; };
+
+/* ══ NAVIGATION — style.display direct ══ */
 window.vdTab = function(id, btn) {
-  document.querySelectorAll('#vitd-root .vd-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('#vitd-root .vd-panel').forEach(function(p){
+    p.style.display = 'none';
+    p.classList.remove('active');
+  });
   document.querySelectorAll('#vitd-root .vd-tab').forEach(function(t){ t.classList.remove('active'); });
   var panel = document.getElementById('vd-' + id);
-  if (panel) panel.classList.add('active');
-  if (btn) { btn.classList.add('active'); btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' }); }
+  if (panel) {
+    panel.style.display = 'block';
+    panel.classList.add('active');
+  }
+  if (btn) {
+    btn.classList.add('active');
+    btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+  }
 };
 
 /* ══ CONVERTISSEUR ══ */
-var FACTOR = 2.5;
-var ngmlEl    = document.getElementById('vd-ngml');
-var nmollEl   = document.getElementById('vd-nmoll');
-var statusEl  = document.getElementById('vd-status');
-var sTitleEl  = document.getElementById('vd-status-title');
-var sTextEl   = document.getElementById('vd-status-text');
+var FACTOR   = 2.5;
+var ngmlEl   = document.getElementById('vd-ngml');
+var nmollEl  = document.getElementById('vd-nmoll');
+var statusEl = document.getElementById('vd-status');
+var sTitleEl = document.getElementById('vd-status-title');
+var sTextEl  = document.getElementById('vd-status-text');
 
 function interprete(val) {
   if (isNaN(val) || val < 0) return;
   var cls, title, txt;
   if (val < 10) {
-    cls = 's0';
-    title = '\u26A0 CARENCE S\u00c9V\u00c8RE \u2014 < 10 ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
-    txt   = 'Risque de rachitisme / ost\u00e9omalacie. Traitement curatif urgent. Contr\u00f4le calc\u00e9mie conseill\u00e9 avant traitement.';
+    cls   = 's0';
+    title = '⚠ CARENCE SÉVÈRE — < 10 ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
+    txt   = 'Risque de rachitisme / ostéomalacie. Traitement curatif urgent. Contrôle calcémie conseillé avant traitement.';
   } else if (val < 20) {
-    cls = 's1';
-    title = '\u26A1 CARENCE MOD\u00c9R\u00c9E \u2014 ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
-    txt   = 'Suppl\u00e9mentation curative n\u00e9cessaire par doses de charge. Sch\u00e9ma selon situation clinique.';
+    cls   = 's1';
+    title = '⚡ CARENCE MODÉRÉE — ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
+    txt   = 'Supplémentation curative nécessaire par doses de charge. Schéma selon situation clinique.';
   } else if (val < 30) {
-    cls = 's2';
-    title = '\u25B2 INSUFFISANCE \u2014 ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
-    txt   = 'Taux suboptimal. Suppl\u00e9mentation d\u2019attaque l\u00e9g\u00e8re recommand\u00e9e pour normaliser les stocks.';
+    cls   = 's2';
+    title = '▲ INSUFFISANCE — ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
+    txt   = 'Taux suboptimal. Supplémentation d’attaque légère recommandée pour normaliser les stocks.';
   } else if (val <= 100) {
-    cls = 's3';
-    title = '\u2713 SUFFISANT \u2014 ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
+    cls   = 's3';
+    title = '✓ SUFFISANT — ' + val.toFixed(1) + ' ng/mL (' + (val*2.5).toFixed(1) + ' nmol/L)';
     txt   = val >= 50
-      ? 'Taux optimal \u00e0 \u00e9lev\u00e9. Arr\u00eater temporairement les bolus de charge pour \u00e9viter le surdosage.'
-      : 'Taux correct. L\u2019entretien r\u00e9gulier pr\u00e9ventif est recommand\u00e9 pour maintenir ce statut.';
+      ? 'Taux optimal à élevé. Arrêter temporairement les bolus de charge pour éviter le surdosage.'
+      : 'Taux correct. L’entretien régulier préventif est recommandé pour maintenir ce statut.';
   } else {
-    cls = 's4';
-    title = '\u26A0 TAUX TOXIQUE \u2014 ' + val.toFixed(1) + ' ng/mL';
-    txt   = 'Taux > 100 ng/mL. Arr\u00eat imm\u00e9diat de la suppl\u00e9mentation. Contr\u00f4le urgent de la calc\u00e9mie.';
+    cls   = 's4';
+    title = '⚠ TAUX TOXIQUE — ' + val.toFixed(1) + ' ng/mL';
+    txt   = 'Taux > 100 ng/mL. Arrêt immédiat de la supplémentation. Contrôle urgent de la calcémie.';
   }
-  statusEl.className  = 'vd-status visible ' + cls;
-  sTitleEl.textContent = title;
-  sTextEl.textContent  = txt;
+  statusEl.style.display  = 'block';
+  statusEl.className      = 'vd-status ' + cls;
+  sTitleEl.textContent    = title;
+  sTextEl.textContent     = txt;
 }
 
 ngmlEl.addEventListener('input', function(){
   var v = parseFloat(this.value);
   if (!isNaN(v) && v >= 0) { nmollEl.value = (v * FACTOR).toFixed(1); interprete(v); }
-  else { nmollEl.value = ''; statusEl.className = 'vd-status'; }
+  else { nmollEl.value = ''; statusEl.style.display = 'none'; statusEl.className = 'vd-status'; }
 });
 nmollEl.addEventListener('input', function(){
   var v = parseFloat(this.value);
   if (!isNaN(v) && v >= 0) { ngmlEl.value = (v / FACTOR).toFixed(1); interprete(v / FACTOR); }
-  else { ngmlEl.value = ''; statusEl.className = 'vd-status'; }
+  else { ngmlEl.value = ''; statusEl.style.display = 'none'; statusEl.className = 'vd-status'; }
 });
 window.vdClearConv = function(){
   ngmlEl.value = ''; nmollEl.value = '';
+  statusEl.style.display = 'none';
   statusEl.className = 'vd-status';
 };
 
@@ -797,298 +947,134 @@ window.vdClearConv = function(){
    - CNGOF RCP Supplémentations grossesse (1997, toujours en vigueur)
    - ANSM notices UVEDOSE 100 000 UI, ZYMAD 200 000 UI, Cholécalciférol Viatris
    - Souberbielle JC et al. Rev Rhum 2019 / RecoMédicales 2025
-   - Académie Nationale de Médecine (Vitamine D et grossesse)
-
-   RÈGLES CONFIRMÉES PAR LES SOURCES :
-   1. GROSSESSE  : 200 000 UI À ÉVITER (CNGOF, ANSM, RecoMédicales 2025)
-                   Max recommandé = 100 000 UI, au début du 6e-7e mois (T3)
-                   "Exclure les doses de charge plus élevées" (CNGOF)
-   2. ADULTE     : ampoules 200 000 UI espacées d'au minimum 3 mois
-                   (RecoMédicales : "200 000 UI à éviter" en routine ;
-                    usage curatif ponctuel acceptable si espacé)
-   3. OBÉSITÉ    : doses fortes acceptables mais espacées ≥ 4 semaines
-   4. MALABSORPTION : idem, espacement ≥ 4 semaines entre ampoules 200k
    ══════════════════════════════════════════════════════════════════ */
-
 var DATA = {
-
-  /* ─────────── ADULTE ─────────── */
   adulte: {
-    label: 'Adulte (hors situation particuli\u00e8re)',
-    objectif: '30\u201350 ng/mL',
+    label: 'Adulte (hors situation particulière)',
+    objectif: '30–50 ng/mL',
     attaque: {
-      /*
-       * CORRECTION : espacement 200k UI = minimum 6 semaines (pas 15 jours)
-       * Source : pharmacocinétique D3, durée de pic ≈ 3-4 semaines
-       */
-      severe:  {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0, puis 1 ampoule 6\u202fsemaines plus tard (J42)',
-        dose100: '1 ampoule de 100\u202f000\u202fUI / semaine \u00d7 4 semaines (soit 400\u202f000\u202fUI au total)',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 8 semaines'
-      },
-      moderate:{
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0',
-        dose100: '2 ampoules de 100\u202f000\u202fUI espac\u00e9es de 4 semaines (J0 et J28)',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 6 semaines'
-      },
-      insuf:   {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0',
-        dose100: '1 ampoule de 100\u202f000\u202fUI \u00e0 J0',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 4 semaines'
-      }
+      severe:   { dose200: '1 ampoule de 200 000 UI à J0, puis 1 ampoule 6 semaines plus tard (J42)', dose100: '1 ampoule de 100 000 UI / semaine × 4 semaines (soit 400 000 UI au total)', dose50: '1 caps/amp de 50 000 UI / semaine × 8 semaines' },
+      moderate: { dose200: '1 ampoule de 200 000 UI à J0', dose100: '2 ampoules de 100 000 UI espacées de 4 semaines (J0 et J28)', dose50: '1 caps/amp de 50 000 UI / semaine × 6 semaines' },
+      insuf:    { dose200: '1 ampoule de 200 000 UI à J0', dose100: '1 ampoule de 100 000 UI à J0', dose50: '1 caps/amp de 50 000 UI / semaine × 4 semaines' }
     },
-    entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 \u00e0 4 mois (espacement minimum : 3 mois)',
-      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 \u00e0 3 mois',
-      dose50:  '1 caps/amp de 50\u202f000\u202fUI par mois (ou 800\u20131\u202f000\u202fUI/j)'
-    },
-    controle: '3 mois apr\u00e8s la fin de la cure d\u2019attaque',
+    entretien: { dose200: '1 ampoule de 200 000 UI tous les 3 à 4 mois (espacement minimum : 3 mois)', dose100: '1 ampoule de 100 000 UI tous les 2 à 3 mois', dose50: '1 caps/amp de 50 000 UI par mois (ou 800–1 000 UI/j)' },
+    controle: '3 mois après la fin de la cure d’attaque',
     notes: [
-      'Prendre au cours d\u2019un repas contenant des graisses (vitamine liposoluble)',
-      'Associer magn\u00e9sium 300 mg/jour (cofacteur enzymatique d\u2019hydroxylation indispensable)',
-      'V\u00e9rifier apport calcique alimentaire suffisant (\u2265 800 mg/j)'
+      'Prendre au cours d’un repas contenant des graisses (vitamine liposoluble)',
+      'Associer magnésium 300 mg/jour (cofacteur enzymatique d’hydroxylation indispensable)',
+      'Vérifier apport calcique alimentaire suffisant (≥ 800 mg/j)'
     ]
   },
-
-  /* ─────────── GROSSESSE ─────────── */
   grossesse: {
     label: 'Grossesse',
-    objectif: '30\u201350 ng/mL (objectif CNGOF) \u2014 certains experts visent 40\u201360 ng/mL',
+    objectif: '30–50 ng/mL (objectif CNGOF) — certains experts visent 40–60 ng/mL',
     attaque: {
-      /*
-       * RÈGLE ABSOLUE CONFIRMÉE (CNGOF, ANSM, RecoMédicales 2025) :
-       * LES AMPOULES DE 200 000 UI SONT À ÉVITER PENDANT LA GROSSESSE.
-       * Raison : risque d'hypercalcémie prolongée → retard développement,
-       *          sténose aortique supravalvulaire, rétinopathie (ANSM).
-       * CNGOF : "exclure les doses de charge plus élevées" (> 100 000 UI).
-       * RecoMédicales 2025 : "200 000 UI à éviter".
-       * → Dose max recommandée = 100 000 UI en grossesse.
-       */
-      severe:  {
-        dose200: '\u26A0 Les ampoules de 200\u202f000\u202fUI sont \u00e0 \u00e9viter pendant la grossesse (CNGOF, ANSM). En cas de carence s\u00e9v\u00e8re document\u00e9e n\u00e9cessitant imp\u00e9rativement une dose \u00e9lev\u00e9e, la d\u00e9cision rel\u00e8ve d\u2019une concertation m\u00e9dicale avec contr\u00f4le de la calc\u00e9mie et de la calciurie. Pr\u00e9f\u00e9rer 100\u202f000\u202fUI avec ampoules 100k.',
-        dose100: '1 ampoule de 100\u202f000\u202fUI imm\u00e9diatement, puis 1 ampoule 4\u202fsemaines plus tard si terme \u2264 28\u202fSA',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 6 semaines'
-      },
-      moderate:{
-        dose200: '\u26A0 Les ampoules de 200\u202f000\u202fUI sont \u00e0 \u00e9viter pendant la grossesse (CNGOF, ANSM). Utiliser 100\u202f000\u202fUI.',
-        dose100: '1 ampoule de 100\u202f000\u202fUI \u00e0 J0',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 4 semaines'
-      },
-      insuf:   {
-        dose200: '\u26A0 Les ampoules de 200\u202f000\u202fUI sont \u00e0 \u00e9viter pendant la grossesse (CNGOF, ANSM). Utiliser 100\u202f000\u202fUI.',
-        dose100: '1 ampoule de 100\u202f000\u202fUI \u00e0 J0',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 3 semaines'
-      }
+      severe:   { dose200: '⚠ Les ampoules de 200 000 UI sont à éviter pendant la grossesse (CNGOF, ANSM). En cas de carence sévère documentée nécessitant impérativement une dose élevée, la décision relève d’une concertation médicale avec contrôle de la calcémie. Privilégier 100 000 UI avec ampoules 100k.', dose100: '1 ampoule de 100 000 UI immédiatement, puis 1 ampoule 4 semaines plus tard si terme ≤ 28 SA', dose50: '1 caps/amp de 50 000 UI / semaine × 6 semaines' },
+      moderate: { dose200: '⚠ Les ampoules de 200 000 UI sont à éviter pendant la grossesse (CNGOF, ANSM). Utiliser 100 000 UI.', dose100: '1 ampoule de 100 000 UI à J0', dose50: '1 caps/amp de 50 000 UI / semaine × 4 semaines' },
+      insuf:    { dose200: '⚠ Les ampoules de 200 000 UI sont à éviter pendant la grossesse (CNGOF, ANSM). Utiliser 100 000 UI.', dose100: '1 ampoule de 100 000 UI à J0', dose50: '1 caps/amp de 50 000 UI / semaine × 3 semaines' }
     },
     entretien: {
-      /*
-       * CORRECTION de l'entretien 100k :
-       * L'ancienne version proposait "1 ampoule au T3 seulement" — insuffisant si T1/T2.
-       * Le CNGOF recommande 100 000 UI au 6e-7e mois (T3).
-       * Si carence corrigée au T1 ou T2, une 2e ampoule à 3 mois peut être nécessaire.
-       */
-      dose200: '\u26A0 Les ampoules de 200\u202f000\u202fUI sont \u00e0 \u00e9viter en grossesse (CNGOF, ANSM). Pour l\u2019entretien, pr\u00e9f\u00e9rer 100\u202f000\u202fUI ou des apports quotidiens (400\u2013800 UI/j).',
-      dose100: 'Selon le terme de d\u00e9but de suppl\u00e9mentation :\n\u2022 Diagnostic au T1 (< 14 SA) : 1 ampoule \u00e0 J0, puis 1 ampoule vers 28 SA, puis 1 ampoule vers la 34e-36e SA\n\u2022 Diagnostic au T2 (14\u201328 SA) : 1 ampoule \u00e0 J0, puis 1 ampoule vers 34\u201336 SA\n\u2022 Diagnostic au T3 (\u2265 28 SA) : 1 ampoule unique vers le d\u00e9but du 7e mois (recommandation CNGOF)',
-      dose50:  '1 caps/amp de 50\u202f000\u202fUI toutes les 6\u20138 semaines jusqu\u2019\u00e0 l\u2019accouchement, ou apports quotidiens (400\u2013800 UI/j)'
+      dose200: '⚠ Les ampoules de 200 000 UI sont à éviter en grossesse (CNGOF, ANSM). Préférer 100 000 UI ou des apports quotidiens (400–800 UI/j).',
+      dose100: 'Selon le terme de début de supplémentation :\n• T1 (< 14 SA) : 1 ampoule à J0, puis 1 vers 28 SA, puis 1 vers 34–36 SA\n• T2 (14–28 SA) : 1 ampoule à J0, puis 1 vers 34–36 SA\n• T3 (≥ 28 SA) : 1 ampoule unique vers le début du 7e mois (recommandation CNGOF)',
+      dose50:  '1 caps/amp de 50 000 UI toutes les 6–8 semaines jusqu’à l’accouchement, ou apports quotidiens (400–800 UI/j)'
     },
-    controle: '6 semaines apr\u00e8s l\u2019ampoule d\u2019attaque, ou avant l\u2019accouchement (selon terme)',
+    controle: '6 semaines après l’ampoule d’attaque, ou avant l’accouchement (selon terme)',
     notes: [
-      '\u26A0 IMPORTANT (CNGOF, ANSM, RecoM\u00e9dicales 2025) : les ampoules de 200\u202f000\u202fUI sont \u00e0 \u00e9viter pendant la grossesse \u2014 dose maximale recommand\u00e9e : 100\u202f000\u202fUI',
-      'Objectif : taux suf\ufb01sant pour la min\u00e9ralisation f\u0153tale et la pr\u00e9vention de la d\u00e9tresse respiratoire n\u00e9onatale',
-      'Associer magn\u00e9sium 350\u2013400 mg/j (cofacteur indispensable, souvent d\u00e9\ufb01cient en grossesse)',
-      'Contr\u00f4le calcémie si carence s\u00e9v\u00e8re avant et apr\u00e8s traitement',
-      'Le nouveau-n\u00e9 devra \u00eatre suppl\u00e9ment\u00e9 d\u00e8s la naissance (400\u2013800 UI/j en gouttes)'
+      '⚠ IMPORTANT (CNGOF, ANSM, RecoMédicales 2025) : les ampoules de 200 000 UI sont à éviter pendant la grossesse — dose maximale recommandée : 100 000 UI',
+      'Objectif : taux suffisant pour la minéralisation fœtale et la prévention de la détresse respiratoire néonatale',
+      'Associer magnésium 350–400 mg/j (cofacteur indispensable, souvent déficient en grossesse)',
+      'Contrôle calcémie si carence sévère avant et après traitement',
+      'Le nouveau-né devra être supplémenté dès la naissance (400–800 UI/j en gouttes)'
     ]
   },
-
-  /* ─────────── PERSONNE ÂGÉE ─────────── */
   age: {
-    label: 'Personne \u00e2g\u00e9e (> 70 ans)',
-    objectif: '40\u201360 ng/mL (pr\u00e9vention chutes et fractures)',
+    label: 'Personne âgée (> 70 ans)',
+    objectif: '40–60 ng/mL (prévention chutes et fractures)',
     attaque: {
-      severe:  {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0, puis 1 ampoule 6\u202fsemaines plus tard (J42)',
-        dose100: '1 ampoule de 100\u202f000\u202fUI / semaine \u00d7 4 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 8 semaines'
-      },
-      moderate:{
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0',
-        dose100: '2 ampoules de 100\u202f000\u202fUI espac\u00e9es de 4 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 6 semaines'
-      },
-      insuf:   {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0',
-        dose100: '1 ampoule de 100\u202f000\u202fUI \u00e0 J0',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 4 semaines'
-      }
+      severe:   { dose200: '1 ampoule de 200 000 UI à J0, puis 1 ampoule 6 semaines plus tard (J42)', dose100: '1 ampoule de 100 000 UI / semaine × 4 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 8 semaines' },
+      moderate: { dose200: '1 ampoule de 200 000 UI à J0', dose100: '2 ampoules de 100 000 UI espacées de 4 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 6 semaines' },
+      insuf:    { dose200: '1 ampoule de 200 000 UI à J0', dose100: '1 ampoule de 100 000 UI à J0', dose50: '1 caps/amp de 50 000 UI / semaine × 4 semaines' }
     },
-    entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 \u00e0 4 mois (traitement \u00e0 vie recommand\u00e9)',
-      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 \u00e0 3 mois',
-      dose50:  '1 caps/amp de 50\u202f000\u202fUI par mois (ou apports journaliers continus 800\u20131\u202f000 UI/j)'
-    },
-    controle: 'Annuel apr\u00e8s normalisation (surveillance calcémie recommandée)',
+    entretien: { dose200: '1 ampoule de 200 000 UI tous les 3 à 4 mois (traitement à vie recommandé)', dose100: '1 ampoule de 100 000 UI tous les 2 à 3 mois', dose50: '1 caps/amp de 50 000 UI par mois (ou apports journaliers 800–1 000 UI/j)' },
+    controle: 'Annuel après normalisation (surveillance calcémie recommandée)',
     notes: [
-      'Synth\u00e8se cutan\u00e9e divis\u00e9e par 4 apr\u00e8s 70 ans \u2192 suppl\u00e9mentation souvent \u00e0 vie',
-      'Associer calcium 1\u202f000 mg/j (alimentaire) pour la pr\u00e9vention fracturaire',
-      'Associer vitamine K2 MK-7 100\u2013200 \u00b5g/j pour orienter le calcium vers l\u2019os',
-      'R\u00e9duction d\u00e9montr\u00e9e du risque de chutes et fractures avec taux \u2265 40 ng/mL'
+      'Synthèse cutanée divisée par 4 après 70 ans → supplémentation souvent à vie',
+      'Associer calcium 1 000 mg/j (alimentaire) pour la prévention fracturaire',
+      'Associer vitamine K2 MK-7 100–200 µg/j pour orienter le calcium vers l’os',
+      'Réduction démontrée du risque de chutes et fractures avec taux ≥ 40 ng/mL'
     ]
   },
-
-  /* ─────────── OBÉSITÉ ─────────── */
   obesite: {
-    label: 'Ob\u00e9sit\u00e9 (IMC \u2265 30)',
-    objectif: '40\u201360 ng/mL (besoins 50\u2013100\u202f% sup\u00e9rieurs \u00e0 la population standard)',
+    label: 'Obésité (IMC ≥ 30)',
+    objectif: '40–60 ng/mL (besoins 50–100 % supérieurs à la population standard)',
     attaque: {
-      /*
-       * CORRECTION : espacement minimum 4 semaines entre ampoules 200k UI.
-       * L'ancienne version proposait 3 ampoules de 200k en 30 jours = trop rapproché.
-       * Doses élevées justifiées par la séquestration dans le tissu adipeux,
-       * mais l'espacement doit être respecté pour éviter l'hypercalcémie.
-       */
-      severe:  {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0, puis 1 ampoule \u00e0 J42 (6 semaines), puis 1 ampoule \u00e0 J84 (12 semaines) \u2014 total 600\u202f000\u202fUI sur 3 mois',
-        dose100: '1 ampoule de 100\u202f000\u202fUI / semaine \u00d7 6 semaines (total 600\u202f000\u202fUI)',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 12 semaines'
-      },
-      moderate:{
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0, puis 1 ampoule \u00e0 J42 (6 semaines) \u2014 total 400\u202f000\u202fUI',
-        dose100: '1 ampoule de 100\u202f000\u202fUI / semaine \u00d7 4 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 8 semaines'
-      },
-      insuf:   {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0, puis 1 ampoule \u00e0 J42 si persistance de l\u2019insuffisance au contr\u00f4le',
-        dose100: '2 ampoules de 100\u202f000\u202fUI espac\u00e9es de 4 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 6 semaines'
-      }
+      severe:   { dose200: '1 ampoule de 200 000 UI à J0, puis 1 ampoule à J42 (6 semaines), puis 1 ampoule à J84 (12 semaines) — total 600 000 UI sur 3 mois', dose100: '1 ampoule de 100 000 UI / semaine × 6 semaines (total 600 000 UI)', dose50: '1 caps/amp de 50 000 UI / semaine × 12 semaines' },
+      moderate: { dose200: '1 ampoule de 200 000 UI à J0, puis 1 ampoule à J42 (6 semaines) — total 400 000 UI', dose100: '1 ampoule de 100 000 UI / semaine × 4 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 8 semaines' },
+      insuf:    { dose200: '1 ampoule de 200 000 UI à J0, puis 1 ampoule à J42 si persistance de l’insuffisance au contrôle', dose100: '2 ampoules de 100 000 UI espacées de 4 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 6 semaines' }
     },
-    entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 2 mois (entretien renforc\u00e9 justifi\u00e9 par la s\u00e9questration adipeuse)',
-      dose100: '1 ampoule de 100\u202f000\u202fUI toutes les 4 \u00e0 6 semaines',
-      dose50:  '1 caps/amp de 50\u202f000\u202fUI toutes les 2 \u00e0 3 semaines'
-    },
-    controle: '6 semaines apr\u00e8s la dose de charge, puis tous les 3 mois (r\u00e9ponse souvent partielle)',
+    entretien: { dose200: '1 ampoule de 200 000 UI tous les 2 mois (entretien renforcé justifié par la séquestration adipeuse)', dose100: '1 ampoule de 100 000 UI toutes les 4 à 6 semaines', dose50: '1 caps/amp de 50 000 UI toutes les 2 à 3 semaines' },
+    controle: '6 semaines après la dose de charge, puis tous les 3 mois (réponse souvent partielle)',
     notes: [
-      'La vitamine D est s\u00e9questr\u00e9e dans le tissu adipeux \u2192 biodisponibilit\u00e9 r\u00e9duite \u2192 doses 50\u2013100\u202f% plus \u00e9lev\u00e9es',
-      'Calc\u00e9mie \u00e0 contr\u00f4ler avant la cure d\u2019attaque (doses cumul\u00e9es importantes)',
-      'Associer magn\u00e9sium (souvent carent\u00e9 en cas d\u2019ob\u00e9sit\u00e9)',
-      'Espacement minimum entre deux ampoules de 200\u202f000\u202fUI : 6 semaines'
+      'La vitamine D est séquestrée dans le tissu adipeux → biodisponibilité réduite → doses 50–100 % plus élevées',
+      'Calcémie à contrôler avant la cure d’attaque (doses cumulées importantes)',
+      'Associer magnésium (souvent carenté en cas d’obésité)',
+      'Espacement minimum entre deux ampoules de 200 000 UI : 6 semaines'
     ]
   },
-
-  /* ─────────── IRC ─────────── */
   irc: {
-    label: 'Insuffisance r\u00e9nale chronique',
-    objectif: '30\u201350 ng/mL en 25(OH)D \u2014 mais forme active (calcitriol) souvent requise',
+    label: 'Insuffisance rénale chronique',
+    objectif: '30–50 ng/mL en 25(OH)D — mais forme active (calcitriol) souvent requise',
     attaque: {
-      severe:  {
-        dose200: '1 ampoule de 200\u202f000\u202fUI puis adaptation imm\u00e9diate selon calc\u00e9mie et phosphat\u00e9mie (J+15)',
-        dose100: '2 ampoules de 100\u202f000\u202fUI espac\u00e9es de 4 semaines, puis bilan',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 4 semaines'
-      },
-      moderate:{
-        dose200: '1 ampoule de 200\u202f000\u202fUI, avec contr\u00f4le calcémie \u00e0 J+15',
-        dose100: '1 ampoule de 100\u202f000\u202fUI, avec contr\u00f4le calcémie \u00e0 J+15',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 3 semaines'
-      },
-      insuf:   {
-        dose200: '1 ampoule de 200\u202f000\u202fUI avec contr\u00f4le calcémie syst\u00e9matique \u00e0 J+15',
-        dose100: '1 ampoule de 100\u202f000\u202fUI',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 2 semaines'
-      }
+      severe:   { dose200: '1 ampoule de 200 000 UI puis adaptation selon calcémie et phosphatémie (J+15)', dose100: '2 ampoules de 100 000 UI espacées de 4 semaines, puis bilan', dose50: '1 caps/amp de 50 000 UI / semaine × 4 semaines' },
+      moderate: { dose200: '1 ampoule de 200 000 UI, avec contrôle calcémie à J+15', dose100: '1 ampoule de 100 000 UI, avec contrôle calcémie à J+15', dose50: '1 caps/amp de 50 000 UI / semaine × 3 semaines' },
+      insuf:    { dose200: '1 ampoule de 200 000 UI avec contrôle calcémie systématique à J+15', dose100: '1 ampoule de 100 000 UI', dose50: '1 caps/amp de 50 000 UI / semaine × 2 semaines' }
     },
-    entretien: {
-      dose200: '1 ampoule tous les 3 \u00e0 4 mois + adaptation stricte selon bilan phosphocalcique',
-      dose100: '1 ampoule tous les 2 \u00e0 3 mois, selon bilan',
-      dose50:  '1 caps/amp de 50\u202f000\u202fUI par mois, selon bilan'
-    },
-    controle: 'Calc\u00e9mie + phosphat\u00e9mie + PTH avant cure, puis tous les 3 mois',
+    entretien: { dose200: '1 ampoule tous les 3 à 4 mois + adaptation stricte selon bilan phosphocalcique', dose100: '1 ampoule tous les 2 à 3 mois, selon bilan', dose50: '1 caps/amp de 50 000 UI par mois, selon bilan' },
+    controle: 'Calcémie + phosphatémie + PTH avant cure, puis tous les 3 mois',
     notes: [
-      '\u26A0 CRITIQUE : si DFG < 30 mL/min, la conversion r\u00e9nale 25(OH)D \u2192 1,25(OH)\u2082D est d\u00e9faillante',
-      'Pr\u00e9f\u00e9rer CALCITRIOL (Rocaltrol\u00ae 0,25\u20130,5 \u00b5g/j) ou ALFACALCIDOL si IRC stades 4\u20135',
-      'Le chol\u00e9calcif\u00e9rol reste utile pour corriger la carence en 25(OH)D (substrat)',
-      'Surveillance calcémie et phosphat\u00e9mie stricte (risque calcifications vasculaires)',
-      'Prescription en concertation avec le n\u00e9phrologue'
+      '⚠ CRITIQUE : si DFG < 30 mL/min, la conversion rénale 25(OH)D → 1,25(OH)₂D est défaillante',
+      'Préférer CALCITRIOL (Rocaltrol® 0,25–0,5 µg/j) ou ALFACALCIDOL si IRC stades 4–5',
+      'Le cholécalciférol reste utile pour corriger la carence en 25(OH)D (substrat)',
+      'Surveillance calcémie et phosphatémie stricte (risque calcifications vasculaires)',
+      'Prescription en concertation avec le néphrologue'
     ]
   },
-
-  /* ─────────── MALABSORPTION ─────────── */
   malabsorption: {
-    label: 'Malabsorption digestive (c\u0153liaque, Crohn, r\u00e9section, bypass)',
-    objectif: '40\u201360 ng/mL (absorption tr\u00e8s variable)',
+    label: 'Malabsorption digestive (cœliaque, Crohn, résection, bypass)',
+    objectif: '40–60 ng/mL (absorption très variable)',
     attaque: {
-      /*
-       * CORRECTION : espacement minimum 4 semaines entre ampoules 200k UI.
-       * L'ancienne version proposait 3 ampoules en 30 jours = trop rapproché.
-       */
-      severe:  {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0, puis 1 ampoule \u00e0 J42 (6 semaines), puis 1 ampoule si insuffisant au contr\u00f4le (J84)',
-        dose100: '1 ampoule de 100\u202f000\u202fUI / semaine \u00d7 6 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 12 semaines'
-      },
-      moderate:{
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0, puis 1 ampoule \u00e0 J42 (6 semaines)',
-        dose100: '1 ampoule de 100\u202f000\u202fUI / semaine \u00d7 4 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 8 semaines'
-      },
-      insuf:   {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0',
-        dose100: '2 ampoules de 100\u202f000\u202fUI espac\u00e9es de 4 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 6 semaines'
-      }
+      severe:   { dose200: '1 ampoule de 200 000 UI à J0, puis 1 ampoule à J42 (6 semaines), puis 1 ampoule si insuffisant au contrôle (J84)', dose100: '1 ampoule de 100 000 UI / semaine × 6 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 12 semaines' },
+      moderate: { dose200: '1 ampoule de 200 000 UI à J0, puis 1 ampoule à J42 (6 semaines)', dose100: '1 ampoule de 100 000 UI / semaine × 4 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 8 semaines' },
+      insuf:    { dose200: '1 ampoule de 200 000 UI à J0', dose100: '2 ampoules de 100 000 UI espacées de 4 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 6 semaines' }
     },
-    entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 1 \u00e0 2 mois (absorption aléatoire)',
-      dose100: '1 ampoule de 100\u202f000\u202fUI toutes les 3 \u00e0 4 semaines',
-      dose50:  '1 caps/amp de 50\u202f000\u202fUI toutes les 2 semaines'
-    },
-    controle: 'Tous les 3 mois (r\u00e9ponse impr\u00e9visible selon la pathologie sous-jacente)',
+    entretien: { dose200: '1 ampoule de 200 000 UI tous les 1 à 2 mois (absorption aléatoire)', dose100: '1 ampoule de 100 000 UI toutes les 3 à 4 semaines', dose50: '1 caps/amp de 50 000 UI toutes les 2 semaines' },
+    controle: 'Tous les 3 mois (réponse imprévisible selon la pathologie sous-jacente)',
     notes: [
-      'Traiter en priorit\u00e9 la maladie digestive sous-jacente (r\u00e9gime sans gluten, Crohn en r\u00e9mission)',
-      'Post-bariatrique (bypass) : doses d\u2019entretien doubl\u00e9es voire tripl\u00e9es, contr\u00f4les trimestriels',
-      'Associer magn\u00e9sium syst\u00e9matiquement (tr\u00e8s fr\u00e9quemment carent\u00e9 en cas de malabsorption)',
-      'Associer vitamine K2 (absorption des vitamines liposolubles globalement alt\u00e9r\u00e9e)',
-      'Espacement minimum entre deux ampoules de 200\u202f000\u202fUI : 6 semaines'
+      'Traiter en priorité la maladie digestive sous-jacente (régime sans gluten, Crohn en rémission)',
+      'Post-bariatrique (bypass) : doses d’entretien doublées voire triplées, contrôles trimestriels',
+      'Associer magnésium systématiquement (très fréquemment carenté en cas de malabsorption)',
+      'Associer vitamine K2 (absorption des vitamines liposolubles globalement altérée)',
+      'Espacement minimum entre deux ampoules de 200 000 UI : 6 semaines'
     ]
   },
-
-  /* ─────────── CORTICOTHÉRAPIE ─────────── */
   cortico: {
-    label: 'Corticoth\u00e9rapie longue dur\u00e9e',
-    objectif: '40\u201360 ng/mL (les cortico\u00efdes r\u00e9duisent l\u2019absorption intestinale du calcium)',
+    label: 'Corticothérapie longue durée',
+    objectif: '40–60 ng/mL (les corticoïdes réduisent l’absorption intestinale du calcium)',
     attaque: {
-      severe:  {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0, puis 1 ampoule \u00e0 J42 (6 semaines)',
-        dose100: '1 ampoule de 100\u202f000\u202fUI / semaine \u00d7 4 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 8 semaines'
-      },
-      moderate:{
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0',
-        dose100: '2 ampoules de 100\u202f000\u202fUI espac\u00e9es de 4 semaines',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 6 semaines'
-      },
-      insuf:   {
-        dose200: '1 ampoule de 200\u202f000\u202fUI \u00e0 J0',
-        dose100: '1 ampoule de 100\u202f000\u202fUI \u00e0 J0',
-        dose50:  '1 caps/amp de 50\u202f000\u202fUI / semaine \u00d7 4 semaines'
-      }
+      severe:   { dose200: '1 ampoule de 200 000 UI à J0, puis 1 ampoule à J42 (6 semaines)', dose100: '1 ampoule de 100 000 UI / semaine × 4 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 8 semaines' },
+      moderate: { dose200: '1 ampoule de 200 000 UI à J0', dose100: '2 ampoules de 100 000 UI espacées de 4 semaines', dose50: '1 caps/amp de 50 000 UI / semaine × 6 semaines' },
+      insuf:    { dose200: '1 ampoule de 200 000 UI à J0', dose100: '1 ampoule de 100 000 UI à J0', dose50: '1 caps/amp de 50 000 UI / semaine × 4 semaines' }
     },
-    entretien: {
-      dose200: '1 ampoule de 200\u202f000\u202fUI tous les 3 mois pendant toute la dur\u00e9e de la corticoth\u00e9rapie',
-      dose100: '1 ampoule de 100\u202f000\u202fUI tous les 2 mois',
-      dose50:  '1 caps/amp de 50\u202f000\u202fUI par mois'
-    },
-    controle: 'Tous les 3 mois pendant la corticoth\u00e9rapie',
+    entretien: { dose200: '1 ampoule de 200 000 UI tous les 3 mois pendant toute la durée de la corticothérapie', dose100: '1 ampoule de 100 000 UI tous les 2 mois', dose50: '1 caps/amp de 50 000 UI par mois' },
+    controle: 'Tous les 3 mois pendant la corticothérapie',
     notes: [
-      'Les cortico\u00efdes diminuent l\u2019absorption intestinale du calcium : suppl\u00e9mentation calcique 1\u202f000\u20131\u202f500 mg/j syst\u00e9matique',
-      'Associer vitamine K2 : pr\u00e9vention des calci\ufb01cations inog\u00e8nes',
-      'Ne pas attendre les r\u00e9sultats biologiques pour initier si corticoth\u00e9rapie > 3 mois pr\u00e9vue',
-      'Densitom\u00e9trie osseuse recommand\u00e9e si corticoth\u00e9rapie > 6 mois'
+      'Les corticoïdes diminuent l’absorption intestinale du calcium : supplémentation calcique 1 000–1 500 mg/j systématique',
+      'Associer vitamine K2 : prévention des calcifications inogènes',
+      'Ne pas attendre les résultats biologiques pour initier si corticothérapie > 3 mois prévue',
+      'Densitométrie osseuse recommandée si corticothérapie > 6 mois'
     ]
   }
-
-}; /* fin DATA */
+};
 
 /* ── utilitaires ── */
 function getStatut(taux) {
@@ -1100,18 +1086,18 @@ function getStatut(taux) {
 }
 function getStatutLabel(st) {
   return {
-    severe:  'Carence s\u00e9v\u00e8re (< 10 ng/mL)',
-    moderate:'Carence mod\u00e9r\u00e9e (10\u201320 ng/mL)',
-    insuf:   'Insuffisance (20\u201330 ng/mL)',
-    suff:    'Suffisant (30\u2013100 ng/mL)',
-    toxique: 'Taux toxique (> 100 ng/mL)'
+    severe:   'Carence sévère (< 10 ng/mL)',
+    moderate: 'Carence modérée (10–20 ng/mL)',
+    insuf:    'Insuffisance (20–30 ng/mL)',
+    suff:     'Suffisant (30–100 ng/mL)',
+    toxique:  'Taux toxique (> 100 ng/mL)'
   }[st] || '';
 }
 function getDose(attaque, cond) {
-  return attaque['dose'+cond] || attaque.dose100 || '';
+  return attaque['dose' + cond] || attaque.dose100 || '';
 }
 
-/* ── CALCUL PRINCIPAL ── */
+/* ══ CALCUL PRINCIPAL ══ */
 window.vdTraitement = function() {
   var taux      = parseFloat(document.getElementById('vd-taux').value);
   var situation = document.getElementById('vd-situation').value;
@@ -1123,11 +1109,11 @@ window.vdTraitement = function() {
   var rtitle    = document.getElementById('vd-trt-title');
 
   if (isNaN(taux) || !situation) {
-    rbody.innerHTML = '<div class="vd-alert orange"><span class="vd-alert-icon">\u26A0</span><span>Veuillez saisir le taux de 25(OH)D et s\u00e9lectionner la situation clinique.</span></div>';
+    rbody.innerHTML = '<div class="vd-alert orange"><span class="vd-alert-icon">⚠</span><span>Veuillez saisir le taux de 25(OH)D et sélectionner la situation clinique.</span></div>';
+    rb.style.display = 'block';
     rb.classList.add('visible');
     return;
   }
-
   var d  = DATA[situation];
   if (!d) return;
   var st = getStatut(taux);
@@ -1135,99 +1121,102 @@ window.vdTraitement = function() {
 
   /* ── TAUX TOXIQUE ── */
   if (st === 'toxique') {
-    rbody.innerHTML = '<div class="vd-alert red"><span class="vd-alert-icon">\u26A0</span><span>'
-      + '<strong>TAUX TOXIQUE (' + taux.toFixed(1) + ' ng/mL). Risque majeur d\u2019hypercalc\u00e9mie.</strong><br><br>'
-      + '<strong>\u25B6 Conduite \u00e0 tenir imm\u00e9diate :</strong><br>'
-      + '&bull; <strong>Arr\u00eat strict et imm\u00e9diat</strong> de toute suppl\u00e9mentation en vitamine D et en calcium.<br>'
-      + '&bull; <strong>Contr\u00f4le urgent</strong> de la calc\u00e9mie, de la cr\u00e9atinine et r\u00e9alisation d\u2019un ECG.<br>'
+    rbody.innerHTML = '<div class="vd-alert red"><span class="vd-alert-icon">⚠</span><span>'
+      + '<strong>TAUX TOXIQUE (' + taux.toFixed(1) + ' ng/mL). Risque majeur d’hypercalcémie.</strong><br><br>'
+      + '<strong>▶ Conduite à tenir immédiate :</strong><br>'
+      + '&bull; <strong>Arrêt strict et immédiat</strong> de toute supplémentation en vitamine D et en calcium.<br>'
+      + '&bull; <strong>Contrôle urgent</strong> de la calcémie, de la créatinine et réalisation d’un ECG.<br>'
       + '&bull; Hydratation abondante.<br>'
-      + '&bull; Ne reprendre aucune suppl\u00e9mentation avant normalisation compl\u00e8te et avis m\u00e9dical.'
+      + '&bull; Ne reprendre aucune supplémentation avant normalisation complète et avis médical.'
       + '</span></div>';
-    rtitle.textContent = 'Alerte Rouge \u2014 Hypervitaminose D';
+    rtitle.textContent = 'Alerte Rouge — Hypervitaminose D';
     rtag.textContent   = 'Urgence (> 100 ng/mL)';
+    rb.style.display = 'block';
     rb.classList.add('visible');
     return;
   }
 
-  /* ── TAUX SUFFISANT (30–100 ng/mL) ── */
+  /* ── TAUX SUFFISANT ── */
   if (st === 'suff') {
-    var txtE = d.entretien['dose'+cond];
-    var aCls = 'green', aIcon = '\u2713', sLabel = 'Taux suffisant';
+    var txtE = d.entretien['dose' + cond];
+    var aCls = 'green', aIcon = '✓', sLabel = 'Taux suffisant';
     if (taux >= 50) {
-      aCls = 'orange'; aIcon = '\u26A0'; sLabel = 'Taux \u00e9lev\u00e9 / Sur-optimal';
+      aCls = 'orange'; aIcon = '⚠'; sLabel = 'Taux élevé / Sur-optimal';
       if (situation === 'grossesse') {
-        txtE = '\u26A0 <strong>Aucun bolus n\u2019est n\u00e9cessaire.</strong> Apports quotidiens mod\u00e9r\u00e9s (400\u2013800 UI/j) ou alimentation enrichie suffisent jusqu\u2019\u00e0 l\u2019accouchement.';
+        txtE = '⚠ <strong>Aucun bolus n’est nécessaire.</strong> Apports quotidiens modérés (400–800 UI/j) suffisent jusqu’à l’accouchement.';
       } else {
-        txtE = '\u26A0 <strong>Arr\u00eat temporaire des bolus recommand\u00e9.</strong> Reprendre l\u2019entretien standard uniquement si le taux baisse sous 35\u201340 ng/mL au prochain contr\u00f4le.';
+        txtE = '⚠ <strong>Arrêt temporaire des bolus recommandé.</strong> Reprendre l’entretien uniquement si le taux baisse sous 35–40 ng/mL au prochain contrôle.';
       }
     }
     rbody.innerHTML = '<div class="vd-alert ' + aCls + '"><span class="vd-alert-icon">' + aIcon + '</span><span>'
-      + '<strong>' + sLabel + ' (' + taux.toFixed(1) + ' ng/mL).</strong> Pas de traitement d\u2019attaque n\u00e9cessaire.<br><br>'
-      + '<strong>\u25B6 Phase de maintien :</strong><br>' + txtE + '</span></div>';
-    rtitle.textContent = sLabel + ' \u2014 Entretien / Pr\u00e9vention';
+      + '<strong>' + sLabel + ' (' + taux.toFixed(1) + ' ng/mL).</strong> Pas de traitement d’attaque nécessaire.<br><br>'
+      + '<strong>▶ Phase de maintien :</strong><br>' + txtE + '</span></div>';
+    rtitle.textContent = sLabel + ' — Entretien / Prévention';
     rtag.textContent   = d.label;
+    rb.style.display = 'block';
     rb.classList.add('visible');
     return;
   }
 
-  /* ── TRAITEMENT CURATIF (carence/insuffisance) ── */
+  /* ── TRAITEMENT CURATIF ── */
   var html = '';
   var stColors = { severe:'var(--accent)', moderate:'#ea580c', insuf:'var(--gold)' };
   html += '<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--light);border-radius:5px;margin-bottom:16px;font-family:Arial,sans-serif;">'
     + '<div style="font-size:2rem;line-height:1;font-weight:900;color:' + (stColors[st]||'#333') + ';">' + taux.toFixed(1) + '</div>'
     + '<div><div style="font-weight:700;font-size:0.90rem;color:var(--navy);">' + getStatutLabel(st) + '</div>'
-    + '<div style="font-size:0.76rem;color:var(--slate);margin-top:2px;">= ' + (taux*2.5).toFixed(1) + ' nmol/L \u2014 Objectif\u00a0: ' + d.objectif + '</div>'
+    + '<div style="font-size:0.76rem;color:var(--slate);margin-top:2px;">= ' + (taux*2.5).toFixed(1) + ' nmol/L — Objectif : ' + d.objectif + '</div>'
     + '</div></div>';
 
-  /* Note terme pour grossesse */
+  /* Note terme grossesse */
   if (situation === 'grossesse' && terme > 0) {
     var termNote = terme < 14
-      ? 'Terme T1 (' + terme + '\u202fSA) \u2014 Temps suf\ufb01sant pour corriger les r\u00e9serves de mani\u00e8re \u00e9tal\u00e9e. Jusqu\u2019\u00e0 3 ampoules de 100\u202f000\u202fUI possibles sur toute la grossesse.'
+      ? 'Terme T1 (' + terme + ' SA) — Temps suffisant pour corriger les réserves de manière étalée. Jusqu’à 3 ampoules de 100 000 UI possibles sur toute la grossesse.'
       : terme < 28
-      ? 'Terme T2 (' + terme + '\u202fSA) \u2014 Correction indispensable avant le pic de croissance f\u0153tale du T3. 2 ampoules de 100\u202f000\u202fUI possibles.'
-      : 'Terme T3 (' + terme + '\u202fSA) \u2014 Correction rapide prioritaire pour le statut calcique n\u00e9onatal. 1 ampoule de 100\u202f000\u202fUI (recommandation CNGOF).';
-    html += '<div class="vd-alert blue"><span class="vd-alert-icon">\u2139</span><span>' + termNote + '</span></div>';
+      ? 'Terme T2 (' + terme + ' SA) — Correction indispensable avant le pic de croissance fœtale du T3. 2 ampoules de 100 000 UI possibles.'
+      : 'Terme T3 (' + terme + ' SA) — Correction rapide prioritaire pour le statut calcique néonatal. 1 ampoule de 100 000 UI (recommandation CNGOF).';
+    html += '<div class="vd-alert blue"><span class="vd-alert-icon">ℹ</span><span>' + termNote + '</span></div>';
   }
 
   /* Phase d'attaque */
-  html += '<div class="vd-phase"><div class="vd-phase-head attack">\u25B6 Phase d\u2019attaque \u2014 Correction de la carence</div>'
+  html += '<div class="vd-phase"><div class="vd-phase-head attack">▶ Phase d’attaque — Correction de la carence</div>'
     + '<div class="vd-phase-body">'
     + '<span class="vd-dose">' + getDose(d.attaque[st], cond) + '</span>'
-    + '<span class="vd-dose-detail">Prendre au cours d\u2019un repas contenant des graisses (vitamine liposoluble \u2014 absorption r\u00e9duite de 30\u201350\u202f% \u00e0 jeun).</span>'
+    + '<span class="vd-dose-detail">Prendre au cours d’un repas contenant des graisses (vitamine liposoluble — absorption réduite de 30–50 % à jeun).</span>'
     + '</div></div>';
 
   /* Phase d'entretien */
-  var entretienDose = d.entretien['dose'+cond];
-  html += '<div class="vd-phase"><div class="vd-phase-head maintain">\u25B6 Phase d\u2019entretien \u2014 Apr\u00e8s cure d\u2019attaque</div>'
+  var entretienDose = d.entretien['dose' + cond];
+  html += '<div class="vd-phase"><div class="vd-phase-head maintain">▶ Phase d’entretien — Après cure d’attaque</div>'
     + '<div class="vd-phase-body">'
     + '<span class="vd-dose" style="font-size:1rem;white-space:pre-wrap;">' + entretienDose + '</span>'
     + '</div></div>';
 
   /* Contrôle biologique */
-  html += '<div class="vd-phase"><div class="vd-phase-head control">\u25B6 Contr\u00f4le biologique</div>'
+  html += '<div class="vd-phase"><div class="vd-phase-head control">▶ Contrôle biologique</div>'
     + '<div class="vd-phase-body"><ul class="vd-rlist check">'
-    + '<li><strong>25(OH)D\u00a0:</strong> ' + d.controle + '</li>'
-    + '<li><strong>Calc\u00e9mie\u00a0:</strong> avant traitement si carence s\u00e9v\u00e8re, puis \u00e0 3 mois</li>'
-    + (situation === 'irc' ? '<li><strong>Phosphat\u00e9mie + PTH\u00a0:</strong> tous les 3 mois (prescription n\u00e9phrologique)</li>' : '')
+    + '<li><strong>25(OH)D :</strong> ' + d.controle + '</li>'
+    + '<li><strong>Calcémie :</strong> avant traitement si carence sévère, puis à 3 mois</li>'
+    + (situation === 'irc' ? '<li><strong>Phosphatémie + PTH :</strong> tous les 3 mois (prescription néphrologique)</li>' : '')
     + '</ul></div></div>';
 
-  /* Précautions et cofacteurs */
-  html += '<div class="vd-sub">Pr\u00e9cautions et cofacteurs associ\u00e9s</div><ul class="vd-rlist warn">';
+  /* Précautions */
+  html += '<div class="vd-sub">Précautions et cofacteurs associés</div><ul class="vd-rlist warn">';
   d.notes.forEach(function(n){ html += '<li>' + n + '</li>'; });
   html += '</ul>';
 
-  /* Alerte spécifique IRC */
+  /* Alerte IRC */
   if (situation === 'irc') {
-    html += '<div class="vd-alert red"><span class="vd-alert-icon">\u26A0</span><span>'
-      + '<strong>IRC s\u00e9v\u00e8re (DFG &lt; 30 mL/min)\u00a0:</strong> la conversion r\u00e9nale est d\u00e9faillante. '
-      + 'Pr\u00e9f\u00e9rer le <strong>calcitriol (Rocaltrol\u00ae 0,25\u20130,5 \u00b5g/j)</strong> ou l\u2019alfacalcidol '
-      + '(prescription en concertation avec le n\u00e9phrologue).'
+    html += '<div class="vd-alert red"><span class="vd-alert-icon">⚠</span><span>'
+      + '<strong>IRC sévère (DFG &lt; 30 mL/min) :</strong> la conversion rénale est défaillante. '
+      + 'Préférer le <strong>calcitriol (Rocaltrol® 0,25–0,5 µg/j)</strong> ou l’alfacalcidol '
+      + '(prescription en concertation avec le néphrologue).'
       + '</span></div>';
   }
 
   rbody.innerHTML = html;
-  rtitle.textContent = 'Sch\u00e9ma \u2014 ' + d.label;
+  rtitle.textContent = 'Schéma — ' + d.label;
   rtag.textContent   = getStatutLabel(st);
+  rb.style.display = 'block';
   rb.classList.add('visible');
   rb.scrollIntoView({ behavior:'smooth', block:'nearest' });
 };
@@ -1237,8 +1226,203 @@ window.vdResetTrt = function() {
   document.getElementById('vd-situation').value = '';
   document.getElementById('vd-terme').value = '';
   document.getElementById('vd-cond').value = '200';
-  document.getElementById('vd-trt-result').classList.remove('visible');
+  var rb = document.getElementById('vd-trt-result');
+  rb.style.display = 'none';
+  rb.classList.remove('visible');
 };
+
+/* ══ COPIER & IMPRIMER ══ */
+function vdGetPatient() {
+  function v(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  var nom = v('vdpt-nom'), prenom = v('vdpt-prenom');
+  var ddn = v('vdpt-ddn'), age = v('vdpt-age');
+  var medecin = v('vdpt-medecin'), dateConsult = v('vdpt-date');
+  var nomComplet = [prenom, nom].filter(Boolean).join(' ');
+  function fmtDate(d){ var p = d.split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : d; }
+  return {
+    nomComplet: nomComplet,
+    ddn: ddn ? fmtDate(ddn) : '',
+    age: age,
+    medecin: medecin,
+    date: dateConsult ? fmtDate(dateConsult) : new Date().toLocaleDateString('fr-FR')
+  };
+}
+
+function vdBuildText() {
+  var title  = document.getElementById('vd-trt-title');
+  var tag    = document.getElementById('vd-trt-tag');
+  var body   = document.getElementById('vd-trt-body');
+  if (!body || !body.textContent.trim()) return '';
+  var pt = vdGetPatient();
+  var lines = [];
+  lines.push('═══════════════════════════════════════');
+  lines.push('VITAMINE D — SCHÉMA THÉRAPEUTIQUE');
+  lines.push('Dr KARA-ZAITRI M.A. — Gynécologie-Obstétrique');
+  lines.push('═══════════════════════════════════════');
+  if (pt.nomComplet) lines.push('Patiente : ' + pt.nomComplet + (pt.age ? ' (' + pt.age + ' ans)' : '') + (pt.ddn ? ' — DDN : ' + pt.ddn : ''));
+  lines.push('Date : ' + pt.date + (pt.medecin ? ' — ' + pt.medecin : ''));
+  lines.push('───────────────────────────────────────');
+  if (title) lines.push('Situation : ' + title.textContent);
+  if (tag)   lines.push('Statut    : ' + tag.textContent);
+  lines.push('───────────────────────────────────────');
+  lines.push(body.innerText || body.textContent);
+  lines.push('───────────────────────────────────────');
+  lines.push('Document généré via vitamine-d.dr-karazaitri-ma.net');
+  return lines.join('\n');
+}
+
+function legacyCopyVd(txt, cb) {
+  var ta = document.createElement('textarea');
+  ta.value = txt; ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); if (cb) cb(); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+window.vdCopyResume = function() {
+  var txt = vdBuildText();
+  if (!txt) return;
+  var btn = document.getElementById('vd-copy-btn');
+  function flash() {
+    if (!btn) return;
+    var orig = btn.innerHTML;
+    btn.innerHTML = '✓ Copié !';
+    btn.style.background = '#166534';
+    setTimeout(function(){ btn.innerHTML = orig; btn.style.background = ''; }, 2200);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(flash).catch(function(){ legacyCopyVd(txt, flash); });
+  } else { legacyCopyVd(txt, flash); }
+};
+
+window.vdPrintResume = function() {
+  var titleEl = document.getElementById('vd-trt-title');
+  var tagEl   = document.getElementById('vd-trt-tag');
+  var body    = document.getElementById('vd-trt-body');
+  if (!body || !body.textContent.trim()) return;
+  var pt       = vdGetPatient();
+  var bodyHTML = body.innerHTML;
+  var title    = titleEl ? titleEl.textContent : 'Schéma Vitamine D';
+  var tag      = tagEl   ? tagEl.textContent   : '';
+
+  var css = [
+    '* { box-sizing: border-box; margin: 0; padding: 0; }',
+    '@page { size: A5; margin: 10mm; }',
+    'html { height: 100%; }',
+    'body { font-family: Arial, sans-serif; font-size: 8.5pt; color: #1a2535;',
+    '  display: flex; flex-direction: column; min-height: 100vh; }',
+    '.main { flex: 1; }',
+    /* Header */
+    '.doc-hd { border-bottom: 2px solid #1a3a5c; padding-bottom: 6px; margin-bottom: 8px; }',
+    '.doc-title { font-size: 11pt; font-weight: 900; color: #1a3a5c; margin-bottom: 2px; }',
+    '.doc-byline { font-size: 7pt; color: #475569; font-style: italic; }',
+    /* Patient table */
+    '.pt-table { width: 100%; border-collapse: collapse; border: 1px solid #d1d9e6; margin-bottom: 9px; }',
+    '.pt-table td { padding: 5px 9px; vertical-align: top; border: 1px solid #d1d9e6; }',
+    '.pt-label { display: block; font-size: 6pt; font-weight: 700; text-transform: uppercase;',
+    '  letter-spacing: .07em; color: #475569; margin-bottom: 2px; }',
+    '.pt-name { font-size: 8.5pt; font-weight: 700; color: #1a2535; }',
+    '.pt-ddn  { font-size: 7.5pt; color: #475569; }',
+    '.pt-right { background: #1a3a5c; color: #fff; text-align: right; width: 32%; }',
+    '.pt-right .pt-label { color: rgba(255,255,255,0.65); }',
+    '.pt-right .pt-val { font-size: 8pt; font-weight: 700; }',
+    '.pt-right .pt-date-val { font-size: 8pt; font-weight: 700; margin-top: 5px; }',
+    /* Situation / status */
+    '.sect-head { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .09em;',
+    '  color: #1a3a5c; border-bottom: 1px solid #d1d9e6; padding-bottom: 3px; margin: 8px 0 6px; }',
+    '.status-tag { display: inline-block; background: #b45309; color: #fff; font-size: 6.5pt;',
+    '  font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 4px; }',
+    '.status-title { font-size: 9.5pt; font-weight: 900; color: #1a3a5c; margin-bottom: 6px; }',
+    /* Bloc résumé taux — écrase l\'inline font-size:2rem */
+    'div[style*="font-size:2rem"] { font-size: 13pt !important; line-height: 1 !important; }',
+    'div[style*="display:flex;align-items:center"] { display: block !important; padding: 7px 9px !important; margin-bottom: 9px !important; }',
+    'div[style*="font-size:0.90rem"] { font-size: 7.5pt !important; }',
+    'div[style*="font-size:0.76rem"] { font-size: 7pt !important; }',
+    /* Phases */
+    '.vd-phase { border: 1px solid #d1d9e6; border-radius: 3px; margin-bottom: 6px; overflow: hidden; }',
+    '.vd-phase-head { padding: 5px 9px; font-size: 7pt; font-weight: 700; text-transform: uppercase;',
+    '  letter-spacing: .06em; display: flex; align-items: center; gap: 5px; }',
+    '.vd-phase-head.attack   { background: #fef2f2; color: #c8102e; border-bottom: 1px solid #fca5a5; }',
+    '.vd-phase-head.maintain { background: #f0fdf4; color: #166534; border-bottom: 1px solid #86efac; }',
+    '.vd-phase-head.control  { background: #eff6ff; color: #1d4ed8; border-bottom: 1px solid #93c5fd; }',
+    '.vd-phase-body { padding: 6px 9px; font-size: 8pt; line-height: 1.45; }',
+    '.vd-dose, .vd-dose[style] { font-size: 7pt !important; font-weight: 600 !important;',
+    '  color: #1a3a5c; display: block; margin-bottom: 3px; white-space: pre-wrap; }',
+    '.vd-dose-detail { font-size: 7pt; color: #475569; display: block; }',
+    /* Lists */
+    '.vd-rlist { list-style: none; padding: 0; margin: 5px 0 0; }',
+    '.vd-rlist li { padding: 3px 0 3px 14px; border-bottom: 1px solid #f0f4f9;',
+    '  font-size: 7.5pt; position: relative; line-height: 1.4; }',
+    '.vd-rlist li:last-child { border-bottom: none; }',
+    '.vd-rlist li::before       { content: "\\2022"; position: absolute; left: 0; color: #b45309; }',
+    '.vd-rlist.check li::before { content: "\\2713"; color: #166534; font-weight: 700; }',
+    '.vd-rlist.warn li::before  { content: "\\26A0"; color: #b45309; }',
+    '.vd-rlist.stop li::before  { content: "\\2716"; color: #c8102e; }',
+    /* Alerts */
+    '.vd-alert { display: block; padding: 6px 9px; border-radius: 3px; font-size: 7.5pt;',
+    '  line-height: 1.45; margin-top: 5px; }',
+    '.vd-alert-icon { margin-right: 4px; }',
+    '.vd-alert.orange { background: #fffbeb; border-left: 3px solid #b45309; color: #78350f; }',
+    '.vd-alert.red    { background: #fef2f2; border-left: 3px solid #c8102e; color: #7f1d1d; }',
+    '.vd-alert.green  { background: #f0fdf4; border-left: 3px solid #166534; color: #14532d; }',
+    '.vd-alert.blue   { background: #eff6ff; border-left: 3px solid #1d4ed8; color: #1e3a8a; }',
+    '.vd-sub { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;',
+    '  color: #1a3a5c; margin: 7px 0 4px; padding-bottom: 3px; border-bottom: 1px solid #d1d9e6; }',
+    '.vd-div { height: 1px; background: #d1d9e6; margin: 6px 0; }',
+    /* Footer ancré en bas */
+    '.doc-ft { border-top: 1px solid #d1d9e6; padding-top: 5px; margin-top: 10px;',
+    '  font-size: 6pt; color: #94a3b8; text-align: center; }'
+  ].join('\n');
+
+  /* ── tableau patient ── */
+  var ptLeft = '<span class="pt-label">Patiente</span>'
+    + '<span class="pt-name">' + (pt.nomComplet || '&mdash;') + '</span>'
+    + (pt.ddn ? '<span class="pt-ddn">N&eacute;e le ' + pt.ddn + (pt.age ? ' (' + pt.age + '&nbsp;ans)' : '') + '</span>'
+               : (pt.age ? '<span class="pt-ddn">' + pt.age + '&nbsp;ans</span>' : ''));
+  var ptRight = '<span class="pt-label">M&eacute;decin</span>'
+    + '<span class="pt-val">' + (pt.medecin || 'Dr Kara-Zaitri M.A.') + '</span>'
+    + '<span class="pt-label" style="margin-top:5px;">Date</span>'
+    + '<span class="pt-date-val">' + pt.date + '</span>';
+
+  var html = '<!DOCTYPE html><html lang="fr"><head>'
+    + '<meta charset="UTF-8">'
+    + '<title>Vitamine D &mdash; ' + title + '</title>'
+    + '<style>' + css + '</style>'
+    + '</head><body><div class="main">'
+    /* Header */
+    + '<div class="doc-hd">'
+    + '<div class="doc-title">Vitamine D &mdash; Sch&eacute;ma Th&eacute;rapeutique</div>'
+    + '<div class="doc-byline">Dr KARA-ZAITRI M.A. &mdash; Gyn&eacute;cologie-Obst&eacute;trique &mdash; CHU Tlemcen &mdash; v1</div>'
+    + '</div>'
+    /* Tableau patient */
+    + '<table class="pt-table"><tr>'
+    + '<td>' + ptLeft + '</td>'
+    + '<td class="pt-right">' + ptRight + '</td>'
+    + '</tr></table>'
+    /* Statut & titre */
+    + '<div class="sect-head">Situation clinique &mdash; D&eacute;cision</div>'
+    + (tag ? '<span class="status-tag">' + tag + '</span><br>' : '')
+    + '<div class="status-title">' + title + '</div>'
+    + '<div class="sect-head">Sch&eacute;ma th&eacute;rapeutique</div>'
+    + bodyHTML
+    + '</div>'
+    /* Footer bas de page */
+    + '<div class="doc-ft">G&eacute;n&eacute;r&eacute; le ' + pt.date
+    + ' &bull; Outil clinique Dr Kara-Zaitri M.A. &bull; Ne se substitue pas au jugement clinique ni &agrave; la discussion RCP</div>'
+    + '</body></html>';
+
+  var w = window.open('', '_blank', 'width=620,height=860');
+  if (!w) return;
+  w.document.open(); w.document.write(html); w.document.close();
+  setTimeout(function(){ w.focus(); w.print(); }, 450);
+};
+
+/* ══ PWA ══ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
 
 })();
 </script>
@@ -1246,33 +1430,5 @@ window.vdResetTrt = function() {
 <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
 
-<!-- SYSTÈME PREMIUM — VÉRIFICATION TOKEN -->
-<div id="kz-block-screen" style="display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);z-index:9999;justify-content:center;align-items:center;">
-  <div style="background:#fff;border-radius:12px;padding:32px 28px;max-width:400px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.3);">
-    <div style="font-size:40px;margin-bottom:12px;">&#128274;</div>
-    <h2 style="font-size:1.2rem;color:#1a3a5c;margin:0 0 12px;font-family:sans-serif;">Acc&#232;s Premium Requis</h2>
-    <p style="font-size:0.9rem;color:#4b5563;margin:0 0 20px;line-height:1.5;font-family:sans-serif;">Cet outil est r&#233;serv&#233; aux membres premium de FemCare Hub.</p>
-    <a href="https://www.dr-karazaitri-ma.net/connexion-membres/" style="display:inline-block;background:#1A3A5C;color:#fff;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.92rem;font-family:sans-serif;">Se connecter / S&#8217;abonner</a>
-    <p style="margin-top:14px;font-size:0.75rem;color:#9ca3af;font-family:sans-serif;">&#128273; Acc&#232;s via token personnel &mdash; FemCare Hub</p>
-  </div>
-</div>
-<script>
-(async function() {
-  var bs = document.getElementById('kz-block-screen');
-  var urlParams = new URLSearchParams(window.location.search);
-  var urlToken = urlParams.get('token');
-  if (urlToken) {
-    localStorage.setItem('kz_platform_token', urlToken);
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-  var token = localStorage.getItem('kz_platform_token');
-  if (!token) return;
-  try {
-    var r = await fetch('https://www.dr-karazaitri-ma.net/wp-json/kz/v1/verify-token?token=' + encodeURIComponent(token));
-    var data = await r.json();
-    if (data.valid === true) bs.style.display = 'none';
-  } catch(e) {}
-})();
-</script>
 </body>
 </html>
