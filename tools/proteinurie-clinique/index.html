@@ -47,6 +47,7 @@
 }
 /* ─── LAYOUT GÉNÉRAL ─── */
 #prot-root .pw { max-width: 900px; margin: 0 auto; background: var(--white); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+
 /* ─── HEADER ─── */
 #prot-root .ph { background: var(--navy); padding: 24px 28px; }
 #prot-root .ph-spec { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #94a3b8; margin-bottom: 8px; font-weight: 600; }
@@ -55,6 +56,7 @@
 #prot-root .ph-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 #prot-root .ph-tag { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 4px 10px; font-size: 11px; color: #e2e8f0; white-space: nowrap; }
 #prot-root .ph-tag.v { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+
 /* ─── PATIENT BAR ─── */
 #prot-root .ppt-bar {
   background: var(--white);
@@ -65,12 +67,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 20px;
-  background: var(--navy-pale);
+  padding: 10px 24px;
+  background: none;
   border: none;
   cursor: pointer;
   font-family: inherit;
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--muted);
   text-align: left;
@@ -80,49 +82,56 @@
   border-bottom: 1px solid var(--border);
 }
 #prot-root .ppt-toggle:hover { color: var(--navy); }
-#prot-root .ppt-toggle .pt-arrow { font-size: 9px; transition: transform 0.2s; display: inline-block; }
+#prot-root .ppt-toggle .pt-arrow { font-size: 10px; transition: transform 0.2s; display: inline-block; }
 #prot-root .ppt-toggle.open .pt-arrow { transform: rotate(90deg); }
 #prot-root .ppt-form {
   display: none;
-  padding: 10px 20px 14px;
-  background: #fafbfc;
+  padding: 14px 24px 18px;
+  background: #f8fafc;
   border-bottom: 1px solid var(--border);
 }
 #prot-root .ppt-form.open { display: block; }
 #prot-root .ppt-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 80px;
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
 }
-@media (max-width: 580px) {
-  #prot-root .ppt-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 340px) {
-  #prot-root .ppt-grid { grid-template-columns: 1fr; }
-}
-#prot-root .ppt-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#prot-root .ppt-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 #prot-root .ppt-field label {
-  font-size: 10px; font-weight: 700; color: #4a5568;
+  font-size: 10.5px; font-weight: 700; color: var(--navy-l);
   text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
 }
 #prot-root .ppt-field input {
-  padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px;
-  font-family: inherit; font-size: 12px; color: var(--navy-l);
+  padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px;
+  font-family: inherit; font-size: 13px; color: var(--navy);
   background: var(--white); outline: none; width: 100%; min-width: 0;
   transition: border-color 0.15s;
 }
 #prot-root .ppt-field input:focus { border-color: var(--primary); }
-/* Ligne 2 : médecin + date consultation sur 2 colonnes */
-#prot-root .ppt-field-wide { grid-column: span 2; }
-@media (max-width: 580px) { #prot-root .ppt-field-wide { grid-column: span 1; } }
+#prot-root .ppt-field-ddnage { grid-column: span 2; min-width: 0; }
+#prot-root .ppt-ddnage-row { display: flex; gap: 8px; }
+#prot-root .ppt-ddnage-col { display: flex; flex-direction: column; gap: 4px; flex: 1 1 0; min-width: 0; }
+#prot-root .ppt-ddnage-col-small { flex: 0 0 80px; }
+#prot-root .ppt-ddnage-col label {
+  font-size: 10.5px; font-weight: 700; color: var(--navy-l);
+  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+}
+#prot-root .ppt-ddnage-col input {
+  padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px;
+  font-family: inherit; font-size: 13px; color: var(--navy);
+  background: var(--white); outline: none; width: 100%; min-width: 0;
+  transition: border-color 0.15s;
+}
+#prot-root .ppt-ddnage-col input:focus { border-color: var(--primary); }
+@media(max-width:680px){ #prot-root .ppt-field-ddnage { grid-column: span 1; } }
 
-/* ─── NAVIGATION — MODÈLE NVG (flex-wrap, responsive natif, sans scrollIntoView) ─── */
+/* ─── NAVIGATION ─── */
 #prot-root .pnav {
   display: flex;
   flex-wrap: wrap;
   background: var(--white);
   border-bottom: 2px solid var(--border);
-  overflow-x: visible; /* ← NVG model : jamais hidden pour éviter le décalage */
+  overflow-x: visible;
 }
 #prot-root .ptab {
   all: unset;
@@ -153,8 +162,6 @@
   font-weight: 700;
 }
 #prot-root .ptab-ico { font-size: 15px; }
-
-/* Mobile : 3 par ligne (2 lignes de 3) — identique NVG (4 par ligne sur 8 onglets) */
 @media (max-width: 640px) {
   #prot-root .ptab {
     flex: 1 1 auto;
@@ -173,13 +180,16 @@
 #prot-root .psec { display: none; animation: fadeIn 0.3s ease; }
 #prot-root .psec.on { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
 /* ─── CARD ─── */
 #prot-root .pc { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 20px; }
 #prot-root .pc-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
 #prot-root .pnum { background: var(--primary); color: #fff; min-width: 24px; height: 24px; border-radius: 50%; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+
 /* ─── TEXTE ─── */
 #prot-root .pp { margin-bottom: 14px; }
 #prot-root .pp:last-child { margin-bottom: 0; }
+
 /* ─── ALERTES ─── */
 #prot-root .pa { border-radius: 6px; padding: 14px 16px; font-size: 14px; margin-bottom: 16px; display: flex; gap: 12px; align-items: flex-start; }
 #prot-root .pa-ico { font-size: 18px; line-height: 1; flex-shrink: 0; }
@@ -188,6 +198,7 @@
 #prot-root .pa.danger { background: var(--red-pale);   border: 1px solid #fee2e2; color: #991b1b; }
 #prot-root .pa.note   { background: #eff6ff; border: 1px solid #dbeafe; color: #1e40af; }
 #prot-root .pa.ok     { background: var(--green-pale); border: 1px solid #bbf7d0; color: #14532d; }
+
 /* ─── LISTES ─── */
 #prot-root .pl { list-style: none; margin: 10px 0 16px; }
 #prot-root .pl li { padding: 6px 0 6px 24px; position: relative; border-bottom: 1px dashed var(--border); }
@@ -195,6 +206,7 @@
 #prot-root .pl li::before { content: '\2022'; position: absolute; left: 6px; top: 6px; color: var(--primary); font-size: 16px; font-weight: bold; }
 #prot-root .pl.chk li::before { content: '\2713'; color: var(--green); font-size: 14px; top: 7px; left: 4px; }
 #prot-root .pl.wrn li::before { content: '\203A'; color: var(--red); font-size: 18px; top: 3px; left: 5px; }
+
 /* ─── TABLEAUX ─── */
 #prot-root .ptw { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 6px; }
 #prot-root .pt { width: 100%; min-width: 600px; border-collapse: collapse; font-size: 13.5px; }
@@ -208,6 +220,7 @@
 #prot-root .bg-a2 { background: #fef9c3; color: #b45309; }
 #prot-root .bg-a3 { background: #ffedd5; color: #c2410c; }
 #prot-root .bg-sn { background: #fee2e2; color: #b91c1c; }
+
 /* ─── GRILLE MÉCANISMES ─── */
 #prot-root .pmg { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 @media (max-width: 600px) { #prot-root .pmg { grid-template-columns: 1fr; } }
@@ -221,6 +234,7 @@
 #prot-root .pmc.rd .pmc-h { color: var(--red); }
 #prot-root .pmc-s { font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 8px; }
 #prot-root .pmc-e { font-size: 13px; line-height: 1.5; }
+
 /* ─── CALCULATEUR ─── */
 #prot-root .pcalc-hd { background: var(--navy-l); color: #fff; padding: 14px 20px; font-size: 15px; font-weight: 700; border-radius: 8px 8px 0 0; display: flex; align-items: center; gap: 10px; }
 #prot-root .pcalc-bd { background: #fff; border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; padding: 20px; margin-bottom: 24px; }
@@ -230,14 +244,16 @@
 #prot-root .pf input, #prot-root .pf select { all: unset; box-sizing: border-box; display: block; width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 16px; color: var(--navy); background: #f8fafc; transition: all 0.2s; }
 #prot-root .pf input:focus, #prot-root .pf select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 #prot-root .pbtns { display: flex; gap: 10px; flex-wrap: wrap; }
-#prot-root .pbtn { all: unset; box-sizing: border-box; cursor: pointer; padding: 12px 24px; border-radius: 6px; font-size: 14.5px; font-weight: 600; background: var(--primary); color: #fff; transition: background 0.2s; text-align: center; }
+#prot-root .pbtn { all: unset; box-sizing: border-box; cursor: pointer; padding: 12px 24px; border-radius: 6px; font-size: 14.5px; font-weight: 600; background: var(--primary); color: #fff; transition: background 0.2s; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 #prot-root .pbtn:hover { background: var(--primary-h); }
 #prot-root .pbtn.sec { background: #f1f5f9; color: var(--navy); border: 1px solid var(--border); }
 #prot-root .pbtn.sec:hover { background: #e2e8f0; }
+
 /* Result Box */
 #prot-root .pres { margin-top: 20px; border-radius: 8px; display: none; overflow: hidden; border: 1px solid var(--border); }
 #prot-root .pres.on { display: block; animation: fadeIn 0.4s ease; }
 #prot-root .pres-hd { padding: 16px 20px; color: #fff; font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+#prot-root .pres-patient-info { padding: 10px 20px; background: #f1f5f9; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--navy); display: none; }
 #prot-root .pres-bd { padding: 20px; background: #fff; }
 #prot-root .pres-val { font-size: 24px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
 #prot-root .pres-int { font-size: 14.5px; color: var(--navy-l); margin-bottom: 16px; }
@@ -246,6 +262,18 @@
 #prot-root .pres.r-a2 .pres-hd { background: #d97706; }
 #prot-root .pres.r-a3 .pres-hd { background: #ea580c; }
 #prot-root .pres.r-sn .pres-hd { background: var(--red); }
+
+/* ─── ACTIONS RAPPORT & IMPRESSION ─── */
+#prot-root .prot-actions { display: none; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+#prot-root .prot-actions.visible { display: flex; }
+#prot-root .prot-report-zone { display: none; margin-top: 16px; border: 1.5px dashed var(--border); border-radius: 8px; overflow: hidden; }
+#prot-root .prot-report-zone.visible { display: block; }
+#prot-root .prot-report-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--navy-pale); border-bottom: 1px solid var(--border); }
+#prot-root .prot-report-content { font-family: 'Courier New', Consolas, monospace; font-size: 13px; line-height: 1.6; color: var(--navy-l); padding: 14px 16px; white-space: pre-wrap; background: #fff; margin: 0; }
+#prot-root .btn-copy { padding: 6px 12px; font-size: 12px; background: #fff; color: var(--navy); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; font-family: inherit; }
+#prot-root .btn-copy:hover { background: var(--border); }
+#prot-root .btn-copy.copied { background: var(--green); color: #fff; border-color: var(--green); }
+
 /* ─── ALGO STEPS ─── */
 #prot-root .palgo { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
 #prot-root .pstep { display: flex; border-bottom: 1px solid var(--border); background: var(--white); }
@@ -254,6 +282,7 @@
 #prot-root .pstep-c { padding: 16px; flex: 1; }
 #prot-root .pstep-l { font-size: 14.5px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
 #prot-root .pstep-d { font-size: 13.5px; color: var(--muted); }
+
 /* ─── ACCORDION ─── */
 #prot-root .pacc { margin-bottom: 20px; }
 #prot-root .pacc-item { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; overflow: hidden; }
@@ -264,16 +293,19 @@
 #prot-root .pacc-btn.on .pacc-chv { transform: rotate(180deg); color: var(--primary); }
 #prot-root .pacc-body { display: none; padding: 16px 18px; background: #fff; }
 #prot-root .pacc-body.on { display: block; }
+
 /* ─── BANNER ─── */
 #prot-root .pban { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 8px; padding: 20px; margin-bottom: 20px; color: #fff; display: flex; align-items: center; gap: 16px; }
 #prot-root .pban-ico { font-size: 32px; line-height: 1; }
 #prot-root .pban-txt strong { font-size: 16px; display: block; margin-bottom: 4px; }
 #prot-root .pban-txt span { font-size: 13px; color: #94a3b8; }
+
 /* ─── FOOTER ─── */
 #prot-root .pfooter { padding: 20px 28px; background: var(--navy-pale); border-top: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 #prot-root .pfooter-l { font-size: 13px; color: var(--muted); }
 #prot-root .pfooter-l strong { color: var(--navy); font-size: 14px; }
 #prot-root .pfooter-r { font-size: 12px; color: #94a3b8; text-align: right; }
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 640px) {
   #prot-root .ph { padding: 20px; }
@@ -284,105 +316,7 @@
   #prot-root .pbtn { width: 100%; }
   #prot-root .pres-hd { flex-direction: column; align-items: flex-start; gap: 4px; }
 }
-/* ─── BARRE D'ACTIONS ─── */
-#prot-root .pact {
-  margin-top: 14px;
-  padding: 12px 0 0;
-  border-top: 1px solid var(--border);
-  display: none;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-#prot-root .pact.on { display: flex; }
-#prot-root .pbtn-rapport {
-  all: unset; box-sizing: border-box; cursor: pointer;
-  padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 700;
-  background: var(--navy); color: #fff; display: inline-flex; align-items: center;
-  gap: 7px; transition: background 0.2s; font-family: inherit;
-}
-#prot-root .pbtn-rapport:hover { background: #334155; }
-#prot-root .pbtn-act-copy {
-  all: unset; box-sizing: border-box; cursor: pointer;
-  padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 600;
-  background: var(--teal); color: #fff; display: inline-flex; align-items: center;
-  gap: 7px; transition: background 0.2s; font-family: inherit;
-}
-#prot-root .pbtn-act-copy:hover { background: #0f766e; }
-#prot-root .pbtn-act-print {
-  all: unset; box-sizing: border-box; cursor: pointer;
-  padding: 10px 20px; border-radius: 6px; font-size: 13.5px; font-weight: 600;
-  background: #64748b; color: #fff; display: inline-flex; align-items: center;
-  gap: 7px; transition: background 0.2s; font-family: inherit;
-}
-#prot-root .pbtn-act-print:hover { background: #475569; }
-@media (max-width: 580px) {
-  #prot-root .pact { flex-direction: column; }
-  #prot-root .pact button { width: 100%; justify-content: center; }
-}
-/* ─── RÉSUMÉ PANEL ─── */
-#prot-root .presume {
-  display: none;
-  margin-top: 24px;
-  border: 2px solid var(--navy);
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--white);
-  animation: fadeIn 0.35s ease;
-}
-#prot-root .presume.on { display: block; }
-#prot-root .presume-hd {
-  background: var(--navy); color: #fff;
-  padding: 14px 20px;
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-}
-#prot-root .presume-hd-title { font-size: 15px; font-weight: 800; }
-#prot-root .presume-hd-meta { font-size: 11.5px; color: #94a3b8; margin-top: 4px; }
-#prot-root .presume-close {
-  all: unset; box-sizing: border-box; cursor: pointer;
-  background: rgba(255,255,255,0.15); color: #fff; border-radius: 4px;
-  padding: 5px 12px; font-size: 12px; font-weight: 700; font-family: inherit;
-  white-space: nowrap; transition: background 0.2s; flex-shrink: 0; margin-top: 2px;
-}
-#prot-root .presume-close:hover { background: rgba(255,255,255,0.28); }
-#prot-root .presume-bd { padding: 20px; }
-#prot-root .presume-sect { margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
-#prot-root .presume-sect:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-#prot-root .presume-sect-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.08em; color: var(--muted); margin-bottom: 7px;
-}
-#prot-root .presume-decision {
-  padding: 13px 18px; border-radius: 7px;
-  font-size: 14.5px; font-weight: 800; color: #fff; margin-bottom: 6px;
-}
-#prot-root .presume-val {
-  font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 4px;
-}
-#prot-root .presume-text { font-size: 14px; color: var(--navy-l); line-height: 1.6; }
-#prot-root .presume-ft {
-  display: flex; gap: 10px; flex-wrap: wrap;
-  padding: 14px 20px;
-  background: var(--navy-pale); border-top: 1px solid var(--border);
-}
-#prot-root .presume-btn-copy {
-  all: unset; box-sizing: border-box; cursor: pointer;
-  padding: 9px 18px; border-radius: 5px; font-size: 13px; font-weight: 700;
-  background: var(--teal); color: #fff; font-family: inherit;
-  display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s;
-}
-#prot-root .presume-btn-copy:hover { background: #0f766e; }
-#prot-root .presume-btn-print {
-  all: unset; box-sizing: border-box; cursor: pointer;
-  padding: 9px 18px; border-radius: 5px; font-size: 13px; font-weight: 700;
-  background: #64748b; color: #fff; font-family: inherit;
-  display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s;
-}
-#prot-root .presume-btn-print:hover { background: #475569; }
-@media (max-width: 580px) {
-  #prot-root .presume-ft { flex-direction: column; }
-  #prot-root .presume-ft button { width: 100%; justify-content: center; }
-}
+
 /* =========================================
    PRO : Masque l'ascenseur (style App native)
    ========================================= */
@@ -394,6 +328,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 <body>
 <div id="prot-root">
 <div class="pw">
+
 <!-- ══ HEADER ══ -->
 <div class="ph">
   <div class="ph-spec">Gynécologie-Obstétrique &#183; Médecine Interne</div>
@@ -408,12 +343,13 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <span class="ph-tag">Dr Kara-Zaitri M.A.</span>
   </div>
 </div>
-<!-- ══ PATIENT BAR ══ -->
+
+<!-- ══ PATIENT BAR (Style Premium) ══ -->
 <div class="ppt-bar">
   <button type="button" class="ppt-toggle" id="ppt-toggle-btn" onclick="pptToggle()" aria-expanded="false">
     <span class="pt-arrow">&#9658;</span>
     <span>&#128100; Identification patient(e) / médecin</span>
-    <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#A0AEC0;">Optionnel &mdash; pour la copie et l'impression</span>
+    <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#A0AEC0;text-transform:none;">Optionnel &mdash; pour la copie et l'impression</span>
   </button>
   <div class="ppt-form" id="ppt-form">
     <div class="ppt-grid">
@@ -425,25 +361,30 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         <label for="ppt-prenom">Prénom</label>
         <input type="text" id="ppt-prenom" placeholder="Prénom" autocomplete="off">
       </div>
-      <div class="ppt-field">
-        <label for="ppt-ddn">Date de naissance</label>
-        <input type="date" id="ppt-ddn" oninput="pptCalcAge()">
+      <div class="ppt-field ppt-field-ddnage">
+        <div class="ppt-ddnage-row">
+          <div class="ppt-ddnage-col">
+            <label for="ppt-ddn">Date de naissance</label>
+            <input type="date" id="ppt-ddn" oninput="pptCalcAge()">
+          </div>
+          <div class="ppt-ddnage-col ppt-ddnage-col-small">
+            <label for="ppt-age">Âge (ans)</label>
+            <input type="number" id="ppt-age" placeholder="Ex: 45" min="0" max="130" oninput="pptClearDdn()">
+          </div>
+        </div>
       </div>
       <div class="ppt-field">
-        <label for="ppt-age">Âge (ans)</label>
-        <input type="number" id="ppt-age" placeholder="Âge" min="0" max="130" oninput="pptClearDdn()">
-      </div>
-      <div class="ppt-field ppt-field-wide">
         <label for="ppt-medecin">Médecin prescripteur</label>
         <input type="text" id="ppt-medecin" placeholder="Dr ..." autocomplete="off">
       </div>
-      <div class="ppt-field ppt-field-wide">
+      <div class="ppt-field">
         <label for="ppt-date">Date de consultation</label>
         <input type="date" id="ppt-date">
       </div>
     </div>
   </div>
 </div>
+
 <!-- ══ NAVIGATION — MODÈLE NVG (flex-wrap, sans scrollIntoView) ══ -->
 <nav class="pnav">
     <button class="ptab on" onclick="showTab('def')"><span class="ptab-ico">📋</span>Définition &amp; Seuils</button>
@@ -453,7 +394,9 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     <button class="ptab" onclick="showTab('grossesse')"><span class="ptab-ico">🤰</span>Grossesse</button>
     <button class="ptab" onclick="showTab('demarche')"><span class="ptab-ico">▶️</span>Démarche</button>
 </nav>
+
 <div class="pbody">
+
 <!-- ═══ ONGLET 1 — DÉFINITION ═══ -->
 <div class="psec on" id="tab-def">
   <div class="pc">
@@ -503,12 +446,14 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
   </div>
 </div>
+
 <!-- ═══ ONGLET 2 — CALCULATEUR P/C ═══ -->
 <div class="psec" id="tab-calc">
   <div class="pa note">
     <span class="pa-ico">&#128161;</span>
     <span>Le rapport <strong>Protéinurie/Créatininurie (P/C)</strong> sur échantillon unique (idéalement le matin) est le standard actuel (HAS, KDIGO 2024) pour s&#8217;affranchir du recueil des 24 heures.</span>
   </div>
+  
   <div class="pcalc-hd"><span style="font-size:18px;">&#129518;</span>&nbsp; Calculateur P/C &amp; A/C</div>
   <div class="pcalc-bd">
     <div class="pcalc-grid">
@@ -532,11 +477,15 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         <input type="number" id="av" placeholder="Ex : 45" min="0" step="0.1">
       </div>
     </div>
+    
     <div class="pbtns">
       <button class="pbtn" onclick="calcPC()">Lancer l&#8217;interprétation</button>
       <button class="pbtn sec" onclick="resetPC()">Effacer</button>
     </div>
+    
+    <!-- RESULT BOX -->
     <div class="pres" id="prot-res">
+      <div class="pres-patient-info" id="rpatient"></div>
       <div class="pres-hd" id="rhd">
         <span id="rstade">Stade</span>
         <span id="rtag" style="font-size:12px;opacity:0.9;"></span>
@@ -547,44 +496,25 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         <div class="pres-rco" id="rr"></div>
       </div>
     </div>
-    <!-- Barre d'actions (visible après calcul) -->
-    <div class="pact" id="prot-act">
-      <button class="pbtn-rapport" onclick="generateReport()">&#128196; Générer le rapport</button>
-      <button class="pbtn-act-copy" id="prot-act-copy" onclick="protCopyResume()">&#128203; Copier pour le dossier</button>
-      <button class="pbtn-act-print" onclick="protPrintResume()">&#128438; Imprimer A5</button>
+    
+    <!-- ACTIONS RAPPORT ET IMPRESSION -->
+    <div class="prot-actions" id="prot-actions">
+      <button class="pbtn" onclick="protGenerateReport()" style="background:var(--navy); color:#fff; border: 2px solid var(--navy-l);">&#128203; Générer le rapport</button>
+      <button class="pbtn sec" onclick="protPrintA5()" style="background:#fff; color:var(--navy); border: 2px solid var(--border);">&#128424; Imprimer (A5)</button>
     </div>
-  </div>
-  <!-- Résumé panel (déployé sous le calculateur) -->
-  <div id="prot-resume" class="presume">
-    <div class="presume-hd">
-      <div>
-        <div class="presume-hd-title">&#128196; Résumé clinique — Protéinurie</div>
-        <div class="presume-hd-meta" id="prot-resume-patient"></div>
+
+    <!-- ZONE DE RAPPORT -->
+    <div class="prot-report-zone" id="prot-report-zone">
+      <div class="prot-report-header">
+        <span style="font-weight: 700; color: var(--navy); font-size: 13px;">Texte structuré pour le dossier médical</span>
+        <button class="btn-copy" id="prot-btn-copy" onclick="protCopyReport()">&#x2398; Copier</button>
       </div>
-      <button class="presume-close" onclick="closeResume()">&#10005; Fermer</button>
+      <pre class="prot-report-content" id="prot-report-content"></pre>
     </div>
-    <div class="presume-bd">
-      <div class="presume-sect">
-        <div class="presume-sect-label">Stade KDIGO / Décision</div>
-        <div class="presume-decision" id="prot-resume-decision"></div>
-        <div class="presume-val" id="prot-resume-val"></div>
-      </div>
-      <div class="presume-sect">
-        <div class="presume-sect-label">Interprétation</div>
-        <div class="presume-text" id="prot-resume-interp"></div>
-      </div>
-      <div class="presume-sect">
-        <div class="presume-sect-label">Conduite à tenir</div>
-        <div class="presume-text" id="prot-resume-reco"></div>
-      </div>
-      <div id="prot-resume-acr"></div>
-    </div>
-    <div class="presume-ft">
-      <button class="presume-btn-copy" id="presume-copy-btn" onclick="protCopyResume()">&#128203; Copier pour le dossier</button>
-      <button class="presume-btn-print" onclick="protPrintResume()">&#128438; Imprimer A5</button>
-    </div>
+
   </div>
 </div>
+
 <!-- ═══ ONGLET 3 — PHYSIOPATHOLOGIE ═══ -->
 <div class="psec" id="tab-physio">
   <div class="pc">
@@ -653,6 +583,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </ul>
   </div>
 </div>
+
 <!-- ═══ ONGLET 4 — ÉTIOLOGIES ═══ -->
 <div class="psec" id="tab-etio">
   <div class="pacc">
@@ -731,6 +662,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
   </div>
 </div>
+
 <!-- ═══ ONGLET 5 — GROSSESSE ═══ -->
 <div class="psec" id="tab-grossesse">
   <div class="pban">
@@ -784,6 +716,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </div>
   </div>
 </div>
+
 <!-- ═══ ONGLET 6 — DÉMARCHE ═══ -->
 <div class="psec" id="tab-demarche">
   <div class="pa info">
@@ -822,6 +755,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     </ul>
   </div>
 </div>
+
 </div><!-- /pbody -->
 <!-- ══ FOOTER ══ -->
 <div class="pfooter">
@@ -835,11 +769,18 @@ body { -ms-overflow-style: none; overflow-y: auto; }
     Mise à jour&#160;: 2025
   </div>
 </div>
+
 </div><!-- /pw -->
 </div><!-- /prot-root -->
 <script>
 (function(){
 'use strict';
+
+/* ===== INITIALISATION DATE ===== */
+var dateField = document.getElementById('ppt-date');
+if (dateField) { dateField.valueAsDate = new Date(); }
+window._protCalcResult = null;
+
 /* ===== PATIENT ===== */
 window.pptToggle = function() {
   var form = document.getElementById('ppt-form');
@@ -848,6 +789,7 @@ window.pptToggle = function() {
   btn.classList.toggle('open');
   btn.setAttribute('aria-expanded', form.classList.contains('open') ? 'true' : 'false');
 };
+
 window.pptCalcAge = function() {
   var ddn = document.getElementById('ppt-ddn').value;
   if (!ddn) return;
@@ -857,7 +799,23 @@ window.pptCalcAge = function() {
   if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
   document.getElementById('ppt-age').value = age;
 };
+
 window.pptClearDdn = function() { document.getElementById('ppt-ddn').value = ''; };
+
+window.pptGetPatient = function() {
+  var nom = document.getElementById('ppt-nom').value.trim();
+  var prenom = document.getElementById('ppt-prenom').value.trim();
+  var ddn = document.getElementById('ppt-ddn').value;
+  var age = document.getElementById('ppt-age').value.trim();
+  var medecin = document.getElementById('ppt-medecin').value.trim();
+  var date = document.getElementById('ppt-date').value;
+
+  var nomComplet = (prenom ? prenom + ' ' : '') + (nom || '');
+  var ddnFmt = '', dateFmt = '';
+  if (ddn) { var d = new Date(ddn); ddnFmt = d.toLocaleDateString('fr-FR'); }
+  if (date) { var db = new Date(date); dateFmt = db.toLocaleDateString('fr-FR'); }
+  return { nomComplet: nomComplet.trim(), ddnFmt: ddnFmt, age: age, medecin: medecin, dateFmt: dateFmt };
+};
 
 /* ===== NAVIGATION — modèle NVG (sans scrollIntoView) ===== */
 var TABS = ['def','calc','physio','etio','grossesse','demarche'];
@@ -870,7 +828,6 @@ window.showTab = function(id) {
   var btns = document.querySelectorAll('#prot-root .ptab');
   if (idx >= 0 && btns[idx]) {
     btns[idx].classList.add('on');
-    /* scrollIntoView supprimé — cause du décalage de page sur mobile */
   }
 };
 
@@ -885,25 +842,15 @@ window.togAcc = function(btn) {
   if (!wasOn) { btn.classList.add('on'); if (body) body.classList.add('on'); }
 };
 
-/* ===== PATIENT HELPER ===== */
-function pptGetPatient() {
-  function v(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; }
-  var nom = v('ppt-nom'), prenom = v('ppt-prenom');
-  var ddn = v('ppt-ddn'), age = v('ppt-age');
-  var medecin = v('ppt-medecin'), dateConsult = v('ppt-date');
-  var nomComplet = [prenom, nom].filter(Boolean).join(' ');
-  function fmtDate(d){ var p = d.split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : d; }
-  var ddnFmt = ddn ? fmtDate(ddn) : '';
-  var dateFmt = dateConsult ? fmtDate(dateConsult) : new Date().toLocaleDateString('fr-FR');
-  return { nomComplet: nomComplet, ddnFmt: ddnFmt, age: age, medecin: medecin, dateFmt: dateFmt };
-}
-
 /* ===== CALCULATEUR P/C ===== */
 window.calcPC = function() {
   var p   = parseFloat(document.getElementById('pv').value);
   var c   = parseFloat(document.getElementById('cv').value);
-  var ctx = document.getElementById('ctx').value;
+  var ctxObj = document.getElementById('ctx');
+  var ctx = ctxObj.value;
+  var ctxText = ctxObj.options[ctxObj.selectedIndex].text;
   var a   = parseFloat(document.getElementById('av').value);
+  
   if (isNaN(p) || isNaN(c) || c <= 0) {
     alert('Veuillez renseigner correctement la protéinurie et la créatininurie (> 0).');
     return;
@@ -912,6 +859,8 @@ window.calcPC = function() {
   var eq    = Math.round(ratio * 10);
   var acr   = (!isNaN(a) && c > 0) ? (a / c).toFixed(1) : null;
   var hd_cls, stade, tag, interp, reco;
+  var aStade = null;
+
   if (ctx === 'grossesse') {
     if (ratio < 30) {
       hd_cls = 'r-ok';
@@ -959,10 +908,11 @@ window.calcPC = function() {
       reco   = 'Avis néphrologique URGENT. Dosage de l\'albumine sérique. Recherche de complications thrombotiques. Biopsie rénale probable.';
     }
   }
+
   var albInfo = '';
   if (acr !== null) {
     var acrNum = parseFloat(acr);
-    var aStade = (acrNum < 3) ? 'A1 (Normal)' : (acrNum < 30) ? 'A2 (Modérément augmentée)' : 'A3 (Sévèrement augmentée)';
+    aStade = (acrNum < 3) ? 'A1 (Normal)' : (acrNum < 30) ? 'A2 (Modérément augmentée)' : 'A3 (Sévèrement augmentée)';
     var aColor = (acrNum < 3) ? '#166534' : (acrNum < 30) ? '#d97706' : '#dc2626';
     albInfo = '<div style="margin-top:14px;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:13.5px;">'
       + '<span style="color:#0f172a;font-weight:700;">Rapport Albuminurie/Créatininurie (ACR) :</span><br>'
@@ -970,6 +920,17 @@ window.calcPC = function() {
       + '<span style="color:#64748b;">(≈ Stade KDIGO ' + aStade + ')</span>'
       + '</div>';
   }
+
+  // Affichage infos patient dans la box de résultat (si renseigné)
+  var pt = pptGetPatient();
+  var rpatientEl = document.getElementById('rpatient');
+  if (pt.nomComplet || pt.medecin) {
+    rpatientEl.innerHTML = '<strong>Patient(e) :</strong> ' + (pt.nomComplet ? pt.nomComplet : 'Non spécifié') + 
+                           (pt.age ? ' (' + pt.age + ' ans)' : '') + 
+                           ' &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Prescripteur :</strong> ' + (pt.medecin ? 'Dr ' + pt.medecin : 'Non spécifié');
+    rpatientEl.style.display = 'block';
+  } else { rpatientEl.style.display = 'none'; }
+
   document.getElementById('rv').innerHTML = ratio.toFixed(1)
     + ' <span style="font-size:16px;font-weight:600;color:#64748b;">mg/mmol</span>'
     + ' <span style="font-size:13px;font-weight:500;color:#64748b;margin-left:6px;">(≈ ' + eq + ' mg/24h)</span>';
@@ -978,21 +939,142 @@ window.calcPC = function() {
   document.getElementById('ri').innerHTML       = interp + albInfo;
   document.getElementById('rr').innerHTML       = '<strong>Conduite :</strong> ' + reco;
   document.getElementById('prot-res').className = 'pres on ' + hd_cls;
-  window._protCalcResult = { ratio: ratio, eq: eq, stade: stade, tag: tag, interp: interp, reco: reco, acr: acr, hd_cls: hd_cls };
-  document.getElementById('prot-act').classList.add('on');
+
+  // Afficher les actions et cacher le rapport
+  document.getElementById('prot-actions').classList.add('visible');
+  document.getElementById('prot-report-zone').classList.remove('visible');
+
+  // Sauvegarder pour le rapport
+  window._protCalcResult = { p: p, c: c, a: a, ctxText: ctxText, ratio: ratio.toFixed(1), eq: eq, acr: acr, aStade: aStade, stade: stade, tag: tag, interp: interp, reco: reco, hd_cls: hd_cls };
 };
+
 window.resetPC = function() {
   ['pv','cv','av'].forEach(function(i){ document.getElementById(i).value = ''; });
   document.getElementById('ctx').selectedIndex = 0;
   document.getElementById('prot-res').className = 'pres';
-  document.getElementById('prot-act').classList.remove('on');
-  document.getElementById('prot-resume').classList.remove('on');
+  document.getElementById('prot-actions').classList.remove('visible');
+  document.getElementById('prot-report-zone').classList.remove('visible');
   window._protCalcResult = null;
 };
+
 /* Soumission par Entrée */
 document.querySelectorAll('#prot-root .pf input').forEach(function(el){
   el.addEventListener('keydown', function(e){ if (e.key === 'Enter') window.calcPC(); });
 });
+
+/* ─── GÉNÉRATION DU RAPPORT (TEXTE STRUCTURÉ) ─── */
+window.protGenerateReport = function() {
+  if (!window._protCalcResult) return;
+  var info = pptGetPatient();
+  var r = window._protCalcResult;
+  var today = new Date().toLocaleDateString('fr-FR');
+
+  var txt = '=== PROTÉINURIE — ÉVALUATION QUANTITATIVE ===\n';
+  txt += 'Date        : ' + (info.dateFmt || today) + '\n';
+  if (info.nomComplet) txt += 'Patient(e)  : ' + info.nomComplet + (info.age ? ' (' + info.age + ' ans)' : '') + (info.ddnFmt ? ' — Né(e) le ' + info.ddnFmt : '') + '\n';
+  if (info.medecin) txt += 'Prescripteur: ' + info.medecin + '\n';
+
+  txt += '\n--- DONNÉES CLINIQUES ---\n';
+  txt += 'Protéinurie    : ' + r.p + ' mg/L\n';
+  txt += 'Créatininurie  : ' + r.c + ' mmol/L\n';
+  if (r.acr !== null) txt += 'Albuminurie    : ' + r.a + ' mg/L\n';
+  txt += 'Contexte       : ' + r.ctxText + '\n';
+
+  txt += '\n--- RÉSULTATS ---\n';
+  txt += 'Rapport P/C    : ' + r.ratio + ' mg/mmol  (Estimation ≈ ' + r.eq + ' mg/24h)\n';
+  txt += 'Statut         : ' + r.stade + '\n';
+  if (r.acr !== null) txt += 'Rapport A/C    : ' + r.acr + ' mg/mmol  (KDIGO : ' + r.aStade + ')\n';
+
+  txt += '\n--- INTERPRÉTATION ---\n';
+  txt += r.interp.replace(/<[^>]+>/g, '') + '\n';
+
+  txt += '\n--- CONDUITE À TENIR ---\n';
+  txt += r.reco.replace(/<[^>]+>/g, '') + '\n';
+
+  txt += '\n(KDIGO 2024 / HAS — Outil d\'aide à la décision clinique)';
+
+  var rZone = document.getElementById('prot-report-zone');
+  document.getElementById('prot-report-content').textContent = txt;
+  rZone.classList.add('visible');
+  rZone.scrollIntoView({ behavior:'smooth', block:'nearest' });
+};
+
+/* ─── COPIER LE RAPPORT ─── */
+window.protCopyReport = function() {
+  var txt = document.getElementById('prot-report-content').textContent;
+  var btn = document.getElementById('prot-btn-copy');
+  var done = function(){ btn.textContent = '\u2713 Copié !'; btn.classList.add('copied'); setTimeout(function(){ btn.innerHTML = '&#x2398; Copier'; btn.classList.remove('copied'); }, 2000); };
+  var fail = function(){ var ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(txt).then(done).catch(fail); } else { fail(); }
+};
+
+/* ─── IMPRESSION A5 ─── */
+function esc(s) {
+  return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+window.protPrintA5 = function() {
+  if (!window._protCalcResult) { alert('Veuillez lancer l\'interprétation d\'abord.'); return; }
+  var info = pptGetPatient();
+  var r = window._protCalcResult;
+  var today = info.dateFmt || new Date().toLocaleDateString('fr-FR');
+
+  var bgColor = r.hd_cls === 'r-ok' ? '#eafaf1' : (r.hd_cls === 'r-a3' || r.hd_cls === 'r-sn') ? '#fdedec' : '#fef9e7';
+  var borderColor = r.hd_cls === 'r-ok' ? '#16a34a' : (r.hd_cls === 'r-a3' || r.hd_cls === 'r-sn') ? '#dc2626' : '#d97706';
+
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+    + '<title>Protéinurie — Résumé</title>'
+    + '<style>@page{size:A5;margin:11mm;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,Helvetica,sans-serif;font-size:9.5pt;color:#1e293b;line-height:1.4;padding-bottom:30px;}'
+    + '.hdr{border-bottom:2px solid #0f172a;padding-bottom:7px;margin-bottom:10px;}'
+    + '.hdr-title{font-size:12pt;font-weight:700;color:#0f172a;margin-bottom:1px;}'
+    + '.hdr-sub{font-size:7.5pt;color:#64748b;}'
+    + '.idbox{display:flex;justify-content:space-between;gap:12px;margin:8px 0 12px;padding:7px 9px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:3px;font-size:8.5pt;}'
+    + '.idcol b{display:block;font-size:7pt;text-transform:uppercase;letter-spacing:0.04em;color:#64748b;margin-bottom:1px;}'
+    + '.sec{margin-bottom:12px;}'
+    + '.sec h3{font-size:7.5pt;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1.5px solid #eef0f3;padding-bottom:3px;margin-bottom:5px;}'
+    + '.box-res{padding:7px 10px;border-radius:3px;background:' + bgColor + ';border-left:4px solid ' + borderColor + '; margin-bottom:8px;}'
+    + '.grid2{display:flex; justify-content:space-between; font-size:8.5pt; margin-bottom:6px;}'
+    + '.val{font-size:13pt;font-weight:800;color:#0f172a;}'
+    + '.val-sub{font-size:9pt;color:#64748b;font-weight:normal;}'
+    + '.interp{font-size:8.5pt; font-weight:600; margin-bottom:6px;}'
+    + '.reco{font-size:8.5pt; border-top:1px solid #e2e8f0; padding-top:6px;}'
+    + '.ftr{position:fixed;bottom:0;left:0;width:100%;padding-top:7px;border-top:1px solid #e2e8f0;font-size:7pt;color:#64748b;text-align:center;background:#fff;}'
+    + '</style></head><body>'
+    + '<div class="hdr"><div class="hdr-title">Protéinurie &mdash; Évaluation Quantitative</div>'
+    + '<div class="hdr-sub">Dr KARA-ZAITRI M.A. &bull; Gynécologie-Obstétrique &bull; KDIGO 2024 / HAS</div></div>'
+    + '<div class="idbox">'
+    + '<div class="idcol"><b>Patient(e)</b>' + esc(info.nomComplet || '\u2014') + (info.ddnFmt ? ' &middot; Né(e) le ' + esc(info.ddnFmt) : '') + (info.age ? ' (' + esc(info.age) + ' ans)' : '') + '</div>'
+    + '<div class="idcol" style="text-align:right"><b>Médecin</b>' + esc(info.medecin || '\u2014') + '<br><b style="margin-top:3px;display:block;">Date</b>' + esc(today) + '</div>'
+    + '</div>'
+    + '<div class="sec"><h3>Données Biologiques & Contexte</h3>'
+    + '<div style="font-size:8.5pt;">'
+    + '&bull; <b>Protéinurie</b> : ' + esc(r.p) + ' mg/L<br>'
+    + '&bull; <b>Créatininurie</b> : ' + esc(r.c) + ' mmol/L<br>'
+    + (r.acr !== null ? '&bull; <b>Albuminurie</b> : ' + esc(r.a) + ' mg/L<br>' : '')
+    + '&bull; <b>Contexte</b> : ' + esc(r.ctxText) 
+    + '</div></div>'
+    + '<div class="sec"><h3>Résultat & Décision</h3>'
+    + '<div class="box-res">'
+    + '  <div class="grid2">'
+    + '    <div><span class="val">P/C : ' + esc(r.ratio) + '</span> <span class="val-sub">mg/mmol</span></div>'
+    + '    <div style="text-align:right;"><b>' + esc(r.stade) + '</b></div>'
+    + '  </div>'
+    + '  <div class="interp">Équivalent 24h : ≈ ' + esc(r.eq) + ' mg/jour</div>'
+    + (r.acr !== null ? '<div class="interp" style="color:#d97706;">Ratio A/C : ' + esc(r.acr) + ' mg/mmol (KDIGO : ' + esc(r.aStade) + ')</div>' : '')
+    + '  <div class="interp">' + r.interp.replace(/<[^>]+>/g, '') + '</div>'
+    + '  <div class="reco"><b>Conduite :</b> ' + r.reco.replace(/<[^>]+>/g, '') + '</div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="ftr">Généré le ' + esc(today) + ' &bull; Outil d\'aide à la décision clinique — ne se substitue pas au jugement médical.</div>'
+    + '</body></html>';
+
+  var w = window.open('', '_blank');
+  if (!w) { alert('Veuillez autoriser les fenêtres pop-up pour imprimer.'); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+  w.onload = function(){ w.focus(); w.print(); };
+  setTimeout(function(){ try { w.focus(); w.print(); } catch(e){} }, 300);
+};
+
 /* ===== PWA ===== */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function(){
