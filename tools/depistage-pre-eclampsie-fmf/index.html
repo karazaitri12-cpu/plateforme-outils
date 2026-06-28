@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a3a5c">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Dépistage Pré-éclampsie — Algorithme FMF T1</title>
 <style>
 /* ============================================================
@@ -24,8 +28,6 @@
   margin: 0;
   padding: 0;
 }
-
-/* Variables */
 #fmf-root {
   --navy:      #1a3a5c;
   --navy-dk:   #122844;
@@ -108,6 +110,80 @@
   letter-spacing: 0.03em;
 }
 
+/* ============================================================
+   BARRE D'IDENTIFICATION PATIENT (Sainte Trinité — d.1)
+   ============================================================ */
+#fmf-root .fmf-pt-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+#fmf-root .fmf-pt-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  background: #f0f4f9;
+  border: none;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--slate);
+  text-align: left;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+  border-bottom: 1px solid var(--border);
+}
+#fmf-root .fmf-pt-toggle:hover { color: var(--navy); }
+#fmf-root .fmf-pt-arrow { font-size: 9px; transition: transform 0.2s; display: inline-block; }
+#fmf-root .fmf-pt-toggle.open .fmf-pt-arrow { transform: rotate(90deg); }
+#fmf-root .fmf-pt-form {
+  display: none;
+  padding: 10px 16px 14px;
+  background: #fafbfc;
+  border-bottom: 1px solid var(--border);
+}
+#fmf-root .fmf-pt-form.open { display: block; }
+#fmf-root .fmf-pt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+#fmf-root .fmf-pt-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#fmf-root .fmf-pt-field label {
+  font-size: 10px; font-weight: 700; color: #4a5568;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  font-family: Arial, sans-serif;
+}
+#fmf-root .fmf-pt-field input {
+  all: unset;
+  box-sizing: border-box;
+  padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px;
+  font-family: Arial, sans-serif; font-size: 12px; color: var(--navy);
+  background: var(--white); width: 100%;
+  transition: border-color 0.15s;
+}
+#fmf-root .fmf-pt-field input:focus { border-color: var(--navy-lt); outline: none; }
+#fmf-root .fmf-pt-ddn-row { display: flex; gap: 8px; }
+#fmf-root .fmf-pt-ddn-col { display: flex; flex-direction: column; gap: 3px; flex: 1 1 0; min-width: 0; }
+#fmf-root .fmf-pt-ddn-col-sm { flex: 0 0 88px; }
+#fmf-root .fmf-pt-ddn-col label {
+  font-size: 10px; font-weight: 700; color: #4a5568;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  font-family: Arial, sans-serif;
+}
+#fmf-root .fmf-pt-ddn-col input {
+  all: unset;
+  box-sizing: border-box;
+  padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px;
+  font-family: Arial, sans-serif; font-size: 12px; color: var(--navy);
+  background: var(--white); width: 100%;
+  transition: border-color 0.15s;
+}
+#fmf-root .fmf-pt-ddn-col input:focus { border-color: var(--navy-lt); outline: none; }
+
 /* ---- Notice méthodologique ---- */
 #fmf-root .fmf-notice {
   background: #eef2f8;
@@ -164,13 +240,7 @@
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 14px;
 }
-
-#fmf-root .fmf-field {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
+#fmf-root .fmf-field { display: flex; flex-direction: column; gap: 5px; }
 #fmf-root .fmf-label {
   font-family: Arial, sans-serif;
   font-size: 0.78rem;
@@ -183,33 +253,15 @@
   gap: 4px;
   line-height: 1.4;
 }
-#fmf-root .fmf-unit {
-  font-weight: 400;
-  color: var(--slate);
-  font-size: 0.73rem;
-}
-#fmf-root .fmf-required {
-  color: var(--accent);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
+#fmf-root .fmf-unit { font-weight: 400; color: var(--slate); font-size: 0.73rem; }
+#fmf-root .fmf-required { color: var(--accent); font-size: 0.85rem; font-weight: 700; }
 #fmf-root .fmf-optional {
-  font-size: 0.67rem;
-  color: var(--slate);
-  font-weight: 400;
-  background: #eef2f8;
-  border-radius: 10px;
-  padding: 1px 6px;
-  white-space: nowrap;
+  font-size: 0.67rem; color: var(--slate); font-weight: 400;
+  background: #eef2f8; border-radius: 10px; padding: 1px 6px; white-space: nowrap;
 }
-#fmf-root .fmf-hint {
-  font-size: 0.70rem;
-  color: var(--slate);
-  font-family: Arial, sans-serif;
-  font-style: italic;
-}
+#fmf-root .fmf-hint { font-size: 0.70rem; color: var(--slate); font-family: Arial, sans-serif; font-style: italic; }
 
-/* ---- Inputs (number + text) ---- */
+/* ---- Inputs ---- */
 #fmf-root input[type="number"],
 #fmf-root input[type="text"] {
   all: unset;
@@ -229,10 +281,7 @@
   appearance: none;
 }
 #fmf-root input[type="number"]::-webkit-inner-spin-button,
-#fmf-root input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+#fmf-root input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 #fmf-root input[type="number"]:focus,
 #fmf-root input[type="text"]:focus {
   border-color: var(--navy-lt);
@@ -241,75 +290,38 @@
 }
 #fmf-root input.fmf-error { border-color: var(--accent) !important; }
 
-/* ---- Select custom ---- */
-#fmf-root .fmf-select-wrap {
-  position: relative;
-  display: block;
-}
+/* ---- Select ---- */
+#fmf-root .fmf-select-wrap { position: relative; display: block; }
 #fmf-root .fmf-select-wrap::after {
   content: '\25BE';
-  position: absolute;
-  right: 10px;
-  top: 50%;
+  position: absolute; right: 10px; top: 50%;
   transform: translateY(-50%);
-  color: var(--navy);
-  font-size: 12px;
-  pointer-events: none;
-  line-height: 1;
+  color: var(--navy); font-size: 12px; pointer-events: none; line-height: 1;
 }
 #fmf-root select {
   all: unset;
   box-sizing: border-box;
-  display: block;
-  width: 100%;
-  border: 1px solid #b8c7d9;
-  border-radius: 4px;
+  display: block; width: 100%;
+  border: 1px solid #b8c7d9; border-radius: 4px;
   padding: 8px 32px 8px 10px;
-  font-size: 0.88rem;
-  font-family: Arial, sans-serif;
-  color: #1a2535;
-  background: #fff;
+  font-size: 0.88rem; font-family: Arial, sans-serif;
+  color: #1a2535; background: #fff;
   cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
 }
-#fmf-root select:focus {
-  border-color: var(--navy-lt);
-  box-shadow: 0 0 0 2px rgba(26,80,128,0.12);
-  outline: none;
-}
+#fmf-root select:focus { border-color: var(--navy-lt); box-shadow: 0 0 0 2px rgba(26,80,128,0.12); outline: none; }
 
-/* ---- Radio boutons (toggle) ---- */
-#fmf-root .fmf-radio-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
+/* ---- Radio boutons ---- */
+#fmf-root .fmf-radio-group { display: flex; flex-wrap: wrap; gap: 7px; }
 #fmf-root .fmf-radio-btn {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  color: #1a2535;
-  background: #f0f4f9;
-  border: 1px solid #c5d2e0;
-  border-radius: 4px;
-  padding: 7px 14px;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
-  user-select: none;
-  white-space: nowrap;
+  display: inline-flex; align-items: center; cursor: pointer;
+  font-family: Arial, sans-serif; font-size: 0.82rem; color: #1a2535;
+  background: #f0f4f9; border: 1px solid #c5d2e0; border-radius: 4px;
+  padding: 7px 14px; transition: background 0.12s, border-color 0.12s, color 0.12s;
+  user-select: none; white-space: nowrap;
 }
-#fmf-root .fmf-radio-btn:hover {
-  background: #e0eaf5;
-  border-color: var(--navy-lt);
-}
-#fmf-root .fmf-radio-btn.active {
-  background: var(--navy);
-  border-color: var(--navy-dk);
-  color: #fff;
-}
+#fmf-root .fmf-radio-btn:hover { background: #e0eaf5; border-color: var(--navy-lt); }
+#fmf-root .fmf-radio-btn.active { background: var(--navy); border-color: var(--navy-dk); color: #fff; }
 #fmf-root .fmf-radio-btn input { display: none; }
 
 /* ---- Checkboxes ---- */
@@ -318,59 +330,29 @@
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 6px 14px;
 }
-
 #fmf-root .fmf-checkbox-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  color: #1a2535;
-  cursor: pointer;
-  padding: 4px 0;
-  line-height: 1.4;
-  user-select: none;
+  display: flex; align-items: flex-start; gap: 9px;
+  font-family: Arial, sans-serif; font-size: 0.82rem; color: #1a2535;
+  cursor: pointer; padding: 4px 0; line-height: 1.4; user-select: none;
 }
 #fmf-root .fmf-checkbox-row input[type="checkbox"] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  pointer-events: none;
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
 }
 #fmf-root .fmf-cb-box {
-  flex-shrink: 0;
-  width: 17px;
-  height: 17px;
-  border: 1.5px solid #b8c7d9;
-  border-radius: 3px;
-  background: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1px;
-  transition: background 0.12s, border-color 0.12s;
+  flex-shrink: 0; width: 17px; height: 17px;
+  border: 1.5px solid #b8c7d9; border-radius: 3px; background: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 1px; transition: background 0.12s, border-color 0.12s;
 }
 #fmf-root .fmf-cb-box::after {
-  content: '';
-  display: block;
-  width: 9px;
-  height: 5px;
-  border-left: 2px solid #fff;
-  border-bottom: 2px solid #fff;
-  transform: rotate(-45deg) translateY(-1px);
-  opacity: 0;
-  transition: opacity 0.1s;
+  content: ''; display: block; width: 9px; height: 5px;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px); opacity: 0; transition: opacity 0.1s;
 }
-#fmf-root .fmf-checkbox-row.checked .fmf-cb-box {
-  background: var(--navy);
-  border-color: var(--navy-dk);
-}
-#fmf-root .fmf-checkbox-row.checked .fmf-cb-box::after {
-  opacity: 1;
-}
+#fmf-root .fmf-checkbox-row.checked .fmf-cb-box { background: var(--navy); border-color: var(--navy-dk); }
+#fmf-root .fmf-checkbox-row.checked .fmf-cb-box::after { opacity: 1; }
 
-/* ---- Boutons ---- */
+/* ---- Boutons principaux ---- */
 #fmf-root .fmf-btn-bar {
   margin-top: 20px;
   display: flex;
@@ -393,32 +375,89 @@
   transition: background 0.15s, transform 0.1s;
   letter-spacing: 0.02em;
 }
-#fmf-root .fmf-btn-primary {
-  background: var(--navy);
-  color: #fff;
-  border: 2px solid var(--navy-dk);
-}
+#fmf-root .fmf-btn-primary { background: var(--navy); color: #fff; border: 2px solid var(--navy-dk); }
 #fmf-root .fmf-btn-primary:hover { background: var(--navy-lt); }
 #fmf-root .fmf-btn-primary:active { transform: scale(0.98); }
-#fmf-root .fmf-btn-reset {
-  background: transparent;
-  color: var(--slate);
-  border: 1px solid var(--border);
-  font-weight: 400;
-}
+#fmf-root .fmf-btn-reset { background: transparent; color: var(--slate); border: 1px solid var(--border); font-weight: 400; }
 #fmf-root .fmf-btn-reset:hover { background: #eef2f8; }
 
-/* ---- Erreurs de validation ---- */
-#fmf-root .fmf-val-error-box {
-  background: #fef2f2;
-  border: 1px solid #fca5a5;
-  border-radius: 4px;
-  padding: 10px 14px;
-  font-family: Arial, sans-serif;
-  font-size: 0.78rem;
-  color: #991b1b;
-  margin-top: 12px;
+/* ---- Action bar (Copier + Imprimer) — Sainte Trinité d.2/d.3 ---- */
+#fmf-root .fmf-action-bar {
   display: none;
+  margin-top: 14px;
+  padding: 8px 0;
+  display: none;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+#fmf-root .fmf-action-bar.visible { display: flex; }
+#fmf-root .fmf-btn-action {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 4px;
+  transition: background 0.15s;
+  letter-spacing: 0.02em;
+}
+#fmf-root .fmf-btn-print { background: var(--navy); color: #fff; border: none; }
+#fmf-root .fmf-btn-print:hover { background: var(--navy-lt); }
+#fmf-root .fmf-btn-copy { background: var(--white); color: var(--navy); border: 1.5px solid var(--navy); }
+#fmf-root .fmf-btn-copy:hover { background: #eef2f8; }
+#fmf-root .fmf-btn-copy.copied { background: var(--green); color: #fff; border-color: var(--green); }
+
+/* ---- Zone rapport texte brut (Sainte Trinité d.2) ---- */
+#fmf-root .fmf-rapport-zone {
+  display: none;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+#fmf-root .fmf-rapport-zone.visible { display: block; }
+#fmf-root .fmf-rapport-head {
+  background: #f0f4f9;
+  padding: 7px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+#fmf-root .fmf-rapport-head span {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+#fmf-root .fmf-rapport-pre {
+  margin: 0;
+  padding: 14px 16px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #1a2535;
+  background: #fafbfc;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+/* ---- Erreurs validation ---- */
+#fmf-root .fmf-val-error-box {
+  background: #fef2f2; border: 1px solid #fca5a5; border-radius: 4px;
+  padding: 10px 14px; font-family: Arial, sans-serif; font-size: 0.78rem;
+  color: #991b1b; margin-top: 12px; display: none;
 }
 #fmf-root .fmf-val-error-box.visible { display: block; }
 #fmf-root .fmf-val-error-box ul { padding-left: 18px; margin-top: 4px; }
@@ -434,83 +473,36 @@
 }
 #fmf-root .fmf-result-box.visible { display: block; }
 #fmf-root .fmf-result-head {
-  background: var(--navy);
-  color: #fff;
-  padding: 11px 18px;
-  font-family: Arial, sans-serif;
-  font-size: 0.80rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
+  background: var(--navy); color: #fff; padding: 11px 18px;
+  font-family: Arial, sans-serif; font-size: 0.80rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
 }
 #fmf-root .fmf-result-body { padding: 18px 20px; }
 
 /* Risque global */
 #fmf-root .fmf-risk-global {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 14px 18px;
-  border-radius: 5px;
-  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 18px;
+  padding: 14px 18px; border-radius: 5px; margin-bottom: 16px;
 }
 #fmf-root .fmf-risk-global.high         { background:#fef2f2; border:1.5px solid #fca5a5; }
 #fmf-root .fmf-risk-global.intermediate { background:var(--amber-bg); border:1.5px solid #fcd34d; }
 #fmf-root .fmf-risk-global.low          { background:var(--green-bg); border:1.5px solid #86efac; }
-#fmf-root .fmf-risk-badge {
-  font-family: Arial, sans-serif;
-  font-size: 1.6rem;
-  font-weight: 900;
-  line-height: 1;
-  flex-shrink: 0;
-}
+#fmf-root .fmf-risk-badge { font-family: Arial, sans-serif; font-size: 1.6rem; font-weight: 900; line-height: 1; flex-shrink: 0; }
 #fmf-root .fmf-risk-global.high .fmf-risk-badge         { color: var(--accent); }
 #fmf-root .fmf-risk-global.intermediate .fmf-risk-badge { color: var(--amber);  }
 #fmf-root .fmf-risk-global.low .fmf-risk-badge          { color: var(--green);  }
-#fmf-root .fmf-risk-label {
-  font-family: Georgia, serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-#fmf-root .fmf-risk-sublabel {
-  font-family: Arial, sans-serif;
-  font-size: 0.78rem;
-  color: var(--slate);
-  margin-top: 3px;
-}
+#fmf-root .fmf-risk-label { font-family: Georgia, serif; font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
+#fmf-root .fmf-risk-sublabel { font-family: Arial, sans-serif; font-size: 0.78rem; color: var(--slate); margin-top: 3px; }
 
 /* Tableau marqueurs */
 #fmf-root .fmf-markers-title {
-  font-family: Arial, sans-serif;
-  font-size: 0.76rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--navy);
-  margin-bottom: 8px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--border);
+  font-family: Arial, sans-serif; font-size: 0.76rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--navy);
+  margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border);
 }
-#fmf-root .fmf-markers-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-  font-size: 0.80rem;
-}
-#fmf-root .fmf-markers-table th {
-  background: #eef2f8;
-  color: var(--navy);
-  font-weight: 700;
-  padding: 7px 10px;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-#fmf-root .fmf-markers-table td {
-  padding: 7px 10px;
-  border-bottom: 1px solid #eef2f8;
-  vertical-align: middle;
-}
+#fmf-root .fmf-markers-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 0.80rem; }
+#fmf-root .fmf-markers-table th { background: #eef2f8; color: var(--navy); font-weight: 700; padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+#fmf-root .fmf-markers-table td { padding: 7px 10px; border-bottom: 1px solid #eef2f8; vertical-align: middle; }
 #fmf-root .fmf-markers-table tr:last-child td { border-bottom: none; }
 #fmf-root .fmf-val-normal { color: var(--green); font-weight: 700; }
 #fmf-root .fmf-val-alert  { color: var(--accent); font-weight: 700; }
@@ -518,121 +510,56 @@
 #fmf-root .fmf-val-na     { color: #9ca3af; font-style: italic; }
 
 /* MoM bars */
-#fmf-root .fmf-mom-bar-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 2px;
-}
-#fmf-root .fmf-mom-bar {
-  height: 6px;
-  border-radius: 3px;
-  background: #e2e8f0;
-  flex: 1;
-  overflow: hidden;
-}
-#fmf-root .fmf-mom-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.5s ease;
-}
+#fmf-root .fmf-mom-bar-wrap { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+#fmf-root .fmf-mom-bar { height: 6px; border-radius: 3px; background: #e2e8f0; flex: 1; overflow: hidden; }
+#fmf-root .fmf-mom-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
 #fmf-root .fmf-mom-bar-fill.normal { background: var(--green); }
 #fmf-root .fmf-mom-bar-fill.alert  { background: var(--accent); }
 #fmf-root .fmf-mom-bar-fill.amber  { background: var(--amber);  }
 
 /* Conduite à tenir */
-#fmf-root .fmf-conduct {
-  margin-top: 16px;
-  padding: 13px 16px;
-  border-radius: 4px;
-  font-family: Arial, sans-serif;
-  font-size: 0.82rem;
-  line-height: 1.6;
-}
+#fmf-root .fmf-conduct { margin-top: 16px; padding: 13px 16px; border-radius: 4px; font-family: Arial, sans-serif; font-size: 0.82rem; line-height: 1.6; }
 #fmf-root .fmf-conduct.high         { background:#fef2f2; border:1px solid #fca5a5; }
 #fmf-root .fmf-conduct.intermediate { background:var(--amber-bg); border:1px solid #fcd34d; }
 #fmf-root .fmf-conduct.low          { background:var(--green-bg); border:1px solid #86efac; }
-#fmf-root .fmf-conduct-title {
-  font-weight: 700;
-  font-size: 0.80rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 7px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+#fmf-root .fmf-conduct-title { font-weight: 700; font-size: 0.80rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 7px; display: flex; align-items: center; gap: 6px; }
 #fmf-root .fmf-conduct.high .fmf-conduct-title         { color: var(--accent); }
 #fmf-root .fmf-conduct.intermediate .fmf-conduct-title { color: var(--amber);  }
 #fmf-root .fmf-conduct.low .fmf-conduct-title          { color: var(--green);  }
 #fmf-root .fmf-conduct ul { padding-left: 0; list-style: none; }
-#fmf-root .fmf-conduct ul li {
-  position: relative;
-  padding-left: 14px;
-  margin-bottom: 4px;
-}
-#fmf-root .fmf-conduct ul li::before {
-  content: '\2022';
-  position: absolute;
-  left: 0;
-  color: var(--slate);
-}
+#fmf-root .fmf-conduct ul li { position: relative; padding-left: 14px; margin-bottom: 4px; }
+#fmf-root .fmf-conduct ul li::before { content: '\2022'; position: absolute; left: 0; color: var(--slate); }
 
 /* Explication score */
 #fmf-root .fmf-score-explain {
-  margin-top: 14px;
-  background: #f8f9fb;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 12px 14px;
-  font-family: Arial, sans-serif;
-  font-size: 0.77rem;
-  color: var(--slate);
-  line-height: 1.6;
+  margin-top: 14px; background: #f8f9fb; border: 1px solid var(--border);
+  border-radius: 4px; padding: 12px 14px; font-family: Arial, sans-serif;
+  font-size: 0.77rem; color: var(--slate); line-height: 1.6;
 }
 #fmf-root .fmf-score-explain strong { color: var(--navy); }
 
-/* ---- Bandeau d'avertissement approximation ---- */
+/* Approximation banner */
 #fmf-root .fmf-approx-banner {
-  margin-top: 12px;
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
-  border-left: 3px solid var(--amber);
-  border-radius: 4px;
-  padding: 10px 14px;
-  font-family: Arial, sans-serif;
-  font-size: 0.75rem;
-  color: #78350f;
-  line-height: 1.55;
+  margin-top: 12px; background: #fffbeb; border: 1px solid #fcd34d;
+  border-left: 3px solid var(--amber); border-radius: 4px; padding: 10px 14px;
+  font-family: Arial, sans-serif; font-size: 0.75rem; color: #78350f; line-height: 1.55;
 }
 #fmf-root .fmf-approx-banner strong { color: var(--amber); }
 
-/* Avertissement médico-légal */
+/* Disclaimer */
 #fmf-root .fmf-disclaimer {
-  margin-top: 20px;
-  background: #f8f9fb;
-  border: 1px solid var(--border);
-  border-top: 2px solid var(--navy-lt);
-  border-radius: var(--radius);
-  padding: 12px 16px;
-  font-family: Arial, sans-serif;
-  font-size: 0.72rem;
-  color: #64748b;
-  line-height: 1.5;
+  margin-top: 20px; background: #f8f9fb; border: 1px solid var(--border);
+  border-top: 2px solid var(--navy-lt); border-radius: var(--radius);
+  padding: 12px 16px; font-family: Arial, sans-serif; font-size: 0.72rem;
+  color: #64748b; line-height: 1.5;
 }
 #fmf-root .fmf-disclaimer strong { color: var(--slate); font-size: 0.74rem; }
 
-/* Separateur sous-section */
+/* Sous-titre section */
 #fmf-root .fmf-sub-title {
-  font-family: Arial, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--navy);
-  margin: 14px 0 8px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--border);
+  font-family: Arial, sans-serif; font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--navy);
+  margin: 14px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border);
 }
 
 /* Responsive */
@@ -661,247 +588,298 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 <div id="fmf-root">
 <div class="fmf-wrap">
 
-  <!-- EN-TÊTE -->
-  <div class="fmf-header">
-    <div class="fmf-header-top">
-      <div class="fmf-logo-badge">FMF London</div>
-      <div class="fmf-header-titles">
-        <div class="fmf-title">Dépistage combiné de la pré-éclampsie — 1<sup>er</sup> trimestre</div>
-        <div class="fmf-subtitle">Algorithme Fetal Medicine Foundation (Nicolaides, 2018) — combinaison 4 marqueurs</div>
-      </div>
-    </div>
-    <div class="fmf-ref-tags">
-      <span class="fmf-tag">CNGOF 2025</span>
-      <span class="fmf-tag">ISUOG 2023</span>
-      <span class="fmf-tag">Nicolaides KH 2018</span>
-      <span class="fmf-tag">SA 11–13+6</span>
+<!-- ══ EN-TÊTE ══ -->
+<div class="fmf-header">
+  <div class="fmf-header-top">
+    <div class="fmf-logo-badge">FMF London</div>
+    <div class="fmf-header-titles">
+      <div class="fmf-title">D&#233;pistage combin&#233; de la pr&#233;-&#233;clampsie &#8212; 1<sup>er</sup> trimestre</div>
+      <div class="fmf-subtitle">Algorithme Fetal Medicine Foundation (Nicolaides, 2018) &#8212; combinaison 4 marqueurs</div>
     </div>
   </div>
-
-  <div class="fmf-notice">
-    <strong>Principe :</strong> Le modèle FMF combine le risque a priori aux marqueurs biophysiques et biochimiques du 1<sup>er</sup> trimestre pour calculer un risque de pré-éclampsie précoce (&lt; 34 SA). Le seuil d'intervention est 1/100 pour l'aspirine prophylactique (Rolnik 2017).<br>
-    <span class="fmf-notice-alert">⚠️ INDICATION : Selon les recommandations, ce dépistage est réservé aux patientes présentant au moins un facteur de risque clinique (élevé ou modéré) identifié lors de la 1ère consultation. Il n'est pas recommandé en population générale à bas risque.</span>
+  <div class="fmf-ref-tags">
+    <span class="fmf-tag">CNGOF 2025</span>
+    <span class="fmf-tag">ISUOG 2023</span>
+    <span class="fmf-tag">Nicolaides KH 2018</span>
+    <span class="fmf-tag">SA 11&#8211;13+6</span>
   </div>
-
-  <!-- ========== SECTION 1 ========== -->
-  <div class="fmf-section">
-    <div class="fmf-section-head">
-      <span class="fmf-step-num">1</span>
-      Caractéristiques maternelles &amp; antécédents
-    </div>
-    <div class="fmf-section-body">
-
-      <div class="fmf-grid">
-        <div class="fmf-field">
-          <span class="fmf-label">Âge maternel <span class="fmf-unit">(années)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-age" min="15" max="55" placeholder="ex : 32">
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">Poids <span class="fmf-unit">(kg)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-poids" min="35" max="200" step="0.1" placeholder="ex : 68.5">
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">Taille <span class="fmf-unit">(cm)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-taille" min="140" max="200" placeholder="ex : 165">
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">Méthode de conception <span class="fmf-required">*</span></span>
-          <div class="fmf-radio-group" id="rg-conception">
-            <label class="fmf-radio-btn"><input type="radio" name="conception" value="natural">Spontanée</label>
-            <label class="fmf-radio-btn"><input type="radio" name="conception" value="ovulation">Induction ovulation</label>
-            <label class="fmf-radio-btn"><input type="radio" name="conception" value="ivf">FIV / ICSI</label>
-          </div>
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">Ethnie <span class="fmf-required">*</span></span>
-          <div class="fmf-select-wrap">
-            <select id="fmf-ethnie">
-              <option value="caucasienne">Caucasienne</option>
-              <option value="afro">Afro-caribéenne</option>
-              <option value="asiatique">Asiatique du Sud</option>
-              <option value="est-asiatique">Asiatique de l'Est</option>
-              <option value="mixte">Mixte / Autre</option>
-            </select>
-          </div>
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">Tabagisme actif <span class="fmf-required">*</span></span>
-          <div class="fmf-radio-group" id="rg-tabac">
-            <label class="fmf-radio-btn"><input type="radio" name="tabac" value="non">Non</label>
-            <label class="fmf-radio-btn"><input type="radio" name="tabac" value="oui">Oui</label>
-          </div>
-        </div>
-      </div>
-
-      <div class="fmf-sub-title">Antécédents obstétricaux</div>
-      <div class="fmf-grid">
-        <div class="fmf-field">
-          <span class="fmf-label">Parité (sans PE antérieure) <span class="fmf-required">*</span></span>
-          <div class="fmf-radio-group" id="rg-parite">
-            <label class="fmf-radio-btn"><input type="radio" name="parite" value="nullipare">Nullipare</label>
-            <label class="fmf-radio-btn"><input type="radio" name="parite" value="multipare">Multipare sans ATCD PE</label>
-          </div>
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">ATCD de pré-éclampsie</span>
-          <div class="fmf-radio-group" id="rg-atcd_pe">
-            <label class="fmf-radio-btn"><input type="radio" name="atcd_pe" value="non">Non</label>
-            <label class="fmf-radio-btn"><input type="radio" name="atcd_pe" value="oui">Oui</label>
-          </div>
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">Intervalle inter-gestationnel <span class="fmf-unit">(années)</span> <span class="fmf-optional">optionnel</span></span>
-          <input type="number" id="fmf-interval" min="0" max="30" step="0.5" placeholder="ex : 3">
-          <span class="fmf-hint">Risque clinique augmenté si &gt; 10 ans</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ========== SECTION 2 ========== -->
-  <div class="fmf-section">
-    <div class="fmf-section-head">
-      <span class="fmf-step-num">2</span>
-      Facteurs de risque cliniques
-    </div>
-    <div class="fmf-section-body">
-      <div class="fmf-check-grid" id="fmf-check-grid">
-        <label class="fmf-checkbox-row" data-cb="fmf-hta">
-          <input type="checkbox" id="fmf-hta">
-          <span class="fmf-cb-box"></span>
-          <span>HTA chronique (diagnostiquée avant la grossesse)</span>
-        </label>
-        <label class="fmf-checkbox-row" data-cb="fmf-diabete">
-          <input type="checkbox" id="fmf-diabete">
-          <span class="fmf-cb-box"></span>
-          <span>Diabète de type 1 ou 2 préexistant</span>
-        </label>
-        <label class="fmf-checkbox-row" data-cb="fmf-sle">
-          <input type="checkbox" id="fmf-sle">
-          <span class="fmf-cb-box"></span>
-          <span>Lupus érythémateux systémique / SAPL</span>
-        </label>
-        <label class="fmf-checkbox-row" data-cb="fmf-nephro">
-          <input type="checkbox" id="fmf-nephro">
-          <span class="fmf-cb-box"></span>
-          <span>Néphropathie chronique</span>
-        </label>
-        <label class="fmf-checkbox-row" data-cb="fmf-gemellaire">
-          <input type="checkbox" id="fmf-gemellaire">
-          <span class="fmf-cb-box"></span>
-          <span>Grossesse gémellaire</span>
-        </label>
-        <label class="fmf-checkbox-row" data-cb="fmf-atcd-fam">
-          <input type="checkbox" id="fmf-atcd-fam">
-          <span class="fmf-cb-box"></span>
-          <span>ATCD familial de PE (mère / sœur)</span>
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== SECTION 3 ========== -->
-  <div class="fmf-section">
-    <div class="fmf-section-head">
-      <span class="fmf-step-num">3</span>
-      Marqueurs biophysiques — Mesures échographiques 11–13+6 SA
-    </div>
-    <div class="fmf-section-body">
-      <div class="fmf-grid">
-        <div class="fmf-field">
-          <span class="fmf-label">LCC <span class="fmf-unit">(mm)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-lcc" min="45" max="84" step="0.1" placeholder="45 – 84 mm">
-          <span class="fmf-hint">Détermine la médiane de l'IP utérin (Plasencia 2008)</span>
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">TA systolique — bras droit <span class="fmf-unit">(mmHg)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-tas1" min="80" max="200" placeholder="ex : 115">
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">TA diastolique — bras droit <span class="fmf-unit">(mmHg)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-tad1" min="40" max="130" placeholder="ex : 75">
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">TA systolique — bras gauche <span class="fmf-unit">(mmHg)</span> <span class="fmf-optional">optionnel</span></span>
-          <input type="number" id="fmf-tas2" min="80" max="200" placeholder="ex : 113">
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">TA diastolique — bras gauche <span class="fmf-unit">(mmHg)</span> <span class="fmf-optional">optionnel</span></span>
-          <input type="number" id="fmf-tad2" min="40" max="130" placeholder="ex : 73">
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">IP artères utérines (moyen) <span class="fmf-unit">(Doppler bilat.)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-ipu" min="0.5" max="5.0" step="0.01" placeholder="ex : 1.45">
-          <span class="fmf-hint">Moyenne (D + G) / 2 — Référence : médiane ~1.40 à 12 SA</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== SECTION 4 ========== -->
-  <div class="fmf-section">
-    <div class="fmf-section-head">
-      <span class="fmf-step-num">4</span>
-      Marqueurs biochimiques — Standard (PlGF)
-    </div>
-    <div class="fmf-section-body">
-      <div class="fmf-grid">
-        <div class="fmf-field">
-          <span class="fmf-label">PlGF <span class="fmf-unit">(MoM)</span> <span class="fmf-required">*</span></span>
-          <input type="number" id="fmf-plgf" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.92">
-          <span class="fmf-hint">Marqueur de référence (Paradigme 2023-2026)</span>
-        </div>
-        <div class="fmf-field">
-          <span class="fmf-label">PAPP-A <span class="fmf-unit">(MoM)</span> <span class="fmf-optional">optionnel</span></span>
-          <input type="number" id="fmf-pappa" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.85">
-          <span class="fmf-hint">Saisi si PlGF non disponible (ancien standard)</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BOUTONS -->
-  <div class="fmf-btn-bar">
-    <button class="fmf-btn fmf-btn-primary" id="btn-calculer">
-      &#9654; Calculer le risque FMF
-    </button>
-    <button class="fmf-btn fmf-btn-reset" id="btn-reset">
-      &#8635; Réinitialiser
-    </button>
-  </div>
-
-  <!-- Erreurs -->
-  <div class="fmf-val-error-box" id="fmf-errors">
-    <strong>Champs obligatoires manquants ou invalides :</strong>
-    <ul id="fmf-error-list"></ul>
-  </div>
-
-  <!-- Résultats -->
-  <div class="fmf-result-box" id="fmf-result">
-    <div class="fmf-result-head">&#9654; Résultats du dépistage combiné FMF — 1<sup>er</sup> trimestre</div>
-    <div class="fmf-result-body" id="fmf-result-body"></div>
-  </div>
-
-  <!-- Avertissement médico-légal renforcé -->
-  <div class="fmf-disclaimer">
-    <strong>Avertissement médico-légal ·</strong>
-    Cet outil est un calculateur de risque éducatif basé sur la méthodologie FMF publiée (Nicolaides KH, <em>Ultrasound Obstet Gynecol</em> 2018 ; Wright D et al. <em>UOG</em> 2015 ; Plasencia W et al. <em>UOG</em> 2008).
-    <strong>Il calcule uniquement le risque de PE précoce (&lt; 34 SA)</strong>, seul modèle validé dans la littérature pour le dépistage T1. Aucune estimation du risque de PE tardive (&lt; 37 SA ou à terme) n'est proposée, car un tel calcul nécessiterait un modèle distinct, non implémenté ici.
-    La médiane de MAP utilisée est une approximation simplifiée (Wright UOG 2015) ne tenant pas compte de la parité ni de l'ethnie de façon complète. Les paramètres log-normaux des LR sont des valeurs uniques (non stratifiées par parité). Ces simplifications sont acceptables pour une aide à la décision, mais <strong>ne se substituent pas au logiciel FMF certifié</strong>.
-    Les valeurs MoM doivent être issues d'un laboratoire accrédité FMF. La prescription d'acide acétylsalicylique (150 mg/j, 12–36 SA) relève de la responsabilité médicale individuelle.
-    Références : ASPRE Trial (Rolnik DL, <em>NEJM</em> 2017) · CNGOF 2025 · ISUOG Practice Guidelines 2023.
-  </div>
-
-</div>
 </div>
 
+<!-- ══ BARRE IDENTIFICATION PATIENT (Sainte Trinit&#233; d.1) ══ -->
+<div class="fmf-pt-bar">
+  <button type="button" class="fmf-pt-toggle" id="fmf-pt-toggle-btn" onclick="fmfPtToggle()" aria-expanded="false">
+    <span class="fmf-pt-arrow">&#9658;</span>
+    <span>&#128100; Identification patiente / m&#233;decin</span>
+    <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#A0AEC0;">Optionnel &#8212; pour la copie et l&#8217;impression</span>
+  </button>
+  <div class="fmf-pt-form" id="fmf-pt-form">
+    <div class="fmf-pt-grid">
+      <div class="fmf-pt-field">
+        <label for="fmf-pt-nom">Nom</label>
+        <input type="text" id="fmf-pt-nom" placeholder="Nom de famille" autocomplete="off">
+      </div>
+      <div class="fmf-pt-field">
+        <label for="fmf-pt-prenom">Pr&#233;nom</label>
+        <input type="text" id="fmf-pt-prenom" placeholder="Pr&#233;nom" autocomplete="off">
+      </div>
+      <div class="fmf-pt-field" style="grid-column:span 2;min-width:0;">
+        <div class="fmf-pt-ddn-row">
+          <div class="fmf-pt-ddn-col">
+            <label for="fmf-pt-ddn">Date de naissance</label>
+            <input type="date" id="fmf-pt-ddn" oninput="fmfPtCalcAge()">
+          </div>
+          <div class="fmf-pt-ddn-col fmf-pt-ddn-col-sm">
+            <label for="fmf-pt-age">&#194;ge (ans)</label>
+            <input type="number" id="fmf-pt-age" placeholder="Ex: 32" min="15" max="55" oninput="fmfPtClearDdn()">
+          </div>
+        </div>
+      </div>
+      <div class="fmf-pt-field">
+        <label for="fmf-pt-medecin">M&#233;decin prescripteur</label>
+        <input type="text" id="fmf-pt-medecin" placeholder="Dr ..." autocomplete="off">
+      </div>
+      <div class="fmf-pt-field">
+        <label for="fmf-pt-date">Date de consultation</label>
+        <input type="date" id="fmf-pt-date">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fmf-notice">
+  <strong>Principe :</strong> Le mod&#232;le FMF combine le risque a priori aux marqueurs biophysiques et biochimiques du 1<sup>er</sup> trimestre pour calculer un risque de pr&#233;-&#233;clampsie pr&#233;coce (&lt; 34 SA). Le seuil d&#8217;intervention est 1/100 pour l&#8217;aspirine prophylactique (Rolnik 2017).<br>
+  <span class="fmf-notice-alert">&#9888; INDICATION : Ce d&#233;pistage est r&#233;serv&#233; aux patientes pr&#233;sentant au moins un facteur de risque clinique identifi&#233; lors de la 1&#232;re consultation.</span>
+</div>
+
+<!-- ========== SECTION 1 ========== -->
+<div class="fmf-section">
+  <div class="fmf-section-head"><span class="fmf-step-num">1</span>Caract&#233;ristiques maternelles &amp; ant&#233;c&#233;dents</div>
+  <div class="fmf-section-body">
+    <div class="fmf-grid">
+      <div class="fmf-field">
+        <span class="fmf-label">&#194;ge maternel <span class="fmf-unit">(ann&#233;es)</span> <span class="fmf-required">*</span></span>
+        <input type="number" id="fmf-age" min="15" max="55" placeholder="ex : 32">
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">Poids <span class="fmf-unit">(kg)</span> <span class="fmf-required">*</span></span>
+        <input type="number" id="fmf-poids" min="35" max="200" step="0.1" placeholder="ex : 68.5">
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">Taille <span class="fmf-unit">(cm)</span> <span class="fmf-required">*</span></span>
+        <input type="number" id="fmf-taille" min="140" max="200" placeholder="ex : 165">
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">M&#233;thode de conception <span class="fmf-required">*</span></span>
+        <div class="fmf-radio-group" id="rg-conception">
+          <label class="fmf-radio-btn"><input type="radio" name="conception" value="natural">Spontan&#233;e</label>
+          <label class="fmf-radio-btn"><input type="radio" name="conception" value="ovulation">Induction ovulation</label>
+          <label class="fmf-radio-btn"><input type="radio" name="conception" value="ivf">FIV / ICSI</label>
+        </div>
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">Ethnie <span class="fmf-required">*</span></span>
+        <div class="fmf-select-wrap">
+          <select id="fmf-ethnie">
+            <option value="caucasienne">Caucasienne</option>
+            <option value="afro">Afro-carib&#233;enne</option>
+            <option value="asiatique">Asiatique du Sud</option>
+            <option value="est-asiatique">Asiatique de l&#8217;Est</option>
+            <option value="mixte">Mixte / Autre</option>
+          </select>
+        </div>
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">Tabagisme actif <span class="fmf-required">*</span></span>
+        <div class="fmf-radio-group" id="rg-tabac">
+          <label class="fmf-radio-btn"><input type="radio" name="tabac" value="non">Non</label>
+          <label class="fmf-radio-btn"><input type="radio" name="tabac" value="oui">Oui</label>
+        </div>
+      </div>
+    </div>
+    <div class="fmf-sub-title">Ant&#233;c&#233;dents obst&#233;tricaux</div>
+    <div class="fmf-grid">
+      <div class="fmf-field">
+        <span class="fmf-label">Parit&#233; <span class="fmf-required">*</span></span>
+        <div class="fmf-radio-group" id="rg-parite">
+          <label class="fmf-radio-btn"><input type="radio" name="parite" value="nullipare">Nullipare</label>
+          <label class="fmf-radio-btn"><input type="radio" name="parite" value="multipare">Multipare sans ATCD PE</label>
+        </div>
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">ATCD de pr&#233;-&#233;clampsie</span>
+        <div class="fmf-radio-group" id="rg-atcd_pe">
+          <label class="fmf-radio-btn"><input type="radio" name="atcd_pe" value="non">Non</label>
+          <label class="fmf-radio-btn"><input type="radio" name="atcd_pe" value="oui">Oui</label>
+        </div>
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">Intervalle inter-gestationnel <span class="fmf-unit">(ann&#233;es)</span> <span class="fmf-optional">optionnel</span></span>
+        <input type="number" id="fmf-interval" min="0" max="30" step="0.5" placeholder="ex : 3">
+        <span class="fmf-hint">Risque clinique augment&#233; si &gt; 10 ans</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 2 ========== -->
+<div class="fmf-section">
+  <div class="fmf-section-head"><span class="fmf-step-num">2</span>Facteurs de risque cliniques</div>
+  <div class="fmf-section-body">
+    <div class="fmf-check-grid">
+      <label class="fmf-checkbox-row"><input type="checkbox" id="fmf-hta"><span class="fmf-cb-box"></span><span>HTA chronique (avant la grossesse)</span></label>
+      <label class="fmf-checkbox-row"><input type="checkbox" id="fmf-diabete"><span class="fmf-cb-box"></span><span>Diab&#232;te de type 1 ou 2 pr&#233;existant</span></label>
+      <label class="fmf-checkbox-row"><input type="checkbox" id="fmf-sle"><span class="fmf-cb-box"></span><span>Lupus &#233;ryth&#233;mateux syst&#233;mique / SAPL</span></label>
+      <label class="fmf-checkbox-row"><input type="checkbox" id="fmf-nephro"><span class="fmf-cb-box"></span><span>N&#233;phropathie chronique</span></label>
+      <label class="fmf-checkbox-row"><input type="checkbox" id="fmf-gemellaire"><span class="fmf-cb-box"></span><span>Grossesse g&#233;mellaire</span></label>
+      <label class="fmf-checkbox-row"><input type="checkbox" id="fmf-atcd-fam"><span class="fmf-cb-box"></span><span>ATCD familial de PE (m&#232;re / s&#339;ur)</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 3 ========== -->
+<div class="fmf-section">
+  <div class="fmf-section-head"><span class="fmf-step-num">3</span>Marqueurs biophysiques &#8212; &#201;chographie 11&#8211;13+6 SA</div>
+  <div class="fmf-section-body">
+    <div class="fmf-grid">
+      <div class="fmf-field">
+        <span class="fmf-label">LCC <span class="fmf-unit">(mm)</span> <span class="fmf-required">*</span></span>
+        <input type="number" id="fmf-lcc" min="45" max="84" step="0.1" placeholder="45 &#8211; 84 mm">
+        <span class="fmf-hint">D&#233;termine la m&#233;diane de l&#8217;IP ut&#233;rin (Plasencia 2008)</span>
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">TA systolique &#8212; bras droit <span class="fmf-unit">(mmHg)</span> <span class="fmf-required">*</span></span>
+        <input type="number" id="fmf-tas1" min="80" max="200" placeholder="ex : 115">
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">TA diastolique &#8212; bras droit <span class="fmf-unit">(mmHg)</span> <span class="fmf-required">*</span></span>
+        <input type="number" id="fmf-tad1" min="40" max="130" placeholder="ex : 75">
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">TA systolique &#8212; bras gauche <span class="fmf-unit">(mmHg)</span> <span class="fmf-optional">optionnel</span></span>
+        <input type="number" id="fmf-tas2" min="80" max="200" placeholder="ex : 113">
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">TA diastolique &#8212; bras gauche <span class="fmf-unit">(mmHg)</span> <span class="fmf-optional">optionnel</span></span>
+        <input type="number" id="fmf-tad2" min="40" max="130" placeholder="ex : 73">
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">IP art&#232;res ut&#233;rines (moyen) <span class="fmf-unit">(Doppler bilat.)</span> <span class="fmf-required">*</span></span>
+        <input type="number" id="fmf-ipu" min="0.5" max="5.0" step="0.01" placeholder="ex : 1.45">
+        <span class="fmf-hint">Moyenne (D + G) / 2 &#8212; R&#233;f&#233;rence : m&#233;diane ~1.40 &#224; 12 SA</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 4 ========== -->
+<div class="fmf-section">
+  <div class="fmf-section-head"><span class="fmf-step-num">4</span>Marqueurs biochimiques &#8212; Standard (PlGF)</div>
+  <div class="fmf-section-body">
+    <div class="fmf-grid">
+      <div class="fmf-field">
+        <span class="fmf-label">PlGF <span class="fmf-unit">(MoM)</span> <span class="fmf-required">*</span></span>
+        <input type="number" id="fmf-plgf" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.92">
+        <span class="fmf-hint">Marqueur de r&#233;f&#233;rence (Paradigme 2023&#8211;2026)</span>
+      </div>
+      <div class="fmf-field">
+        <span class="fmf-label">PAPP-A <span class="fmf-unit">(MoM)</span> <span class="fmf-optional">optionnel</span></span>
+        <input type="number" id="fmf-pappa" min="0.05" max="5.0" step="0.01" placeholder="ex : 0.85">
+        <span class="fmf-hint">Saisi si PlGF non disponible (ancien standard)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOUTONS -->
+<div class="fmf-btn-bar">
+  <button class="fmf-btn fmf-btn-primary" id="btn-calculer">&#9654; Calculer le risque FMF</button>
+  <button class="fmf-btn fmf-btn-reset" id="btn-reset">&#8635; R&#233;initialiser</button>
+</div>
+
+<!-- Erreurs -->
+<div class="fmf-val-error-box" id="fmf-errors">
+  <strong>Champs obligatoires manquants ou invalides :</strong>
+  <ul id="fmf-error-list"></ul>
+</div>
+
+<!-- R&#233;sultats -->
+<div class="fmf-result-box" id="fmf-result">
+  <div class="fmf-result-head">&#9654; R&#233;sultats du d&#233;pistage combin&#233; FMF &#8212; 1<sup>er</sup> trimestre</div>
+  <div class="fmf-result-body" id="fmf-result-body"></div>
+</div>
+
+<!-- ══ ACTION BAR (Sainte Trinit&#233; d.2 + d.3) ══ -->
+<div class="fmf-action-bar" id="fmf-action-bar">
+  <button type="button" class="fmf-btn-action fmf-btn-print" onclick="fmfPrint()">&#128424; Imprimer (A5)</button>
+  <button type="button" class="fmf-btn-action fmf-btn-copy" id="fmf-btn-copy" onclick="fmfCopy()">&#128203; Copier pour le dossier</button>
+</div>
+
+<!-- Zone rapport texte brut -->
+<div class="fmf-rapport-zone" id="fmf-rapport-zone">
+  <div class="fmf-rapport-head">
+    <span>&#128196; Rapport structur&#233;</span>
+    <button type="button" class="fmf-btn-action fmf-btn-copy" id="fmf-rapport-copy-btn" onclick="fmfCopyRapport()" style="padding:4px 10px;font-size:11px;">&#128203; Copier</button>
+  </div>
+  <pre class="fmf-rapport-pre" id="fmf-rapport-pre"></pre>
+</div>
+
+<!-- Disclaimer -->
+<div class="fmf-disclaimer">
+  <strong>Avertissement m&#233;dico-l&#233;gal &#183;</strong>
+  Cet outil est un calculateur de risque &#233;ducatif bas&#233; sur la m&#233;thodologie FMF publi&#233;e (Nicolaides KH, <em>Ultrasound Obstet Gynecol</em> 2018&#160;; Wright D et al. <em>UOG</em> 2015&#160;; Plasencia W et al. <em>UOG</em> 2008).
+  <strong>Il calcule uniquement le risque de PE pr&#233;coce (&lt; 34 SA)</strong>. Les valeurs MoM doivent &#234;tre issues d&#8217;un laboratoire accr&#233;dit&#233; FMF. La prescription d&#8217;acide ac&#233;tylsalicylique rel&#232;ve de la responsabilit&#233; m&#233;dicale individuelle.
+  R&#233;f&#233;rences&#160;: ASPRE Trial (Rolnik DL, <em>NEJM</em> 2017) &#183; CNGOF 2025 &#183; ISUOG 2023.
+</div>
+
+</div><!-- /fmf-wrap -->
+</div><!-- /fmf-root -->
 <script>
 (function () {
 'use strict';
 
 /* ================================================================
-   UTILITAIRES
+   PATIENT BAR
+   ================================================================ */
+window.fmfPtToggle = function() {
+  var form = document.getElementById('fmf-pt-form');
+  var btn  = document.getElementById('fmf-pt-toggle-btn');
+  form.classList.toggle('open');
+  btn.classList.toggle('open');
+  btn.setAttribute('aria-expanded', form.classList.contains('open') ? 'true' : 'false');
+};
+window.fmfPtCalcAge = function() {
+  var ddn = document.getElementById('fmf-pt-ddn').value;
+  if (!ddn) return;
+  var d = new Date(ddn), now = new Date();
+  var age = now.getFullYear() - d.getFullYear();
+  var m = now.getMonth() - d.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+  document.getElementById('fmf-pt-age').value = age;
+};
+window.fmfPtClearDdn = function() { document.getElementById('fmf-pt-ddn').value = ''; };
+
+function getPatient() {
+  var nom    = document.getElementById('fmf-pt-nom').value.trim();
+  var prenom = document.getElementById('fmf-pt-prenom').value.trim();
+  var ddn    = document.getElementById('fmf-pt-ddn').value;
+  var age    = document.getElementById('fmf-pt-age').value.trim();
+  var med    = document.getElementById('fmf-pt-medecin').value.trim();
+  var date   = document.getElementById('fmf-pt-date').value;
+  var nomC   = (prenom ? prenom + ' ' : '') + (nom || '');
+  var ddnFmt = '', dateFmt = '';
+  if (ddn)  { var d1 = new Date(ddn);  ddnFmt  = d1.toLocaleDateString('fr-FR'); }
+  if (date) { var d2 = new Date(date); dateFmt = d2.toLocaleDateString('fr-FR'); }
+  return { nomComplet: nomC.trim(), ddnFmt: ddnFmt, age: age, medecin: med, dateFmt: dateFmt };
+}
+
+/* Pré-remplir date du jour */
+(function() {
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('fmf-pt-date').value = today;
+})();
+
+/* ================================================================
+   UTILITAIRES CALCUL
    ================================================================ */
 function $id(id)  { return document.getElementById(id); }
 function getNum(id) { var v = $id(id); return v ? parseFloat(v.value) : NaN; }
@@ -916,14 +894,13 @@ function isChecked(id) { var el = $id(id); return el ? el.checked : false; }
    ================================================================ */
 document.querySelectorAll('#fmf-root .fmf-checkbox-row').forEach(function (labelEl) {
   labelEl.addEventListener('click', function (e) {
-    e.preventDefault(); 
+    e.preventDefault();
     var inp = labelEl.querySelector('input[type="checkbox"]');
     if (!inp) return;
     inp.checked = !inp.checked;
     labelEl.classList.toggle('checked', inp.checked);
   });
 });
-
 document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (btn) {
   btn.addEventListener('click', function () {
     var inp = btn.querySelector('input[type="radio"]');
@@ -934,44 +911,27 @@ document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (btn) {
     inp.checked = true;
   });
 });
-
 ['conception', 'tabac', 'parite', 'atcd_pe'].forEach(function (name) {
   var first = document.querySelector('#fmf-root input[name="' + name + '"]');
-  if (first) {
-    first.checked = true;
-    first.closest('.fmf-radio-btn').classList.add('active');
-  }
+  if (first) { first.checked = true; first.closest('.fmf-radio-btn').classList.add('active'); }
 });
 
 /* ================================================================
    MODÈLE MATHÉMATIQUE FMF
    ================================================================ */
-
-function calcBMI(poids, taille) {
-  return poids / Math.pow(taille / 100, 2);
-}
-
-function medianeIPU(lcc) {
-  return 2.434 - 0.02221 * lcc + 0.000101 * lcc * lcc;
-}
-
-function medianeMAP(age, bmi) {
-  return 73.3 + 0.062 * age + 0.285 * bmi;
-}
-
+function calcBMI(poids, taille) { return poids / Math.pow(taille / 100, 2); }
+function medianeIPU(lcc) { return 2.434 - 0.02221 * lcc + 0.000101 * lcc * lcc; }
+function medianeMAP(age, bmi) { return 73.3 + 0.062 * age + 0.285 * bmi; }
 function gpdf(x, mu, sigma) {
-  return (1 / (sigma * Math.sqrt(2 * Math.PI))) *
-         Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+  return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
 }
-
 function lrLogNormal(mom, mu_PE, sig_PE, mu_bg, sig_bg) {
   if (isNaN(mom) || mom <= 0) return 1.0;
   var logM = Math.log(mom);
-  var pe  = gpdf(logM, mu_PE, sig_PE);
-  var bg  = gpdf(logM, mu_bg, sig_bg);
+  var pe = gpdf(logM, mu_PE, sig_PE);
+  var bg = gpdf(logM, mu_bg, sig_bg);
   return bg > 0 ? pe / bg : 1.0;
 }
-
 function lrIPU(mom)   { return lrLogNormal(mom,  0.288, 0.392, -0.087, 0.319); }
 function lrMAP(mom)   { return lrLogNormal(mom,  0.137, 0.085,  0.046, 0.073); }
 function lrPAPPA(mom) { return lrLogNormal(mom, -0.356, 0.548,  0.000, 0.450); }
@@ -998,7 +958,6 @@ function apriori(p) {
   if (!isNaN(p.interval) && p.interval > 5) logit += 0.282;
   return 1 / (1 + Math.exp(-logit));
 }
-
 function combiner(prior, lr1, lr2, lr3, lr4) {
   var odds = (prior / (1 - prior)) * lr1 * lr2 * lr3 * lr4;
   return odds / (1 + odds);
@@ -1008,18 +967,15 @@ function combiner(prior, lr1, lr2, lr3, lr4) {
    FORMATAGE
    ================================================================ */
 function fmtRisk(r) {
-  if (r < 0.001) return '1\u202f/\u202f' + Math.round(1 / r).toLocaleString('fr-FR');
-  if (r < 0.01)  return '1\u202f/\u202f' + Math.round(1 / r).toLocaleString('fr-FR');
-  if (r < 0.10)  return '1\u202f/\u202f' + Math.round(1 / r) + '\u00a0(' + (r * 100).toFixed(1) + '\u202f%)';
+  if (r < 0.01) return '1\u202f/\u202f' + Math.round(1 / r).toLocaleString('fr-FR');
+  if (r < 0.10) return '1\u202f/\u202f' + Math.round(1 / r) + '\u00a0(' + (r * 100).toFixed(1) + '\u202f%)';
   return (r * 100).toFixed(1) + '\u202f%';
 }
-
 function classify(r) {
   if (r >= 0.01)  return 'high';
   if (r >= 0.002) return 'intermediate';
   return 'low';
 }
-
 function statutMOM(mom, seuilBas, seuilHaut, inv) {
   var cls, txt;
   if (inv) {
@@ -1033,20 +989,22 @@ function statutMOM(mom, seuilBas, seuilHaut, inv) {
   }
   return '<span class="' + cls + '">' + txt + '</span>';
 }
-
 function momBar(mom, inv) {
   var pct = Math.min(100, (mom / 3.0) * 100);
   var cls;
   if (inv) cls = mom < 0.5 ? 'alert' : mom < 0.7 ? 'amber' : 'normal';
   else     cls = mom > 2.0 ? 'alert' : mom > 1.5 ? 'amber' : 'normal';
-  return '<div class="fmf-mom-bar-wrap">'
-    + '<div class="fmf-mom-bar"><div class="fmf-mom-bar-fill ' + cls
-    + '" style="width:' + pct.toFixed(0) + '%"></div></div>'
-    + '</div>';
+  return '<div class="fmf-mom-bar-wrap"><div class="fmf-mom-bar"><div class="fmf-mom-bar-fill '
+    + cls + '" style="width:' + pct.toFixed(0) + '%"></div></div></div>';
 }
 
 /* ================================================================
-   VALIDATION (Désormais PlGF obligatoire)
+   STOCKAGE DU DERNIER RÉSULTAT (pour rapport + impression)
+   ================================================================ */
+var _lastResult = null;
+
+/* ================================================================
+   VALIDATION
    ================================================================ */
 function valider() {
   var err = [];
@@ -1084,6 +1042,7 @@ function fmfCalculer() {
     errList.innerHTML = err.map(function (e) { return '<li>' + e + '</li>'; }).join('');
     errBox.classList.add('visible');
     $id('fmf-result').classList.remove('visible');
+    $id('fmf-action-bar').classList.remove('visible');
     return;
   }
   errBox.classList.remove('visible');
@@ -1101,46 +1060,49 @@ function fmfCalculer() {
   var pappa  = getNum('fmf-pappa');
   var plgf   = getNum('fmf-plgf');
 
-  var map1 = (tas1 + 2 * tad1) / 3;
-  var map2 = (!isNaN(tas2) && !isNaN(tad2)) ? (tas2 + 2 * tad2) / 3 : map1;
+  var map1   = (tas1 + 2 * tad1) / 3;
+  var map2   = (!isNaN(tas2) && !isNaN(tad2)) ? (tas2 + 2 * tad2) / 3 : map1;
   var mapVal = Math.max(map1, map2);
   var mapMed = medianeMAP(age, bmi);
   var mapMom = mapVal / mapMed;
-
   var ipuMom = ipu / medianeIPU(lcc);
 
   var p = {
     age: age, bmi: bmi, interval: getNum('fmf-interval'),
-    ethnie:     $id('fmf-ethnie').value,
-    conception: radio('conception'),
-    tabac:      radio('tabac'),
-    parite:     radio('parite'),
-    atcd_pe:    radio('atcd_pe'),
-    hta:        isChecked('fmf-hta'),
-    diabete:    isChecked('fmf-diabete'),
-    sle:        isChecked('fmf-sle'),
-    nephro:     isChecked('fmf-nephro'),
-    gemellaire: isChecked('fmf-gemellaire'),
-    atcd_fam:   isChecked('fmf-atcd-fam')
+    ethnie: $id('fmf-ethnie').value,
+    conception: radio('conception'), tabac: radio('tabac'),
+    parite: radio('parite'), atcd_pe: radio('atcd_pe'),
+    hta: isChecked('fmf-hta'), diabete: isChecked('fmf-diabete'),
+    sle: isChecked('fmf-sle'), nephro: isChecked('fmf-nephro'),
+    gemellaire: isChecked('fmf-gemellaire'), atcd_fam: isChecked('fmf-atcd-fam')
   };
 
-  var prior    = apriori(p);
-  var LR_map   = lrMAP(mapMom);
-  var LR_ipu   = lrIPU(ipuMom);
-  var LR_papp  = isNaN(pappa) ? 1.0 : lrPAPPA(pappa);
-  var LR_plgf  = isNaN(plgf) ? 1.0 : lrPLGF(plgf);
-
+  var prior   = apriori(p);
+  var LR_map  = lrMAP(mapMom);
+  var LR_ipu  = lrIPU(ipuMom);
+  var LR_papp = isNaN(pappa) ? 1.0 : lrPAPPA(pappa);
+  var LR_plgf = isNaN(plgf)  ? 1.0 : lrPLGF(plgf);
   var rPrecoce = combiner(prior, LR_map, LR_ipu, LR_papp, LR_plgf);
   var classif  = classify(rPrecoce);
+
+  /* Stocker pour rapport/impression */
+  _lastResult = {
+    rPrecoce: rPrecoce, classif: classif, prior: prior,
+    mapVal: mapVal, mapMom: mapMom, LR_map: LR_map,
+    ipu: ipu, ipuMom: ipuMom, LR_ipu: LR_ipu,
+    plgf: plgf, LR_plgf: LR_plgf,
+    pappa: pappa, LR_papp: LR_papp,
+    bmi: bmi, lcc: lcc, age: age
+  };
 
   var conduites = {
     high: {
       titre: 'RISQUE \u00c9LEV\u00c9 \u2014 seuil \u2265 1/100 (ASPRE)',
       icon: '\u26a0',
       items: [
-        'Aspirine prophylactique\u00a0: 150\u00a0mg/j (Asp\u00e9gic\u00ae) le soir, d\u00e8s 12\u00a0SA jusqu\u2019\u00e0 36-37\u00a0SA',
-        'Consultation sp\u00e9cialis\u00e9e (obst\u00e9tricien / MFM) d\u00e8s le 1<sup>er</sup> trimestre',
-        'Surveillance rapproch\u00e9e\u00a0: TA bimensuelle, \u00e9cho biom\u00e9trie + Doppler \u00e0 20, 24, 28, 32, 36\u00a0SA',
+        'Aspirine prophylactique : 150\u00a0mg/j (Asp\u00e9gic\u00ae) le soir, d\u00e8s 12\u00a0SA jusqu\u2019\u00e0 36\u201337\u00a0SA',
+        'Consultation sp\u00e9cialis\u00e9e (obst\u00e9tricien / MFM) d\u00e8s le 1er trimestre',
+        'Surveillance rapproch\u00e9e : TA bimensuelle, \u00e9cho biom\u00e9trie + Doppler \u00e0 20, 24, 28, 32, 36\u00a0SA',
         'Information sur signes d\u2019alerte (c\u00e9phal\u00e9es, troubles visuels, douleurs \u00e9pigastriques, \u0153d\u00e8mes)'
       ]
     },
@@ -1148,11 +1110,10 @@ function fmfCalculer() {
       titre: 'RISQUE INTERM\u00c9DIAIRE \u2014 surveillance renforc\u00e9e',
       icon: '\u25b2',
       items: [
-        'Aspirine \u00e0 discuter selon contexte clinique global et facteurs de risque associ\u00e9s',
-        'R\u00e9\u00e9valuation \u00e0 20\u201322\u00a0SA\u00a0: Doppler ut\u00e9rin bilat\u00e9ral',
-        'Surveillance TA mensuelle jusqu\u2019\u00e0 20\u00a0SA, puis bimensuelle',
-        'Consultation sp\u00e9cialis\u00e9e \u00e0 discuter selon profil maternel',
-        '\u00c9ducation sur les signes d\u2019alerte'
+        'Aspirine \u00e0 discuter selon contexte clinique global',
+        'R\u00e9\u00e9valuation \u00e0 20\u201322\u00a0SA : Doppler ut\u00e9rin bilat\u00e9ral',
+        'Surveillance TA mensuelle puis bimensuelle',
+        'Consultation sp\u00e9cialis\u00e9e \u00e0 discuter selon profil maternel'
       ]
     },
     low: {
@@ -1161,67 +1122,238 @@ function fmfCalculer() {
       items: [
         'Pas d\u2019indication \u00e0 l\u2019aspirine en l\u2019absence d\u2019autre facteur de risque majeur',
         'Suivi de grossesse standard (CNGOF)',
-        'R\u00e9\u00e9valuation du risque si nouveau facteur de risque ou sympt\u00f4me'
+        'R\u00e9\u00e9valuation du risque si nouveau facteur ou sympt\u00f4me'
       ]
     }
   };
-
-  var classLabels = {
-    high:         'RISQUE \u00c9LEV\u00c9',
-    intermediate: 'RISQUE INTERM\u00c9DIAIRE',
-    low:          'RISQUE FAIBLE'
-  };
+  var classLabels = { high: 'RISQUE \u00c9LEV\u00c9', intermediate: 'RISQUE INTERM\u00c9DIAIRE', low: 'RISQUE FAIBLE' };
   var risqueSublabels = {
     high:         'PE pr\u00e9coce (&lt;\u202034\u00a0SA) \u2265 1/100 \u2014 indication aspirine ASPRE',
     intermediate: 'PE pr\u00e9coce entre 1/500 et 1/100',
     low:          'PE pr\u00e9coce &lt;\u00a01/500'
   };
-
   var c = conduites[classif];
 
   var html =
     '<div class="fmf-risk-global ' + classif + '">'
     + '<div class="fmf-risk-badge">' + fmtRisk(rPrecoce) + '</div>'
-    + '<div>'
-    + '<div class="fmf-risk-label">' + classLabels[classif] + '</div>'
-    + '<div class="fmf-risk-sublabel">' + risqueSublabels[classif] + '</div>'
-    + '</div></div>'
-
-    + '<div class="fmf-approx-banner">'
-    + '<strong>Rappel m\u00e9thodologique\u00a0:</strong> Ce risque correspond uniquement \u00e0 la <strong>PE pr\u00e9coce (&lt; 34 SA)</strong>. '
-    + 'Le risque de PE tardive n\u2019est pas calcul\u00e9 ici (mod\u00e8le distinct). '
-    + 'La m\u00e9diane MAP utilis\u00e9e est une approximation \u00e0 2 covariables. '
-    + 'Pour une d\u00e9cision clinique stricte, utilisez le logiciel FMF certifi\u00e9.'
-    + '</div>'
-
+    + '<div><div class="fmf-risk-label">' + classLabels[classif] + '</div>'
+    + '<div class="fmf-risk-sublabel">' + risqueSublabels[classif] + '</div></div></div>'
+    + '<div class="fmf-approx-banner"><strong>Rappel m\u00e9thodologique :</strong> Ce risque correspond uniquement \u00e0 la <strong>PE pr\u00e9coce (&lt; 34 SA)</strong>. Pour une d\u00e9cision stricte, utilisez le logiciel FMF certifi\u00e9.</div>'
     + '<div class="fmf-markers-title">D\u00e9tail des marqueurs</div>'
-    + '<table class="fmf-markers-table"><thead><tr>'
-    + '<th>Marqueur</th><th>Valeur</th><th>Statut</th><th>LR (PE pr\u00e9coce)</th>'
-    + '</tr></thead><tbody>'
+    + '<table class="fmf-markers-table"><thead><tr><th>Marqueur</th><th>Valeur</th><th>Statut</th><th>LR</th></tr></thead><tbody>'
     + '<tr><td>Risque a priori</td><td colspan="2">Histoire maternelle</td><td>' + fmtRisk(prior) + '</td></tr>'
-    + '<tr><td>MAP (pression art. moyenne)</td><td>' + mapVal.toFixed(1) + '\u00a0mmHg</td><td>' + statutMOM(mapMom, 1.08, 1.15, false) + momBar(mapMom, false) + '</td><td>' + LR_map.toFixed(2) + '</td></tr>'
-    + '<tr><td>IP art. ut\u00e9rines (moyen)</td><td>' + ipu.toFixed(2) + '</td><td>' + statutMOM(ipuMom, 1.5, 2.0, false) + momBar(ipuMom, false) + '</td><td>' + LR_ipu.toFixed(2) + '</td></tr>'
+    + '<tr><td>MAP</td><td>' + mapVal.toFixed(1) + '\u00a0mmHg</td><td>' + statutMOM(mapMom, 1.08, 1.15, false) + momBar(mapMom, false) + '</td><td>' + LR_map.toFixed(2) + '</td></tr>'
+    + '<tr><td>IP art. ut\u00e9rines</td><td>' + ipu.toFixed(2) + '</td><td>' + statutMOM(ipuMom, 1.5, 2.0, false) + momBar(ipuMom, false) + '</td><td>' + LR_ipu.toFixed(2) + '</td></tr>'
     + '<tr><td>PlGF</td><td>' + plgf.toFixed(2) + '\u00a0MoM</td><td>' + statutMOM(plgf, 0.4, 0.6, true) + momBar(plgf, true) + '</td><td>' + LR_plgf.toFixed(2) + '</td></tr>'
-    + '<tr><td>PAPP-A</td><td>' + (isNaN(pappa) ? '<span class="fmf-val-na">Non saisi</span>' : pappa.toFixed(2) + '\u00a0MoM') + '</td><td>' + (isNaN(pappa) ? '<span class="fmf-val-na">LR\u00a0=\u00a01.00 (neutre)</span>' : statutMOM(pappa, 0.4, 0.6, true) + momBar(pappa, true)) + '</td><td>' + LR_papp.toFixed(2) + '</td></tr>'
+    + '<tr><td>PAPP-A</td><td>' + (isNaN(pappa) ? '<span class="fmf-val-na">Non saisi</span>' : pappa.toFixed(2) + '\u00a0MoM') + '</td><td>' + (isNaN(pappa) ? '<span class="fmf-val-na">LR\u00a0=\u00a01.00</span>' : statutMOM(pappa, 0.4, 0.6, true) + momBar(pappa, true)) + '</td><td>' + LR_papp.toFixed(2) + '</td></tr>'
     + '</tbody></table>'
-
-    + '<div class="fmf-conduct ' + classif + '">'
-    + '<div class="fmf-conduct-title">' + c.icon + '\u00a0' + c.titre + '</div>'
-    + '<ul>' + c.items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + '</ul>'
-    + '</div>'
-
-    + '<div class="fmf-score-explain">'
-    + '<strong>M\u00e9thodologie\u00a0:</strong> Combinaison bay\u00e9sienne du risque a priori (histoire maternelle, logit Wright 2015) '
-    + 'et des rapports de vraisemblance (LR) de chaque marqueur (distributions log-normales PE vs t\u00e9moins, param\u00e8tres uniques non stratifi\u00e9s). '
-    + 'IMC calcul\u00e9\u00a0: <strong>' + bmi.toFixed(1) + '\u00a0kg/m\u00b2</strong> \u00b7 '
-    + 'LCC\u00a0: <strong>' + lcc + '\u00a0mm</strong> \u00b7 '
-    + 'MAP retenue\u00a0: <strong>' + mapVal.toFixed(1) + '\u00a0mmHg</strong> (bras ' + (map2 >= map1 ? 'gauche' : 'droit') + ').'
-    + '</div>';
+    + '<div class="fmf-conduct ' + classif + '"><div class="fmf-conduct-title">' + c.icon + '\u00a0' + c.titre + '</div>'
+    + '<ul>' + c.items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + '</ul></div>'
+    + '<div class="fmf-score-explain"><strong>M\u00e9thodologie :</strong> Combinaison bay\u00e9sienne (Wright 2015). IMC calcul\u00e9\u00a0: <strong>' + bmi.toFixed(1) + '\u00a0kg/m\u00b2</strong> \u00b7 LCC\u00a0: <strong>' + lcc + '\u00a0mm</strong> \u00b7 MAP\u00a0: <strong>' + mapVal.toFixed(1) + '\u00a0mmHg</strong>.</div>';
 
   $id('fmf-result-body').innerHTML = html;
   $id('fmf-result').classList.add('visible');
+  $id('fmf-action-bar').classList.add('visible');
+  $id('fmf-rapport-zone').classList.remove('visible');
   $id('fmf-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
+/* ================================================================
+   RAPPORT TEXTE BRUT
+   ================================================================ */
+function buildRapport() {
+  if (!_lastResult) return '';
+  var r = _lastResult;
+  var pt = getPatient();
+  var today = new Date().toLocaleDateString('fr-FR');
+  var classifTexte = { high: 'RISQUE ELEVE', intermediate: 'RISQUE INTERMEDIAIRE', low: 'RISQUE FAIBLE' };
+  var aspirine = r.classif === 'high'
+    ? 'ASPIRINE INDIQUEE : 150 mg/j (Aspegic) le soir, de 12 SA a 36-37 SA'
+    : r.classif === 'intermediate'
+    ? 'Aspirine a discuter selon contexte clinique'
+    : 'Aspirine non indiquee (risque faible)';
+  var t = '=== DEPISTAGE PRE-ECLAMPSIE T1 — ALGORITHME FMF ===\n';
+  t += 'Date : ' + (pt.dateFmt || today) + '\n';
+  if (pt.nomComplet) t += 'Patiente : ' + pt.nomComplet + (pt.age ? ' (' + pt.age + ' ans)' : '') + (pt.ddnFmt ? ' — Nee le ' + pt.ddnFmt : '') + '\n';
+  if (pt.medecin)    t += 'Medecin  : ' + pt.medecin + '\n';
+  t += '\n--- RESULTAT GLOBAL ---\n';
+  t += 'Risque PE precoce (< 34 SA) : ' + fmtRisk(r.rPrecoce).replace(/\u202f/g,' ').replace(/\u00a0/g,' ') + '\n';
+  t += 'Classification : ' + classifTexte[r.classif] + '\n';
+  t += '\n--- DETAIL DES MARQUEURS ---\n';
+  t += 'Risque a priori (histoire maternelle) : ' + fmtRisk(r.prior).replace(/\u202f/g,' ').replace(/\u00a0/g,' ') + '\n';
+  t += 'MAP (pression art. moyenne) : ' + r.mapVal.toFixed(1) + ' mmHg  |  MoM = ' + r.mapMom.toFixed(2) + '  |  LR = ' + r.LR_map.toFixed(2) + '\n';
+  t += 'IP art. uterines (moyen)    : ' + r.ipu.toFixed(2) + '        |  MoM = ' + r.ipuMom.toFixed(2) + '  |  LR = ' + r.LR_ipu.toFixed(2) + '\n';
+  t += 'PlGF                        : ' + r.plgf.toFixed(2) + ' MoM   |  LR = ' + r.LR_plgf.toFixed(2) + '\n';
+  t += 'PAPP-A                      : ' + (isNaN(r.pappa) ? 'Non saisi (LR = 1.00)' : r.pappa.toFixed(2) + ' MoM  |  LR = ' + r.LR_papp.toFixed(2)) + '\n';
+  t += '\n--- CONDUITE A TENIR ---\n';
+  t += aspirine + '\n';
+  if (r.classif === 'high') {
+    t += 'Consultation specialisee (obstetricien / MFM)\n';
+    t += 'Surveillance TA bimensuelle\n';
+    t += 'Echo biometrie + Doppler a 20, 24, 28, 32, 36 SA\n';
+    t += 'Information signes d\'alerte (cephalees, troubles visuels, douleurs epigastriques)\n';
+  } else if (r.classif === 'intermediate') {
+    t += 'Reevaluation a 20-22 SA : Doppler uterin bilateral\n';
+    t += 'Surveillance TA mensuelle puis bimensuelle\n';
+  } else {
+    t += 'Suivi de grossesse standard (CNGOF)\n';
+  }
+  t += '\n--- DONNEES TECHNIQUES ---\n';
+  t += 'IMC : ' + r.bmi.toFixed(1) + ' kg/m2  |  LCC : ' + r.lcc + ' mm  |  MAP retenue : ' + r.mapVal.toFixed(1) + ' mmHg\n';
+  t += '\n(Algorithme FMF — CNGOF 2025 / ASPRE 2017 — Dr KARA-ZAITRI M.A., Gynecologie-Obstetrique, CHU Tlemcen)\n';
+  return t;
+}
+
+/* ================================================================
+   COPIER (double fallback)
+   ================================================================ */
+function doCopy(texte, btnEl) {
+  var reset = function() {
+    btnEl.classList.remove('copied');
+    btnEl.innerHTML = btnEl.dataset.origLabel || '\u{1F4CB} Copier';
+  };
+  var done = function() {
+    if (!btnEl.dataset.origLabel) btnEl.dataset.origLabel = btnEl.innerHTML;
+    btnEl.classList.add('copied');
+    btnEl.textContent = '\u2713 Copie !';
+    setTimeout(reset, 2500);
+  };
+  var fail = function() {
+    btnEl.textContent = '\u26A0 Impossible';
+    setTimeout(reset, 2500);
+  };
+  var legacy = function() {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = texte; ta.setAttribute('readonly','');
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      ta.setSelectionRange(0, texte.length);
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      ok ? done() : fail();
+    } catch(e) { fail(); }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texte).then(done).catch(legacy);
+  } else { legacy(); }
+}
+
+window.fmfCopy = function() {
+  var texte = buildRapport();
+  if (!texte) { alert('Veuillez d\'abord lancer le calcul.'); return; }
+  /* Affiche aussi la zone rapport */
+  var zone = $id('fmf-rapport-zone');
+  var pre  = $id('fmf-rapport-pre');
+  pre.textContent = texte;
+  zone.classList.add('visible');
+  doCopy(texte, $id('fmf-btn-copy'));
+};
+
+window.fmfCopyRapport = function() {
+  var texte = $id('fmf-rapport-pre').textContent;
+  if (!texte) return;
+  doCopy(texte, $id('fmf-rapport-copy-btn'));
+};
+
+/* ================================================================
+   IMPRESSION A5 (footer position:fixed bottom:0)
+   ================================================================ */
+window.fmfPrint = function() {
+  if (!_lastResult) { alert('Veuillez d\'abord lancer le calcul.'); return; }
+  var r  = _lastResult;
+  var pt = getPatient();
+  var today = new Date().toLocaleDateString('fr-FR');
+  var esc = function(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  };
+  var classifTexte = { high: 'RISQUE ELEVE', intermediate: 'RISQUE INTERMEDIAIRE', low: 'RISQUE FAIBLE' };
+  var classifColor = { high: '#c8102e', intermediate: '#b45309', low: '#166534' };
+  var classifBg    = { high: '#fef2f2', intermediate: '#fffbeb', low: '#f0fdf4' };
+  var classifBord  = { high: '#fca5a5', intermediate: '#fcd34d', low: '#86efac' };
+
+  var conduiteItems = {
+    high: [
+      'Aspirine 150 mg/j (Asp\u00e9gic\u00ae) le soir, d\u00e8s 12 SA jusqu\u2019\u00e0 36\u201337 SA',
+      'Consultation sp\u00e9cialis\u00e9e (obst\u00e9tricien / MFM)',
+      'Surveillance TA bimensuelle',
+      '\u00c9cho biom\u00e9trie + Doppler \u00e0 20, 24, 28, 32, 36 SA',
+      'Information sur les signes d\u2019alerte'
+    ],
+    intermediate: [
+      'Aspirine \u00e0 discuter selon contexte clinique',
+      'R\u00e9\u00e9valuation \u00e0 20\u201322 SA : Doppler ut\u00e9rin',
+      'Surveillance TA mensuelle puis bimensuelle'
+    ],
+    low: [
+      'Aspirine non indiqu\u00e9e',
+      'Suivi de grossesse standard (CNGOF)',
+      'R\u00e9\u00e9valuation si nouveau facteur de risque'
+    ]
+  };
+
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+    + '<title>D\u00e9pistage PE T1 \u2014 FMF</title>'
+    + '<style>'
+    + '@page{size:A5;margin:11mm;}'
+    + '*{box-sizing:border-box;margin:0;padding:0;}'
+    + 'body{font-family:Arial,Helvetica,sans-serif;font-size:8.5pt;color:#1a2535;line-height:1.4;padding-bottom:32mm;}'
+    + '.hdr{border-bottom:2px solid #1a3a5c;padding-bottom:5px;margin-bottom:8px;}'
+    + '.hdr-badge{display:inline-block;background:#c8102e;color:#fff;font-size:7pt;font-weight:700;padding:2px 7px;border-radius:2px;margin-bottom:4px;}'
+    + '.hdr-title{font-size:11pt;font-weight:700;color:#1a3a5c;}'
+    + '.hdr-sub{font-size:7pt;color:#475569;font-style:italic;}'
+    + '.idbox{display:flex;justify-content:space-between;gap:10px;margin:6px 0 10px;padding:5px 9px;background:#f0f4f9;border:1px solid #d1d9e6;border-radius:3px;font-size:7.5pt;}'
+    + '.idcol b{display:block;font-size:6.5pt;text-transform:uppercase;letter-spacing:0.04em;color:#475569;margin-bottom:1px;}'
+    + '.result-box{padding:8px 10px;border-radius:4px;margin-bottom:8px;border:1.5px solid ' + esc(classifBord[r.classif]) + ';background:' + esc(classifBg[r.classif]) + ';}'
+    + '.risk-val{font-size:14pt;font-weight:900;color:' + esc(classifColor[r.classif]) + ';}'
+    + '.risk-lbl{font-size:9pt;font-weight:700;color:' + esc(classifColor[r.classif]) + ';}'
+    + '.risk-sub{font-size:7pt;color:#475569;margin-top:2px;}'
+    + '.sec-title{font-size:7pt;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#1a3a5c;border-bottom:1px solid #d1d9e6;padding-bottom:2px;margin:8px 0 5px;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:7.5pt;}'
+    + 'th{background:#1a3a5c;color:#fff;padding:4px 7px;text-align:left;font-size:7pt;}'
+    + 'td{padding:4px 7px;border-bottom:1px solid #eef2f8;}'
+    + 'tr:last-child td{border-bottom:none;}'
+    + '.ok{color:#166534;font-weight:700;} .warn{color:#c8102e;font-weight:700;} .amb{color:#b45309;font-weight:700;}'
+    + '.conduite{padding:6px 9px;border-radius:3px;font-size:7.5pt;border:1px solid ' + esc(classifBord[r.classif]) + ';background:' + esc(classifBg[r.classif]) + ';margin-top:7px;}'
+    + '.conduite-title{font-weight:700;color:' + esc(classifColor[r.classif]) + ';font-size:7.5pt;margin-bottom:4px;}'
+    + '.conduite ul{list-style:none;padding-left:0;}'
+    + '.conduite li{position:relative;padding-left:12px;margin-bottom:2px;}'
+    + '.conduite li::before{content:"\u2022";position:absolute;left:0;color:#475569;}'
+    + '.ftr{position:fixed;bottom:0;left:0;width:100%;padding:4px 11mm;border-top:1px solid #d1d9e6;background:#fff;font-size:6.5pt;color:#64748b;text-align:center;}'
+    + '</style></head><body>'
+    + '<div class="hdr"><div class="hdr-badge">FMF London</div>'
+    + '<div class="hdr-title">D\u00e9pistage pr\u00e9-\u00e9clampsie \u2014 1<sup>er</sup> trimestre</div>'
+    + '<div class="hdr-sub">Algorithme FMF (Nicolaides 2018) \u2014 CNGOF 2025 \u2014 Dr KARA-ZAITRI M.A. \u2014 CHU Tlemcen</div></div>'
+    + '<div class="idbox">'
+    + '<div class="idcol"><b>Patiente</b>' + esc(pt.nomComplet || '\u2014') + (pt.ddnFmt ? ' &middot; N\u00e9e le ' + esc(pt.ddnFmt) : '') + (pt.age ? ' (' + esc(pt.age) + ' ans)' : '') + '</div>'
+    + '<div class="idcol" style="text-align:right"><b>M\u00e9decin</b>' + esc(pt.medecin || '\u2014') + '<br><b style="display:block;margin-top:2px;">Date</b>' + esc(pt.dateFmt || today) + '</div>'
+    + '</div>'
+    + '<div class="result-box">'
+    + '<div class="risk-val">' + esc(fmtRisk(r.rPrecoce).replace(/\u202f/g,' ').replace(/\u00a0/g,' ')) + '</div>'
+    + '<div class="risk-lbl">' + esc(classifTexte[r.classif]) + '</div>'
+    + '<div class="risk-sub">PE pr\u00e9coce (&lt; 34 SA) \u2014 Mod\u00e8le FMF bay\u00e9sien</div>'
+    + '</div>'
+    + '<div class="sec-title">D\u00e9tail des marqueurs</div>'
+    + '<table><thead><tr><th>Marqueur</th><th>Valeur</th><th>MoM</th><th>LR</th></tr></thead><tbody>'
+    + '<tr><td>Risque a priori</td><td colspan="2">Histoire maternelle</td><td>' + esc(fmtRisk(r.prior).replace(/\u202f/g,' ').replace(/\u00a0/g,' ')) + '</td></tr>'
+    + '<tr><td>MAP (pression art. moy.)</td><td>' + r.mapVal.toFixed(1) + ' mmHg</td><td class="' + (r.mapMom>1.15?'warn':r.mapMom>1.08?'amb':'ok') + '">' + r.mapMom.toFixed(2) + '</td><td>' + r.LR_map.toFixed(2) + '</td></tr>'
+    + '<tr><td>IP art. ut\u00e9rines (moy.)</td><td>' + r.ipu.toFixed(2) + '</td><td class="' + (r.ipuMom>2.0?'warn':r.ipuMom>1.5?'amb':'ok') + '">' + r.ipuMom.toFixed(2) + '</td><td>' + r.LR_ipu.toFixed(2) + '</td></tr>'
+    + '<tr><td>PlGF</td><td>' + r.plgf.toFixed(2) + ' MoM</td><td class="' + (r.plgf<0.4?'warn':r.plgf<0.6?'amb':'ok') + '">' + r.plgf.toFixed(2) + '</td><td>' + r.LR_plgf.toFixed(2) + '</td></tr>'
+    + '<tr><td>PAPP-A</td><td>' + (isNaN(r.pappa) ? 'Non saisi' : r.pappa.toFixed(2) + ' MoM') + '</td><td>' + (isNaN(r.pappa) ? '\u2014' : r.pappa.toFixed(2)) + '</td><td>' + r.LR_papp.toFixed(2) + '</td></tr>'
+    + '</tbody></table>'
+    + '<div class="conduite"><div class="conduite-title">Conduite \u00e0 tenir</div><ul>'
+    + conduiteItems[r.classif].map(function(i){ return '<li>' + i + '</li>'; }).join('')
+    + '</ul></div>'
+    + '<div class="ftr">G\u00e9n\u00e9r\u00e9 le ' + esc(today) + ' \u2022 IMC : ' + r.bmi.toFixed(1) + ' kg/m\u00b2 \u2022 LCC : ' + r.lcc + ' mm \u2022 MAP : ' + r.mapVal.toFixed(1) + ' mmHg \u2022 Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 ne se substitue pas au logiciel FMF certifi\u00e9</div>'
+    + '</body></html>';
+
+  var w = window.open('', '_blank');
+  if (!w) { alert('Veuillez autoriser les fen\u00eatres pop-up pour imprimer.'); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+  w.onload = function() { w.focus(); w.print(); };
+  setTimeout(function() { try { w.focus(); w.print(); } catch(e){} }, 300);
+};
 
 /* ================================================================
    RESET
@@ -1233,7 +1365,6 @@ function fmfReset() {
       var el = $id(id);
       if (el) { el.value = ''; el.classList.remove('fmf-error'); }
     });
-
   ['fmf-hta','fmf-diabete','fmf-sle','fmf-nephro','fmf-gemellaire','fmf-atcd-fam']
     .forEach(function (id) {
       var el = $id(id);
@@ -1242,28 +1373,32 @@ function fmfReset() {
       var row = el.closest('.fmf-checkbox-row');
       if (row) row.classList.remove('checked');
     });
-
   ['conception','tabac','parite','atcd_pe'].forEach(function (name) {
     document.querySelectorAll('#fmf-root .fmf-radio-btn').forEach(function (b) {
       var inp = b.querySelector('input[name="' + name + '"]');
       if (inp) b.classList.remove('active');
     });
     var first = document.querySelector('#fmf-root input[name="' + name + '"]');
-    if (first) {
-      first.checked = true;
-      first.closest('.fmf-radio-btn').classList.add('active');
-    }
+    if (first) { first.checked = true; first.closest('.fmf-radio-btn').classList.add('active'); }
   });
-
   $id('fmf-result').classList.remove('visible');
   $id('fmf-errors').classList.remove('visible');
+  $id('fmf-action-bar').classList.remove('visible');
+  $id('fmf-rapport-zone').classList.remove('visible');
+  _lastResult = null;
 }
 
 /* ================================================================
-   ATTACHER LES BOUTONS
+   BOUTONS + PWA
    ================================================================ */
 $id('btn-calculer').addEventListener('click', fmfCalculer);
 $id('btn-reset').addEventListener('click', fmfReset);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
 
 }());
 </script>
