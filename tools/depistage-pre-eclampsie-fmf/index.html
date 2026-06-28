@@ -146,50 +146,48 @@
   border-bottom: 1px solid var(--border);
 }
 #fmf-root .fmf-pt-form.open { display: block; }
+/* Barre patient — pattern identique Bandelette urinaire (1 seule ligne) */
 #fmf-root .fmf-pt-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px 12px;
-  align-items: end;
-}
-@media (max-width: 600px) {
-  #fmf-root .fmf-pt-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 380px) {
-  #fmf-root .fmf-pt-grid { grid-template-columns: 1fr; }
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
 }
 #fmf-root .fmf-pt-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 #fmf-root .fmf-pt-field label {
   font-size: 10px; font-weight: 700; color: #4a5568;
   text-transform: uppercase; letter-spacing: 0.04em;
-  font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif; white-space: nowrap;
 }
 #fmf-root .fmf-pt-field input {
   all: unset;
   box-sizing: border-box;
   padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px;
   font-family: Arial, sans-serif; font-size: 12px; color: var(--navy);
-  background: var(--white); width: 100%;
+  background: var(--white); width: 100%; min-width: 0;
   transition: border-color 0.15s;
 }
 #fmf-root .fmf-pt-field input:focus { border-color: var(--navy-lt); outline: none; }
+#fmf-root .fmf-pt-field-ddnage { grid-column: span 2; min-width: 0; }
 #fmf-root .fmf-pt-ddn-row { display: flex; gap: 8px; }
 #fmf-root .fmf-pt-ddn-col { display: flex; flex-direction: column; gap: 3px; flex: 1 1 0; min-width: 0; }
-#fmf-root .fmf-pt-ddn-col-sm { flex: 0 0 88px; }
+#fmf-root .fmf-pt-ddn-col-sm { flex: 0 0 90px; }
 #fmf-root .fmf-pt-ddn-col label {
   font-size: 10px; font-weight: 700; color: #4a5568;
   text-transform: uppercase; letter-spacing: 0.04em;
-  font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif; white-space: nowrap;
 }
 #fmf-root .fmf-pt-ddn-col input {
   all: unset;
   box-sizing: border-box;
   padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px;
   font-family: Arial, sans-serif; font-size: 12px; color: var(--navy);
-  background: var(--white); width: 100%;
+  background: var(--white); width: 100%; min-width: 0;
   transition: border-color 0.15s;
 }
 #fmf-root .fmf-pt-ddn-col input:focus { border-color: var(--navy-lt); outline: none; }
+@media (max-width: 680px) {
+  #fmf-root .fmf-pt-field-ddnage { grid-column: span 1; }
+}
 
 /* ---- Notice méthodologique ---- */
 #fmf-root .fmf-notice {
@@ -621,7 +619,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
   </button>
   <div class="fmf-pt-form" id="fmf-pt-form">
     <div class="fmf-pt-grid">
-      <!-- Ligne 1 : Nom / Prénom / DDN+Âge -->
       <div class="fmf-pt-field">
         <label for="fmf-pt-nom">Nom</label>
         <input type="text" id="fmf-pt-nom" placeholder="Nom de famille" autocomplete="off">
@@ -630,7 +627,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         <label for="fmf-pt-prenom">Pr&#233;nom</label>
         <input type="text" id="fmf-pt-prenom" placeholder="Pr&#233;nom" autocomplete="off">
       </div>
-      <div class="fmf-pt-field" style="min-width:0;">
+      <div class="fmf-pt-field fmf-pt-field-ddnage">
         <div class="fmf-pt-ddn-row">
           <div class="fmf-pt-ddn-col">
             <label for="fmf-pt-ddn">Date de naissance</label>
@@ -642,7 +639,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
           </div>
         </div>
       </div>
-      <!-- Ligne 2 : Médecin / Date consultation / (vide) -->
       <div class="fmf-pt-field">
         <label for="fmf-pt-medecin">M&#233;decin prescripteur</label>
         <input type="text" id="fmf-pt-medecin" placeholder="Dr ..." autocomplete="off">
