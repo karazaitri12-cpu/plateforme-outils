@@ -213,9 +213,46 @@
 #hypo-root .hy-surv-title { font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: #1d4ed8; }
 #hypo-root .hy-cible { font-size: 11px; color: #475569; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #bfdbfe; font-weight: bold; }
 
-@media (max-width: 860px) {
-  #hypo-root .hy-tool-body { grid-template-columns: 1fr; }
-  #hypo-root .hy-tool-left { border-right: none; border-bottom: 1.5px solid #e2e8f0; }
+/* ============================================================
+   CALCULATEUR 30-50% (Nouvelle boite de design pointillé)
+   ============================================================ */
+#hypo-root .hy-dose-calc {
+  padding: 14px 16px;
+  border: 1.5px dashed #94a3b8;
+  border-radius: 10px;
+  background: #f8fafc;
+  transition: border-color 0.2s;
+}
+#hypo-root .hy-dose-calc:hover { border-color: #3b82f6; }
+#hypo-root .hy-dose-calc-title {
+  font-size: 11px; font-weight: 800; color: #1e3a8a;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 12px; text-align: center;
+}
+#hypo-root .hy-dose-calc-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+#hypo-root .hy-dose-calc-col {
+  display: flex; flex-direction: column; gap: 6px;
+}
+#hypo-root .hy-dose-calc-col label {
+  font-size: 9.5px; font-weight: 800; color: #64748b;
+  text-transform: uppercase; letter-spacing: 0.02em; text-align: center;
+}
+#hypo-root .hy-dose-calc-input {
+  width: 100%; padding: 8px; border: 1.5px solid #cbd5e1; border-radius: 8px;
+  font-family: inherit; font-size: 15px; font-weight: 800; color: #1e3a8a;
+  background: #ffffff; text-align: center; outline: none; transition: border-color 0.2s;
+  -moz-appearance: textfield;
+}
+#hypo-root .hy-dose-calc-input:focus { border-color: #3b82f6; }
+#hypo-root .hy-dose-calc-input::-webkit-inner-spin-button,
+#hypo-root .hy-dose-calc-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+#hypo-root .hy-dose-calc-res {
+  width: 100%; padding: 8px; border: 1.5px solid #bfdbfe; border-radius: 8px;
+  font-family: inherit; font-size: 15px; font-weight: 800; color: #1d4ed8;
+  background: #eff6ff; text-align: center; display: flex; align-items: center; justify-content: center;
+  height: 38px;
 }
 
 /* ============================================================
@@ -223,8 +260,6 @@
    ============================================================ */
 #hypo-root .hy-action-bar {
   display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-  margin-top: auto; /* Pousse les boutons tout en bas de la colonne */
-  padding-top: 10px;
 }
 #hypo-root .hy-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -237,6 +272,11 @@
 }
 #hypo-root .hy-btn.copied { 
   background: #10b981; color: #ffffff; border-color: #059669; 
+}
+
+@media (max-width: 860px) {
+  #hypo-root .hy-tool-body { grid-template-columns: 1fr; }
+  #hypo-root .hy-tool-left { border-right: none; border-bottom: 1.5px solid #e2e8f0; }
 }
 
 /* ============================================================
@@ -479,6 +519,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 
       <!-- DROITE : Résultat dynamique en temps réel -->
       <div class="hy-tool-right">
+        
         <div id="hy-result-zone">
           <div class="hy-result-empty">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg>
@@ -486,11 +527,32 @@ body { -ms-overflow-style: none; overflow-y: auto; }
           </div>
         </div>
         
-        <!-- BOUTONS D'ACTIONS DÉPLACÉS ICI -->
-        <div class="hy-action-bar">
-          <button type="button" class="hy-btn" id="hy-btn-copy" onclick="hyCopy()">📋 Copier la synthèse</button>
-          <button type="button" class="hy-btn" onclick="hyPrint()">🖨️ Imprimer A5 / A4</button>
+        <!-- WRAPPER BOTTOM POUR POUSSER EN BAS -->
+        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 16px;">
+          
+          <!-- NOUVEAU CALCULATEUR 30-50% -->
+          <div id="hy-dose-calc" class="hy-dose-calc" style="display: none;">
+            <div class="hy-dose-calc-title">💡 Calculateur d'augmentation (30 à 50 %)</div>
+            <div class="hy-dose-calc-row">
+              <div class="hy-dose-calc-col">
+                <label>Dose habituelle</label>
+                <input type="number" id="hy-current-dose" class="hy-dose-calc-input" placeholder="Ex: 100" min="0" step="12.5" oninput="hyCalcDoseInc()">
+              </div>
+              <div class="hy-dose-calc-col">
+                <label>Nouvelle cible</label>
+                <div id="hy-new-dose" class="hy-dose-calc-res"><span style="font-size:11px;font-weight:600;color:#94a3b8;">En attente...</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOUTONS D'ACTIONS DÉPLACÉS ICI -->
+          <div class="hy-action-bar">
+            <button type="button" class="hy-btn" id="hy-btn-copy" onclick="hyCopy()">📋 Copier la synthèse</button>
+            <button type="button" class="hy-btn" onclick="hyPrint()">🖨️ Imprimer A5 / A4</button>
+          </div>
+          
         </div>
+
       </div>
 
     </div>
@@ -786,6 +848,27 @@ function hyUpdateT4LNorm() {
 }
 
 /* ============================================================
+   NOUVEAU : CALCULATEUR D'AUGMENTATION DE DOSE 30-50%
+   ============================================================ */
+window.hyCalcDoseInc = function() {
+  var input = document.getElementById('hy-current-dose');
+  var out = document.getElementById('hy-new-dose');
+  var val = parseFloat(input.value);
+  
+  if (isNaN(val) || val <= 0) {
+    out.innerHTML = '<span style="font-size:11px;font-weight:600;color:#94a3b8;">En attente...</span>';
+    return;
+  }
+  
+  // Calcul mathématique arrondi
+  var min = Math.round(val * 1.3);
+  var max = Math.round(val * 1.5);
+  
+  out.innerHTML = min + ' à ' + max + ' <small style="font-size:10.5px;font-weight:700;margin-left:2px;color:#1e3a8a;">µg/j</small>';
+};
+
+
+/* ============================================================
    MOTEUR LOGIQUE ATA 2017 / CONTEXTES DYNAMIQUES (SÉCURISÉ)
    ============================================================ */
 window.hyCalc = function() {
@@ -807,8 +890,11 @@ window.hyCalc = function() {
   }
 
   var zone = document.getElementById('hy-result-zone');
+  var doseCalcBox = document.getElementById('hy-dose-calc'); // Le nouveau calculateur
+
   if (hyState.tsh === null) {
     zone.innerHTML = '<div class="hy-result-empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg><div style="font-weight: 700; color: #64748b; font-size: 14px;">Saisissez la valeur de la TSH pour obtenir la décision clinique</div></div>';
+    if(doseCalcBox) doseCalcBox.style.display = 'none';
     return;
   }
 
@@ -897,6 +983,16 @@ window.hyCalc = function() {
     + '</div>'
     + '<div class="hy-surv-box"><div class="hy-surv-title">Protocole de surveillance</div>' + surv
     + '<div class="hy-cible">' + cible + '</div></div>';
+
+  // Affichage conditionnel de la boite de calcul 30-50%
+  if (doseCalcBox) {
+    if (ctx === 'preexist' && !t4lElevee) {
+      doseCalcBox.style.display = 'block';
+      hyCalcDoseInc(); // Relancer le calcul si l'input a déjà une valeur
+    } else {
+      doseCalcBox.style.display = 'none';
+    }
+  }
 };
 
 /* ============================================================
@@ -956,6 +1052,18 @@ window.hyCopy = function() {
   t += '• T4 Libre (T4L) : ' + (hyState.t4l !== null ? hyState.t4l.toFixed(2) + ' ' + hyState.unit : 'Non saisie') + '\n';
   t += '• Trimestre : ' + hyState.trim + 'er Trimestre\n';
   t += '• Contexte : ' + (hyState.ctx === 'discovery' ? 'Découverte pendant la grossesse' : 'Hypothyroïdie préexistante connue') + '\n';
+  
+  // BONUS : Ajouter le calcul de dose si rempli
+  var currentDoseInput = document.getElementById('hy-current-dose');
+  if (hyState.ctx === 'preexist' && currentDoseInput && currentDoseInput.value) {
+    var val = parseFloat(currentDoseInput.value);
+    if (!isNaN(val) && val > 0) {
+      var min = Math.round(val * 1.3);
+      var max = Math.round(val * 1.5);
+      t += '• Dose habituelle : ' + val + ' µg/j\n';
+      t += '• NOUVELLE CIBLE CALCULÉE (+30 à +50%) : ' + min + ' à ' + max + ' µg/j\n';
+    }
+  }
   
   t += '\n--- ALGORITHME PROFESSIONNEL (ATA 2017 / SFE) ---\n';
   t += '• Objectifs cibles TSH : T1 ≤ 2,5 mUI/L | T2-T3 ≤ 3,0 mUI/L\n';
