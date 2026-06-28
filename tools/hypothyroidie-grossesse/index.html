@@ -609,9 +609,9 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 var hyState = { ctx: 'discovery', trim: 1, atpo: 'nd', tsh: null, t4l: null };
 
 var hyT4norms = {
-  1: { min: 0.9, max: 1.6, txt: 'Normes T1 : 0,9 – 1,6 ng/dL' },
-  2: { min: 0.8, max: 1.2, txt: 'Normes T2 : 0,8 – 1,2 ng/dL' },
-  3: { min: 0.7, max: 1.1, txt: 'Normes T3 : 0,7 – 1,1 ng/dL' }
+  1: { min: 0.9, max: 1.6, txt: 'Normes T1 : 0,9 \u2013 1,6 ng/dL' },
+  2: { min: 0.8, max: 1.2, txt: 'Normes T2 : 0,8 \u2013 1,2 ng/dL' },
+  3: { min: 0.7, max: 1.1, txt: 'Normes T3 : 0,7 \u2013 1,1 ng/dL' }
 };
 
 window.hySelectCtx = function(v) {
@@ -619,16 +619,18 @@ window.hySelectCtx = function(v) {
   ['discovery','preexist'].forEach(function(k) {
     document.getElementById('ctx-'+k).classList.toggle('sel', k===v);
   });
-  hyCalc();
+  window.hyCalc();
 };
+
 window.hySelectTrim = function(v) {
   hyState.trim = v;
   [1,2,3].forEach(function(k) {
     document.getElementById('trim-'+k).classList.toggle('sel', k===v);
   });
   document.getElementById('hy-t4l-norm').textContent = hyT4norms[v].txt;
-  hyCalc();
+  window.hyCalc();
 };
+
 window.hySelectAtpo = function(v) {
   hyState.atpo = v;
   ['pos','neg','nd'].forEach(function(k) {
@@ -640,12 +642,14 @@ window.hySelectAtpo = function(v) {
       else el.classList.add('sel');
     }
   });
-  hyCalc();
+  window.hyCalc();
 };
+
 window.hySetTsh = function(val) {
   document.getElementById('hy-tsh-val').value = val;
-  hyCalc();
+  window.hyCalc();
 };
+
 window.hyCalc = function() {
   var tshEl = document.getElementById('hy-tsh-val');
   var t4lEl = document.getElementById('hy-t4l-val');
@@ -654,104 +658,93 @@ window.hyCalc = function() {
   hyState.tsh = isNaN(tsh) ? null : tsh;
   hyState.t4l = isNaN(t4l) ? null : t4l;
 
-  /* Mettre à jour les presets actifs */
-  ['norm','grey','frust','sev'].forEach(function(k) {
-    document.querySelectorAll('.hy-preset.p-'+k).forEach(function(el) {
-      el.classList.remove('sel');
-    });
-  });
+  /* Presets visuels */
+  document.querySelectorAll('.hy-preset').forEach(function(el) { el.classList.remove('sel'); });
   if (!isNaN(tsh)) {
-    var presetMap = [[1.8,'norm'],[3.2,'grey'],[5.5,'frust'],[14.2,'sev']];
-    presetMap.forEach(function(pair) {
+    [[1.8,'p-norm'],[3.2,'p-grey'],[5.5,'p-frust'],[14.2,'p-sev']].forEach(function(pair) {
       if (Math.abs(tsh - pair[0]) < 0.01) {
-        document.querySelectorAll('.hy-preset.p-'+pair[1]).forEach(function(el){ el.classList.add('sel'); });
+        document.querySelectorAll('.hy-preset.'+pair[1]).forEach(function(el){ el.classList.add('sel'); });
       }
     });
   }
 
   var zone = document.getElementById('hy-result-zone');
   if (hyState.tsh === null) {
-    zone.innerHTML = '<div class="hy-result-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg><div>Saisissez la TSH pour obtenir<br>la décision clinique</div></div>';
+    zone.innerHTML = '<div class="hy-result-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg><div>Saisissez la TSH pour obtenir<br>la d\u00e9cision clinique</div></div>';
     return;
   }
 
-  /* ---- LOGIQUE DE DÉCISION ---- */
   var ctx = hyState.ctx, atpo = hyState.atpo, trim = hyState.trim;
   var t4lNorm = hyT4norms[trim];
-  var t4lBasse = (hyState.t4l !== null) && (hyState.t4l < t4lNorm.min);
+  var t4lBasse   = (hyState.t4l !== null) && (hyState.t4l < t4lNorm.min);
   var t4lNormale = (hyState.t4l !== null) && (hyState.t4l >= t4lNorm.min);
 
-  var classif = '', badgeColor = '', badgeBg = '', diag = '', avis = '', dose = '', doseColor = '', doseLabel = '', surv = '', cible = '';
+  var classif='', badgeColor='', badgeBg='', diag='', avis='', dose='', doseColor='', doseLabel='', surv='', cible='';
 
   if (ctx === 'preexist') {
-    /* Hypothyroïdie préexistante → augmenter dose */
-    classif = 'Hypoth. préexistante';
+    classif = 'Hypoth. pr\u00e9existante';
     badgeColor = '#2b6cb0'; badgeBg = '#ebf8ff';
     diag = 'Augmentation de dose requise';
-    avis = 'Patiente déjà sous L‑Thyroxine. Dès le test de grossesse positif, <strong>augmenter la dose de 30 à 50 %</strong> sans attendre le résultat de la TSH. Objectif : TSH ≤ 2,5 mUI/L au 1er trimestre, ≤ 3 mUI/L aux 2e–3e trimestres.';
-    if (tsh <= 2.5) { dose = 'Dose actuelle adéquate'; doseColor = '#f0fdf4'; doseLabel = '#166534'; }
-    else if (tsh <= 4) { dose = '+25 μg / jour'; doseColor = '#ebf8ff'; doseLabel = '#2b6cb0'; }
-    else { dose = '+50 μg / jour'; doseColor = '#fff5f5'; doseLabel = '#c53030'; }
-    surv = 'Contrôle TSH + T4L dans 4–6 semaines';
-    cible = 'Cible : T1 ≤ 2,5 │ T2–T3 ≤ 3,0 mUI/L';
+    avis = 'Patiente d\u00e9j\u00e0 sous L-Thyroxine. D\u00e8s le test de grossesse positif, <strong>augmenter la dose de 30 \u00e0 50\u00a0%</strong> sans attendre le r\u00e9sultat de la TSH. Objectif : TSH \u2264 2,5 mUI/L au 1er trimestre, \u2264 3 mUI/L aux 2e-3e trimestres.';
+    if (tsh <= 2.5) { dose = 'Dose actuelle ad\u00e9quate'; doseColor = '#f0fdf4'; doseLabel = '#166534'; }
+    else if (tsh <= 4) { dose = '+25 \u03bcg / jour'; doseColor = '#ebf8ff'; doseLabel = '#2b6cb0'; }
+    else { dose = '+50 \u03bcg / jour'; doseColor = '#fff5f5'; doseLabel = '#c53030'; }
+    surv = 'Contr\u00f4le TSH + T4L dans 4-6 semaines';
+    cible = 'Cible : T1 \u2264 2,5 | T2-T3 \u2264 3,0 mUI/L';
 
   } else if (tsh < 2.5) {
-    classif = 'Euthyroïdie'; badgeColor = '#276749'; badgeBg = '#f0fdf4';
-    diag = 'Euthyroïdie — Pas de traitement';
-    avis = 'TSH dans les limites physiologiques pour la grossesse. <strong>Aucun traitement indiqué.</strong> Recontrôle à chaque trimestre si facteurs de risque présents.';
+    classif = 'Euthyro\u00efdie'; badgeColor = '#276749'; badgeBg = '#f0fdf4';
+    diag = 'Euthyro\u00efdie \u2014 Pas de traitement';
+    avis = 'TSH dans les limites physiologiques pour la grossesse. <strong>Aucun traitement indiqu\u00e9.</strong> Recontr\u00f4le \u00e0 chaque trimestre si facteurs de risque pr\u00e9sents.';
     dose = 'Aucun traitement'; doseColor = '#f0fdf4'; doseLabel = '#276749';
-    surv = 'Surveillance standard (1 fois par trimestre si FDR)';
-    cible = 'Pas d’objectif TSH (euthyroïdie)';
+    surv = 'Surveillance standard (1 fois / trimestre si FDR)';
+    cible = 'Pas d\u2019objectif TSH (euthyro\u00efdie)';
 
-  } else if (tsh >= 2.5 && tsh < 4.0) {
-    /* Zone grise */
+  } else if (tsh < 4.0) {
     if (atpo === 'pos') {
-      classif = 'Zone grise — ATPO (+)'; badgeColor = '#c05621'; badgeBg = '#fffbeb';
-      diag = 'Évaluation clinique active';
-      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L) associée à des Anticorps Anti-TPO <strong>positifs (+)</strong>. L’initiation d’une substitution à faible dose est formellement bénéfique pour réduire le risque de fausses couches spontanées.';
-      dose = '25 μg / jour'; doseColor = '#fffbeb'; doseLabel = '#c05621';
-      surv = 'TSH + T4L toutes les 4–6 semaines';
+      classif = 'Zone grise \u2014 ATPO (+)'; badgeColor = '#c05621'; badgeBg = '#fffbeb';
+      diag = '\u00c9valuation clinique active';
+      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L) avec ATPO <strong>positifs (+)</strong>. Initiation d\u2019une substitution \u00e0 faible dose formellement b\u00e9n\u00e9fique pour r\u00e9duire le risque de fausses couches.';
+      dose = '25 \u03bcg / jour'; doseColor = '#fffbeb'; doseLabel = '#c05621';
     } else if (atpo === 'neg') {
-      classif = 'Zone grise — ATPO (−)'; badgeColor = '#2b6cb0'; badgeBg = '#ebf8ff';
-      diag = 'Surveillance rapprochée';
-      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L) avec ATPO négatifs. <strong>Pas de traitement indiqué pour l’instant.</strong> Surveillance rigoureuse de la TSH toutes les 4–6 semaines.';
+      classif = 'Zone grise \u2014 ATPO (\u2212)'; badgeColor = '#2b6cb0'; badgeBg = '#ebf8ff';
+      diag = 'Surveillance rapproch\u00e9e';
+      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L) avec ATPO n\u00e9gatifs. <strong>Pas de traitement indiqu\u00e9 pour l\u2019instant.</strong> Surveillance rigoureuse de la TSH toutes les 4-6 semaines.';
       dose = 'Pas de traitement'; doseColor = '#ebf8ff'; doseLabel = '#2b6cb0';
-      surv = 'TSH seule toutes les 4–6 semaines';
     } else {
-      classif = 'Zone grise — ATPO non dosé'; badgeColor = '#c05621'; badgeBg = '#fffbeb';
+      classif = 'Zone grise \u2014 ATPO non dos\u00e9'; badgeColor = '#c05621'; badgeBg = '#fffbeb';
       diag = 'ATPO indispensable';
-      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L) : la décision de traiter ou surveiller <strong>dépend des ATPO</strong>. Dosage des Anti-TPO obligatoire pour trancher.';
-      dose = 'Décision selon ATPO'; doseColor = '#fffbeb'; doseLabel = '#c05621';
-      surv = 'Doser ATPO en urgence';
+      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L). La d\u00e9cision de traiter ou surveiller <strong>d\u00e9pend des ATPO</strong>. Dosage des Anti-TPO obligatoire.';
+      dose = 'D\u00e9cision selon ATPO'; doseColor = '#fffbeb'; doseLabel = '#c05621';
     }
-    cible = 'Cible : TSH ≤ 2,5 mUI/L (T1)';
+    surv = 'TSH + T4L toutes les 4-6 semaines';
+    cible = 'Cible : TSH \u2264 2,5 mUI/L (T1)';
 
-  } else if (tsh >= 4.0 && tsh <= 10) {
-    var type = (t4lBasse) ? 'Avérée (HV)' : (t4lNormale) ? 'Fruste (HIC)' : 'Fruste ou Avérée';
-    classif = 'Hypothyroïdie ' + type; badgeColor = '#c05621'; badgeBg = '#fffbeb';
+  } else if (tsh <= 10) {
+    var type2 = t4lBasse ? 'Av\u00e9r\u00e9e (HV)' : (t4lNormale ? 'Fruste (HIC)' : 'Fruste ou Av\u00e9r\u00e9e');
+    classif = 'Hypoth. ' + type2; badgeColor = '#c05621'; badgeBg = '#fffbeb';
     diag = 'Traitement obligatoire';
-    var typeDetail = t4lBasse ? ' et T4L <strong>basse</strong> → Hypothyroïdie <strong>Avérée (HV)</strong>' : (t4lNormale ? ' et T4L <strong>normale</strong> → Hypothyroïdie <strong>Fruste (HIC)</strong>' : '');
-    avis = 'TSH à ' + tsh.toFixed(1) + ' mUI/L' + typeDetail + '. <strong>Instauration de la Lévothyroxine obligatoire.</strong> La dose dépend de la valeur de TSH.';
-    var d = (tsh < 7) ? '25–50 μg / jour' : '50–75 μg / jour';
-    dose = d; doseColor = '#fffbeb'; doseLabel = '#c05621';
-    surv = 'TSH + T4L toutes les 4–6 semaines';
-    cible = 'Cible : T1 ≤ 2,5 │ T2–T3 ≤ 3,0 mUI/L';
+    var detail = t4lBasse ? ' et T4L <strong>basse</strong> \u2192 Hypoth. <strong>Av\u00e9r\u00e9e (HV)</strong>' : (t4lNormale ? ' et T4L <strong>normale</strong> \u2192 Hypoth. <strong>Fruste (HIC)</strong>' : '');
+    avis = 'TSH \u00e0 ' + tsh.toFixed(1) + ' mUI/L' + detail + '. <strong>Instauration de la L\u00e9vothyroxine obligatoire.</strong>';
+    dose = (tsh < 7) ? '25-50 \u03bcg / jour' : '50-75 \u03bcg / jour';
+    doseColor = '#fffbeb'; doseLabel = '#c05621';
+    surv = 'TSH + T4L toutes les 4-6 semaines';
+    cible = 'Cible : T1 \u2264 2,5 | T2-T3 \u2264 3,0 mUI/L';
 
   } else {
-    /* TSH > 10 */
-    classif = 'Hypothyroïdie Sévère'; badgeColor = '#fff'; badgeBg = '#742a2a';
+    classif = 'Hypoth. S\u00e9v\u00e8re'; badgeColor = '#fff'; badgeBg = '#742a2a';
     diag = 'TRAITEMENT URGENT';
-    avis = 'TSH à ' + tsh.toFixed(1) + ' mUI/L — Hypothyroïdie <strong>Avérée sévère</strong>. Urgence thérapeutique. <strong>Début immédiat de LT4 à dose pleine.</strong> Avis endocrinologique recommandé.';
-    var d2 = (tsh < 20) ? '50–75 μg / jour' : '75–100 μg / jour';
-    dose = d2; doseColor = '#fff5f5'; doseLabel = '#c53030';
-    surv = 'Contrôle TSH + T4L dans 2–4 semaines';
-    cible = 'Cible : TSH ≤ 2,5 mUI/L dès le 1er trimestre';
+    avis = 'TSH \u00e0 ' + tsh.toFixed(1) + ' mUI/L \u2014 Hypoth. <strong>Av\u00e9r\u00e9e s\u00e9v\u00e8re</strong>. Urgence th\u00e9rapeutique. <strong>D\u00e9but imm\u00e9diat de LT4 \u00e0 dose pleine.</strong> Avis endocrinologique recommand\u00e9.';
+    dose = (tsh < 20) ? '50-75 \u03bcg / jour' : '75-100 \u03bcg / jour';
+    doseColor = '#fff5f5'; doseLabel = '#c53030';
+    surv = 'Contr\u00f4le TSH + T4L dans 2-4 semaines';
+    cible = 'Cible : TSH \u2264 2,5 mUI/L d\u00e8s le 1er trimestre';
   }
 
   zone.innerHTML = ''
     + '<span class="hy-classif-badge" style="background:' + badgeBg + ';color:' + badgeColor + ';border:1.5px solid ' + badgeColor + ';">' + classif + '</span>'
     + '<div class="hy-diag-title">' + diag + '</div>'
-    + '<div class="hy-avis-box"><strong>Avis médical</strong><br>' + avis + '</div>'
+    + '<div class="hy-avis-box"><strong>Avis m\u00e9dical</strong><br>' + avis + '</div>'
     + '<div class="hy-dose-box" style="background:' + doseColor + ';border:1.5px solid ' + badgeColor + ';">'
     + '<div class="hy-dose-title" style="color:' + doseLabel + ';">Posologie L-T4</div>'
     + '<div class="hy-dose-val" style="color:' + doseLabel + ';">' + dose + '</div>'
