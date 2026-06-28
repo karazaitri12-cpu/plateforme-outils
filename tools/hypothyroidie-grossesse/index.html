@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#1a365d">
+<meta name="theme-color" content="#1e3a8a">
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,605 +15,766 @@
 #hypo-root {
   all: initial;
   display: block;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   line-height: 1.5;
-  color: #2d3748;
+  color: #1e293b;
   box-sizing: border-box;
   -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: subpixel-antialiased;
+  -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  background-color: #f8fafc;
+  padding: 10px;
 }
 #hypo-root *, #hypo-root *::before, #hypo-root *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  box-sizing: border-box; margin: 0; padding: 0;
 }
 
-/* ---- Wrapper ---- */
+/* ---- Wrapper principal ---- */
 #hypo-root .hy-wrap {
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 30px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  max-width: 1000px; margin: 20px auto; padding: 30px;
+  background: #ffffff; border: 1px solid #e2e8f0;
+  border-radius: 24px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
 }
 
-/* ---- Header ---- */
-#hypo-root .hy-header { text-align: center; margin-bottom: 20px; }
-#hypo-root .hy-header h1 { color: #1a365d; font-size: 22px; text-transform: uppercase; margin: 0 0 5px; font-weight: 700; }
-#hypo-root .hy-header p { color: #718096; font-size: 13px; margin: 0; }
+/* ---- Header au look premium médical ---- */
+#hypo-root .hy-header {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 24px 30px;
+  text-align: center;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.15);
+}
+#hypo-root .hy-header h1 {
+  font-size: 24px;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+}
+#hypo-root .hy-header p {
+  color: #bfdbfe;
+  font-size: 13px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+#hypo-root .hy-header .author-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+}
+#hypo-root .hy-header .author-tag strong {
+  color: #34d399;
+}
 
 /* ============================================================
-   BARRE PATIENT (pattern bandu — Sainte Trinité d.1)
+   BARRE PATIENT / IDENTIFICATION
    ============================================================ */
 #hypo-root .hy-pt-bar {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  margin-bottom: 18px;
-  overflow: hidden;
+  background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 12px; margin-bottom: 20px; overflow: hidden;
 }
 #hypo-root .hy-pt-toggle {
   width: 100%; display: flex; align-items: center; gap: 8px;
-  padding: 8px 14px; background: none; border: none; cursor: pointer;
+  padding: 12px 18px; background: none; border: none; cursor: pointer;
   font-family: inherit; font-size: 11px; font-weight: 700;
-  color: #6b7280; text-align: left; letter-spacing: 0.04em; text-transform: uppercase;
-  transition: color 0.15s;
+  color: #64748b; text-align: left; letter-spacing: 0.04em; text-transform: uppercase;
+  transition: all 0.15s;
 }
-#hypo-root .hy-pt-toggle:hover { color: #1a365d; }
+#hypo-root .hy-pt-toggle:hover { color: #1e3a8a; background: #f1f5f9; }
 #hypo-root .hy-pt-arrow { font-size: 9px; transition: transform 0.2s; display: inline-block; }
 #hypo-root .hy-pt-toggle.open .hy-pt-arrow { transform: rotate(90deg); }
 #hypo-root .hy-pt-form {
-  display: none; padding: 10px 14px 14px;
+  display: none; padding: 16px 18px 18px;
   background: #fafbfc; border-top: 1px solid #e2e8f0;
 }
 #hypo-root .hy-pt-form.open { display: block; }
 #hypo-root .hy-pt-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;
 }
-#hypo-root .hy-pt-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#hypo-root .hy-pt-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 #hypo-root .hy-pt-field label {
-  font-size: 10px; font-weight: 700; color: #4a5568;
-  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
-  font-family: inherit;
+  font-size: 10px; font-weight: 700; color: #475569;
+  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; font-family: inherit;
 }
 #hypo-root .hy-pt-field input {
-  padding: 6px 8px; border: 1px solid #dde3ea; border-radius: 4px;
-  font-family: inherit; font-size: 12px; color: #1a365d;
-  background: #fff; outline: none; width: 100%; min-width: 0;
-  transition: border-color 0.15s;
+  padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px;
+  font-family: inherit; font-size: 13px; color: #0f172a;
+  background: #ffffff; outline: none; width: 100%; min-width: 0; transition: border-color 0.15s;
 }
-#hypo-root .hy-pt-field input:focus { border-color: #1a365d; }
+#hypo-root .hy-pt-field input:focus { border-color: #1e3a8a; box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1); }
 #hypo-root .hy-pt-ddnage { grid-column: span 2; min-width: 0; }
-#hypo-root .hy-pt-ddn-row { display: flex; gap: 8px; }
-#hypo-root .hy-pt-ddn-col { display: flex; flex-direction: column; gap: 3px; flex: 1 1 0; min-width: 0; }
+#hypo-root .hy-pt-ddn-row { display: flex; gap: 10px; }
+#hypo-root .hy-pt-ddn-col { display: flex; flex-direction: column; gap: 5px; flex: 1 1 0; min-width: 0; }
 #hypo-root .hy-pt-ddn-col-sm { flex: 0 0 90px; }
-#hypo-root .hy-pt-ddn-col label {
-  font-size: 10px; font-weight: 700; color: #4a5568;
-  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
-  font-family: inherit;
-}
-#hypo-root .hy-pt-ddn-col input {
-  padding: 6px 8px; border: 1px solid #dde3ea; border-radius: 4px;
-  font-family: inherit; font-size: 12px; color: #1a365d;
-  background: #fff; outline: none; width: 100%; min-width: 0;
-  transition: border-color 0.15s;
-}
-#hypo-root .hy-pt-ddn-col input:focus { border-color: #1a365d; }
-@media (max-width: 680px) { #hypo-root .hy-pt-ddnage { grid-column: span 1; } }
+
+@media (max-width: 768px) { #hypo-root .hy-pt-ddnage { grid-column: span 1; } }
 
 /* ============================================================
-   BARRE D'ACTIONS (Sainte Trinité d.2 + d.3)
+   OUTIL INTERACTIF UNIFIÉ (COMBINÉ)
+   ============================================================ */
+#hypo-root .hy-tool {
+  background: #ffffff; border: 1.5px solid #cbd5e1;
+  border-radius: 20px; margin-bottom: 28px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+}
+#hypo-root .hy-tool-header {
+  background: linear-gradient(135deg, #1e3a8a, #1e40af);
+  color: #ffffff; padding: 16px 20px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1.5px solid #172554;
+}
+#hypo-root .hy-tool-header h2 { font-size: 15px; font-weight: 800; margin: 0; color: #ffffff; text-transform: none; }
+#hypo-root .hy-tool-header span { font-size: 11px; color: #93c5fd; margin-left: auto; font-weight: bold; }
+
+#hypo-root .hy-tool-body {
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 0;
+}
+#hypo-root .hy-tool-left {
+  padding: 24px; border-right: 1.5px solid #e2e8f0;
+  display: flex; flex-direction: column; gap: 20px;
+  background-color: #ffffff;
+}
+#hypo-root .hy-tool-right {
+  padding: 24px; background: #f8fafc;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+/* Saisie de données label */
+#hypo-root .hy-inp-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.05em; color: #475569; margin-bottom: 8px; display: block;
+}
+
+/* ---- Boutons Toggle de Contexte et Trimestre ---- */
+#hypo-root .hy-toggle-group { display: flex; gap: 8px; flex-wrap: wrap; }
+#hypo-root .hy-toggle {
+  flex: 1; min-width: 120px; padding: 10px 14px; border-radius: 10px; font-size: 12px; font-weight: 700;
+  cursor: pointer; border: 1.5px solid #cbd5e1; background: #ffffff; color: #475569;
+  font-family: inherit; transition: all 0.15s; text-align: center;
+}
+#hypo-root .hy-toggle:hover { border-color: #3b82f6; color: #1e3a8a; background-color: #f8fafc; }
+#hypo-root .hy-toggle.sel { background: #1e3a8a; color: #ffffff; border-color: #1e3a8a; box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.1); }
+
+/* ---- Boutons ATPO originaux (ROUGE / VERT) ---- */
+#hypo-root .hy-toggle.sel-pos { background: #ef4444; color: #ffffff; border-color: #dc2626; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.15); }
+#hypo-root .hy-toggle.sel-neg { background: #10b981; color: #ffffff; border-color: #059669; box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.15); }
+
+/* TSH Input & Presets */
+#hypo-root .hy-tsh-row { display: flex; align-items: center; gap: 10px; }
+#hypo-root .hy-tsh-input {
+  width: 120px; padding: 10px 14px; border: 2px solid #93c5fd; border-radius: 10px;
+  font-family: inherit; font-size: 22px; font-weight: 800; color: #1e3a8a;
+  background: #ffffff; outline: none; text-align: center; transition: all 0.2s;
+  -moz-appearance: textfield;
+}
+#hypo-root .hy-tsh-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+#hypo-root .hy-tsh-input::-webkit-inner-spin-button,
+#hypo-root .hy-tsh-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+#hypo-root .hy-tsh-unit { font-size: 13px; color: #475569; font-weight: 700; }
+
+#hypo-root .hy-presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+#hypo-root .hy-preset {
+  padding: 5px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700;
+  cursor: pointer; border: 1.5px solid; transition: all 0.15s; background: #ffffff;
+}
+#hypo-root .hy-preset:hover { transform: translateY(-1px); }
+#hypo-root .hy-preset.p-norm  { border-color: #10b981; color: #047857; }
+#hypo-root .hy-preset.p-norm:hover, #hypo-root .hy-preset.p-norm.sel { background: #10b981; color: #ffffff; }
+#hypo-root .hy-preset.p-grey  { border-color: #3b82f6; color: #1d4ed8; }
+#hypo-root .hy-preset.p-grey:hover, #hypo-root .hy-preset.p-grey.sel { background: #3b82f6; color: #ffffff; }
+#hypo-root .hy-preset.p-frust { border-color: #f59e0b; color: #b45309; }
+#hypo-root .hy-preset.p-frust:hover, #hypo-root .hy-preset.p-frust.sel { background: #f59e0b; color: #ffffff; }
+#hypo-root .hy-preset.p-sev   { border-color: #ef4444; color: #b91c1c; }
+#hypo-root .hy-preset.p-sev:hover, #hypo-root .hy-preset.p-sev.sel { background: #ef4444; color: #ffffff; }
+
+/* T4L Input avec sélecteur d'unités */
+#hypo-root .hy-t4l-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+#hypo-root .hy-unit-toggle {
+  display: inline-flex; background: #f1f5f9; padding: 2px;
+  border-radius: 8px; border: 1px solid #cbd5e1;
+}
+#hypo-root .hy-unit-btn {
+  font-family: inherit; font-size: 10px; font-weight: 800; border: none;
+  background: none; color: #64748b; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.1s;
+}
+#hypo-root .hy-unit-btn.active { background: #ffffff; color: #1e3a8a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+#hypo-root .hy-t4l-wrap { position: relative; }
+#hypo-root .hy-t4l-input {
+  width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 10px;
+  font-family: inherit; font-size: 14px; color: #0f172a;
+  background: #ffffff; outline: none; transition: border-color 0.2s; -moz-appearance: textfield;
+}
+#hypo-root .hy-t4l-input:focus { border-color: #3b82f6; }
+#hypo-root .hy-t4l-unit-badge {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 11px; font-weight: 700; color: #64748b;
+  background: #f1f5f9; padding: 3px 8px; border-radius: 6px; pointer-events: none;
+}
+#hypo-root .hy-t4l-norm { font-size: 11px; color: #64748b; margin-top: 6px; font-style: italic; }
+
+/* Résultat Dynamique */
+#hypo-root .hy-result-empty {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 250px; color: #94a3b8; font-size: 13px; text-align: center; flex-direction: column; gap: 12px;
+}
+#hypo-root .hy-result-empty svg { stroke: #94a3b8; opacity: 0.6; }
+#hypo-root .hy-classif-badge {
+  display: inline-block; padding: 6px 14px; border-radius: 9999px;
+  font-size: 11px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+#hypo-root .hy-diag-title { font-size: 18px; font-weight: 800; color: #1e3a8a; margin-bottom: 12px; }
+#hypo-root .hy-avis-box {
+  background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px;
+  padding: 14px; font-size: 13px; color: #334155; line-height: 1.6; margin-bottom: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+}
+#hypo-root .hy-dose-box { border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; border: 2.5px solid transparent; }
+#hypo-root .hy-dose-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+#hypo-root .hy-dose-val { font-size: 24px; font-weight: 900; }
+#hypo-root .hy-surv-box {
+  background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px;
+  padding: 12px 16px; font-size: 12.5px; color: #1e40af;
+}
+#hypo-root .hy-surv-title { font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: #1d4ed8; }
+#hypo-root .hy-cible { font-size: 11px; color: #475569; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #bfdbfe; font-weight: bold; }
+
+@media (max-width: 860px) {
+  #hypo-root .hy-tool-body { grid-template-columns: 1fr; }
+  #hypo-root .hy-tool-left { border-right: none; border-bottom: 1.5px solid #e2e8f0; }
+}
+
+/* ============================================================
+   BOUTONS D'ACTIONS (Déplacés dans la colonne de droite)
    ============================================================ */
 #hypo-root .hy-action-bar {
-  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  padding: 8px 0 16px; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-top: auto; /* Pousse les boutons tout en bas de la colonne */
+  padding-top: 10px;
 }
 #hypo-root .hy-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 14px; border-radius: 5px; font-family: inherit;
-  font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s;
-  border: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 12px; border-radius: 10px; font-family: inherit;
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s;
+  border: 1.5px solid #cbd5e1; background: #ffffff; color: #475569;
 }
-#hypo-root .hy-btn-print { background: #1a365d; color: #fff; }
-#hypo-root .hy-btn-print:hover { background: #2a5080; }
-#hypo-root .hy-btn-copy { background: #fff; color: #1a365d; border: 1.5px solid #1a365d; }
-#hypo-root .hy-btn-copy:hover { background: #eef4fb; }
-#hypo-root .hy-btn-copy.copied { background: #166534; color: #fff; border-color: #166534; }
-#hypo-root .hy-copy-notice { font-size: 11px; color: #166534; display: none; }
-#hypo-root .hy-copy-notice.visible { display: inline; }
+#hypo-root .hy-btn:hover { 
+  background: #f8fafc; color: #1e3a8a; border-color: #94a3b8; transform: translateY(-1px); 
+}
+#hypo-root .hy-btn.copied { 
+  background: #10b981; color: #ffffff; border-color: #059669; 
+}
 
 /* ============================================================
-   CONTENU ALGORITHMIQUE (CSS original isolé sous #hypo-root)
+   FACTEURS DE RISQUE ACCORDÉON
+   ============================================================ */
+#hypo-root .hy-risk-card {
+  background: #ffffff; border: 1.5px solid #e2e8f0;
+  border-radius: 16px; margin-bottom: 28px; overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+}
+#hypo-root .hy-risk-header {
+  width: 100%; display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; background: #ffffff; border: none; cursor: pointer;
+  font-family: inherit; text-align: left; transition: background 0.15s;
+}
+#hypo-root .hy-risk-header:hover { background: #f8fafc; }
+#hypo-root .hy-risk-icon { background: #fef3c7; color: #d97706; padding: 8px; border-radius: 10px; font-size: 16px; flex-shrink: 0; }
+#hypo-root .hy-risk-header-text h3 { font-size: 13px; font-weight: 800; color: #0f172a; }
+#hypo-root .hy-risk-header-text p { font-size: 11px; color: #64748b; margin-top: 2px; }
+#hypo-root .hy-risk-count {
+  margin-left: auto; font-size: 11px; font-weight: 800;
+  background: #f1f5f9; color: #475569; padding: 4px 12px; border-radius: 9999px;
+  white-space: nowrap; transition: all 0.3s;
+}
+#hypo-root .hy-risk-count.alerted {
+  background: #fef3c7; color: #92400e; border: 1px solid #fde68a;
+}
+#hypo-root .hy-risk-body {
+  display: none; padding: 18px;
+  border-top: 1.5px solid #f1f5f9; background: #fafbfc;
+}
+#hypo-root .hy-risk-body.open { display: block; }
+#hypo-root .hy-risk-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px;
+}
+#hypo-root .hy-risk-item {
+  display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px;
+  background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 10px;
+  cursor: pointer; user-select: none; transition: all 0.15s;
+}
+#hypo-root .hy-risk-item input[type="checkbox"] { margin-top: 3px; cursor: pointer; accent-color: #1e3a8a; flex-shrink: 0; }
+#hypo-root .hy-risk-item span { font-size: 12px; color: #334155; line-height: 1.4; font-weight: 600; }
+#hypo-root .hy-risk-item.active { background: #fffbeb; border-color: #fcd34d; }
+#hypo-root .hy-risk-alert {
+  margin-top: 16px; background: #fffbeb; border: 1.5px solid #fde68a;
+  padding: 12px 16px; border-radius: 12px; font-size: 12px; color: #78350f; line-height: 1.6; font-weight: 700;
+}
+
+/* ============================================================
+   SECTIONS ALGORITHMIQUES STATIQUES ORIGINALES (STYLE PREMIUM)
    ============================================================ */
 #hypo-root .section-title {
-  font-size: 14px; font-weight: 700; color: #2b6cb0;
-  margin: 28px 0 14px; padding-left: 10px; border-left: 4px solid #2b6cb0; text-transform: uppercase;
+  font-size: 13px; font-weight: 800; color: #2563eb;
+  margin: 32px 0 16px; padding-left: 12px; border-left: 4px solid #1e3a8a; text-transform: uppercase;
+  letter-spacing: 0.05em; font-family: inherit;
 }
-#hypo-root .main-box { background: #2d3748; color: #fff; padding: 18px; border-radius: 8px; text-align: center; font-size: 16px; }
-#hypo-root .line { width: 2px; height: 22px; background: #cbd5e0; margin: 0 auto; }
-#hypo-root .flex-container { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; width: 100%; margin-bottom: 14px; }
-#hypo-root .diag-row { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 18px; width: 100%; }
-#hypo-root .flex-item { flex: 1; min-width: 260px; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center; background: #f8fafc; overflow: hidden; display: flex; flex-direction: column; }
-#hypo-root .tag { padding: 7px; font-size: 13px; font-weight: 700; color: #fff; }
-#hypo-root .green { background: #48bb78; }
-#hypo-root .red { background: #f56565; }
-#hypo-root .box-content { padding: 18px; flex-grow: 1; }
-#hypo-root .text-green { color: #155724; }
-#hypo-root .text-red { color: #721c24; }
+#hypo-root .main-box {
+  background: #0f172a; color: #ffffff; padding: 18px; border-radius: 12px;
+  text-align: center; font-size: 15px; font-weight: 800;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1);
+}
+#hypo-root .line { width: 2.5px; height: 24px; background: #cbd5e1; margin: 0 auto; }
+#hypo-root .flex-container { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; width: 100%; margin-bottom: 16px; }
+#hypo-root .diag-row { display: flex; gap: 12px; justify-content: space-between; margin-bottom: 18px; width: 100%; }
+#hypo-root .flex-item {
+  flex: 1; min-width: 265px; border-radius: 16px; border: 1.5px solid #e2e8f0;
+  text-align: center; background: #ffffff; overflow: hidden; display: flex;
+  flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+}
+#hypo-root .tag { padding: 8px; font-size: 12px; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.05em; }
+#hypo-root .green { background: #10b981; }
+#hypo-root .red { background: #ef4444; }
+#hypo-root .box-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+#hypo-root .text-green { color: #065f46; }
+#hypo-root .text-red { color: #991b1b; }
 #hypo-root .test-badge {
-  background: #fff8e1; color: #856404; border-left: 4px solid #ffc107;
-  padding: 9px; font-weight: 700; font-size: 13px; border-radius: 4px; display: inline-block; margin: 4px auto;
+  background: #fef3c7; color: #92400e; border-left: 4px solid #f59e0b;
+  padding: 10px; font-weight: 800; font-size: 13px; border-radius: 6px;
+  display: inline-block; margin: 6px auto 0; border-top: 1px solid #fde68a;
+  border-bottom: 1px solid #fde68a; border-right: 1px solid #fde68a;
 }
-#hypo-root .diag-box { flex: 1; min-width: 0; padding: 14px; border-radius: 10px; text-align: center; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
-#hypo-root .diag-criteria { font-size: 13px; margin-bottom: 9px; min-height: 42px; color: #2d3748; font-weight: 500; }
-#hypo-root .grey-zone { border-top: 6px solid #4299e1; background: #f0f7ff; }
-#hypo-root .hic { border-top: 6px solid #f6ad55; }
-#hypo-root .urgent { background: #742a2a; color: #fff; border-top: 6px solid #000; }
-#hypo-root .tpo-logic { display: flex; gap: 5px; margin-bottom: 9px; }
-#hypo-root .tpo-yes { flex: 1; background: #ebf8ff; padding: 7px 4px; border-radius: 4px; color: #2b6cb0; border: 1px solid #bee3f8; font-size: 10px; }
-#hypo-root .tpo-no  { flex: 1; background: #fff; padding: 7px 4px; border-radius: 4px; color: #4a5568; border: 1px solid #edf2f7; font-size: 10px; }
-#hypo-root .nuance-logic { font-size: 11px; background: #fffaf0; border: 1px solid #fbd38d; border-radius: 6px; padding: 9px; margin-bottom: 9px; text-align: left; color: #7b341e; }
-#hypo-root .diag-label { font-size: 11px; font-weight: 700; color: #718096; margin-bottom: 9px; font-style: italic; }
-#hypo-root .action-btn { font-weight: 700; font-size: 10px; padding: 7px; border-radius: 6px; background: #fff; color: #c53030; border: 1px solid #feb2b2; text-align: center; }
-#hypo-root .dosage-container { background: #f7fafc; padding: 18px; border-radius: 10px; border: 1px solid #e2e8f0; width: 100%; }
-#hypo-root .dosage-header { font-weight: 700; text-align: center; margin-bottom: 13px; font-size: 14px; }
-#hypo-root .dosage-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e2e8f0; }
-#hypo-root .dosage-table th,
-#hypo-root .dosage-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: center; font-size: 13px; color: #2d3748; }
-#hypo-root .dosage-table th { background: #edf2f7; font-weight: 700; }
-#hypo-root .preexist-box { margin-top: 13px; font-size: 13px; text-align: center; padding: 13px; background: #ebf8ff; border-radius: 8px; border: 1px solid #bee3f8; }
-#hypo-root .info-box { flex: 1; padding: 18px; border-radius: 10px; color: #fff; min-width: 240px; }
-#hypo-root .goal { background: #5a67d8; }
-#hypo-root .follow { background: #d53f8c; }
-#hypo-root .white-list { margin: 9px 0 0; padding-left: 18px; color: #fff; }
-#hypo-root .white-list li { margin-bottom: 5px; }
-#hypo-root .warning-box { margin-top: 22px; background: #fff5f5; border: 2px solid #feb2b2; border-radius: 10px; display: flex; padding: 18px; align-items: center; gap: 13px; width: 100%; }
-#hypo-root .warning-icon { font-size: 22px; }
-#hypo-root .warning-text { font-size: 13px; color: #9b2c2c; line-height: 1.5; text-align: justify; }
-#hypo-root .risk-factors { background: #f1f5f9; border: 1px dashed #cbd5e0; padding: 11px; font-size: 11px; margin-top: 9px; border-radius: 6px; text-align: justify; white-space: pre-line; }
-#hypo-root .t4-disclaimer { font-size: 11px; color: #718096; margin-top: 9px; font-style: italic; }
-#hypo-root .post-partum { background: #f1f5f9; color: #2d3748; border: 2px solid #cbd5e0; padding: 16px; border-radius: 8px; text-align: center; }
-#hypo-root .blink { animation: hy-blink 1.5s infinite; background: #f56565; color: #fff; border: none; }
-@keyframes hy-blink { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
+#hypo-root .diag-box {
+  flex: 1; min-width: 0; padding: 18px; border-radius: 16px; text-align: center;
+  border: 1.5px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+#hypo-root .diag-criteria { font-size: 13px; margin-bottom: 12px; min-height: 38px; color: #1e293b; font-weight: 700; }
+#hypo-root .grey-zone { border-top: 6px solid #3b82f6; background: #eff6ff; }
+#hypo-root .hic { border-top: 6px solid #f59e0b; }
+#hypo-root .urgent { background: #7f1d1d; color: #ffffff; border-top: 6px solid #1e293b; }
+#hypo-root .tpo-logic { display: flex; gap: 6px; margin-bottom: 10px; }
+#hypo-root .tpo-yes { flex: 1; background: #eff6ff; padding: 8px 6px; border-radius: 6px; color: #1e40af; border: 1px solid #bfdbfe; font-size: 11px; font-weight: bold; }
+#hypo-root .tpo-no  { flex: 1; background: #ffffff; padding: 8px 6px; border-radius: 6px; color: #475569; border: 1px solid #e2e8f0; font-size: 11px; font-weight: bold; }
+#hypo-root .nuance-logic {
+  font-size: 11px; background: #fffbeb; border: 1px solid #fde68a;
+  border-radius: 8px; padding: 10px; margin-bottom: 10px; text-align: left;
+  color: #78350f; font-weight: 700; line-height: 1.5;
+}
+#hypo-root .diag-label { font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 10px; font-style: italic; }
+#hypo-root .action-btn { font-weight: 800; font-size: 11px; padding: 8px; border-radius: 8px; background: #ffffff; color: #b91c1c; border: 1.5px solid #fca5a5; text-align: center; }
+#hypo-root .dosage-container { background: #f8fafc; padding: 20px; border-radius: 16px; border: 1.5px solid #cbd5e1; width: 100%; }
+#hypo-root .dosage-header { font-weight: 800; text-align: center; margin-bottom: 14px; font-size: 14px; color: #0f172a; }
+#hypo-root .dosage-table { width: 100%; border-collapse: collapse; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+#hypo-root .dosage-table th, #hypo-root .dosage-table td { padding: 12px; border: 1px solid #e2e8f0; text-align: center; font-size: 13px; color: #334155; }
+#hypo-root .dosage-table th { background: #f1f5f9; font-weight: 800; color: #1e293b; }
+#hypo-root .preexist-box { margin-top: 14px; font-size: 13px; text-align: center; padding: 14px; background: #eff6ff; border-radius: 10px; border: 1.5px solid #bfdbfe; color: #1e40af; font-weight: 700; }
+#hypo-root .info-box { flex: 1; padding: 20px; border-radius: 16px; color: #ffffff; min-width: 250px; }
+#hypo-root .goal { background: #3b82f6; }
+#hypo-root .follow { background: #8b5cf6; }
+#hypo-root .white-list { margin: 10px 0 0; padding-left: 20px; color: #ffffff; }
+#hypo-root .white-list li { margin-bottom: 6px; font-weight: 600; }
+#hypo-root .warning-box { margin-top: 24px; background: #fef2f2; border: 2px solid #fca5a5; border-radius: 16px; display: flex; padding: 18px; align-items: center; gap: 14px; width: 100%; }
+#hypo-root .warning-icon { font-size: 24px; }
+#hypo-root .warning-text { font-size: 12.5px; color: #991b1b; line-height: 1.6; text-align: justify; font-weight: 700; }
+#hypo-root .t4-disclaimer { font-size: 11px; color: #64748b; margin-top: 10px; font-style: italic; }
+#hypo-root .post-partum { background: #f1f5f9; color: #1e293b; border: 2px solid #cbd5e1; padding: 18px; border-radius: 12px; text-align: center; font-weight: 800; font-size: 13px; }
+#hypo-root .blink { animation: hy-blink 1.5s infinite; background: #ef4444; color: #ffffff; border: none; }
+@keyframes hy-blink { 0%,100%{opacity:1;} 50%{opacity:0.85;} }
 
 @media (max-width: 768px) {
-  #hypo-root .hy-wrap { padding: 16px; }
-  #hypo-root .diag-row,
-  #hypo-root .flex-container { flex-direction: column; }
-  #hypo-root .diag-box,
-  #hypo-root .flex-item,
-  #hypo-root .info-box { width: 100%; margin-bottom: 10px; }
+  #hypo-root .hy-wrap { padding: 16px; margin: 10px auto; }
+  #hypo-root .diag-row, #hypo-root .flex-container, #hypo-root .hy-action-bar { grid-template-columns: 1fr; flex-direction: column; }
+  #hypo-root .diag-box, #hypo-root .flex-item, #hypo-root .info-box { width: 100%; margin-bottom: 12px; }
   #hypo-root .warning-box { flex-direction: column; text-align: center; }
 }
 
-/* ---- Scrollbar ---- */
+/* Suppression scrollbars par défaut */
 html { scrollbar-width: none; }
 body { -ms-overflow-style: none; overflow-y: auto; }
 ::-webkit-scrollbar { display: none; }
-
-/* ============================================================
-   OUTIL INTERACTIF
-   ============================================================ */
-#hypo-root .hy-tool {
-  background: #f8fafc;
-  border: 1.5px solid #bee3f8;
-  border-radius: 12px;
-  margin-bottom: 28px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(26,54,93,0.08);
-}
-#hypo-root .hy-tool-header {
-  background: linear-gradient(135deg,#1a365d,#2b6cb0);
-  color: #fff;
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-#hypo-root .hy-tool-header h2 {
-  font-size: 15px; font-weight: 700; margin: 0; color: #fff;
-}
-#hypo-root .hy-tool-header span {
-  font-size: 11px; color: #bee3f8; margin-left: auto;
-}
-#hypo-root .hy-tool-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-}
-#hypo-root .hy-tool-left {
-  padding: 18px 20px;
-  border-right: 1px solid #e2e8f0;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-#hypo-root .hy-tool-right {
-  padding: 18px 20px;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-/* Champ de saisie */
-#hypo-root .hy-inp-label {
-  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.05em; color: #4a5568; margin-bottom: 6px; display: block;
-}
-#hypo-root .hy-tsh-row {
-  display: flex; align-items: center; gap: 10px;
-}
-#hypo-root .hy-tsh-input {
-  width: 110px; padding: 10px 12px;
-  border: 2px solid #bee3f8; border-radius: 8px;
-  font-family: inherit; font-size: 20px; font-weight: 700;
-  color: #1a365d; background: #fff; outline: none;
-  text-align: center; transition: border-color 0.2s;
-  -moz-appearance: textfield;
-}
-#hypo-root .hy-tsh-input:focus { border-color: #2b6cb0; }
-#hypo-root .hy-tsh-input::-webkit-inner-spin-button,
-#hypo-root .hy-tsh-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-#hypo-root .hy-tsh-unit { font-size: 12px; color: #718096; font-weight: 600; }
-/* Presets TSH */
-#hypo-root .hy-presets {
-  display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px;
-}
-#hypo-root .hy-preset {
-  padding: 4px 9px; border-radius: 20px; font-size: 11px; font-weight: 600;
-  cursor: pointer; border: 1.5px solid; transition: all 0.15s;
-  background: #fff;
-}
-#hypo-root .hy-preset:hover { transform: translateY(-1px); }
-#hypo-root .hy-preset.p-norm  { border-color: #48bb78; color: #276749; }
-#hypo-root .hy-preset.p-norm:hover, #hypo-root .hy-preset.p-norm.sel { background: #48bb78; color: #fff; }
-#hypo-root .hy-preset.p-grey  { border-color: #4299e1; color: #2b6cb0; }
-#hypo-root .hy-preset.p-grey:hover, #hypo-root .hy-preset.p-grey.sel { background: #4299e1; color: #fff; }
-#hypo-root .hy-preset.p-frust { border-color: #f6ad55; color: #c05621; }
-#hypo-root .hy-preset.p-frust:hover, #hypo-root .hy-preset.p-frust.sel { background: #f6ad55; color: #fff; }
-#hypo-root .hy-preset.p-sev   { border-color: #f56565; color: #c53030; }
-#hypo-root .hy-preset.p-sev:hover, #hypo-root .hy-preset.p-sev.sel { background: #f56565; color: #fff; }
-/* Toggle buttons */
-#hypo-root .hy-toggle-group { display: flex; gap: 6px; flex-wrap: wrap; }
-#hypo-root .hy-toggle {
-  padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
-  cursor: pointer; border: 1.5px solid #e2e8f0; background: #f8fafc; color: #4a5568;
-  font-family: inherit; transition: all 0.15s;
-}
-#hypo-root .hy-toggle:hover { border-color: #2b6cb0; color: #2b6cb0; }
-#hypo-root .hy-toggle.sel { background: #1a365d; color: #fff; border-color: #1a365d; }
-#hypo-root .hy-toggle.sel-pos { background: #f56565; color: #fff; border-color: #c53030; }
-#hypo-root .hy-toggle.sel-neg { background: #48bb78; color: #fff; border-color: #276749; }
-/* T4L input */
-#hypo-root .hy-t4l-wrap { position: relative; }
-#hypo-root .hy-t4l-input {
-  width: 100%; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 7px;
-  font-family: inherit; font-size: 14px; color: #1a365d;
-  background: #fff; outline: none; transition: border-color 0.2s;
-  -moz-appearance: textfield;
-}
-#hypo-root .hy-t4l-input:focus { border-color: #2b6cb0; }
-#hypo-root .hy-t4l-input::-webkit-inner-spin-button,
-#hypo-root .hy-t4l-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-#hypo-root .hy-t4l-norm { font-size: 10.5px; color: #718096; margin-top: 4px; }
-/* Résultat */
-#hypo-root .hy-result-empty {
-  display: flex; align-items: center; justify-content: center;
-  min-height: 160px; color: #a0aec0; font-size: 13px; text-align: center; flex-direction: column; gap: 8px;
-}
-#hypo-root .hy-result-empty svg { opacity: 0.3; }
-#hypo-root .hy-classif-badge {
-  display: inline-block; padding: 4px 12px; border-radius: 20px;
-  font-size: 11px; font-weight: 700; margin-bottom: 10px;
-}
-#hypo-root .hy-diag-title { font-size: 18px; font-weight: 700; color: #1a365d; margin-bottom: 12px; }
-#hypo-root .hy-avis-box {
-  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-  padding: 12px 14px; font-size: 12.5px; color: #2d3748; line-height: 1.6; margin-bottom: 12px;
-}
-#hypo-root .hy-avis-box strong { color: #1a365d; }
-#hypo-root .hy-dose-box {
-  border-radius: 8px; padding: 12px 16px; margin-bottom: 8px;
-}
-#hypo-root .hy-dose-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-#hypo-root .hy-dose-val { font-size: 22px; font-weight: 800; }
-#hypo-root .hy-surv-box {
-  background: #f0f7ff; border: 1px solid #bee3f8; border-radius: 8px;
-  padding: 10px 14px; font-size: 12px; color: #2b6cb0;
-}
-#hypo-root .hy-surv-title { font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; color: #2b6cb0; }
-#hypo-root .hy-cible { font-size: 11px; color: #4a5568; margin-top: 6px; padding-top: 6px; border-top: 1px solid #e2e8f0; }
-
-@media (max-width: 680px) {
-  #hypo-root .hy-tool-body { grid-template-columns: 1fr; }
-  #hypo-root .hy-tool-left { border-right: none; border-bottom: 1px solid #e2e8f0; }
-}
 </style>
 </head>
 <body>
 <div id="hypo-root">
 <div class="hy-wrap">
 
-<!-- ══ HEADER ══ -->
-<div class="hy-header">
-  <h1>Prise en Charge : Hypothyro&#239;die &amp; Grossesse</h1>
-  <p>Expertise conforme aux recommandations ATA 2017 &amp; Consensus SFE (Soci&#233;t&#233; Fran&#231;aise d&#8217;Endocrinologie)<br>Algorithme con&#231;u par Dr KARA-ZAITRI M.A.</p>
-</div>
+  <!-- ══ HEADER ORIGINAL & PREMIUM ══ -->
+  <div class="hy-header">
+    <h1>Prise en Charge : Hypothyro&#239;die &amp; Grossesse</h1>
+    <p>Expertise conforme aux recommandations ATA 2017 &amp; Consensus SFE (Soci&#233;t&#233; Fran&#231;aise d&#8217;Endocrinologie)<br>Outil d'aide à la décision clinique conçu scientifiquement par le Dr KARA-ZAITRI M.A.</p>
+    <div class="author-tag">
+      <span>Conception scientifique : <strong>Dr KARA-ZAITRI M.A.</strong> (Gynécologie-Obstétrique, CHU Tlemcen)</span>
+    </div>
+  </div>
 
-<!-- ══ BARRE PATIENT (d.1) ══ -->
-<div class="hy-pt-bar">
-  <button type="button" class="hy-pt-toggle" id="hy-pt-toggle-btn" onclick="hyPtToggle()" aria-expanded="false">
-    <span class="hy-pt-arrow">&#9658;</span>
-    <span>&#128100; Identification patiente / m&#233;decin</span>
-    <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#A0AEC0;">Optionnel &#8212; pour la copie et l&#8217;impression</span>
-  </button>
-  <div class="hy-pt-form" id="hy-pt-form">
-    <div class="hy-pt-grid">
-      <div class="hy-pt-field">
-        <label for="hy-pt-nom">Nom</label>
-        <input type="text" id="hy-pt-nom" placeholder="Nom de famille" autocomplete="off">
-      </div>
-      <div class="hy-pt-field">
-        <label for="hy-pt-prenom">Pr&#233;nom</label>
-        <input type="text" id="hy-pt-prenom" placeholder="Pr&#233;nom" autocomplete="off">
-      </div>
-      <div class="hy-pt-field hy-pt-ddnage">
-        <div class="hy-pt-ddn-row">
-          <div class="hy-pt-ddn-col">
-            <label for="hy-pt-ddn">Date de naissance</label>
-            <input type="date" id="hy-pt-ddn" oninput="hyPtCalcAge()">
-          </div>
-          <div class="hy-pt-ddn-col hy-pt-ddn-col-sm">
-            <label for="hy-pt-age">&#194;ge (ans)</label>
-            <input type="number" id="hy-pt-age" placeholder="Ex: 32" min="0" max="130" oninput="hyPtClearDdn()">
+  <!-- ══ BARRE PATIENT / IDENTIFICATION ══ -->
+  <div class="hy-pt-bar">
+    <button type="button" class="hy-pt-toggle" id="hy-pt-toggle-btn" onclick="hyPtToggle()" aria-expanded="false">
+      <span class="hy-pt-arrow">&#9658;</span>
+      <span>👤 Identification patiente / médecin</span>
+      <span style="margin-left:auto;font-size:10px;font-weight:400;font-style:italic;color:#64748b;">Optionnel — pour la copie et l'impression</span>
+    </button>
+    <div class="hy-pt-form" id="hy-pt-form">
+      <div class="hy-pt-grid">
+        <div class="hy-pt-field"><label for="hy-pt-nom">Nom</label><input type="text" id="hy-pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
+        <div class="hy-pt-field"><label for="hy-pt-prenom">Prénom</label><input type="text" id="hy-pt-prenom" placeholder="Prénom" autocomplete="off"></div>
+        <div class="hy-pt-field hy-pt-ddnage">
+          <div class="hy-pt-ddn-row">
+            <div class="hy-pt-ddn-col"><label for="hy-pt-ddn">Date de naissance</label><input type="date" id="hy-pt-ddn" oninput="hyPtCalcAge()"></div>
+            <div class="hy-pt-ddn-col hy-pt-ddn-col-sm"><label for="hy-pt-age">Âge (ans)</label><input type="number" id="hy-pt-age" placeholder="Ex: 32" min="0" max="120" oninput="hyPtClearDdn()"></div>
           </div>
         </div>
-      </div>
-      <div class="hy-pt-field">
-        <label for="hy-pt-medecin">M&#233;decin prescripteur</label>
-        <input type="text" id="hy-pt-medecin" placeholder="Dr ..." autocomplete="off">
-      </div>
-      <div class="hy-pt-field">
-        <label for="hy-pt-date">Date de consultation</label>
-        <input type="date" id="hy-pt-date">
+        <div class="hy-pt-field"><label for="hy-pt-medecin">Médecin prescripteur</label><input type="text" id="hy-pt-medecin" placeholder="Dr ..." autocomplete="off"></div>
+        <div class="hy-pt-field"><label for="hy-pt-date">Date de consultation</label><input type="date" id="hy-pt-date"></div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ══ BARRE D'ACTIONS (d.2 + d.3) ══ -->
-<div class="hy-action-bar">
-  <button type="button" class="hy-btn hy-btn-print" onclick="hyPrint()">&#128424; Imprimer (A5)</button>
-  <button type="button" class="hy-btn hy-btn-copy" id="hy-btn-copy" onclick="hyCopy()">&#128203; Copier la synth&#232;se</button>
-  <span class="hy-copy-notice" id="hy-copy-notice">&#10003; Texte copi&#233; !</span>
-</div>
+  <!-- ══ OUTIL INTERACTIF UNIFIÉ ══ -->
+  <div class="hy-tool">
+    <div class="hy-tool-header">
+      <span style="font-size:18px;">🧬</span>
+      <h2>Outil de décision clinique — Saisie des paramètres biologiques</h2>
+      <span>ATA 2017 / SFE</span>
+    </div>
+    <div class="hy-tool-body">
 
-<!-- ══ OUTIL INTERACTIF ══ -->
-<div class="hy-tool">
-  <div class="hy-tool-header">
-    <span style="font-size:18px;">&#129516;</span>
-    <h2>Outil de d&#233;cision clinique — Saisie des param&#232;tres biologiques</h2>
-    <span>ATA 2017 / SFE</span>
-  </div>
-  <div class="hy-tool-body">
-    <!-- COLONNE GAUCHE : Saisie -->
-    <div class="hy-tool-left">
+      <!-- GAUCHE : Saisie -->
+      <div class="hy-tool-left">
+        <!-- CONTEXTE -->
+        <div>
+          <label class="hy-inp-label">📋 Contexte thérapeutique</label>
+          <div class="hy-toggle-group">
+            <button type="button" class="hy-toggle sel" id="ctx-discovery" onclick="hySelectCtx('discovery')">Découverte pendant la grossesse</button>
+            <button type="button" class="hy-toggle" id="ctx-preexist" onclick="hySelectCtx('preexist')">Hypothyroïdie préexistante</button>
+          </div>
+        </div>
 
-      <!-- CONTEXTE -->
-      <div>
-        <label class="hy-inp-label">&#128203; Contexte th&#233;rapeutique</label>
-        <div class="hy-toggle-group">
-          <button type="button" class="hy-toggle sel" id="ctx-discovery" onclick="hySelectCtx('discovery')">D&#233;couverte pendant la grossesse</button>
-          <button type="button" class="hy-toggle" id="ctx-preexist" onclick="hySelectCtx('preexist')">Hypothyro&#239;die pr&#233;existante</button>
+        <!-- TRIMESTRE -->
+        <div>
+          <label class="hy-inp-label">📅 Trimestre de grossesse actuel</label>
+          <div class="hy-toggle-group">
+            <button type="button" class="hy-toggle sel" id="trim-1" onclick="hySelectTrim(1)">1er Trim.<br><small style="font-weight:400;">≤ 13 SA + 6 j</small></button>
+            <button type="button" class="hy-toggle" id="trim-2" onclick="hySelectTrim(2)">2ème Trim.<br><small style="font-weight:400;">14 SA – 27 SA</small></button>
+            <button type="button" class="hy-toggle" id="trim-3" onclick="hySelectTrim(3)">3ème Trim.<br><small style="font-weight:400;">≥ 28 SA</small></button>
+          </div>
+        </div>
+
+        <!-- TSH AVEC PRESETS DE COULEURS -->
+        <div>
+          <label class="hy-inp-label">🔬 TSH plasmatique (mUI/L)</label>
+          <div class="hy-tsh-row">
+            <input type="number" class="hy-tsh-input" id="hy-tsh-val" placeholder="ex: 3.2" step="0.01" min="0" max="100" oninput="hyCalc()">
+            <span class="hy-tsh-unit">mUI/L</span>
+            <button type="button" class="hy-toggle" onclick="document.getElementById('hy-tsh-val').value='';hyCalc();" style="padding:6px 12px;font-size:11px;min-width:auto;">Effacer</button>
+          </div>
+          <div class="hy-presets">
+            <span class="hy-inp-label" style="width:100%;margin-bottom:2px;font-size:10px;color:#94a3b8;">Valeurs rapides :</span>
+            <button type="button" class="hy-preset p-norm" onclick="hySetTsh(1.8)">Normal (1,8)</button>
+            <button type="button" class="hy-preset p-grey" onclick="hySetTsh(3.2)">Zone grise (3,2)</button>
+            <button type="button" class="hy-preset p-frust" onclick="hySetTsh(5.5)">Fruste (5,5)</button>
+            <button type="button" class="hy-preset p-sev" onclick="hySetTsh(14.2)">Sévère (14,2)</button>
+          </div>
+        </div>
+
+        <!-- ATPO AVEC ROUGE / VERT STRICT -->
+        <div>
+          <label class="hy-inp-label">🧬 Anticorps Anti-TPO (ATPO)</label>
+          <div class="hy-toggle-group">
+            <button type="button" class="hy-toggle" id="atpo-pos" onclick="hySelectAtpo('pos')">Positif (+)</button>
+            <button type="button" class="hy-toggle" id="atpo-neg" onclick="hySelectAtpo('neg')">Négatif (–)</button>
+            <button type="button" class="hy-toggle sel" id="atpo-nd" onclick="hySelectAtpo('nd')">Non dosé</button>
+          </div>
+          <p style="font-size:11px;color:#64748b;margin-top:5px;font-style:italic;">Décisif si la TSH est en zone grise (2,5 – 4,0 mUI/L)</p>
+        </div>
+
+        <!-- T4L DYNAMIQUE AVEC CHOIX D'UNITÉ -->
+        <div>
+          <div class="hy-t4l-header">
+            <label class="hy-inp-label" style="margin-bottom:0;">📋 T4 libre (T4L) <small style="font-weight:400;text-transform:none;letter-spacing:0;">(optionnel)</small></label>
+            <div class="hy-unit-toggle">
+              <button type="button" class="hy-unit-btn active" id="unit-ng" onclick="hySetUnit('ng')">ng/dL</button>
+              <button type="button" class="hy-unit-btn" id="unit-pm" onclick="hySetUnit('pm')">pmol/L</button>
+            </div>
+          </div>
+          <div class="hy-t4l-wrap">
+            <input type="number" class="hy-t4l-input" id="hy-t4l-val" placeholder="Saisir la T4L..." step="0.01" min="0" oninput="hyCalc()">
+            <span class="hy-t4l-unit-badge" id="hy-t4l-unit-badge">ng/dL</span>
+          </div>
+          <div class="hy-t4l-norm" id="hy-t4l-norm">Normes T1 : 0,9 – 1,6 ng/dL</div>
         </div>
       </div>
 
-      <!-- TRIMESTRE -->
-      <div>
-        <label class="hy-inp-label">&#128197; Trimestre de grossesse actuel</label>
-        <div class="hy-toggle-group">
-          <button type="button" class="hy-toggle sel" id="trim-1" onclick="hySelectTrim(1)">1<sup>er</sup> Trim.<br><small style="font-weight:400;">&#8804; 13 SA + 6 j</small></button>
-          <button type="button" class="hy-toggle" id="trim-2" onclick="hySelectTrim(2)">2&#232;me Trim.<br><small style="font-weight:400;">14 SA &#8211; 27 SA</small></button>
-          <button type="button" class="hy-toggle" id="trim-3" onclick="hySelectTrim(3)">3&#232;me Trim.<br><small style="font-weight:400;">&#8805; 28 SA</small></button>
+      <!-- DROITE : Résultat dynamique en temps réel -->
+      <div class="hy-tool-right">
+        <div id="hy-result-zone">
+          <div class="hy-result-empty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg>
+            <div style="font-weight: 700; color: #64748b; font-size: 14px;">Saisissez la valeur de la TSH pour obtenir la décision clinique</div>
+          </div>
+        </div>
+        
+        <!-- BOUTONS D'ACTIONS DÉPLACÉS ICI -->
+        <div class="hy-action-bar">
+          <button type="button" class="hy-btn" id="hy-btn-copy" onclick="hyCopy()">📋 Copier la synthèse</button>
+          <button type="button" class="hy-btn" onclick="hyPrint()">🖨️ Imprimer A5 / A4</button>
         </div>
       </div>
 
-      <!-- TSH -->
-      <div>
-        <label class="hy-inp-label">&#128300; TSH plasmatique <small style="font-weight:400;text-transform:none;letter-spacing:0;">(mUI/L)</small></label>
-        <div class="hy-tsh-row">
-          <input type="number" class="hy-tsh-input" id="hy-tsh-val" placeholder="ex: 3.2" step="0.1" min="0" max="100" oninput="hyCalc()">
-          <span class="hy-tsh-unit">mUI/L</span>
-          <button type="button" class="hy-toggle" onclick="document.getElementById('hy-tsh-val').value='';hyCalc();" style="padding:5px 9px;font-size:11px;">Effacer</button>
-        </div>
-        <div class="hy-presets">
-          <span class="hy-inp-label" style="width:100%;margin-bottom:3px;">Valeurs rapides :</span>
-          <button type="button" class="hy-preset p-norm" onclick="hySetTsh(1.8)">Normal (1,8)</button>
-          <button type="button" class="hy-preset p-grey" onclick="hySetTsh(3.2)">Zone grise (3,2)</button>
-          <button type="button" class="hy-preset p-frust" onclick="hySetTsh(5.5)">Fruste (5,5)</button>
-          <button type="button" class="hy-preset p-sev"  onclick="hySetTsh(14.2)">S&#233;v&#232;re (14,2)</button>
-        </div>
-      </div>
-
-      <!-- ATPO -->
-      <div>
-        <label class="hy-inp-label">&#129900; Anticorps Anti-TPO (ATPO)</label>
-        <div class="hy-toggle-group">
-          <button type="button" class="hy-toggle" id="atpo-pos" onclick="hySelectAtpo('pos')">Positif (+)</button>
-          <button type="button" class="hy-toggle" id="atpo-neg" onclick="hySelectAtpo('neg')">N&#233;gatif (&#8722;)</button>
-          <button type="button" class="hy-toggle sel" id="atpo-nd"  onclick="hySelectAtpo('nd')">Non dos&#233;</button>
-        </div>
-        <div style="font-size:10.5px;color:#718096;margin-top:5px;">D&#233;cisif si TSH en zone grise (2,5 &#8211; 4,0 mUI/L)</div>
-      </div>
-
-      <!-- T4L -->
-      <div>
-        <label class="hy-inp-label">&#128203; T4 libre (T4L) <small style="font-weight:400;text-transform:none;letter-spacing:0;">(optionnel)</small></label>
-        <div class="hy-t4l-wrap">
-          <input type="number" class="hy-t4l-input" id="hy-t4l-val" placeholder="Saisir la T4L en ng/dL" step="0.01" min="0" max="5" oninput="hyCalc()">
-        </div>
-        <div class="hy-t4l-norm" id="hy-t4l-norm">Normes T1 : 0,9 &#8211; 1,6 ng/dL</div>
-      </div>
-
     </div>
+  </div>
 
-    <!-- COLONNE DROITE : Résultat -->
-    <div class="hy-tool-right">
-      <div id="hy-result-zone">
-        <div class="hy-result-empty">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg>
-          <div>Saisissez la TSH pour obtenir<br>la d&#233;cision clinique</div>
-        </div>
+  <!-- ══ ACCORDÉON DES FACTEURS DE RISQUE (CONVENANCE SFE) ══ -->
+  <div class="hy-risk-card">
+    <button type="button" class="hy-risk-header" onclick="hyToggleRisk()">
+      <div class="hy-risk-icon">⚠️</div>
+      <div class="hy-risk-header-text">
+        <h3>Facteurs de Risque de Dysthyroïdie (*)</h3>
+        <p>Le dépistage par dosage systématique est formellement indiqué si au moins un facteur est présent.</p>
+      </div>
+      <span class="hy-risk-count" id="hy-risk-count">0 coché(s)</span>
+    </button>
+    <div class="hy-risk-body" id="hy-risk-body">
+      <div class="hy-risk-grid" id="hy-risk-grid"></div>
+      <div class="hy-risk-alert" id="hy-risk-alert" style="display:none;">
+        <strong>Recommandation SFE :</strong> La patiente présente au moins un facteur de risque thyroïdien d'après le consensus. Le dosage biologique de la <strong>TSH plasmatique</strong> est formellement requis dès la première consultation obstétricale.
       </div>
     </div>
   </div>
-</div>
 
-<!-- ══ SECTION 1 : DÉPISTAGE ══ -->
-<div class="section-title">1. D&#233;pistage Initial</div>
-<div class="main-box">Dosage de la <strong>TSH</strong> chez les femmes avec facteurs de risque (*)</div>
-<div class="line"></div>
-<div class="flex-container">
-  <div class="flex-item border-green" style="border:1px solid #e2e8f0;">
-    <div class="tag green">TSH &lt; 2,5 mUI/L</div>
-    <div class="box-content">
-      <strong class="text-green">EUTHYRO&#207;DIE</strong>
-      <p class="text-green">Normal - Pas de traitement</p>
+  <!-- ══ SECTIONS STATIQUES DE L'ALGORITHME ══ -->
+  <div class="section-title">1. Dépistage Initial</div>
+  <div class="main-box">Dosage de la TSH chez les femmes présentant un ou plusieurs facteurs de risque (*)</div>
+  <div class="line"></div>
+  <div class="flex-container">
+    <div class="flex-item">
+      <div class="tag green">TSH &lt; 2,5 mUI/L</div>
+      <div class="box-content">
+        <strong class="text-green" style="font-size:14px;letter-spacing:0.02em;">EUTHYROÏDIE</strong>
+        <p class="text-green" style="font-size:12px;margin-top:4px;">Physiologique — Aucun traitement requis</p>
+      </div>
+    </div>
+    <div class="flex-item">
+      <div class="tag red">TSH &ge; 2,5 mUI/L</div>
+      <div class="box-content">
+        <strong class="text-red" style="font-size:14px;letter-spacing:0.02em;">ÉVALUATION COMPLÉMENTAIRE</strong>
+        <p class="text-red" style="font-size:12px;margin-top:4px;margin-bottom:8px;">Doser obligatoirement le couple :</p>
+        <div class="test-badge">T4L + Anti-TPO (ATPO)</div>
+      </div>
     </div>
   </div>
-  <div class="flex-item" style="border:1px solid #e2e8f0;">
-    <div class="tag red">TSH &#8805; 2,5 mUI/L</div>
-    <div class="box-content">
-      <strong class="text-red">&#201;VALUATION COMPL&#201;MENTAIRE</strong>
-      <p style="margin-bottom:10px;" class="text-red">Doser obligatoirement :</p>
-      <div class="test-badge">T4L + Anti-TPO</div>
+  <div class="risk-factors"><strong>(*) Note sur l'évaluation :</strong> Les facteurs indicatifs nécessitant une exploration d'emblée comportent : l'âge maternel > 35 ans, l'IMC ≥ 40 kg/m², les antécédents personnels ou familiaux de dysthyroïdie ou de chirurgie thyroïdienne, la présence évidente d'un goître cervical, la positivité préexistante d'anticorps thyroïdiens, les symptômes d'hypothyroïdie ou d'auto-immunité (type diabète de type 1), les antécédents obstétricaux péjoratifs (fausses couches à répétition, infertilité, accouchement prématuré), ou un séjour en zone géographique de carence modérée en iode.</div>
+  
+  <div class="line" style="margin-top:18px;"></div>
+
+  <div class="section-title">2. Classification &amp; Décision Thérapeutique</div>
+  <div class="diag-row">
+    <div class="diag-box grey-zone">
+      <div class="diag-criteria"><strong>TSH 2,5 – 4,0 mUI/L</strong><br>(Zone grise d'incertitude)</div>
+      <div class="tpo-logic">
+        <div class="tpo-yes"><strong>ATPO (+)</strong><br>➔ TRAITER</div>
+        <div class="tpo-no"><strong>ATPO (–)</strong><br>➔ SURVEILLER</div>
+      </div>
+      <span class="diag-label">Bénéfice lié à l'auto-immunité active</span>
+    </div>
+    <div class="diag-box hic">
+      <div class="diag-criteria"><strong>TSH 4,0 – 10,0 mUI/L</strong></div>
+      <div class="nuance-logic">
+        <div>• T4L Normale = <strong>Fruste (HIC)</strong></div>
+        <div style="margin-top:3px;">• T4L Basse = <strong>Avérée (HV)</strong></div>
+      </div>
+      <div class="action-btn">TRAITEMENT OBLIGATOIRE</div>
+    </div>
+    <div class="diag-box urgent">
+      <div class="diag-criteria" style="color:#fca5a5;"><strong>TSH &gt; 10,0 mUI/L</strong><br>(Urgence thérapeutique)</div>
+      <span class="diag-label" style="color:#ffffff;">Hypothyroïdie Avérée Sévère (HV)</span>
+      <div class="action-btn blink">TRAITEMENT URGENT IMMÉDIAT</div>
     </div>
   </div>
-</div>
-<div class="risk-factors"><strong>(*) Facteurs de risque :</strong>  &#194;ge &gt; 35 ans, IMC &#8805; 40 kg/m&#178;.
 
-&#8226; Ant&#233;c&#233;dent personnel de dysthyro&#239;die.
-&#8226; Ant&#233;c&#233;dent familial de dysthyro&#239;die.
-&#8226; Ant&#233;c&#233;dents obst&#233;tricaux : accouchement pr&#233;matur&#233;, fausses couches, infertilit&#233;.
-&#8226; Go&#238;tre.
-&#8226; Anticorps antithyro&#239;diens positifs (essentiellement les anti-TPO).
-&#8226; Sympt&#244;mes &#233;voquant une hypothyro&#239;die.
-&#8226; Diab&#232;te de type 1 ou autre pathologie auto-immune.
-&#8226; Exposition &#224; des radiations (radioth&#233;rapie cervicale).
-&#8226; Chirurgie thyro&#239;dienne ant&#233;rieure (thyro&#239;dectomie partielle ou totale).
-&#8226; Traitement actuel ou ant&#233;rieur : antithyro&#239;diens, amiodarone, lithium.
-&#8226; Zone g&#233;ographique de carence en iode.</div>
-<div class="line" style="margin-top:18px;"></div>
-
-<!-- ══ SECTION 2 : CLASSIFICATION ══ -->
-<div class="section-title">2. Classification &amp; D&#233;cision Th&#233;rapeutique</div>
-<div class="diag-row">
-  <div class="diag-box grey-zone">
-    <div class="diag-criteria"><strong>TSH 2,5 &#8211; 4,0 mUI/L</strong><br>(Zone grise)</div>
-    <div class="tpo-logic">
-      <div class="tpo-yes"><strong>ATPO (+)</strong><br>&#10145; TRAITER</div>
-      <div class="tpo-no"><strong>ATPO (-)</strong><br>&#10145; SURVEILLER</div>
+  <div class="section-title">3. Instauration de la Lévothyroxine (LT4)</div>
+  <div class="dosage-container">
+    <div class="dosage-header">Posologie initiale recommandée (Hypothyroïdie découverte pendant la grossesse)</div>
+    <table class="dosage-table">
+      <thead>
+        <tr>
+          <th>Valeur de la TSH (mUI/L)</th>
+          <th>Dose initiale préconisée d'emblée</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#f0f9ff;">
+          <td><strong>2,5 &le; TSH &lt; 4,0</strong></td>
+          <td><strong>25 µg</strong> / jour <small style="font-weight:normal;color:#475569;">(uniquement si ATPO+)</small></td>
+        </tr>
+        <tr>
+          <td><strong>4,0 &le; TSH &lt; 10,0</strong></td>
+          <td><strong>25 – 50 µg</strong> / jour</td>
+        </tr>
+        <tr>
+          <td><strong>10,0 &le; TSH &lt; 20,0</strong></td>
+          <td><strong>50 – 75 µg</strong> / jour</td>
+        </tr>
+        <tr>
+          <td><strong>TSH &ge; 20,0</strong></td>
+          <td><strong>75 – 100 µg</strong> / jour</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="preexist-box">
+      💡 <strong>Hypothyroïdie préexistante :</strong> Pour une patiente déjà sous traitement substitutif avant la conception, <strong>augmenter d'emblée sa dose de 30 à 50%</strong> (souvent de +2 comprimés/semaine) dès la confirmation biologique du test de grossesse positif.
     </div>
-    <span class="diag-label">B&#233;n&#233;fice li&#233; &#224; l&#8217;auto-immunit&#233;</span>
   </div>
-  <div class="diag-box hic">
-    <div class="diag-criteria"><strong>TSH 4,0 &#8211; 10 mUI/L</strong></div>
-    <div class="nuance-logic">
-      <div>T4L Normale = <strong>Fruste (HIC)</strong></div>
-      <div>T4L Basse = <strong>Av&#233;r&#233;e (HV)</strong></div>
+
+  <div class="section-title">4. Objectifs &amp; Surveillance</div>
+  <div class="flex-container">
+    <div class="info-box goal">
+      <strong>🎯 Objectifs de TSH cible</strong>
+      <ul class="white-list">
+        <li>Premier Trimestre (T1) : &le; 2,5 mUI/L</li>
+        <li>Deuxième &amp; Troisième Trim. : &le; 3,0 mUI/L</li>
+      </ul>
     </div>
-    <div class="action-btn">TRAITEMENT OBLIGATOIRE</div>
+    <div class="info-box follow">
+      <strong>📅 Rythme de suivi obstétrical</strong>
+      <ul class="white-list">
+        <li>Patientes substituées : TSH + T4L toutes les 4 à 6 semaines</li>
+        <li>Zone grise ATPO(–) non traitée : TSH seule toutes les 4 à 6 semaines</li>
+      </ul>
+    </div>
   </div>
-  <div class="diag-box urgent">
-    <div class="diag-criteria" style="color:#feb2b2;"><strong>TSH &gt; 10 mUI/L</strong><br>(Urgence th&#233;rapeutique)</div>
-    <span class="diag-label" style="color:#fff;">Hypothyro&#239;die Av&#233;r&#233;e (HV)</span>
-    <div class="action-btn blink">TRAITEMENT URGENT</div>
+  <div class="warning-box">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">
+      WARNING CLINIQUE MAJEUR : Le suivi biologique d'une patiente sous substitution thérapeutique par Lévothyroxine active doit impérativement comporter le couple de dosage TSH + T4L. Pour les patientes euthyroïdiennes porteuses d'anticorps ATPO(+) sans traitement d'instauration, la TSH seule est suffisante à la surveillance périodique.
+    </div>
   </div>
+
+  <!-- ══ ANNEXE CONVERTIE ET VALIDE ══ -->
+  <div class="section-title">Annexe : Valeurs indicatives de la T4 libre</div>
+  <div class="dosage-container">
+    <table class="dosage-table">
+      <thead>
+        <tr>
+          <th>Trimestre</th>
+          <th>Normes en ng/dL</th>
+          <th>Normes en pmol/L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1er Trimestre (T1)</strong></td>
+          <td>0,9 – 1,6 ng/dL</td>
+          <td>12 – 20 pmol/L</td>
+        </tr>
+        <tr>
+          <td><strong>2ème Trimestre (T2)</strong></td>
+          <td>0,8 – 1,2 ng/dL</td>
+          <td>10 – 15 pmol/L</td>
+        </tr>
+        <tr>
+          <td><strong>3ème Trimestre (T3)</strong></td>
+          <td>0,7 – 1,1 ng/dL</td>
+          <td>9 – 14 pmol/L</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="t4-disclaimer">⚠️ Note de sécurité : Les plages indiquées sont des moyennes physiologiques observées. Les valeurs seuils établies par le laboratoire effectuant l'analyse doivent systématiquement être prises en considération par le médecin prescripteur en priorité absolue.</p>
+  </div>
+
+  <!-- ══ POST-PARTUM ══ -->
+  <div class="section-title">5. Post-Partum</div>
+  <div class="post-partum">
+    Retour immédiat à la dose d'avant la grossesse (pré-gravidique) + Contrôle biologique systématique de la TSH à 4 – 6 semaines du post-partum.
+  </div>
+
+</div>
 </div>
 
-<!-- ══ SECTION 3 : TRAITEMENT ══ -->
-<div class="section-title">3. Instauration de la L&#233;vothyroxine (LT4)</div>
-<div class="dosage-container">
-  <div class="dosage-header">Doses initiales (Hypothyro&#239;die d&#233;couverte pendant la grossesse)</div>
-  <table class="dosage-table">
-    <thead><tr><th>TSH (mUI/L)</th><th>Dose Initiale recommand&#233;e</th></tr></thead>
-    <tbody>
-      <tr style="background:#f0f9ff;"><td><strong>2,5 &#8804; TSH &lt; 4</strong></td><td><strong>25 &#956;g</strong> / jour <small>(si ATPO+)</small></td></tr>
-      <tr><td><strong>4 &#8804; TSH &lt; 10</strong></td><td><strong>25 &#8211; 50 &#956;g</strong> / jour</td></tr>
-      <tr><td><strong>10 &#8804; TSH &lt; 20</strong></td><td><strong>50 &#8211; 75 &#956;g</strong> / jour</td></tr>
-      <tr><td><strong>TSH &#8805; 20</strong></td><td><strong>75 &#8211; 100 &#956;g</strong> / jour</td></tr>
-    </tbody>
-  </table>
-  <div class="preexist-box">
-    <strong style="color:#2b6cb0;">&#128161; Hypothyro&#239;die pr&#233;existante :</strong><br>
-    Augmenter la dose de <strong>30 &#224; 50 %</strong> d&#232;s le test de grossesse positif.
-  </div>
-</div>
-
-<!-- ══ SECTION 4 : SURVEILLANCE ══ -->
-<div class="section-title">4. Objectifs &amp; Surveillance</div>
-<div class="flex-container">
-  <div class="info-box goal">
-    <strong>&#127919; Objectifs TSH cible</strong>
-    <ul class="white-list">
-      <li>1er trimestre : &#8804; 2,5 mUI/L</li>
-      <li>2&#232;me &amp; 3&#232;me trim. : &#8804; 3 mUI/L</li>
-    </ul>
-  </div>
-  <div class="info-box follow">
-    <strong>&#128197; Rythme de suivi</strong>
-    <ul class="white-list">
-      <li>Patientes trait&#233;es : TSH + T4L / 4-6 sem.</li>
-      <li>Zone grise ATPO(-) : TSH / 4-6 sem.</li>
-    </ul>
-  </div>
-</div>
-
-<div class="warning-box">
-  <div class="warning-icon">&#9888;&#65039;</div>
-  <div class="warning-text">
-    <strong>WARNING CLINIQUE :</strong> Le suivi d&#8217;une patiente <strong>sous traitement</strong> doit obligatoirement comporter le couple <strong>TSH + T4L</strong>. Pour les patientes euthyro&#239;diennes ATPO+ (non trait&#233;es), seule la <strong>TSH</strong> est surveill&#233;e.
-  </div>
-</div>
-
-<!-- ══ ANNEXE T4L ══ -->
-<div class="section-title">Annexe : Valeurs indicatives de la T4 libre</div>
-<div class="dosage-container">
-  <table class="dosage-table">
-    <thead><tr><th>Trimestre</th><th>Normes en ng/dL</th><th>Normes en pmol/L</th></tr></thead>
-    <tbody>
-      <tr><td><strong>1er Trimestre</strong></td><td>0,9 &#8211; 1,6 ng/dL</td><td>12 &#8211; 20 pmol/L</td></tr>
-      <tr><td><strong>2&#232;me Trimestre</strong></td><td>0,8 &#8211; 1,2 ng/dL</td><td>10 &#8211; 15 pmol/L</td></tr>
-      <tr><td><strong>3&#232;me Trimestre</strong></td><td>0,7 &#8211; 1,1 ng/dL</td><td>9 &#8211; 14 pmol/L</td></tr>
-    </tbody>
-  </table>
-  <p class="t4-disclaimer">&#9888; Note : Ces valeurs sont des moyennes indicatives. Les normes du laboratoire doivent &#234;tre utilis&#233;es en priorit&#233;.</p>
-</div>
-
-<!-- ══ SECTION 5 : POST-PARTUM ══ -->
-<div class="section-title">5. Post-Partum</div>
-<div class="post-partum">
-  <strong>Retour dose pr&#233;-gravidique + Contr&#244;le TSH &#224; 4 - 6 semaines.</strong>
-</div>
-
-</div><!-- /hy-wrap -->
-</div><!-- /hypo-root -->
 <script>
-/* ===== OUTIL INTERACTIF ===== */
-var hyState = { ctx: 'discovery', trim: 1, atpo: 'nd', tsh: null, t4l: null };
+/* ============================================================
+   ÉTIQUETTE ET ÉTAT DE L'APPLICATION
+   ============================================================ */
+var hyState = { ctx: 'discovery', trim: 1, atpo: 'nd', unit: 'ng', tsh: null, t4l: null };
 
 var hyT4norms = {
-  1: { min: 0.9, max: 1.6, txt: 'Normes T1 : 0,9 \u2013 1,6 ng/dL' },
-  2: { min: 0.8, max: 1.2, txt: 'Normes T2 : 0,8 \u2013 1,2 ng/dL' },
-  3: { min: 0.7, max: 1.1, txt: 'Normes T3 : 0,7 \u2013 1,1 ng/dL' }
+  1: { ng: { min: 0.9, max: 1.6 }, pm: { min: 12, max: 20 }, txtNg: 'Normes T1 : 0,9 – 1,6 ng/dL', txtPm: 'Normes T1 : 12 – 20 pmol/L' },
+  2: { ng: { min: 0.8, max: 1.2 }, pm: { min: 10, max: 15 }, txtNg: 'Normes T2 : 0,8 – 1,2 ng/dL', txtPm: 'Normes T2 : 10 – 15 pmol/L' },
+  3: { ng: { min: 0.7, max: 1.1 }, pm: { min: 9, max: 14 }, txtNg: 'Normes T3 : 0,7 – 1,1 ng/dL', txtPm: 'Normes T3 : 9 – 14 pmol/L' }
 };
 
+var RISKS = [
+  'Âge maternel > 35 ans ou IMC ≥ 40 kg/m²',
+  'Antécédent personnel de dysthyroïdie ou de chirurgie thyroïdienne',
+  'Antécédent familial direct de pathologie thyroïdienne',
+  'Présence d\'un goître palpable lors de l\'examen clinique',
+  'Antécédents obstétricaux péjoratifs (fausses couches, infertilité, accouchement prématuré)',
+  'Anticorps antithyroïdiens positifs connus de manière antérieure (anti-TPO)',
+  'Symptômes évidents (asthénie, frilosité intense, constipation opiniâtre)',
+  'Diabète de type 1 ou autre affection auto-immune (vitiligo, maladie cœliaque)',
+  'Exposition historique à des radiations cervicales (radiothérapie)',
+  'Traitement en cours ou récent (amiodarone, lithium, antithyroïdiens)',
+  'Résidence habituelle en zone géographique de carence modérée en iode'
+];
+var riskChecked = {};
+
+/* ============================================================
+   FONCTIONNALITÉ DE L'IDENTIFICATION PATIENTE
+   ============================================================ */
+window.hyPtToggle = function() {
+  var f = document.getElementById('hy-pt-form');
+  var b = document.getElementById('hy-pt-toggle-btn');
+  f.classList.toggle('open'); b.classList.toggle('open');
+  b.setAttribute('aria-expanded', f.classList.contains('open') ? 'true' : 'false');
+};
+
+window.hyPtCalcAge = function() {
+  var ddn = document.getElementById('hy-pt-ddn').value;
+  if (!ddn) return;
+  var d = new Date(ddn), now = new Date();
+  var age = now.getFullYear() - d.getFullYear();
+  var m = now.getMonth() - d.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+  document.getElementById('hy-pt-age').value = age;
+};
+
+window.hyPtClearDdn = function() { document.getElementById('hy-pt-ddn').value = ''; };
+
+// Pré-remplir la date du jour par défaut
+(function() {
+  var dField = document.getElementById('hy-pt-date');
+  if (dField) dField.value = new Date().toISOString().split('T')[0];
+})();
+
+function hyGetPatient() {
+  var nom    = document.getElementById('hy-pt-nom').value.trim();
+  var prenom = document.getElementById('hy-pt-prenom').value.trim();
+  var ddn    = document.getElementById('hy-pt-ddn').value;
+  var age    = document.getElementById('hy-pt-age').value.trim();
+  var med    = document.getElementById('hy-pt-medecin').value.trim();
+  var date   = document.getElementById('hy-pt-date').value;
+  var nomC   = (prenom ? prenom + ' ' : '') + (nom || '');
+  var ddnFmt = '', dateFmt = '';
+  if (ddn)  ddnFmt  = new Date(ddn).toLocaleDateString('fr-FR');
+  if (date) dateFmt = new Date(date).toLocaleDateString('fr-FR');
+  return { nomComplet: nomC.trim(), ddnFmt: ddnFmt, age: age, medecin: med, dateFmt: dateFmt };
+}
+
+/* ============================================================
+   INTERACTIVITÉ DU CALCULATEUR (COMMUNICATION)
+   ============================================================ */
 window.hySelectCtx = function(v) {
   hyState.ctx = v;
   ['discovery','preexist'].forEach(function(k) {
@@ -627,7 +788,7 @@ window.hySelectTrim = function(v) {
   [1,2,3].forEach(function(k) {
     document.getElementById('trim-'+k).classList.toggle('sel', k===v);
   });
-  document.getElementById('hy-t4l-norm').textContent = hyT4norms[v].txt;
+  hyUpdateT4LNorm();
   window.hyCalc();
 };
 
@@ -650,6 +811,23 @@ window.hySetTsh = function(val) {
   window.hyCalc();
 };
 
+window.hySetUnit = function(v) {
+  hyState.unit = v;
+  document.getElementById('unit-ng').classList.toggle('active', v === 'ng');
+  document.getElementById('unit-pm').classList.toggle('active', v === 'pm');
+  document.getElementById('hy-t4l-unit-badge').textContent = v === 'ng' ? 'ng/dL' : 'pmol/L';
+  hyUpdateT4LNorm();
+  window.hyCalc();
+};
+
+function hyUpdateT4LNorm() {
+  var n = hyT4norms[hyState.trim];
+  document.getElementById('hy-t4l-norm').textContent = hyState.unit === 'ng' ? n.txtNg : n.txtPm;
+}
+
+/* ============================================================
+   MOTEUR LOGIQUE ATA 2017 / CONTEXTES DYNAMIQUES (SÉCURISÉ)
+   ============================================================ */
 window.hyCalc = function() {
   var tshEl = document.getElementById('hy-tsh-val');
   var t4lEl = document.getElementById('hy-t4l-val');
@@ -658,11 +836,11 @@ window.hyCalc = function() {
   hyState.tsh = isNaN(tsh) ? null : tsh;
   hyState.t4l = isNaN(t4l) ? null : t4l;
 
-  /* Presets visuels */
+  // Gestion des preset pills
   document.querySelectorAll('.hy-preset').forEach(function(el) { el.classList.remove('sel'); });
   if (!isNaN(tsh)) {
     [[1.8,'p-norm'],[3.2,'p-grey'],[5.5,'p-frust'],[14.2,'p-sev']].forEach(function(pair) {
-      if (Math.abs(tsh - pair[0]) < 0.01) {
+      if (Math.abs(tsh - pair[0]) < 0.05) {
         document.querySelectorAll('.hy-preset.'+pair[1]).forEach(function(el){ el.classList.add('sel'); });
       }
     });
@@ -670,282 +848,256 @@ window.hyCalc = function() {
 
   var zone = document.getElementById('hy-result-zone');
   if (hyState.tsh === null) {
-    zone.innerHTML = '<div class="hy-result-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg><div>Saisissez la TSH pour obtenir<br>la d\u00e9cision clinique</div></div>';
+    zone.innerHTML = '<div class="hy-result-empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg><div style="font-weight: 700; color: #64748b; font-size: 14px;">Saisissez la valeur de la TSH pour obtenir la décision clinique</div></div>';
     return;
   }
 
-  var ctx = hyState.ctx, atpo = hyState.atpo, trim = hyState.trim;
-  var t4lNorm = hyT4norms[trim];
-  var t4lBasse   = (hyState.t4l !== null) && (hyState.t4l < t4lNorm.min);
-  var t4lNormale = (hyState.t4l !== null) && (hyState.t4l >= t4lNorm.min);
+  var ctx = hyState.ctx, atpo = hyState.atpo, trim = hyState.trim, unit = hyState.unit;
+  var norms = hyT4norms[trim][unit];
+  
+  // 🚨 CORRECTION SÉCURITÉ CLINIQUE : Vérification du plafond max
+  var t4lBasse   = (hyState.t4l !== null) && (hyState.t4l < norms.min);
+  var t4lNormale = (hyState.t4l !== null) && (hyState.t4l >= norms.min && hyState.t4l <= norms.max);
+  var t4lElevee  = (hyState.t4l !== null) && (hyState.t4l > norms.max);
 
   var classif='', badgeColor='', badgeBg='', diag='', avis='', dose='', doseColor='', doseLabel='', surv='', cible='';
 
-  if (ctx === 'preexist') {
-    classif = 'Hypoth. pr\u00e9existante';
-    badgeColor = '#2b6cb0'; badgeBg = '#ebf8ff';
-    diag = 'Augmentation de dose requise';
-    avis = 'Patiente d\u00e9j\u00e0 sous L-Thyroxine. D\u00e8s le test de grossesse positif, <strong>augmenter la dose de 30 \u00e0 50\u00a0%</strong> sans attendre le r\u00e9sultat de la TSH. Objectif : TSH \u2264 2,5 mUI/L au 1er trimestre, \u2264 3 mUI/L aux 2e-3e trimestres.';
-    if (tsh <= 2.5) { dose = 'Dose actuelle ad\u00e9quate'; doseColor = '#f0fdf4'; doseLabel = '#166534'; }
-    else if (tsh <= 4) { dose = '+25 \u03bcg / jour'; doseColor = '#ebf8ff'; doseLabel = '#2b6cb0'; }
-    else { dose = '+50 \u03bcg / jour'; doseColor = '#fff5f5'; doseLabel = '#c53030'; }
-    surv = 'Contr\u00f4le TSH + T4L dans 4-6 semaines';
-    cible = 'Cible : T1 \u2264 2,5 | T2-T3 \u2264 3,0 mUI/L';
-
+  // 1. INTERDICTION DE TRAITEMENT EN CAS DE T4L ÉLEVÉE (Hyperthyroïdie / Thyrotoxicose)
+  if (t4lElevee) {
+    classif = 'T4L Élevée / Anormale'; badgeColor = '#ffffff'; badgeBg = '#dc2626';
+    diag = 'CONTRE-INDICATION À LA LÉVOTHYROXINE';
+    avis = 'Attention : La T4L saisie (' + t4l + ' ' + (unit==='ng'?'ng/dL':'pmol/L') + ') est <strong>supérieure à la norme</strong> (max ' + norms.max + '). Il y a un risque d\'hyperthyroïdie, de thyrotoxicose ou d\'interférence biologique. <strong>Ne pas prescrire de L-Thyroxine.</strong>';
+    dose = 'NE PAS TRAITER'; doseColor = '#fef2f2'; doseLabel = '#991b1b';
+    surv = 'Avis endocrinologique urgent requis';
+    cible = 'Bilan thyroïdien complet (TRAK, etc.)';
+  } 
+  // 2. LOGIQUE CLASSIQUE
+  else if (ctx === 'preexist') {
+    classif = 'Hypoth. préexistante'; badgeColor = '#ffffff'; badgeBg = '#1e3a8a';
+    diag = 'Adaptation posologique immédiate';
+    avis = 'Patiente substituée par L-Thyroxine avant grossesse. <strong>Dès le test urinaire de grossesse positif (+)</strong>, il est préconisé d\'<strong>augmenter d\'emblée la posologie hebdomadaire de 30% à 50%</strong> (souvent de +2 comprimés par semaine) sans attendre le premier bilan biologique.';
+    if (tsh <= 2.5) { dose = 'Dose actuelle adéquate'; doseColor = '#f0fdf4'; doseLabel = '#047857'; }
+    else if (tsh <= 4) { dose = '+25 µg / jour'; doseColor = '#eff6ff'; doseLabel = '#1e40af'; }
+    else { dose = '+50 µg / jour'; doseColor = '#fef2f2'; doseLabel = '#991b1b'; }
+    surv = 'Dosage combiné TSH + T4L toutes les 4 à 6 semaines';
+    cible = 'Objectif : Trimestre 1 ≤ 2,5 mUI/L | Trimestres 2-3 ≤ 3,0 mUI/L';
   } else if (tsh < 2.5) {
-    classif = 'Euthyro\u00efdie'; badgeColor = '#276749'; badgeBg = '#f0fdf4';
-    diag = 'Euthyro\u00efdie \u2014 Pas de traitement';
-    avis = 'TSH dans les limites physiologiques pour la grossesse. <strong>Aucun traitement indiqu\u00e9.</strong> Recontr\u00f4le \u00e0 chaque trimestre si facteurs de risque pr\u00e9sents.';
-    dose = 'Aucun traitement'; doseColor = '#f0fdf4'; doseLabel = '#276749';
-    surv = 'Surveillance standard (1 fois / trimestre si FDR)';
-    cible = 'Pas d\u2019objectif TSH (euthyro\u00efdie)';
-
+    classif = 'Euthyroïdie'; badgeColor = '#ffffff'; badgeBg = '#10b981';
+    diag = 'Normal — Aucun traitement';
+    avis = 'La valeur de la TSH plasmatique se situe dans les limites physiologiques optimales pour la grossesse. <strong>Aucune substitution thérapeutique n\'est indiquée.</strong>';
+    dose = 'Aucun traitement'; doseColor = '#f0fdf4'; doseLabel = '#047857';
+    surv = 'Surveillance standard (recontrôle à chaque trimestre uniquement si FDR présents)';
+    cible = 'Pas d\'objectif de TSH (euthyroïdie active)';
   } else if (tsh < 4.0) {
     if (atpo === 'pos') {
-      classif = 'Zone grise \u2014 ATPO (+)'; badgeColor = '#c05621'; badgeBg = '#fffbeb';
-      diag = '\u00c9valuation clinique active';
-      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L) avec ATPO <strong>positifs (+)</strong>. Initiation d\u2019une substitution \u00e0 faible dose formellement b\u00e9n\u00e9fique pour r\u00e9duire le risque de fausses couches.';
-      dose = '25 \u03bcg / jour'; doseColor = '#fffbeb'; doseLabel = '#c05621';
+      classif = 'Zone grise — ATPO (+)'; badgeColor = '#ffffff'; badgeBg = '#f59e0b';
+      diag = 'Évaluation clinique active';
+      avis = 'TSH en zone grise intermédiaire (' + tsh.toFixed(2) + ' mUI/L) avec anticorps Anti-TPO <strong>positifs (+)</strong>. L\'instauration d\'une substitution par LT4 à faible dose est formellement indiquée car elle réduit les taux de fausses couches.';
+      dose = '25 µg / jour'; doseColor = '#fffbeb'; doseLabel = '#b45309';
     } else if (atpo === 'neg') {
-      classif = 'Zone grise \u2014 ATPO (\u2212)'; badgeColor = '#2b6cb0'; badgeBg = '#ebf8ff';
-      diag = 'Surveillance rapproch\u00e9e';
-      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L) avec ATPO n\u00e9gatifs. <strong>Pas de traitement indiqu\u00e9 pour l\u2019instant.</strong> Surveillance rigoureuse de la TSH toutes les 4-6 semaines.';
-      dose = 'Pas de traitement'; doseColor = '#ebf8ff'; doseLabel = '#2b6cb0';
+      classif = 'Zone grise — ATPO (–)'; badgeColor = '#1e3a8a'; badgeBg = '#eff6ff';
+      diag = 'Surveillance attentive';
+      avis = 'TSH en zone grise intermédiaire (' + tsh.toFixed(2) + ' mUI/L) avec anticorps Anti-TPO négatifs. <strong>La substitution n\'est pas recommandée d\'emblée.</strong> Une surveillance rapprochée est requise.';
+      dose = 'Aucun traitement'; doseColor = '#f8fafc'; doseLabel = '#475569';
     } else {
-      classif = 'Zone grise \u2014 ATPO non dos\u00e9'; badgeColor = '#c05621'; badgeBg = '#fffbeb';
-      diag = 'ATPO indispensable';
-      avis = 'TSH en zone grise (' + tsh.toFixed(1) + ' mUI/L). La d\u00e9cision de traiter ou surveiller <strong>d\u00e9pend des ATPO</strong>. Dosage des Anti-TPO obligatoire.';
-      dose = 'D\u00e9cision selon ATPO'; doseColor = '#fffbeb'; doseLabel = '#c05621';
+      classif = 'Zone grise — ATPO non dosé'; badgeColor = '#ffffff'; badgeBg = '#3b82f6';
+      diag = 'Dosage ATPO requis';
+      avis = 'TSH en zone grise intermédiaire (' + tsh.toFixed(2) + ' mUI/L). La décision finale d\'initier une prescription d\'hormones <strong>dépend impérativement de la positivité des ATPO</strong>. Bilan immunologique requis.';
+      dose = 'Décision selon ATPO'; doseColor = '#fef3c7'; doseLabel = '#92400e';
     }
-    surv = 'TSH + T4L toutes les 4-6 semaines';
-    cible = 'Cible : TSH \u2264 2,5 mUI/L (T1)';
-
+    surv = 'Contrôle biologique TSH + T4L toutes les 4 à 6 semaines';
+    cible = 'Cible : TSH ≤ 2,5 mUI/L (au cours du 1er trimestre)';
   } else if (tsh <= 10) {
-    var type2 = t4lBasse ? 'Av\u00e9r\u00e9e (HV)' : (t4lNormale ? 'Fruste (HIC)' : 'Fruste ou Av\u00e9r\u00e9e');
-    classif = 'Hypoth. ' + type2; badgeColor = '#c05621'; badgeBg = '#fffbeb';
-    diag = 'Traitement obligatoire';
-    var detail = t4lBasse ? ' et T4L <strong>basse</strong> \u2192 Hypoth. <strong>Av\u00e9r\u00e9e (HV)</strong>' : (t4lNormale ? ' et T4L <strong>normale</strong> \u2192 Hypoth. <strong>Fruste (HIC)</strong>' : '');
-    avis = 'TSH \u00e0 ' + tsh.toFixed(1) + ' mUI/L' + detail + '. <strong>Instauration de la L\u00e9vothyroxine obligatoire.</strong>';
-    dose = (tsh < 7) ? '25-50 \u03bcg / jour' : '50-75 \u03bcg / jour';
-    doseColor = '#fffbeb'; doseLabel = '#c05621';
-    surv = 'TSH + T4L toutes les 4-6 semaines';
-    cible = 'Cible : T1 \u2264 2,5 | T2-T3 \u2264 3,0 mUI/L';
-
+    var type2 = t4lBasse ? 'Avérée (HV)' : (t4lNormale ? 'Fruste (HIC)' : 'Fruste ou Avérée');
+    classif = 'Hypoth. ' + type2; badgeColor = '#ffffff'; badgeBg = '#f59e0b';
+    diag = 'Substitution obligatoire d\'emblée';
+    var detail = t4lBasse ? ' avec une valeur de T4L <strong>basse</strong> (Hypothyroïdie Avérée)' : (t4lNormale ? ' avec une valeur de T4L <strong>normale</strong> (Hypothyroïdie Fruste)' : '');
+    avis = 'La valeur de la TSH est significativement élevée à ' + tsh.toFixed(2) + ' mUI/L' + detail + '. <strong>La prescription d\'hormonothérapie par Lévothyroxine est obligatoire d\'emblée.</strong>';
+    dose = (tsh < 7) ? '25 – 50 µg / jour' : '50 – 75 µg / jour';
+    doseColor = '#fffbeb'; doseLabel = '#b45309';
+    surv = 'Contrôle combiné TSH + T4L toutes les 4 à 6 semaines';
+    cible = 'Cible : Trimestre 1 ≤ 2,5 | Trimestres 2-3 ≤ 3,0 mUI/L';
   } else {
-    classif = 'Hypoth. S\u00e9v\u00e8re'; badgeColor = '#fff'; badgeBg = '#742a2a';
-    diag = 'TRAITEMENT URGENT';
-    avis = 'TSH \u00e0 ' + tsh.toFixed(1) + ' mUI/L \u2014 Hypoth. <strong>Av\u00e9r\u00e9e s\u00e9v\u00e8re</strong>. Urgence th\u00e9rapeutique. <strong>D\u00e9but imm\u00e9diat de LT4 \u00e0 dose pleine.</strong> Avis endocrinologique recommand\u00e9.';
-    dose = (tsh < 20) ? '50-75 \u03bcg / jour' : '75-100 \u03bcg / jour';
-    doseColor = '#fff5f5'; doseLabel = '#c53030';
-    surv = 'Contr\u00f4le TSH + T4L dans 2-4 semaines';
-    cible = 'Cible : TSH \u2264 2,5 mUI/L d\u00e8s le 1er trimestre';
+    classif = 'Hypoth. Avérée Majeure'; badgeColor = '#ffffff'; badgeBg = '#ef4444';
+    diag = 'URGENCE THERAPEUTIQUE';
+    avis = 'TSH de gravité sévère à ' + tsh.toFixed(2) + ' mUI/L. Risques neuro-obstétricaux importants pour le déroulement de la gestation. <strong>Début immédiat de la Lévothyroxine à dose pleine active.</strong>';
+    dose = (tsh < 20) ? '50 – 75 µg / jour' : '75 – 100 µg / jour';
+    doseColor = '#fef2f2'; doseLabel = '#991b1b';
+    surv = 'Contrôle biochimique anticipé TSH + T4L dans 2 à 4 semaines';
+    cible = 'Cible : Atteindre rapidement ≤ 2,5 mUI/L dès le 1er trimestre';
   }
 
   zone.innerHTML = ''
     + '<span class="hy-classif-badge" style="background:' + badgeBg + ';color:' + badgeColor + ';border:1.5px solid ' + badgeColor + ';">' + classif + '</span>'
     + '<div class="hy-diag-title">' + diag + '</div>'
-    + '<div class="hy-avis-box"><strong>Avis m\u00e9dical</strong><br>' + avis + '</div>'
-    + '<div class="hy-dose-box" style="background:' + doseColor + ';border:1.5px solid ' + badgeColor + ';">'
-    + '<div class="hy-dose-title" style="color:' + doseLabel + ';">Posologie L-T4</div>'
+    + '<div class="hy-avis-box"><strong>Orientation clinique</strong><br>' + avis + '</div>'
+    + '<div class="hy-dose-box" style="background:' + doseColor + ';border:2px solid ' + doseLabel + ';">'
+    + '<div class="hy-dose-title" style="color:' + doseLabel + ';">Dose recommand&#233;e d\'embl&#233;e</div>'
     + '<div class="hy-dose-val" style="color:' + doseLabel + ';">' + dose + '</div>'
     + '</div>'
     + '<div class="hy-surv-box"><div class="hy-surv-title">Protocole de surveillance</div>' + surv
     + '<div class="hy-cible">' + cible + '</div></div>';
 };
 
-/* ===== PATIENT ===== */
-window.hyPtToggle = function() {
-  var form = document.getElementById('hy-pt-form');
-  var btn  = document.getElementById('hy-pt-toggle-btn');
-  form.classList.toggle('open');
-  btn.classList.toggle('open');
-  btn.setAttribute('aria-expanded', form.classList.contains('open') ? 'true' : 'false');
+/* ============================================================
+   FACTEURS DE RISQUE INDICATIONNELS
+   ============================================================ */
+window.hyToggleRisk = function() {
+  document.getElementById('hy-risk-body').classList.toggle('open');
 };
-window.hyPtCalcAge = function() {
-  var ddn = document.getElementById('hy-pt-ddn').value;
-  if (!ddn) return;
-  var d = new Date(ddn), now = new Date();
-  var age = now.getFullYear() - d.getFullYear();
-  var m = now.getMonth() - d.getMonth();
-  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
-  document.getElementById('hy-pt-age').value = age;
-};
-window.hyPtClearDdn = function() { document.getElementById('hy-pt-ddn').value = ''; };
 
-/* Pré-remplir date du jour */
-(function() {
-  document.getElementById('hy-pt-date').value = new Date().toISOString().split('T')[0];
-})();
-
-function hyGetPatient() {
-  var nom    = document.getElementById('hy-pt-nom').value.trim();
-  var prenom = document.getElementById('hy-pt-prenom').value.trim();
-  var ddn    = document.getElementById('hy-pt-ddn').value;
-  var age    = document.getElementById('hy-pt-age').value.trim();
-  var med    = document.getElementById('hy-pt-medecin').value.trim();
-  var date   = document.getElementById('hy-pt-date').value;
-  var nomC   = (prenom ? prenom + ' ' : '') + (nom || '');
-  var ddnFmt = '', dateFmt = '';
-  if (ddn)  { var d1 = new Date(ddn);  ddnFmt  = d1.toLocaleDateString('fr-FR'); }
-  if (date) { var d2 = new Date(date); dateFmt = d2.toLocaleDateString('fr-FR'); }
-  return { nomComplet: nomC.trim(), ddnFmt: ddnFmt, age: age, medecin: med, dateFmt: dateFmt };
+function hyInitRisks() {
+  var grid = document.getElementById('hy-risk-grid');
+  if (!grid) return;
+  RISKS.forEach(function(label, i) {
+    riskChecked[i] = false;
+    var item = document.createElement('div');
+    item.className = 'hy-risk-item';
+    item.id = 'risk-' + i;
+    item.innerHTML = '<input type="checkbox" id="chk-' + i + '"><span>' + label + '</span>';
+    item.onclick = function(e) { 
+      // Éviter de double-cocher lors du clic sur le checkbox natif
+      if(e.target.tagName !== 'INPUT') {
+        hyToggleRiskItem(i); 
+      }
+    };
+    grid.appendChild(item);
+  });
 }
 
-/* ===== COPIER (d.2) ===== */
+function hyToggleRiskItem(i) {
+  riskChecked[i] = !riskChecked[i];
+  var chk = document.getElementById('chk-' + i);
+  if(chk) chk.checked = riskChecked[i];
+  
+  var row = document.getElementById('risk-' + i);
+  if(row) row.classList.toggle('active', riskChecked[i]);
+  
+  var count = Object.values(riskChecked).filter(Boolean).length;
+  var badge = document.getElementById('hy-risk-count');
+  badge.textContent = count + ' coché(s)';
+  badge.classList.toggle('alerted', count > 0);
+  document.getElementById('hy-risk-alert').style.display = count > 0 ? 'block' : 'none';
+}
+
+/* ============================================================
+   SYNTHÈSE DE COPIE UNIFIÉE
+   ============================================================ */
 window.hyCopy = function() {
   var pt    = hyGetPatient();
   var today = new Date().toLocaleDateString('fr-FR');
-  var t = '=== HYPOTHYROIDIE & GROSSESSE — ALGORITHME ATA 2017 / SFE ===\n';
-  t += 'Date : ' + (pt.dateFmt || today) + '\n';
-  if (pt.nomComplet) t += 'Patiente : ' + pt.nomComplet + (pt.age ? ' (' + pt.age + ' ans)' : '') + (pt.ddnFmt ? ' — Nee le ' + pt.ddnFmt : '') + '\n';
-  if (pt.medecin)    t += 'Medecin  : ' + pt.medecin + '\n';
+  var t = '=== SYNTHÈSE CLINIQUE : HYPOTHYROÏDIE & GROSSESSE ===\n';
+  t += 'Date de l\'évaluation : ' + (pt.dateFmt || today) + '\n';
+  if (pt.nomComplet) t += 'Patiente : ' + pt.nomComplet + (pt.age ? ' (' + pt.age + ' ans)' : '') + (pt.ddnFmt ? ' — Née le ' + pt.ddnFmt : '') + '\n';
+  if (pt.medecin)    t += 'Médecin prescripteur : ' + pt.medecin + '\n';
+  t += '\n--- PARAMÈTRES BIOLOGIQUES ---\n';
+  t += '• TSH Plasmatique : ' + (hyState.tsh !== null ? hyState.tsh.toFixed(2) + ' mUI/L' : 'Non saisie') + '\n';
+  t += '• Statut Anticorps Anti-TPO : ' + (hyState.atpo === 'pos' ? 'POSITIF (+)' : (hyState.atpo === 'neg' ? 'NÉGATIF (–)' : 'Non dosé')) + '\n';
+  t += '• T4 Libre (T4L) : ' + (hyState.t4l !== null ? hyState.t4l.toFixed(2) + ' ' + hyState.unit : 'Non saisie') + '\n';
+  t += '• Trimestre : ' + hyState.trim + 'er Trimestre\n';
+  t += '• Contexte : ' + (hyState.ctx === 'discovery' ? 'Découverte pendant la grossesse' : 'Hypothyroïdie préexistante connue') + '\n';
+  
+  t += '\n--- ALGORITHME PROFESSIONNEL (ATA 2017 / SFE) ---\n';
+  t += '• Objectifs cibles TSH : T1 ≤ 2,5 mUI/L | T2-T3 ≤ 3,0 mUI/L\n';
+  t += '• Rythme de surveillance bio : Toutes les 4 à 6 semaines (TSH + T4L sous traitement)\n';
+  t += '\n(Généré via la plateforme du Dr KARA-ZAITRI M.A., Gynécologie-Obstétrique, CHU Tlemcen)\n';
 
-  t += '\n--- 1. DEPISTAGE ---\n';
-  t += 'Dosage TSH chez femmes avec facteurs de risque.\n';
-  t += '• TSH < 2,5 mUI/L : Euthyroidie — pas de traitement\n';
-  t += '• TSH >= 2,5 mUI/L : Evaluation complementaire — doser T4L + Anti-TPO\n';
-
-  t += '\n--- 2. CLASSIFICATION & DECISION ---\n';
-  t += '• TSH 2,5 - 4,0 mUI/L (Zone grise) :\n';
-  t += '    ATPO(+) → Traiter\n';
-  t += '    ATPO(-) → Surveiller\n';
-  t += '• TSH 4,0 - 10 mUI/L :\n';
-  t += '    T4L normale → Hypothyroidie Fruste (HIC) → Traitement obligatoire\n';
-  t += '    T4L basse   → Hypothyroidie Averee (HV)  → Traitement obligatoire\n';
-  t += '• TSH > 10 mUI/L : Hypothyroidie Averee — TRAITEMENT URGENT\n';
-
-  t += '\n--- 3. LEVOTHYROXINE (LT4) — DOSES INITIALES ---\n';
-  t += '• 2,5 <= TSH < 4  → 25 mcg/j (si ATPO+)\n';
-  t += '• 4   <= TSH < 10 → 25-50 mcg/j\n';
-  t += '• 10  <= TSH < 20 → 50-75 mcg/j\n';
-  t += '• TSH >= 20       → 75-100 mcg/j\n';
-  t += '• Hypothyroidie preexistante : augmenter la dose de 30 a 50 % des test grossesse positif\n';
-
-  t += '\n--- 4. OBJECTIFS TSH CIBLE ---\n';
-  t += '• 1er trimestre   : <= 2,5 mUI/L\n';
-  t += '• 2e & 3e trim.   : <= 3 mUI/L\n';
-  t += 'Suivi patientes traitees    : TSH + T4L toutes les 4-6 semaines\n';
-  t += 'Suivi zone grise ATPO(-)    : TSH toutes les 4-6 semaines\n';
-
-  t += '\n--- ANNEXE : T4 LIBRE (valeurs indicatives) ---\n';
-  t += '• 1er trim. : 0,9-1,6 ng/dL  |  12-20 pmol/L\n';
-  t += '• 2e  trim. : 0,8-1,2 ng/dL  |  10-15 pmol/L\n';
-  t += '• 3e  trim. : 0,7-1,1 ng/dL  |   9-14 pmol/L\n';
-
-  t += '\n--- 5. POST-PARTUM ---\n';
-  t += 'Retour dose pre-gravidique + Controle TSH a 4-6 semaines.\n';
-
-  t += '\n(ATA 2017 / SFE — Dr KARA-ZAITRI M.A., Gynecologie-Obstetrique, CHU Tlemcen)\n';
-
-  var btn    = document.getElementById('hy-btn-copy');
-  var notice = document.getElementById('hy-copy-notice');
-  var reset  = function() { btn.classList.remove('copied'); btn.innerHTML = '&#128203; Copier la synth\u00e8se'; if (notice) notice.classList.remove('visible'); };
-  var done   = function() { btn.classList.add('copied'); btn.textContent = '\u2713 Copi\u00e9 !'; if (notice) notice.classList.add('visible'); setTimeout(reset, 3000); };
-  var fail   = function() { btn.textContent = '\u26A0 Impossible'; setTimeout(reset, 3000); };
-  var legacy = function() {
+  var btn = document.getElementById('hy-btn-copy');
+  var reset = function() { btn.classList.remove('copied'); btn.innerHTML = '📋 Copier la synthèse'; };
+  var done  = function() { btn.classList.add('copied'); btn.textContent = '✓ Fiche copiée !'; setTimeout(reset, 2500); };
+  var fail  = function() { btn.textContent = '⚠️ Impossible de copier'; setTimeout(reset, 2500); };
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) { 
+    navigator.clipboard.writeText(t).then(done).catch(fail); 
+  } else { 
     try {
       var ta = document.createElement('textarea');
-      ta.value = t; ta.setAttribute('readonly', '');
-      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
-      document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0, t.length);
-      var ok = document.execCommand('copy');
-      document.body.removeChild(ta);
+      ta.value = t; ta.setAttribute('readonly',''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      var ok = document.execCommand('copy'); document.body.removeChild(ta);
       ok ? done() : fail();
     } catch(e) { fail(); }
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(done).catch(legacy); }
-  else { legacy(); }
+  }
 };
 
-/* ===== IMPRESSION A5 (d.3) ===== */
+/* ============================================================
+   GÉNÉRATEUR D'IMPRESSION A5/A4 OPTIMISÉE (TENIR SUR 1 PAGE)
+   ============================================================ */
 window.hyPrint = function() {
   var pt    = hyGetPatient();
   var today = new Date().toLocaleDateString('fr-FR');
   var esc = function(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
-
+  
   var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
-    + '<title>Hypothyro\u00efdie &amp; Grossesse</title>'
-    + '<style>@page{size:A5;margin:11mm;}'
-    + '*{box-sizing:border-box;margin:0;padding:0;}'
-    + 'body{font-family:Arial,Helvetica,sans-serif;font-size:8.5pt;color:#2d3748;line-height:1.4;padding-bottom:28mm;}'
-    + '.hdr{border-bottom:2px solid #1a365d;padding-bottom:5px;margin-bottom:8px;}'
-    + '.hdr-title{font-size:11pt;font-weight:700;color:#1a365d;}'
-    + '.hdr-sub{font-size:7pt;color:#718096;font-style:italic;}'
-    + '.idbox{display:flex;justify-content:space-between;gap:10px;margin:6px 0 10px;padding:5px 8px;background:#f7fafc;border:1px solid #e2e8f0;border-radius:3px;font-size:7.5pt;}'
-    + '.idcol b{display:block;font-size:6.5pt;text-transform:uppercase;letter-spacing:0.04em;color:#718096;margin-bottom:1px;}'
+    + '<title>Fiche de Prescription - Hypothyroïdie &amp; Grossesse</title>'
+    + '<style>'
+    + '@page{size:A5; margin:8mm;} *{box-sizing:border-box;margin:0;padding:0;}'
+    + 'body{font-family:"Helvetica Neue",Arial,sans-serif;font-size:8pt;color:#1e293b;line-height:1.35;padding-bottom:12mm;}'
+    + '.hdr{border-bottom:2px solid #1e3a8a;padding-bottom:4px;margin-bottom:8px;}'
+    + '.hdr-title{font-size:9.5pt;font-weight:800;color:#1e3a8a;text-transform:uppercase;}'
+    + '.hdr-sub{font-size:6.5pt;color:#64748b;font-style:italic;margin-top:2px;}'
+    + '.idbox{display:flex;justify-content:space-between;gap:12px;margin:6px 0 10px;padding:6px 10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:7.5pt;}'
+    + '.idcol b{display:block;font-size:6pt;text-transform:uppercase;letter-spacing:0.04em;color:#64748b;margin-bottom:2px;}'
     + '.sec{margin-bottom:8px;}'
-    + '.sec-title{font-size:7.5pt;font-weight:700;color:#2b6cb0;text-transform:uppercase;letter-spacing:0.04em;border-left:3px solid #2b6cb0;padding-left:5px;margin-bottom:4px;}'
-    + 'table{width:100%;border-collapse:collapse;font-size:7.5pt;}'
-    + 'th{background:#1a365d;color:#fff;padding:4px 7px;text-align:center;font-size:7pt;}'
-    + 'td{padding:3px 7px;border-bottom:1px solid #eef1f6;text-align:center;}'
-    + 'tr:nth-child(even) td{background:#f8fafc;}'
-    + 'tr:last-child td{border-bottom:none;}'
-    + '.row2{display:flex;gap:8px;margin-bottom:7px;}'
-    + '.box-g{flex:1;padding:6px 9px;border-radius:4px;font-size:7.5pt;}'
-    + '.bg-green{background:#f0fdf4;border:1px solid #86efac;color:#14532d;}'
-    + '.bg-blue{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;}'
-    + '.bg-amber{background:#fffbeb;border:1px solid #fcd34d;color:#78350f;}'
-    + '.bg-red{background:#7f1d1d;color:#fff;border:1px solid #000;}'
-    + '.warn-box{background:#fff5f5;border:1.5px solid #feb2b2;border-radius:4px;padding:6px 9px;font-size:7.5pt;color:#9b2c2c;margin-bottom:7px;}'
-    + '.ftr{position:fixed;bottom:0;left:0;width:100%;padding:4px 11mm;border-top:1px solid #e2e8f0;background:#fff;font-size:6.5pt;color:#9ca3af;text-align:center;}'
+    + '.sec-title{font-size:7.5pt;font-weight:800;color:#2563eb;text-transform:uppercase;letter-spacing:0.04em;border-left:3px solid #1e3a8a;padding-left:5px;margin-bottom:4px;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:7pt;margin-bottom:6px;}'
+    + 'th{background:#1e3a8a;color:#fff;padding:4px 6px;text-align:center;font-weight:800;}'
+    + 'td{padding:3px 6px;border-bottom:1px solid #f1f5f9;text-align:center;}'
+    + 'tr:nth-child(even) td{background:#f8fafc;} tr:last-child td{border-bottom:none;}'
+    + '.row2{display:flex;gap:6px;margin-bottom:6px;}'
+    + '.box-g{flex:1;padding:6px 8px;border-radius:4px;font-size:7.5pt;font-weight:700;}'
+    + '.bg-green{background:#f0fdf4;border:1px solid #10b981;color:#065f46;}'
+    + '.bg-blue{background:#eff6ff;border:1px solid #3b82f6;color:#1e40af;}'
+    + '.bg-amber{background:#fffbeb;border:1px solid #f59e0b;color:#78350f;}'
+    + '.bg-red{background:#fef2f2;border:1px solid #ef4444;color:#991b1b;}'
+    + '.warn-box{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:4px;padding:6px 8px;font-size:7pt;color:#991b1b;margin-bottom:6px;font-weight:700;}'
+    + '.ftr{position:fixed;bottom:0;left:0;width:100%;padding:4px 8mm;border-top:1px solid #e2e8f0;background:#fff;font-size:6pt;color:#94a3b8;text-align:center;}'
     + '</style></head><body>'
-    + '<div class="hdr"><div class="hdr-title">Hypothyro\u00efdie &amp; Grossesse \u2014 Algorithme ATA 2017 / SFE</div>'
-    + '<div class="hdr-sub">Dr KARA-ZAITRI M.A. \u2014 Gyn\u00e9cologie-Obst\u00e9trique, CHU Tlemcen</div></div>'
-    + '<div class="idbox">'
-    + '<div class="idcol"><b>Patiente</b>' + esc(pt.nomComplet || '\u2014') + (pt.ddnFmt ? ' &middot; N\u00e9e le ' + esc(pt.ddnFmt) : '') + (pt.age ? ' (' + esc(pt.age) + ' ans)' : '') + '</div>'
-    + '<div class="idcol" style="text-align:right"><b>M\u00e9decin</b>' + esc(pt.medecin || '\u2014') + '<br><b style="display:block;margin-top:2px;">Date</b>' + esc(pt.dateFmt || today) + '</div>'
-    + '</div>'
-
-    + '<div class="sec"><div class="sec-title">1. D\u00e9pistage</div>'
-    + '<div class="row2">'
-    + '<div class="box-g bg-green"><strong>TSH &lt; 2,5 mUI/L</strong><br>Euthyro\u00efdie \u2014 pas de traitement</div>'
-    + '<div class="box-g bg-amber"><strong>TSH \u2265 2,5 mUI/L</strong><br>Doser T4L + Anti-TPO</div>'
-    + '</div></div>'
-
-    + '<div class="sec"><div class="sec-title">2. Classification &amp; D\u00e9cision</div>'
-    + '<div class="row2">'
-    + '<div class="box-g bg-blue"><strong>TSH 2,5\u20134,0</strong><br>ATPO+ \u2192 Traiter<br>ATPO- \u2192 Surveiller</div>'
-    + '<div class="box-g bg-amber"><strong>TSH 4,0\u201310</strong><br>T4L normale \u2192 HIC<br>T4L basse \u2192 HV<br><strong>Traitement obligatoire</strong></div>'
-    + '<div class="box-g bg-red"><strong>TSH &gt; 10</strong><br>Hypothyro\u00efdie Av\u00e9r\u00e9e<br><strong>TRAITEMENT URGENT</strong></div>'
-    + '</div></div>'
-
-    + '<div class="sec"><div class="sec-title">3. L\u00e9vothyroxine \u2014 Doses initiales</div>'
-    + '<table><thead><tr><th>TSH (mUI/L)</th><th>Dose initiale</th></tr></thead><tbody>'
-    + '<tr><td>2,5 \u2264 TSH &lt; 4</td><td><strong>25 \u03bcg/j</strong> (si ATPO+)</td></tr>'
-    + '<tr><td>4 \u2264 TSH &lt; 10</td><td><strong>25\u201350 \u03bcg/j</strong></td></tr>'
-    + '<tr><td>10 \u2264 TSH &lt; 20</td><td><strong>50\u201375 \u03bcg/j</strong></td></tr>'
-    + '<tr><td>TSH \u2265 20</td><td><strong>75\u2013100 \u03bcg/j</strong></td></tr>'
+    + '<div class="hdr"><div class="hdr-title">Hypothyroïdie &amp; Grossesse — Fiche Obstétricale</div>'
+    + '<div class="hdr-sub">Algorithme d\'aide à la décision conforme ATA 2017 / SFE — Dr KARA-ZAITRI M.A.</div></div>'
+    + '<div class="idbox"><div class="idcol"><b>Patiente</b>' + esc(pt.nomComplet||'—') + (pt.ddnFmt?' · Née le '+esc(pt.ddnFmt):'') + (pt.age?' ('+esc(pt.age)+' ans)':'') + '</div>'
+    + '<div class="idcol" style="text-align:right"><b>Médecin traitant</b>' + esc(pt.medecin||'—') + '<br><b style="display:block;margin-top:2px;">Date</b>' + esc(pt.dateFmt||today) + '</div></div>'
+    + '<div class="sec"><div class="sec-title">1. Dépistage Initial</div><div class="row2">'
+    + '<div class="box-g bg-green"><strong>TSH &lt; 2,5 mUI/L</strong><br>Euthyroïdie — Pas de traitement</div>'
+    + '<div class="box-g bg-amber"><strong>TSH &ge; 2,5 mUI/L</strong><br>Bilan requis : Doser T4L + ATPO</div></div></div>'
+    + '<div class="sec"><div class="sec-title">2. Classification &amp; Décision Thérapeutique</div><div class="row2">'
+    + '<div class="box-g bg-blue"><strong>TSH 2,5–4,0 (Zone grise)</strong><br>ATPO(+) ➔ Traiter<br>ATPO(–) ➔ Surveiller</div>'
+    + '<div class="box-g bg-amber"><strong>TSH 4,0–10,0</strong><br>T4L norm. ➔ HIC<br>T4L basse ➔ HV<br><strong>Substitution requise</strong></div>'
+    + '<div class="box-g bg-red"><strong>TSH &gt; 10,0</strong><br>Hypoth. Avérée Sévère<br><strong>TRAITEMENT URGENT</strong></div></div></div>'
+    + '<div class="sec"><div class="sec-title">3. Instauration d\'un traitement de substitution (LT4)</div>'
+    + '<table><thead><tr><th>TSH initiale (mUI/L)</th><th>Posologie initiale préconisée d\'emblée</th></tr></thead><tbody>'
+    + '<tr><td>2,5 &le; TSH &lt; 4,0</td><td><strong>25 µg/j</strong> (si anticorps ATPO+)</td></tr>'
+    + '<tr><td>4,0 &le; TSH &lt; 10,0</td><td><strong>25 – 50 µg/j</strong></td></tr>'
+    + '<tr><td>10,0 &le; TSH &lt; 20,0</td><td><strong>50 – 75 µg/j</strong></td></tr>'
+    + '<tr><td>TSH &ge; 20,0</td><td><strong>75 – 100 µg/j</strong></td></tr>'
     + '</tbody></table>'
-    + '<div style="margin-top:4px;padding:4px 8px;background:#ebf8ff;border-radius:3px;font-size:7.5pt;color:#2b6cb0;">Hypoth. pr\u00e9existante : augmenter dose de 30\u201350 % d\u00e8s test grossesse positif</div></div>'
-
-    + '<div class="sec"><div class="sec-title">4. Objectifs &amp; Surveillance</div>'
-    + '<div class="row2">'
-    + '<div class="box-g bg-blue"><strong>TSH cible</strong><br>1er T : \u2264 2,5 mUI/L<br>2e\u20133e T : \u2264 3 mUI/L</div>'
-    + '<div class="box-g" style="background:#fdf4ff;border:1px solid #d8b4fe;color:#4c1d95;"><strong>Rythme de suivi</strong><br>Trait\u00e9es : TSH+T4L / 4\u20136 sem.<br>Zone grise ATPO(-) : TSH / 4\u20136 sem.</div>'
-    + '</div>'
-    + '<div class="warn-box"><strong>WARNING :</strong> Suivi sous traitement = TSH + T4L obligatoirement. ATPO+ non trait\u00e9e = TSH seule.</div></div>'
-
-    + '<div class="sec"><div class="sec-title">Annexe : T4 libre (valeurs indicatives)</div>'
-    + '<table><thead><tr><th>Trimestre</th><th>ng/dL</th><th>pmol/L</th></tr></thead><tbody>'
-    + '<tr><td>1er Trim.</td><td>0,9\u20131,6</td><td>12\u201320</td></tr>'
-    + '<tr><td>2\u00e8me Trim.</td><td>0,8\u20131,2</td><td>10\u201315</td></tr>'
-    + '<tr><td>3\u00e8me Trim.</td><td>0,7\u20131,1</td><td>9\u201314</td></tr>'
-    + '</tbody></table></div>'
-
-    + '<div class="sec"><div class="sec-title">5. Post-partum</div>'
-    + '<div class="box-g bg-blue" style="text-align:center;">Retour dose pr\u00e9-gravidique + Contr\u00f4le TSH \u00e0 4\u20136 semaines</div></div>'
-
-    + '<div class="ftr">G\u00e9n\u00e9r\u00e9 le ' + esc(today) + ' \u2022 Algorithme ATA 2017 / SFE \u2022 Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 usage r\u00e9serv\u00e9 aux professionnels de sant\u00e9</div>'
+    + '<div style="margin-top:2px;padding:4px 8px;background:#eff6ff;border-radius:4px;font-size:7pt;color:#1e40af;font-weight:700;">Maladie préexistante connue : Augmenter d\'emblée le traitement de 30% à 50% dès la grossesse active.</div></div>'
+    + '<div class="sec"><div class="sec-title">4. Objectifs Cibles &amp; Suivi</div><div class="row2">'
+    + '<div class="box-g bg-blue"><strong>Objectif cible</strong><br>T1 : ≤ 2,5 mUI/L | T2-T3 : ≤ 3,0 mUI/L</div>'
+    + '<div class="box-g bg-amber"><strong>Suivi obstétrical</strong><br>Substituée : TSH + T4L / 4–6 sem.<br>ATPO(–) non traitée : TSH / 4–6 sem.</div></div>'
+    + '<div class="warn-box">WARNING CLINIQUE : Tout suivi biologique sous substitution active requiert obligatoirement le dosage conjoint TSH + T4L.</div></div>'
+    + '<div class="sec"><div class="sec-title">5. Post-Partum Immédiat</div>'
+    + '<div class="post-partum" style="background:#f1f5f9;color:#1e293b;padding:5px;border-radius:4px;font-size:7pt;font-weight:700;">Retour immédiat à la posologie pré-gravidique habituelle + Contrôle TSH à 4 – 6 semaines.</div></div>'
+    + '<div class="ftr">Généré via la plateforme du Dr KARA-ZAITRI M.A. • Recommandations ATA 2017 / SFE • Professionnels de santé</div>'
     + '</body></html>';
 
   var w = window.open('', '_blank');
-  if (!w) { alert('Veuillez autoriser les fen\u00eatres pop-up pour imprimer.'); return; }
+  if (!w) { alert('Veuillez autoriser l\'affichage des pop-ups pour imprimer la fiche.'); return; }
   w.document.open(); w.document.write(html); w.document.close();
   w.onload = function() { w.focus(); w.print(); };
-  setTimeout(function() { try { w.focus(); w.print(); } catch(e) {} }, 300);
 };
 
-/* ===== PWA ===== */
+/* ============================================================
+   INITIALISATION ET CHARGEMENT DU DOM
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', function() {
+  hyInitRisks();
+  hyUpdateT4LNorm();
+});
+
+   /* ============================================================
+   PWA (SERVICE WORKER)
+   ============================================================ */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw.js').catch(function(){});
@@ -955,5 +1107,6 @@ if ('serviceWorker' in navigator) {
 
 <!-- TRACKING UMAMI (RGPD compliant, no cookies) -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="b182aba6-225e-47ac-b6be-892e033a6013"></script>
+
 </body>
 </html>
