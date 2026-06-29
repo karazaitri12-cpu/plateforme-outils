@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dermatoses Spécifiques de la Grossesse — Dr KARA-ZAITRI M.A.</title>
   <meta name="description" content="Outil d'aide au diagnostic des dermatoses spécifiques de la grossesse : pemphigoïde, DPG/PUPPP, cholestase, impétigo herpétiforme. Dr KARA-ZAITRI M.A., Gynécologie-Obstétrique, Tlemcen.">
-
-  <!-- PWA -->
   <meta name="theme-color" content="#1A3A5C">
   <meta name="apple-mobile-web-app-capable" content="apple-mobile-web-app-capable">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -16,20 +14,60 @@
 </head>
 <body>
 
-<!-- ================================================================
-     Outil de Diagnostic : Dermatoses Spécifiques de la Grossesse
-     Version 2.4 — Mai 2026
-     Références : HAS, CNGOF, Cours GHR, UpToDate 2024
-     Blindé pour intégration Elementor (widget HTML)
-     ================================================================ -->
-
 <div id="dsg-tool-container" class="dsg-app-wrapper">
 
     <!-- EN-TÊTE -->
     <header class="dsg-main-header">
-        <h2 class="dsg-title">Aide au Diagnostic : Dermatoses Sp&#233;cifiques de la Grossesse</h2>
+        <h2 class="dsg-title">Aide au Diagnostic&#160;: Dermatoses Sp&#233;cifiques de la Grossesse</h2>
         <p class="dsg-subtitle">Outil d&#39;orientation clinique &#8212; Professionnels de sant&#233;</p>
     </header>
+
+    <!-- ============================================================
+         BARRE PATIENT COMPACTE (standard Dr KZ)
+    ============================================================ -->
+    <div class="dsg-pt-bar">
+        <button type="button" class="dsg-pt-toggle" id="dsg-pt-toggle-btn" onclick="dsgPtToggle()" aria-expanded="false">
+            <span class="dsg-pt-arrow">&#9658;</span>
+            <span>&#128100;&#160;Identification patiente / m&#233;decin prescripteur</span>
+            <span style="margin-left:auto;font-size:10px;font-weight:400;text-transform:none;color:#8a9ab0;font-style:italic;">Optionnel &#8212; pour le r&#233;sum&#233; et l&#8217;impression</span>
+        </button>
+        <div class="dsg-pt-form" id="dsg-pt-form">
+            <div class="dsg-pt-grid">
+                <div class="dsg-pt-field">
+                    <label for="dsg-pt-nom">Nom</label>
+                    <input type="text" id="dsg-pt-nom" placeholder="Nom de famille" autocomplete="off" oninput="dsgUpdateResume()">
+                </div>
+                <div class="dsg-pt-field">
+                    <label for="dsg-pt-prenom">Pr&#233;nom</label>
+                    <input type="text" id="dsg-pt-prenom" placeholder="Pr&#233;nom" autocomplete="off" oninput="dsgUpdateResume()">
+                </div>
+                <div class="dsg-pt-field dsg-pt-ddnage">
+                    <div class="dsg-pt-ddn-row">
+                        <div class="dsg-pt-ddn-col">
+                            <label for="dsg-pt-ddn">Date de naissance</label>
+                            <input type="date" id="dsg-pt-ddn" oninput="dsgPtCalcAge(); dsgUpdateResume();">
+                        </div>
+                        <div class="dsg-pt-ddn-col dsg-pt-ddn-col-sm">
+                            <label for="dsg-pt-age">&#194;ge <span id="dsg-pt-age-badge" class="dsg-pt-age-badge"></span></label>
+                            <input type="number" id="dsg-pt-age" placeholder="ans" min="0" max="130" oninput="dsgPtClearDdn(); dsgUpdateResume();">
+                        </div>
+                    </div>
+                </div>
+                <div class="dsg-pt-field">
+                    <label for="dsg-pt-ddr">DDR <span id="dsg-pt-am-badge" class="dsg-pt-age-badge"></span></label>
+                    <input type="date" id="dsg-pt-ddr" oninput="dsgPtCalcAmenorrhee(); dsgUpdateResume();">
+                </div>
+                <div class="dsg-pt-field">
+                    <label for="dsg-pt-med">M&#233;decin prescripteur</label>
+                    <input type="text" id="dsg-pt-med" placeholder="Dr ..." autocomplete="off" oninput="dsgUpdateResume()">
+                </div>
+                <div class="dsg-pt-field">
+                    <label for="dsg-pt-date">Date de consultation</label>
+                    <input type="date" id="dsg-pt-date" oninput="dsgUpdateResume()">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- BARRE DE PROGRESSION -->
     <div class="dsg-progress-bar" id="dsg-progress-bar" aria-hidden="true">
@@ -96,6 +134,20 @@
         <div id="dsg-result" class="dsg-step">
             <div class="dsg-breadcrumb" id="dsg-breadcrumb"></div>
             <div id="dsg-result-content"></div>
+
+            <!-- Zone rapport compacte -->
+            <div class="dsg-rapport-box" id="dsg-rapport-box" style="display:none;">
+                <div class="dsg-rapport-header">
+                    <span class="dsg-rapport-title">&#128196;&#160;R&#233;sum&#233; clinique</span>
+                    <div class="dsg-rapport-actions">
+                        <button class="dsg-rapport-btn dsg-rapport-btn-copy" id="dsg-rapport-copy-btn" onclick="dsgCopyDossier()">&#128203;&#160;Copier</button>
+                        <button class="dsg-rapport-btn dsg-rapport-btn-clear" onclick="dsgClearResume()">&#10005;</button>
+                    </div>
+                </div>
+                <textarea class="dsg-resume-textarea" id="dsg-resume-textarea" spellcheck="true"
+                    placeholder="Le r&#233;sum&#233; clinique s&#39;affiche ici..."></textarea>
+            </div>
+
             <div class="dsg-result-actions">
                 <button class="dsg-btn-reset" onclick="dsgReset()">&#8635;&#160;Nouvelle &#233;valuation</button>
                 <button class="dsg-btn-print" onclick="dsgPrint()">&#128438;&#160;Imprimer le r&#233;sultat</button>
@@ -111,87 +163,11 @@
 
     <!-- FOOTER -->
     <footer class="dsg-footer">
-        Version 2.4 &#8212; Mai 2026 &nbsp;|&nbsp; R&#233;f.&#160;: HAS, CNGOF, Cours GHR &nbsp;|&nbsp; Dr Kara-Za&#239;tri M.A. &nbsp;|&nbsp; <a href="https://www.dr-karazaitri-ma.net/" target="_blank" rel="noopener" class="dsg-footer-link">www.dr-karazaitri-ma.net</a>
+        Version 2.4 &#8212; Mai 2026 &nbsp;|&nbsp; R&#233;f.&#160;: HAS, CNGOF, Cours GHR &nbsp;|&nbsp; Dr Kara-Za&#239;tri M.A. &nbsp;|&nbsp;
+        <a href="https://www.dr-karazaitri-ma.net/" target="_blank" rel="noopener" class="dsg-footer-link">www.dr-karazaitri-ma.net</a>
     </footer>
 
-    <!-- ============================================================
-         PANNEAU DOSSIER PATIENT
-    ============================================================ -->
-    <section class="dsg-patient-panel" id="dsg-patient-panel">
-
-        <div class="dsg-patient-header" onclick="dsgTogglePatient()">
-            <span class="dsg-patient-header-title">
-                &#128196;&#160;Dossier patient &#8212; R&#233;sum&#233; clinique
-            </span>
-            <span class="dsg-patient-toggle-icon" id="dsg-patient-icon">&#9660;</span>
-        </div>
-
-        <div class="dsg-patient-body" id="dsg-patient-body">
-
-            <div class="dsg-patient-id-grid">
-                <div class="dsg-field-group">
-                    <label class="dsg-field-label" for="dsg-nom">Nom</label>
-                    <input class="dsg-field-input" type="text" id="dsg-nom" placeholder="NOM" oninput="dsgUpdateResume()" autocomplete="off" />
-                </div>
-                <div class="dsg-field-group">
-                    <label class="dsg-field-label" for="dsg-prenom">Pr&#233;nom</label>
-                    <input class="dsg-field-input" type="text" id="dsg-prenom" placeholder="Pr&#233;nom" oninput="dsgUpdateResume()" autocomplete="off" />
-                </div>
-                <div class="dsg-field-group">
-                    <label class="dsg-field-label" for="dsg-ddn">
-                        Date de naissance
-                        <span class="dsg-calc-badge" id="dsg-age-badge"></span>
-                    </label>
-                    <input class="dsg-field-input" type="date" id="dsg-ddn" oninput="dsgCalcAge(); dsgUpdateResume();" />
-                </div>
-                <div class="dsg-field-group">
-                    <label class="dsg-field-label" for="dsg-ddr">
-                        Derni&#232;res r&#232;gles (DDR)
-                        <span class="dsg-calc-badge" id="dsg-amenorrhee-badge"></span>
-                    </label>
-                    <input class="dsg-field-input" type="date" id="dsg-ddr" oninput="dsgCalcAmenorrhee(); dsgUpdateResume();" />
-                </div>
-            </div>
-
-            <div class="dsg-patient-sep"></div>
-
-            <div class="dsg-resume-header">
-                <span class="dsg-field-label" style="margin:0;">R&#233;sum&#233; clinique (&#233;ditable)</span>
-                <div class="dsg-resume-actions">
-                    <button class="dsg-resume-btn dsg-resume-btn-fill" onclick="dsgFillResume()" title="G&#233;n&#233;rer le r&#233;sum&#233; depuis le diagnostic">
-                        &#8635;&#160;G&#233;n&#233;rer
-                    </button>
-                    <button class="dsg-resume-btn dsg-resume-btn-print" onclick="dsgPrintResume()" title="Imprimer uniquement le r&#233;sum&#233;">
-                        &#128438;&#160;Imprimer
-                    </button>
-                    <button class="dsg-resume-btn dsg-resume-btn-clear" onclick="dsgClearResume()" title="Effacer">
-                        &#10005;&#160;Effacer
-                    </button>
-                </div>
-            </div>
-
-            <textarea
-                class="dsg-resume-textarea"
-                id="dsg-resume-textarea"
-                placeholder="Le r&#233;sum&#233; clinique s&#39;affiche ici apr&#232;s avoir obtenu un diagnostic. Vous pouvez aussi saisir librement ou compl&#233;ter ce texte avant de le copier dans le dossier patient."
-                spellcheck="true"
-            ></textarea>
-
-            <div class="dsg-patient-copy-bar">
-                <span class="dsg-patient-copy-hint">
-                    &#8505;&#160;Ce texte est copi&#233; tel quel &#8212; vous pouvez l&#39;&#233;diter avant de coller dans le dossier.
-                </span>
-                <button class="dsg-patient-copy-btn" id="dsg-patient-copy-btn" onclick="dsgCopyDossier()">
-                    &#128203;&#160;Copier pour le dossier
-                </button>
-            </div>
-
-        </div>
-    </section>
-
 </div>
-
-<!-- ================================================================ CSS ================================================================ -->
 <style>
 
 /* === RESET & WRAPPER BLINDÉ === */
@@ -211,703 +187,275 @@
     overflow: visible !important;
     -webkit-text-size-adjust: 100% !important;
     text-size-adjust: 100% !important;
-    -webkit-tap-highlight-color: transparent !important;
 }
-
-#dsg-tool-container.dsg-app-wrapper * {
-    box-sizing: border-box !important;
-    font-family: inherit !important;
-}
+#dsg-tool-container.dsg-app-wrapper * { box-sizing: border-box !important; font-family: inherit !important; }
 
 /* === EN-TÊTE === */
-#dsg-tool-container .dsg-main-header {
-    background-color: #f4f7fb;
-    padding: 24px 28px 20px;
-    border-bottom: 3px solid #1a3a5c;
-}
+#dsg-tool-container .dsg-main-header { background-color: #f4f7fb; padding: 24px 28px 20px; border-bottom: 3px solid #1a3a5c; }
+#dsg-tool-container .dsg-title { all: unset; display: block; color: #1a3a5c; font-size: 1.35rem; font-weight: 700; margin-bottom: 5px; line-height: 1.3; }
+#dsg-tool-container .dsg-subtitle { all: unset; display: block; font-size: 0.88rem; color: #5a6a7e; font-style: italic; }
 
-#dsg-tool-container .dsg-title {
-    all: unset;
-    display: block;
-    color: #1a3a5c;
-    font-size: 1.35rem;
+/* ============================================================
+   BARRE PATIENT COMPACTE
+============================================================ */
+#dsg-tool-container .dsg-pt-bar {
+    background: #f4f7fb;
+    border-bottom: 1px solid #d8e4f0;
+    overflow: hidden;
+}
+#dsg-tool-container .dsg-pt-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
     font-weight: 700;
-    margin-bottom: 5px;
-    line-height: 1.3;
+    color: #5a6a7e;
+    text-align: left;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.15s, background 0.15s;
 }
-
-#dsg-tool-container .dsg-subtitle {
+#dsg-tool-container .dsg-pt-toggle:hover { color: #1a3a5c; background: #e8f0fa; }
+#dsg-tool-container .dsg-pt-arrow { font-size: 9px; transition: transform 0.2s; display: inline-block; color: #8a9ab0; }
+#dsg-tool-container .dsg-pt-toggle.open .dsg-pt-arrow { transform: rotate(90deg); }
+#dsg-tool-container .dsg-pt-form {
+    display: none;
+    padding: 10px 18px 14px;
+    background: #fff;
+    border-top: 1px solid #d8e4f0;
+}
+#dsg-tool-container .dsg-pt-form.open { display: block; }
+#dsg-tool-container .dsg-pt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+}
+#dsg-tool-container .dsg-pt-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#dsg-tool-container .dsg-pt-field label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #5a6a7e;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+}
+#dsg-tool-container .dsg-pt-field input {
     all: unset;
     display: block;
-    font-size: 0.88rem;
-    color: #5a6a7e;
-    font-style: italic;
+    width: 100%;
+    padding: 6px 9px;
+    border: 1px solid #c8d3df;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12px;
+    color: #1a1a1a;
+    background: #f9fafb;
+    transition: border-color 0.15s;
 }
+#dsg-tool-container .dsg-pt-field input:focus { border-color: #1a3a5c; background: #fff; outline: none; }
+#dsg-tool-container .dsg-pt-age-badge {
+    display: inline-block;
+    background: #1a3a5c;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 20px;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+#dsg-tool-container .dsg-pt-ddnage { grid-column: span 2; min-width: 0; }
+#dsg-tool-container .dsg-pt-ddn-row { display: flex; gap: 8px; }
+#dsg-tool-container .dsg-pt-ddn-col { display: flex; flex-direction: column; gap: 3px; flex: 1 1 0; min-width: 0; }
+#dsg-tool-container .dsg-pt-ddn-col-sm { flex: 0 0 82px; }
+#dsg-tool-container .dsg-pt-ddn-col label {
+    font-size: 10px; font-weight: 700; color: #5a6a7e;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    display: flex; align-items: center; gap: 5px; margin: 0; padding: 0;
+}
+#dsg-tool-container .dsg-pt-ddn-col input {
+    all: unset; display: block; width: 100%;
+    padding: 6px 9px; border: 1px solid #c8d3df; border-radius: 4px;
+    font-family: inherit; font-size: 12px; color: #1a1a1a;
+    background: #f9fafb; transition: border-color 0.15s;
+}
+#dsg-tool-container .dsg-pt-ddn-col input:focus { border-color: #1a3a5c; background: #fff; outline: none; }
+@media (max-width: 540px) { #dsg-tool-container .dsg-pt-ddnage { grid-column: span 1; } }
 
 /* === BARRE DE PROGRESSION === */
-#dsg-tool-container .dsg-progress-bar {
-    display: flex;
-    align-items: center;
-    padding: 14px 28px;
-    background: #f9fafb;
-    border-bottom: 1px solid #e4eaf0;
-}
-
-#dsg-tool-container .dsg-progress-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
-}
-
-#dsg-tool-container .dsg-prog-dot {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #d0d7de;
-    color: #fff;
-    font-size: 0.82rem;
-    font-weight: 700;
-    transition: background 0.3s;
-}
-
+#dsg-tool-container .dsg-progress-bar { display: flex; align-items: center; padding: 14px 28px; background: #f9fafb; border-bottom: 1px solid #e4eaf0; }
+#dsg-tool-container .dsg-progress-step { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+#dsg-tool-container .dsg-prog-dot { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: #d0d7de; color: #fff; font-size: 0.82rem; font-weight: 700; transition: background 0.3s; }
 #dsg-tool-container .dsg-progress-step.active .dsg-prog-dot { background: #1a3a5c; }
-#dsg-tool-container .dsg-progress-step.done .dsg-prog-dot   { background: #1a7a4a; }
-
-#dsg-tool-container .dsg-prog-label {
-    font-size: 0.72rem;
-    color: #8a9ab0;
-    white-space: nowrap;
-    font-weight: 500;
-}
-
+#dsg-tool-container .dsg-progress-step.done .dsg-prog-dot { background: #1a7a4a; }
+#dsg-tool-container .dsg-prog-label { font-size: 0.72rem; color: #8a9ab0; white-space: nowrap; font-weight: 500; }
 #dsg-tool-container .dsg-progress-step.active .dsg-prog-label,
 #dsg-tool-container .dsg-progress-step.done .dsg-prog-label { color: #1a3a5c; }
-
-#dsg-tool-container .dsg-progress-line {
-    flex: 1;
-    height: 2px;
-    background: #d0d7de;
-    margin: 0 6px;
-    margin-bottom: 16px;
-    transition: background 0.3s;
-}
-
+#dsg-tool-container .dsg-progress-line { flex: 1; height: 2px; background: #d0d7de; margin: 0 6px; margin-bottom: 16px; transition: background 0.3s; }
 #dsg-tool-container .dsg-progress-line.done { background: #1a7a4a; }
 
 /* === DISCLAIMER === */
-#dsg-tool-container .dsg-disclaimer {
-    background-color: #fff8f0;
-    border-left: 4px solid #c0392b;
-    padding: 12px 18px;
-    font-size: 0.84rem;
-    color: #6b2b1f;
-    margin: 0;
-    line-height: 1.5;
-}
+#dsg-tool-container .dsg-disclaimer { background-color: #fff8f0; border-left: 4px solid #c0392b; padding: 12px 18px; font-size: 0.84rem; color: #6b2b1f; margin: 0; line-height: 1.5; }
 
 /* === CARD === */
-#dsg-tool-container .dsg-card {
-    padding: 28px !important;
-    box-sizing: border-box !important;
-}
+#dsg-tool-container .dsg-card { padding: 28px !important; box-sizing: border-box !important; }
 
-/* === ÉTAPES avec FADE === */
+/* === ÉTAPES === */
 #dsg-tool-container .dsg-step { display: none; opacity: 0; }
+#dsg-tool-container .dsg-step.active { display: block; animation: dsgFadeIn 0.22s ease forwards; }
+@keyframes dsgFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-#dsg-tool-container .dsg-step.active {
-    display: block;
-    animation: dsgFadeIn 0.22s ease forwards;
-}
-
-@keyframes dsgFadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-#dsg-tool-container .dsg-step-title {
-    all: unset;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #1a3a5c;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #e4eaf0;
-}
-
-#dsg-tool-container .dsg-step-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    background: #1a3a5c;
-    color: #fff;
-    border-radius: 50%;
-    font-size: 0.85rem;
-    font-weight: 700;
-    flex-shrink: 0;
-}
+#dsg-tool-container .dsg-step-title { all: unset; display: flex; align-items: center; gap: 10px; font-size: 1.05rem; font-weight: 600; color: #1a3a5c; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e4eaf0; }
+#dsg-tool-container .dsg-step-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: #1a3a5c; color: #fff; border-radius: 50%; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
 
 /* === OPTIONS === */
-#dsg-tool-container .dsg-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-    width: 100% !important;
-    padding-right: 0 !important;
-}
-
-#dsg-tool-container .dsg-btn {
-    all: unset;
-    display: block;
-    background: #ffffff;
-    border: 1px solid #c8d3df;
-    padding: 14px 18px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.96rem;
-    color: #1a1a1a;
-    line-height: 1.45;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-}
-
+#dsg-tool-container .dsg-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; width: 100% !important; }
+#dsg-tool-container .dsg-btn { all: unset; display: block; background: #ffffff; border: 1px solid #c8d3df; padding: 14px 18px; border-radius: 4px; cursor: pointer; font-size: 0.96rem; color: #1a1a1a; line-height: 1.45; width: 100% !important; box-sizing: border-box !important; transition: background 0.15s, border-color 0.15s, color 0.15s; }
 #dsg-tool-container .dsg-btn:hover { background: #eaf1fb; border-color: #1a3a5c; color: #1a3a5c; }
-
-#dsg-tool-container .dsg-btn.dsg-btn-selected {
-    background: #ddeeff;
-    border-color: #1a3a5c;
-    border-width: 2px;
-    color: #1a3a5c;
-    font-weight: 600;
-}
-
-#dsg-tool-container .dsg-btn.dsg-btn-urgent {
-    border-color: #c0392b;
-    background: #fff5f4;
-    color: #6b2b1f;
-    font-weight: 600;
-}
-
-#dsg-tool-container .dsg-btn.dsg-btn-urgent:hover,
-#dsg-tool-container .dsg-btn.dsg-btn-urgent.dsg-btn-selected {
-    background: #fde8e6;
-    border-color: #922b21;
-    color: #922b21;
-}
+#dsg-tool-container .dsg-btn.dsg-btn-selected { background: #ddeeff; border-color: #1a3a5c; border-width: 2px; color: #1a3a5c; font-weight: 600; }
+#dsg-tool-container .dsg-btn.dsg-btn-urgent { border-color: #c0392b; background: #fff5f4; color: #6b2b1f; font-weight: 600; }
+#dsg-tool-container .dsg-btn.dsg-btn-urgent:hover { background: #fde8e6; border-color: #922b21; color: #922b21; }
 
 /* === NAVIGATION === */
-#dsg-tool-container .dsg-btn-back {
-    all: unset;
-    display: inline-block;
-    color: #5a6a7e;
-    cursor: pointer;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    margin-top: 4px;
-}
+#dsg-tool-container .dsg-btn-back { all: unset; display: inline-block; color: #5a6a7e; cursor: pointer; font-size: 0.9rem; text-decoration: underline; margin-top: 4px; }
 #dsg-tool-container .dsg-btn-back:hover { color: #1a3a5c; }
 
-/* === ACTIONS RÉSULTAT === */
-#dsg-tool-container .dsg-result-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid #e4eaf0;
-}
-
-#dsg-tool-container .dsg-btn-reset {
-    all: unset;
-    display: inline-block;
-    background: #1a3a5c;
-    color: #fff;
-    padding: 9px 20px;
+/* === ZONE RAPPORT COMPACTE === */
+#dsg-tool-container .dsg-rapport-box {
+    margin-top: 20px;
+    border: 1px solid #d8e4f0;
     border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.92rem;
-    font-weight: 500;
-    transition: background 0.15s;
-}
-#dsg-tool-container .dsg-btn-reset:hover { background: #122a44; }
-
-#dsg-tool-container .dsg-btn-print,
-#dsg-tool-container .dsg-btn-copy {
-    all: unset;
-    display: inline-block;
-    background: #f4f7fb;
-    color: #1a3a5c;
-    border: 1px solid #c8d3df;
-    padding: 9px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.92rem;
-    font-weight: 500;
-    transition: background 0.15s;
-}
-#dsg-tool-container .dsg-btn-print:hover,
-#dsg-tool-container .dsg-btn-copy:hover { background: #e4eaf0; }
-
-#dsg-tool-container .dsg-btn-copy.dsg-copied {
-    background: #e6f4ee;
-    border-color: #1a7a4a;
-    color: #1a7a4a;
-}
-
-/* === FIL D'ARIANE === */
-#dsg-tool-container .dsg-breadcrumb {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-    background: #f9fafb;
-    border: 1px solid #e4eaf0;
-    border-radius: 4px;
-    padding: 10px 14px;
-    margin-bottom: 20px;
-    font-size: 0.83rem;
-    color: #5a6a7e;
-}
-
-#dsg-tool-container .dsg-breadcrumb-item { color: #1a3a5c; font-weight: 500; }
-#dsg-tool-container .dsg-breadcrumb-sep  { color: #aab5c0; font-size: 0.8rem; }
-
-/* === RÉSULTATS === */
-#dsg-tool-container .dsg-result-header {
-    background: #f0f5fb;
-    border-left: 4px solid #1a3a5c;
-    padding: 16px 20px;
-    border-radius: 0 4px 4px 0;
-    margin-bottom: 22px;
-}
-
-#dsg-tool-container .dsg-result-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-
-#dsg-tool-container .dsg-meta-badge {
-    display: inline-block;
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
-    border: 1px solid;
-}
-#dsg-tool-container .dsg-meta-badge.trimestre      { background:#eaf1fb; border-color:#90b8e0; color:#1a3a5c; }
-#dsg-tool-container .dsg-meta-badge.recidive-eleve { background:#fdecea; border-color:#e57373; color:#6b1a1a; }
-#dsg-tool-container .dsg-meta-badge.recidive-faible{ background:#e6f4ee; border-color:#6abf8a; color:#1a5a30; }
-#dsg-tool-container .dsg-meta-badge.recidive-moyen { background:#fff8e1; border-color:#f0c040; color:#5a3e00; }
-
-#dsg-tool-container .dsg-result-title {
-    all: unset;
-    display: block;
-    color: #1a3a5c;
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-    line-height: 1.3;
-}
-
-#dsg-tool-container .dsg-result-desc {
-    all: unset;
-    display: block;
-    font-size: 0.93rem;
-    color: #3a4a5c;
-    line-height: 1.5;
-}
-
-#dsg-tool-container .dsg-section-label {
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: #5a6a7e;
-    margin: 18px 0 8px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #e4eaf0;
-}
-
-#dsg-tool-container .dsg-list { list-style: none; padding: 0; margin: 0; }
-
-#dsg-tool-container .dsg-list li {
-    position: relative;
-    padding-left: 20px;
-    margin-bottom: 6px;
-    font-size: 0.94rem;
-    color: #222;
-    line-height: 1.5;
-}
-
-#dsg-tool-container .dsg-list li::before {
-    content: "\2022";
-    position: absolute;
-    left: 0; top: 0;
-    color: #1a3a5c;
-    font-weight: bold;
-}
-
-#dsg-tool-container .dsg-list.dsg-list-urgence li::before { content: "\2192"; color: #c0392b; }
-#dsg-tool-container .dsg-list.dsg-list-ddx    li::before { content: "\2022"; color: #8a6a00; }
-
-#dsg-tool-container .dsg-traitement-text {
-    all: unset;
-    display: block;
-    font-size: 0.94rem;
-    color: #222;
-    margin-top: 6px;
-    line-height: 1.6;
-}
-
-#dsg-tool-container .dsg-alert-box {
-    padding: 13px 16px;
-    border-radius: 4px;
-    margin-top: 16px;
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
-#dsg-tool-container .dsg-alert-box.dsg-alert-warn   { background:#fff8e1; border:1px solid #f0c040; color:#5a3e00; }
-#dsg-tool-container .dsg-alert-box.dsg-alert-danger { background:#fdecea; border:1px solid #e57373; color:#6b1a1a; }
-#dsg-tool-container .dsg-alert-box.dsg-alert-info   { background:#e8f4fd; border:1px solid #90c4e8; color:#1a3a5c; }
-
-#dsg-tool-container .dsg-urgence-box {
-    background: #fdecea;
-    border: 2px solid #c0392b;
-    border-radius: 4px;
-    padding: 14px 16px;
-    margin-top: 16px;
-}
-#dsg-tool-container .dsg-urgence-box-title {
-    all: unset;
-    display: block;
-    font-size: 0.82rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #c0392b;
-    margin-bottom: 8px;
-}
-
-#dsg-tool-container .dsg-cours-link {
-    display: inline-block;
-    margin-top: 14px;
-    font-size: 0.86rem;
-    color: #1a3a5c;
-    text-decoration: underline;
-    cursor: pointer;
-}
-#dsg-tool-container .dsg-cours-link:hover { color: #0d2238; }
-
-#dsg-tool-container .dsg-urgence-badge {
-    display: inline-block;
-    background: #c0392b;
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 2px 8px;
-    border-radius: 2px;
-    margin-right: 8px;
-    vertical-align: middle;
-}
-
-#dsg-tool-container .dsg-ddx-box {
-    background: #fffbea;
-    border: 1px solid #e8c840;
-    border-radius: 4px;
-    padding: 11px 14px;
-    margin-top: 14px;
-    font-size: 0.88rem;
-    color: #4a3800;
-}
-#dsg-tool-container .dsg-ddx-title {
-    all: unset;
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #8a6a00;
-    margin-bottom: 6px;
-}
-
-/* === FOOTER === */
-#dsg-tool-container .dsg-footer {
-    background: #f4f7fb;
-    border-top: 1px solid #d0d7de;
-    padding: 10px 20px;
-    font-size: 0.78rem;
-    color: #7a8a9a;
-    text-align: center;
-}
-
-/* ================================================================
-   PANNEAU DOSSIER PATIENT
-================================================================ */
-#dsg-tool-container .dsg-patient-panel {
-    border-top: 3px solid #1a3a5c;
-    background: #f9fafb;
     overflow: hidden;
+    background: #f9fafb;
 }
-
-#dsg-tool-container .dsg-patient-header {
+#dsg-tool-container .dsg-rapport-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 24px;
-    cursor: pointer;
+    padding: 8px 14px;
     background: #f0f5fb;
     border-bottom: 1px solid #d8e4f0;
-    user-select: none;
-    transition: background 0.15s;
 }
-
-#dsg-tool-container .dsg-patient-header:hover { background: #e4edf8; }
-
-#dsg-tool-container .dsg-patient-header-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #1a3a5c;
-    letter-spacing: 0.01em;
-}
-
-#dsg-tool-container .dsg-patient-toggle-icon {
-    color: #1a3a5c;
-    font-size: 0.85rem;
-    transition: transform 0.25s;
-}
-
-#dsg-tool-container .dsg-patient-toggle-icon.closed { transform: rotate(-90deg); }
-
-#dsg-tool-container .dsg-patient-body {
-    padding: 22px 24px 20px;
-    display: block;
-}
-
-#dsg-tool-container .dsg-patient-body.dsg-collapsed { display: none; }
-
-#dsg-tool-container .dsg-patient-id-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px 20px;
-    margin-bottom: 18px;
-}
-
-#dsg-tool-container .dsg-field-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-#dsg-tool-container .dsg-field-label {
-    font-size: 0.78rem;
+#dsg-tool-container .dsg-rapport-title {
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #5a6a7e;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    letter-spacing: 0.05em;
+    color: #1a3a5c;
 }
-
-#dsg-tool-container .dsg-field-input {
-    all: unset;
-    display: block;
-    width: 100% !important;
-    background: #fff;
-    border: 1px solid #c8d3df;
-    border-radius: 4px;
-    padding: 9px 12px;
-    font-size: 0.95rem;
-    color: #1a1a1a;
-    transition: border-color 0.15s;
-}
-
-#dsg-tool-container .dsg-field-input:focus { border-color: #1a3a5c; outline: none; }
-
-#dsg-tool-container .dsg-calc-badge {
-    display: inline-block;
-    background: #1a3a5c;
-    color: #fff;
-    font-size: 0.74rem;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    min-width: 10px;
-    text-transform: none;
-    letter-spacing: 0;
-}
-
-#dsg-tool-container .dsg-patient-sep {
-    height: 1px;
-    background: #d8e4f0;
-    margin: 4px 0 16px;
-}
-
-#dsg-tool-container .dsg-resume-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-#dsg-tool-container .dsg-resume-actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-#dsg-tool-container .dsg-resume-btn {
+#dsg-tool-container .dsg-rapport-actions { display: flex; gap: 6px; }
+#dsg-tool-container .dsg-rapport-btn {
     all: unset;
     display: inline-block;
-    font-size: 0.82rem;
+    font-size: 11px;
     font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 4px;
+    padding: 4px 10px;
+    border-radius: 3px;
     cursor: pointer;
     border: 1px solid;
     transition: background 0.15s;
 }
-
-#dsg-tool-container .dsg-resume-btn-fill {
-    background: #eaf1fb;
-    border-color: #90b8e0;
-    color: #1a3a5c;
-}
-#dsg-tool-container .dsg-resume-btn-fill:hover { background: #d4e5f7; }
-
-#dsg-tool-container .dsg-resume-btn-print {
-    background: #f4f7fb;
-    border-color: #c8d3df;
-    color: #1a3a5c;
-}
-#dsg-tool-container .dsg-resume-btn-print:hover { background: #e4eaf0; }
-
-#dsg-tool-container .dsg-resume-btn-clear {
-    background: #fdecea;
-    border-color: #e57373;
-    color: #922b21;
-}
-#dsg-tool-container .dsg-resume-btn-clear:hover { background: #fbd5d5; }
-
+#dsg-tool-container .dsg-rapport-btn-copy { background: #eaf1fb; border-color: #90b8e0; color: #1a3a5c; }
+#dsg-tool-container .dsg-rapport-btn-copy:hover { background: #d4e5f7; }
+#dsg-tool-container .dsg-rapport-btn-copy.dsg-copied { background: #e6f4ee; border-color: #6abf8a; color: #1a7a4a; }
+#dsg-tool-container .dsg-rapport-btn-clear { background: #fdecea; border-color: #e57373; color: #922b21; }
+#dsg-tool-container .dsg-rapport-btn-clear:hover { background: #fbd5d5; }
 #dsg-tool-container .dsg-resume-textarea {
     display: block;
     width: 100% !important;
-    min-height: 160px;
-    max-height: 600px;
+    min-height: 140px;
+    max-height: 500px;
     resize: vertical;
     background: #fff;
-    border: 1px solid #c8d3df;
-    border-radius: 4px;
+    border: none;
     padding: 12px 14px;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     color: #1a1a1a;
     line-height: 1.6;
     white-space: pre-wrap;
     font-family: "Segoe UI", Arial, sans-serif;
-    transition: border-color 0.15s;
-    overflow-y: auto;
-    margin: 0;
     box-sizing: border-box;
+    outline: none;
+    overflow-y: auto;
 }
 
-#dsg-tool-container .dsg-resume-textarea:focus { border-color: #1a3a5c; outline: none; }
+/* === ACTIONS RÉSULTAT === */
+#dsg-tool-container .dsg-result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e4eaf0; }
+#dsg-tool-container .dsg-btn-reset { all: unset; display: inline-block; background: #1a3a5c; color: #fff; padding: 9px 20px; border-radius: 4px; cursor: pointer; font-size: 0.92rem; font-weight: 500; transition: background 0.15s; }
+#dsg-tool-container .dsg-btn-reset:hover { background: #122a44; }
+#dsg-tool-container .dsg-btn-print { all: unset; display: inline-block; background: #f4f7fb; color: #1a3a5c; border: 1px solid #c8d3df; padding: 9px 20px; border-radius: 4px; cursor: pointer; font-size: 0.92rem; font-weight: 500; transition: background 0.15s; }
+#dsg-tool-container .dsg-btn-print:hover { background: #e4eaf0; }
 
-#dsg-tool-container .dsg-patient-copy-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 12px;
-}
+/* === FIL D'ARIANE === */
+#dsg-tool-container .dsg-breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; background: #f9fafb; border: 1px solid #e4eaf0; border-radius: 4px; padding: 10px 14px; margin-bottom: 20px; font-size: 0.83rem; color: #5a6a7e; }
+#dsg-tool-container .dsg-breadcrumb-item { color: #1a3a5c; font-weight: 500; }
+#dsg-tool-container .dsg-breadcrumb-sep { color: #aab5c0; font-size: 0.8rem; }
 
-#dsg-tool-container .dsg-patient-copy-hint {
-    font-size: 0.8rem;
-    color: #7a8a9a;
-    font-style: italic;
-    flex: 1;
-    min-width: 0;
-}
+/* === RÉSULTATS (identique à l'original) === */
+#dsg-tool-container .dsg-result-header { background: #f0f5fb; border-left: 4px solid #1a3a5c; padding: 16px 20px; border-radius: 0 4px 4px 0; margin-bottom: 22px; }
+#dsg-tool-container .dsg-result-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+#dsg-tool-container .dsg-meta-badge { display: inline-block; font-size: 0.78rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; border: 1px solid; }
+#dsg-tool-container .dsg-meta-badge.trimestre { background:#eaf1fb; border-color:#90b8e0; color:#1a3a5c; }
+#dsg-tool-container .dsg-meta-badge.recidive-eleve { background:#fdecea; border-color:#e57373; color:#6b1a1a; }
+#dsg-tool-container .dsg-meta-badge.recidive-faible { background:#e6f4ee; border-color:#6abf8a; color:#1a5a30; }
+#dsg-tool-container .dsg-meta-badge.recidive-moyen { background:#fff8e1; border-color:#f0c040; color:#5a3e00; }
+#dsg-tool-container .dsg-result-title { all: unset; display: block; color: #1a3a5c; font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+#dsg-tool-container .dsg-result-desc { all: unset; display: block; font-size: 0.93rem; color: #3a4a5c; line-height: 1.5; }
+#dsg-tool-container .dsg-section-label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #5a6a7e; margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid #e4eaf0; }
+#dsg-tool-container .dsg-list { list-style: none; padding: 0; margin: 0; }
+#dsg-tool-container .dsg-list li { position: relative; padding-left: 20px; margin-bottom: 6px; font-size: 0.94rem; color: #222; line-height: 1.5; }
+#dsg-tool-container .dsg-list li::before { content: "\2022"; position: absolute; left: 0; top: 0; color: #1a3a5c; font-weight: bold; }
+#dsg-tool-container .dsg-list.dsg-list-urgence li::before { content: "\2192"; color: #c0392b; }
+#dsg-tool-container .dsg-traitement-text { all: unset; display: block; font-size: 0.94rem; color: #222; margin-top: 6px; line-height: 1.6; }
+#dsg-tool-container .dsg-alert-box { padding: 13px 16px; border-radius: 4px; margin-top: 16px; font-size: 0.9rem; line-height: 1.5; }
+#dsg-tool-container .dsg-alert-box.dsg-alert-warn { background:#fff8e1; border:1px solid #f0c040; color:#5a3e00; }
+#dsg-tool-container .dsg-alert-box.dsg-alert-danger { background:#fdecea; border:1px solid #e57373; color:#6b1a1a; }
+#dsg-tool-container .dsg-alert-box.dsg-alert-info { background:#e8f4fd; border:1px solid #90c4e8; color:#1a3a5c; }
+#dsg-tool-container .dsg-urgence-box { background:#fdecea; border:2px solid #c0392b; border-radius:4px; padding:14px 16px; margin-top:16px; }
+#dsg-tool-container .dsg-urgence-box-title { all:unset; display:block; font-size:0.82rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#c0392b; margin-bottom:8px; }
+#dsg-tool-container .dsg-cours-link { display:inline-block; margin-top:14px; font-size:0.86rem; color:#1a3a5c; text-decoration:underline; cursor:pointer; }
+#dsg-tool-container .dsg-urgence-badge { display:inline-block; background:#c0392b; color:#fff; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:2px 8px; border-radius:2px; margin-right:8px; vertical-align:middle; }
+#dsg-tool-container .dsg-ddx-box { background:#fffbea; border:1px solid #e8c840; border-radius:4px; padding:11px 14px; margin-top:14px; font-size:0.88rem; color:#4a3800; }
+#dsg-tool-container .dsg-ddx-title { all:unset; display:block; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#8a6a00; margin-bottom:6px; }
 
-#dsg-tool-container .dsg-patient-copy-btn {
-    all: unset;
-    display: inline-block;
-    background: #1a3a5c;
-    color: #fff;
-    padding: 10px 24px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.94rem;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    transition: background 0.15s;
-    flex-shrink: 0;
-}
-#dsg-tool-container .dsg-patient-copy-btn:hover { background: #122a44; }
+/* === FOOTER === */
+#dsg-tool-container .dsg-footer { background:#f4f7fb; border-top:1px solid #d0d7de; padding:10px 20px; font-size:0.78rem; color:#7a8a9a; text-align:center; }
+#dsg-tool-container .dsg-footer-link { color: #1a3a5c; }
 
-#dsg-tool-container .dsg-patient-copy-btn.dsg-copied { background: #1a7a4a; }
-
-/* =========================================
-   PRO : Masque l'ascenseur (style App native)
-   ========================================= */
+/* === SCROLLBAR === */
 html { scrollbar-width: none; }
 body { -ms-overflow-style: none; overflow-y: auto; }
 ::-webkit-scrollbar { display: none; }
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
-    #dsg-tool-container.dsg-app-wrapper {
-        font-size: 15px !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        border-left: none !important;
-        border-right: none !important;
-    }
-    #dsg-tool-container .dsg-card { padding: 14px !important; }
-    #dsg-tool-container .dsg-main-header { padding: 14px 16px; }
-    #dsg-tool-container .dsg-title { font-size: 1.05rem; }
-    #dsg-tool-container .dsg-btn { font-size: 0.93rem; padding: 13px 14px; line-height: 1.45; }
-    #dsg-tool-container .dsg-progress-bar { padding: 10px 14px; }
-    #dsg-tool-container .dsg-prog-label { display: none; }
-    #dsg-tool-container .dsg-result-actions { flex-direction: column; }
-    #dsg-tool-container .dsg-patient-id-grid { grid-template-columns: 1fr; }
-    #dsg-tool-container .dsg-resume-header { flex-direction: column; align-items: flex-start; }
-    #dsg-tool-container .dsg-patient-copy-bar { flex-direction: column; align-items: stretch; }
-    #dsg-tool-container .dsg-patient-copy-btn { text-align: center; width: 100% !important; }
+    #dsg-tool-container.dsg-app-wrapper { font-size:15px !important; margin:0 !important; border-radius:0 !important; border-left:none !important; border-right:none !important; }
+    #dsg-tool-container .dsg-card { padding:14px !important; }
+    #dsg-tool-container .dsg-main-header { padding:14px 16px; }
+    #dsg-tool-container .dsg-title { font-size:1.05rem; }
+    #dsg-tool-container .dsg-btn { font-size:0.93rem; padding:13px 14px; }
+    #dsg-tool-container .dsg-progress-bar { padding:10px 14px; }
+    #dsg-tool-container .dsg-prog-label { display:none; }
+    #dsg-tool-container .dsg-result-actions { flex-direction:column; }
     #dsg-tool-container .dsg-btn-reset,
-    #dsg-tool-container .dsg-btn-print { width: 100% !important; text-align: center; }
-    #dsg-tool-container .dsg-patient-panel { border-radius: 0; }
-    #dsg-tool-container .dsg-resume-textarea { min-height: 120px; }
-    #dsg-tool-container .dsg-footer { font-size: 0.72rem; }
+    #dsg-tool-container .dsg-btn-print { width:100% !important; text-align:center; }
 }
-
 </style>
-
-<!-- ================================================================ JS ================================================================ -->
 <script>
 (function() {
 
-    var dsgState = {
-        path: null,
-        step2Choice: null,
-        breadcrumb: [],
-        currentType: null
-    };
+    var dsgState = { path: null, step2Choice: null, breadcrumb: [], currentType: null };
 
     var dsgLabels = {
         'prurit':        'Prurit pr\u00e9dominant',
@@ -918,6 +466,69 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         'nu':            'Prurit nu (paumes/plantes)'
     };
 
+    /* ============================================================
+       BARRE PATIENT COMPACTE
+    ============================================================ */
+    window.dsgPtToggle = function() {
+        var f = document.getElementById('dsg-pt-form');
+        var b = document.getElementById('dsg-pt-toggle-btn');
+        f.classList.toggle('open');
+        b.classList.toggle('open');
+        b.setAttribute('aria-expanded', f.classList.contains('open') ? 'true' : 'false');
+    };
+    window.dsgPtCalcAge = function() {
+        var ddn = document.getElementById('dsg-pt-ddn').value;
+        var badge = document.getElementById('dsg-pt-age-badge');
+        if (!ddn) { if(badge) badge.textContent = ''; return; }
+        var d = new Date(ddn), now = new Date();
+        var age = now.getFullYear() - d.getFullYear();
+        var m = now.getMonth() - d.getMonth();
+        if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+        document.getElementById('dsg-pt-age').value = Math.max(0, age);
+        if(badge) badge.textContent = age + ' ans';
+    };
+    window.dsgPtClearDdn = function() {
+        document.getElementById('dsg-pt-ddn').value = '';
+        var badge = document.getElementById('dsg-pt-age-badge');
+        if(badge) badge.textContent = '';
+    };
+    window.dsgPtCalcAmenorrhee = function() {
+        var val = document.getElementById('dsg-pt-ddr').value;
+        var badge = document.getElementById('dsg-pt-am-badge');
+        if (!val) { if(badge) badge.textContent = ''; return; }
+        var ddr = new Date(val), now = new Date();
+        var diffMs = now - ddr;
+        if (diffMs < 0) { if(badge) badge.textContent = 'date future'; return; }
+        var diffDays = Math.floor(diffMs / 86400000);
+        var sa = Math.floor(diffDays / 7);
+        var j  = diffDays % 7;
+        if(badge) badge.textContent = sa + ' SA + ' + j + ' j';
+    };
+
+    function dsgGetPatient() {
+        var nom    = (document.getElementById('dsg-pt-nom').value || '').trim();
+        var prenom = (document.getElementById('dsg-pt-prenom').value || '').trim();
+        var ddn    = document.getElementById('dsg-pt-ddn').value;
+        var age    = (document.getElementById('dsg-pt-age').value || '').trim();
+        var ddr    = document.getElementById('dsg-pt-ddr').value;
+        var med    = (document.getElementById('dsg-pt-med').value || '').trim();
+        var date   = document.getElementById('dsg-pt-date').value;
+        var amBadge = (document.getElementById('dsg-pt-am-badge').textContent || '').trim();
+        var nomC   = (prenom ? prenom + ' ' : '') + nom;
+        return {
+            nomComplet: nomC.trim(),
+            ddn: ddn ? dsgFormatDate(ddn) : '',
+            age: age,
+            ddr: ddr ? dsgFormatDate(ddr) : '',
+            amenorrhee: amBadge,
+            medecin: med,
+            date: date ? dsgFormatDate(date) : new Date().toLocaleDateString('fr-FR')
+        };
+    }
+
+    /* ============================================================
+       BASE DE DONNÉES
+    ============================================================ */
     var dsgDB = {
         pemphigoide: {
             title: "Pemphigo\u00efde Gestationnelle (Herp\u00e8s Gestationis)",
@@ -926,110 +537,70 @@ body { -ms-overflow-style: none; overflow-y: auto; }
             recidive: "eleve",
             recidive_label: "R\u00e9cidive\u00a0: 50\u201370\u00a0%",
             desc: "Dermatose auto-immune rare (1/50\u00a0000 \u00e0 1/60\u00a0000 grossesses). D\u00e9bute fr\u00e9quemment en r\u00e9gion p\u00e9ri-ombilicale, parfois sous forme urticarienne sans bulles en phase initiale.",
-            diag: [
-                "Biopsie cutan\u00e9e avec immunofluorescence directe (IFD)\u00a0: d\u00e9p\u00f4ts lin\u00e9aires d\u2019IgG et/ou C3 \u00e0 la jonction dermo-\u00e9pidermique",
-                "NFS\u00a0: \u00e9osinophilie (pr\u00e9sente dans ~50\u00a0% des cas)",
-                "Anticorps anti-BP180 (Collag\u00e8ne XVII) \u2014 marqueur le plus sensible",
-                "Anticorps anti-BP230 (compl\u00e9ment du bilan auto-immun)",
-                "Avis dermatologique imp\u00e9ratif"
-            ],
+            diag: ["Biopsie cutan\u00e9e avec immunofluorescence directe (IFD)\u00a0: d\u00e9p\u00f4ts lin\u00e9aires d\u2019IgG et/ou C3 \u00e0 la jonction dermo-\u00e9pidermique","NFS\u00a0: \u00e9osinophilie (pr\u00e9sente dans ~50\u00a0% des cas)","Anticorps anti-BP180 (Collag\u00e8ne XVII) \u2014 marqueur le plus sensible","Anticorps anti-BP230 (compl\u00e9ment du bilan auto-immun)","Avis dermatologique imp\u00e9ratif"],
             traitement: "Dermocortico\u00efdes forts (clob\u00e9tasol) en phase initiale\u00a0; Prednisone orale 0,5\u20131\u00a0mg/kg/j si bulles extensives ou atteinte s\u00e9v\u00e8re. R\u00e9duction progressive post-partum. Surveillance n\u00e9onatale.",
             urgence_cat: null,
             complications: "Risque de pr\u00e9maturit\u00e9 et de RCIU mod\u00e9r\u00e9. R\u00e9cidive aux grossesses ult\u00e9rieures dans 50\u201370\u00a0% des cas. Risque d\u2019atteinte n\u00e9onatale transitoire par transfert passif des IgG (<\u00a010\u00a0%).",
-            alerte_class: "dsg-alert-warn",
-            alerte_titre: "Surveillance f\u0153tale",
+            alerte_class: "dsg-alert-warn", alerte_titre: "Surveillance f\u0153tale",
             ddx: "\u00c9liminer\u00a0: DPG/PUPPP (IFD n\u00e9gative), \u00e9ruption atopique (contexte clinique)"
         },
         puppp: {
             title: "Dermatose Polymorphe Gravidique (DPG \u2014 PUPPP)",
             urgence: false,
             trimestre: "3e trimestre",
-            recidive: "faible",
-            recidive_label: "R\u00e9cidive\u00a0: rare",
+            recidive: "faible", recidive_label: "R\u00e9cidive\u00a0: rare",
             desc: "Dermatose la plus fr\u00e9quente\u00a0: incidence estim\u00e9e \u00e0 1/130\u20131/200 grossesses. Surtout 3e trimestre, primipares. Respect caract\u00e9ristique de la r\u00e9gion ombilicale.",
-            diag: [
-                "Diagnostic essentiellement clinique (aspect, localisation, contexte)",
-                "Absence de bulles \u2014 distingue de la pemphigo\u00efde",
-                "Bilan h\u00e9patique (ALAT/ASAT, GGT, acides biliaires)\u00a0: normal \u2014 \u00e0 r\u00e9aliser syst\u00e9matiquement pour \u00e9liminer une cholestase",
-                "IFD non n\u00e9cessaire si tableau typique"
-            ],
+            diag: ["Diagnostic essentiellement clinique (aspect, localisation, contexte)","Absence de bulles \u2014 distingue de la pemphigo\u00efde","Bilan h\u00e9patique (ALAT/ASAT, GGT, acides biliaires)\u00a0: normal \u2014 \u00e0 r\u00e9aliser syst\u00e9matiquement pour \u00e9liminer une cholestase","IFD non n\u00e9cessaire si tableau typique"],
             traitement: "Dermocortico\u00efdes classe II ou III (7\u201310 jours) + Antihistaminiques H1 s\u00e9datifs (nuit). \u00c9mollients pluriquotidiens.",
             urgence_cat: null,
             complications: "Pronostic materno-f\u0153tal excellent. Pas de r\u00e9cidive habituelle aux grossesses ult\u00e9rieures.",
-            alerte_class: "dsg-alert-info",
-            alerte_titre: "Pronostic",
+            alerte_class: "dsg-alert-info", alerte_titre: "Pronostic",
             ddx: "\u00c9liminer\u00a0: pemphigo\u00efde gestationnelle (IFD si doute), cholestase intrah\u00e9patique (acides biliaires)"
         },
         eczema: {
             title: "\u00c9ruption Atopique de la Grossesse (EAG)",
             urgence: false,
             trimestre: "1er\u20112e trimestre (majorit\u00e9)",
-            recidive: "moyen",
-            recidive_label: "R\u00e9cidive\u00a0: possible",
+            recidive: "moyen", recidive_label: "R\u00e9cidive\u00a0: possible",
             desc: "Entit\u00e9 la plus fr\u00e9quente des dermatoses gestationnelles (1/300 env.). Inclut eczema atopique aggrav\u00e9 et prurigo gravidique. Terrain atopique personnel ou familial retrouv\u00e9 dans ~80\u00a0% des cas.",
-            diag: [
-                "Diagnostic clinique\u00a0: l\u00e9sions des plis (coudes, creux poplit\u00e9s), cou, visage",
-                "Bilan h\u00e9patique + acides biliaires \u00e0 jeun\u00a0: normaux (\u00e9limination de cholestase)",
-                "IgE totales \u00e9lev\u00e9es possibles (non indispensables au diagnostic)"
-            ],
+            diag: ["Diagnostic clinique\u00a0: l\u00e9sions des plis (coudes, creux poplit\u00e9s), cou, visage","Bilan h\u00e9patique + acides biliaires \u00e0 jeun\u00a0: normaux (\u00e9limination de cholestase)","IgE totales \u00e9lev\u00e9es possibles (non indispensables au diagnostic)"],
             traitement: "\u00c9mollients pluriquotidiens + Dermocortico\u00efdes classe II\u2013III sur l\u00e9sions actives. Savons surgras. Antihistaminiques H1 si prurit invalidant.",
             urgence_cat: null,
             complications: "Risque de surinfection bact\u00e9rienne cutan\u00e9e (\u00e0 surveiller). Pronostic maternel et f\u0153tal excellent. Peut r\u00e9cidiver \u00e0 la grossesse suivante.",
-            alerte_class: "dsg-alert-info",
-            alerte_titre: "Pronostic",
+            alerte_class: "dsg-alert-info", alerte_titre: "Pronostic",
             ddx: "\u00c9liminer\u00a0: cholestase intrah\u00e9patique (acides biliaires), gale (topographie, entourage)"
         },
         cholestase: {
             title: "Cholestase Intrah\u00e9patique Gravidique (CIG)",
             urgence: false,
             trimestre: "3e trimestre",
-            recidive: "eleve",
-            recidive_label: "R\u00e9cidive\u00a0: 45\u201370\u00a0%",
+            recidive: "eleve", recidive_label: "R\u00e9cidive\u00a0: 45\u201370\u00a0%",
             desc: "Prurit nu, intense, \u00e0 recrudescence nocturne, pr\u00e9dominant aux paumes et plantes. Troisi\u00e8me trimestre principalement. Absence de l\u00e9sion cutan\u00e9e primaire (l\u00e9sions de grattage secondaires).",
-            diag: [
-                "Acides biliaires totaux \u00e0 jeun\u00a0: \u2265\u00a010\u00a0\u00b5mol/L (seuil diagnostique) \u2014 forme s\u00e9v\u00e8re si \u2265\u00a040\u00a0\u00b5mol/L",
-                "ALAT/ASAT\u00a0: augment\u00e9es dans 20\u201360\u00a0% des cas (inconstantes)",
-                "GGT, bilirubine (augmentation inconstante)",
-                "TP, facteur V (surveillance si cholestase s\u00e9v\u00e8re \u2014 malabsorption Vit.\u00a0K)",
-                "\u00c9chographie h\u00e9patobiliaire (\u00e9limination lithiase)",
-                "Bilan hebdomadaire \u00e0 adapter selon s\u00e9v\u00e9rit\u00e9"
-            ],
+            diag: ["Acides biliaires totaux \u00e0 jeun\u00a0: \u2265\u00a010\u00a0\u00b5mol/L (seuil diagnostique) \u2014 forme s\u00e9v\u00e8re si \u2265\u00a040\u00a0\u00b5mol/L","ALAT/ASAT\u00a0: augment\u00e9es dans 20\u201360\u00a0% des cas (inconstantes)","GGT, bilirubine (augmentation inconstante)","TP, facteur V (surveillance si cholestase s\u00e9v\u00e8re \u2014 malabsorption Vit.\u00a0K)","\u00c9chographie h\u00e9patobiliaire (\u00e9limination lithiase)","Bilan hebdomadaire \u00e0 adapter selon s\u00e9v\u00e9rit\u00e9"],
             traitement: "Acide ursod\u00e9soxycholique (AUDCA)\u00a0: 10\u201315\u00a0mg/kg/j en 2\u20133 prises. Vitamine K si TP bas ou cholestase s\u00e9v\u00e8re. Surveillance RCF rapproch\u00e9e d\u00e8s 34\u00a0SA. Discussion d\u2019un d\u00e9clenchement \u00e0 partir de 37\u201338\u00a0SA selon s\u00e9v\u00e9rit\u00e9 (acides biliaires \u2265\u00a040\u00a0\u00b5mol/L).",
             urgence_cat: null,
             complications: "Risque de pr\u00e9maturit\u00e9 (30\u201360\u00a0%). Risque de mort in utero (0,75\u20133\u00a0%) \u2014 plus \u00e9lev\u00e9 si acides biliaires \u2265\u00a040\u00a0\u00b5mol/L. Risque de d\u00e9tresse respiratoire n\u00e9onatale.",
-            alerte_class: "dsg-alert-danger",
-            alerte_titre: "Risque f\u0153tal \u2014 Surveillance obligatoire",
+            alerte_class: "dsg-alert-danger", alerte_titre: "Risque f\u0153tal \u2014 Surveillance obligatoire",
             ddx: "\u00c9liminer\u00a0: h\u00e9patite virale (s\u00e9rologies), HELLP syndrome (bilan complet), st\u00e9atose h\u00e9patique aigu\u00eb gravidique"
         },
         impetigo: {
             title: "Imp\u00e9tigo Herp\u00e9tiforme (Psoriasis Pustuleux de la Grossesse)",
             urgence: true,
             trimestre: "Tout trimestre (3e trimestre +++)",
-            recidive: "moyen",
-            recidive_label: "R\u00e9cidive\u00a0: possible",
+            recidive: "moyen", recidive_label: "R\u00e9cidive\u00a0: possible",
             desc: "Urgence m\u00e9dicale rare. \u00c9ruption pustuleuse st\u00e9rile sur plaques \u00e9ryth\u00e9mateuses, souvent d\u00e9butant dans les plis. Fi\u00e8vre, alt\u00e9ration de l\u2019\u00e9tat g\u00e9n\u00e9ral. Terrain souvent sans ant\u00e9c\u00e9dent de psoriasis.",
-            diag: [
-                "Biopsie cutan\u00e9e (pustule st\u00e9rile spongiforme intra-corn\u00e9e)",
-                "Bact\u00e9riologie des pustules\u00a0: n\u00e9gative (pustules aseptiques)",
-                "Bilan biologique\u00a0: hypocalc\u00e9mie (fr\u00e9quente), carence en vitamine\u00a0D",
-                "NFS, CRP, bilan h\u00e9patique, ionogramme complet",
-                "Surveillance f\u0153tale\u00a0: ERCF, \u00e9chographie doppler"
-            ],
+            diag: ["Biopsie cutan\u00e9e (pustule st\u00e9rile spongiforme intra-corn\u00e9e)","Bact\u00e9riologie des pustules\u00a0: n\u00e9gative (pustules aseptiques)","Bilan biologique\u00a0: hypocalc\u00e9mie (fr\u00e9quente), carence en vitamine\u00a0D","NFS, CRP, bilan h\u00e9patique, ionogramme complet","Surveillance f\u0153tale\u00a0: ERCF, \u00e9chographie doppler"],
             traitement: "Corticoth\u00e9rapie orale (Prednisone). Correction de l\u2019hypocalc\u00e9mie et de la carence en vitamine\u00a0D. Antibioth\u00e9rapie si surinfection. D\u00e9clenchement ou c\u00e9sarienne \u00e0 discuter selon terme et s\u00e9v\u00e9rit\u00e9. Transfert en maternit\u00e9 de niveau adapt\u00e9.",
-            urgence_cat: [
-                "Hospitalisation imm\u00e9diate en urgence",
-                "Appel du r\u00e9f\u00e9rent dermatologue et de l\u2019\u00e9quipe obst\u00e9tricale",
-                "Bilan biologique en urgence (calcium, vitamine D, NFS, ionogramme)",
-                "Monitoring f\u0153tal continu",
-                "Voie veineuse p\u00e9riph\u00e9rique + r\u00e9hydratation si alt\u00e9ration \u00e9tat g\u00e9n\u00e9ral"
-            ],
+            urgence_cat: ["Hospitalisation imm\u00e9diate en urgence","Appel du r\u00e9f\u00e9rent dermatologue et de l\u2019\u00e9quipe obst\u00e9tricale","Bilan biologique en urgence (calcium, vitamine D, NFS, ionogramme)","Monitoring f\u0153tal continu","Voie veineuse p\u00e9riph\u00e9rique + r\u00e9hydratation si alt\u00e9ration \u00e9tat g\u00e9n\u00e9ral"],
             complications: "Pronostic f\u0153tal grave\u00a0: risque de mort in utero jusqu\u2019\u00e0 50\u00a0% dans les s\u00e9ries anciennes. Risque maternel engag\u00e9\u00a0: insuffisance r\u00e9nale, cardiaque, surr\u00e9nalienne.",
-            alerte_class: "dsg-alert-danger",
-            alerte_titre: "\u26a0\u00a0URGENCE \u2014 Hospitalisation imm\u00e9diate",
+            alerte_class: "dsg-alert-danger", alerte_titre: "\u26a0\u00a0URGENCE \u2014 Hospitalisation imm\u00e9diate",
             ddx: "\u00c9liminer\u00a0: pustulose exanth\u00e9matique aigu\u00eb g\u00e9n\u00e9ralis\u00e9e (PEAG, cause m\u00e9dicamenteuse), varicelle dissemin\u00e9e (v\u00e9sicules not pustules)"
         }
     };
 
+    /* ============================================================
+       LOGIQUE DE NAVIGATION
+    ============================================================ */
     window.dsgNextStep = function(step, choice, btn) {
         if (btn) {
             var siblings = btn.parentNode.querySelectorAll('.dsg-btn');
@@ -1038,7 +609,6 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         }
         var opt2 = document.getElementById('options-step-2');
         var opt3 = document.getElementById('options-step-3');
-
         if (step === 2) {
             dsgState.path = choice;
             dsgState.breadcrumb = [dsgLabels[choice] || choice];
@@ -1077,6 +647,8 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         dsgState = { path:null, step2Choice:null, breadcrumb:[], currentType:null };
         dsgSetActiveStep('dsg-step-1');
         dsgUpdateProgress(1);
+        var rb = document.getElementById('dsg-rapport-box');
+        if(rb) rb.style.display = 'none';
     };
 
     window.dsgShowResult = function(type, btn) {
@@ -1089,14 +661,10 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         document.getElementById('dsg-breadcrumb').innerHTML = '<span style="color:#8a9ab0;font-size:0.8rem;margin-right:4px;">Chemin\u00a0:</span>' + bcItems;
 
         var urgenceBadge = d.urgence ? '<span class="dsg-urgence-badge">\u26a0\u00a0Urgence</span>' : '';
-        var trimestreBadge = '<span class="dsg-meta-badge trimestre">\ud83d\udcc5\u00a0' + d.trimestre + '</span>';
-        var recidiveBadge  = '<span class="dsg-meta-badge recidive-' + d.recidive + '">' + d.recidive_label + '</span>';
         var diagItems = d.diag.map(function(i){ return '<li>'+i+'</li>'; }).join('');
-
         var catUrgenceHtml = '';
         if (d.urgence_cat && d.urgence_cat.length) {
-            catUrgenceHtml = '<div class="dsg-urgence-box"><span class="dsg-urgence-box-title">\u26a0\u00a0CAT imm\u00e9diate \u2014 Urgence</span><ul class="dsg-list dsg-list-urgence">' +
-                d.urgence_cat.map(function(i){return '<li>'+i+'</li>';}).join('') + '</ul></div>';
+            catUrgenceHtml = '<div class="dsg-urgence-box"><span class="dsg-urgence-box-title">\u26a0\u00a0CAT imm\u00e9diate \u2014 Urgence</span><ul class="dsg-list dsg-list-urgence">' + d.urgence_cat.map(function(i){return '<li>'+i+'</li>';}).join('') + '</ul></div>';
         }
         var ddxHtml = d.ddx ? '<div class="dsg-ddx-box"><span class="dsg-ddx-title">Diagnostics \u00e0 \u00e9liminer</span>'+d.ddx+'</div>' : '';
         var coursHtml = '<a class="dsg-cours-link" href="https://www.dr-karazaitri-ma.net/obstetrique/grossesses-a-haut-risque/der1/" target="_blank" rel="noopener">\u2192\u00a0Voir le cours complet sur les dermatoses de la grossesse</a>';
@@ -1105,7 +673,7 @@ body { -ms-overflow-style: none; overflow-y: auto; }
             '<div class="dsg-result-header">' +
                 '<span class="dsg-result-title">' + urgenceBadge + d.title + '</span>' +
                 '<span class="dsg-result-desc">' + d.desc + '</span>' +
-                '<div class="dsg-result-meta">' + trimestreBadge + recidiveBadge + '</div>' +
+                '<div class="dsg-result-meta"><span class="dsg-meta-badge trimestre">\ud83d\udcc5\u00a0'+d.trimestre+'</span><span class="dsg-meta-badge recidive-'+d.recidive+'">'+d.recidive_label+'</span></div>' +
             '</div>' +
             catUrgenceHtml +
             '<span class="dsg-section-label">Examens compl\u00e9mentaires cl\u00e9s</span>' +
@@ -1118,6 +686,8 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         dsgSetActiveStep('dsg-result');
         dsgUpdateProgress(4);
         dsgFillResume();
+        var rb = document.getElementById('dsg-rapport-box');
+        if(rb) rb.style.display = 'block';
     };
 
     function dsgUpdateProgress(currentStep) {
@@ -1143,77 +713,29 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         if (t) t.classList.add('active');
     }
 
-    window.dsgTogglePatient = function() {
-        var body = document.getElementById('dsg-patient-body');
-        var icon = document.getElementById('dsg-patient-icon');
-        if (!body || !icon) return;
-        if (body.classList.contains('dsg-collapsed')) {
-            body.classList.remove('dsg-collapsed');
-            icon.classList.remove('closed');
-        } else {
-            body.classList.add('dsg-collapsed');
-            icon.classList.add('closed');
-        }
-    };
-
-    window.dsgCalcAge = function() {
-        var val = document.getElementById('dsg-ddn').value;
-        var badge = document.getElementById('dsg-age-badge');
-        if (!val) { badge.textContent = ''; return; }
-        var ddn = new Date(val);
-        var now = new Date();
-        var age = now.getFullYear() - ddn.getFullYear();
-        var m = now.getMonth() - ddn.getMonth();
-        if (m < 0 || (m === 0 && now.getDate() < ddn.getDate())) age--;
-        badge.textContent = age >= 0 ? age + ' ans' : '';
-    };
-
-    window.dsgCalcAmenorrhee = function() {
-        var val = document.getElementById('dsg-ddr').value;
-        var badge = document.getElementById('dsg-amenorrhee-badge');
-        if (!val) { badge.textContent = ''; return; }
-        var ddr = new Date(val);
-        var now = new Date();
-        var diffMs = now - ddr;
-        if (diffMs < 0) { badge.textContent = 'date future'; return; }
-        var diffDays = Math.floor(diffMs / 86400000);
-        var sa = Math.floor(diffDays / 7);
-        var j  = diffDays % 7;
-        badge.textContent = sa + ' SA + ' + j + ' j';
-    };
-
-    window.dsgUpdateResume = function() {
-        if (dsgState.currentType) dsgFillResume();
-    };
+    /* ============================================================
+       RÉSUMÉ CLINIQUE
+    ============================================================ */
+    window.dsgUpdateResume = function() { if (dsgState.currentType) dsgFillResume(); };
 
     window.dsgFillResume = function() {
         var ta = document.getElementById('dsg-resume-textarea');
         if (!ta) return;
-
-        var nom    = (document.getElementById('dsg-nom').value || '').trim().toUpperCase();
-        var prenom = (document.getElementById('dsg-prenom').value || '').trim();
-        var ddn    = document.getElementById('dsg-ddn').value;
-        var ddr    = document.getElementById('dsg-ddr').value;
-        var ageBadge  = document.getElementById('dsg-age-badge').textContent;
-        var amBadge   = document.getElementById('dsg-amenorrhee-badge').textContent;
+        var pt = dsgGetPatient();
+        var today = new Date().toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
 
         var identite = '';
-        if (nom || prenom) identite += 'Patiente\u00a0: ' + [prenom, nom].filter(Boolean).join(' ') + '\n';
-        if (ddn) identite += 'N\u00e9e le\u00a0: ' + dsgFormatDate(ddn) + (ageBadge ? ' (' + ageBadge + ')' : '') + '\n';
-        if (ddr) identite += 'DDR\u00a0: ' + dsgFormatDate(ddr) + (amBadge ? ' \u2014 Am\u00e9norh\u00e9e\u00a0: ' + amBadge : '') + '\n';
+        if (pt.nomComplet) identite += 'Patiente\u00a0: ' + pt.nomComplet + (pt.age ? ' (' + pt.age + ' ans)' : '') + (pt.ddn ? ' \u2014 N\u00e9e le ' + pt.ddn : '') + '\n';
+        if (pt.ddr) identite += 'DDR\u00a0: ' + pt.ddr + (pt.amenorrhee ? ' \u2014 Am\u00e9norh\u00e9e\u00a0: ' + pt.amenorrhee : '') + '\n';
+        if (pt.medecin) identite += 'M\u00e9decin\u00a0: ' + pt.medecin + '\n';
         if (identite) identite += '\n';
 
-        var today = new Date();
-        var dateConsult = 'Consultation du ' + today.toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'}) + '\n\n';
-
+        var dateConsult = 'Consultation du ' + (pt.date || today) + '\n\n';
         var corps = '';
         if (dsgState.currentType && dsgDB[dsgState.currentType]) {
             var d = dsgDB[dsgState.currentType];
-            corps += '--- ORIENTATION DIAGNOSTIQUE ---\n';
-            corps += d.title + '\n';
-            corps += d.trimestre + '\n\n';
-            corps += '--- SIGNES D\u2019APPEL ---\n';
-            corps += d.desc + '\n\n';
+            corps += '--- ORIENTATION DIAGNOSTIQUE ---\n' + d.title + '\n' + d.trimestre + '\n\n';
+            corps += '--- SIGNES D\u2019APPEL ---\n' + d.desc + '\n\n';
             if (d.urgence_cat && d.urgence_cat.length) {
                 corps += '--- CAT IMMED\u00cdATE (URGENCE) ---\n';
                 d.urgence_cat.forEach(function(item, i) { corps += (i+1) + '. ' + item + '\n'; });
@@ -1221,19 +743,12 @@ body { -ms-overflow-style: none; overflow-y: auto; }
             }
             corps += '--- EXAMENS COMPL\u00c9MENTAIRES PROPOS\u00c9S ---\n';
             d.diag.forEach(function(item, i) { corps += (i+1) + '. ' + item + '\n'; });
-            corps += '\n';
-            corps += '--- PRISE EN CHARGE ---\n';
-            corps += d.traitement + '\n\n';
-            corps += '--- \u00c9VOLUTION / RISQUES ---\n';
-            corps += d.complications + '\n\n';
-            if (d.ddx) {
-                corps += '--- DIAGNOSTICS \u00c0 \u00c9LIMINER ---\n';
-                corps += d.ddx + '\n\n';
-            }
+            corps += '\n--- PRISE EN CHARGE ---\n' + d.traitement + '\n\n';
+            corps += '--- \u00c9VOLUTION / RISQUES ---\n' + d.complications + '\n\n';
+            if (d.ddx) corps += '--- DIAGNOSTICS \u00c0 \u00c9LIMINER ---\n' + d.ddx + '\n\n';
         } else {
             corps = '(Compl\u00e9ter apr\u00e8s obtention d\u2019un diagnostic via l\u2019outil)\n\n';
         }
-
         var footer = '---\nOutil d\u2019aide \u00e0 la d\u00e9cision \u2014 Dr Kara-Za\u00eftri M.A. \u2014 v2.4 \u2014 Ne remplace pas l\u2019examen clinique.';
         ta.value = identite + dateConsult + corps + footer;
     };
@@ -1245,130 +760,90 @@ body { -ms-overflow-style: none; overflow-y: auto; }
 
     window.dsgCopyDossier = function() {
         var ta = document.getElementById('dsg-resume-textarea');
-        if (!ta || !ta.value.trim()) {
-            alert('Le r\u00e9sum\u00e9 est vide. G\u00e9n\u00e9rez-le d\u2019abord ou saisissez du texte.');
-            return;
-        }
-        dsgDoClipboard(ta.value, 'dsg-patient-copy-btn');
-    };
-
-    function dsgDoClipboard(text, btnId) {
+        if (!ta || !ta.value.trim()) { alert('Le r\u00e9sum\u00e9 est vide.'); return; }
         function feedback() {
-            var btn = document.getElementById(btnId);
+            var btn = document.getElementById('dsg-rapport-copy-btn');
             if (!btn) return;
             var orig = btn.innerHTML;
-            btn.innerHTML = '\u2713 Copi\u00e9 !';
+            btn.innerHTML = '\u2713 Copi\u00e9\u00a0!';
             btn.classList.add('dsg-copied');
             setTimeout(function() { btn.innerHTML = orig; btn.classList.remove('dsg-copied'); }, 2400);
         }
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(feedback).catch(function() { dsgFallbackClipboard(text, feedback); });
-        } else {
-            dsgFallbackClipboard(text, feedback);
-        }
-    }
+            navigator.clipboard.writeText(ta.value).then(feedback).catch(function() { dsgFallbackClipboard(ta.value, feedback); });
+        } else { dsgFallbackClipboard(ta.value, feedback); }
+    };
 
     function dsgFallbackClipboard(text, cb) {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
-        document.body.appendChild(ta);
-        ta.focus(); ta.select();
+        var el = document.createElement('textarea');
+        el.value = text; el.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+        document.body.appendChild(el); el.focus(); el.select();
         try { document.execCommand('copy'); if (cb) cb(); } catch(e) {}
-        document.body.removeChild(ta);
+        document.body.removeChild(el);
     }
 
+    /* ============================================================
+       IMPRESSION
+    ============================================================ */
     window.dsgPrint = function() {
         var content = document.getElementById('dsg-result-content');
         if (!content) { alert('Obtenez d\u2019abord un diagnostic.'); return; }
-
         var resume = document.getElementById('dsg-resume-textarea');
         var resumeBlock = '';
         if (resume && resume.value.trim()) {
-            resumeBlock =
-                '<div style="margin-top:18px;padding-top:14px;border-top:2px solid #1a3a5c;">' +
-                '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#5a6a7e;margin:0 0 8px;">R\u00e9sum\u00e9 clinique</p>' +
-                '<pre style="font-size:12px;white-space:pre-wrap;line-height:1.6;font-family:Arial,sans-serif;margin:0;color:#111;">' +
-                resume.value.replace(/</g,'&lt;').replace(/>/g,'&gt;') +
-                '</pre></div>';
+            resumeBlock = '<div style="margin-top:18px;padding-top:14px;border-top:2px solid #1a3a5c;">'
+                + '<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#5a6a7e;margin:0 0 8px;">R\u00e9sum\u00e9 clinique</p>'
+                + '<pre style="font-size:12px;white-space:pre-wrap;line-height:1.6;font-family:Arial,sans-serif;margin:0;color:#111;">'
+                + resume.value.replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                + '</pre></div>';
         }
+        var pt = dsgGetPatient();
+        var ptLine = '';
+        if (pt.nomComplet) ptLine = pt.nomComplet + (pt.age ? ' (' + pt.age + ' ans)' : '') + (pt.ddn ? ' \u2014 N\u00e9e le ' + pt.ddn : '') + ' \u2014 ' + (pt.date || new Date().toLocaleDateString('fr-FR'));
 
-        var cleanHtml = content.innerHTML
-            .replace(/<a [^>]*>[\s\S]*?<\/a>/gi, '')
-            .replace(/\ud83d[\udc00-\udfff]/g, '')
-            .replace(/[\u2600-\u27BF]/g, '');
-
-        var w = window.open('', '_blank', 'width=800,height=900,scrollbars=yes');
-        if (!w) { alert('Autorisez les popups pour imprimer.'); return; }
-
-        w.document.write(
-            '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">' +
-            '<title>Dermatoses de la Grossesse \u2014 Dr Kara-Za\u00eftri</title>' +
-            '<style>' +
-            'body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#111;padding:28px 32px;line-height:1.6;max-width:720px;margin:0 auto;}' +
-            'h1{font-size:16px;font-weight:700;color:#1a3a5c;margin:0 0 3px;}' +
-            'p.meta{font-size:11px;color:#666;margin:0 0 14px;}' +
-            'hr{border:none;border-top:1px solid #ccc;margin:12px 0;}' +
-            '.dsg-result-header{background:#f0f5fb;border-left:4px solid #1a3a5c;padding:12px 16px;border-radius:0 4px 4px 0;margin-bottom:16px;}' +
-            '.dsg-result-title{display:block;color:#1a3a5c;font-size:14px;font-weight:700;margin-bottom:4px;}' +
-            '.dsg-result-desc{display:block;font-size:12px;color:#3a4a5c;}' +
-            '.dsg-result-meta{margin-top:8px;}' +
-            '.dsg-meta-badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #90b8e0;background:#eaf1fb;color:#1a3a5c;margin-right:6px;}' +
-            '.dsg-meta-badge.recidive-eleve{background:#fdecea;border-color:#e57373;color:#6b1a1a;}' +
-            '.dsg-meta-badge.recidive-faible{background:#e6f4ee;border-color:#6abf8a;color:#1a5a30;}' +
-            '.dsg-meta-badge.recidive-moyen{background:#fff8e1;border-color:#f0c040;color:#5a3e00;}' +
-            '.dsg-section-label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5a6a7e;margin:14px 0 6px;padding-bottom:3px;border-bottom:1px solid #e4eaf0;}' +
-            '.dsg-list{list-style:none;padding:0;margin:0;}' +
-            '.dsg-list li{position:relative;padding-left:16px;margin-bottom:4px;font-size:12px;}' +
-            '.dsg-list li:before{content:"\u2022";position:absolute;left:0;color:#1a3a5c;font-weight:bold;}' +
-            '.dsg-list.dsg-list-urgence li:before{content:"\u2192";color:#c0392b;}' +
-            '.dsg-traitement-text{font-size:12px;display:block;margin-top:4px;line-height:1.6;}' +
-            '.dsg-alert-box{padding:10px 14px;border-radius:4px;margin-top:12px;font-size:11px;line-height:1.5;}' +
-            '.dsg-alert-warn{background:#fff8e1;border:1px solid #f0c040;color:#5a3e00;}' +
-            '.dsg-alert-danger{background:#fdecea;border:1px solid #e57373;color:#6b1a1a;}' +
-            '.dsg-alert-info{background:#e8f4fd;border:1px solid #90c4e8;color:#1a3a5c;}' +
-            '.dsg-urgence-box{background:#fdecea;border:2px solid #c0392b;border-radius:4px;padding:10px 14px;margin-top:12px;}' +
-            '.dsg-urgence-box-title{display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#c0392b;margin-bottom:6px;}' +
-            '.dsg-urgence-badge{display:inline-block;background:#c0392b;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;padding:1px 6px;border-radius:2px;margin-right:6px;}' +
-            '.dsg-ddx-box{background:#fffbea;border:1px solid #e8c840;border-radius:4px;padding:9px 12px;margin-top:10px;font-size:11px;color:#4a3800;}' +
-            '.dsg-ddx-title{display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:#8a6a00;margin-bottom:4px;}' +
-            '.dsg-breadcrumb{display:none;}' +
-            '.dsg-cours-link{display:none;}' +
-            'p.footer-note{font-size:10px;color:#888;margin-top:14px;border-top:1px solid #eee;padding-top:8px;}' +
-            '@media print{body{padding:14px;}@page{margin:1.5cm;}}' +
-            '</style></head><body>' +
-            '<h1>Aide au Diagnostic \u2014 Dermatoses Sp\u00e9cifiques de la Grossesse</h1>' +
-            '<p class="meta">Dr Kara-Za\u00eftri M.A. \u2014 Version 2.4 \u2014 ' + new Date().toLocaleDateString('fr-FR') + '</p>' +
-            '<hr>' +
-            cleanHtml +
-            resumeBlock +
-            '<p class="footer-note">Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 Ne remplace pas l\u2019examen clinique ni l\u2019avis sp\u00e9cialis\u00e9 \u2014 R\u00e9f.\u00a0: HAS, CNGOF, Cours GHR</p>' +
-            '</body></html>'
-        );
-        w.document.close();
-        setTimeout(function() { w.focus(); w.print(); }, 400);
-    };
-
-    window.dsgPrintResume = function() {
-        var resume = document.getElementById('dsg-resume-textarea');
-        if (!resume || !resume.value.trim()) {
-            alert('Le r\u00e9sum\u00e9 est vide. Veuillez d\'abord g\u00e9n\u00e9rer ou \u00e9crire un texte.');
-            return;
-        }
+        var cleanHtml = content.innerHTML.replace(/<a [^>]*>[\s\S]*?<\/a>/gi,'').replace(/\ud83d[\udc00-\udfff]/g,'').replace(/[\u2600-\u27BF]/g,'');
         var w = window.open('', '_blank', 'width=800,height=900,scrollbars=yes');
         if (!w) { alert('Autorisez les popups pour imprimer.'); return; }
         w.document.write(
-            '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">' +
-            '<title>R\u00e9sum\u00e9 Clinique \u2014 Dermatoses</title>' +
-            '<style>' +
-            'body{font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#111;padding:28px 32px;line-height:1.6;max-width:720px;margin:0 auto;}' +
-            'h1{font-size:16px;font-weight:700;color:#1a3a5c;margin:0 0 3px; border-bottom: 2px solid #1a3a5c; padding-bottom: 10px;}' +
-            'pre{font-size:13px;white-space:pre-wrap;line-height:1.6;font-family:Arial,sans-serif;margin-top:20px;}' +
-            '@media print{body{padding:14px;}@page{margin:1.5cm;}}' +
-            '</style></head><body>' +
-            '<h1>Dossier Patient \u2014 R\u00e9sum\u00e9 Clinique</h1>' +
-            '<pre>' + resume.value.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre>' +
-            '</body></html>'
+            '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+            + '<title>Dermatoses de la Grossesse \u2014 Dr Kara-Za\u00eftri</title>'
+            + '<style>@page{size:A5;margin:11mm;}'
+            + 'body{font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#111;padding:0;line-height:1.5;}'
+            + 'h1{font-size:13px;font-weight:700;color:#1a3a5c;margin:0 0 2px;}'
+            + 'p.meta{font-size:10px;color:#666;margin:0 0 10px;}'
+            + 'hr{border:none;border-top:1px solid #ccc;margin:8px 0;}'
+            + '.dsg-result-header{background:#f0f5fb;border-left:3px solid #1a3a5c;padding:9px 12px;border-radius:0 3px 3px 0;margin-bottom:12px;}'
+            + '.dsg-result-title{display:block;color:#1a3a5c;font-size:12px;font-weight:700;margin-bottom:3px;}'
+            + '.dsg-result-desc{display:block;font-size:10px;color:#3a4a5c;}'
+            + '.dsg-result-meta{margin-top:5px;}'
+            + '.dsg-meta-badge{display:inline-block;font-size:9px;font-weight:700;padding:1px 7px;border-radius:20px;border:1px solid #90b8e0;background:#eaf1fb;color:#1a3a5c;margin-right:4px;}'
+            + '.dsg-meta-badge.recidive-eleve{background:#fdecea;border-color:#e57373;color:#6b1a1a;}'
+            + '.dsg-meta-badge.recidive-faible{background:#e6f4ee;border-color:#6abf8a;color:#1a5a30;}'
+            + '.dsg-meta-badge.recidive-moyen{background:#fff8e1;border-color:#f0c040;color:#5a3e00;}'
+            + '.dsg-section-label{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5a6a7e;margin:10px 0 4px;padding-bottom:2px;border-bottom:1px solid #e4eaf0;}'
+            + '.dsg-list{list-style:none;padding:0;margin:0;}'
+            + '.dsg-list li{position:relative;padding-left:13px;margin-bottom:3px;font-size:10px;}'
+            + '.dsg-list li:before{content:"\u2022";position:absolute;left:0;color:#1a3a5c;font-weight:bold;}'
+            + '.dsg-list.dsg-list-urgence li:before{content:"\u2192";color:#c0392b;}'
+            + '.dsg-traitement-text{font-size:10px;display:block;margin-top:3px;line-height:1.5;}'
+            + '.dsg-alert-box{padding:7px 10px;border-radius:3px;margin-top:8px;font-size:10px;line-height:1.4;}'
+            + '.dsg-alert-warn{background:#fff8e1;border:1px solid #f0c040;color:#5a3e00;}'
+            + '.dsg-alert-danger{background:#fdecea;border:1px solid #e57373;color:#6b1a1a;}'
+            + '.dsg-alert-info{background:#e8f4fd;border:1px solid #90c4e8;color:#1a3a5c;}'
+            + '.dsg-urgence-box{background:#fdecea;border:1.5px solid #c0392b;border-radius:3px;padding:7px 10px;margin-top:8px;}'
+            + '.dsg-urgence-box-title{display:block;font-size:9px;font-weight:700;text-transform:uppercase;color:#c0392b;margin-bottom:4px;}'
+            + '.dsg-urgence-badge{display:inline-block;background:#c0392b;color:#fff;font-size:9px;font-weight:700;text-transform:uppercase;padding:1px 5px;border-radius:2px;margin-right:5px;}'
+            + '.dsg-ddx-box{background:#fffbea;border:1px solid #e8c840;border-radius:3px;padding:7px 10px;margin-top:7px;font-size:10px;color:#4a3800;}'
+            + '.dsg-ddx-title{display:block;font-size:9px;font-weight:700;text-transform:uppercase;color:#8a6a00;margin-bottom:3px;}'
+            + '.dsg-breadcrumb,.dsg-cours-link{display:none;}'
+            + '.ftr{position:fixed;bottom:0;left:0;width:100%;padding:3px 11mm;border-top:1px solid #e4eaf0;background:#fff;font-size:8px;color:#999;text-align:center;}'
+            + 'body{padding-bottom:18mm;}'
+            + '</style></head><body>'
+            + '<h1>Aide au Diagnostic \u2014 Dermatoses Sp\u00e9cifiques de la Grossesse</h1>'
+            + '<p class="meta">Dr Kara-Za\u00eftri M.A. \u2014 v2.4 \u2014 ' + new Date().toLocaleDateString('fr-FR') + (ptLine ? ' \u2014 ' + ptLine : '') + '</p>'
+            + '<hr>' + cleanHtml + resumeBlock
+            + '<div class="ftr">Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 Ne remplace pas l\u2019examen clinique \u2014 R\u00e9f.\u00a0: HAS, CNGOF, Cours GHR</div>'
+            + '</body></html>'
         );
         w.document.close();
         setTimeout(function() { w.focus(); w.print(); }, 400);
@@ -1381,15 +856,16 @@ body { -ms-overflow-style: none; overflow-y: auto; }
         return parts[2] + '/' + parts[1] + '/' + parts[0];
     }
 
-    /* ============================================================
-       PWA — Enregistrement du Service Worker global
-       ============================================================ */
+    /* Pré-remplir date du jour */
+    (function() {
+        var d = document.getElementById('dsg-pt-date');
+        if(d) d.value = new Date().toISOString().split('T')[0];
+    })();
+
+    /* PWA */
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                .catch(function(err) {
-                    console.warn('[DKZ-DSG] SW non enregistré :', err);
-                });
+            navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function(){});
         });
     }
 
