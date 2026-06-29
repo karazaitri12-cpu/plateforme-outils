@@ -6,463 +6,264 @@
     <meta name="theme-color" content="#14532d">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="description" content="Arbre décisionnel complet pour la prise en charge de la Menace d'Accouchement Prématuré (MAP) et RPM">
-    <title>MAP & RPM — Arbre Décisionnel | Dr KARA-ZAITRI M.A</title>
+    <title>MAP &amp; RPM — Arbre Décisionnel | Dr KARA-ZAITRI M.A</title>
     <style>
-        /* ============================================================
-           VARIABLES & RESET
-        ============================================================ */
         :root {
-            --vert: #14532d; --vert-vif: #16a34a; --vert-pale: #f0fdf4; --vert-bord: #86efac;
-            --rouge: #8b1a1a; --rouge-vif: #b91c1c; --rouge-pale: #fef2f2; --rouge-bord: #fca5a5;
-            --bleu: #1e3a5f; --bleu-pale: #eff6ff; --bleu-bord: #bfdbfe;
-            --orange: #9a3412; --orange-pale: #fff7ed; --orange-bord: #fdba74;
-            --violet: #4c1d95; --violet-pale: #f5f3ff; --violet-bord: #c4b5fd;
-            --ambre: #78350f; --ambre-pale: #fffbeb; --ambre-bord: #fcd34d;
-            --or: #b8860b; --or-pale: #fbf5e6; --or-bord: #d4a84b;
-            --gris-100: #f8f9fa; --gris-200: #e9ecef; --gris-400: #adb5bd;
-            --gris-600: #6c757d; --gris-800: #343a40; --noir: #212529; --blanc: #ffffff;
-            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; --radius: 6px;
+            --vert:#14532d; --vert-vif:#16a34a; --vert-pale:#f0fdf4; --vert-bord:#86efac;
+            --rouge:#8b1a1a; --rouge-vif:#b91c1c; --rouge-pale:#fef2f2; --rouge-bord:#fca5a5;
+            --bleu:#1e3a5f; --bleu-pale:#eff6ff; --bleu-bord:#bfdbfe;
+            --orange:#9a3412; --orange-pale:#fff7ed; --orange-bord:#fdba74;
+            --violet:#4c1d95; --violet-pale:#f5f3ff; --violet-bord:#c4b5fd;
+            --ambre:#78350f; --ambre-pale:#fffbeb; --ambre-bord:#fcd34d;
+            --or:#b8860b; --or-pale:#fbf5e6; --or-bord:#d4a84b;
+            --gris-100:#f8f9fa; --gris-200:#e9ecef; --gris-400:#adb5bd;
+            --gris-600:#6c757d; --gris-800:#343a40; --noir:#212529; --blanc:#ffffff;
+            --font:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; --radius:6px;
         }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+        html { scrollbar-width:none; }
+        body { -ms-overflow-style:none; overflow-y:auto; }
+        ::-webkit-scrollbar { display:none; }
+        html { font-family:var(--font); font-size:15px; color:var(--noir); background:#f1f3f5; -webkit-text-size-adjust:100%; }
+        body { min-height:100vh; padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+        #map-tool { max-width:800px; margin:0 auto; }
 
-        /* ============================================================
-           PRO : Masque l'ascenseur (style App native)
-        ============================================================ */
-        html { scrollbar-width: none; }
-        body { -ms-overflow-style: none; overflow-y: auto; }
-        ::-webkit-scrollbar { display: none; }
+        /* HEADER */
+        .tool-header { background:linear-gradient(135deg,#14532d 0%,#1e6b3f 100%); padding:22px 24px 18px; position:relative; overflow:hidden; }
+        .tool-header::after { content:''; position:absolute; right:-20px; top:-20px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,0.05); pointer-events:none; }
+        .tool-header-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+        .tool-header h1 { font-size:clamp(15px,3vw,19px); font-weight:700; color:var(--blanc); line-height:1.25; display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+        .tool-header-sub { font-size:12px; color:rgba(255,255,255,0.65); margin-top:5px; }
+        .tool-header-badges { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+        .tool-badge { font-size:10px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; color:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.25); padding:3px 9px; border-radius:3px; white-space:nowrap; background:rgba(255,255,255,0.08); }
+        .header-actions { display:flex; gap:8px; flex-shrink:0; align-items:flex-start; }
+        .btn-hdr { border-radius:var(--radius); cursor:pointer; font-size:12px; font-weight:600; font-family:var(--font); white-space:nowrap; touch-action:manipulation; transition:background 0.2s; padding:8px 14px; border:1px solid rgba(255,255,255,0.25); color:rgba(255,255,255,0.9); background:rgba(255,255,255,0.12); }
+        .btn-hdr:hover { background:rgba(255,255,255,0.25); }
+        .btn-retour { background:rgba(255,255,255,0.22); display:none; }
+        .btn-retour.visible { display:inline-block; }
 
-        html {
-            font-family: var(--font); font-size: 15px; color: var(--noir);
-            background: #f1f3f5; -webkit-text-size-adjust: 100%;
-        }
-        body {
-            min-height: 100vh; min-height: -webkit-fill-available;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right)
-                     env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
+        /* BARRE PATIENT COMPACTE */
+        #map-tool .map-pt-bar { background:#f8faf8; border-bottom:1px solid #c6dfc6; overflow:hidden; }
+        #map-tool .map-pt-toggle { width:100%; display:flex; align-items:center; gap:8px; padding:9px 20px; background:none; border:none; cursor:pointer; font-family:var(--font); font-size:11px; font-weight:700; color:#4a6a4a; text-align:left; letter-spacing:0.05em; text-transform:uppercase; transition:color 0.15s,background 0.15s; }
+        #map-tool .map-pt-toggle:hover { color:var(--vert); background:#edf5ed; }
+        #map-tool .map-pt-arrow { font-size:9px; transition:transform 0.2s; display:inline-block; color:#8aaa8a; }
+        #map-tool .map-pt-toggle.open .map-pt-arrow { transform:rotate(90deg); }
+        #map-tool .map-pt-form { display:none; padding:10px 20px 14px; background:#fff; border-top:1px solid #c6dfc6; }
+        #map-tool .map-pt-form.open { display:block; }
+        #map-tool .map-pt-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:8px; }
+        #map-tool .map-pt-field { display:flex; flex-direction:column; gap:3px; min-width:0; }
+        #map-tool .map-pt-field label { font-size:10px; font-weight:700; color:#4a5a4a; text-transform:uppercase; letter-spacing:0.04em; margin:0; padding:0; }
+        #map-tool .map-pt-field input { padding:6px 9px; border:1px solid #c8d8c8; border-radius:4px; font-family:var(--font); font-size:12px; color:var(--vert); background:#f8faf8; outline:none; width:100%; min-width:0; transition:border-color 0.15s; }
+        #map-tool .map-pt-field input:focus { border-color:var(--or); background:#fff; }
+        #map-tool .map-pt-ddnage { grid-column:span 2; min-width:0; }
+        #map-tool .map-pt-ddn-row { display:flex; gap:8px; }
+        #map-tool .map-pt-ddn-col { display:flex; flex-direction:column; gap:3px; flex:1 1 0; min-width:0; }
+        #map-tool .map-pt-ddn-col-sm { flex:0 0 82px; }
+        #map-tool .map-pt-ddn-col label { font-size:10px; font-weight:700; color:#4a5a4a; text-transform:uppercase; letter-spacing:0.04em; margin:0; padding:0; }
+        #map-tool .map-pt-ddn-col input { padding:6px 9px; border:1px solid #c8d8c8; border-radius:4px; font-family:var(--font); font-size:12px; color:var(--vert); background:#f8faf8; outline:none; width:100%; min-width:0; transition:border-color 0.15s; }
+        #map-tool .map-pt-ddn-col input:focus { border-color:var(--or); background:#fff; }
+        @media(max-width:540px){ #map-tool .map-pt-ddnage { grid-column:span 1; } }
 
-        /* ============================================================
-           LAYOUT
-        ============================================================ */
-        #map-tool { max-width: 800px; margin: 0 auto; }
+        /* BOUTONS ACTIONS */
+        #map-tool .map-actions-bar { display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+        #map-tool .map-btn-action { flex:1; min-width:130px; padding:10px 16px; border-radius:var(--radius); font-family:var(--font); font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.15s; border:none; }
+        #map-tool .map-btn-copy { background:#fff; color:var(--vert); border:1.5px solid var(--vert); }
+        #map-tool .map-btn-copy:hover { background:var(--vert-pale); }
+        #map-tool .map-btn-copy.copied { background:var(--vert); color:#fff; border-color:var(--vert); }
+        #map-tool .map-btn-print { background:var(--vert); color:#fff; }
+        #map-tool .map-btn-print:hover { background:var(--vert-vif); }
 
-        /* ============================================================
-           HEADER
-        ============================================================ */
-        .tool-header {
-            background: linear-gradient(135deg, #14532d 0%, #1e6b3f 100%);
-            padding: 22px 24px 18px; position: relative; overflow: hidden;
-        }
-        .tool-header::after {
-            content: ''; position: absolute; right: -20px; top: -20px;
-            width: 120px; height: 120px; border-radius: 50%;
-            background: rgba(255,255,255,0.05); pointer-events: none;
-        }
-        .tool-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-        .tool-header h1 {
-            font-size: clamp(15px, 3vw, 19px); font-weight: 700; color: var(--blanc);
-            line-height: 1.25; display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
-        }
-        .tool-header-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 5px; }
-        .tool-header-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-        .tool-badge {
-            font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
-            color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.25);
-            padding: 3px 9px; border-radius: 3px; white-space: nowrap; background: rgba(255,255,255,0.08);
-        }
-        .header-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: flex-start; }
-        .btn-hdr {
-            border-radius: var(--radius); cursor: pointer; font-size: 12px; font-weight: 600;
-            font-family: var(--font); white-space: nowrap; touch-action: manipulation;
-            transition: background 0.2s; padding: 8px 14px;
-            border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9);
-            background: rgba(255,255,255,0.12);
-        }
-        .btn-hdr:hover { background: rgba(255,255,255,0.25); }
-        .btn-retour { background: rgba(255,255,255,0.22); display: none; }
-        .btn-retour.visible { display: inline-block; }
+        /* BARRE DE PROGRESSION */
+        .tool-progress { background:var(--blanc); border-bottom:1px solid var(--gris-200); padding:12px 24px; display:flex; align-items:center; }
+        .prog-step { display:flex; align-items:center; gap:8px; flex:1; }
+        .prog-circle { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; background:var(--gris-200); color:var(--gris-600); transition:all 0.3s; }
+        .prog-circle.active { background:var(--vert-vif); color:var(--blanc); }
+        .prog-label { font-size:11px; font-weight:600; color:var(--gris-600); text-transform:uppercase; letter-spacing:0.04em; }
+        .prog-label.active { color:var(--vert-vif); }
+        .prog-line { flex:1; height:2px; background:var(--gris-200); margin:0 8px; transition:background 0.3s; }
+        .prog-line.active { background:var(--vert-vif); }
 
-        /* ============================================================
-           BARRE DE PROGRESSION
-        ============================================================ */
-        .tool-progress {
-            background: var(--blanc); border-bottom: 1px solid var(--gris-200);
-            padding: 12px 24px; display: flex; align-items: center;
-        }
-        .prog-step { display: flex; align-items: center; gap: 8px; flex: 1; }
-        .prog-circle {
-            width: 28px; height: 28px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
-            flex-shrink: 0; background: var(--gris-200); color: var(--gris-600); transition: all 0.3s;
-        }
-        .prog-circle.active { background: var(--vert-vif); color: var(--blanc); }
-        .prog-label {
-            font-size: 11px; font-weight: 600; color: var(--gris-600);
-            text-transform: uppercase; letter-spacing: 0.04em;
-        }
-        .prog-label.active { color: var(--vert-vif); }
-        .prog-line { flex: 1; height: 2px; background: var(--gris-200); margin: 0 8px; transition: background 0.3s; }
-        .prog-line.active { background: var(--vert-vif); }
+        /* CORPS */
+        .tool-body { padding:20px; }
+        .step-content { display:none; }
+        .step-content.active { display:block; animation:fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);} }
+        .sec-title { font-size:15px; font-weight:700; margin:0 0 14px 0; padding-bottom:10px; border-bottom:2px solid var(--vert-pale); color:var(--vert); display:flex; align-items:center; gap:8px; }
 
-        /* ============================================================
-           CORPS PRINCIPAL — ÉTAPES
-        ============================================================ */
-        .tool-body { padding: 20px; }
-        .step-content { display: none; }
-        .step-content.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        /* IBOX */
+        .ibox { border-radius:var(--radius); padding:13px 15px; margin-bottom:13px; border-left:4px solid; }
+        .ibox p,.ibox li { font-size:13px; line-height:1.5; }
+        .ibox strong { font-weight:700; }
+        .ibox h3 { font-size:12px; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; }
+        .ibox ul { list-style:none; padding:0; margin:0; }
+        .ibox ul li { padding:4px 0 4px 16px; position:relative; }
+        .ibox ul li::before { content:"\2022"; position:absolute; left:0; font-weight:bold; }
+        .ibox.green  { background:var(--vert-pale); border-left-color:var(--vert); }
+        .ibox.green h3 { color:var(--vert); }
+        .ibox.green ul li { color:#14532d; }
+        .ibox.green ul li::before { color:var(--vert-vif); }
+        .ibox.red    { background:var(--rouge-pale); border-left-color:var(--rouge-vif); }
+        .ibox.red ul li { color:#7f1d1d; }
+        .ibox.red ul li::before { color:var(--rouge-vif); }
+        .ibox.blue   { background:var(--bleu-pale); border-left-color:var(--bleu); }
+        .ibox.blue h3 { color:var(--bleu); }
+        .ibox.blue ul li { color:var(--bleu); }
+        .ibox.blue ul li::before { color:var(--bleu); }
+        .ibox.yellow { background:var(--ambre-pale); border-left-color:#d97706; }
+        .ibox.yellow ul li { color:#78350f; }
+        .ibox.yellow ul li::before { color:#d97706; }
+        .ibox.violet { background:var(--violet-pale); border-left-color:var(--violet); }
+        .ibox.violet h3 { color:var(--violet); }
+        .ibox.violet ul li { color:var(--violet); }
+        .ibox.violet ul li::before { color:var(--violet); }
+        .ibox.orange { background:var(--orange-pale); border-left-color:#ea580c; }
+        .ibox.orange h3 { color:var(--orange); }
+        .ibox.or     { background:var(--or-pale); border-left-color:var(--or); }
+        .ibox.or h3  { color:var(--or); }
+        .ibox.or ul li { color:#5a4205; }
+        .ibox.or ul li::before { color:var(--or); }
 
-        .sec-title {
-            font-size: 15px; font-weight: 700; margin: 0 0 14px 0; padding-bottom: 10px;
-            border-bottom: 2px solid var(--vert-pale); color: var(--vert);
-            display: flex; align-items: center; gap: 8px;
-        }
+        /* ALERTE */
+        .alert-gravite { background:#fee2e2; border:2px solid var(--rouge-vif); border-radius:var(--radius); padding:14px 15px; margin-bottom:14px; }
+        .alert-gravite .ag-title { font-weight:700; color:var(--rouge-vif); font-size:13px; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+        .alert-gravite p { font-size:13px; color:#991b1b; line-height:1.5; }
+        .alert-gravite ul { list-style:none; padding:0; margin:6px 0 0 0; }
+        .alert-gravite ul li { font-size:13px; color:#991b1b; padding:3px 0 3px 15px; position:relative; font-weight:600; }
+        .alert-gravite ul li::before { content:"\26A0"; position:absolute; left:0; color:var(--rouge-vif); }
 
-        /* ============================================================
-           ENCADRÉS INFO (ibox)
-        ============================================================ */
-        .ibox { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 13px; border-left: 4px solid; }
-        .ibox p, .ibox li { font-size: 13px; line-height: 1.5; }
-        .ibox strong { font-weight: 700; }
-        .ibox h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .ibox ul { list-style: none; padding: 0; margin: 0; }
-        .ibox ul li { padding: 4px 0 4px 16px; position: relative; }
-        .ibox ul li::before { content: "\2022"; position: absolute; left: 0; font-weight: bold; }
+        /* FORMULAIRE */
+        .form-section { background:var(--blanc); border:1px solid var(--gris-200); border-radius:var(--radius); padding:15px; margin-bottom:14px; }
+        .form-section-title { font-size:13px; font-weight:700; color:var(--vert); margin-bottom:12px; display:flex; align-items:center; gap:8px; text-transform:uppercase; letter-spacing:0.04em; }
+        .form-section-title::before { content:""; width:4px; height:16px; background:var(--or); border-radius:2px; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+        @media(max-width:600px){ .form-row { grid-template-columns:1fr; } }
+        .form-group { margin-bottom:10px; }
+        .form-group:last-child { margin-bottom:0; }
+        .form-group label { display:block; font-size:12px; font-weight:600; color:var(--gris-800); margin-bottom:5px; }
+        .form-group input[type="date"],.form-group input[type="number"],.form-group select { width:100%; padding:9px 11px; border:1px solid var(--gris-200); border-radius:4px; font-family:var(--font); font-size:13px; color:var(--noir); background:var(--blanc); transition:border-color 0.2s,box-shadow 0.2s; }
+        .form-group input:focus,.form-group select:focus { outline:none; border-color:var(--or); box-shadow:0 0 0 3px rgba(184,134,11,0.12); }
+        .form-group input[type="number"] { -moz-appearance:textfield; }
+        .form-group input[type="number"]::-webkit-outer-spin-button,.form-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+        .terme-display { background:linear-gradient(135deg,var(--vert-pale) 0%,#e8f5e9 100%); border:1px solid var(--vert-bord); border-radius:var(--radius); padding:10px 13px; margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+        .terme-display .td-label { font-size:11px; color:var(--vert); text-transform:uppercase; font-weight:600; letter-spacing:0.04em; }
+        .terme-display .td-value { font-size:18px; font-weight:700; color:var(--vert); }
+        .terme-display.hors-limite { background:var(--rouge-pale); border-color:var(--rouge-bord); }
+        .terme-display.hors-limite .td-label,.terme-display.hors-limite .td-value { color:var(--rouge-vif); }
+        .radio-group { display:flex; flex-direction:column; gap:6px; }
+        .radio-item { position:relative; }
+        .radio-item input[type="radio"],.radio-item input[type="checkbox"] { position:absolute; opacity:0; }
+        .radio-item label { display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--gris-100); border:1px solid var(--gris-200); border-radius:4px; cursor:pointer; font-size:13px; transition:all 0.15s; }
+        .radio-item input[type="radio"]:checked + label,.radio-item input[type="checkbox"]:checked + label { background:var(--or-pale); border-color:var(--or); color:#5a4205; font-weight:600; }
+        .radio-item label:hover { background:var(--gris-200); }
 
-        .ibox.green  { background: var(--vert-pale);   border-left-color: var(--vert); }
-        .ibox.green h3 { color: var(--vert); }
-        .ibox.green ul li { color: #14532d; }
-        .ibox.green ul li::before { color: var(--vert-vif); }
+        /* BOUTON VALIDER */
+        .btn-primary { width:100%; background:linear-gradient(135deg,var(--vert) 0%,var(--vert-vif) 100%); color:var(--blanc); border:none; padding:13px 18px; border-radius:var(--radius); font-size:14px; font-weight:700; font-family:var(--font); cursor:pointer; text-transform:uppercase; letter-spacing:0.05em; margin-top:10px; transition:transform 0.15s,box-shadow 0.15s; touch-action:manipulation; }
+        .btn-primary:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(20,83,45,0.25); }
+        .btn-primary:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-        .ibox.red    { background: var(--rouge-pale);  border-left-color: var(--rouge-vif); }
-        .ibox.red ul li { color: #7f1d1d; }
-        .ibox.red ul li::before { color: var(--rouge-vif); }
+        /* RESULT BOX */
+        .result-box { border-radius:var(--radius); padding:15px; margin-top:14px; border:1px solid; border-top-width:4px; }
+        .result-box.green  { background:var(--vert-pale);   border-color:var(--vert-bord);   border-top-color:var(--vert); }
+        .result-box.green  .rb-title { color:var(--vert); }
+        .result-box.red    { background:var(--rouge-pale);  border-color:var(--rouge-bord);  border-top-color:var(--rouge-vif); }
+        .result-box.red    .rb-title { color:var(--rouge-vif); }
+        .result-box.orange { background:var(--orange-pale); border-color:var(--orange-bord); border-top-color:#ea580c; }
+        .result-box.orange .rb-title { color:var(--orange); }
+        .result-box.blue   { background:var(--bleu-pale);   border-color:var(--bleu-bord);   border-top-color:var(--bleu); }
+        .result-box.blue   .rb-title { color:var(--bleu); }
+        .result-box.violet { background:var(--violet-pale); border-color:var(--violet-bord); border-top-color:var(--violet); }
+        .result-box.violet .rb-title { color:var(--violet); }
+        .rb-title { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:12px; display:flex; align-items:center; gap:7px; }
 
-        .ibox.blue   { background: var(--bleu-pale);   border-left-color: var(--bleu); }
-        .ibox.blue h3 { color: var(--bleu); }
-        .ibox.blue ul li { color: var(--bleu); }
-        .ibox.blue ul li::before { color: var(--bleu); }
+        /* EXAM LIST */
+        .exam-list { background:var(--blanc); border:1px solid var(--gris-200); border-radius:var(--radius); margin:10px 0; overflow:hidden; }
+        .exam-item { padding:10px 13px; border-bottom:1px solid var(--gris-200); font-size:13px; line-height:1.45; color:var(--gris-800); }
+        .exam-item:last-child { border-bottom:none; }
+        .exam-item strong { color:var(--noir); font-weight:700; display:block; margin-bottom:2px; }
+        .exam-item p { color:var(--gris-600); font-size:12px; margin-top:2px; }
+        .exam-item ul { list-style:none; padding:0; margin:5px 0 0 0; }
+        .exam-item ul li { font-size:12px; color:var(--gris-600); padding:2px 0 2px 13px; position:relative; }
+        .exam-item ul li::before { content:"\2022"; position:absolute; left:0; color:var(--gris-400); }
+        .alert-urg { background:#fee2e2; border:1px solid #fca5a5; border-radius:var(--radius); padding:13px; margin-bottom:12px; }
+        .alert-urg .urg-title { font-weight:700; color:var(--rouge-vif); font-size:12px; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:7px; }
+        .alert-urg ul { list-style:none; padding:0; margin:0; }
+        .alert-urg ul li { font-size:13px; color:#991b1b; padding:3px 0 3px 15px; position:relative; font-weight:500; }
+        .alert-urg ul li::before { content:"\2022"; position:absolute; left:0; color:var(--rouge-vif); }
+        .note-ambre { background:var(--ambre-pale); border:1px solid var(--ambre-bord); border-radius:var(--radius); padding:11px 13px; margin-top:11px; }
+        .note-ambre .na-title { font-size:11px; font-weight:700; color:var(--ambre); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px; }
+        .note-ambre p { font-size:12px; color:var(--ambre); line-height:1.4; }
 
-        .ibox.yellow { background: var(--ambre-pale);  border-left-color: #d97706; }
-        .ibox.yellow ul li { color: #78350f; }
-        .ibox.yellow ul li::before { color: #d97706; }
+        /* MÉDICAMENTS */
+        .drug-card { background:var(--blanc); border:1px solid var(--gris-200); border-radius:var(--radius); margin-bottom:8px; overflow:hidden; }
+        .drug-header { padding:10px 13px; background:var(--vert-pale); border-bottom:1px solid var(--vert-bord); font-size:13px; font-weight:700; color:var(--vert); display:flex; justify-content:space-between; align-items:center; }
+        .drug-body { padding:10px 13px; font-size:12px; color:var(--gris-800); line-height:1.5; }
+        .drug-body ul { list-style:none; padding:0; margin:5px 0 0 0; }
+        .drug-body ul li { padding:2px 0 2px 13px; position:relative; }
+        .drug-body ul li::before { content:"\2022"; position:absolute; left:0; color:var(--vert-vif); }
+        .line-tag { font-size:10px; background:var(--vert); color:var(--blanc); padding:1px 6px; border-radius:3px; }
 
-        .ibox.violet { background: var(--violet-pale); border-left-color: var(--violet); }
-        .ibox.violet h3 { color: var(--violet); }
-        .ibox.violet ul li { color: var(--violet); }
-        .ibox.violet ul li::before { color: var(--violet); }
+        /* SUMMARY */
+        .summary-box { background:linear-gradient(135deg,var(--or-pale) 0%,#fef9e7 100%); border:1px solid var(--or-bord); border-radius:var(--radius); padding:12px 15px; margin-bottom:15px; }
+        .summary-title { font-size:11px; font-weight:700; color:var(--or); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; }
+        .summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; }
+        .summary-item { font-size:12px; }
+        .summary-item .s-label { color:var(--gris-600); font-size:10px; text-transform:uppercase; }
+        .summary-item .s-value { color:var(--noir); font-weight:700; }
 
-        .ibox.orange { background: var(--orange-pale); border-left-color: #ea580c; }
-        .ibox.orange h3 { color: var(--orange); }
+        /* RÈGLES TERME */
+        .term-rule-box { border-radius:var(--radius); padding:13px 15px; margin-bottom:15px; border-left:4px solid; }
+        .term-rule-box h3 { font-size:12px; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; }
+        .term-rule-box ul { list-style:none; padding:0; margin:0; }
+        .term-rule-box ul li { font-size:13px; padding:4px 0 4px 16px; position:relative; line-height:1.4; }
+        .term-rule-box ul li::before { content:"\2022"; position:absolute; left:0; font-weight:bold; }
+        .term-rule-box.high-risk  { background:var(--rouge-pale); border-left-color:var(--rouge-vif); }
+        .term-rule-box.high-risk h3 { color:var(--rouge-vif); }
+        .term-rule-box.high-risk ul li { color:#7f1d1d; }
+        .term-rule-box.high-risk ul li::before { color:var(--rouge-vif); }
+        .term-rule-box.mid-risk   { background:var(--or-pale); border-left-color:var(--or); }
+        .term-rule-box.mid-risk h3 { color:var(--or); }
+        .term-rule-box.mid-risk ul li { color:#5a4205; }
+        .term-rule-box.mid-risk ul li::before { color:var(--or); }
+        .term-rule-box.safe-term  { background:var(--bleu-pale); border-left-color:var(--bleu); }
+        .term-rule-box.safe-term h3 { color:var(--bleu); }
+        .term-rule-box.safe-term ul li { color:var(--bleu); }
+        .term-rule-box.safe-term ul li::before { color:var(--bleu); }
 
-        .ibox.or     { background: var(--or-pale);     border-left-color: var(--or); }
-        .ibox.or h3  { color: var(--or); }
-        .ibox.or ul li { color: #5a4205; }
-        .ibox.or ul li::before { color: var(--or); }
+        /* FOOTER */
+        .tool-footer { background:var(--blanc); border-top:1px solid var(--gris-200); padding:16px 20px; }
+        .legal-warning { font-size:11px; color:var(--gris-600); line-height:1.5; text-align:justify; margin-bottom:10px; border-top:1px dashed var(--gris-200); padding-top:12px; }
+        .legal-warning strong { color:var(--vert); font-weight:700; }
+        .tool-footer .refs { font-size:11px; color:var(--gris-600); line-height:1.5; }
+        .tool-footer .refs strong { color:var(--gris-800); }
+        .copyright { font-size:11px; color:var(--gris-600); text-align:right; margin-top:10px; font-style:italic; font-weight:500; }
 
-        /* ============================================================
-           ALERTE GRAVITÉ
-        ============================================================ */
-        .alert-gravite {
-            background: #fee2e2; border: 2px solid var(--rouge-vif); border-radius: var(--radius);
-            padding: 14px 15px; margin-bottom: 14px;
-        }
-        .alert-gravite .ag-title {
-            font-weight: 700; color: var(--rouge-vif); font-size: 13px;
-            text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .alert-gravite p { font-size: 13px; color: #991b1b; line-height: 1.5; }
-        .alert-gravite ul { list-style: none; padding: 0; margin: 6px 0 0 0; }
-        .alert-gravite ul li {
-            font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px;
-            position: relative; font-weight: 600;
-        }
-        .alert-gravite ul li::before { content: "\26A0"; position: absolute; left: 0; color: var(--rouge-vif); }
+        /* MODAL */
+        #map-modal-overlay { position:fixed; inset:0; z-index:9999; background:rgba(15,40,25,0.55); backdrop-filter:blur(2px); display:flex; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.18s ease; }
+        #map-modal-box { background:var(--blanc); border-radius:10px; padding:28px 26px 22px; max-width:420px; width:100%; box-shadow:0 8px 32px rgba(0,0,0,0.22); border-top:5px solid var(--rouge-vif); text-align:center; }
+        #map-modal-icon { font-size:32px; margin-bottom:10px; }
+        #map-modal-title { font-size:14px; font-weight:700; color:var(--rouge-vif); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px; }
+        #map-modal-body { font-size:13px; color:var(--gris-800); line-height:1.6; margin-bottom:20px; text-align:left; }
+        #map-modal-btn { background:linear-gradient(135deg,var(--vert) 0%,var(--vert-vif) 100%); color:var(--blanc); border:none; padding:10px 32px; border-radius:var(--radius); font-size:13px; font-weight:700; font-family:var(--font); cursor:pointer; letter-spacing:0.04em; transition:transform 0.15s,box-shadow 0.15s; }
+        #map-modal-btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(20,83,45,0.25); }
 
-        /* ============================================================
-           FORMULAIRE
-        ============================================================ */
-        .form-section {
-            background: var(--blanc); border: 1px solid var(--gris-200);
-            border-radius: var(--radius); padding: 15px; margin-bottom: 14px;
+        @media(max-width:480px) {
+            .tool-header { padding:15px 15px 13px; }
+            .tool-header h1 { font-size:13px; }
+            .tool-progress { padding:10px 15px; }
+            .prog-label { display:none; }
+            .tool-body { padding:13px; }
+            .form-row { grid-template-columns:1fr; }
         }
-        .form-section-title {
-            font-size: 13px; font-weight: 700; color: var(--vert); margin-bottom: 12px;
-            display: flex; align-items: center; gap: 8px;
-            text-transform: uppercase; letter-spacing: 0.04em;
-        }
-        .form-section-title::before { content: ""; width: 4px; height: 16px; background: var(--or); border-radius: 2px; }
-
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-
-        .form-group { margin-bottom: 10px; }
-        .form-group:last-child { margin-bottom: 0; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--gris-800); margin-bottom: 5px; }
-
-        .form-group input[type="date"],
-        .form-group input[type="number"],
-        .form-group select {
-            width: 100%; padding: 9px 11px; border: 1px solid var(--gris-200); border-radius: 4px;
-            font-family: var(--font); font-size: 13px; color: var(--noir); background: var(--blanc);
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .form-group input:focus, .form-group select:focus {
-            outline: none; border-color: var(--or); box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.12);
-        }
-        .form-group input[type="number"] { -moz-appearance: textfield; }
-        .form-group input[type="number"]::-webkit-outer-spin-button,
-        .form-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
-        .terme-display {
-            background: linear-gradient(135deg, var(--vert-pale) 0%, #e8f5e9 100%);
-            border: 1px solid var(--vert-bord); border-radius: var(--radius);
-            padding: 10px 13px; margin-top: 10px;
-            display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        }
-        .terme-display .td-label { font-size: 11px; color: var(--vert); text-transform: uppercase; font-weight: 600; letter-spacing: 0.04em; }
-        .terme-display .td-value { font-size: 18px; font-weight: 700; color: var(--vert); }
-
-        /* Indicateur hors limites */
-        .terme-display.hors-limite { background: var(--rouge-pale); border-color: var(--rouge-bord); }
-        .terme-display.hors-limite .td-label,
-        .terme-display.hors-limite .td-value { color: var(--rouge-vif); }
-
-        .radio-group { display: flex; flex-direction: column; gap: 6px; }
-        .radio-item { position: relative; }
-        .radio-item input[type="radio"],
-        .radio-item input[type="checkbox"] { position: absolute; opacity: 0; }
-        .radio-item label {
-            display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-            background: var(--gris-100); border: 1px solid var(--gris-200);
-            border-radius: 4px; cursor: pointer; font-size: 13px; transition: all 0.15s;
-        }
-        .radio-item input[type="radio"]:checked + label,
-        .radio-item input[type="checkbox"]:checked + label {
-            background: var(--or-pale); border-color: var(--or); color: #5a4205; font-weight: 600;
-        }
-        .radio-item label:hover { background: var(--gris-200); }
-
-        /* ============================================================
-           BOUTONS
-        ============================================================ */
-        .btn-primary {
-            width: 100%; background: linear-gradient(135deg, var(--vert) 0%, var(--vert-vif) 100%);
-            color: var(--blanc); border: none; padding: 13px 18px; border-radius: var(--radius);
-            font-size: 14px; font-weight: 700; font-family: var(--font); cursor: pointer;
-            text-transform: uppercase; letter-spacing: 0.05em; margin-top: 10px;
-            transition: transform 0.15s, box-shadow 0.15s; touch-action: manipulation;
-        }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20, 83, 45, 0.25); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        /* ============================================================
-           RÉSULTAT
-        ============================================================ */
-        .result-box {
-            border-radius: var(--radius); padding: 15px; margin-top: 14px;
-            border: 1px solid; border-top-width: 4px;
-        }
-        .result-box.green  { background: var(--vert-pale);   border-color: var(--vert-bord);   border-top-color: var(--vert); }
-        .result-box.green  .rb-title { color: var(--vert); }
-        .result-box.red    { background: var(--rouge-pale);  border-color: var(--rouge-bord);  border-top-color: var(--rouge-vif); }
-        .result-box.red    .rb-title { color: var(--rouge-vif); }
-        .result-box.orange { background: var(--orange-pale); border-color: var(--orange-bord); border-top-color: #ea580c; }
-        .result-box.orange .rb-title { color: var(--orange); }
-        .result-box.blue   { background: var(--bleu-pale);   border-color: var(--bleu-bord);   border-top-color: var(--bleu); }
-        .result-box.blue   .rb-title { color: var(--bleu); }
-        .result-box.violet { background: var(--violet-pale); border-color: var(--violet-bord); border-top-color: var(--violet); }
-        .result-box.violet .rb-title { color: var(--violet); }
-
-        .rb-title {
-            font-size: 13px; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.04em; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 7px;
-        }
-
-        /* ============================================================
-           LISTES D'EXAMENS / MÉDICAMENTS
-        ============================================================ */
-        .exam-list {
-            background: var(--blanc); border: 1px solid var(--gris-200);
-            border-radius: var(--radius); margin: 10px 0; overflow: hidden;
-        }
-        .exam-item {
-            padding: 10px 13px; border-bottom: 1px solid var(--gris-200);
-            font-size: 13px; line-height: 1.45; color: var(--gris-800);
-        }
-        .exam-item:last-child { border-bottom: none; }
-        .exam-item strong { color: var(--noir); font-weight: 700; display: block; margin-bottom: 2px; }
-        .exam-item p { color: var(--gris-600); font-size: 12px; margin-top: 2px; }
-        .exam-item ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
-        .exam-item ul li { font-size: 12px; color: var(--gris-600); padding: 2px 0 2px 13px; position: relative; }
-        .exam-item ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--gris-400); }
-
-        .alert-urg {
-            background: #fee2e2; border: 1px solid #fca5a5;
-            border-radius: var(--radius); padding: 13px; margin-bottom: 12px;
-        }
-        .alert-urg .urg-title {
-            font-weight: 700; color: var(--rouge-vif); font-size: 12px;
-            text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 7px;
-        }
-        .alert-urg ul { list-style: none; padding: 0; margin: 0; }
-        .alert-urg ul li {
-            font-size: 13px; color: #991b1b; padding: 3px 0 3px 15px;
-            position: relative; font-weight: 500;
-        }
-        .alert-urg ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--rouge-vif); }
-
-        .note-ambre {
-            background: var(--ambre-pale); border: 1px solid var(--ambre-bord);
-            border-radius: var(--radius); padding: 11px 13px; margin-top: 11px;
-        }
-        .note-ambre .na-title {
-            font-size: 11px; font-weight: 700; color: var(--ambre);
-            text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;
-        }
-        .note-ambre p { font-size: 12px; color: var(--ambre); line-height: 1.4; }
-
-        /* ============================================================
-           MÉDICAMENTS
-        ============================================================ */
-        .drug-card {
-            background: var(--blanc); border: 1px solid var(--gris-200);
-            border-radius: var(--radius); margin-bottom: 8px; overflow: hidden;
-        }
-        .drug-header {
-            padding: 10px 13px; background: var(--vert-pale); border-bottom: 1px solid var(--vert-bord);
-            font-size: 13px; font-weight: 700; color: var(--vert);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .drug-body { padding: 10px 13px; font-size: 12px; color: var(--gris-800); line-height: 1.5; }
-        .drug-body ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
-        .drug-body ul li { padding: 2px 0 2px 13px; position: relative; }
-        .drug-body ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--vert-vif); }
-        .line-tag {
-            font-size: 10px; background: var(--vert); color: var(--blanc);
-            padding: 1px 6px; border-radius: 3px;
-        }
-
-        /* ============================================================
-           RÉSUMÉ PARAMÈTRES
-        ============================================================ */
-        .summary-box {
-            background: linear-gradient(135deg, var(--or-pale) 0%, #fef9e7 100%);
-            border: 1px solid var(--or-bord); border-radius: var(--radius);
-            padding: 12px 15px; margin-bottom: 15px;
-        }
-        .summary-title {
-            font-size: 11px; font-weight: 700; color: var(--or);
-            text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;
-        }
-        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
-        .summary-item { font-size: 12px; }
-        .summary-item .s-label { color: var(--gris-600); font-size: 10px; text-transform: uppercase; }
-        .summary-item .s-value { color: var(--noir); font-weight: 700; }
-
-        /* ============================================================
-           RÈGLES CLINIQUES PAR TERME
-        ============================================================ */
-        .term-rule-box { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 15px; border-left: 4px solid; }
-        .term-rule-box h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
-        .term-rule-box ul { list-style: none; padding: 0; margin: 0; }
-        .term-rule-box ul li { font-size: 13px; padding: 4px 0 4px 16px; position: relative; line-height: 1.4; }
-        .term-rule-box ul li::before { content: "\2022"; position: absolute; left: 0; font-weight: bold; }
-
-        .term-rule-box.high-risk  { background: var(--rouge-pale); border-left-color: var(--rouge-vif); }
-        .term-rule-box.high-risk h3 { color: var(--rouge-vif); }
-        .term-rule-box.high-risk ul li { color: #7f1d1d; }
-        .term-rule-box.high-risk ul li::before { color: var(--rouge-vif); }
-
-        .term-rule-box.mid-risk   { background: var(--or-pale); border-left-color: var(--or); }
-        .term-rule-box.mid-risk h3 { color: var(--or); }
-        .term-rule-box.mid-risk ul li { color: #5a4205; }
-        .term-rule-box.mid-risk ul li::before { color: var(--or); }
-
-        .term-rule-box.safe-term  { background: var(--bleu-pale); border-left-color: var(--bleu); }
-        .term-rule-box.safe-term h3 { color: var(--bleu); }
-        .term-rule-box.safe-term ul li { color: var(--bleu); }
-        .term-rule-box.safe-term ul li::before { color: var(--bleu); }
-
-        /* ============================================================
-           PIED DE PAGE
-        ============================================================ */
-        .tool-footer {
-            background: var(--blanc); border-top: 1px solid var(--gris-200); padding: 16px 20px;
-        }
-        .legal-warning {
-            font-size: 11px; color: var(--gris-600); line-height: 1.5; text-align: justify;
-            margin-bottom: 10px; border-top: 1px dashed var(--gris-200); padding-top: 12px;
-        }
-        .legal-warning strong { color: var(--vert); font-weight: 700; }
-        .tool-footer .refs { font-size: 11px; color: var(--gris-600); line-height: 1.5; }
-        .tool-footer .refs strong { color: var(--gris-800); }
-        .copyright { font-size: 11px; color: var(--gris-600); text-align: right; margin-top: 10px; font-style: italic; font-weight: 500; }
-
-        /* ============================================================
-           RESPONSIVE
-        ============================================================ */
-        @media (max-width: 480px) {
-            .tool-header { padding: 15px 15px 13px; }
-            .tool-header h1 { font-size: 13px; }
-            .tool-progress { padding: 10px 15px; }
-            .prog-label { display: none; }
-            .tool-body { padding: 13px; }
-            .form-row { grid-template-columns: 1fr; }
-        }
-
-        /* ============================================================
-           MODAL INTERNE (remplace alert natif)
-        ============================================================ */
-        #map-modal-overlay {
-            position: fixed; inset: 0; z-index: 9999;
-            background: rgba(15, 40, 25, 0.55);
-            backdrop-filter: blur(2px);
-            display: flex; align-items: center; justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.18s ease;
-        }
-        #map-modal-box {
-            background: var(--blanc); border-radius: 10px;
-            padding: 28px 26px 22px; max-width: 420px; width: 100%;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-            border-top: 5px solid var(--rouge-vif);
-            text-align: center;
-        }
-        #map-modal-icon { font-size: 32px; margin-bottom: 10px; }
-        #map-modal-title {
-            font-size: 14px; font-weight: 700; color: var(--rouge-vif);
-            text-transform: uppercase; letter-spacing: 0.05em;
-            margin-bottom: 12px;
-        }
-        #map-modal-body {
-            font-size: 13px; color: var(--gris-800); line-height: 1.6;
-            margin-bottom: 20px; text-align: left;
-        }
-        #map-modal-btn {
-            background: linear-gradient(135deg, var(--vert) 0%, var(--vert-vif) 100%);
-            color: var(--blanc); border: none; padding: 10px 32px;
-            border-radius: var(--radius); font-size: 13px; font-weight: 700;
-            font-family: var(--font); cursor: pointer; letter-spacing: 0.04em;
-            transition: transform 0.15s, box-shadow 0.15s;
-        }
-        #map-modal-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20,83,45,0.25); }
     </style>
 </head>
 <body>
 <div id="map-tool">
-
-    <!-- ============================================================
-         EN-TÊTE
-    ============================================================ -->
+    <!-- EN-TÊTE -->
     <div class="tool-header">
         <div class="tool-header-top">
             <div>
-                <h1>&#9679; MAP & RPM &#8212; Arbre Décisionnel</h1>
-                <p class="tool-header-sub">Usage médical professionnel</p>
+                <h1>&#9679; MAP &amp; RPM &#8212; Arbre D&#233;cisionnel</h1>
+                <p class="tool-header-sub">Usage m&#233;dical professionnel</p>
             </div>
             <div class="header-actions">
                 <button class="btn-hdr btn-retour" id="btn-retour" onclick="mapTool.goBack()">&#8592; Retour</button>
@@ -470,75 +271,70 @@
             </div>
         </div>
         <div class="tool-header-badges">
-            <span class="tool-badge">Obstétrique</span>
+            <span class="tool-badge">Obst&#233;trique</span>
             <span class="tool-badge">CNGOF/HAS</span>
-            <span class="tool-badge">Temps réel</span>
+            <span class="tool-badge">Temps r&#233;el</span>
         </div>
     </div>
 
-    <!-- ============================================================
-         BARRE DE PROGRESSION
-    ============================================================ -->
+    <!-- BARRE PATIENT COMPACTE (Sainte Trinit&#233; d.1) -->
+    <div class="map-pt-bar">
+        <button type="button" class="map-pt-toggle" id="map-pt-toggle-btn" onclick="mapPtToggle()" aria-expanded="false">
+            <span class="map-pt-arrow">&#9658;</span>
+            <span>&#128100;&#160;Identification patiente / m&#233;decin prescripteur</span>
+            <span style="margin-left:auto;font-size:10px;font-weight:400;text-transform:none;color:#8aaa8a;font-style:italic;">Optionnel &#8212; pour la copie et l&#8217;impression</span>
+        </button>
+        <div class="map-pt-form" id="map-pt-form">
+            <div class="map-pt-grid">
+                <div class="map-pt-field"><label for="map-pt-nom">Nom</label><input type="text" id="map-pt-nom" placeholder="Nom de famille" autocomplete="off"></div>
+                <div class="map-pt-field"><label for="map-pt-prenom">Pr&#233;nom</label><input type="text" id="map-pt-prenom" placeholder="Pr&#233;nom" autocomplete="off"></div>
+                <div class="map-pt-field map-pt-ddnage">
+                    <div class="map-pt-ddn-row">
+                        <div class="map-pt-ddn-col"><label for="map-pt-ddn">Date de naissance</label><input type="date" id="map-pt-ddn" oninput="mapPtCalcAge()"></div>
+                        <div class="map-pt-ddn-col map-pt-ddn-col-sm"><label for="map-pt-age">&#194;ge (ans)</label><input type="number" id="map-pt-age" placeholder="ans" min="0" max="130" oninput="mapPtClearDdn()"></div>
+                    </div>
+                </div>
+                <div class="map-pt-field"><label for="map-pt-med">M&#233;decin prescripteur</label><input type="text" id="map-pt-med" placeholder="Dr ..." autocomplete="off"></div>
+                <div class="map-pt-field"><label for="map-pt-date">Date de consultation</label><input type="date" id="map-pt-date"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BARRE DE PROGRESSION -->
     <div class="tool-progress" id="progressBar"></div>
 
-    <!-- ============================================================
-         CORPS
-    ============================================================ -->
+    <!-- CORPS -->
     <div class="tool-body">
 
-        <!-- ======================================================
-             ÉTAPE 1 : SAISIE
-        ====================================================== -->
+        <!-- ÉTAPE 1 : SAISIE -->
         <div class="step-content active" id="step1">
-            <h2 class="sec-title">&#9654; &#201;valuation initiale &#8212; Saisie des paramètres</h2>
-
+            <h2 class="sec-title">&#9654; &#201;valuation initiale &#8212; Saisie des param&#232;tres</h2>
             <div class="ibox blue">
-                <p><strong>Définition MAP :</strong> Contractions utérines régulières (&#8805;&#8239;2 CU/10&#8239;min) associées à des modifications cervicales, entre <strong>22&#8239;SA et 36&#8239;SA&#8239;+&#8239;6&#8239;jours</strong>.</p>
+                <p><strong>D&#233;finition MAP :</strong> Contractions ut&#233;rines r&#233;guli&#232;res (&#8805;&#8239;2 CU/10&#8239;min) associ&#233;es &#224; des modifications cervicales, entre <strong>22&#8239;SA et 36&#8239;SA&#8239;+&#8239;6&#8239;jours</strong>.</p>
             </div>
 
             <!-- TERME -->
             <div class="form-section">
-                <div class="form-section-title">1. Détermination du terme</div>
+                <div class="form-section-title">1. D&#233;termination du terme</div>
                 <div class="form-group">
-                    <label>Mode de détermination du terme</label>
+                    <label>Mode de d&#233;termination du terme</label>
                     <div class="radio-group">
-                        <div class="radio-item">
-                            <input type="radio" id="mode_ddr" name="mode_terme" value="ddr" checked onchange="mapTool.switchModeTerme()">
-                            <label for="mode_ddr">Calcul automatique depuis les Dernières Règles (DDR)</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="mode_manual" name="mode_terme" value="manual" onchange="mapTool.switchModeTerme()">
-                            <label for="mode_manual">Saisie manuelle du terme en SA</label>
-                        </div>
+                        <div class="radio-item"><input type="radio" id="mode_ddr" name="mode_terme" value="ddr" checked onchange="mapTool.switchModeTerme()"><label for="mode_ddr">Calcul automatique depuis les Derni&#232;res R&#232;gles (DDR)</label></div>
+                        <div class="radio-item"><input type="radio" id="mode_manual" name="mode_terme" value="manual" onchange="mapTool.switchModeTerme()"><label for="mode_manual">Saisie manuelle du terme en SA</label></div>
                     </div>
                 </div>
-
                 <div id="zone_ddr">
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="ddr">Date des Dernières Règles (DDR)</label>
-                            <input type="date" id="ddr" onchange="mapTool.calculerTerme()">
-                        </div>
-                        <div class="form-group">
-                            <label for="date_today">Date du jour (référence)</label>
-                            <input type="date" id="date_today" onchange="mapTool.calculerTerme()">
-                        </div>
+                        <div class="form-group"><label for="ddr">Date des Derni&#232;res R&#232;gles (DDR)</label><input type="date" id="ddr" onchange="mapTool.calculerTerme()"></div>
+                        <div class="form-group"><label for="date_today">Date du jour (r&#233;f&#233;rence)</label><input type="date" id="date_today" onchange="mapTool.calculerTerme()"></div>
                     </div>
                 </div>
-
                 <div id="zone_manual" style="display:none;">
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="sa_manual">Semaines d'aménorrhée (SA)</label>
-                            <input type="number" id="sa_manual" min="20" max="42" placeholder="ex&#8239;: 32" oninput="mapTool.updateTermeDisplay()">
-                        </div>
-                        <div class="form-group">
-                            <label for="jr_manual">Jours complémentaires</label>
-                            <input type="number" id="jr_manual" min="0" max="6" placeholder="ex&#8239;: 3" oninput="mapTool.updateTermeDisplay()">
-                        </div>
+                        <div class="form-group"><label for="sa_manual">Semaines d&#8217;am&#233;norh&#233;e (SA)</label><input type="number" id="sa_manual" min="20" max="42" placeholder="ex&#8239;: 32" oninput="mapTool.updateTermeDisplay()"></div>
+                        <div class="form-group"><label for="jr_manual">Jours compl&#233;mentaires</label><input type="number" id="jr_manual" min="0" max="6" placeholder="ex&#8239;: 3" oninput="mapTool.updateTermeDisplay()"></div>
                     </div>
                 </div>
-
                 <div class="terme-display" id="terme_display_box">
                     <span class="td-label">Terme actuel</span>
                     <span class="td-value" id="terme_display">&#8212; SA</span>
@@ -549,406 +345,228 @@
             <div class="form-section">
                 <div class="form-section-title">2. Membranes</div>
                 <div class="form-group">
-                    <label>Rupture Prématurée des Membranes (RPM)&#8239;?</label>
+                    <label>Rupture Pr&#233;matur&#233;e des Membranes (RPM)&#8239;?</label>
                     <div class="radio-group">
-                        <div class="radio-item">
-                            <input type="radio" id="rpm_non" name="rpm" value="non" checked>
-                            <label for="rpm_non">Non &#8212; Membranes intactes</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="rpm_oui" name="rpm" value="oui">
-                            <label for="rpm_oui">Oui &#8212; RPM confirmée</label>
-                        </div>
+                        <div class="radio-item"><input type="radio" id="rpm_non" name="rpm" value="non" checked><label for="rpm_non">Non &#8212; Membranes intactes</label></div>
+                        <div class="radio-item"><input type="radio" id="rpm_oui" name="rpm" value="oui"><label for="rpm_oui">Oui &#8212; RPM confirm&#233;e</label></div>
                     </div>
                 </div>
             </div>
 
             <!-- COL -->
             <div class="form-section">
-                <div class="form-section-title">3. &#201;tat du col (TV + échographie endovaginale)</div>
+                <div class="form-section-title">3. &#201;tat du col (TV + &#233;chographie endovaginale)</div>
                 <div class="form-group">
-                    <label for="lc">Longueur cervicale échographique (LC en mm) &#8212; si connue</label>
+                    <label for="lc">Longueur cervicale &#233;chographique (LC en mm) &#8212; si connue</label>
                     <input type="number" id="lc" min="0" max="60" placeholder="ex&#8239;: 22" oninput="mapTool.onLcInput()">
                 </div>
                 <div class="form-group">
                     <label>Classification du col</label>
                     <div class="radio-group">
-                        <div class="radio-item">
-                            <input type="radio" id="col_long" name="col" value="long" checked>
-                            <label for="col_long">Col long &#8805;&#8239;25&#8239;mm &#8212; Risque faible</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="col_court" name="col" value="court">
-                            <label for="col_court">Col court 15&#8239;&#8211;&#8239;25&#8239;mm &#8212; Risque modéré</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="col_tres_court" name="col" value="tres_court">
-                            <label for="col_tres_court">Col très court &lt;&#8239;15&#8239;mm ou dilaté &#8805;&#8239;3&#8239;cm &#8212; Risque élevé</label>
-                        </div>
+                        <div class="radio-item"><input type="radio" id="col_long" name="col" value="long" checked><label for="col_long">Col long &#8805;&#8239;25&#8239;mm &#8212; Risque faible</label></div>
+                        <div class="radio-item"><input type="radio" id="col_court" name="col" value="court"><label for="col_court">Col court 15&#8239;&#8211;&#8239;25&#8239;mm &#8212; Risque mod&#233;r&#233;</label></div>
+                        <div class="radio-item"><input type="radio" id="col_tres_court" name="col" value="tres_court"><label for="col_tres_court">Col tr&#232;s court &lt;&#8239;15&#8239;mm ou dilat&#233; &#8805;&#8239;3&#8239;cm &#8212; Risque &#233;lev&#233;</label></div>
                     </div>
                 </div>
             </div>
 
-            <!-- SIGNES DE GRAVITÉ -->
+            <!-- SIGNES GRAVITÉ -->
             <div class="form-section">
-                <div class="form-section-title">4. Signes de gravité (cocher si présents)</div>
+                <div class="form-section-title">4. Signes de gravit&#233; (cocher si pr&#233;sents)</div>
                 <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="checkbox" id="sg_chorio" name="gravite" value="chorio">
-                        <label for="sg_chorio">&#128308; Suspicion de chorioamniotite (fièvre, CRP élevée, utérus sensible)</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="checkbox" id="sg_hemorr" name="gravite" value="hemorr">
-                        <label for="sg_hemorr">&#128308; Métrorragies associées</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="checkbox" id="sg_sff" name="gravite" value="sff">
-                        <label for="sg_sff">&#128308; Souffrance fœtale (RCF pathologique)</label>
-                    </div>
+                    <div class="radio-item"><input type="checkbox" id="sg_chorio" name="gravite" value="chorio"><label for="sg_chorio">&#128308; Suspicion de chorioamniotite (fi&#232;vre, CRP &#233;lev&#233;e, ut&#233;rus sensible)</label></div>
+                    <div class="radio-item"><input type="checkbox" id="sg_hemorr" name="gravite" value="hemorr"><label for="sg_hemorr">&#128308; M&#233;trorragies associ&#233;es</label></div>
+                    <div class="radio-item"><input type="checkbox" id="sg_sff" name="gravite" value="sff"><label for="sg_sff">&#128308; Souffrance f&#339;tale (RCF pathologique)</label></div>
                 </div>
             </div>
 
             <div class="ibox yellow">
-                <p><strong>&#9888; Avant validation :</strong> Vérifier que les urgences ont été éliminées (placenta pr&#230;via, HRPP, chorioamniotite constituée). Tout signe de gravité coché redirige vers la branche urgence.</p>
+                <p><strong>&#9888; Avant validation :</strong> V&#233;rifier que les urgences ont &#233;t&#233; &#233;limin&#233;es (placenta pr&#230;via, HRPP, chorioamniotite constitu&#233;e). Tout signe de gravit&#233; coch&#233; redirige vers la branche urgence.</p>
             </div>
-
             <button class="btn-primary" onclick="mapTool.validerEtOrienter()">&#10148; Valider et orienter la prise en charge</button>
         </div>
 
-        <!-- ======================================================
-             BRANCHE : URGENCE (signes de gravité)
-        ====================================================== -->
+        <!-- BRANCHE URGENCE -->
         <div class="step-content" id="step-urgence">
-            <h2 class="sec-title">&#128680; Signe(s) de Gravité Détecté(s) &#8212; Prise en charge immédiate</h2>
+            <h2 class="sec-title">&#128680; Signe(s) de Gravit&#233; D&#233;tect&#233;(s) &#8212; Prise en charge imm&#233;diate</h2>
             <div id="summary-urgence"></div>
-
             <div id="signes-gravite-detail"></div>
-
             <div class="alert-urg">
-                <div class="urg-title">Mesures immédiates systématiques</div>
+                <div class="urg-title">Mesures imm&#233;diates syst&#233;matiques</div>
                 <ul>
-                    <li>Hospitalisation en urgence &#8212; Maternité de niveau adapté au terme</li>
+                    <li>Hospitalisation en urgence &#8212; Maternit&#233; de niveau adapt&#233; au terme</li>
                     <li>Monitoring continu RCF + toco</li>
-                    <li>Voie veineuse + bilan biologique complet (NFS, CRP, hémocultures si fièvre)</li>
-                    <li>&#201;chographie obstétricale en urgence (vitalité, présentation, placenta)</li>
-                    <li>Avis senior / senior obstétricien immédiat</li>
+                    <li>Voie veineuse + bilan biologique complet (NFS, CRP, h&#233;mocultures si fi&#232;vre)</li>
+                    <li>&#201;chographie obst&#233;tricale en urgence (vitalit&#233;, pr&#233;sentation, placenta)</li>
+                    <li>Avis senior / senior obst&#233;tricien imm&#233;diat</li>
                 </ul>
             </div>
-
             <div id="term-rules-urgence"></div>
-
             <div class="note-ambre">
-                <div class="na-title">&#9888; Décision d'extraction</div>
-                <p>En cas de chorioamniotite confirmée : <strong>extraction immédiate quel que soit le terme</strong>, sans attendre la fin de la corticothérapie. La tocolyse est contre-indiquée.</p>
+                <div class="na-title">&#9888; D&#233;cision d&#8217;extraction</div>
+                <p>En cas de chorioamniotite confirm&#233;e : <strong>extraction imm&#233;diate quel que soit le terme</strong>, sans attendre la fin de la corticoth&#233;rapie. La tocolyse est contre-indiqu&#233;e.</p>
             </div>
         </div>
 
-        <!-- ======================================================
-             BRANCHE : Col long — risque faible
-        ====================================================== -->
+        <!-- COL LONG -->
         <div class="step-content" id="step-col-long">
-            <h2 class="sec-title">&#9654; MAP à Risque Faible &#8212; Col &#8805;&#8239;25&#8239;mm</h2>
+            <h2 class="sec-title">&#9654; MAP &#224; Risque Faible &#8212; Col &#8805;&#8239;25&#8239;mm</h2>
             <div id="summary-col-long"></div>
             <div id="term-rules-col-long"></div>
-
             <div class="result-box green">
                 <div class="rb-title">&#10003; Prise en charge ambulatoire possible</div>
                 <div class="exam-list">
-                    <div class="exam-item">
-                        <strong>Si FFN négative (+ col &#8805;&#8239;25&#8239;mm)</strong>
-                        <p>Valeur prédictive négative &gt;&#8239;95&#8239;% pour accouchement dans les 7&#8239;jours. Sortie autorisée sous réserve.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Traitement tocolytique</strong>
-                        <p>Non recommandé en première intention si risque faible.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Surveillance ambulatoire</strong>
-                        <p>Contr&#244;le échographique cervical à 1&#8239;semaine + RCF ambulatoire.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Repos relatif</strong>
-                        <p>Arrêt de travail + éviction des facteurs déclenchants.</p>
-                    </div>
+                    <div class="exam-item"><strong>Si FFN n&#233;gative (+ col &#8805;&#8239;25&#8239;mm)</strong><p>Valeur pr&#233;dictive n&#233;gative &gt;&#8239;95&#8239;% pour accouchement dans les 7&#8239;jours. Sortie autoris&#233;e sous r&#233;serve.</p></div>
+                    <div class="exam-item"><strong>Traitement tocolytique</strong><p>Non recommand&#233; en premi&#232;re intention si risque faible.</p></div>
+                    <div class="exam-item"><strong>Surveillance ambulatoire</strong><p>Contr&#244;le &#233;chographique cervical &#224; 1&#8239;semaine + RCF ambulatoire.</p></div>
+                    <div class="exam-item"><strong>Repos relatif</strong><p>Arr&#234;t de travail + &#233;viction des facteurs d&#233;clenchants.</p></div>
                 </div>
                 <div class="note-ambre">
                     <div class="na-title">Signes de retour en urgence</div>
-                    <p>Recrudescence des CU, perte de liquide, métrorragies, fièvre, diminution des MAF &#8594; Retour immédiat aux urgences</p>
+                    <p>Recrudescence des CU, perte de liquide, m&#233;trorragies, fi&#232;vre, diminution des MAF &#8594; Retour imm&#233;diat aux urgences</p>
                 </div>
             </div>
         </div>
 
-        <!-- ======================================================
-             BRANCHE : Col court — risque modéré
-        ====================================================== -->
+        <!-- COL COURT -->
         <div class="step-content" id="step-col-court">
-            <h2 class="sec-title">&#9654; MAP à Risque Modéré &#8212; Col 15&#8239;&#8211;&#8239;25&#8239;mm</h2>
+            <h2 class="sec-title">&#9654; MAP &#224; Risque Mod&#233;r&#233; &#8212; Col 15&#8239;&#8211;&#8239;25&#8239;mm</h2>
             <div id="summary-col-court"></div>
             <div id="term-rules-col-court"></div>
-
-            <div class="ibox yellow">
-                <p><strong>Hospitalisation recommandée</strong> pour surveillance et évaluation complémentaire.</p>
-            </div>
-
+            <div class="ibox yellow"><p><strong>Hospitalisation recommand&#233;e</strong> pour surveillance et &#233;valuation compl&#233;mentaire.</p></div>
             <div class="result-box orange">
-                <div class="rb-title">&#9888; Prise en charge hospitalière</div>
+                <div class="rb-title">&#9888; Prise en charge hospitali&#232;re</div>
                 <div class="exam-list">
-                    <div class="exam-item">
-                        <strong>Corticothérapie (Célestène Chronodose&#174;)</strong>
-                        <p>Voir les règles d'administration, contre-indications et pièges RCF détaillés ci-dessus.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Sulfate de Magnésium &#8212; Neuroprotection fœtale</strong>
-                        <p>Voir les règles spécifiques au terme ci-dessus.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Tocolyse</strong>
-                        <p>Voir les règles spécifiques au terme ci-dessus.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Transfert in utero</strong>
-                        <p>Vers maternité de niveau adapté au terme (Niveau III si &lt;&#8239;32&#8239;SA).</p>
-                    </div>
+                    <div class="exam-item"><strong>Corticoth&#233;rapie (C&#233;lest&#232;ne Chronodose&#174;)</strong><p>Voir les r&#232;gles d&#8217;administration, contre-indications et pi&#232;ges RCF d&#233;taill&#233;s ci-dessus.</p></div>
+                    <div class="exam-item"><strong>Sulfate de Magn&#233;sium &#8212; Neuroprotection f&#339;tale</strong><p>Voir les r&#232;gles sp&#233;cifiques au terme ci-dessus.</p></div>
+                    <div class="exam-item"><strong>Tocolyse</strong><p>Voir les r&#232;gles sp&#233;cifiques au terme ci-dessus.</p></div>
+                    <div class="exam-item"><strong>Transfert in utero</strong><p>Vers maternit&#233; de niveau adapt&#233; au terme (Niveau III si &lt;&#8239;32&#8239;SA).</p></div>
                 </div>
             </div>
-
-            <p style="font-size:12px;font-weight:700;color:var(--gris-600);text-transform:uppercase;letter-spacing:0.05em;margin:14px 0 8px;">Tocolytiques disponibles (si indiqués selon le terme)</p>
-
+            <p style="font-size:12px;font-weight:700;color:var(--gris-600);text-transform:uppercase;letter-spacing:0.05em;margin:14px 0 8px;">Tocolytiques disponibles (si indiqu&#233;s selon le terme)</p>
             <div class="drug-card">
-                <div class="drug-header">Atosiban (Tractocile&#174;) <span class="line-tag">1ère ligne</span></div>
-                <div class="drug-body">
-                    Antagoniste de l'ocytocine &#8212; Meilleure tolérance maternelle<br>
-                    <ul>
-                        <li>Bolus&#8239;: 6,75&#8239;mg IV sur 1&#8239;min</li>
-                        <li>Entretien&#8239;: 18&#8239;mg/h sur 3h puis 6&#8239;mg/h max 45h</li>
-                        <li>CI&#8239;: souffrance fœtale, RCIU sévère, infection amniotique.</li>
-                    </ul>
-                </div>
+                <div class="drug-header">Atosiban (Tractocile&#174;) <span class="line-tag">1&#232;re ligne</span></div>
+                <div class="drug-body">Antagoniste de l&#8217;ocytocine &#8212; Meilleure tol&#233;rance maternelle<br><ul><li>Bolus&#8239;: 6,75&#8239;mg IV sur 1&#8239;min</li><li>Entretien&#8239;: 18&#8239;mg/h sur 3h puis 6&#8239;mg/h max 45h</li><li>CI&#8239;: souffrance f&#339;tale, RCIU s&#233;v&#232;re, infection amniotique.</li></ul></div>
             </div>
-
             <div class="drug-card">
-                <div class="drug-header">Nifédipine (Adalate&#174;) <span class="line-tag">Alternative</span></div>
-                <div class="drug-body">
-                    Inhibiteur calcique &#8212; Efficacité comparable, co&#251;t moindre<br>
-                    <ul>
-                        <li>Dose initiale&#8239;: 10&#8211;20&#8239;mg per os toutes les 4&#8211;6h</li>
-                        <li>CI&#8239;: hypotension, insuffisance cardiaque, association aux bêtamimétiques</li>
-                        <li>Surveillance&#8239;: PA, FC</li>
-                    </ul>
-                </div>
+                <div class="drug-header">Nif&#233;dipine (Adalate&#174;) <span class="line-tag">Alternative</span></div>
+                <div class="drug-body">Inhibiteur calcique &#8212; Efficacit&#233; comparable, co&#251;t moindre<br><ul><li>Dose initiale&#8239;: 10&#8211;20&#8239;mg per os toutes les 4&#8211;6h</li><li>CI&#8239;: hypotension, insuffisance cardiaque, association aux b&#234;tamim&#233;tiques</li><li>Surveillance&#8239;: PA, FC</li></ul></div>
             </div>
         </div>
 
-        <!-- ======================================================
-             BRANCHE : Col très court — haut risque
-        ====================================================== -->
+        <!-- COL TRÈS COURT -->
         <div class="step-content" id="step-col-tres-court">
-            <h2 class="sec-title">&#128680; MAP à Haut Risque &#8212; Col &lt;&#8239;15&#8239;mm / Dilaté</h2>
+            <h2 class="sec-title">&#128680; MAP &#224; Haut Risque &#8212; Col &lt;&#8239;15&#8239;mm / Dilat&#233;</h2>
             <div id="summary-col-tres-court"></div>
             <div id="term-rules-col-tres-court"></div>
-
             <div class="alert-urg">
-                <div class="urg-title">Mesures immédiates</div>
+                <div class="urg-title">Mesures imm&#233;diates</div>
                 <ul>
-                    <li>Hospitalisation en urgence &#8212; Maternité de niveau adapté au terme</li>
+                    <li>Hospitalisation en urgence &#8212; Maternit&#233; de niveau adapt&#233; au terme</li>
                     <li>Repos strict au lit</li>
                     <li>Monitoring continu RCF + toco</li>
-                    <li>Voie veineuse + prélèvements biologiques complets</li>
+                    <li>Voie veineuse + pr&#233;l&#232;vements biologiques complets</li>
                     <li>Transfert in utero si terme &lt;&#8239;32&#8239;SA vers niveau III</li>
                 </ul>
             </div>
-
             <div class="result-box red">
                 <div class="rb-title">&#128680; Protocole de neuroprotection et maturation</div>
                 <div class="exam-list">
-                    <div class="exam-item">
-                        <strong>1. Sulfate de Magnésium</strong>
-                        <p>Voir les règles spécifiques au terme ci-dessus.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>2. Corticothérapie (Célestène Chronodose&#174;)</strong>
-                        <p>Voir les règles d'administration, contre-indications et pièges RCF détaillés ci-dessus.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>3. Tocolyse</strong>
-                        <p>48h pour permettre la maturation. Atosiban en 1ère intention &#8212; Arrêt si col &#8805;&#8239;4&#8239;cm ou accouchement inévitable.</p>
-                    </div>
-                    <div class="exam-item">
-                        <strong>4. Cerclage d'urgence</strong>
-                        <p>&#192; discuter si col &lt;&#8239;25&#8239;mm entre 22 et 24&#8239;SA, membranes intactes, ATCD de fausse couche tardive.</p>
-                    </div>
+                    <div class="exam-item"><strong>1. Sulfate de Magn&#233;sium</strong><p>Voir les r&#232;gles sp&#233;cifiques au terme ci-dessus.</p></div>
+                    <div class="exam-item"><strong>2. Corticoth&#233;rapie (C&#233;lest&#232;ne Chronodose&#174;)</strong><p>Voir les r&#232;gles d&#8217;administration, contre-indications et pi&#232;ges RCF d&#233;taill&#233;s ci-dessus.</p></div>
+                    <div class="exam-item"><strong>3. Tocolyse</strong><p>48h pour permettre la maturation. Atosiban en 1&#232;re intention &#8212; Arr&#234;t si col &#8805;&#8239;4&#8239;cm ou accouchement in&#233;vitable.</p></div>
+                    <div class="exam-item"><strong>4. Cerclage d&#8217;urgence</strong><p>&#192; discuter si col &lt;&#8239;25&#8239;mm entre 22 et 24&#8239;SA, membranes intactes, ATCD de fausse couche tardive.</p></div>
                 </div>
             </div>
         </div>
 
-        <!-- ======================================================
-             BRANCHE : RPM
-        ====================================================== -->
+        <!-- RPM -->
         <div class="step-content" id="step-rpm">
-            <h2 class="sec-title">&#9888; Rupture Prématurée des Membranes</h2>
+            <h2 class="sec-title">&#9888; Rupture Pr&#233;matur&#233;e des Membranes</h2>
             <div id="summary-rpm"></div>
             <div id="term-rules-rpm"></div>
-
             <div class="ibox red">
-                <p><strong>Définition :</strong> Rupture des membranes avant le début du travail, avant 37&#8239;SA.<br>
-                <strong>Risques majeurs :</strong> Chorioamniotite (10&#8211;30&#8239;%) + procidence du cordon + hypoplasie pulmonaire (si RPM précoce) + prématurité.</p>
+                <p><strong>D&#233;finition :</strong> Rupture des membranes avant le d&#233;but du travail, avant 37&#8239;SA.<br>
+                <strong>Risques majeurs :</strong> Chorioamniotite (10&#8211;30&#8239;%) + procidence du cordon + hypoplasie pulmonaire (si RPM pr&#233;coce) + pr&#233;maturit&#233;.</p>
             </div>
-
             <div class="ibox blue">
                 <h3>Confirmation diagnostique</h3>
                 <ul>
-                    <li>Spéculum&#8239;: écoulement de liquide amniotique (test à la toux)</li>
+                    <li>Sp&#233;culum&#8239;: &#233;coulement de liquide amniotique (test &#224; la toux)</li>
                     <li>Test AmniSure&#174; ou IGFBP-1 (Actim PROM&#174;) si doute</li>
                     <li>pH vaginal (liquide amniotique&#8239;: pH &#8805;&#8239;7)</li>
                     <li>Pas de TV au doigt sauf accouchement imminent</li>
-                    <li>&#201;chographie&#8239;: index de liquide amniotique (ILA), vitalité fœtale</li>
-                    <li>PV + ECBU + NFS + CRP d'entrée systématiques</li>
+                    <li>&#201;chographie&#8239;: index de liquide amniotique (ILA), vitalit&#233; f&#339;tale</li>
+                    <li>PV + ECBU + NFS + CRP d&#8217;entr&#233;e syst&#233;matiques</li>
                 </ul>
             </div>
-
-            <!-- ANTIBIOPROPHYLAXIE -->
             <div class="result-box violet">
-                <div class="rb-title">&#10003; Antibioprophylaxie &#8212; Modalités (toutes RPM)</div>
+                <div class="rb-title">&#10003; Antibioprophylaxie &#8212; Modalit&#233;s (toutes RPM)</div>
                 <div class="exam-list">
-                    <div class="exam-item">
-                        <strong>1ère intention &#8212; Amoxicilline (Clamoxyl&#174;)</strong>
-                        <ul>
-                            <li><strong>1&#8239;g &#215;&#8239;3/24h per os</strong> &#8212; molécule de choix</li>
-                        </ul>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Si allergie aux pénicillines &#8212; Erythromycine</strong>
-                        <ul>
-                            <li><strong>500&#8239;mg &#215;&#8239;4/24h per os</strong> (les C3G peuvent être discutées)</li>
-                        </ul>
-                    </div>
-                    <div class="exam-item">
-                        <strong>&#128683; Non recommandés</strong>
-                        <ul>
-                            <li>Amoxicilline + Acide clavulanique (risque d'entérocolite néonatale)</li>
-                            <li>Aminosides, C1G, C2G, métronidazole</li>
-                        </ul>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Adaptation aux résultats bactériologiques</strong>
-                        <ul>
-                            <li>Bilan négatif &#8594; <span style="color:var(--rouge-vif);font-weight:700;">ARR&#202;T de l'antibiothérapie</span></li>
-                            <li>Bilan positif &#8594; <span style="color:var(--vert-vif);font-weight:700;">Adapter au germe, durée 7 jours au total</span></li>
-                        </ul>
-                    </div>
+                    <div class="exam-item"><strong>1&#232;re intention &#8212; Amoxicilline (Clamoxyl&#174;)</strong><ul><li><strong>1&#8239;g &#215;&#8239;3/24h per os</strong> &#8212; mol&#233;cule de choix</li></ul></div>
+                    <div class="exam-item"><strong>Si allergie aux p&#233;nicillines &#8212; Erythromycine</strong><ul><li><strong>500&#8239;mg &#215;&#8239;4/24h per os</strong></li></ul></div>
+                    <div class="exam-item"><strong>&#128683; Non recommand&#233;s</strong><ul><li>Amoxicilline + Acide clavulanique (risque d&#8217;entérocolite n&#233;onatale)</li><li>Aminosides, C1G, C2G, m&#233;tronidazole</li></ul></div>
+                    <div class="exam-item"><strong>Adaptation aux r&#233;sultats bact&#233;riologiques</strong><ul><li>Bilan n&#233;gatif &#8594; <span style="color:var(--rouge-vif);font-weight:700;">ARR&#202;T de l&#8217;antibioth&#233;rapie</span></li><li>Bilan positif &#8594; <span style="color:var(--vert-vif);font-weight:700;">Adapter au germe, dur&#233;e 7 jours au total</span></li></ul></div>
                 </div>
             </div>
-
-            <!-- SURVEILLANCE CLINIQUE -->
             <div class="result-box blue">
                 <div class="rb-title">&#128203; Surveillance (24&#8211;34 SA)</div>
                 <div class="exam-list">
-                    <div class="exam-item">
-                        <strong>Clinique</strong>
-                        <ul>
-                            <li>Température&#8239;: 3&#8239;fois/j &#8212; pas de TV sauf nécessité</li>
-                            <li>Aspect de l'écoulement (odeur, aspect louche = infection)</li>
-                        </ul>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Monitoring fœtal</strong>
-                        <ul>
-                            <li>1/j ou plus sur point d'appel pendant l'hospitalisation</li>
-                            <li>2/semaine en surveillance à domicile</li>
-                        </ul>
-                    </div>
-                    <div class="exam-item">
-                        <strong>Biologique</strong>
-                        <ul>
-                            <li>NFS + CRP&#8239;: 1/semaine</li>
-                            <li>PV&#8239;: 1/semaine &#8212; ECBU&#8239;: 1/15 jours</li>
-                        </ul>
-                    </div>
-                    <div class="exam-item">
-                        <strong>&#201;chographique</strong>
-                        <ul>
-                            <li>Hebdomadaire&#8239;: mesure index du LA (ILA)</li>
-                            <li>Plus fréquente sur point d'appel</li>
-                        </ul>
-                    </div>
+                    <div class="exam-item"><strong>Clinique</strong><ul><li>Temp&#233;rature&#8239;: 3&#8239;fois/j &#8212; pas de TV sauf n&#233;cessit&#233;</li><li>Aspect de l&#8217;&#233;coulement (odeur, aspect louche = infection)</li></ul></div>
+                    <div class="exam-item"><strong>Monitoring f&#339;tal</strong><ul><li>1/j ou plus sur point d&#8217;appel pendant l&#8217;hospitalisation</li><li>2/semaine en surveillance &#224; domicile</li></ul></div>
+                    <div class="exam-item"><strong>Biologique</strong><ul><li>NFS + CRP&#8239;: 1/semaine</li><li>PV&#8239;: 1/semaine &#8212; ECBU&#8239;: 1/15 jours</li></ul></div>
+                    <div class="exam-item"><strong>&#201;chographique</strong><ul><li>Hebdomadaire&#8239;: mesure index du LA (ILA)</li></ul></div>
                 </div>
             </div>
-
-            <!-- CONDITIONS SURVEILLANCE EXTERNE -->
             <div class="ibox or">
-                <h3>&#128196; Conditions d'acceptation de la surveillance externe (RPM 24&#8211;34 SA)</h3>
+                <h3>&#128196; Conditions d&#8217;acceptation de la surveillance externe (RPM 24&#8211;34 SA)</h3>
                 <ul>
-                    <li>Après hospitalisation initiale d'<strong>au moins 48h</strong> en maternité</li>
+                    <li>Apr&#232;s hospitalisation initiale d&#8217;<strong>au moins 48h</strong> en maternit&#233;</li>
                     <li>Examen clinique normal&#8239;: <strong>apyrexie + absence de CU</strong></li>
-                    <li>Absence de signes d'infection amniotique</li>
-                    <li>Monitorings normaux + échographie normale (ILA normal)</li>
-                    <li>Surveillance hebdomadaire à la maternité (SF libérale en alternance)</li>
+                    <li>Absence de signes d&#8217;infection amniotique</li>
+                    <li>Monitorings normaux + &#233;chographie normale (ILA normal)</li>
+                    <li>Surveillance hebdomadaire &#224; la maternit&#233;</li>
                 </ul>
             </div>
-
-            <!-- STRATIFICATION SGB ≥ 37 SA -->
             <div class="result-box green">
-                <div class="rb-title">&#9654; RPM à terme (&#8805;&#8239;37&#8239;SA) &#8212; Stratégie selon Streptocoque B</div>
+                <div class="rb-title">&#9654; RPM &#224; terme (&#8805;&#8239;37&#8239;SA) &#8212; Strat&#233;gie selon Streptocoque B</div>
                 <div class="exam-list">
-                    <div class="exam-item">
-                        <strong>Bilan initial systématique</strong>
-                        <ul>
-                            <li>NFS, CRP, PV ciblé SGB (PCR possible)</li>
-                            <li>Surveillance NFS + CRP à l'admission puis toutes 12h</li>
-                        </ul>
-                    </div>
-                    <div class="exam-item">
-                        <strong>&#128308; SGB négatif ou inconnu (test rapide non disponible)</strong>
-                        <ul>
-                            <li>Expectative possible jusqu'à <strong>24h</strong></li>
-                            <li>Antibiothérapie à débuter à <strong>H12</strong> après rupture</li>
-                            <li>Déclenchement (ou césarienne si CI VB) à <strong>H24</strong></li>
-                            <li><strong>Temps de latence maximum&#8239;: 48h</strong></li>
-                        </ul>
-                    </div>
-                    <div class="exam-item">
-                        <strong>&#128308; SGB positif</strong>
-                        <ul>
-                            <li>Antibiothérapie à débuter <strong>immédiatement à l'arrivée</strong></li>
-                            <li>Faire accoucher <strong>sans délai</strong>&#8239;: déclenchement ou césarienne si CI VB</li>
-                        </ul>
-                    </div>
+                    <div class="exam-item"><strong>Bilan initial syst&#233;matique</strong><ul><li>NFS, CRP, PV cibl&#233; SGB (PCR possible)</li><li>Surveillance NFS + CRP &#224; l&#8217;admission puis toutes 12h</li></ul></div>
+                    <div class="exam-item"><strong>&#128308; SGB n&#233;gatif ou inconnu</strong><ul><li>Expectative possible jusqu&#8217;&#224; <strong>24h</strong></li><li>Antibioth&#233;rapie &#224; d&#233;buter &#224; <strong>H12</strong> apr&#232;s rupture</li><li>D&#233;clenchement &#224; <strong>H24</strong> &#8212; Temps de latence maximum&#8239;: 48h</li></ul></div>
+                    <div class="exam-item"><strong>&#128308; SGB positif</strong><ul><li>Antibioth&#233;rapie &#224; d&#233;buter <strong>imm&#233;diatement &#224; l&#8217;arriv&#233;e</strong></li><li>Faire accoucher <strong>sans d&#233;lai</strong></li></ul></div>
                 </div>
             </div>
-
-            <!-- CAS PARTICULIERS -->
             <div class="ibox yellow">
                 <h3>&#9888; Cas particuliers</h3>
                 <ul>
-                    <li><strong>Cerclage du col&#8239;:</strong> à enlever dès que la RPM est constatée (point d'appel infectieux) + dosage CRP</li>
-                    <li><strong>MIU&#8239;:</strong> risque infectieux au 1er plan &#8594; déclenchement le plus rapidement possible</li>
-                    <li><strong>Streptocoque B isolé (PV+) :</strong> pas une indication de déclenchement avant 37 SA sous couvert d'antibio adaptée</li>
-                    <li><strong>Autre germe (E. Coli K1, H. Influenzae, Klebsiella)&#8239;:</strong> discussion collégiale pour déclenchement</li>
+                    <li><strong>Cerclage du col&#8239;:</strong> &#224; enlever d&#232;s que la RPM est constat&#233;e + dosage CRP</li>
+                    <li><strong>MIU&#8239;:</strong> risque infectieux au 1er plan &#8594; d&#233;clenchement le plus rapidement possible</li>
+                    <li><strong>Streptocoque B isol&#233; (PV+)&#8239;:</strong> pas une indication de d&#233;clenchement avant 37 SA sous couvert d&#8217;antibio adapt&#233;e</li>
                 </ul>
             </div>
-
             <div class="note-ambre">
-                <div class="na-title">&#9888; Signes de chorioamniotite &#8212; Extraction immédiate quel que soit le terme</div>
-                <p>Fièvre maternelle &gt;&#8239;38&#8239;&#176;C + tachycardie fœtale + utérus douloureux + liquide malodorant ou purulent + CRP &gt;&#8239;20&#8239;mg/L avec ascension rapide &#8212; <strong>Tocolyse formellement contre-indiquée</strong></p>
+                <div class="na-title">&#9888; Signes de chorioamniotite &#8212; Extraction imm&#233;diate quel que soit le terme</div>
+                <p>Fi&#232;vre maternelle &gt;&#8239;38&#8239;&#176;C + tachycardie f&#339;tale + ut&#233;rus douloureux + liquide malodorant ou purulent + CRP &gt;&#8239;20&#8239;mg/L &#8212; <strong>Tocolyse formellement contre-indiqu&#233;e</strong></p>
             </div>
         </div>
 
     </div><!-- /tool-body -->
 
-    <!-- ============================================================
-         PIED DE PAGE
-    ============================================================ -->
+    <!-- PIED DE PAGE -->
     <div class="tool-footer">
+        <!-- Sainte Trinit&#233; d.2 + d.3 -->
+        <div class="map-actions-bar">
+            <button type="button" class="map-btn-action map-btn-copy" id="map-btn-copy" onclick="mapCopy()">&#128203;&#160;Copier la synth&#232;se</button>
+            <button type="button" class="map-btn-action map-btn-print" onclick="mapPrint()">&#128424;&#160;Imprimer A5</button>
+        </div>
         <p class="legal-warning">
-            <strong>&#9888; Avertissement médico-légal :</strong> Cet outil d'aide à la décision est basé sur les recommandations du CNGOF/HAS. Il ne se substitue en aucun cas au jugement clinique du médecin, à l'évaluation individualisée de la patiente. La responsabilité du diagnostic, de la prescription et de la prise en charge thérapeutique incombe exclusivement au praticien.
+            <strong>&#9888; Avertissement m&#233;dico-l&#233;gal :</strong> Cet outil d&#8217;aide &#224; la d&#233;cision est bas&#233; sur les recommandations du CNGOF/HAS. Il ne se substitue en aucun cas au jugement clinique du m&#233;decin, &#224; l&#8217;&#233;valuation individualis&#233;e de la patiente. La responsabilit&#233; du diagnostic, de la prescription et de la prise en charge th&#233;rapeutique incombe exclusivement au praticien.
         </p>
-        <p class="refs"><strong>Références :</strong> CNGOF 2016 / HAS</p>
+        <p class="refs"><strong>R&#233;f&#233;rences :</strong> CNGOF 2016 / HAS</p>
         <p class="copyright">Dr KARA-ZAITRI M.A &#169; 2026</p>
     </div>
 
-    <!-- ============================================================
-         MODAL INTERNE
-    ============================================================ -->
+    <!-- MODAL -->
     <div id="map-modal-overlay" style="display:none;" aria-modal="true" role="dialog">
         <div id="map-modal-box">
             <div id="map-modal-icon"></div>
@@ -957,463 +575,458 @@
             <button id="map-modal-btn" onclick="mapModal.close()">OK</button>
         </div>
     </div>
-</div><!-- /#map-tool -->
-
+</div>
 <script>
 'use strict';
-/* ================================================================
-   MAP TOOL v4 — Dr KARA-ZAITRI M.A
-   Corrections appliquées (FIX 9 & 10) :
-   - Ajout d'une alerte visuelle RCF pour le Célestène.
-   - Mention claire "Cure unique (pas de cures itératives)".
-   - Précision du nom complet : Célestène Chronodose® 12 mg IM.
-   - Ajout Toxémie et chorioamniotite dans les CI de la cortico.
-   - FIX 10 : Correction du bug d'affichage "&lt;" par "<" dans le modal.
-================================================================ */
-var mapTool = (function () {
 
+/* ============================================================
+   BARRE PATIENT COMPACTE
+============================================================ */
+function mapPtToggle() {
+    var f = document.getElementById('map-pt-form');
+    var b = document.getElementById('map-pt-toggle-btn');
+    f.classList.toggle('open');
+    b.classList.toggle('open');
+    b.setAttribute('aria-expanded', f.classList.contains('open') ? 'true' : 'false');
+}
+function mapPtCalcAge() {
+    var ddn = document.getElementById('map-pt-ddn').value;
+    if (!ddn) return;
+    var d = new Date(ddn), now = new Date();
+    var age = now.getFullYear() - d.getFullYear();
+    var m = now.getMonth() - d.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+    document.getElementById('map-pt-age').value = Math.max(0, age);
+}
+function mapPtClearDdn() { document.getElementById('map-pt-ddn').value = ''; }
+
+function mapGetPatient() {
+    var nom    = (document.getElementById('map-pt-nom').value || '').trim();
+    var prenom = (document.getElementById('map-pt-prenom').value || '').trim();
+    var ddn    = document.getElementById('map-pt-ddn').value;
+    var age    = (document.getElementById('map-pt-age').value || '').trim();
+    var med    = (document.getElementById('map-pt-med').value || '').trim();
+    var date   = document.getElementById('map-pt-date').value;
+    var nomC   = (prenom ? prenom + ' ' : '') + nom;
+    function fmt(d) { if(!d) return ''; var p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+    return { nomComplet:nomC.trim(), ddn:fmt(ddn), age:age, medecin:med, date:fmt(date) };
+}
+(function(){
+    var d = document.getElementById('map-pt-date');
+    if(d) d.value = new Date().toISOString().split('T')[0];
+})();
+
+/* ============================================================
+   COPIER (d.2) — double fallback
+============================================================ */
+function mapCopy() {
+    var pt    = mapGetPatient();
+    var today = pt.date || new Date().toLocaleDateString('fr-FR');
+    var t = '=== MAP & RPM \u2014 ARBRE D\u00c9CISIONNEL | CHU Tlemcen ===\n';
+    t += 'Date : ' + today + '\n';
+    if (pt.nomComplet) t += 'Patiente : ' + pt.nomComplet + (pt.age ? ' (' + pt.age + ' ans)' : '') + (pt.ddn ? ' \u2014 N\u00e9e le ' + pt.ddn : '') + '\n';
+    if (pt.medecin)    t += 'M\u00e9decin  : ' + pt.medecin + '\n';
+    t += '\n--- PARAM\u00c8TRES \u00c9VALU\u00c9S ---\n';
+    var termeEl = document.getElementById('terme_display');
+    t += 'Terme    : ' + (termeEl ? termeEl.textContent : '\u2014') + '\n';
+    var rpm = document.querySelector('input[name="rpm"]:checked');
+    t += 'RPM      : ' + (rpm ? (rpm.value === 'oui' ? 'Oui \u2014 Rupture confirm\u00e9e' : 'Non \u2014 Membranes intactes') : '\u2014') + '\n';
+    var col = document.querySelector('input[name="col"]:checked');
+    var colL = { long:'Long (\u2265 25 mm)', court:'Court (15\u201325 mm)', tres_court:'Tr\u00e8s court (< 15 mm) / dilat\u00e9' };
+    t += 'Col      : ' + (col ? (colL[col.value] || col.value) : '\u2014') + '\n';
+    var lc = document.getElementById('lc').value;
+    if(lc) t += 'LC \u00e9cho   : ' + lc + ' mm\n';
+    var signes = [];
+    if(document.getElementById('sg_chorio').checked) signes.push('Suspicion chorioamniotite');
+    if(document.getElementById('sg_hemorr').checked) signes.push('M\u00e9trorragies');
+    if(document.getElementById('sg_sff').checked)    signes.push('Souffrance f\u0153tale');
+    if(signes.length) t += 'Signes de gravit\u00e9 : ' + signes.join(', ') + '\n';
+    t += '\n--- R\u00c9SULTAT / ORIENTATION ---\n';
+    var activeStep = document.querySelector('#map-tool .step-content.active');
+    if (activeStep && activeStep.id !== 'step1') {
+        var titles = {
+            'step-urgence':        '\u26A0 Signe(s) de gravit\u00e9 \u2014 PEC imm\u00e9diate',
+            'step-col-long':       'MAP \u00e0 risque faible \u2014 Col \u2265 25 mm',
+            'step-col-court':      'MAP \u00e0 risque mod\u00e9r\u00e9 \u2014 Col 15\u201325 mm',
+            'step-col-tres-court': 'MAP \u00e0 haut risque \u2014 Col < 15 mm / dilat\u00e9',
+            'step-rpm':            'Rupture pr\u00e9matur\u00e9e des membranes (RPM)'
+        };
+        t += (titles[activeStep.id] || activeStep.id) + '\n';
+        var trEl = activeStep.querySelector('[id^="term-rules"]');
+        if(trEl && trEl.innerText) t += '\nR\u00e8gles cliniques selon terme :\n' + trEl.innerText.replace(/^\s+|\s+$/g,'') + '\n';
+    } else {
+        t += '(Obtenir un diagnostic via l\u2019outil avant de copier)\n';
+    }
+    t += '\n(CHU Tlemcen \u2014 CNGOF/HAS \u2014 Dr KARA-ZAITRI M.A.)\n';
+    var btn = document.getElementById('map-btn-copy');
+    function done(){ btn.classList.add('copied'); btn.textContent='\u2713 Copi\u00e9 !'; setTimeout(function(){ btn.classList.remove('copied'); btn.innerHTML='&#128203;&#160;Copier la synth\u00e8se'; },2500); }
+    function fail(){ btn.textContent='\u26A0 Impossible'; setTimeout(function(){ btn.innerHTML='&#128203;&#160;Copier la synth\u00e8se'; },2500); }
+    function legacy(){
+        try{
+            var ta=document.createElement('textarea'); ta.value=t; ta.style.cssText='position:fixed;top:0;left:0;opacity:0;';
+            document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,t.length);
+            var ok=document.execCommand('copy'); document.body.removeChild(ta); ok?done():fail();
+        }catch(e){fail();}
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(legacy);}
+    else{legacy();}
+}
+
+/* ============================================================
+   IMPRIMER A5 (d.3)
+============================================================ */
+function mapPrint() {
+    var pt    = mapGetPatient();
+    var today = pt.date || new Date().toLocaleDateString('fr-FR');
+    function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    var activeStep = document.querySelector('#map-tool .step-content.active');
+    var stepTitle = 'Saisie en cours', stepHTML = '';
+    if(activeStep && activeStep.id !== 'step1'){
+        var titleEl = activeStep.querySelector('.sec-title');
+        if(titleEl) stepTitle = titleEl.innerText || titleEl.textContent;
+        stepHTML = activeStep.innerHTML.replace(/<button[^>]*>[\s\S]*?<\/button>/gi,'');
+    }
+    var termeStr = (document.getElementById('terme_display')||{}).textContent || '\u2014';
+    var rpmEl = document.querySelector('input[name="rpm"]:checked');
+    var rpmStr = rpmEl?(rpmEl.value==='oui'?'RPM confirm\u00e9e':'Membranes intactes'):'\u2014';
+    var colEl = document.querySelector('input[name="col"]:checked');
+    var colL2 = {long:'Long (\u2265\u202525\u202fmm)',court:'Court (15\u201325\u202fmm)',tres_court:'Tr\u00e8s court / dilat\u00e9'};
+    var colStr = colEl?(colL2[colEl.value]||colEl.value):'\u2014';
+    var lcStr = document.getElementById('lc').value?document.getElementById('lc').value+'\u202fmm':'\u2014';
+    var ptLine='';
+    if(pt.nomComplet) ptLine = pt.nomComplet+(pt.age?' ('+pt.age+' ans)':'')+(pt.ddn?' \u2014 N\u00e9e le '+pt.ddn:'');
+
+    var css = '@page{size:A5;margin:11mm;}'
+        + 'body{font-family:Arial,sans-serif;font-size:8.5pt;color:#1a1a1a;line-height:1.4;padding-bottom:26mm;}'
+        + '.hdr{border-bottom:2.5px solid #14532d;padding-bottom:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-end;}'
+        + '.hdr-t{font-size:11pt;font-weight:800;color:#14532d;}.hdr-s{font-size:7pt;color:#666;font-style:italic;}'
+        + '.idbox{display:flex;justify-content:space-between;gap:10px;padding:5px 8px;background:#f8faf8;border:1px solid #c6dfc6;border-radius:3px;margin-bottom:8px;font-size:7.5pt;}'
+        + '.idcol b{display:block;font-size:6.5pt;text-transform:uppercase;letter-spacing:0.04em;color:#4a6a4a;margin-bottom:1px;}'
+        + '.params{background:#f8faf8;border:1px solid #c6dfc6;border-radius:3px;padding:6px 9px;margin-bottom:8px;font-size:7.5pt;}'
+        + '.params b{display:block;font-size:6.5pt;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:#14532d;margin-bottom:4px;}'
+        + '.pg{display:flex;flex-wrap:wrap;gap:6px 16px;}'
+        + '.pi .pl{font-size:6pt;text-transform:uppercase;color:#666;}.pi .pv{font-size:8pt;font-weight:700;color:#14532d;}'
+        + '.rt{font-size:9pt;font-weight:800;color:#14532d;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;border-bottom:1px solid #c6dfc6;padding-bottom:4px;}'
+        + '.ibox{padding:4px 7px;margin-bottom:4px;border-left:3px solid;border-radius:2px;font-size:7.5pt;}'
+        + '.ibox.green{background:#f0fdf4;border-color:#14532d;color:#14532d;}'
+        + '.ibox.red{background:#fef2f2;border-color:#b91c1c;color:#7f1d1d;}'
+        + '.ibox.blue{background:#eff6ff;border-color:#1e3a5f;color:#1e3a5f;}'
+        + '.ibox.yellow{background:#fffbeb;border-color:#d97706;color:#78350f;}'
+        + '.ibox.violet{background:#f5f3ff;border-color:#4c1d95;color:#4c1d95;}'
+        + '.ibox.orange{background:#fff7ed;border-color:#ea580c;color:#9a3412;}'
+        + '.ibox.or{background:#fbf5e6;border-color:#b8860b;color:#5a4205;}'
+        + '.ibox h3{font-size:7pt;font-weight:800;text-transform:uppercase;margin-bottom:3px;}'
+        + '.ibox p{font-size:7pt;}.ibox ul{list-style:none;padding:0;margin:0;}'
+        + '.ibox ul li,.alert-urg ul li,.term-rule-box ul li{padding-left:10px;position:relative;margin-bottom:1px;font-size:7pt;}'
+        + '.ibox ul li::before,.alert-urg ul li::before,.term-rule-box ul li::before{content:"\u2022";position:absolute;left:0;font-weight:bold;}'
+        + '.term-rule-box{padding:5px 8px;margin-bottom:5px;border-left:3px solid;border-radius:2px;font-size:7.5pt;}'
+        + '.term-rule-box.high-risk{background:#fef2f2;border-color:#b91c1c;color:#7f1d1d;}'
+        + '.term-rule-box.mid-risk{background:#fffbeb;border-color:#b8860b;color:#5a4205;}'
+        + '.term-rule-box.safe-term{background:#eff6ff;border-color:#1e3a5f;color:#1e3a5f;}'
+        + '.term-rule-box h3{font-size:7pt;font-weight:800;text-transform:uppercase;margin-bottom:2px;}'
+        + '.alert-gravite{background:#fee2e2;border:1.5px solid #b91c1c;border-radius:2px;padding:4px 7px;margin-bottom:4px;}'
+        + '.alert-urg{background:#fee2e2;border:1px solid #fca5a5;border-radius:2px;padding:4px 7px;margin-bottom:4px;}'
+        + '.alert-urg .urg-title{font-weight:800;font-size:7pt;text-transform:uppercase;color:#b91c1c;margin-bottom:2px;}'
+        + '.note-ambre{background:#fffbeb;border:1px solid #fcd34d;border-radius:2px;padding:3px 6px;margin-top:3px;font-size:7pt;color:#78350f;}'
+        + '.na-title{font-size:6.5pt;font-weight:800;text-transform:uppercase;color:#78350f;margin-bottom:1px;}'
+        + '.note-ambre p{font-size:7pt;}'
+        + '.exam-list{border:1px solid #e5e7e5;border-radius:2px;margin:3px 0;}'
+        + '.exam-item{padding:3px 6px;border-bottom:1px solid #e5e7e5;font-size:7pt;}'
+        + '.exam-item:last-child{border-bottom:none;}'
+        + '.exam-item strong{display:block;font-size:7.5pt;}'
+        + '.exam-item p,.exam-item ul li{font-size:6.5pt;color:#555;}'
+        + '.exam-item ul{list-style:none;padding:0;margin:0;}'
+        + '.exam-item ul li{padding-left:9px;position:relative;}'
+        + '.exam-item ul li::before{content:"\u2022";position:absolute;left:0;}'
+        + '.result-box{border:1px solid;border-top-width:3px;border-radius:2px;padding:5px 8px;margin-top:4px;font-size:7.5pt;}'
+        + '.result-box.green{background:#f0fdf4;border-color:#86efac;border-top-color:#14532d;}'
+        + '.result-box.red{background:#fef2f2;border-color:#fca5a5;border-top-color:#b91c1c;}'
+        + '.result-box.orange{background:#fff7ed;border-color:#fdba74;border-top-color:#ea580c;}'
+        + '.result-box.blue{background:#eff6ff;border-color:#bfdbfe;border-top-color:#1e3a5f;}'
+        + '.result-box.violet{background:#f5f3ff;border-color:#c4b5fd;border-top-color:#4c1d95;}'
+        + '.rb-title{font-size:7.5pt;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;}'
+        + '.drug-card{border:1px solid #e5e7e5;border-radius:2px;margin-bottom:3px;}'
+        + '.drug-header{padding:2px 6px;background:#f0fdf4;border-bottom:1px solid #c6dfc6;font-size:7pt;font-weight:700;color:#14532d;display:flex;justify-content:space-between;}'
+        + '.drug-body{padding:2px 6px;font-size:6.5pt;}'
+        + '.drug-body ul{list-style:none;padding:0;margin:0;}'
+        + '.drug-body ul li{padding-left:9px;position:relative;font-size:6.5pt;}'
+        + '.drug-body ul li::before{content:"\u2022";position:absolute;left:0;color:#16a34a;}'
+        + '.line-tag{font-size:8px;background:#14532d;color:#fff;padding:1px 4px;border-radius:2px;}'
+        + '.summary-box,.sec-title,.btn-primary,.btn-hdr,.header-actions,.form-section{display:none;}'
+        + '.ftr{position:fixed;bottom:0;left:0;width:100%;padding:3px 11mm;border-top:1px solid #c6dfc6;background:#fff;font-size:6.5pt;color:#888;text-align:center;}';
+
+    var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+        + '<title>MAP &amp; RPM \u2014 Dr KARA-ZAITRI</title>'
+        + '<style>' + css + '</style></head><body>'
+        + '<div class="hdr"><div><div class="hdr-t">MAP &amp; RPM \u2014 Arbre D\u00e9cisionnel</div>'
+        + '<div class="hdr-s">CNGOF/HAS \u2014 Dr KARA-ZAITRI M.A.</div></div>'
+        + '<div style="text-align:right;font-size:7pt;color:#666;">' + esc(today) + '</div></div>';
+
+    if(ptLine||pt.medecin){
+        html += '<div class="idbox"><div class="idcol"><b>Patiente</b>'+esc(ptLine||'\u2014')+'</div>'
+              + '<div class="idcol" style="text-align:right"><b>M\u00e9decin</b>'+esc(pt.medecin||'\u2014')+'</div></div>';
+    }
+
+    html += '<div class="params"><b>Param\u00e8tres \u00e9valu\u00e9s</b>'
+          + '<div class="pg">'
+          + '<div class="pi"><div class="pl">Terme</div><div class="pv">'+esc(termeStr)+'</div></div>'
+          + '<div class="pi"><div class="pl">Membranes</div><div class="pv">'+esc(rpmStr)+'</div></div>'
+          + '<div class="pi"><div class="pl">Col</div><div class="pv">'+esc(colStr)+'</div></div>'
+          + '<div class="pi"><div class="pl">LC \u00e9cho</div><div class="pv">'+esc(lcStr)+'</div></div>'
+          + '</div></div>';
+
+    if(stepHTML){
+        html += '<div class="rt">'+esc(stepTitle)+'</div>'+stepHTML;
+    }
+
+    html += '<div class="ftr">G\u00e9n\u00e9r\u00e9 le '+esc(today)+' \u2022 \u2022 Outil d\u2019aide \u00e0 la d\u00e9cision \u2014 usage r\u00e9serv\u00e9 aux professionnels de sant\u00e9</div>'
+          + '</body></html>';
+
+    var w = window.open('','_blank');
+    if(!w){mapModal.show('\u26A0\uFE0F','Popups requis','Veuillez autoriser les fen\u00eatres pop-up.');return;}
+    w.document.open(); w.document.write(html); w.document.close();
+    w.onload = function(){w.focus();w.print();};
+    setTimeout(function(){try{w.focus();w.print();}catch(e){}},400);
+}
+
+/* ============================================================
+   MOTEUR DÉCISIONNEL MAP (original complet)
+============================================================ */
+var mapTool = (function(){
     var navHistory  = ['step1'];
-    var allStepIds  = [
-        'step1', 'step-urgence',
-        'step-col-long', 'step-col-court', 'step-col-tres-court', 'step-rpm'
-    ];
-    var currentTerme = { sa: null, jr: 0 };
+    var allStepIds  = ['step1','step-urgence','step-col-long','step-col-court','step-col-tres-court','step-rpm'];
+    var currentTerme = { sa:null, jr:0 };
 
     function init() {
         document.getElementById('date_today').valueAsDate = new Date();
         updateUI();
     }
-
     function updateUI() {
-        var bar    = document.getElementById('progressBar');
-        var labels = ['Saisie', 'Orientation'];
-        var cur    = navHistory.length;
+        var bar = document.getElementById('progressBar');
+        var labels = ['Saisie','Orientation'];
+        var cur = navHistory.length;
         bar.innerHTML = '';
-
-        for (var i = 1; i <= 2; i++) {
-            var s  = document.createElement('div'); s.className = 'prog-step';
-            var c  = document.createElement('div');
-            c.className = 'prog-circle' + (cur >= i ? ' active' : '');
-            c.textContent = String(i);
-            var l  = document.createElement('div');
-            l.className = 'prog-label' + (cur >= i ? ' active' : '');
-            l.textContent = labels[i - 1];
-            s.appendChild(c);
-            s.appendChild(l);
-            if (i < 2) {
-                var ln = document.createElement('div');
-                ln.className = 'prog-line' + (cur > i ? ' active' : '');
-                s.appendChild(ln);
-            }
+        for(var i=1;i<=2;i++){
+            var s=document.createElement('div'); s.className='prog-step';
+            var c=document.createElement('div'); c.className='prog-circle'+(cur>=i?' active':''); c.textContent=String(i);
+            var l=document.createElement('div'); l.className='prog-label'+(cur>=i?' active':''); l.textContent=labels[i-1];
+            s.appendChild(c); s.appendChild(l);
+            if(i<2){var ln=document.createElement('div'); ln.className='prog-line'+(cur>i?' active':''); s.appendChild(ln);}
             bar.appendChild(s);
         }
-
-        var btn = document.getElementById('btn-retour');
-        if (btn) btn.classList.toggle('visible', navHistory.length > 1);
+        var btn=document.getElementById('btn-retour');
+        if(btn) btn.classList.toggle('visible',navHistory.length>1);
     }
-
     function calculerTerme() {
-        var ddrVal   = document.getElementById('ddr').value;
-        var todayVal = document.getElementById('date_today').value;
-        var display  = document.getElementById('terme_display');
-        var box      = document.getElementById('terme_display_box');
-
-        if (!ddrVal || !todayVal) {
-            display.textContent = '\u2014 SA';
-            currentTerme = { sa: null, jr: 0 };
-            box.classList.remove('hors-limite');
-            return;
-        }
-
-        var ddrDate   = new Date(ddrVal);
-        var todayDate = new Date(todayVal);
-        var diffDays  = Math.floor((todayDate - ddrDate) / 86400000);
-
-        if (diffDays < 0) {
-            display.textContent = 'DDR future ?';
-            currentTerme = { sa: null, jr: 0 };
-            box.classList.add('hors-limite');
-            return;
-        }
-
-        var sa = Math.floor(diffDays / 7);
-        var jr = diffDays % 7;
-        currentTerme = { sa: sa, jr: jr };
-        display.textContent = sa + ' SA ' + jr + 'j';
-
-        box.classList.toggle('hors-limite', sa < 22 || sa > 36 || (sa === 36 && jr > 6));
+        var ddrVal=document.getElementById('ddr').value;
+        var todayVal=document.getElementById('date_today').value;
+        var display=document.getElementById('terme_display');
+        var box=document.getElementById('terme_display_box');
+        if(!ddrVal||!todayVal){display.textContent='\u2014 SA';currentTerme={sa:null,jr:0};box.classList.remove('hors-limite');return;}
+        var ddrDate=new Date(ddrVal), todayDate=new Date(todayVal);
+        var diffDays=Math.floor((todayDate-ddrDate)/86400000);
+        if(diffDays<0){display.textContent='DDR future ?';currentTerme={sa:null,jr:0};box.classList.add('hors-limite');return;}
+        var sa=Math.floor(diffDays/7), jr=diffDays%7;
+        currentTerme={sa:sa,jr:jr};
+        display.textContent=sa+' SA '+jr+'j';
+        box.classList.toggle('hors-limite',sa<22||sa>36||(sa===36&&jr>6));
     }
-
     function updateTermeDisplay() {
-        var saInput  = document.getElementById('sa_manual').value;
-        var jrInput  = document.getElementById('jr_manual').value;
-        var display  = document.getElementById('terme_display');
-        var box      = document.getElementById('terme_display_box');
-        var sa       = saInput !== '' ? parseInt(saInput, 10) : NaN;
-        var jr       = jrInput !== '' ? parseInt(jrInput, 10) : 0;
-
-        if (isNaN(sa) || sa < 20) {
-            display.textContent = '\u2014 SA';
-            currentTerme = { sa: null, jr: 0 };
-            box.classList.remove('hors-limite');
-            return;
-        }
-        currentTerme = { sa: sa, jr: jr };
-        display.textContent = sa + ' SA ' + jr + 'j';
-        box.classList.toggle('hors-limite', sa < 22 || sa > 36 || (sa === 36 && jr > 6));
+        var saInput=document.getElementById('sa_manual').value;
+        var jrInput=document.getElementById('jr_manual').value;
+        var display=document.getElementById('terme_display');
+        var box=document.getElementById('terme_display_box');
+        var sa=saInput!==''?parseInt(saInput,10):NaN;
+        var jr=jrInput!==''?parseInt(jrInput,10):0;
+        if(isNaN(sa)||sa<20){display.textContent='\u2014 SA';currentTerme={sa:null,jr:0};box.classList.remove('hors-limite');return;}
+        currentTerme={sa:sa,jr:jr};
+        display.textContent=sa+' SA '+jr+'j';
+        box.classList.toggle('hors-limite',sa<22||sa>36||(sa===36&&jr>6));
     }
-
     function switchModeTerme() {
-        var mode = document.querySelector('input[name="mode_terme"]:checked').value;
-        document.getElementById('zone_ddr').style.display    = (mode === 'ddr')    ? 'block' : 'none';
-        document.getElementById('zone_manual').style.display = (mode === 'manual') ? 'block' : 'none';
-        document.getElementById('terme_display').textContent = '\u2014 SA';
+        var mode=document.querySelector('input[name="mode_terme"]:checked').value;
+        document.getElementById('zone_ddr').style.display=(mode==='ddr')?'block':'none';
+        document.getElementById('zone_manual').style.display=(mode==='manual')?'block':'none';
+        document.getElementById('terme_display').textContent='\u2014 SA';
         document.getElementById('terme_display_box').classList.remove('hors-limite');
-        currentTerme = { sa: null, jr: 0 };
+        currentTerme={sa:null,jr:0};
     }
-
     function onLcInput() {
-        var lcVal = document.getElementById('lc').value;
-        if (lcVal === '') return;
-        var lc = parseInt(lcVal, 10);
-        if (isNaN(lc)) return;
-        var target = lc >= 25 ? 'long' : (lc >= 15 ? 'court' : 'tres_court');
-        document.getElementById('col_' + target).checked = true;
+        var lcVal=document.getElementById('lc').value;
+        if(lcVal==='') return;
+        var lc=parseInt(lcVal,10);
+        if(isNaN(lc)) return;
+        var target=lc>=25?'long':(lc>=15?'court':'tres_court');
+        document.getElementById('col_'+target).checked=true;
     }
-
-    function genererResume(colFinal, rpmVal, lcVal) {
-        var termeStr = currentTerme.sa
-            ? (currentTerme.sa + ' SA ' + currentTerme.jr + 'j')
-            : '\u2014';
-
-        var colStr = {
-            long:       'Long (\u2265\u202525\u202fmm)',
-            court:      'Court (15\u201325\u202fmm)',
-            tres_court: 'Tr\u00e8s court (< 15\u202fmm) / dilaté'
-        }[colFinal] || '\u2014';
-
-        return '<div class="summary-box">'
-            + '<div class="summary-title">\uD83D\uDCCB Param\u00e8tres évalués</div>'
-            + '<div class="summary-grid">'
-            + '<div class="summary-item"><div class="s-label">Terme</div><div class="s-value">' + termeStr + '</div></div>'
-            + '<div class="summary-item"><div class="s-label">Membranes</div><div class="s-value">' + (rpmVal === 'oui' ? 'RPM confirmée' : 'Intactes') + '</div></div>'
-            + '<div class="summary-item"><div class="s-label">Col</div><div class="s-value">' + colStr + '</div></div>'
-            + '<div class="summary-item"><div class="s-label">LC (écho)</div><div class="s-value">' + (lcVal !== null ? lcVal + '\u202fmm' : '\u2014') + '</div></div>'
-            + '</div></div>';
+    function genererResume(colFinal,rpmVal,lcVal) {
+        var termeStr=currentTerme.sa?(currentTerme.sa+' SA '+currentTerme.jr+'j'):'\u2014';
+        var colStr={long:'Long (\u2265\u202525\u202fmm)',court:'Court (15\u201325\u202fmm)',tres_court:'Tr\u00e8s court (< 15\u202fmm) / dilat\u00e9'}[colFinal]||'\u2014';
+        return '<div class="summary-box"><div class="summary-title">\uD83D\uDCCB Param\u00e8tres \u00e9valu\u00e9s</div>'
+            +'<div class="summary-grid">'
+            +'<div class="summary-item"><div class="s-label">Terme</div><div class="s-value">'+termeStr+'</div></div>'
+            +'<div class="summary-item"><div class="s-label">Membranes</div><div class="s-value">'+(rpmVal==='oui'?'RPM confirm\u00e9e':'Intactes')+'</div></div>'
+            +'<div class="summary-item"><div class="s-label">Col</div><div class="s-value">'+colStr+'</div></div>'
+            +'<div class="summary-item"><div class="s-label">LC (\u00e9cho)</div><div class="s-value">'+(lcVal!==null?lcVal+'\u202fmm':'\u2014')+'</div></div>'
+            +'</div></div>';
     }
-
-    function genererReglesTerme(sa, isRPM) {
-
-        /* ── Hors MAP < 22 SA ─────────────────────────────────────── */
-        if (sa < 22) {
-            return '<div class="term-rule-box high-risk">'
-                + '<h3>\u26D4 Terme hors définition MAP (' + sa + ' SA)</h3>'
-                + '<ul>'
-                + '<li>La MAP est définie entre <strong>22 SA et 36 SA + 6j</strong>. Aucune recommandation de cet outil n\u2019est applicable \u00e0 ce terme.</li>'
-                + '<li>En dessous de 22 SA, la prise en charge rel\u00e8ve d\u2019une <strong>décision pluridisciplinaire spécialisée</strong> (viabilité, CPDPN, soins palliatifs périnataux).</li>'
-                + '<li><strong>Ne pas initier corticothérapie, sulfate de magnésium ni tocolyse sur la base de cet outil.</strong></li>'
-                + '</ul></div>';
-        }
-
-        /* ── Zone de viabilité 22–23 SA ──────────────────────────── */
-        if (sa === 22 || sa === 23) {
-            var html = '<div class="term-rule-box high-risk">'
-                + '<h3>\u26A0\uFE0F R\u00e8gles cliniques (Terme ' + sa + ' SA) \u2014 Zone de viabilité</h3>'
-                + '<ul>'
-                + '<li><strong>Décision obligatoirement multidisciplinaire</strong> (obstétricien, néonatologiste, parents / CPDPN).</li>'
-                + '<li><strong>Corticothérapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E AUTOMATIQUEMENT</span> (seuil AMM \u00e0 24 SA).</li>'
-                + '<li><strong>Sulfate de Magnésium / Tocolyse :</strong> Décision spécialisée uniquement.</li>';
-
-            if (isRPM) {
-                html += '<li><strong>Information patiente (RPM) :</strong> Risques d\'hypoplasie pulmonaire (surtout si anamnios &lt; 20 SA) et d\'arthrogrypose. Discuter la poursuite de la grossesse.</li>'
-                     + '<li><strong>Si expectative (RPM) :</strong> Hospitalisation initiale 24\u201348h, puis surveillance \u00e0 domicile possible. Bilan clinique/bio 1x/semaine.</li>';
-            } else {
-                html += '<li><strong>Transfert (TIU) :</strong> \u00c0 discuter selon le projet parental et possibilités réanimation.</li>';
-            }
-            html += '</ul></div>';
+    function genererReglesTerme(sa,isRPM) {
+        if(sa<22) return '<div class="term-rule-box high-risk"><h3>\u26D4 Terme hors d\u00e9finition MAP ('+sa+' SA)</h3><ul><li>La MAP est d\u00e9finie entre <strong>22 SA et 36 SA + 6j</strong>. Aucune recommandation de cet outil n\u2019est applicable \u00e0 ce terme.</li><li>En dessous de 22 SA, la prise en charge rel\u00e8ve d\u2019une <strong>d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e</strong> (viabilit\u00e9, CPDPN).</li><li><strong>Ne pas initier corticoth\u00e9rapie, sulfate de magn\u00e9sium ni tocolyse sur la base de cet outil.</strong></li></ul></div>';
+        if(sa===22||sa===23){
+            var html='<div class="term-rule-box high-risk"><h3>\u26A0\uFE0F R\u00e8gles cliniques (Terme '+sa+' SA) \u2014 Zone de viabilit\u00e9</h3><ul><li><strong>D\u00e9cision obligatoirement multidisciplinaire</strong> (obst\u00e9tricien, n\u00e9onatologiste, parents / CPDPN).</li><li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E AUTOMATIQUEMENT</span> (seuil AMM \u00e0 24 SA).</li><li><strong>Sulfate de Magn\u00e9sium / Tocolyse :</strong> D\u00e9cision sp\u00e9cialis\u00e9e uniquement.</li>';
+            if(isRPM) html+='<li><strong>Information patiente (RPM) :</strong> Risques d\u2019hypoplasie pulmonaire et d\u2019arthrogrypose. Discuter la poursuite de la grossesse.</li>';
+            else html+='<li><strong>Transfert (TIU) :</strong> \u00c0 discuter selon le projet parental et possibilit\u00e9s r\u00e9animation.</li>';
+            html+='</ul></div>';
             return html;
         }
-
-        /* ── Grande prématurité 24–31 SA ─────────────────────────── */
-        if (sa >= 24 && sa < 32) {
-            var html = '<div class="term-rule-box high-risk">'
-                + '<h3>\uD83D\uDEA8 R\u00e8gles cliniques impératives (Terme 24\u201331 SA) \u2014 Grande Prématurité</h3>'
-                + '<ul>'
-                + '<li><strong>Corticothérapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E EN URGENCE</span> \u2014 Célest\u00e8ne Chronodose\u00ae 12 mg IM \u00d72 \u00e0 24h d\'intervalle (Cure unique).</li>'
-                + '<li><strong>Sulfate de Magnésium :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> si accouchement imminent (neuroprotection).</li>';
-
-            if (isRPM) {
-                html += '<li><strong>Tocolyse :</strong> <span style="color:var(--ambre);font-weight:700;">NON SYST\u00c9MATIQUE</span>. Uniquement si CU pour permettre la corticothérapie. <strong>Contre-indiquée</strong> si infection amniotique.</li>'
-                     + '<li><strong>Attitude au travail :</strong> Laisser faire l\'accouchement par voie basse si travail en cours (pronostic f\u0153tal mauvais, tocolyse trop risquée).</li>';
-            } else {
-                html += '<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour permettre la corticothérapie et le transfert (48h).</li>';
-            }
-            html += '<li><strong>Transfert (TIU) :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> vers maternité de Niveau III.</li>'
-                 + '</ul></div>';
-                 
-            // ALERTE CÉLESTÈNE RCF (FIX 9)
-            html += '<div class="note-ambre" style="margin-top:12px;">'
-                 + '<div class="na-title">\u26A0\uFE0F PI\u00c8GE RCF : EFFET C\u00c9LEST\u00c8NE</div>'
-                 + '<p>Le <strong>Célest\u00e8ne Chronodose\u00ae</strong> provoque une diminution transitoire de la variabilité et de la réactivité du RCF (aplatissement des oscillations, disparition des accélérations). Cela survient souvent apr\u00e8s la 2\u00e8me injection et peut persister jusqu\'\u00e0 48h. <strong>Ne pas réaliser d\'extraction f\u0153tale abusive sur ce seul crit\u00e8re.</strong><br><br>'
-                 + '\u2022 <strong>Cure unique stricte</strong> (les cures itératives réduisent le périm\u00e8tre cr\u00e2nien et le poids).<br>'
-                 + '\u2022 <strong>Contre-indications :</strong> Chorioamniotite avérée, toxémie.</p>'
-                 + '</div>';
-
+        if(sa>=24&&sa<32){
+            var html='<div class="term-rule-box high-risk"><h3>\uD83D\uDEA8 R\u00e8gles cliniques imp\u00e9ratives (Terme 24\u201331 SA) \u2014 Grande Pr\u00e9maturit\u00e9</h3><ul>'
+                +'<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E EN URGENCE</span> \u2014 C\u00e9lest\u00e8ne Chronodose\u00ae 12 mg IM \u00d72 \u00e0 24h d\u2019intervalle (Cure unique).</li>'
+                +'<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> si accouchement imminent (neuroprotection).</li>';
+            if(isRPM) html+='<li><strong>Tocolyse :</strong> <span style="color:var(--ambre);font-weight:700;">NON SYST\u00c9MATIQUE</span>. Uniquement si CU pour permettre la corticoth\u00e9rapie. <strong>Contre-indiqu\u00e9e</strong> si infection amniotique.</li>';
+            else html+='<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour permettre la corticoth\u00e9rapie et le transfert (48h).</li>';
+            html+='<li><strong>Transfert (TIU) :</strong> <span style="color:var(--vert-vif);font-weight:700;">OBLIGATOIRE</span> vers maternit\u00e9 de Niveau III.</li>'
+                +'</ul></div>'
+                +'<div class="note-ambre" style="margin-top:12px;"><div class="na-title">\u26A0\uFE0F PI\u00c8GE RCF : EFFET C\u00c9LEST\u00c8NE</div>'
+                +'<p>Le <strong>C\u00e9lest\u00e8ne Chronodose\u00ae</strong> provoque une diminution transitoire de la variabilit\u00e9 et de la r\u00e9activit\u00e9 du RCF. <strong>Ne pas r\u00e9aliser d\u2019extraction f\u0153tale abusive sur ce seul crit\u00e8re.</strong><br>'
+                +'\u2022 <strong>Cure unique stricte</strong> (les cures it\u00e9ratives r\u00e9duisent le p\u00e9rim\u00e8tre cr\u00e2nien et le poids).<br>'
+                +'\u2022 <strong>Contre-indications :</strong> Chorioamniotite av\u00e9r\u00e9e, toxémie.</p></div>';
             return html;
         }
-
-        /* ── Prématurité modérée 32–33 SA ────────────────────────── */
-        if (sa >= 32 && sa < 34) {
-            var html = '<div class="term-rule-box mid-risk">'
-                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques impératives (Terme 32\u201333 SA)</h3>'
-                + '<ul>'
-                + '<li><strong>Corticothérapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> \u2014 Célest\u00e8ne Chronodose\u00ae 12 mg IM \u00d72 \u00e0 24h (Cure unique).</li>'
-                + '<li><strong>Sulfate de Magnésium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> pour neuroprotection (seuil strict &lt; 32 SA).</li>';
-
-            if (isRPM) {
-                html += '<li><strong>Tocolyse :</strong> <span style="color:var(--ambre);font-weight:700;">NON SYST\u00c9MATIQUE</span>. Uniquement si CU pour permettre la corticothérapie. Pas de tocolyse si infection.</li>';
-            } else {
-                html += '<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour gagner 48h (corticothérapie).</li>';
-            }
-            html += '<li><strong>Transfert (TIU) :</strong> \u00c0 discuter vers Niveau III selon contexte et protocole local.</li>'
-                 + '</ul></div>';
-                 
-            // ALERTE CÉLESTÈNE RCF (FIX 9)
-            html += '<div class="note-ambre" style="margin-top:12px;">'
-                 + '<div class="na-title">\u26A0\uFE0F PI\u00c8GE RCF : EFFET C\u00c9LEST\u00c8NE</div>'
-                 + '<p>Le <strong>Célest\u00e8ne Chronodose\u00ae</strong> provoque une diminution transitoire de la variabilité et de la réactivité du RCF (aplatissement des oscillations, disparition des accélérations). Cela survient souvent apr\u00e8s la 2\u00e8me injection et peut persister jusqu\'\u00e0 48h. <strong>Ne pas réaliser d\'extraction f\u0153tale abusive sur ce seul crit\u00e8re.</strong><br><br>'
-                 + '\u2022 <strong>Cure unique stricte</strong> (les cures itératives réduisent le périm\u00e8tre cr\u00e2nien et le poids).<br>'
-                 + '\u2022 <strong>Contre-indications :</strong> Chorioamniotite avérée, toxémie.</p>'
-                 + '</div>';
-
+        if(sa>=32&&sa<34){
+            var html='<div class="term-rule-box mid-risk"><h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (Terme 32\u201333 SA)</h3><ul>'
+                +'<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> \u2014 C\u00e9lest\u00e8ne Chronodose\u00ae 12 mg IM \u00d72 \u00e0 24h (Cure unique).</li>'
+                +'<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> pour neuroprotection (seuil strict &lt; 32 SA).</li>';
+            if(isRPM) html+='<li><strong>Tocolyse :</strong> <span style="color:var(--ambre);font-weight:700;">NON SYST\u00c9MATIQUE</span>. Uniquement si CU pour permettre la corticoth\u00e9rapie.</li>';
+            else html+='<li><strong>Tocolyse :</strong> <span style="color:var(--vert-vif);font-weight:700;">INDIQU\u00c9E</span> pour gagner 48h (corticoth\u00e9rapie).</li>';
+            html+='</ul></div>'
+                +'<div class="note-ambre" style="margin-top:12px;"><div class="na-title">\u26A0\uFE0F PI\u00c8GE RCF : EFFET C\u00c9LEST\u00c8NE</div>'
+                +'<p>Cure unique stricte. CI : chorioamniotite av\u00e9r\u00e9e, toxémie. Ne pas extraire sur simple aplatissement RCF post-injection.</p></div>';
             return html;
         }
-
-        /* ── RPM 34–36 SA : expectative recommandée ──────────────── */
-        if (isRPM && sa >= 34 && sa <= 36) {
-            return '<div class="term-rule-box mid-risk">'
-                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques impératives (RPM \u2014 34\u201336 SA)</h3>'
-                + '<ul>'
-                + '<li><strong>Attitude obstétricale :</strong> <span style="color:var(--vert-vif);font-weight:700;">EXPECTATIVE RECOMMAND\u00c9E</span> jusqu\'\u00e0 37 SA en l\'absence de complication. Laisser débuter le travail spontanément.</li>'
-                + '<li><strong>Corticothérapie :</strong> <span style="color:var(--ambre);font-weight:700;">ENVISAGEABLE</span> \u2014 \u00e0 discuter au cas par cas (discussion obstétrico-pédiatrique). Si décidée : utiliser Célest\u00e8ne Chronodose\u00ae (cure unique).</li>'
-                + '<li><strong>Tocolyse / MgSO4 :</strong> <span style="color:var(--rouge-vif);font-weight:700;">PAS DE TOCOLYSE</span> (le risque infectieux dépasse celui de la prématurité).</li>'
-                + '<li><strong>Antibioprophylaxie :</strong> <span style="color:var(--vert-vif);font-weight:700;">MAINTENUE</span>. Adapter aux résultats : arr\u00eat si négatif, 7j au total si positif.</li>'
-                + '<li><strong>Extraction :</strong> Déclenchement uniquement si infection intra-utérine ou autre indication obstétricale.</li>'
-                + '</ul></div>';
+        if(isRPM&&sa>=34&&sa<=36){
+            return '<div class="term-rule-box mid-risk"><h3>\uD83D\uDCC4 R\u00e8gles cliniques imp\u00e9ratives (RPM \u2014 34\u201336 SA)</h3><ul>'
+                +'<li><strong>Attitude obst\u00e9tricale :</strong> <span style="color:var(--vert-vif);font-weight:700;">EXPECTATIVE RECOMMAND\u00c9E</span> jusqu\u2019\u00e0 37 SA en l\u2019absence de complication.</li>'
+                +'<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--ambre);font-weight:700;">ENVISAGEABLE</span> \u2014 discussion obst\u00e9trico-p\u00e9diatrique.</li>'
+                +'<li><strong>Tocolyse / MgSO4 :</strong> <span style="color:var(--rouge-vif);font-weight:700;">PAS DE TOCOLYSE</span>.</li>'
+                +'<li><strong>Antibioprophylaxie :</strong> <span style="color:var(--vert-vif);font-weight:700;">MAINTENUE</span>.</li>'
+                +'</ul></div>';
         }
-
-        /* ── RPM ≥ 37 SA (Stratification SGB) ────────────────────── */
-        if (isRPM && sa >= 37) {
-            return '<div class="term-rule-box safe-term">'
-                + '<h3>\uD83D\uDCC4 R\u00e8gles cliniques impératives (RPM \u2014 \u00c0 terme \u2265 37 SA)</h3>'
-                + '<ul>'
-                + '<li><strong>Corticothérapie / Tocolyse / MgSO4 :</strong> <span style="color:var(--rouge-vif);font-weight:700;">CONTRE-INDIQU\u00c9S / NON INDIQU\u00c9S</span>.</li>'
-                + '<li><strong>Stratégie selon Streptocoque B (SGB) :</strong></li>'
-                + '<li><span style="color:var(--rouge-vif);font-weight:700;">SGB Positif :</span> Antibiothérapie immédiate + <strong>Accouchement sans délai</strong> (Déclenchement ou césarienne).</li>'
-                + '<li><span style="color:var(--vert-vif);font-weight:700;">SGB Négatif ou Inconnu :</span> Expectative possible jusqu\'\u00e0 24h. Antibio d\u00e8s H12. <strong>Déclenchement \u00e0 H24</strong> (Temps de latence max: 48h).</li>'
-                + '</ul></div>';
+        if(isRPM&&sa>=37){
+            return '<div class="term-rule-box safe-term"><h3>\uD83D\uDCC4 R\u00e8gles cliniques (RPM \u2014 \u00c0 terme \u2265 37 SA)</h3><ul>'
+                +'<li><strong>Corticoth\u00e9rapie / Tocolyse / MgSO4 :</strong> <span style="color:var(--rouge-vif);font-weight:700;">CONTRE-INDIQU\u00c9S / NON INDIQU\u00c9S</span>.</li>'
+                +'<li><span style="color:var(--rouge-vif);font-weight:700;">SGB Positif :</span> Antibioth\u00e9rapie imm\u00e9diate + <strong>Accouchement sans d\u00e9lai</strong>.</li>'
+                +'<li><span style="color:var(--vert-vif);font-weight:700;">SGB N\u00e9gatif ou Inconnu :</span> Expectative possible jusqu\u2019\u00e0 24h. Antibio d\u00e8s H12. D\u00e9clenchement \u00e0 H24.</li>'
+                +'</ul></div>';
         }
-
-        /* ── MAP sans RPM, 34–36 SA ──────────────────────────────── */
-        return '<div class="term-rule-box safe-term">'
-            + '<h3>\uD83D\uDCC4 MAP \u2014 Prématurité tardive / \u00c0 terme (\u2265 34 SA)</h3>'
-            + '<ul>'
-            + '<li><strong>Corticothérapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> \u2014 hors AMM apr\u00e8s 34 SA selon CNGOF/HAS.</li>'
-            + '<li><strong>Sulfate de Magnésium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span> (seuil strict &lt; 32 SA).</li>'
-            + '<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON RECOMMAND\u00c9E</span> de routine (sauf pour permettre un TIU exceptionnel).</li>'
-            + '<li><strong>Orientation :</strong> Maternité de Niveau II ou I selon protocole local.</li>'
-            + '</ul></div>';
+        return '<div class="term-rule-box safe-term"><h3>\uD83D\uDCC4 MAP \u2014 Pr\u00e9maturit\u00e9 tardive / \u00c0 terme (\u2265 34 SA)</h3><ul>'
+            +'<li><strong>Corticoth\u00e9rapie :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9E</span> \u2014 hors AMM apr\u00e8s 34 SA selon CNGOF/HAS.</li>'
+            +'<li><strong>Sulfate de Magn\u00e9sium :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON INDIQU\u00c9</span>.</li>'
+            +'<li><strong>Tocolyse :</strong> <span style="color:var(--rouge-vif);font-weight:700;">NON RECOMMAND\u00c9E</span> de routine.</li>'
+            +'</ul></div>';
     }
-
-    function genererDetailGravite(chorio, hemorr, sff) {
-        var items = [];
-        if (chorio) items.push({
-            titre: 'Suspicion de chorioamniotite',
-            detail: 'Bilan infectieux en urgence (NFS, CRP, hémocultures). Extraction immédiate si diagnostic confirmé, quel que soit le terme. Tocolyse CONTRE-INDIQU\u00c9E.'
-        });
-        if (hemorr) items.push({
-            titre: 'Métrorragies associées',
-            detail: '\u00c9liminer HRPP et placenta pr\u00e6via en urgence (échographie). Groupage + RAI + NFS. Surveillance hémodynamique.'
-        });
-        if (sff) items.push({
-            titre: 'Souffrance f\u0153tale (RCF pathologique)',
-            detail: 'Monitoring continu. Préparer extraction si souffrance persist. Tocolyse CONTRE-INDIQU\u00c9E en cas de souffrance f\u0153tale.'
-        });
-
-        if (!items.length) return '';
-
-        var html = '<div class="alert-gravite">'
-            + '<div class="ag-title">\u26A0 Signes de gravité détectés</div>';
-        items.forEach(function (it) {
-            html += '<p><strong>' + it.titre + '</strong><br>' + it.detail + '</p><br>';
-        });
-        html += '</div>';
+    function genererDetailGravite(chorio,hemorr,sff){
+        var items=[];
+        if(chorio) items.push({titre:'Suspicion de chorioamniotite',detail:'Bilan infectieux en urgence (NFS, CRP, h\u00e9mocultures). Extraction imm\u00e9diate si diagnostic confirm\u00e9. Tocolyse CONTRE-INDIQU\u00c9E.'});
+        if(hemorr) items.push({titre:'M\u00e9trorragies associ\u00e9es',detail:'\u00c9liminer HRPP et placenta pr\u00e6via en urgence (\u00e9chographie). Groupage + RAI + NFS.'});
+        if(sff)    items.push({titre:'Souffrance f\u0153tale (RCF pathologique)',detail:'Monitoring continu. Tocolyse CONTRE-INDIQU\u00c9E en cas de souffrance f\u0153tale.'});
+        if(!items.length) return '';
+        var html='<div class="alert-gravite"><div class="ag-title">\u26A0 Signes de gravit\u00e9 d\u00e9tect\u00e9s</div>';
+        items.forEach(function(it){ html+='<p><strong>'+it.titre+'</strong><br>'+it.detail+'</p><br>'; });
+        html+='</div>';
         return html;
     }
-
-    function showStep(stepId) {
-        allStepIds.forEach(function (id) {
-            document.getElementById(id).classList.remove('active');
-        });
+    function showStep(stepId){
+        allStepIds.forEach(function(id){ document.getElementById(id).classList.remove('active'); });
         document.getElementById(stepId).classList.add('active');
     }
-
-    function goTo(stepId) {
-        navHistory.push(stepId);
-        showStep(stepId);
-        updateUI();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    function goTo(stepId){
+        navHistory.push(stepId); showStep(stepId); updateUI();
+        window.scrollTo({top:0,behavior:'smooth'});
     }
-
-    function goBack() {
-        if (navHistory.length <= 1) return;
-        navHistory.pop();
-        showStep(navHistory[navHistory.length - 1]);
-        updateUI();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    function goBack(){
+        if(navHistory.length<=1) return;
+        navHistory.pop(); showStep(navHistory[navHistory.length-1]); updateUI();
+        window.scrollTo({top:0,behavior:'smooth'});
     }
-
-    function validerEtOrienter() {
-        if (!currentTerme.sa || currentTerme.sa < 22) {
-            mapModal.show(
-                '\u26A0\uFE0F',
-                'Terme non renseigné ou < 22 SA',
+    function validerEtOrienter(){
+        if(!currentTerme.sa||currentTerme.sa<22){
+            mapModal.show('\u26A0\uFE0F','Terme non renseign\u00e9 ou < 22 SA',
                 'Veuillez renseigner un terme valide (<strong>\u2265\u202f22\u202fSA</strong>) avant de valider.<br><br>'
-                + 'En dessous de 22 SA, la prise en charge rel\u00e8ve d\u2019une décision pluridisciplinaire spécialisée (CPDPN).'
-            );
+                +'En dessous de 22 SA, la prise en charge rel\u00e8ve d\u2019une d\u00e9cision pluridisciplinaire sp\u00e9cialis\u00e9e (CPDPN).');
             return;
         }
-
-        if (currentTerme.sa > 36 || (currentTerme.sa === 36 && currentTerme.jr > 6)) {
-            var rpmCheck = document.querySelector('input[name="rpm"]:checked').value;
-            if (rpmCheck === 'non') {
-                mapModal.show(
-                    '\u26D4',
-                    'Terme hors définition MAP',
-                    '<strong>Terme : ' + currentTerme.sa + ' SA ' + currentTerme.jr + 'j</strong> &mdash; \u2265 37 SA.<br><br>'
-                    + 'Cet outil (MAP) couvre les termes de <strong>22 SA \u00e0 36 SA + 6j</strong>.<br>'
-                    + '\u00c0 partir de 37 SA, sans rupture de membranes, le travail est \u00e0 terme et sort du cadre de cet outil.'
-                );
+        if(currentTerme.sa>36||(currentTerme.sa===36&&currentTerme.jr>6)){
+            var rpmCheck=document.querySelector('input[name="rpm"]:checked').value;
+            if(rpmCheck==='non'){
+                mapModal.show('\u26D4','Terme hors d\u00e9finition MAP',
+                    '<strong>Terme : '+currentTerme.sa+' SA '+currentTerme.jr+'j</strong> \u2014 \u2265 37 SA.<br><br>'
+                    +'Cet outil (MAP) couvre les termes de <strong>22 SA \u00e0 36 SA + 6j</strong>.<br>'
+                    +'\u00c0 partir de 37 SA, sans rupture de membranes, le travail est \u00e0 terme et sort du cadre de cet outil.');
                 return;
             }
         }
-
-        var rpm    = document.querySelector('input[name="rpm"]:checked').value;
-        var colRad = document.querySelector('input[name="col"]:checked').value;
-
-        var lcInput = document.getElementById('lc').value;
-        var lc      = lcInput !== '' ? parseInt(lcInput, 10) : null;
-        if (lc !== null && isNaN(lc)) lc = null;
-
-        var colFinal = colRad;
-        if (lc !== null) {
-            colFinal = lc >= 25 ? 'long' : (lc >= 15 ? 'court' : 'tres_court');
-            document.getElementById('col_' + colFinal).checked = true;
+        var rpm=document.querySelector('input[name="rpm"]:checked').value;
+        var colRad=document.querySelector('input[name="col"]:checked').value;
+        var lcInput=document.getElementById('lc').value;
+        var lc=lcInput!==''?parseInt(lcInput,10):null;
+        if(lc!==null&&isNaN(lc)) lc=null;
+        var colFinal=colRad;
+        if(lc!==null){ colFinal=lc>=25?'long':(lc>=15?'court':'tres_court'); document.getElementById('col_'+colFinal).checked=true; }
+        var chorio=document.getElementById('sg_chorio').checked;
+        var hemorr=document.getElementById('sg_hemorr').checked;
+        var sff=document.getElementById('sg_sff').checked;
+        var hasGravite=chorio||hemorr||sff;
+        var resume=genererResume(colFinal,rpm,lc);
+        if(hasGravite){
+            var sumEl=document.getElementById('summary-urgence'); if(sumEl) sumEl.innerHTML=resume;
+            var gravEl=document.getElementById('signes-gravite-detail'); if(gravEl) gravEl.innerHTML=genererDetailGravite(chorio,hemorr,sff);
+            var trEl=document.getElementById('term-rules-urgence'); if(trEl) trEl.innerHTML=genererReglesTerme(currentTerme.sa,rpm==='oui');
+            goTo('step-urgence'); return;
         }
-
-        var chorio = document.getElementById('sg_chorio').checked;
-        var hemorr = document.getElementById('sg_hemorr').checked;
-        var sff    = document.getElementById('sg_sff').checked;
-        var hasGravite = chorio || hemorr || sff;
-
-        var resume = genererResume(colFinal, rpm, lc);
-
-        if (hasGravite) {
-            var sumEl = document.getElementById('summary-urgence');
-            if (sumEl) sumEl.innerHTML = resume;
-
-            var gravEl = document.getElementById('signes-gravite-detail');
-            if (gravEl) gravEl.innerHTML = genererDetailGravite(chorio, hemorr, sff);
-
-            var trEl = document.getElementById('term-rules-urgence');
-            if (trEl) trEl.innerHTML = genererReglesTerme(currentTerme.sa, rpm === 'oui');
-
-            goTo('step-urgence');
-            return;
-        }
-
-        var branchMap = {
-            'rpm':        'step-rpm',
-            'col-long':   'step-col-long',
-            'col-court':  'step-col-court',
-            'col-tres-court': 'step-col-tres-court'
-        };
-
-        var branchKey;
-        if (rpm === 'oui') {
-            branchKey = 'rpm';
-        } else if (colFinal === 'long') {
-            branchKey = 'col-long';
-        } else if (colFinal === 'court') {
-            branchKey = 'col-court';
-        } else {
-            branchKey = 'col-tres-court';
-        }
-
-        var stepId   = branchMap[branchKey];
-        var summId   = 'summary-' + branchKey;
-        var termRId  = 'term-rules-' + branchKey;
-
-        var sumEl2 = document.getElementById(summId);
-        if (sumEl2) sumEl2.innerHTML = resume;
-
-        var trEl2 = document.getElementById(termRId);
-        if (trEl2) trEl2.innerHTML = genererReglesTerme(currentTerme.sa, rpm === 'oui');
-
+        var branchMap={'rpm':'step-rpm','col-long':'step-col-long','col-court':'step-col-court','col-tres-court':'step-col-tres-court'};
+        var branchKey=rpm==='oui'?'rpm':(colFinal==='long'?'col-long':(colFinal==='court'?'col-court':'col-tres-court'));
+        var stepId=branchMap[branchKey];
+        var summId='summary-'+branchKey;
+        var termRId='term-rules-'+branchKey;
+        var sumEl2=document.getElementById(summId); if(sumEl2) sumEl2.innerHTML=resume;
+        var trEl2=document.getElementById(termRId); if(trEl2) trEl2.innerHTML=genererReglesTerme(currentTerme.sa,rpm==='oui');
         goTo(stepId);
     }
-
-    function reset() {
-        navHistory = ['step1'];
-        showStep('step1');
-
-        document.getElementById('ddr').value       = '';
-        document.getElementById('sa_manual').value = '';
-        document.getElementById('jr_manual').value = '';
-        document.getElementById('lc').value        = '';
-        document.getElementById('mode_ddr').checked     = true;
-        document.getElementById('zone_ddr').style.display    = 'block';
-        document.getElementById('zone_manual').style.display = 'none';
-        document.getElementById('rpm_non').checked  = true;
-        document.getElementById('col_long').checked = true;
-        document.getElementById('sg_chorio').checked = false;
-        document.getElementById('sg_hemorr').checked = false;
-        document.getElementById('sg_sff').checked    = false;
-        document.getElementById('terme_display').textContent = '\u2014 SA';
+    function reset(){
+        navHistory=['step1']; showStep('step1');
+        document.getElementById('ddr').value='';
+        document.getElementById('sa_manual').value='';
+        document.getElementById('jr_manual').value='';
+        document.getElementById('lc').value='';
+        document.getElementById('mode_ddr').checked=true;
+        document.getElementById('zone_ddr').style.display='block';
+        document.getElementById('zone_manual').style.display='none';
+        document.getElementById('rpm_non').checked=true;
+        document.getElementById('col_long').checked=true;
+        document.getElementById('sg_chorio').checked=false;
+        document.getElementById('sg_hemorr').checked=false;
+        document.getElementById('sg_sff').checked=false;
+        document.getElementById('terme_display').textContent='\u2014 SA';
         document.getElementById('terme_display_box').classList.remove('hors-limite');
-        document.getElementById('date_today').valueAsDate = new Date();
-
-        currentTerme = { sa: null, jr: 0 };
+        document.getElementById('date_today').valueAsDate=new Date();
+        currentTerme={sa:null,jr:0};
         updateUI();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({top:0,behavior:'smooth'});
     }
-
-    return {
-        init:               init,
-        calculerTerme:      calculerTerme,
-        updateTermeDisplay: updateTermeDisplay,
-        switchModeTerme:    switchModeTerme,
-        onLcInput:          onLcInput,
-        validerEtOrienter:  validerEtOrienter,
-        goBack:             goBack,
-        reset:              reset
-    };
-
+    return { init:init, calculerTerme:calculerTerme, updateTermeDisplay:updateTermeDisplay, switchModeTerme:switchModeTerme, onLcInput:onLcInput, validerEtOrienter:validerEtOrienter, goBack:goBack, reset:reset };
 })();
 
-var mapModal = (function () {
-    function show(icon, title, bodyHtml) {
-        document.getElementById('map-modal-icon').textContent  = icon;
-        document.getElementById('map-modal-title').textContent = title;
-        document.getElementById('map-modal-body').innerHTML    = bodyHtml;
-        var overlay = document.getElementById('map-modal-overlay');
-        overlay.style.display = 'flex';
+var mapModal=(function(){
+    function show(icon,title,bodyHtml){
+        document.getElementById('map-modal-icon').textContent=icon;
+        document.getElementById('map-modal-title').textContent=title;
+        document.getElementById('map-modal-body').innerHTML=bodyHtml;
+        document.getElementById('map-modal-overlay').style.display='flex';
         document.getElementById('map-modal-btn').focus();
     }
-    function close() {
-        document.getElementById('map-modal-overlay').style.display = 'none';
-    }
-    return { show: show, close: close };
+    function close(){ document.getElementById('map-modal-overlay').style.display='none'; }
+    return { show:show, close:close };
 })();
 
 mapTool.init();
